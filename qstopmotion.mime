@@ -1,0 +1,5 @@
+application/x-qstopmotion;
+/usr/bin/qstopmotion  -caption "Animation Creator" %s;
+nametemplate=%s.qsmd;
+test=test "$DISPLAY" != "";
+priority=9

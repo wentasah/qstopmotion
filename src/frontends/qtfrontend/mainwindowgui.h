@@ -1,0 +1,529 @@
+/******************************************************************************
+ *  Copyright (C) 2005-2011 by                                                *
+ *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
+ *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
+ *    Ralf Lange (ralf.lange@longsoft.de)                                     *
+ *                                                                            *
+ *  This program is free software; you can redistribute it and/or modify      *
+ *  it under the terms of the GNU General Public License as published by      *
+ *  the Free Software Foundation; either version 2 of the License, or         *
+ *  (at your option) any later version.                                       *
+ *                                                                            *
+ *  This program is distributed in the hope that it will be useful,           *
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of            *
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             *
+ *  GNU General Public License for more details.                              *
+ *                                                                            *
+ *  You should have received a copy of the GNU General Public License         *
+ *  along with this program; if not, write to the                             *
+ *  Free Software Foundation, Inc.,                                           *
+ *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                 *
+ ******************************************************************************/
+
+#ifndef QTGUI_H
+#define QTGUI_H
+
+#include "application/camerahandler.h"
+#include "application/editmenuhandler.h"
+#include "application/externalchangemonitor.h"
+#include "application/runanimationhandler.h"
+#include "application/soundhandler.h"
+#include "frontends/frontend.h"
+#include "frontends/qtfrontend/menuframe.h"
+#include "frontends/qtfrontend/toolbar.h"
+#include "frontends/qtfrontend/dialogs/descriptiondialog.h"
+#include "frontends/qtfrontend/dialogs/helpbrowser.h"
+#include "frontends/qtfrontend/elements/flexiblespinbox.h"
+#include "frontends/qtfrontend/frameview/frameviewinterface.h"
+#include "frontends/qtfrontend/preferences/preferencesmenu.h"
+#include "frontends/qtfrontend/timeline/timeline.h"
+// #include "frontends/qtfrontend/tooltabs/compositingtab.h"
+#include "frontends/qtfrontend/tooltabs/projecttab.h"
+#include "frontends/qtfrontend/tooltabs/recordingtab.h"
+// #include "frontends/qtfrontend/tooltabs/viewtab.h"
+
+#include <QtGui/QProgressBar>
+#include <QtGui/QProgressDialog>
+#include <QtGui/QUndoView>
+#include <QtGui/QtGui>
+
+
+/**
+ *The main window class for the qstopmotion application.
+ *This class sets up the main GUI and connects the buttons.
+ *
+ *@author Bjoern Erik Nilsen & Fredrik Berg Kjoelstad
+*/
+class MainWindowGUI : public QMainWindow
+{
+    Q_OBJECT
+public:
+
+    enum {SAVE, SAVE_AS, UNDO, REDO, CUT, COPY, PASTE, GOTO};
+
+    /**************************************************************************
+     * Public functions
+     **************************************************************************/
+
+    /**
+     * Sets up the program main GUI and connect the widgets and handlers.
+     * @param stApp the application class for changing translator
+     * on runtime.
+     */
+    MainWindowGUI(QApplication *stApp, Frontend *f);
+
+    /**
+     * Cleans up after the mainwindowgui.
+     */
+    ~MainWindowGUI();
+
+    void init();
+
+    /**
+     * Overloaded mouse listener. Closes the embedded menues when the user
+     * clicks inside the main window.
+     * @param e information about the event.
+     */
+    void mousePressEvent(QMouseEvent * e);
+
+    /**
+     * Overloaded event listener which recieves information when a keyboard key is
+     * pressed.
+     * @param k information about the key event.
+     */
+    void keyPressEvent(QKeyEvent *k);
+
+    /**
+     * Sets up the ExternalChangeMonitor to monitor the project directories
+     * for changes in the project files.
+     */
+    void setupDirectoryMonitoring();
+
+    /**
+     * Getting all possible GUI languages
+     * @return A vector with all languages
+     */
+    const QVector<QString> getLanguages();
+
+    /**
+     * Getting all possible GUI locales
+     * @return A vector with all locales
+     */
+    const QVector<QString> getLocales();
+
+    /**
+     * A new language is selected in the preferences menu.
+     * @param newIndex New selected index.
+     */
+    void changeLanguage(int newIndex);
+
+    /**
+     * A new capture button function is selected in the preferences menu.
+     * @param newFunction New selected function.
+     */
+    void changeCaptureButtonFunction(PreferencesTool::captureButtonFunction newFunction);
+
+    /**
+     * Retranslates the strings.
+     *
+     * This function is called after a new translator has been installed so that
+     * the program strings are retranslated to the new language.
+     * @param newLocale The new locale for the retranslation.
+     */
+    void retranslateStrings(const QString &newLocale);
+
+    /**
+     * Function for displaying progress on timeconsuming operations.
+     * @param infoText the text to display to the user
+     * @param numOperations the number of calculated operations to do
+     */
+    void showProgress(const char *infoText, unsigned int numOperations = 0);
+
+    /**
+     * Function for hiding the progress info.
+     */
+    void hideProgress();
+
+    /**
+     * Function for updating the progress.
+     * @param numOperationsDone the number of operations done
+     */
+    void updateProgress(int numOperationsDone);
+
+    /**
+     * Function for changing the information to display to the user
+     * @param infoText the text to display to the user
+     */
+    void setProgressInfo(const char *infoText);
+
+    /**
+     * Display a message in the status bar.
+     * @param message the message to display.
+     * @param timeout the timeout for the message in mili-seconds.
+     */
+    void showMessage(const QString &message, int timeout = 0);
+
+    /**
+     * Removes any temporary message being shown in the status bar.
+     */
+    void clearMessage();
+
+    /**
+     * Function for checking if the user has aborted the operation
+     * (eg pressed cancel)
+     * @return true if the the operation is aborted, false otherwise
+     */
+    bool isOperationAborted();
+
+    /**
+     * Set the project ID in the status bar
+     * @param id The new project id:
+     */
+    void setProjectID(const QString &id);
+
+    /**
+     * Set the scene ID in the status bar
+     * @param id The new scene id:
+     */
+    void setSceneID(const QString &id);
+
+    /**
+     * Set the take ID in the status bar
+     * @param id The new take id:
+     */
+    void setTakeID(const QString &id);
+
+    /**
+     * Set the exposure ID in the status bar
+     * @param id The new exposure id:
+     */
+    void setExposureID(const QString &id);
+
+    /**
+     * Open the start dialog
+     */
+    void startDialog();
+
+    /**
+     * Set all settings to the actual default settings.
+     */
+    void setProjectSettingsToDefault();
+
+    /**************************************************************************
+     * Public slots
+     **************************************************************************/
+
+public slots:
+    /**
+     * This slot is notified when the size of the model changes so that menuframe
+     * menu options can be adjusted (activated/deactivated, etc).
+     * @param modelSize the new size of the model.
+     */
+    void modelSizeChanged(int modelSize);
+
+    /**
+     * Sets differents buttons such as undo, save as and copy to be enabled.
+     */
+    void activateMenuOptions();
+
+    /**
+     * Update the progress bar.
+     */
+    void updateProgressBar();
+
+    /**************************************************************************
+     * Private slots
+     **************************************************************************/
+
+private slots:
+
+    /**
+     * Creates a new project.
+     */
+    void newProject();
+
+    /**
+     * Opens a project.
+     */
+    void openProject();
+
+    /**
+     * Opens the last used projects.
+     */
+    void openMostRecent();
+    void openSecondMostRecent();
+    void openThirdMostRecent();
+    void openFourthMostRecent();
+
+    /**
+     * Saves the project to the last saved file.
+     */
+    void saveProject();
+
+    /**
+     * Saves the project to a given filename from the user.
+     */
+    void saveProjectAs();
+
+    /**
+     * Exports the current project to a video file choosen by the user. It uses the
+     * registered video encoder -- if registered -- to export.
+     */
+    void exportToVideo();
+
+    /**
+     * Exports the current project to a valid cinelerra-cv project.
+     */
+    void exportToCinelerra();
+
+    /**
+     * Close the application.
+     */
+    void closeApplication();
+
+    /**
+     * Brings up a preferences menu where the user can set preferences for the
+     * application.
+     */
+    void showPreferencesMenu();
+
+    /**
+     * Show the undo view window.
+     */
+    void showUndoStack();
+
+    /**
+     *
+     */
+    void whatsThis();
+
+    /**
+     * Brings up an help dialog with the qstopmotion user manua.
+     */
+    void showHelpDialog();
+
+    /**
+     * Brings up an about dialog with information about the application.
+     */
+    void showAboutDialog();
+
+protected:
+   void closeEvent(QCloseEvent* event);
+
+signals:
+    void startNewProject();
+    void startLastProject();
+    void startOpenProject();
+    void startExit();
+
+public:
+
+private:
+    QApplication       *stApp;
+    Frontend           *frontend;
+    QWidget            *centerWidget;
+    QVBoxLayout        *centerWidgetLayout;
+    QWidget            *workArea;
+    QHBoxLayout        *workAreaLayout;
+    QWidget            *viewArea;
+    QVBoxLayout        *viewAreaLayout;
+    TimeLine           *timeLine;
+    FrameViewInterface *frameView;
+    ToolBar            *toolBar;
+
+    // Actions
+    QAction *newAct;
+    QAction *openAct;
+    QAction *mostRecentAct;
+    QAction *secondMostRecentAct;
+    QAction *thirdMostRecentAct;
+    QAction *fourthMostRecentAct;
+    QAction *saveAct;
+    QAction *saveAsAct;
+    QAction *videoAct;
+    QAction *cinelerraAct;
+    QAction *quitAct;
+    QAction *undoAct;
+    QAction *redoAct;
+    QAction *cutAct;
+    QAction *copyAct;
+    QAction *pasteAct;
+    QAction *configureAct;
+    QAction *undoViewAct;
+    QAction *whatsthisAct;
+    QAction *aboutAct;
+    QAction *helpAct;
+
+    // Menues
+    QMenu           *fileMenu;
+    QMenu           *exportMenu;
+    QMenu           *mostRecentMenu;
+    QMenu           *editMenu;
+    QMenu           *settingsMenu;
+    QMenu           *viewMenu;
+    QMenu           *helpMenu;
+    QTabWidget      *sideBar;
+    PreferencesMenu *preferencesMenu;
+    RecordingTab    *recordingTab;
+    ProjectTab      *projectTab;
+    // ViewTab         *viewTab;
+    // CompositingTab  *compositingTab;
+
+    // QAction *gotoFrameAct;
+    // MenuFrame       *gotoMenu;
+    // QPushButton     *gotoMenuCloseButton;
+    // QWidget         *gotoMenuWidget;
+    // QHBoxLayout     *gotoMenuWidgetLayout;
+    // FlexibleSpinBox *gotoSpinner;
+    // QLabel          *gotoFrameLabel;
+
+    // Status bar
+    QProgressDialog *progressDialog;
+    QProgressBar    *progressBar;
+    QLabel          *infoText;
+    QTimer          *timer;
+    QLabel          *projectLabel;
+    QLabel          *projectID;
+    QLabel          *sceneLabel;
+    QLabel          *sceneID;
+    QLabel          *takeLabel;
+    QLabel          *takeID;
+    QLabel          *exposureLabel;
+    QLabel          *exposureID;
+
+    // Other widgets
+    QUndoView       *undoView;
+    HelpBrowser     *helpBrowser;
+
+    // Handlers
+    SoundHandler          *soundHandler;
+    CameraHandler         *cameraHandler;
+    EditMenuHandler       *editMenuHandler;
+    RunAnimationHandler   *runAnimationHandler;
+    ExternalChangeMonitor *changeMonitor;
+
+    // Translation handling
+    QTranslator      *translator;
+    QString           translationsPath;
+    QVector<QString>  translationsLanguages;
+    QVector<QString>  translationsLocales;
+
+    // Others
+    QString lastVisitedDir;
+
+    /**************************************************************************
+     * Private functions
+     **************************************************************************/
+
+    /**
+     * Create the translator of the application.
+     * @paramnewLocale The new locale.
+     */
+    void createTranslator(const QString &newLocale);
+
+    /**
+     * Initialize the possible languages
+     */
+    void initTranslations();
+
+    /**
+     * Creates the handlers for handling user requests.
+     */
+    void createHandlers();
+
+    /**
+     * Creates key accelerators (keyboard shortcuts)
+     *
+     * More can be found in the function ToolsMenu::createAccelerators().
+     */
+    void createAccelerators();
+
+    /**
+     * Creates the actions from which the menus are created.
+     */
+    void createActions();
+
+    /**
+     * Creates and sets up the menu and the toolbar.
+     */
+    void createMenus();
+
+    /**
+     * Creates the preferences menu.
+     * @param parent
+     */
+    void makePreferencesMenu();
+
+    /**
+     *Creates and sets up the toolsmenu.
+     *@param parent the widget the toolsmenu will be inserted into.
+     */
+    void makeToolsMenu(QHBoxLayout *layout);
+
+    /**
+     * Creates and sets up the menu for going to a specified framenumber.
+     * @param parent the widget the gotomenu will be inserted into.
+     */
+    // void makeGotoMenu(QVBoxLayout *layout);
+
+    /**
+     *Creates and sets up the frameview.
+     *@param parent the widget the frameview will be inserted into.
+     */
+    void makeViews(QHBoxLayout *layout);
+
+    /**
+     * Sets up the statusbar with custom widgets.
+     */
+    void makeStatusBar();
+
+    /**
+     *Overloaded event listener for when when a drag enters the application.
+     *@param event information about the dragEnterEvent
+     */
+    void dragEnterEvent(QDragEnterEvent * event);
+
+    /**
+     *Overloaded event listener for when a drop event occur in the application.
+     *@param event information about the dropEvent
+     */
+    void dropEvent(QDropEvent *event);
+
+    /**
+     * Overloaded event listener which recieves information when a keyboard key is
+     * released
+     * @param k information about the key event.
+     */
+    void keyReleaseEvent(QKeyEvent * k);
+
+    /**
+     * Retranslates the tooltip and whatsthis text.
+     *
+     * This function is called from retranslateStrings.
+     */
+    void retranslateHelpText();
+
+    /**
+     * Changes the project history so that they shows correctly in the
+     * most recent menu.
+     */
+    void setMostRecentProject();
+
+    /**
+     * Updates the most recent menu.
+     */
+    void updateMostRecentMenu();
+
+    /**
+     * Opens a saved project.
+     * @param projectFile the project to open
+     */
+    void openProject(const QString &projectFile);
+
+    /**
+     * Check for saving of all changes.
+     */
+    void checkSaved();
+};
+
+#endif

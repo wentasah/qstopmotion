@@ -1,0 +1,162 @@
+Last Changes in the sources on qStopMotion
+===============================================================================
+
+qStopMotion (0.9.x)
+  * Fix Bugs
+  * Check source code quality with "cppcheck".
+  * Check source code quality with "valgrind".
+qStopMotion (0.9.9)
+  * Fix Bugs
+  * Feature freeze for version 1.0.0.
+qStopMotion (0.9.8)
+  * Fix Bugs
+  * Selection of the capture butten functionality in the general tab of the
+    preferences dialog in the preferences menu.
+  * Insert Scenes functionality.
+  * Insert Takes functionality.
+  * Insert Frames functionality.
+qStopMotion (0.9.7)
+  * Fix Bugs
+  * Syncronous selection of scene, take and exposure in the project tree.
+  * Remove Scenes functionality.
+  * Remove Takes functionality.
+  * Add / Remove Frames functionality
+  * Implementation of the ProjectTab Class as a Observer
+  * Remove all project tree functionality from the animation project
+  * Concentration of all changes in the project, the views and the frontend in the
+    Domain Factory class
+  * Add undo history entries for all changes in the animation project
+qStopMotion (0.9.6)
+  * Fix Bugs
+  * change the configuration system from automake to CMake.
+  * using the CMakeLists.txt instead of qstopmotion.pro in the Qt-Creator.
+  * Add installation functionality
+  * Add packaging for Windows (NSIS Installer).
+  * Add packaging for Linux RPM package.
+  * Add packaging for Linux DEB package.
+  * Add packaging for source package.
+qStopMotion (0.9.5)
+  * Fix Bugs
+  * Add Scenes functionality.
+  * Add Takes functionality.
+  * Config files only used for linux and mac systems.
+  * Create dirctories on windows systems using the installation path of the binary.
+  * Conzentrate the handling of directories in the frontend main class.
+qStopMotion (0.9.4)
+  * Fix Bugs
+  * Remove of static get function form the PreferencesTool and add the
+    PreferencesTool as a pointer to the QtFrontend.
+  * Move ExternalCommand to dirctory frontends/qtfrontend/dialogs and rename to
+    ExternalCommandDialog.
+  * Project tree on the project tool tab.
+  * Add Takes functionality.
+qStopMotion (0.9.3)
+  * New general settings tab in the preferences dialog.
+  * Move the language selection from the preferences menu to the preferences dialog.
+  * Remove language handler class.
+qStopMotion (0.9.2)
+  * New default value tab in the preferences dialog.
+  * Separation of default project settings and actual project setting.
+  * Save default project settings in the prefrences file.
+  * Save actual project settings in the project file.
+qStopMotion (0.9.1)
+  * Full implementation of the FrameViewImage.
+  * Replace FrameViewSDL with FrameViewImage on the Linux platform.
+  * Move special widgets to the sub folder elments.
+  * Move class ImageGraberThread to the FrameView sub folder.
+qStopMotion (0.9.0)
+  * Create new subdirectory preferences to the qtfrontend folder.
+  * Move preferencesmenu and exporttab classes to the new folder.
+  * Rename directory tools/video to tools/videoencoder.
+  * Rename class VideoFactory to VideoEncoderFactory.
+  * Use VideoEncoder as a base class for different types of endoding tools.
+  * Add FfmpegEncoder as the first implementation of VideoEncoder.
+  * Reimplement the export tab of the preferences menu.
+qStopMotion (0.8.9)
+  * Add Windows support to gstreamer grabber
+  * Rename ModelHandler to ProjectHandler.
+  * Remove all status bar variables from the handler classes.
+qStopMotion (0.8.8)
+  * Separate the access to the views from the domain facade in a view facade.
+  * Replace all DomainFacade::getFacade() calls.
+  * Replace all ViewFacade::getFacade() calls.
+  * Remove static variables and static functions from DomainFacade and ViewFacade.
+  * full implementation of the new component call concept.
+qStopMotion (0.8.7)
+  * Replace UndoHistory class by QUndoStack.
+  * Replace Undo class by QUndoCommand.
+  * Rename all undo classes for frames to undo for expersure.
+  * Rename all undo classes for scenes.
+  * Add undo classes for takes.
+  * Add undo view.
+  * Integrate new undo functionality to domain facade.
+  * Replace all DomainFacade::getFacade() calls from the domain and animation
+  model/project classes.
+qStopMotion (0.8.6)
+  * Move all tooltabs classes to a separate subdirectory tooltabs.
+  * Move about dialog class to a separate subdirectory dialoges.
+  * Remove class filepreferencesmenu.
+  * Remove bottom widget in mainwindowgui.
+  * Add single dialog for projct, scene and take description.
+  * Remove class scenearrowbutton.
+  * Remove class scenethumbview.
+  * Rename subdirectory framebar to timeline
+  * Rename class framebar to timeline
+  * Rename htmlDirectory to manualDirectory in the namespace
+  * Add version to namespace
+  * Add graphics path to namespace
+  * Load all graphic files from the graphics path in the namespace
+  * Move the helpwindow to the dialogs subdirectory
+  * Rename the helpwindow to helpbrowser
+  * Remove the Qt Designer file for the helpwindow
+  * Test SDL on the windows platform.
+qStopMotion (0.8.5)
+  * Move project serializer from directory technical to directory domain/animation.
+  * Move all directory, file and suffix constants from projectserializer to preferencestool.
+  * Rename class animation to animationproject.
+  * Rename class frame to exposure.
+  * Add class take between scene and exposure.
+  * Move sound functionality to scene.
+  * Move XML read and save functionality from prject to scene/take/exposure.
+  * Expand XML layout of the project file.
+  * Clearing the observer messages.
+  * Add separate input dialoges for project, scene and take description.
+qStopMotion (0.8.4)
+  * First Windows version!!!
+  * Replace the propritary logger functionality by the QtDebug debugging
+  functionality.
+  * Delete the logger class.
+  * Dove preferences tool class from fondation directory to technical directory.
+  * Delete fondation directory.
+  * Replace the Linux inotify functionlity by the QFileSystemWatcher.
+  * Remove oggvorbis audio driver.
+  * Remove oss audio driver.
+  * Remove non gui frontend.
+  * Move directory frontends to src and remove directory presentation.
+  * Remove packer functionality.
+qStopMotion (0.8.3)
+  * Remove device tab from the preferences menu entry.
+  * Remove import tab from the preferences menu entry.
+  * Remove commandlinegrabber class.
+qStopMotion (0.8.2)
+  * Separation of command line commands from the imagegrabber class in the
+  commandlinegrabber class.
+  * Implementation of a new gstreamer image grabber implementation using the
+  gstreamer library.
+  * Add a combobox to select the video source to the recording tab.
+qStopMotion (0.8.1)
+  * Separation of the frame view implementation in SDL using a interface.
+  * Implementation of a new frame view based on QImage.
+qStopMotion (0.8.0)
+  * 
+qStopMotion (0.7.0)
+  * 
+
+===============================================================================
+
+stopmotion (0.6.2)
+  * Last version of StopMotion4Linux
+  * Base of the qStopMotion fork
+
+===============================================================================
+

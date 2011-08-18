@@ -1,0 +1,810 @@
+/******************************************************************************
+ *  Copyright (C) 2005-2011 by                                                *
+ *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
+ *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
+ *    Ralf Lange (ralf.lange@longsoft.de)                                     *
+ *                                                                            *
+ *  This program is free software; you can redistribute it and/or modify      *
+ *  it under the terms of the GNU General Public License as published by      *
+ *  the Free Software Foundation; either version 2 of the License, or         *
+ *  (at your option) any later version.                                       *
+ *                                                                            *
+ *  This program is distributed in the hope that it will be useful,           *
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of            *
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             *
+ *  GNU General Public License for more details.                              *
+ *                                                                            *
+ *  You should have received a copy of the GNU General Public License         *
+ *  along with this program; if not, write to the                             *
+ *  Free Software Foundation, Inc.,                                           *
+ *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                 *
+ ******************************************************************************/
+
+#include "qtfrontend.h"
+
+#include "domain/animation/projectserializer.h"
+#include "frontends/viewfacade.h"
+#include "frontends/qtfrontend/dialogs/externalcommanddialog.h"
+#include "technical/util.h"
+#include "technical/preferencestool.h"
+
+#include <QtCore/QDebug>
+#include <QtGui/QtGui>
+
+#include <cstring>
+// #include <unistd.h>
+
+
+QtFrontend::QtFrontend(int &argc, char **argv)
+{
+    qDebug("QtFrontend::Constructor --> Start");
+
+    domainFacade         = NULL;
+    viewFacade           = NULL;
+    mw                   = NULL;
+    preferencesTool      = NULL;
+
+    stApp = new QApplication(argc, argv);
+    /*
+    #if QT_VERSION == 0x040400
+        stApp->setAttribute(Qt::AA_NativeWindows);
+    #endif
+    */
+
+    qDebug("QtFrontend::Constructor --> End");
+}
+
+
+QtFrontend::~QtFrontend()
+{
+    qDebug("QtFrontend::Destructor --> Start");
+
+    delete mw;
+    mw = NULL;
+    delete stApp;
+    stApp = NULL;
+    domainFacade = NULL;
+    viewFacade = NULL;
+
+    if(preferencesTool != NULL) {
+        delete preferencesTool;
+        preferencesTool = NULL;
+    }
+
+    qDebug("QtFrontend::Destructor --> End");
+}
+
+
+bool QtFrontend::checkApplicationDirectory(char *binDirName)
+{
+    qDebug("QtFrontend::checkApplicationDirectory --> Start");
+
+    qDebug() << "QtFrontend::checkApplicationDirectory --> binDirName: " << binDirName;
+
+    bool hasCorrectPermissions = true;
+    QDir homeDir = QDir::home();
+    QString userDirName;
+    QString otherDirName;
+    QString appDirName;
+
+    // Check if ~./qstopmotion directory exists, create it if not
+    bool prefsFileExists = homeDir.exists(PreferencesTool::applicationDirectory);
+    if (prefsFileExists == false) {
+        // TODO: mkdir(tmp, 0755);
+        if (!homeDir.mkdir(PreferencesTool::applicationDirectory)) {
+            // TODO: Error! Can't create application directory
+        }
+    }
+    homeDir.cd(PreferencesTool::applicationDirectory);
+    if (homeDir.isReadable() == false) {
+        // TODO: W_OK | X_OK - Test necessary
+        hasCorrectPermissions = false;
+    }
+    if (!hasCorrectPermissions) {
+        // Set the rigth permissions
+        QFile appDir(homeDir.absolutePath());
+        hasCorrectPermissions = appDir.setPermissions(QFile::ReadOwner | QFile::WriteOwner | QFile::ExeOwner);
+        if (!hasCorrectPermissions) {
+            // Set the permissions was not successful!
+            showCritical(tr("Check Permissions"),
+                tr("You do not have the necessary permissions to run qStopMotion.\n"
+                "You need permission to read, write and execute on ~/.qstopmotion"));
+
+            qDebug("QtFrontend::checkApplicationDirectory --> End (Error)");
+            return 1;
+        }
+    }
+
+    userDirName.append(homeDir.absolutePath());
+
+    appUserDirName.append(userDirName.toLatin1());
+    userDirName.append(QLatin1String("/"));
+
+    otherDirName.append(userDirName);
+    otherDirName.append(PreferencesTool::tempDirectory);
+    appTempDirName.append(otherDirName.toLatin1());
+
+    otherDirName.clear();
+    otherDirName.append(userDirName);
+    otherDirName.append(PreferencesTool::trashDirectory);
+    appTrashDirName.append(otherDirName.toLatin1());
+
+    otherDirName.clear();
+    otherDirName.append(userDirName);
+    otherDirName.append(PreferencesTool::packerDirectory);
+    appPackerDirName.append(otherDirName.toLatin1());
+
+    QString absoluteAppName = Util::convertPathFromOsSpecific(QString(binDirName));
+    int pathLength = absoluteAppName.lastIndexOf("/bin/");
+
+    if (pathLength == -1)
+    {
+        // The binDirName is only the application name --> use default values
+#ifdef Q_WS_WIN
+        // Windows version
+
+        appDirName.append("C:/Program Files/qstopmotion/");
+#else
+        // Linux and Apple OS X version
+
+        appDirName.append("/usr/");
+#endif
+        otherDirName.clear();
+        otherDirName.append(appDirName);
+        otherDirName.append(QLatin1String("bin/"));
+        appBinDirName.append(otherDirName.toLatin1());
+    }
+    else
+    {
+        // The binDirName is a full qualified application name
+        appDirName.append(absoluteAppName.left(pathLength + 1));
+        pathLength = absoluteAppName.lastIndexOf("/");
+        appBinDirName.append(absoluteAppName.left(pathLength + 1));
+    }
+    qDebug() << "QtFrontend::checkApplicationDirectory --> Application Direcory: " << appDirName;
+    qDebug("QtFrontend::checkApplicationDirectory --> Application Binary Direcory: " + appBinDirName);
+
+#ifdef Q_WS_WIN
+    // Windows version
+
+    otherDirName.clear();
+    otherDirName.append(appDirName);
+    otherDirName.append(PreferencesTool::manualDirectory);
+    otherDirName.append(QLatin1String("/"));
+    appManualDirName.append(otherDirName.toLatin1());
+
+    otherDirName.clear();
+    otherDirName.append(appDirName);
+    otherDirName.append(PreferencesTool::translationsDirectory);
+    otherDirName.append(QLatin1String("/"));
+    appTranslationsDirName.append(otherDirName.toLatin1());
+
+    otherDirName.clear();
+    otherDirName.append(appDirName);
+    otherDirName.append(PreferencesTool::graphicsDirectory);
+    otherDirName.append(QLatin1String("/"));
+    appGraphicsDirName.append(otherDirName.toLatin1());
+
+#else
+    // Linux and Apple OS X version
+
+    otherDirName.clear();
+    otherDirName.append(appDirName);
+    otherDirName.append(QLatin1String("share/doc/"));
+    otherDirName.append(PreferencesTool::applicationName);
+    otherDirName.append(QLatin1String("/"));
+    otherDirName.append(PreferencesTool::manualDirectory);
+    otherDirName.append(QLatin1String("/"));
+    appManualDirName.append(otherDirName.toLatin1());
+
+    otherDirName.clear();
+    otherDirName.append(appDirName);
+    otherDirName.append(QLatin1String("share/"));
+    otherDirName.append(PreferencesTool::applicationName);
+    otherDirName.append(QLatin1String("/"));
+    otherDirName.append(PreferencesTool::translationsDirectory);
+    otherDirName.append(QLatin1String("/"));
+    appTranslationsDirName.append(otherDirName.toLatin1());
+
+    otherDirName.clear();
+    otherDirName.append(appDirName);
+    otherDirName.append(QLatin1String("share/"));
+    otherDirName.append(PreferencesTool::applicationName);
+    otherDirName.append(QLatin1String("/"));
+    otherDirName.append(PreferencesTool::graphicsDirectory);
+    otherDirName.append(QLatin1String("/"));
+    appGraphicsDirName.append(otherDirName.toLatin1());
+
+#endif
+
+    qDebug("QtFrontend::checkApplicationDirectory --> Application Manual Direcory: " + appManualDirName);
+    qDebug("QtFrontend::checkApplicationDirectory --> Application Translations Direcory: " + appTranslationsDirName);
+    qDebug("QtFrontend::checkApplicationDirectory --> Application Graphics Direcory: " + appGraphicsDirName);
+
+
+    otherDirName.clear();
+    otherDirName.append(appGraphicsDirName);
+    otherDirName.append(PreferencesTool::iconsDirectory);
+    otherDirName.append(QLatin1String("/"));
+    appIconsDirName.append(otherDirName.toLatin1());
+    qDebug("QtFrontend::checkApplicationDirectory --> Application Icon Direcory: " + appIconsDirName);
+
+    otherDirName.clear();
+    otherDirName.append(appGraphicsDirName);
+    otherDirName.append(PreferencesTool::picturesDirectory);
+    otherDirName.append(QLatin1String("/"));
+    appPicturesDirName.append(otherDirName.toLatin1());
+    qDebug("QtFrontend::checkApplicationDirectory --> Application Pictures Direcory: " + appPicturesDirName);
+
+    qDebug("QtFrontend::checkApplicationDirectory --> End");
+    return 0;
+}
+
+
+void QtFrontend::init()
+{
+    qDebug("QtFrontend::init --> Start");
+
+    // Need to call this here to get the locale for the language
+    // which is used by the translator created in mainWindowGUI
+    preferencesTool = new PreferencesTool(this);
+    initializePreferences();
+
+    // returns a pointer to the domain facade (allocated with new)
+    domainFacade = new DomainFacade(this);
+
+    // returns a pointer to the facade (allocated with new)
+    viewFacade = new ViewFacade(this);
+
+    mw = new MainWindowGUI(stApp, this);
+    mw->init();
+    mw->setWindowTitle(tr("qStopMotion"));
+    mw->resize(751, 593);
+    mw->move(20, 20);
+
+    // this->testMainWidget();
+
+    mw->show();
+    mw->startDialog();
+
+    // this->testMainWidget();
+
+    qDebug("QtFrontend::init --> End");
+}
+
+
+void QtFrontend::handleArguments(int argc, char **argv)
+{
+    qDebug("QtFrontend::handleArguments --> Start");
+
+    // returns a pointer to the facade (allocated with new)
+    DomainFacade *facadePtr = getProject();
+
+    bool hasRecovered = false;
+
+    if (isRecoveryMode()) {
+        int ret = askQuestion(tr("Recovery"),
+                      tr("Something caused qStopmotion to exit abnormally\n"
+                      "last time it was runned. Do you want to recover?"));
+        // The user wants to recover
+        if (ret == 0) {
+            recover(facadePtr);
+            hasRecovered = true;
+        } else {
+            removeTemporaryDirectories();
+            makeTemporaryDirectories();
+        }
+    } else {
+        removeTemporaryDirectories();
+        makeTemporaryDirectories();
+    }
+
+    if (hasRecovered == false && argc > 1 && QFileInfo(argv[1]).isReadable()) {
+        facadePtr->setProjectFileName(argv[1]);
+        facadePtr->openProject();
+        const QString proFile = facadePtr->getProjectFileName();
+        if (proFile != NULL) {
+            preferencesTool->setBasicPreference("mostrecent", proFile);
+        }
+    }
+
+    qDebug("QtFrontend::handleArguments --> End");
+}
+
+
+int QtFrontend::run(int, char **)
+{
+    stApp->connect(stApp, SIGNAL(lastWindowClosed()), stApp, SLOT(quit()));
+    return stApp->exec();
+}
+
+
+void QtFrontend::finalize()
+{
+    this->removeTemporaryDirectories();
+    this->removeTemporaryFiles();
+}
+
+
+DomainFacade* QtFrontend::getProject()
+{
+    return domainFacade;
+}
+
+
+ViewFacade* QtFrontend::getView()
+{
+    return viewFacade;
+}
+
+
+PreferencesTool* QtFrontend::getPreferences()
+{
+    return preferencesTool;
+}
+
+
+const char* QtFrontend::getUserDirName()
+{
+    return this->appUserDirName.constData();
+}
+
+
+const char* QtFrontend::getTempDirName()
+{
+    return this->appTempDirName.constData();
+}
+
+
+const char* QtFrontend::getTrashDirName()
+{
+    return this->appTrashDirName.constData();
+}
+
+
+const char* QtFrontend::getPackerDirName()
+{
+    return this->appPackerDirName.constData();
+}
+
+
+const char* QtFrontend::getBinDirName()
+{
+    return this->appBinDirName.constData();
+}
+
+
+const char* QtFrontend::getManualDirName()
+{
+    return this->appManualDirName.constData();
+}
+
+
+const char* QtFrontend::getTranslationsDirName()
+{
+    return this->appTranslationsDirName.constData();
+}
+
+
+const char* QtFrontend::getGraphicsDirName()
+{
+    return this->appGraphicsDirName.constData();
+}
+
+
+const char* QtFrontend::getIconsDirName()
+{
+    return this->appIconsDirName.constData();
+}
+
+
+const char* QtFrontend::getPicturesDirName()
+{
+    return this->appPicturesDirName.constData();
+}
+
+
+const QVector<QString> QtFrontend::getLanguages()
+{
+    return mw->getLanguages();
+}
+
+
+const QVector<QString> QtFrontend::getLocales()
+{
+    return mw->getLocales();
+}
+
+
+void QtFrontend::changeLanguage(int newIndex)
+{
+    mw->changeLanguage(newIndex);
+}
+
+
+void QtFrontend::changeCaptureButtonFunction(int newFunction)
+{
+    mw->changeCaptureButtonFunction((PreferencesTool::captureButtonFunction)newFunction);
+}
+
+
+void QtFrontend::showProgress(const char* operation, unsigned int numOperations)
+{
+    mw->showProgress(operation, numOperations);
+}
+
+
+void QtFrontend::hideProgress()
+{
+    mw->hideProgress();
+}
+
+
+void QtFrontend::updateProgress(int numOperationsDone)
+{
+    mw->updateProgress(numOperationsDone);
+}
+
+
+void QtFrontend::setProgressInfo(const char *infoText)
+{
+    mw->setProgressInfo(infoText);
+}
+
+
+void QtFrontend::showMessage(const QString &message, int timeout)
+{
+    mw->showMessage(message, timeout);
+}
+
+
+void QtFrontend::clearMessage()
+{
+    mw->clearMessage();
+}
+
+
+void QtFrontend::setProjectID(const char *id)
+{
+    mw->setProjectID(QString(id));
+}
+
+
+void QtFrontend::setSceneID(const char *id)
+{
+    mw->setSceneID(QString(id));
+}
+
+
+void QtFrontend::setTakeID(const char *id)
+{
+    mw->setTakeID(QString(id));
+}
+
+
+void QtFrontend::setExposureID(const char *id)
+{
+    mw->setExposureID(QString(id));
+}
+
+
+bool QtFrontend::isOperationAborted()
+{
+    return mw->isOperationAborted();
+}
+
+
+void QtFrontend::processEvents()
+{
+    stApp->processEvents();
+}
+
+
+void QtFrontend::updateProgressBar()
+{
+    mw->updateProgressBar();
+}
+
+
+void QtFrontend::initializePreferences()
+{
+    qDebug("QtFrontend::initializePreferences --> Start");
+
+    QDir homeDir = QDir::home();
+    QString preferencesFile = homeDir.absolutePath();
+    preferencesFile.append(QLatin1String("/"));
+    preferencesFile.append(PreferencesTool::applicationDirectory);
+    preferencesFile.append(QLatin1String("/"));
+    preferencesFile.append(PreferencesTool::preferencesName);
+    preferencesFile.append(QLatin1String("."));
+    preferencesFile.append(PreferencesTool::preferencesSuffix);
+
+    if (!preferencesTool->setPreferencesFile(preferencesFile, "0.9")) {
+        // File doesn't exist or is corrupt
+        setDefaultPreferences();
+    }
+
+    qDebug("QtFrontend::initializePreferences --> End");
+}
+
+
+void QtFrontend::setDefaultPreferences()
+{
+    qDebug("QtFrontend::setDefaultPreferences --> Start");
+
+    preferencesTool->setBasicPreferenceDefaults();
+    // preferencesTool->setEncoderDefaults();
+
+    qDebug("QtFrontend::setDefaultPreferences --> End");
+}
+
+
+int QtFrontend::askQuestion(const QString title, const QString &question)
+{
+    int ret = QMessageBox::question(mw,
+                                    title,
+                                    question,
+                                    QMessageBox::Yes, QMessageBox::No,
+                                    // tr("&Yes"), tr("&No"), // button 0, button 1, ...
+                                    QMessageBox::NoButton);
+    if (ret == QMessageBox::Yes) {
+        return 0;
+    }
+    return 1;
+}
+
+
+void QtFrontend::showInformation(const QString title, const QString &info)
+{
+    QMessageBox::information(mw,
+                             title,
+                             info);
+}
+
+
+void QtFrontend::showWarning(const QString title, const QString &warning)
+{
+    QMessageBox::warning(mw,
+                         title,
+                         warning);
+}
+
+
+void QtFrontend::showCritical(const QString title, const QString &message)
+{
+    QMessageBox::critical(mw,
+                          title,
+                          message);
+    Q_ASSERT(0);
+}
+
+
+int QtFrontend::runExternalCommand(const QString &command)
+{
+    ExternalCommandDialog *ec = new ExternalCommandDialog;
+    ec->show();
+    ec->run(command);
+    return 0;
+}
+
+
+/**
+ * Sets up the ExternalChangeMonitor to monitor the project directories
+ * for changes in the project files.
+ */
+void QtFrontend::setupDirectoryMonitoring()
+{
+    mw->setupDirectoryMonitoring();
+}
+
+
+bool QtFrontend::RemoveDirectory(const QString &path)
+{
+    bool has_err = false;
+    QDir aDir(path);
+    if (aDir.exists()) { //QDir::NoDotAndDotDot
+        QFileInfoList entries = aDir.entryInfoList(QDir::NoDotAndDotDot |
+                                QDir::Dirs | QDir::Files);
+        int count = entries.size();
+        for (int idx = 0; ((idx < count) && (!has_err)); idx++) {
+            QFileInfo entryInfo = entries[idx];
+            QString path = entryInfo.absoluteFilePath();
+            if (entryInfo.isDir()) {
+                has_err = RemoveDirectory(path);
+            } else {
+                QFile file(path);
+                if (!file.remove())
+                    has_err = true;
+            }
+        }
+        if (!aDir.rmdir(aDir.absolutePath()))
+            has_err = true;
+    }
+    return(has_err);
+}
+
+
+void QtFrontend::makeTemporaryDirectories()
+{
+    QDir homeDir = QDir::home();
+
+    homeDir.mkpath(getTempDirName());
+    // QFile appDir(homeDir.absolutePath() and temp subdirectory);
+    // hasCorrectPermissions = appDir.setPermissions(QFile::ReadOwner | QFile::WriteOwner | QFile::ExeOwner);
+    homeDir.mkpath(getTrashDirName());
+    // setPermissions(...)
+    homeDir.mkpath(getPackerDirName());
+    // setPermissions(...)
+}
+
+
+void QtFrontend::removeTemporaryDirectories()
+{
+    QDir homeDir = QDir::home();
+
+    RemoveDirectory(getTempDirName());
+    RemoveDirectory(getTrashDirName());
+    RemoveDirectory(getPackerDirName());
+
+    homeDir.rmpath(getTempDirName());
+    homeDir.rmpath(getTrashDirName());
+    homeDir.rmpath(getPackerDirName());
+}
+
+
+void QtFrontend::removeTemporaryFiles()
+{
+    QDir homeDir(this->getUserDirName());
+    QStringList nameFilter;
+    QString fileName(PreferencesTool::capturedFileName);
+    fileName.append(".");
+    fileName.append(PreferencesTool::capturedFileSuffix);
+    nameFilter.append(fileName);
+
+    homeDir.setNameFilters(nameFilter);
+    homeDir.setFilter(QDir::Files);
+    QStringList fileNames = homeDir.entryList();
+    if (fileNames.count() > 0) {
+        homeDir.remove(fileNames[0]);
+    }
+}
+
+
+bool QtFrontend::isRecoveryMode()
+{
+    if (QFile::exists(getTempDirName()) == false)
+        return false;
+    if (QFile::exists(getTrashDirName()) == false)
+        return false;
+    if (QFile::exists(getPackerDirName()) == false)
+        return false;
+
+    // Everything is intact and we have to run in recovery mode
+    return true;
+}
+
+
+void QtFrontend::recover(DomainFacade *facadePtr)
+{
+    QDir dp(this->getPackerDirName());
+    if (dp.isReadable()) {
+
+        QFileInfoList fileList = dp.entryInfoList();
+        const QString mostRecent = preferencesTool->getBasicPreference("mostrecent", QString());
+
+        for (int i = 0 ; i < fileList.size() ; i++) {
+            QFileInfo fileInfo = fileList.at(i);
+
+            // is a directory
+            if (!fileInfo.isDir()) continue;
+            // and not a '.' or '..' directory
+            if (!fileInfo.absolutePath().endsWith(QLatin1String("."))) continue;
+            if (mostRecent.compare(fileInfo.absolutePath(), Qt::CaseInsensitive) != 0) continue;
+            if (!fileInfo.isReadable()) continue;
+            if (!fileInfo.isWritable()) continue;
+            facadePtr->setProjectFileName(fileInfo.absolutePath());
+            facadePtr->openProject();
+            break;
+        }
+    }
+
+    dp.setPath(this->getTempDirName());
+    if (dp.isReadable()) {
+        QVector<QString> frames;
+        QVector<AudioFile> sounds;
+
+        QFileInfoList fileList = dp.entryInfoList();
+        // const QString mostRecent = preferencesTool->getBasicPreference("mostrecent", QString());
+
+        for (int i = 0 ; i < fileList.size() ; i++) {
+            QFileInfo fileInfo = fileList.at(i);
+
+            // Is a regular file, not a directory
+            if (fileInfo.isFile()) {
+                // Image file
+                if (fileInfo.suffix().compare(QLatin1String("snd")) != 0) {
+                    frames.push_back(fileInfo.absolutePath());
+                }
+                // Sound file
+                else {
+                    QString buf = fileInfo.absolutePath().left(fileInfo.absolutePath().indexOf(QLatin1String("_")));
+                    QString index = buf.left(buf.indexOf(QLatin1String("_")));
+
+                    AudioFile af;
+                    af.belongsTo = index.toUInt();
+                    af.filename.append(fileInfo.absolutePath());
+                    sounds.push_back(af);
+                }
+            }
+        }
+
+        if (frames.size() <= 0)
+            return;
+
+        // TODO: Wath is the reason for this line???
+        // QVector<QString>(frames).swap(frames);
+
+        facadePtr->addFrames(frames);
+
+        unsigned int numElem = sounds.size();
+        for (unsigned int j = 0; j < numElem; ++j) {
+            facadePtr->addSoundToScene(sounds[j].belongsTo, sounds[j].filename, QString() );
+        }
+    }
+}
+
+
+void QtFrontend::test(QWidget *parentWidget, int level)
+{
+    QDebug(QtDebugMsg) << "QtFrontend::test of level: " << level << " --> Start <<<<<<<<<<<<<<<=======================";
+
+    QObjectList testList = parentWidget->children();
+    int testSize = testList.size();
+    if (testSize == 0) {
+        QDebug(QtDebugMsg) << "QtFrontend::test of level: " << level << " --> End (no childs) <<<<<<<<<<<<<<<=======================";
+        return;
+    }
+    QDebug(QtDebugMsg) << "QtFrontend::test of level: " << level << " --> testSize: " << testSize;
+    for (int testIndex = 0 ; testIndex < testSize ; testIndex++ ) {
+        if ((level == 1) && (testIndex > 3)) {
+            QDebug(QtDebugMsg) << "QtFrontend::test: ++++++++++++++++++++++ Break +++++++++++++++++";
+        }
+
+        QObject *testObject = testList.at(testIndex);
+        if (testObject == 0) {
+            QDebug(QtDebugMsg) << "QtFrontend::test of level: " << level << " index: " << testIndex << " --> Widget korrupt !!!";
+            continue;
+        }
+
+        if (testObject->objectName().isEmpty()) {
+            QDebug(QtDebugMsg) << "QtFrontend::test of level: " << level << " index: " << testIndex << " --> testObject.className: " << testObject->metaObject()->className();
+        }
+        else {
+            QDebug(QtDebugMsg) << "QtFrontend::test of level: " << level << " index: " << testIndex << " --> testObject.objectName: " << testObject->objectName();
+        }
+        if (testObject->parent() != parentWidget) {
+            QDebug(QtDebugMsg) << "QtFrontend::test: ?????????????? Parent different ?????????????";
+        }
+
+        QWidget *testWidget = qobject_cast<QWidget *>(testObject);
+        if (testWidget == 0) {
+            QDebug(QtDebugMsg) << "QtFrontend::test of level: " << level << " index: " << testIndex << " --> no Widget !!!";
+            continue;
+        }
+
+        QDebug(QtDebugMsg) << "QtFrontend::test of level: " << level << " index: " << testIndex << " --> testWidget.winID: " << testWidget->winId();
+        this->test(testWidget, (level+1));
+    }
+
+    QDebug(QtDebugMsg) << "QtFrontend::test of level: " << level << " --> End <<<<<<<<<<<<<<<=======================";
+}
+
+
+void QtFrontend::testMainWidget()
+{
+    QDebug(QtDebugMsg) << "QtFrontend::testMainWidget --> Start";
+
+    test(this->mw, 0);
+
+    QDebug(QtDebugMsg) << "QtFrontend::testMainWidget --> End";
+}

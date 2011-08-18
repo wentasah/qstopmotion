@@ -1,0 +1,34 @@
+
+
+
+#ifndef CLICKABLE_LABEL
+#define CLICKABLE_LABEL
+
+#include <QLabel>
+#include <QMouseEvent>
+
+class ClickableLabel : public QLabel
+{
+    Q_OBJECT
+    bool pressed;
+
+    void mousePressEvent(QMouseEvent*) {
+        pressed = true;
+    }
+    void mouseReleaseEvent(QMouseEvent* e) {
+        if(pressed && rect().contains(e->pos())) {
+            emit clicked();
+        }
+        pressed = false;
+    }
+
+public:
+    ClickableLabel(QWidget* parent=0)
+     : QLabel(parent), pressed(false)
+    {}
+
+signals:
+    void clicked();
+};
+
+#endif

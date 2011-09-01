@@ -35,7 +35,7 @@
 #include "frontends/qtfrontend/dialogs/helpbrowser.h"
 #include "frontends/qtfrontend/elements/flexiblespinbox.h"
 #include "frontends/qtfrontend/frameview/frameviewinterface.h"
-#include "frontends/qtfrontend/preferences/preferencesmenu.h"
+#include "frontends/qtfrontend/preferences/preferencesdialog.h"
 #include "frontends/qtfrontend/timeline/timeline.h"
 // #include "frontends/qtfrontend/tooltabs/compositingtab.h"
 #include "frontends/qtfrontend/tooltabs/projecttab.h"
@@ -282,10 +282,10 @@ private slots:
     void closeApplication();
 
     /**
-     * Brings up a preferences menu where the user can set preferences for the
+     * Brings up a preferences dialog where the user can set preferences for the
      * application.
      */
-    void showPreferencesMenu();
+    void showPreferencesDialog();
 
     /**
      * Show the undo view window.
@@ -363,7 +363,7 @@ private:
     QMenu           *viewMenu;
     QMenu           *helpMenu;
     QTabWidget      *sideBar;
-    PreferencesMenu *preferencesMenu;
+
     RecordingTab    *recordingTab;
     ProjectTab      *projectTab;
     // ViewTab         *viewTab;
@@ -447,12 +447,6 @@ private:
      * Creates and sets up the menu and the toolbar.
      */
     void createMenus();
-
-    /**
-     * Creates the preferences menu.
-     * @param parent
-     */
-    void makePreferencesMenu();
 
     /**
      *Creates and sets up the toolsmenu.

@@ -20,8 +20,8 @@
  *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                 *
  ******************************************************************************/
 
-#ifndef PREFERENCESMENU_H
-#define PREFERENCESMENU_H
+#ifndef PREFERENCESDIALOG_H
+#define PREFERENCESDIALOG_H
 
 #include "frontends/frontend.h"
 #include "frontends/qtfrontend/preferences/defaulttab.h"
@@ -34,11 +34,11 @@
 
 
 /**
- * The import and export preferences menu.
+ * The import and export preferences dialog.
  *
  * @author Bjoern Erik Nilsen & Fredrik Berg Kjoelstad
  */
-class PreferencesMenu : public QDialog
+class PreferencesDialog : public QDialog
 {
     Q_OBJECT
 public:
@@ -47,9 +47,7 @@ public:
      * @param f frontend of the application.
      * @param parent the parent of the widget.
      */
-    PreferencesMenu(Frontend *f, QWidget *parent = 0);
-    void display();
-    void retranslateStrings();
+    PreferencesDialog(Frontend *f, QWidget *parent = 0);
 
 private:
     Frontend    *frontend;

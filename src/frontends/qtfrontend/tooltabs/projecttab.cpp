@@ -22,8 +22,10 @@
 
 #include "domain/domainfacade.h"
 #include "frontends/qtfrontend/dialogs/descriptiondialog.h"
+#include "technical/util.h"
 
 #include <QtCore/QList>
+#include <QtCore/QProcess>
 #include <QtCore/QtDebug>
 #include <QtGui/QLabel>
 #include <QtGui/QInputDialog>
@@ -1177,12 +1179,12 @@ void ProjectTab::removeFramesSlot()
 void ProjectTab::editFrameSlot()
 {
     qDebug("ProjectTab::editFrameSlot --> Start");
-/*
+
     const QString gimpCommand = Util::checkCommand("gimp");
     if (gimpCommand.isEmpty()) {
         frontend->showWarning(tr("Warning"),
                               tr("You do not have Gimp installed on your system"));
-        return 1;
+        return;
     }
 
     // Determine the active scene and active frame.
@@ -1193,14 +1195,14 @@ void ProjectTab::editFrameSlot()
     if (activeScene < 0 || activeTake < 0 || activeExposure < 0) {
         frontend->showWarning(tr("Warning"),
                               tr("There is no active frame to open"));
-        return 1;
+        return;
     }
 
     Exposure *exposure = frontend->getProject()->getExposure(activeScene, activeTake, activeExposure);
     if (exposure->isEmpty()) {
         frontend->showWarning(tr("Warning"),
                               tr("The active frame is corrupt"));
-        return 1;
+        return;
     }
 
     QStringList argList;
@@ -1213,11 +1215,9 @@ void ProjectTab::editFrameSlot()
     if (!process.startDetached(gimpCommand, argList)) {
         frontend->showWarning(tr("Warning"),
                               tr("Failed to start Gimp!"));
-        return 1;
+        return;
     }
 
-    return 0;
-*/
     qDebug("ProjectTab::editFrameSlot --> End");
 }
 

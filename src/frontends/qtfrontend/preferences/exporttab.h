@@ -86,8 +86,6 @@ public:
      */
     void initialize();
 
-    void retranslateStrings();
-
 protected:
     // void resizeEvent(QResizeEvent *event);
 

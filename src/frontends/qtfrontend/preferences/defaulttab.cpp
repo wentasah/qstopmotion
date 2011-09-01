@@ -51,6 +51,7 @@ DefaultTab::DefaultTab(Frontend *f, QWidget *parent)
     mixCountSliderCaption  = 0;
     mixCountSlider         = 0;
     defaultMixCount        = 0;
+    defaultPlaybackCount   = 0;
     fpsChooserCaption      = 0;
     fpsChooser             = 0;
     defaultFps             = 0;
@@ -69,7 +70,7 @@ void DefaultTab::makeGUI()
 
     QVBoxLayout *tabLayout = new QVBoxLayout;
 
-    cameraGroupBox = new QGroupBox(QString(tr("Camera")));
+    cameraGroupBox = new QGroupBox(tr("Camera"));
     // cameraGroupBox->setFlat(true);
 
     videoSourceCombo = new QComboBox();
@@ -94,19 +95,37 @@ void DefaultTab::makeGUI()
     firstLayout->addStretch(10);
     cameraGroupBox->setLayout(firstLayout);
 
-    captureGroupBox = new QGroupBox(QString(tr("Capture")));
+    captureGroupBox = new QGroupBox(tr("Capture"));
     // secondGroupBox->setFlat(true);
 
     viewingModeChooseCombo = new QComboBox();
     viewingModeChooseCombo->setFocusPolicy(Qt::NoFocus);
     connect(viewingModeChooseCombo, SIGNAL(activated(int)), this, SLOT(changeViewingMode(int)));
+    viewingModeChooseCombo->addItem(tr("Mix"));
+    viewingModeChooseCombo->addItem(tr("Diff"));
+    viewingModeChooseCombo->addItem(tr("Playback"));
+    viewingModeChooseCombo->addItem(tr("Auto"));
+
 
     unitModeChooseCombo = new QComboBox();
     unitModeChooseCombo->setFocusPolicy(Qt::NoFocus);
     // unitModeChooseCombo->setEnabled(false);
     connect(unitModeChooseCombo, SIGNAL(activated(int)), this, SLOT(changeUnitMode(int)));
+    unitModeChooseCombo->addItem("");
+    unitModeChooseCombo->addItem(tr("Pr sec"));
+    unitModeChooseCombo->addItem(tr("Pr min"));
+    unitModeChooseCombo->addItem(tr("Pr hr"));
 
-    mixCountSliderCaption = new QLabel();
+    mixCountSliderCaption = new QLabel(tr("Number of images:"));
+    QString infoText =
+        tr("<h4>Number of images</h4> "
+           "<p>By changing the value in this slidebar you can specify how many images "
+           "backwards in the animation which should be mixed on top of the camera or "
+           "if you are in playback mode: how many images to play. </p> "
+           "<p>By mixing the previous image(s) onto the camera you can more easily see "
+           "how the next shot will be in relation to the other, therby making a smoother "
+           "stop motion animation!</p>");
+    mixCountSliderCaption->setWhatsThis(infoText);
 
     mixCountSlider = new QSlider(Qt::Horizontal);
     mixCountSlider->setMinimum(0);
@@ -116,15 +135,25 @@ void DefaultTab::makeGUI()
     mixCountSlider->setTickPosition(QSlider::TicksBelow);
     mixCountSlider->setFocusPolicy(Qt::NoFocus);
     connect(mixCountSlider, SIGNAL(valueChanged(int)), this, SLOT(updateSliderValue(int)));
+    mixCountSlider->setWhatsThis(infoText);
 
-    fpsChooserCaption = new QLabel();
+    fpsChooserCaption = new QLabel(tr("FPS chooser"));
+    infoText =
+        tr("<h4>FPS chooser</h4> "
+           "<p>By changing the value in this "
+           "chooser you set which speed the "
+           "animation in the <b>FrameView</b> "
+           "should run at.</p> "
+           "<p>To start an animation press the "
+           "<b>Run Animation</b> button.</p>");
+    fpsChooserCaption->setWhatsThis(infoText);
 
     fpsChooser = new QSpinBox();
     fpsChooser->setMinimum(1);
     fpsChooser->setMaximum(30);
     fpsChooser->setValue(1);
     fpsChooser->setFocusPolicy(Qt::NoFocus);
-    fpsChooser->setValue(frontend->getPreferences()->getBasicPreference("defaultframespersecond", 10));
+    fpsChooser->setWhatsThis(infoText);
 
     QVBoxLayout *secondLayout = new QVBoxLayout;
     secondLayout->addWidget(viewingModeChooseCombo);
@@ -168,6 +197,25 @@ void DefaultTab::initialize()
     defaultUnitMode = pref->getBasicPreference("defaultunitmode", 0);
     unitModeChooseCombo->setCurrentIndex(defaultUnitMode);
     changeUnitMode(defaultUnitMode);
+
+    defaultMixCount = frontend->getPreferences()->getBasicPreference("defaultmixcount", 2);
+    defaultPlaybackCount = frontend->getPreferences()->getBasicPreference("defaultplaybackcount", 5);
+
+    switch (defaultViewingMode) {
+    case 0:
+        mixCountSlider->setValue(defaultMixCount);
+        break;
+    case 1:
+        break;
+    case 2:
+        mixCountSlider->setValue(defaultPlaybackCount);
+        break;
+    case 3:
+        break;
+    }
+
+    defaultFps = pref->getBasicPreference("defaultframespersecond", 10);
+    fpsChooser->setValue(defaultFps);
 
     qDebug("DefaultTab::initialize --> End");
 }
@@ -254,48 +302,6 @@ void DefaultTab::reset()
 }
 
 
-void DefaultTab::retranslateStrings()
-{
-    viewingModeChooseCombo->clear();
-    viewingModeChooseCombo->addItem(tr("Mix"));
-    viewingModeChooseCombo->addItem(tr("Diff"));
-    viewingModeChooseCombo->addItem(tr("Playback"));
-    viewingModeChooseCombo->addItem(tr("Auto"));
-    viewingModeChooseCombo->setCurrentIndex(this->defaultViewingMode);
-
-    unitModeChooseCombo->clear();
-    unitModeChooseCombo->addItem("");
-    unitModeChooseCombo->addItem(tr("Pr sec"));
-    unitModeChooseCombo->addItem(tr("Pr min"));
-    unitModeChooseCombo->addItem(tr("Pr hr"));
-    unitModeChooseCombo->setCurrentIndex(this->defaultUnitMode);
-
-    mixCountSliderCaption->setText(tr("Number of images:"));
-    QString infoText =
-        tr("<h4>Number of images</h4> "
-           "<p>By changing the value in this slidebar you can specify how many images "
-           "backwards in the animation which should be mixed on top of the camera or "
-           "if you are in playback mode: how many images to play. </p> "
-           "<p>By mixing the previous image(s) onto the camera you can more easily see "
-           "how the next shot will be in relation to the other, therby making a smoother "
-           "stop motion animation!</p>");
-    mixCountSliderCaption->setWhatsThis(infoText);
-    mixCountSlider->setWhatsThis(infoText);
-
-    fpsChooserCaption->setText(tr("FPS chooser"));
-    infoText =
-        tr("<h4>FPS chooser</h4> "
-           "<p>By changing the value in this "
-           "chooser you set which speed the "
-           "animation in the <b>FrameView</b> "
-           "should run at.</p> "
-           "<p>To start an animation press the "
-           "<b>Run Animation</b> button.</p>");
-    fpsChooserCaption->setWhatsThis(infoText);
-    fpsChooser->setWhatsThis(infoText);
-}
-
-
 void DefaultTab::updateSliderValue(int /*sliderValue*/)
 {
     /*
@@ -332,7 +338,7 @@ void DefaultTab::changeViewingMode(int index)
         mixCountSliderCaption->setEnabled(true);
         mixCountSlider->setEnabled(true);
         mixCountSlider->setMaximum(5);
-        mixCountSlider->setValue(frontend->getPreferences()->getBasicPreference("defaultmixcount", 2));
+        mixCountSlider->setValue(defaultMixCount);
         unitModeChooseCombo->setEnabled(false);
         unitModeChooseCombo->setCurrentIndex(0);
         break;
@@ -346,7 +352,7 @@ void DefaultTab::changeViewingMode(int index)
         mixCountSliderCaption->setEnabled(true);
         mixCountSlider->setEnabled(true);
         mixCountSlider->setMaximum(50);
-        mixCountSlider->setValue(frontend->getPreferences()->getBasicPreference("defaultplaybackcount", 5));
+        mixCountSlider->setValue(defaultPlaybackCount);
         unitModeChooseCombo->setEnabled(false);
         unitModeChooseCombo->setCurrentIndex(0);
         break;

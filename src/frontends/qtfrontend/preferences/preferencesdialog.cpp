@@ -20,7 +20,7 @@
  *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                 *
  ******************************************************************************/
 
-#include "preferencesmenu.h"
+#include "preferencesdialog.h"
 
 #include "technical/preferencestool.h"
 
@@ -29,10 +29,10 @@
 #include <QtGui/QVBoxLayout>
 
 
-PreferencesMenu::PreferencesMenu(Frontend *f, QWidget *parent)
+PreferencesDialog::PreferencesDialog(Frontend *f, QWidget *parent)
     : QDialog(parent, Qt::Dialog)
 {
-    qDebug("PreferencesMenu::Constructor --> Start");
+    qDebug("PreferencesDialog::Constructor --> Start");
 
     frontend       = f;
     exportVideoTab = 0;
@@ -68,52 +68,52 @@ PreferencesMenu::PreferencesMenu(Frontend *f, QWidget *parent)
     makeVideoExportTab();
     makeDefaultValueTab();
 
-    qDebug("PreferencesMenu::Constructor --> End");
+    qDebug("PreferencesDialog::Constructor --> End");
 }
 
 
-void PreferencesMenu::makeGeneralSettingsTab()
+void PreferencesDialog::makeGeneralSettingsTab()
 {
-    qDebug("PreferencesMenu::makeGeneralSettingsTab --> Start");
+    qDebug("PreferencesDialog::makeGeneralSettingsTab --> Start");
 
     generalSettingsTab = new GeneralTab(frontend);
     generalSettingsTab->initialize();
     // generalSettingsTab->setMinimumHeight(300);
     tabWidget->addTab(generalSettingsTab, tr("&General Settings"));
 
-    qDebug("PreferencesMenu::makeGeneralSettingsTab --> End");
+    qDebug("PreferencesDialog::makeGeneralSettingsTab --> End");
 }
 
 
-void PreferencesMenu::makeVideoExportTab()
+void PreferencesDialog::makeVideoExportTab()
 {
-    qDebug("PreferencesMenu::makeVideoExportTab --> Start");
+    qDebug("PreferencesDialog::makeVideoExportTab --> Start");
 
     exportVideoTab = new ExportTab(frontend);
     exportVideoTab->initialize();
     // exportVideoTab->setMinimumHeight(300);
     tabWidget->addTab(exportVideoTab, tr("Video &Export"));
 
-    qDebug("PreferencesMenu::makeVideoExportTab --> End");
+    qDebug("PreferencesDialog::makeVideoExportTab --> End");
 }
 
 
-void PreferencesMenu::makeDefaultValueTab()
+void PreferencesDialog::makeDefaultValueTab()
 {
-    qDebug("PreferencesMenu::makeDefaultValueTab --> Start");
+    qDebug("PreferencesDialog::makeDefaultValueTab --> Start");
 
     defaultValueTab = new DefaultTab(frontend);
     defaultValueTab->initialize();
     // exportVideoTab->setMinimumHeight(300);
     tabWidget->addTab(defaultValueTab, tr("&Default Values"));
 
-    qDebug("PreferencesMenu::makeDefaultValueTab --> End");
+    qDebug("PreferencesDialog::makeDefaultValueTab --> End");
 }
 
 
-void PreferencesMenu::apply()
+void PreferencesDialog::apply()
 {
-    qDebug("PreferencesMenu::apply --> Start");
+    qDebug("PreferencesDialog::apply --> Start");
 
     setFocus();
     this->generalSettingsTab->apply();
@@ -122,13 +122,13 @@ void PreferencesMenu::apply()
     frontend->getPreferences()->flushPreferences();
     this->hide();
 
-    qDebug("PreferencesMenu::apply --> End");
+    qDebug("PreferencesDialog::apply --> End");
 }
 
 
-void PreferencesMenu::close()
+void PreferencesDialog::close()
 {
-    qDebug("PreferencesMenu::close --> Start");
+    qDebug("PreferencesDialog::close --> Start");
 
     setFocus();
     this->generalSettingsTab->reset();
@@ -136,13 +136,13 @@ void PreferencesMenu::close()
     this->defaultValueTab->reset();
     this->hide();
 
-    qDebug("PreferencesMenu::close --> End");
+    qDebug("PreferencesDialog::close --> End");
 }
 
 
-void PreferencesMenu::finish(int result)
+void PreferencesDialog::finish(int result)
 {
-    qDebug("PreferencesMenu::finish --> Start");
+    qDebug("PreferencesDialog::finish --> Start");
 
     setFocus();
     if (result == 0)
@@ -153,28 +153,5 @@ void PreferencesMenu::finish(int result)
     }
     this->hide();
 
-    qDebug("PreferencesMenu::finish --> End");
+    qDebug("PreferencesDialog::finish --> End");
 }
-
-
-void PreferencesMenu::display()
-{
-    this->show();
-}
-
-
-void PreferencesMenu::retranslateStrings()
-{
-    applyButton->setText(tr("Apply"));
-    closeButton->setText(tr("Close"));
-    setWindowTitle(tr("Preferences Menu"));
-
-    tabWidget->setTabText(0, tr("&General Settings"));
-    tabWidget->setTabText(1, tr("Video &Export"));
-    tabWidget->setTabText(2, tr("&Default Values"));
-
-    this->generalSettingsTab->retranslateStrings();
-    this->exportVideoTab->retranslateStrings();
-    this->defaultValueTab->retranslateStrings();
-}
-

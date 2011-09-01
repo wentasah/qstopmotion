@@ -38,12 +38,12 @@ HelpBrowser::HelpBrowser(Frontend *f,
     // Enable help window for modal dialoges
     this->setAttribute(Qt::WA_GroupLeader);
 
-    backwardButton = new QPushButton(tr("Backward"));
-    homeButton = new QPushButton(tr("Home"));
-    forwardButton = new QPushButton(tr("Forward"));
+    backwardButton = new QPushButton(tr("&Backward"));
+    homeButton = new QPushButton(tr("&Home"));
+    forwardButton = new QPushButton(tr("&Forward"));
     searchEdit = new QLineEdit;
     textBrowser = new QTextBrowser;
-    closeButton = new QPushButton(tr("Close"));
+    closeButton = new QPushButton(tr("&Close"));
 
     connect(backwardButton, SIGNAL(clicked()), textBrowser, SLOT(backward()));
     connect(homeButton, SIGNAL(clicked()), textBrowser, SLOT(home()));

@@ -407,31 +407,3 @@ void ExportTab::browseOutputFiles()
         defaultOutputEdit->setText(outputFile);
     }
 }
-
-void ExportTab::retranslateStrings()
-{
-    infoText->setHtml(
-        "<p>" +
-        tr("Below you can set which program/process qStopMotion should use "
-           "for encoding the currently active project to a video file.") +
-        "</p>");
-
-    // Encoder preferences
-    encoderPrefs->setTitle(tr("Encoder settings"));
-    encoderApplicationLabel->setText(tr("Encoder Application:"));
-    videoFormatLabel->setText(tr("Video Format:"));
-    videoSizeLabel->setText(tr("Video Size:"));
-    videoFpsLabel->setText(tr("Project Frames per Second:"));
-
-    // Output file preferences
-    outputPrefs->setTitle(tr("Output file settings"));
-    askForOutputLabel->setText(
-        tr("Do you want to be asked for an output file everytime you choose to export?"));
-
-    yesButton->setText(tr("Yes"));
-    noButton->setText(tr("No"));
-    defaultOutputLabel->setText(tr("Set default output file:"));
-    browseOutputButton->setText(tr("Browse"));
-}
-
-

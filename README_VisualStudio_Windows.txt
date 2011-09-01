@@ -1,5 +1,5 @@
 Building qStopMotion using MS Visual Studio 2010 / 2008
-Last Change: 2011/07/07
+Last Change: 2011/08/21
 
 1. Preparation of the development environment
 
@@ -29,13 +29,35 @@ Last Change: 2011/07/07
     "C:\Program Files\CMake 2.8\bin\cmake-gui.exe"
 * Create a shortcut to the start script.
 
-1.5 NSIS 2.46
+1.5 Mercurial client (Version >= 1.4.1)
+* Download TortoiseHG from "http://tortoisehg.bitbucket.org/download/index.html".
+* Install in the default installation directory.
+* Download VisualHG, the Mercurial extension for Visual Studio, from "http://visualhg.codeplex.com/".
+* Install in the default installation directory.
+
+1.6 NSIS 2.46
 * Download NSIS from "http://nsis.sourceforge.net/Main_Page"
 * Install in the default installation directory.
 
 2. Building qStopMotion
 
-2.1 Create the Visual Studio Solution
+2.1 Get the last version of the sources
+
+There are two possibilities, to get the source code:
+
+2.1.1 Download the sources as a anonymous user
+* Download the latest version of the sources as a tar ball from http://qstopmotion.hg.sourceforge.net:8000/hgroot/qstopmotion/qstopmotion
+* Extract the tar ball
+
+2.1.2 Use the Mercurial SCM as a registered developer
+* Registering as a developer on qstopmotion.sourceforge.net
+* Create a new directory for the work on qStopMotion
+* Move to the new directory
+* Start the TortoiseHG GUI
+* hg clone ssh://USERNAME@qstopmotion.hg.sourceforge.net/hgroot/qstopmotion/qstopmotion
+* A new directory 'qstopmotion' will be created containing the the last version of the sources
+
+2.2 Create the Visual Studio Solution
 * Start the CMake GUI using the shortcut to the start script.
 * Select the directory with the cmakelist.txt file
 * Select the destination directory
@@ -43,7 +65,7 @@ Last Change: 2011/07/07
 * Select the generator "Visual Studio 10"
 * Press the generate button
 
-2.2 Build the application
+2.3 Build the application
 * Start MS Visual Studio
 * Open the new created solution file (qstopmotion.sln)
 * Activate the project "qstopmotion" as the active project

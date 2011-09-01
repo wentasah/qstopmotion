@@ -69,8 +69,6 @@ public:
      */
     void initialize();
 
-    void retranslateStrings();
-
 private:
     /**
      * Create the GUI of the tab

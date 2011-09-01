@@ -1,5 +1,5 @@
 Building qStopMotion using Qt-Creator IDE on Linux
-Last Change: 2011/08/15
+Last Change: 2011/08/21
 
 1. Preparation of the development environment
 
@@ -28,15 +28,26 @@ Last Change: 2011/08/15
 
 2. Building qStopMotion
 
-2.1 Check out the actual sources from the source code management
-* anonnymous: http://qstopmotion.hg.sourceforge.net:8000/hgroot/qstopmotion/qstopmotion
-  (read-only)
-* as developer: hg clone ssh://USERNAME@qstopmotion.hg.sourceforge.net/hgroot/qstopmotion/qstopmotion
-  (USERNAME is your user account at sourceforge.net)
+2.1 Get the last version of the sources
+
+There are two possibilities, to get the source code:
+
+2.1.1 Download the sources as a anonymous user
+* Download the latest version of the sources as a tar ball from http://qstopmotion.hg.sourceforge.net:8000/hgroot/qstopmotion/qstopmotion
+* Extract the tar ball
+
+2.1.2 Use the Mercurial SCM as a registered developer
+* Registering as a developer on qstopmotion.sourceforge.net
+* Create a new directory for the work on qStopMotion
+* Move to the new directory
+* hg clone ssh://USERNAME@qstopmotion.hg.sourceforge.net/hgroot/qstopmotion/qstopmotion
+* A new directory 'qstopmotion' will be created containing the the last version of the sources
 
 2.2 Create the Makefile
 * Start the CMake GUI
-* ...
+* Select the file CMakeLists.txt in the qstopmotion directory
+* Select xxx as target platform
+* Press the 'generate' button
 
 2.3 Build
 * Call "make"

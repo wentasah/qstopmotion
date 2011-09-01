@@ -68,8 +68,6 @@ public:
      */
     void initialize();
 
-    void retranslateStrings();
-
 private:
     /**
      * Create the GUI of the tab
@@ -123,6 +121,7 @@ private:
     int          defaultViewingMode;
     int          defaultUnitMode;
     int          defaultMixCount;
+    int          defaultPlaybackCount;
     int          defaultFps;
 
 };

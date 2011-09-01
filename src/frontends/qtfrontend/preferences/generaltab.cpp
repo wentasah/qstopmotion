@@ -228,11 +228,6 @@ void GeneralTab::reset()
 }
 
 
-void GeneralTab::retranslateStrings()
-{
-}
-
-
 void GeneralTab::changeLanguage(int index)
 {
     frontend->changeLanguage(index);

@@ -1,7 +1,7 @@
 ###############################################################################
 # CMake file for the qStopMotion project                                      #
 # (c) Ralf Lange, longsoft.de                                                 #
-# Last update: 2011-06-13                                                     #
+# Last update: 2011-08-31                                                     #
 #                                                                             #
 # Usage:                                                                      #
 #   * Qt-Creator (Windows, Linux)                                             #
@@ -11,7 +11,7 @@
 #   * makefile: (Windows)                                                     #
 #      + cmake -G "NMake Makefile"                                            #
 #      + nmake                                                                #
-#      + nmake install                                                        #
+#      + nmake install (with administration rights)                           #
 #      + nmake package                                                        #
 #   * makefile: (Linux)                                                       #
 #      + cmake -G "Unix Makefile"                                             #
@@ -36,6 +36,8 @@ SET(QSTOPMOTION_HOMEPAGE "http://www.qstopmotion.org")
 SET(QSTOPMOTION_VERSION_MAJOR "0")
 SET(QSTOPMOTION_VERSION_MINOR "9")
 SET(QSTOPMOTION_VERSION_PATCH "8")
+
+SET(FILES_TO_TRANSLATE )
 
 ###############################################################################
 # Qt4 support
@@ -121,7 +123,7 @@ set(MOC_HEADERS
     src/frontends/qtfrontend/preferences/defaulttab.h
     src/frontends/qtfrontend/preferences/exporttab.h
     src/frontends/qtfrontend/preferences/generaltab.h
-    src/frontends/qtfrontend/preferences/preferencesmenu.h
+    src/frontends/qtfrontend/preferences/preferencesdialog.h
     src/frontends/qtfrontend/timeline/timeline.h
     src/frontends/qtfrontend/tooltabs/compositingtab.h
     src/frontends/qtfrontend/tooltabs/projecttab.h
@@ -176,7 +178,7 @@ set(SOURCES
     src/frontends/qtfrontend/preferences/defaulttab.cpp
     src/frontends/qtfrontend/preferences/exporttab.cpp
     src/frontends/qtfrontend/preferences/generaltab.cpp
-    src/frontends/qtfrontend/preferences/preferencesmenu.cpp
+    src/frontends/qtfrontend/preferences/preferencesdialog.cpp
     src/frontends/qtfrontend/timeline/timeline.cpp
     src/frontends/qtfrontend/timeline/exposurethumbview.cpp
     src/frontends/qtfrontend/timeline/thumbview.cpp
@@ -381,6 +383,23 @@ ELSE(WIN32)
 ENDIF(WIN32)
 
 ###############################################################################
+# Translation
+###############################################################################
+
+set (FILES_TO_TRANSLATE ${FILES_TO_TRANSLATE} ${HEADERS} ${MOC_HEADERS} ${SOURCES})
+
+file (GLOB TRANSLATIONS_FILES ${TRANSLATIONS})
+
+option (UPDATE_TRANSLATIONS "Update source translation translations/*.ts files (WARNING: make clean will delete the source .ts files! Danger!)")
+if (UPDATE_TRANSLATIONS)
+  qt4_create_translation(QM_FILES ${FILES_TO_TRANSLATE} ${TRANSLATIONS_FILES})
+else (UPDATE_TRANSLATIONS)
+  qt4_add_translation(QM_FILES ${TRANSLATIONS_FILES})
+endif (UPDATE_TRANSLATIONS) 
+
+add_custom_target (translations_target DEPENDS ${QM_FILES})
+
+###############################################################################
 # Installation
 ###############################################################################
 
@@ -470,9 +489,9 @@ SET(CPACK_PACKAGE_INSTALL_DIRECTORY "qStopMotion ${QSTOPMOTION_VERSION_MAJOR}.${
 SET(CPACK_PACKAGE_EXECUTABLES "qstopmotion" "qStopMotion")
 SET(CPACK_STRIP_FILES "qstopmotion")
 SET(CPACK_SOURCE_STRIP_FILES "")
-SET(CPACK_PACKAGE_VERSION_MAJOR "0")
-SET(CPACK_PACKAGE_VERSION_MINOR "9")
-SET(CPACK_PACKAGE_VERSION_PATCH "6")
+SET(CPACK_PACKAGE_VERSION_MAJOR "${QSTOPMOTION_VERSION_MAJOR}")
+SET(CPACK_PACKAGE_VERSION_MINOR "${QSTOPMOTION_VERSION_MINOR}")
+SET(CPACK_PACKAGE_VERSION_PATCH "${QSTOPMOTION_VERSION_PATCH}")
 SET(CPACK_TOPLEVEL_TAG "/user")
 # CPACK_PACKAGE_VERSION - generated from major, minor, patch
 

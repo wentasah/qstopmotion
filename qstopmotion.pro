@@ -1,8 +1,15 @@
+###############################################################################
+# QtCreator file for the qStopMotion project                                  #
+# (c) Ralf Lange, longsoft.de                                                 #
+# Last update: 2011-08-31                                                     #
+#                                                                             #
+# Please use CMake and the CMakeLists.txt file to build qStopMotion!          #
+###############################################################################
+
 HEADERS += src/config.h \
            src/application/camerahandler.h \
            src/application/editmenuhandler.h \
            src/application/externalchangemonitor.h \
-           src/application/projecthandler.h \
            src/application/runanimationhandler.h \
            src/application/soundhandler.h \
            src/domain/domainfacade.h \
@@ -15,13 +22,17 @@ HEADERS += src/config.h \
            src/domain/undo/undoexposureinsert.h \
            src/domain/undo/undoexposuremove.h \
            src/domain/undo/undoexposureremove.h \
+           src/domain/undo/undoexposureselect.h \
            src/domain/undo/undosceneadd.h \
            src/domain/undo/undosceneinsert.h \
            src/domain/undo/undoscenemove.h \
            src/domain/undo/undosceneremove.h \
+           src/domain/undo/undosceneselect.h \
            src/domain/undo/undotakeadd.h \
            src/domain/undo/undotakeinsert.h \
+           src/domain/undo/undotakemove.h \
            src/domain/undo/undotakeremove.h \
+           src/domain/undo/undotakeselect.h \
            src/frontends/observer.h \
            src/frontends/frontend.h \
            src/frontends/viewfacade.h \
@@ -44,7 +55,7 @@ HEADERS += src/config.h \
            src/frontends/qtfrontend/preferences/defaulttab.h \
            src/frontends/qtfrontend/preferences/exporttab.h \
            src/frontends/qtfrontend/preferences/generaltab.h \
-           src/frontends/qtfrontend/preferences/preferencesmenu.h \
+           src/frontends/qtfrontend/preferences/preferencesdialog.h \
            src/frontends/qtfrontend/timeline/timeline.h \
            src/frontends/qtfrontend/timeline/exposurethumbview.h \
            src/frontends/qtfrontend/timeline/thumbview.h \
@@ -62,12 +73,10 @@ HEADERS += src/config.h \
            src/technical/videoencoder/videoencoder.h \
            src/technical/videoencoder/videoencoderfactory.h
 
-SOURCES += src/config.cpp \
-           src/main.cpp \
+SOURCES += src/main.cpp \
            src/application/camerahandler.cpp \
            src/application/editmenuhandler.cpp \
            src/application/externalchangemonitor.cpp \
-           src/application/projecthandler.cpp \
            src/application/runanimationhandler.cpp \
            src/application/soundhandler.cpp \
            src/domain/domainfacade.cpp \
@@ -80,13 +89,17 @@ SOURCES += src/config.cpp \
            src/domain/undo/undoexposureinsert.cpp \
            src/domain/undo/undoexposuremove.cpp \
            src/domain/undo/undoexposureremove.cpp \
+           src/domain/undo/undoexposureselect.cpp \
            src/domain/undo/undosceneadd.cpp \
            src/domain/undo/undosceneinsert.cpp \
            src/domain/undo/undoscenemove.cpp \
            src/domain/undo/undosceneremove.cpp \
+           src/domain/undo/undosceneselect.cpp \
            src/domain/undo/undotakeadd.cpp \
            src/domain/undo/undotakeinsert.cpp \
+           src/domain/undo/undotakemove.cpp \
            src/domain/undo/undotakeremove.cpp \
+           src/domain/undo/undotakeselect.cpp \
            src/frontends/viewfacade.cpp \
            src/frontends/qtfrontend/mainwindowgui.cpp \
            src/frontends/qtfrontend/menuframe.cpp \
@@ -105,7 +118,7 @@ SOURCES += src/config.cpp \
            src/frontends/qtfrontend/preferences/defaulttab.cpp \
            src/frontends/qtfrontend/preferences/exporttab.cpp \
            src/frontends/qtfrontend/preferences/generaltab.cpp \
-           src/frontends/qtfrontend/preferences/preferencesmenu.cpp \
+           src/frontends/qtfrontend/preferences/preferencesdialog.cpp \
            src/frontends/qtfrontend/timeline/timeline.cpp \
            src/frontends/qtfrontend/timeline/exposurethumbview.cpp \
            src/frontends/qtfrontend/timeline/thumbview.cpp \

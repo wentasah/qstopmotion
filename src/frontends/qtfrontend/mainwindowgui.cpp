@@ -91,7 +91,6 @@ MainWindowGUI::MainWindowGUI(QApplication *stApp, Frontend *f)
     projectTab           = 0;
     // viewTab              = 0;
     // compositingTab       = 0;
-    preferencesMenu      = 0;
 
     // gotoFrameAct         = 0;
     // gotoMenuCloseButton  = 0;
@@ -167,8 +166,6 @@ void MainWindowGUI::init()
     centerWidgetLayout->addWidget(workArea);
     centerWidgetLayout->addWidget(timeLine);
 
-    makePreferencesMenu();
-    // makeGotoMenu(centerWidgetLayout);
     centerWidget->setLayout(centerWidgetLayout);
     setCentralWidget(centerWidget);
 
@@ -335,14 +332,10 @@ void MainWindowGUI::retranslateStrings(const QString &newLocale)
     aboutAct->setText(tr("&About"));
 
     // Status bar
-    projectLabel->setText(tr("Project ID:"));
+    projectLabel->setText(tr("Project ID: "));
     sceneLabel->setText(tr("Scene ID: "));
     takeLabel->setText(tr("Take ID: "));
     exposureLabel->setText(tr("Exposure ID: "));
-
-    // Other
-    // gotoFrameAct->setText(tr("&Go to frame"));
-    // gotoFrameLabel->setText(tr("Go to frame:"));
 
     //Tooltip and whatsthis texts
     retranslateHelpText();
@@ -396,7 +389,6 @@ void MainWindowGUI::retranslateStrings(const QString &newLocale)
     projectTab->retranslateStrings();
     // viewTab->retranslateStrings();
     // compositingTab->retranslateStrings();
-    preferencesMenu->retranslateStrings();
 
     qDebug("MainWindowGUI::retranslateStrings --> End");
 }
@@ -615,6 +607,9 @@ void MainWindowGUI::newProject()
     if (ret == QDialog::Rejected) {
         // The user canceled the input dialog
         qDebug("ModelHandler::newScene --> End (cancel)");
+
+        delete(dialog);
+
         return;
     }
 
@@ -809,9 +804,17 @@ void MainWindowGUI::closeApplication()
 }
 
 
-void MainWindowGUI::showPreferencesMenu()
+void MainWindowGUI::showPreferencesDialog()
 {
-    preferencesMenu->display();
+    PreferencesDialog *preferencesDialog;
+
+    preferencesDialog = new PreferencesDialog(frontend);
+    int ret = preferencesDialog->exec();
+    if (ret == QDialog::Rejected) {
+        // The user canceled the input dialog
+        qDebug("MainWindowsGUI::showPreferencesDialog --> End (cancel)");
+    }
+    delete(preferencesDialog);
 }
 
 
@@ -933,7 +936,7 @@ void MainWindowGUI::initTranslations()
         QTranslator translator;
         translator.load(fileNames[i], qmPath);
 
-        QString language = translator.translate("LanguageHandler", "English",
+        QString language = translator.translate("MainWindowGUI", "English",
                                                 "This should be translated to the name of the "
                                                 "language you are translating to, in that language. "
                                                 "Example: English = Deutsch (Deutsch is \"German\" "
@@ -1169,7 +1172,7 @@ void MainWindowGUI::createActions()
     configureAct->setIcon(QIcon(iconFile));
     configureAct->setShortcut(ControlModifier + Key_P);
     configureAct->setIconVisibleInMenu(true);
-    connect(configureAct, SIGNAL(triggered()), this, SLOT(showPreferencesMenu()));
+    connect(configureAct, SIGNAL(triggered()), this, SLOT(showPreferencesDialog()));
 
     // View menu
     undoViewAct = new QAction(this);
@@ -1242,13 +1245,6 @@ void MainWindowGUI::createMenus()
     helpMenu->addAction(helpAct);
     helpMenu->addSeparator();
     helpMenu->addAction(aboutAct);
-}
-
-
-void MainWindowGUI::makePreferencesMenu()
-{
-    preferencesMenu = new PreferencesMenu(frontend);
-    preferencesMenu->hide();
 }
 
 
@@ -1620,7 +1616,7 @@ void MainWindowGUI::retranslateHelpText()
 
     // Status bar
     infoText =
-        tr("<h4>Projevt ID</h4><p>This area displays the id"
+        tr("<h4>Project ID</h4><p>This area displays the id "
            "of the currently active project</p>");
     projectLabel->setToolTip(infoText);
     projectLabel->setWhatsThis(infoText);
@@ -1628,7 +1624,7 @@ void MainWindowGUI::retranslateHelpText()
     projectID->setWhatsThis(infoText);
 
     infoText =
-        tr("<h4>Scene ID</h4><p>This area displays the id"
+        tr("<h4>Scene ID</h4><p>This area displays the id "
            "of the currently selected scene</p>");
     sceneLabel->setToolTip(infoText);
     sceneLabel->setWhatsThis(infoText);
@@ -1636,7 +1632,7 @@ void MainWindowGUI::retranslateHelpText()
     sceneID->setWhatsThis(infoText);
 
     infoText =
-        tr("<h4>Take ID</h4><p>This area displays the id"
+        tr("<h4>Take ID</h4><p>This area displays the id "
            "of the currently selected take</p>");
     takeLabel->setToolTip(infoText);
     takeLabel->setWhatsThis(infoText);
@@ -1644,7 +1640,7 @@ void MainWindowGUI::retranslateHelpText()
     takeID->setWhatsThis(infoText);
 
     infoText =
-        tr("<h4>Exposure ID</h4><p>This area displays the id"
+        tr("<h4>Exposure ID</h4><p>This area displays the id "
            "of the currently selected exposure</p>");
     exposureLabel->setToolTip(infoText);
     exposureLabel->setWhatsThis(infoText);

@@ -1,5 +1,5 @@
 Building qStopMotion using MS Visual Studio 2010 / 2008
-Last Change: 2011/07/07
+Last Change: 2011/08/22
 
 1. Preparation of the development environment
 
@@ -20,8 +20,8 @@ Last Change: 2011/07/07
 
 1.4 CMake 2.8.x
 * Download CMake from "http://www.cmake.org/cmake/resources/software.html"
-* Add CMake to the system PATH for all users.
 * Install in the default installation directory.
+* Add CMake to the system PATH for all users.
 * Create a start script for CMake (C:\Tools\cmakestart.bat)
     rem Set the Visual Studion 10 environment variables
     call "c:\Program Files\Microsoft Visual Studio 10.0\VC\vcvarsall.bat"
@@ -29,27 +29,52 @@ Last Change: 2011/07/07
     "C:\Program Files\CMake 2.8\bin\cmake-gui.exe"
 * Create a shortcut to the start script.
 
-1.5 NSIS 2.46
+1.5 Mercurial client (Version >= 1.4.1)
+* Download TortoiseHG from "http://tortoisehg.bitbucket.org/download/index.html"
+* Install in the default installation directory.
+
+1.6 NSIS 2.46
 * Download NSIS from "http://nsis.sourceforge.net/Main_Page"
 * Install in the default installation directory.
 
 2. Building qStopMotion
 
-2.1 Create the NMake makefile
+2.1 Get the last version of the sources
+
+There are two possibilities, to get the source code:
+
+2.1.1 Download the sources as a anonymous user
+* Download the latest version of the sources as a tar ball from http://qstopmotion.hg.sourceforge.net:8000/hgroot/qstopmotion/qstopmotion
+* Extract the tar ball
+
+2.1.2 Use the Mercurial SCM as a registered developer
+* Registering as a developer on qstopmotion.sourceforge.net
+* Create a new directory for the work on qStopMotion
+* Create a subdirectory qstopmotion and move to it
+* Move to the new directory
+* Start the TortoiseHG GUI
+* Select 'File - Clone Repository ...'
+* Source: 'ssh://USERNAME@qstopmotion.hg.sourceforge.net/hgroot/qstopmotion/qstopmotion'
+* Destination: your working directory.
+* Press the 'Clone' button and add the password.
+* The directory now containing the the last version of the sources
+
+2.2 Create the NMake makefile
 * Start the CMake GUI using the shortcut to the start script.
-* Select the directory with the cmakelist.txt file
-* Select the destination directory
+* Select the directory with the cmakelist.txt file as the source code directory
+* Select a separate directory as the destination directory
 * Press the configure button
-* Select the generator "NMake Visual Studio 10"
+* Select the generator "NMake Makefiles"
 * Press the generate button
 
-2.2 Build the application
+2.3 Build the application
 * Start a Visual Studio command prompt
+* Move to the new created destination directory.
 * call "nmake"
 * Locking for error and warning messages
 
 3. Installation
-* Start a Visual Studio command prompt
+* Start a Visual Studio command prompt with administration rights
 * call "nmake install"
 
 4. Starting qStopMotion
@@ -58,15 +83,11 @@ Last Change: 2011/07/07
 
 5. Creating installer for Windows
 
-5.1 Nullsoft NSIS 2.46
-* Download NSIS from "http://nsis.sourceforge.net/Download"
-* Install in the default installation directory.
-
-5.2 Create the installer for qStopMotion
+5.1 Create the installer for qStopMotion
 * Start a Visual Studio command prompt
 * call "nmake package"
 
-5.3 Test the new installer
+5.2 Test the new installer
 * ...
 * ...
 

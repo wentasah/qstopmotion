@@ -541,40 +541,67 @@ void QtFrontend::setDefaultPreferences()
 
 int QtFrontend::askQuestion(const QString title, const QString &question)
 {
-    int ret = QMessageBox::question(mw,
-                                    title,
-                                    question,
-                                    QMessageBox::Yes, QMessageBox::No,
-                                    // tr("&Yes"), tr("&No"), // button 0, button 1, ...
-                                    QMessageBox::NoButton);
+    QMessageBox msgBox;
+    msgBox.setWindowTitle(title);
+    msgBox.setText(question);
+    // msgBox.setInformativeText(information);
+    msgBox.setStandardButtons(QMessageBox::NoButton);
+    msgBox.setDefaultButton(QMessageBox::NoButton);
+    msgBox.addButton(tr("&Yes"), QMessageBox::YesRole);
+    msgBox.addButton(tr("&No"), QMessageBox::NoRole);
+    msgBox.setIcon(QMessageBox::Question);
+
+    int ret = msgBox.exec();
+
     if (ret == QMessageBox::Yes) {
         return 0;
     }
     return 1;
 }
 
-
 void QtFrontend::showInformation(const QString title, const QString &info)
 {
-    QMessageBox::information(mw,
-                             title,
-                             info);
+    QMessageBox msgBox;
+    msgBox.setWindowTitle(title);
+    msgBox.setText(info);
+    // msgBox.setInformativeText(information);
+    msgBox.setStandardButtons(QMessageBox::NoButton);
+    msgBox.setDefaultButton(QMessageBox::NoButton);
+    msgBox.addButton(tr("&OK"), QMessageBox::AcceptRole);
+    msgBox.setIcon(QMessageBox::Information);
+
+    msgBox.exec();
 }
 
 
 void QtFrontend::showWarning(const QString title, const QString &warning)
 {
-    QMessageBox::warning(mw,
-                         title,
-                         warning);
+    QMessageBox msgBox;
+    msgBox.setWindowTitle(title);
+    msgBox.setText(warning);
+    // msgBox.setInformativeText(information);
+    msgBox.setStandardButtons(QMessageBox::NoButton);
+    msgBox.setDefaultButton(QMessageBox::NoButton);
+    msgBox.addButton(tr("&OK"), QMessageBox::AcceptRole);
+    msgBox.setIcon(QMessageBox::Warning);
+
+    msgBox.exec();
 }
 
 
 void QtFrontend::showCritical(const QString title, const QString &message)
 {
-    QMessageBox::critical(mw,
-                          title,
-                          message);
+    QMessageBox msgBox;
+    msgBox.setWindowTitle(title);
+    msgBox.setText(message);
+    // msgBox.setInformativeText(information);
+    msgBox.setStandardButtons(QMessageBox::NoButton);
+    msgBox.setDefaultButton(QMessageBox::NoButton);
+    msgBox.addButton(tr("&OK"), QMessageBox::AcceptRole);
+    msgBox.setIcon(QMessageBox::Critical);
+
+    msgBox.exec();
+
     Q_ASSERT(0);
 }
 

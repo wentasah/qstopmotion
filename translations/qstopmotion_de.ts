@@ -1441,6 +1441,23 @@ last time it was runned. Do you want to recover?</source>
         <translation>Es sieht so aus, als wurde qStopmotion bei der letzten Nutzung nicht
 ordentlich beendet. Möchten Sie die letzte Sitzung wiederherstellen?</translation>
     </message>
+    <message>
+        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="550"/>
+        <source>&amp;Yes</source>
+        <translation>&amp;Ja</translation>
+    </message>
+    <message>
+        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="551"/>
+        <source>&amp;No</source>
+        <translation>&amp;Nein</translation>
+    </message>
+    <message>
+        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="570"/>
+        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="585"/>
+        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="600"/>
+        <source>&amp;OK</source>
+        <translation>&amp;OK</translation>
+    </message>
 </context>
 <context>
     <name>RecordingTab</name>

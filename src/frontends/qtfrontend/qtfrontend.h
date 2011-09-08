@@ -74,8 +74,9 @@ public:
     /**
      * Check for recovery after a crash.
      * Open a project given in the arguments.
+     * @return true if a project file is opened.
      */
-    void handleArguments(int argc, char **argv);
+    bool handleArguments(int argc, char **argv);
 
     /**
      * The run function for starting the application.
@@ -318,10 +319,10 @@ public:
     void testMainWidget();
 
     /**
-     * Remove the Directory and its content.
+     * Remove the content of the given directory.
      * @param path the path to te directory.
      */
-    bool RemoveDirectory(const QString &path);
+    bool removeContentInDirectory(const QString &path);
 
     /**
      * Create all temporary directories (temp, trash, packer)
@@ -344,9 +345,15 @@ public:
     bool isRecoveryMode();
 
     /**
-     *
+     * Recover the last changes after a crash.
+     * @return true if an crashed project is recovered
      */
-    void recover(DomainFacade *facadePtr);
+    bool recover();
+
+    /**
+     * Open the start dialog
+     */
+    void startDialog();
 
 
 protected slots:

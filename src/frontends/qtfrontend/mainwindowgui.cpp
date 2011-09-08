@@ -145,10 +145,6 @@ void MainWindowGUI::init()
 
     timeLine = new TimeLine(this->frontend);
 
-    // TODO: on this point, the tmp directory didn't exist!!!
-    // Create it before or move the start of the monitoring.
-    setupDirectoryMonitoring();
-
     this->initTranslations();
     createHandlers();
 
@@ -251,15 +247,15 @@ void MainWindowGUI::mousePressEvent(QMouseEvent *)
  */
 void MainWindowGUI::keyPressEvent(QKeyEvent *k)
 {
+    DomainFacade *facade = frontend->getProject();
+    int activeScene = facade->getActiveSceneIndex();
+    // int activeTake = facade->getActiveTakeIndex();
+
     switch (k->key()) {
-    case Key_Shift: {
+    case Key_Shift:
         timeLine->setSelecting(true);
         break;
-    }
-    case Key_A: {
-        DomainFacade *facade = frontend->getProject();
-        int activeScene = facade->getActiveSceneIndex();
-        // int activeTake = facade->getActiveTakeIndex();
+    case Key_A:
         if (activeScene >= 0) {
             if (facade->getSceneExposureSize(activeScene) > 1) {
                 facade->setActiveExposureIndex(0);
@@ -267,18 +263,20 @@ void MainWindowGUI::keyPressEvent(QKeyEvent *k)
             }
         }
         break;
-    }
-    default: {
+    default:
         k->ignore();
         break;
-    }
     }
 }
 
 
 void MainWindowGUI::setupDirectoryMonitoring()
 {
+    qDebug("MainWindowGUI::setupDirectoryMonitoring --> Start");
+
     changeMonitor = new ExternalChangeMonitor(frontend, this);
+
+    qDebug("MainWindowGUI::setupDirectoryMonitoring --> End");
 }
 
 
@@ -918,11 +916,15 @@ void MainWindowGUI::createTranslator(const QString &newLocale)
     }
 
     stApp->installTranslator(translator);
+
+    qDebug("MainWindowGUI::createTranslator --> End");
 }
 
 
 void MainWindowGUI::initTranslations()
 {
+    qDebug("MainWindowGUI::initTranslations --> Start");
+
     // Fill the list with possible languages
     QString qmPath(frontend->getTranslationsDirName());
     QDir dir(qmPath);
@@ -953,7 +955,7 @@ void MainWindowGUI::initTranslations()
         }
     }
 
-    qDebug("MainWindowGUI::createTranslator --> End");
+    qDebug("MainWindowGUI::initTranslations --> End");
 }
 
 

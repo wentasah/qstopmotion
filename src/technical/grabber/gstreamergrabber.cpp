@@ -322,12 +322,18 @@ bool GstreamerGrabber::init()
         // TODO: Handle more than one device per source
         GstPropertyProbe* probe = GST_PROPERTY_PROBE(source);
         GValueArray* va = gst_property_probe_get_values_name(probe, "device-name");
-        GValue* v0 = g_value_array_get_nth(va, 0);
-        qDebug() << "gstreamergrabber::init --> device 0" << g_value_get_string(v0);
-        if (va->n_values > 1) {
-            // More than one device possible
-            GValue* v = g_value_array_get_nth(va, 1);
-            qDebug() << "gstreamergrabber::init --> device 1" << g_value_get_string(v);
+        if (va != NULL) {
+            GValue* v0 = g_value_array_get_nth(va, 0);
+            qDebug() << "gstreamergrabber::init --> device 0" << g_value_get_string(v0);
+            if (va->n_values > 1) {
+                // More than one device possible
+                GValue* v = g_value_array_get_nth(va, 1);
+                qDebug() << "gstreamergrabber::init --> device 1" << g_value_get_string(v);
+            }
+        }
+        else {
+            const GList* pva = gst_property_probe_get_properties(probe);
+            qDebug() << "gstreamergrabber::init --> device 0"; // << g_value_get_string(v0);
         }
         // END: Handle more than one device per source
     }

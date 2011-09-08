@@ -265,7 +265,6 @@ void QtFrontend::init()
     // this->testMainWidget();
 
     mw->show();
-    mw->startDialog();
 
     // this->testMainWidget();
 
@@ -273,42 +272,31 @@ void QtFrontend::init()
 }
 
 
-void QtFrontend::handleArguments(int argc, char **argv)
+bool QtFrontend::handleArguments(int argc, char **argv)
 {
     qDebug("QtFrontend::handleArguments --> Start");
 
-    // returns a pointer to the facade (allocated with new)
-    DomainFacade *facadePtr = getProject();
-
-    bool hasRecovered = false;
-
-    if (isRecoveryMode()) {
-        int ret = askQuestion(tr("Recovery"),
-                      tr("Something caused qStopmotion to exit abnormally\n"
-                      "last time it was runned. Do you want to recover?"));
-        // The user wants to recover
-        if (ret == 0) {
-            recover(facadePtr);
-            hasRecovered = true;
-        } else {
-            removeTemporaryDirectories();
-            makeTemporaryDirectories();
-        }
-    } else {
-        removeTemporaryDirectories();
-        makeTemporaryDirectories();
+    if (argc < 2) {
+        // No arguments
+        qDebug("QtFrontend::handleArguments --> End (false)");
+        return false;
     }
 
-    if (hasRecovered == false && argc > 1 && QFileInfo(argv[1]).isReadable()) {
+    DomainFacade *facadePtr = getProject();
+
+    if (QFileInfo(argv[1]).isReadable()) {
         facadePtr->setProjectFileName(argv[1]);
         facadePtr->openProject();
         const QString proFile = facadePtr->getProjectFileName();
         if (proFile != NULL) {
             preferencesTool->setBasicPreference("mostrecent", proFile);
         }
+        qDebug("QtFrontend::handleArguments --> End (true)");
+        return true;
     }
 
-    qDebug("QtFrontend::handleArguments --> End");
+    qDebug("QtFrontend::handleArguments --> End (false)");
+    return false;
 }
 
 
@@ -547,15 +535,16 @@ int QtFrontend::askQuestion(const QString title, const QString &question)
     // msgBox.setInformativeText(information);
     msgBox.setStandardButtons(QMessageBox::NoButton);
     msgBox.setDefaultButton(QMessageBox::NoButton);
-    msgBox.addButton(tr("&Yes"), QMessageBox::YesRole);
-    msgBox.addButton(tr("&No"), QMessageBox::NoRole);
+    QPushButton *yesButton = msgBox.addButton(tr("&Yes"), QMessageBox::YesRole);
+    QPushButton *noButton = msgBox.addButton(tr("&No"), QMessageBox::NoRole);
     msgBox.setIcon(QMessageBox::Question);
 
-    int ret = msgBox.exec();
+    msgBox.exec();
 
-    if (ret == QMessageBox::Yes) {
+    if (msgBox.clickedButton() == yesButton) {
         return 0;
     }
+
     return 1;
 }
 
@@ -615,38 +604,45 @@ int QtFrontend::runExternalCommand(const QString &command)
 }
 
 
-/**
- * Sets up the ExternalChangeMonitor to monitor the project directories
- * for changes in the project files.
- */
 void QtFrontend::setupDirectoryMonitoring()
 {
     mw->setupDirectoryMonitoring();
 }
 
 
-bool QtFrontend::RemoveDirectory(const QString &path)
+bool QtFrontend::removeContentInDirectory(const QString &dirPath)
 {
     bool has_err = false;
-    QDir aDir(path);
-    if (aDir.exists()) { //QDir::NoDotAndDotDot
-        QFileInfoList entries = aDir.entryInfoList(QDir::NoDotAndDotDot |
-                                QDir::Dirs | QDir::Files);
-        int count = entries.size();
-        for (int idx = 0; ((idx < count) && (!has_err)); idx++) {
-            QFileInfo entryInfo = entries[idx];
-            QString path = entryInfo.absoluteFilePath();
-            if (entryInfo.isDir()) {
-                has_err = RemoveDirectory(path);
-            } else {
-                QFile file(path);
-                if (!file.remove())
-                    has_err = true;
+    QDir aDir(dirPath);
+
+    if (!(aDir.exists())) {
+        return true;
+    }
+
+    QFileInfoList entries = aDir.entryInfoList(QDir::NoDotAndDotDot |
+                            QDir::Dirs | QDir::Files);
+    int count = entries.size();
+    for (int idx = 0; ((idx < count) && (!has_err)); idx++) {
+        QFileInfo entryInfo = entries[idx];
+        QString path = entryInfo.absoluteFilePath();
+        if (entryInfo.isDir()) {
+            // This entry is a directory
+            has_err = removeContentInDirectory(path);
+            if (has_err) {
+                continue;
+            }
+            if (!aDir.rmdir(path)) {
+                has_err = true;
             }
         }
-        if (!aDir.rmdir(aDir.absolutePath()))
-            has_err = true;
+        else {
+            // This entry is a file
+            if (!aDir.remove(path)) {
+                has_err = true;
+            }
+        }
     }
+
     return(has_err);
 }
 
@@ -667,21 +663,25 @@ void QtFrontend::makeTemporaryDirectories()
 
 void QtFrontend::removeTemporaryDirectories()
 {
-    QDir homeDir = QDir::home();
+    QDir homeDir(getUserDirName());
 
-    RemoveDirectory(getTempDirName());
-    RemoveDirectory(getTrashDirName());
-    RemoveDirectory(getPackerDirName());
+    if (!removeContentInDirectory(getTempDirName())) {
+        homeDir.rmdir(getTempDirName());
+    }
 
-    homeDir.rmpath(getTempDirName());
-    homeDir.rmpath(getTrashDirName());
-    homeDir.rmpath(getPackerDirName());
+    if (!removeContentInDirectory(getTrashDirName())) {
+        homeDir.rmdir(getTrashDirName());
+    }
+
+    if (!removeContentInDirectory(getPackerDirName())) {
+        homeDir.rmdir(getPackerDirName());
+    }
 }
 
 
 void QtFrontend::removeTemporaryFiles()
 {
-    QDir homeDir(this->getUserDirName());
+    QDir homeDir(getUserDirName());
     QStringList nameFilter;
     QString fileName(PreferencesTool::capturedFileName);
     fileName.append(".");
@@ -699,49 +699,74 @@ void QtFrontend::removeTemporaryFiles()
 
 bool QtFrontend::isRecoveryMode()
 {
-    if (QFile::exists(getTempDirName()) == false)
+    qDebug("QtFrontend::isRecoveryMode --> Start");
+
+    if (QFile::exists(getTempDirName()) == false) {
+        qDebug("QtFrontend::isRecoveryMode --> End (False)");
         return false;
-    if (QFile::exists(getTrashDirName()) == false)
+    }
+    if (QFile::exists(getTrashDirName()) == false) {
+        qDebug("QtFrontend::isRecoveryMode --> End (False)");
         return false;
-    if (QFile::exists(getPackerDirName()) == false)
+    }
+    if (QFile::exists(getPackerDirName()) == false) {
+        qDebug("QtFrontend::isRecoveryMode --> End (False)");
         return false;
+    }
 
     // Everything is intact and we have to run in recovery mode
+    qDebug("QtFrontend::isRecoveryMode --> End (True)");
     return true;
 }
 
 
-void QtFrontend::recover(DomainFacade *facadePtr)
+bool QtFrontend::recover()
 {
-    QDir dp(this->getPackerDirName());
-    if (dp.isReadable()) {
+    qDebug("QtFrontend::recover --> Start");
 
-        QFileInfoList fileList = dp.entryInfoList();
-        const QString mostRecent = preferencesTool->getBasicPreference("mostrecent", QString());
-
-        for (int i = 0 ; i < fileList.size() ; i++) {
-            QFileInfo fileInfo = fileList.at(i);
-
-            // is a directory
-            if (!fileInfo.isDir()) continue;
-            // and not a '.' or '..' directory
-            if (!fileInfo.absolutePath().endsWith(QLatin1String("."))) continue;
-            if (mostRecent.compare(fileInfo.absolutePath(), Qt::CaseInsensitive) != 0) continue;
-            if (!fileInfo.isReadable()) continue;
-            if (!fileInfo.isWritable()) continue;
-            facadePtr->setProjectFileName(fileInfo.absolutePath());
-            facadePtr->openProject();
-            break;
-        }
+    int ret = askQuestion(tr("Recovery"),
+                  tr("Something caused qStopmotion to exit abnormally\n"
+                  "last time it was runned. Do you want to recover?"));
+    // The user wants to recover
+    if (ret != 0) {
+        qDebug("QtFrontend::recover --> End (False)");
+        return false;
     }
 
-    dp.setPath(this->getTempDirName());
+    bool recovered = false;
+    DomainFacade* project = getProject();
+
+    // Open the last modified project
+    PreferencesTool *pref = getPreferences();
+    QString fileName(pref->getProject(0));
+    if (fileName.isEmpty()) {
+        // Create the new project
+        project->newProjectRedo(tr("Recover project"));
+        mw->setProjectSettingsToDefault();
+
+        // Create and activate the new scene
+        project->addSceneRedo(tr("Recover scene"));
+        project->setActiveSceneIndex(0);
+
+        // Create and activate the new take
+        project->addTakeRedo(0, tr("Recover take"));
+        project->setActiveTakeIndex(0);
+
+        //fileMenu->setItemEnabled(SAVE, false);
+
+        mw->modelSizeChanged(0);
+    }
+    else {
+        project->setProjectFileName(fileName);
+        project->openProject();
+    }
+
+    // Handle new added file from the temp direcory
+    QDir dp(this->getTempDirName());
     if (dp.isReadable()) {
         QVector<QString> frames;
-        QVector<AudioFile> sounds;
 
         QFileInfoList fileList = dp.entryInfoList();
-        // const QString mostRecent = preferencesTool->getBasicPreference("mostrecent", QString());
 
         for (int i = 0 ; i < fileList.size() ; i++) {
             QFileInfo fileInfo = fileList.at(i);
@@ -749,35 +774,31 @@ void QtFrontend::recover(DomainFacade *facadePtr)
             // Is a regular file, not a directory
             if (fileInfo.isFile()) {
                 // Image file
-                if (fileInfo.suffix().compare(QLatin1String("snd")) != 0) {
-                    frames.push_back(fileInfo.absolutePath());
-                }
-                // Sound file
-                else {
-                    QString buf = fileInfo.absolutePath().left(fileInfo.absolutePath().indexOf(QLatin1String("_")));
-                    QString index = buf.left(buf.indexOf(QLatin1String("_")));
-
-                    AudioFile af;
-                    af.belongsTo = index.toUInt();
-                    af.filename.append(fileInfo.absolutePath());
-                    sounds.push_back(af);
-                }
+                frames.append(fileInfo.absolutePath());
             }
         }
 
-        if (frames.size() <= 0)
-            return;
-
-        // TODO: Wath is the reason for this line???
-        // QVector<QString>(frames).swap(frames);
-
-        facadePtr->addFrames(frames);
-
-        unsigned int numElem = sounds.size();
-        for (unsigned int j = 0; j < numElem; ++j) {
-            facadePtr->addSoundToScene(sounds[j].belongsTo, sounds[j].filename, QString() );
+        if (frames.size() > 0) {
+            recovered = true;
+            project->addFrames(frames);
         }
     }
+
+    // TODO: Handle deleted files from the trash direcory
+    dp.setPath(this->getTrashDirName());
+
+    qDebug("QtFrontend::recover --> End");
+    return recovered;
+}
+
+
+void QtFrontend::startDialog()
+{
+    qDebug("QtFrontend::startDialog --> Start");
+
+    mw->startDialog();
+
+    qDebug("QtFrontend::startDialog --> End");
 }
 
 

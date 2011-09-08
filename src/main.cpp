@@ -28,6 +28,9 @@ int main(int argc, char **argv)
     // TODO: What ist this???
     // atexit(cleanup);
     int ret = 0;
+    bool hasRecovered = false;
+    bool hasProjectArg = false;
+
 
     QtFrontend qtFrontend(argc, argv);
     ret = qtFrontend.checkApplicationDirectory(argv[0]);
@@ -36,8 +39,27 @@ int main(int argc, char **argv)
     }
     qtFrontend.init();
     qtFrontend.processEvents();
-    qtFrontend.handleArguments(argc, argv);
 
+    if (qtFrontend.isRecoveryMode()) {
+        hasRecovered = qtFrontend.recover();
+    }
+
+    if (hasRecovered == false) {
+        qtFrontend.removeTemporaryDirectories();
+        qtFrontend.makeTemporaryDirectories();
+        // TODO: now the tmp directory is blocked (on Windows). The application can`t
+        // create new files in the tmp directory!!!
+
+        hasProjectArg = qtFrontend.handleArguments(argc, argv);
+        if (hasProjectArg == false) {
+            qtFrontend.startDialog();
+        }
+    }
+    qtFrontend.removeTemporaryFiles();
+
+    qtFrontend.setupDirectoryMonitoring();
+
+    // TODO: Repair Directory Monitoring
     // qtFrontend.setupDirectoryMonitoring();
     ret = qtFrontend.run(argc, argv);
 

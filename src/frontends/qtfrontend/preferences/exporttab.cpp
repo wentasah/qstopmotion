@@ -56,8 +56,6 @@ ExportTab::ExportTab(Frontend *f, QWidget *parent) : QWidget(parent)
     activeVideoSize          = ExportTab::nonSize;
     videoFpsLabel            = 0;
     videoFpsEdit             = 0;
-    yesButton                = 0;
-    noButton                 = 0;
 
     // Output file preferences
     outputPrefs              = 0;

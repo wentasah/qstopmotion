@@ -1170,6 +1170,7 @@ void ProjectTab::removeFramesSlot()
         return;
     }
 
+    // TODO: Optinaly save the image to remove in a separate directory
     frontend->getProject()->removeExposureToUndo(sceneIndex, takeIndex, exposureIndex);
 
     qDebug("ProjectTab::removeFramesSlot --> End");

@@ -961,7 +961,6 @@ void TimeLine::removeExposure(int sceneIndex,
 
     delete thumbViews[exposureIndex];
     thumbViews.remove(exposureIndex);
-    thumbViews[exposureIndex]->setSelected(TRUE);
 
     mainWidget->resize((FRAME_WIDTH + SPACE) * thumbViews.size(), FRAME_HEIGHT);
 

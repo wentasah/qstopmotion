@@ -267,6 +267,7 @@ bool AnimationProject::saveProject()
         qWarning("AnimationProject::saveProject --> save animation data failed");
         return false;
     }
+    this->unsavedChanges = false;
 
     qDebug("AnimationProject::saveProject --> End");
     return true;

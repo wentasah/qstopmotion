@@ -22,6 +22,8 @@
 
 #include "videoencoderfactory.h"
 
+#include <QtCore/QtDebug>
+
 
 VideoEncoderFactory::VideoEncoderFactory(Frontend *f)
 {
@@ -37,13 +39,21 @@ VideoEncoderFactory::~VideoEncoderFactory()
 
 const QString VideoEncoderFactory::createVideoFile(VideoEncoder *encoder)
 {
+    qDebug("VideoEncoderFactory::createVideoFile --> Start");
+
     QString startCommand = encoder->getStartCommand();
+
+    qDebug("VideoEncoderFactory::createVideoFile --> Command:");
+    qDebug() << startCommand;
 
     if (!startCommand.isEmpty()) {
         if (startEncoder(startCommand) == 0) {
+            qDebug("VideoEncoderFactory::createVideoFile --> End (Done)");
             return encoder->getOutputFile();
         }
     }
+
+    qDebug("VideoEncoderFactory::createVideoFile --> End (Nothing)");
     return QString();
 }
 

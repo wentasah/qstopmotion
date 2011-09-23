@@ -54,8 +54,8 @@ FfmpegEncoder::~FfmpegEncoder()
 const QString FfmpegEncoder::getStartCommand() const
 {
     QString startCommand;
-    ProjectSerializer *serializer = animationProject->getProjectSerializer();
-    QString imagePath = serializer->getImagePath();
+    QString imagePath = animationProject->getImagePath();
+    PreferencesTool *pref = animationProject->getFrontend()->getPreferences();
 
     // Prepare start command
     //
@@ -67,23 +67,21 @@ const QString FfmpegEncoder::getStartCommand() const
     // Encoder
     startCommand.append(getEncoderCommand());
 
-    // Use target option
-    // vcd.mpg
-    // startCommand.append(" -target vcd");
-    // pal-vcd
-    // startCommand.append(" -target pal-vcd");
+    // ===============================
+    // Input options
+    // ===============================
 
-    // Use individual format options
     // Frame rate (default = 25)
-    startCommand.append(" -r 10");
+    startCommand.append(QString(" -r %1").arg(animationProject->getFramesPerSecond()));
 
-    // Bit rate in bit/s (default = 200kb/s)
-    startCommand.append(" -b 1800");
+    // ===============================
+    // Input files
+    // ===============================
 
     // Input file name
     if (!imagePath.isEmpty()) {
-        startCommand.append(" -i");
-        startCommand.append(" \"");
+        startCommand.append(" -i ");
+        startCommand.append("\"");
         startCommand.append(imagePath);
         startCommand.append("/");
         startCommand.append("%6d.jpg");
@@ -95,7 +93,61 @@ const QString FfmpegEncoder::getStartCommand() const
         return QString();
     }
 
-    startCommand.append(" \"");
+    // ===============================
+    // Output options
+    // ===============================
+
+    // Use target option
+    // vcd.mpg
+    // startCommand.append(" -target vcd");
+    // pal-vcd
+    // startCommand.append(" -target pal-vcd");
+
+    // Use individual format options
+    // Frame rate (default = 25)
+    startCommand.append(QString(" -r 25"));
+
+    // Video size (default = Input size)
+    switch(pref->getBasicPreference("videosize", VideoEncoder::defaultSize)) {
+    case VideoEncoder::qvgaSize:
+        startCommand.append(" -s qvga");
+        break;
+    case VideoEncoder::vgaSize:
+        startCommand.append(" -s vga");
+        break;
+    case VideoEncoder::svgaSize:
+        startCommand.append(" -s svga");
+        break;
+    case VideoEncoder::paldSize:
+        startCommand.append(" -s 4cif");
+        break;
+    case VideoEncoder::hdreadySize:
+        startCommand.append(" -s hd720");
+        break;
+    case VideoEncoder::fullhdSize:
+        startCommand.append(" -s hd1080");
+        break;
+    }
+
+    // Video format
+    switch(pref->getBasicPreference("videoformat", VideoEncoder::noneFormat)) {
+    case VideoEncoder::aviFormat:
+        startCommand.append(" -f avi");
+        break;
+    case VideoEncoder::mp4Format:
+        startCommand.append(" -f mp4");
+        break;
+    }
+
+    // Bit rate in bit/s (default = 200kb/s)
+    // startCommand.append(" -b 1800");
+
+    // ===============================
+    // Output file
+    // ===============================
+
+    startCommand.append(" ");
+    startCommand.append("\"");
     startCommand.append(this->getOutputFile());
     startCommand.append("\"");
 

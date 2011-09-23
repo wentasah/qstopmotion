@@ -232,6 +232,7 @@ int AnimationProject::getFramesPerSecond() const
 void AnimationProject::setFramesPerSecond(int newFPS)
 {
     framesPerSecond = newFPS;
+    setUnsavedChanges();
 }
 
 
@@ -759,6 +760,7 @@ bool AnimationProject::saveScenesToProject(QDomDocument &doc, QDomElement &anima
     }
 
     QString msg(QObject::tr("Saving scenes to disk ..."));
+    nextTotalExposureIndex = 0;
     frontend->showProgress(msg.toLatin1().constData(), sceneSize);
     for (sceneIndex = 0; sceneIndex < sceneSize; ++sceneIndex) {
         frontend->updateProgress(sceneIndex);

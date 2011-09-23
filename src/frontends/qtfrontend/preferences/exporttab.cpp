@@ -25,6 +25,7 @@
 #include "domain/domainfacade.h"
 #include "frontends/qtfrontend/elements/flexiblelineedit.h"
 #include "technical/preferencestool.h"
+#include "technical/videoencoder/videoencoder.h"
 
 #include <QtCore/QtDebug>
 #include <QtGui/QFileDialog>
@@ -47,15 +48,16 @@ ExportTab::ExportTab(Frontend *f, QWidget *parent) : QWidget(parent)
     encoderPrefs             = 0;
     encoderApplicationLabel  = 0;
     encoderApplicationCombo  = 0;
-    activeEncoderApplication = ExportTab::noneApplication;
+    activeEncoderApplication = VideoEncoder::noneApplication;
     videoFormatLabel         = 0;
     videoFormatCombo         = 0;
-    activeVideoFormat        = ExportTab::noneFormat;
+    activeVideoFormat        = VideoEncoder::noneFormat;
     videoSizeLabel           = 0;
     videoSizeCombo           = 0;
-    activeVideoSize          = ExportTab::nonSize;
+    activeVideoSize          = VideoEncoder::defaultSize;
     videoFpsLabel            = 0;
-    videoFpsEdit             = 0;
+    videoFpsChooser          = 0;
+    activeProjectFps         = 1;
 
     // Output file preferences
     outputPrefs              = 0;
@@ -119,19 +121,43 @@ void ExportTab::makeGUI()
     videoFormatLabel->setBuddy(videoFormatCombo);
     videoFormatCombo->setFocusPolicy(Qt::NoFocus);
     connect(videoFormatCombo, SIGNAL(activated(int)), this, SLOT(changeVideoFormat(int)));
-    videoFormatCombo->addItem(tr("MPEG-4"));
+    videoFormatCombo->addItem(tr("AVI"));
+    videoFormatCombo->addItem(tr("MP4"));
 
     videoSizeLabel = new QLabel(tr("Video Size:"));
     videoSizeCombo = new QComboBox();
     videoSizeLabel->setBuddy(videoSizeCombo);
     videoSizeCombo->setFocusPolicy(Qt::NoFocus);
     connect(videoSizeCombo, SIGNAL(activated(int)), this, SLOT(changeVideoSize(int)));
-    videoSizeCombo->addItem(tr("320x240"));
-    videoSizeCombo->addItem(tr("640x480"));
+    videoSizeCombo->addItem(tr("Frame Size"));
+    videoSizeCombo->addItem(tr("QVGA (320x240)"));
+    videoSizeCombo->addItem(tr("VGA (640x480)"));
+    videoSizeCombo->addItem(tr("SVGQ (800x600)"));
+    videoSizeCombo->addItem(tr("PAL D (704x576)"));
+    videoSizeCombo->addItem(tr("HD Ready (1280x720)"));
+    videoSizeCombo->addItem(tr("Full HD (1900x1080"));
 
     videoFpsLabel = new QLabel(tr("Project Frames per Second:"));
-    videoFpsEdit = new QLineEdit();
-    videoFpsLabel->setBuddy(videoFpsEdit);
+    videoFpsChooser = new QSpinBox();
+
+    QString whatsThis =
+        tr("<h4>FPS chooser</h4> "
+           "<p>By changing the value in this "
+           "chooser you set which speed the "
+           "animation in the <b>FrameView</b> "
+           "should run at.</p> "
+           "<p>To start an animation press the "
+           "<b>Run Animation</b> button.</p>");
+    videoFpsLabel->setWhatsThis(whatsThis);
+    videoFpsChooser->setWhatsThis(whatsThis);
+
+    videoFpsChooser->setMinimum(1);
+    videoFpsChooser->setMaximum(30);
+    videoFpsChooser->setValue(1);
+    videoFpsChooser->setFocusPolicy(Qt::NoFocus);
+    connect(videoFpsChooser, SIGNAL(valueChanged(int)), this, SLOT(changeFps(int)));
+
+    videoFpsLabel->setBuddy(videoFpsChooser);
 
     // Output file preferences
     outputPrefs = new QGroupBox;
@@ -176,7 +202,7 @@ void ExportTab::makeGUI()
     encoderPrefsLayout->addWidget(videoSizeLabel, 2, 0);
     encoderPrefsLayout->addWidget(videoSizeCombo, 2, 1);
     encoderPrefsLayout->addWidget(videoFpsLabel, 3, 0);
-    encoderPrefsLayout->addWidget(videoFpsEdit, 3, 1);
+    encoderPrefsLayout->addWidget(videoFpsChooser, 3, 1);
     encoderPrefs->setLayout(encoderPrefsLayout);
 
     // Output file preferences
@@ -211,8 +237,8 @@ void ExportTab::initialize()
     PreferencesTool *pref = frontend->getPreferences();
 
     // Encoder preferences
-    activeEncoderApplication = pref->getBasicPreference("encoderapplication", ExportTab::noneApplication);
-    if (activeEncoderApplication == ExportTab::noneApplication)
+    activeEncoderApplication = pref->getBasicPreference("encoderapplication", VideoEncoder::noneApplication);
+    if (activeEncoderApplication == VideoEncoder::noneApplication)
     {
         encoderApplicationCombo->setCurrentIndex(0);
     }
@@ -221,8 +247,8 @@ void ExportTab::initialize()
         encoderApplicationCombo->setCurrentIndex(activeEncoderApplication);
     }
 
-    activeVideoFormat = pref->getBasicPreference("videoformat", ExportTab::noneFormat);
-    if (activeVideoFormat == ExportTab::noneFormat)
+    activeVideoFormat = pref->getBasicPreference("videoformat", VideoEncoder::noneFormat);
+    if (activeVideoFormat == VideoEncoder::noneFormat)
     {
         videoFormatCombo->setCurrentIndex(0);
     }
@@ -231,8 +257,8 @@ void ExportTab::initialize()
         videoFormatCombo->setCurrentIndex(activeVideoFormat);
     }
 
-    activeVideoSize = pref->getBasicPreference("videosize", ExportTab::nonSize);
-    if (activeVideoSize == ExportTab::nonSize)
+    activeVideoSize = pref->getBasicPreference("videosize", VideoEncoder::defaultSize);
+    if (activeVideoSize == VideoEncoder::defaultSize)
     {
         videoSizeCombo->setCurrentIndex(0);
     }
@@ -241,8 +267,8 @@ void ExportTab::initialize()
         videoSizeCombo->setCurrentIndex(activeVideoSize);
     }
 
-    int activeProjectFps = frontend->getProject()->getFramesPerSecond();
-    videoFpsEdit->setText(QString("%1").arg(activeProjectFps));
+    activeProjectFps = frontend->getProject()->getFramesPerSecond();
+    this->videoFpsChooser->setValue(activeProjectFps);
 
     // Output file preferences
     useDefaultOutputFile = pref->getBasicPreference("usedefaultoutputfile", 0);
@@ -278,6 +304,7 @@ void ExportTab::apply()
 
     PreferencesTool *pref = frontend->getPreferences();
     int index;
+    int newFps;
 
     index = encoderApplicationCombo->currentIndex();
     if (activeEncoderApplication != index)
@@ -298,6 +325,11 @@ void ExportTab::apply()
     {
         pref->setBasicPreference("videosize", index);
         activeVideoSize = index;
+    }
+
+    newFps = videoFpsChooser->value();
+    if (activeProjectFps != newFps) {
+        frontend->getProject()->setFramesPerSecond(newFps);
     }
 
     qDebug("ExportTab::apply --> End");
@@ -337,6 +369,11 @@ void ExportTab::changeVideoSize(int /*index*/)
     // qDebug() << "ExportTab::changeVideoSize --> Start";
 
     // qDebug() << "ExportTab::changeVideoSize --> End";
+}
+
+
+void ExportTab::changeFps(int newFps)
+{
 }
 
 

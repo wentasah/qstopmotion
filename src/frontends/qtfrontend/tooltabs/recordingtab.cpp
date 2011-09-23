@@ -45,8 +45,6 @@ RecordingTab::RecordingTab(Frontend *f,
     unitModeChooseCombo    = 0;
     mixCountSliderCaption  = 0;
     mixCountSlider         = 0;
-    fpsChooserCaption      = 0;
-    fpsChooser             = 0;
 
     playAccel              = 0;
     mixAccel               = 0;
@@ -132,15 +130,6 @@ void RecordingTab::makeGUI()
     mixCountSlider->setFocusPolicy(Qt::NoFocus);
     connect(mixCountSlider, SIGNAL(valueChanged(int)), this, SLOT(changeMixCount(int)));
 
-    fpsChooserCaption = new QLabel();
-
-    fpsChooser = new QSpinBox();
-    fpsChooser->setMinimum(1);
-    fpsChooser->setMaximum(30);
-    fpsChooser->setValue(1);
-    fpsChooser->setFocusPolicy(Qt::NoFocus);
-    connect(fpsChooser, SIGNAL(valueChanged(int)), this, SLOT(changeFps(int)));
-
     QVBoxLayout *captureLayout = new QVBoxLayout;
     captureLayout->setMargin(4);
     // captureLayout->setSpacing(2);
@@ -149,8 +138,6 @@ void RecordingTab::makeGUI()
     captureLayout->addWidget(unitModeChooseCombo);
     captureLayout->addWidget(mixCountSliderCaption);
     captureLayout->addWidget(mixCountSlider);
-    captureLayout->addWidget(fpsChooserCaption);
-    captureLayout->addWidget(fpsChooser);
     captureLayout->addStretch(10);
     captureGroupBox->setLayout(captureLayout);
     captureGroupBox->hide();
@@ -182,9 +169,6 @@ void RecordingTab::initialize()
 
     int unitMode = frontend->getProject()->getAnimationProject()->getUnitMode();
     this->unitModeChooseCombo->setCurrentIndex(unitMode);
-
-    int fps = frontend->getProject()->getAnimationProject()->getFramesPerSecond();
-    this->fpsChooser->setValue(fps);
 
     qDebug() << "RecordingTab::initialize --> End";
 }
@@ -265,18 +249,6 @@ void RecordingTab::retranslateStrings()
            "stop motion animation!</p>");
     mixCountSliderCaption->setWhatsThis(infoText);
     mixCountSlider->setWhatsThis(infoText);
-
-    fpsChooserCaption->setText(tr("FPS chooser"));
-    infoText =
-        tr("<h4>FPS chooser</h4> "
-           "<p>By changing the value in this "
-           "chooser you set which speed the "
-           "animation in the <b>FrameView</b> "
-           "should run at.</p> "
-           "<p>To start an animation press the "
-           "<b>Run Animation</b> button.</p>");
-    fpsChooserCaption->setWhatsThis(infoText);
-    fpsChooser->setWhatsThis(infoText);
 }
 
 
@@ -440,13 +412,6 @@ void RecordingTab::changeMixCount(int newMixCount)
     }
 
     frontend->getProject()->getView()->notifyNewMixCount(newMixCount);
-}
-
-
-void RecordingTab::changeFps(int newFps)
-{
-    frontend->getProject()->getAnimationProject()->setFramesPerSecond(newFps);
-    frontend->getProject()->getView()->notifyNewFramesPerSecond(newFps);
 }
 
 

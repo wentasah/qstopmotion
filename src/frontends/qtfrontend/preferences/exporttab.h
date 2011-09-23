@@ -32,6 +32,7 @@
 #include <QtGui/QLineEdit>
 #include <QtGui/QPushButton>
 #include <QtGui/QRadioButton>
+#include <QtGui/QSpinBox>
 #include <QtGui/QTableWidget>
 #include <QtGui/QTextEdit>
 #include <QtGui/QToolBox>
@@ -46,24 +47,6 @@ class ExportTab : public QWidget
 {
     Q_OBJECT
 public:
-    enum encoderApplication {
-        ffmpegApplication,
-        mencoderApplication,
-        noneApplication
-    };
-
-    enum videoFormat {
-        mpeg1Format,
-        mpeg4Format,
-        noneFormat
-    };
-
-    enum videoSize {
-        qvgaSize,          // 320x240
-        vgaSize,           // 640x480
-        nonSize
-    };
-
     /**
      * Sets up the tab.
      * @param f frontend of the application
@@ -112,6 +95,12 @@ private slots:
      */
     void changeVideoSize(int index);
 
+    /**
+     * Slot for updating the frames per second value.
+     * @param value the new slider value.
+     */
+    void changeFps(int value);
+
     // Output file preferences
     /**
      * Slot for notified the export tab when yes button is selected, so that
@@ -157,7 +146,8 @@ private:
     QComboBox    *videoSizeCombo;
     int           activeVideoSize;
     QLabel       *videoFpsLabel;
-    QLineEdit    *videoFpsEdit;
+    QSpinBox     *videoFpsChooser;
+    int           activeProjectFps;
 
     // Output file preferences
     QGroupBox    *outputPrefs;

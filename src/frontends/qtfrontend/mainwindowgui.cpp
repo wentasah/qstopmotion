@@ -726,9 +726,9 @@ void MainWindowGUI::exportToVideo()
 
     VideoEncoder *enc = NULL;
     PreferencesTool *pref = frontend->getPreferences();
-    int activeEncoderApplication = pref->getBasicPreference("encoderapplication", ExportTab::noneApplication);
+    int activeEncoderApplication = pref->getBasicPreference("encoderapplication", VideoEncoder::noneApplication);
 
-    if (activeEncoderApplication == ExportTab::noneApplication)
+    if (activeEncoderApplication == VideoEncoder::noneApplication)
     {
         frontend->showWarning(tr("Warning"),
                               tr("Cannot find any registered encoder to be used for video export.\n"
@@ -740,19 +740,29 @@ void MainWindowGUI::exportToVideo()
 
     switch (activeEncoderApplication)
     {
-    case ExportTab::ffmpegApplication:
+    case VideoEncoder::ffmpegApplication:
         enc = new FfmpegEncoder(this->frontend->getProject()->getAnimationProject());
 
         break;
-    case ExportTab::mencoderApplication:
+    case VideoEncoder::mencoderApplication:
         break;
     default:
         return;
     }
 
     if (pref->getBasicPreference("usedefaultoutputfile", 0) == 0) {
+        QString filter;
+        switch(pref->getBasicPreference("videoformat", VideoEncoder::noneFormat)) {
+        case VideoEncoder::aviFormat:
+            filter.append(tr("AVI Videos (*.avi)"));
+            break;
+        case VideoEncoder::mp4Format:
+            filter.append(tr("MP4 Videos (*.mp4)"));
+            break;
+        }
+
         QString outputFile = QFileDialog::
-                       getSaveFileName(this, tr("Export to video file"), lastVisitedDir);
+                       getSaveFileName(this, tr("Export to video file"), lastVisitedDir, filter);
         if (outputFile.isEmpty()) {
             delete enc;
             enc = NULL;
@@ -764,6 +774,9 @@ void MainWindowGUI::exportToVideo()
         enc->setOutputFile(pref->getBasicPreference("defaultoutputfilename", ""));
     }
 
+    // Remove an existing file
+    QFile::remove(enc->getOutputFile());
+
     if (!enc->isValid()) {
         frontend->showWarning(tr("Warning"),
                               tr("The registered encoder is not valid.\n"
@@ -772,7 +785,7 @@ void MainWindowGUI::exportToVideo()
         enc = NULL;
         return;
     }
-    saveProject();
+    checkSaved();
     frontend->getProject()->exportToVideo(enc);
     delete enc;
     enc = NULL;

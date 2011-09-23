@@ -260,7 +260,7 @@ void QtFrontend::init()
     mw->init();
     mw->setWindowTitle(tr("qStopMotion"));
     mw->resize(751, 593);
-    mw->move(20, 20);
+    mw->move(80, 20);
 
     // this->testMainWidget();
 

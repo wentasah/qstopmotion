@@ -198,9 +198,10 @@ int DomainFacade::getFramesPerSecond()
 }
 
 
-void DomainFacade::setFramesPerSecond(int newFPS)
+void DomainFacade::setFramesPerSecond(int newFps)
 {
-    animationProject->setFramesPerSecond(newFPS);
+    animationProject->setFramesPerSecond(newFps);
+    getView()->notifyNewFramesPerSecond(newFps);
 }
 
 

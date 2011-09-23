@@ -35,6 +35,37 @@ class VideoEncoder
 public:
 
     /**
+     * Enum with all possible encoder applications.
+     */
+    enum encoderApplication {
+        ffmpegApplication,
+        mencoderApplication,
+        noneApplication
+    };
+
+    /**
+     * Enum with all possible video output formats
+     */
+    enum videoFormat {
+        aviFormat,            // AVI format
+        mp4Format,            // MP4 format
+        noneFormat
+    };
+
+    /**
+     * Enum with all possible video sizes
+     */
+    enum videoSize {
+        defaultSize,          // Source size
+        qvgaSize,             // 320x240 (QVGA)
+        vgaSize,              // 640x480 (VGA)
+        svgaSize,             // 800x600 (SVGA)
+        paldSize,             // 704x576 (PAL D)
+        hdreadySize,          // 1280x720 (HD Ready)
+        fullhdSize            // 1900x1080 (Full HD)
+    };
+
+    /**
      * Destrictor
      */
     ~VideoEncoder();

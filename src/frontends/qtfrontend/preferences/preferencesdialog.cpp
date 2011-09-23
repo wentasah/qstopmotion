@@ -120,6 +120,7 @@ void PreferencesDialog::apply()
     this->exportVideoTab->apply();
     this->defaultValueTab->apply();
     frontend->getPreferences()->flushPreferences();
+    this->setResult(QDialog::Accepted);
     this->hide();
 
     qDebug("PreferencesDialog::apply --> End");

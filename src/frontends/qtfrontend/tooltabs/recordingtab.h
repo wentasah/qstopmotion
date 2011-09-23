@@ -32,7 +32,6 @@
 #include <QtGui/QGroupBox>
 #include <QtGui/QGridLayout>
 #include <QtGui/QSlider>
-#include <QtGui/QSpinBox>
 #include <QtGui/QLabel>
 #include <QtGui/QShortcut>
 
@@ -113,12 +112,6 @@ private slots:
     void changeMixCount(int value);
 
     /**
-     * Slot for updating the frames per second value.
-     * @param value the new slider value.
-     */
-    void changeFps(int value);
-
-    /**
      * Slot for setting the camera mode to mixing.
      * Used by the shortcut key.
      */
@@ -161,8 +154,6 @@ private:
     QComboBox   *unitModeChooseCombo;
     QLabel      *mixCountSliderCaption;
     QSlider     *mixCountSlider;
-    QLabel      *fpsChooserCaption;
-    QSpinBox    *fpsChooser;
 
 };
 

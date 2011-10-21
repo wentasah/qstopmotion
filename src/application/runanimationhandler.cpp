@@ -149,7 +149,7 @@ void RunAnimationHandler::pauseAnimation()
 
 }
 
-// TODO: No button, no implementation
+// TODO: No selectPreviousScene button, no implementation
 void RunAnimationHandler::selectPreviousScene()
 {
     /*
@@ -160,7 +160,7 @@ void RunAnimationHandler::selectPreviousScene()
     */
 }
 
-// TODO: No button, no implementation
+// TODO: No selectPreviousTake button, no implementation
 void RunAnimationHandler::selectPreviousTake()
 {
     /*
@@ -212,7 +212,7 @@ void RunAnimationHandler::selectToEndFrame()
     }
 }
 
-// TODO: No button, no implementation
+// TODO: No selectNextTake button, no implementation
 void RunAnimationHandler::selectNextTake()
 {
     /*
@@ -224,7 +224,7 @@ void RunAnimationHandler::selectNextTake()
     */
 }
 
-// TODO: No button, no implementation
+// TODO: No selectNextScene button, no implementation
 
 void RunAnimationHandler::selectNextScene()
 {

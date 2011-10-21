@@ -177,21 +177,6 @@ void FrameViewImage::updateInsertExposure(int sceneIndex,
 }
 
 
-/* old version
-void FrameViewImage::updateSetNewActiveExposure(int exposureIndex)
-{
-    qDebug("FrameViewImage::updateSetNewActiveExposure --> Start");
-
-    if (frameNumber > -1) {
-        setActiveFrame(frameNumber);
-    } else {
-        this->update();
-    }
-
-    qDebug("FrameViewImage::updateSetNewActiveExposure --> End");
-}
-*/
-
 void FrameViewImage::updateActivateExposure()
 {
     qDebug("FrameViewImage::updateActivateExposure --> Start");
@@ -200,21 +185,6 @@ void FrameViewImage::updateActivateExposure()
 
     qDebug("FrameViewImage::updateActivateExposure --> End");
 }
-
-/*
-void FrameViewImage::updateExposure(int sceneIndex, int takeIndex, int exposureIndex)
-{
-    qDebug("FrameViewImage::updateFrame --> Start");
-
-    if (exposureIndex > -1) {
-        setFrame(sceneIndex, takeIndex, exposureIndex);
-    } else {
-        this->update();
-    }
-
-    qDebug("FrameViewImage::updateFrame --> End");
-}
-*/
 
 /**************************************************************************
  * Signals
@@ -368,30 +338,6 @@ void FrameViewImage::paintEvent(QPaintEvent *)
  * Private functions
  **************************************************************************/
 
-void FrameViewImage::setFrame(int sceneIndex, int takeIndex, int exposureIndex)
-{
-    qDebug("FrameViewImage::setFrame --> Start");
-
-	// TODO: set frame from active scene, active take and active exposure
-    Exposure *exposure = frontend->getProject()->getExposure(sceneIndex, takeIndex, exposureIndex);
-    if (!exposure->isEmpty()) {
-        const QString fileName = exposure->getImagePath();
-
-        qDebug("FrameViewImage::setFrame --> Loading image");
-
-        activeImage.load(fileName);
-
-        qDebug("FrameViewImage::setFrame --> Loading image finished");
-
-        this->update();
-    } else {
-        qWarning("FrameViewImage::setFrame --> Active frame number inside frameview is not valid!");
-    }
-
-    qDebug("FrameViewImage::setFrame --> End");
-}
-
-
 void FrameViewImage::activateExposure()
 {
     qDebug("FrameViewImage::activateExposure --> Start");
@@ -409,31 +355,6 @@ void FrameViewImage::activateExposure()
 
     qDebug("FrameViewImage::activateExposure --> End");
 }
-
-/* old version
-void FrameViewImage::setActiveFrame(int frameNumber)
-{
-    qDebug("FrameViewImage::setActiveFrame --> Start");
-
-	// TODO: set frame from active scene, active take and active exposure
-    Exposure *exposure = facade->getExposure(frameNumber);
-    if (!exposure->isEmpty()) {
-        const QString fileName = exposure->getImagePath();
-
-        qDebug("FrameViewImage::setActiveFrame --> Loading image");
-
-        screen->load(fileName);
-
-        qDebug("FrameViewImage::setActiveFrame --> Loading image finished");
-
-        this->update();
-    } else {
-        qWarning("FrameViewImage::setActiveFrame --> Active frame number inside frameview is not valid!");
-    }
-
-    qDebug("FrameViewImage::setActiveFrame --> End");
-}
-*/
 
 void FrameViewImage::addToImageBuffer(QImage const image)
 {

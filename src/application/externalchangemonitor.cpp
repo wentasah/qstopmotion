@@ -35,9 +35,6 @@
  * Class to monitor the changes to the file system and notify the application.
  *
  * @todo replace this class with QFileSystemWatcher!!!!
- *
- * @todo uniform most of the getenv("home") calls so that it is done once
- * and pasted around.
  */
 ExternalChangeMonitor::ExternalChangeMonitor(Frontend *f,
                                              QObject *parent)

@@ -455,9 +455,6 @@ const QVector<Exposure*> Take::addExposures(const QVector<QString> &exposureName
         }
     }
 
-    // TODO: trim to size :)
-    // QVector<QString>(newImagePaths).swap(newImagePaths);
-
     this->getAnimationProject()->setUnsavedChanges();
 
     qDebug("Take::addExposures --> End");
@@ -512,9 +509,6 @@ const QVector<Exposure*> Take::removeExposures(unsigned int fromExposure,
             exposures.remove(fromExposure);
         }
     }
-
-    // TODO: trim to size :)
-    // QVector<QString>(newImagePaths).swap(newImagePaths);
 
     return newExposures;
 }

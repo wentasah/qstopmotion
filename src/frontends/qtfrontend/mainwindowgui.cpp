@@ -1149,7 +1149,7 @@ void MainWindowGUI::createActions()
     cutAct->setIconVisibleInMenu(true);
     cutAct->setEnabled(false);
     cutAct->setShortcut(ControlModifier + Key_X);
-
+/*
     copyAct = new QAction(this);
     iconFile.clear();
     iconFile.append(frontend->getIconsDirName());
@@ -1169,7 +1169,7 @@ void MainWindowGUI::createActions()
     pasteAct->setIconVisibleInMenu(true);
     pasteAct->setEnabled(false);
     connect(pasteAct, SIGNAL(triggered()), editMenuHandler, SLOT(paste()));
-/*
+
     gotoFrameAct = new QAction(this);
     iconFile.clear();
     iconFile.append(frontend->getIconsDirName());

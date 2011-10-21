@@ -65,8 +65,10 @@ void EditMenuHandler::closeGotoMenu()
 }
 
 
+// TODO: New implementation of copy necessary
 void EditMenuHandler::copy()
 {
+    /*
     QList<QUrl> urls;
 
     // TODO: return the scene, take and frame from the frame bar!!!!
@@ -89,6 +91,7 @@ void EditMenuHandler::copy()
 
     //drag->start(Qt::MoveAction);
     QApplication::clipboard()->setMimeData(mimeData);
+    */
 }
 
 // TODO: New implementation of past necessary

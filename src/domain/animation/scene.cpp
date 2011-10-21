@@ -571,9 +571,6 @@ const QVector<Exposure*> Scene::addExposures(const QVector<QString> &exposureNam
         }
     }
 
-    // TODO: trim to size :)
-    // QVector<QString>(newImagePaths).swap(newImagePaths);
-
     qDebug("Scene::addExposures --> End");
     return newExposures;
 }

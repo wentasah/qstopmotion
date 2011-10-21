@@ -1,10 +1,11 @@
 [Desktop Entry]
 Name=qStopMotion
 Comment=Program to create stop-motion animations
-Exec=qstopmotion
+Exec=qstopmotion %f
 Icon=qstopmotion
 Terminal=false
+X-MultipleArgs=false
 Type=Application
-Categories=Application;Graphics;AudioVideo;Video;AudioVideoEditing;Qt
-MimeType=application/x-qstopmotion
-Encoding=UTF-8
+Categories=AudioVideo;Video;AudioVideoEditing;
+StartupNotify=true
+MimeType=application/x-qstopmotion;

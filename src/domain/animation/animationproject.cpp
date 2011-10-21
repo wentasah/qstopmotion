@@ -1200,8 +1200,6 @@ void AnimationProject::clear()
     unsavedChanges = false;
     Exposure::tempNum = 0;
     Exposure::trashNum = 0;
-    // TODO: Move notifyClear to the caller of this function
-    // notifyClear();
     description.clear();
 
     qDebug("AnimationProject::clear --> End");

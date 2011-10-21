@@ -272,21 +272,6 @@ public:
      */
     void updateMoveExposures(int fromFrame, int toFrame, int movePosition);
 
-    /**
-     * Function to recieve notification when a new exposure is selected.
-     */
-    // virtual void updateSetNewActiveExposure(int exposureIndex) = 0;
-
-    /**
-     * Function to recieve notification when a new frame is selected.
-     */
-    // virtual void updateNewActiveFrame(int frameNumber) = 0;
-
-    /**
-     * Function to recieve notification when a new frame is selected.
-     */
-    // virtual void updateExposure(int sceneIndex, int takeIndex, int exposureIndex) = 0;
-
     /**************************************************************************
      * Frameview functions
      **************************************************************************/
@@ -359,7 +344,7 @@ protected:
      * @param takeIndex
      * @param exposureIndex
      */
-    virtual void setFrame(int sceneIndex, int takeIndex, int exposureIndex) = 0;
+    // virtual void setFrame(int sceneIndex, int takeIndex, int exposureIndex) = 0;
 
     /**
      * Loads the new active frames picture into the frameview.

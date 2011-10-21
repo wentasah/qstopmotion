@@ -132,17 +132,7 @@ public:
     /**
      * Function to recieve notification when a new frame is selected.
      */
-    // void updateSetNewActiveExposure(int exposureIndex);
-
-    /**
-     * Function to recieve notification when a new frame is selected.
-     */
     void updateActivateExposure();
-
-    /**
-     * Function to recieve notification when a new frame is selected.
-     */
-    // void updateExposure(int sceneIndex, int takeIndex, int exposureIndex);
 
 signals:
     void cameraReady();
@@ -178,18 +168,12 @@ private:
      * @param takeIndex
      * @param exposureIndex
      */
-    void setFrame(int sceneIndex, int takeIndex, int exposureIndex);
+    // void setFrame(int sceneIndex, int takeIndex, int exposureIndex);
 
     /**
      * Loads the new active frames picture into the frameview.
      */
     void activateExposure();
-
-    /**
-     * Loads the new active frames picture into the frameview.
-     * @param frameNumber
-     */
-    // void setActiveFrame(int frameNumber);
 
     /**
      * Add a image to the image buffer

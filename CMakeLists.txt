@@ -1,7 +1,7 @@
 ###############################################################################
 # CMake file for the qStopMotion project                                      #
 # (c) Ralf Lange, longsoft.de                                                 #
-# Last update: 2011-08-31                                                     #
+# Last update: 2011-10-17                                                     #
 #                                                                             #
 # Usage:                                                                      #
 #   * Qt-Creator (Windows, Linux)                                             #
@@ -216,14 +216,23 @@ set(TRANSLATIONS
 #    translations/qstopmotion_tr.ts
 )
 
+set(PIXMAP_FILES
+    qstopmotion.png       # RPM Icon is installed in a separate step
+    qstopmotion.xpm       # DEB Icon is installed in a separate step
+)
+
 set(GENERAL_FILES
-#    qstopmotion.desktop   # .desktop ist installed in an separate step
-    qstopmotion.mime      # ???
-#    qstopmotion.1         # Linux man page
     AUTHORS               # The authors
     README.txt            # The readme for the users
     COPYING               # GPL2 License
     Changes.txt           # Change log
+)
+
+set(UNIX_FILES
+    qstopmotion.desktop   # .desktop is installed in a separate step
+    qstopmotion.menufile  # .menufile is installed in a separate step
+    qstopmotion.mime      # ???
+#     qstopmotion.1         # Linux man page
 )
 
 ###############################################################################
@@ -373,12 +382,18 @@ IF(WIN32)
     file(COPY graphics DESTINATION ".")
     file(COPY manual DESTINATION ".")
     file(COPY translations DESTINATION ".")
+    file(COPY ${ICON_FILES} DESTINATION ".")
+    file(COPY ${GENERAL_FILES} DESTINATION ".")
 
 ELSE(WIN32)
 
     file(COPY graphics DESTINATION "share/qstopmotion/")
     file(COPY manual DESTINATION "share/doc/qstopmotion/")
     file(COPY translations DESTINATION "share/qstopmotion/")
+    file(COPY icons DESTINATION "share/qstopmotion/")
+    file(COPY ${ICON_FILES} DESTINATION "share/qstopmotion/")
+    file(COPY ${GENERAL_FILES} DESTINATION "share/qstopmotion/")
+    file(COPY ${UNIX_FILES} DESTINATION "share/qstopmotion/")
 
 ENDIF(WIN32)
 
@@ -405,28 +420,33 @@ add_custom_target (translations_target DEPENDS ${QM_FILES})
 
 IF(WIN32)
     # The predefined windows installer path include the qstopmotion subdirectory
+    
     set(QSTOPMOTION_BIN_INSTALL_DIR "bin")
-    set(QSTOPMOTION_GRAPHICS_INSTALL_DIR ".")
-    set(QSTOPMOTION_MANUAL_INSTALL_DIR ".")
-    set(QSTOPMOTION_TRANSLATIONS_INSTALL_DIR ".")
+    set(QSTOPMOTION_GRAPHICS_INSTALL_DIR "graphics")
+    set(QSTOPMOTION_GRAPHICS_ICONS_INSTALL_DIR "graphics/icons")
+    set(QSTOPMOTION_GRAPHICS_PICTURES_INSTALL_DIR "graphics/pictures")
+    set(QSTOPMOTION_MANUAL_INSTALL_DIR "manual")
+    set(QSTOPMOTION_TRANSLATIONS_INSTALL_DIR "translations")
     set(QSTOPMOTION_GENERALS_INSTALL_DIR ".")
-    set(QSTOPMOTION_DESKTOP_INSTALL_DIR ".")
+    set(QSTOPMOTION_PIXMAP_INSTALL_DIR "pixmaps")
+    set(QSTOPMOTION_ICONS_INSTALL_DIR "icons")
 
 ELSE(WIN32)
     # The predefined CMake-Linux installer path is "/usr/local"
     # The predefined RPM installer path is "/usr"
-    set(QSTOPMOTION_SHARE_QSTOPMOTION_DIR "share/qstopmotion")
-    set(QSTOPMOTION_SHARE_GRAPHICS_DIR "share/qstopmotion/graphics")
-    set(QSTOPMOTION_SHARE_ICONS_DIR "share/qstopmotion/graphics/icons")
-    set(QSTOPMOTION_SHARE_PICTURES_DIR "share/qstopmotion/graphics/pictures")
-    set(QSTOPMOTION_SHARE_TRANSLATIONS_DIR "share/qstopmotion/translations")
+    # The predefined DEB installer path is "/usr"
 
     set(QSTOPMOTION_BIN_INSTALL_DIR "bin")
-    set(QSTOPMOTION_GRAPHICS_INSTALL_DIR "share/qstopmotion")
-    set(QSTOPMOTION_MANUAL_INSTALL_DIR "share/doc/qstopmotion")
-    set(QSTOPMOTION_TRANSLATIONS_INSTALL_DIR "share/qstopmotion")
+    set(QSTOPMOTION_GRAPHICS_INSTALL_DIR "share/qstopmotion/graphics")
+    set(QSTOPMOTION_GRAPHICS_ICONS_INSTALL_DIR "share/qstopmotion/graphics/icons")
+    set(QSTOPMOTION_GRAPHICS_PICTURES_INSTALL_DIR "share/qstopmotion/graphics/pictures")
+    set(QSTOPMOTION_TRANSLATIONS_INSTALL_DIR "share/qstopmotion/translations")
     set(QSTOPMOTION_GENERALS_INSTALL_DIR "share/qstopmotion")
+    set(QSTOPMOTION_MANUAL_INSTALL_DIR "share/doc/qstopmotion")
     set(QSTOPMOTION_DESKTOP_INSTALL_DIR "share/applications")
+    set(QSTOPMOTION_MENUFILE_INSTALL_DIR "share/menus")
+    set(QSTOPMOTION_PIXMAP_INSTALL_DIR "share/pixmaps")
+    set(QSTOPMOTION_ICONS_INSTALL_DIR "share/icons")
 
 ENDIF(WIN32)
 
@@ -436,35 +456,74 @@ install(
     RUNTIME DESTINATION ${QSTOPMOTION_BIN_INSTALL_DIR}
 )
 
-# installation of the grapics
-install(
-    DIRECTORY graphics
-    DESTINATION ${QSTOPMOTION_GRAPHICS_INSTALL_DIR}
-)
-
-# installation of the manual
-install(
-    DIRECTORY manual
-    DESTINATION ${QSTOPMOTION_MANUAL_INSTALL_DIR}
-)
-
-# installation of the translations
-install(
-    DIRECTORY translations
-    DESTINATION ${QSTOPMOTION_TRANSLATIONS_INSTALL_DIR}
-)
-
 # installation of the general-purpose files
 install(
     FILES ${GENERAL_FILES}
     DESTINATION ${QSTOPMOTION_GENERALS_INSTALL_DIR}
 )
 
-# installation of the .desktop file
+# installation of the content of the grapics directory
 install(
-    FILES "qstopmotion.desktop"
-    DESTINATION ${QSTOPMOTION_DESKTOP_INSTALL_DIR}
+    DIRECTORY graphics/
+    DESTINATION ${QSTOPMOTION_GRAPHICS_INSTALL_DIR}
 )
+
+# installation of the content of the manual directory
+install(
+    DIRECTORY manual/
+    DESTINATION ${QSTOPMOTION_MANUAL_INSTALL_DIR}
+)
+
+# installation of the content of the translations directory
+install(
+    DIRECTORY translations/
+    DESTINATION ${QSTOPMOTION_TRANSLATIONS_INSTALL_DIR}
+)
+
+# installation only on UNIX systems
+IF(UNIX)
+    # installation of the general unix files
+    install(
+        FILES ${UNIX_FILES}
+        DESTINATION ${QSTOPMOTION_GENERALS_INSTALL_DIR}
+    )
+
+    # installation of the icons
+    install(
+        DIRECTORY icons/
+        DESTINATION ${QSTOPMOTION_ICONS_INSTALL_DIR}
+    )
+ENDIF(UNIX)
+
+# installation only on FEDORA systems
+IF(CPACK_GENERATOR STREQUAL "RPM")
+    # installation of the icon file
+    install(
+        FILES "qstopmotion.png"
+        DESTINATION ${QSTOPMOTION_PIXMAP_INSTALL_DIR}
+    )
+
+    # installation of the .desktop file
+    install(
+        FILES "qstopmotion.desktop"
+        DESTINATION ${QSTOPMOTION_DESKTOP_INSTALL_DIR}
+    )
+ENDIF(CPACK_GENERATOR STREQUAL "RPM")
+
+# installation on DEBIAN systems
+IF(CPACK_GENERATOR STREQUAL "DEB")
+    # installation of the icon file
+    install(
+        FILES "qstopmotion.xpm"
+        DESTINATION ${QSTOPMOTION_PIXMAP_INSTALL_DIR}
+    )
+
+    # installation of the .menufile file
+    install(
+        FILES "qstopmotion.menufile"
+        DESTINATION ${QSTOPMOTION_MENUFILE_INSTALL_DIR}
+    )
+ENDIF(CPACK_GENERATOR STREQUAL "DEB")
 
 ###############################################################################
 ###############################################################################
@@ -537,6 +596,15 @@ SET(CPACK_NSIS_MENU_LINKS
 # SET(CPACK_NSIS_URL_INFO_ABOUT "http:\\\\\\\\www.longsoft.de")
 # SET(CPACK_NSIS_CONTACT ${CPACK_PACKAGE_CONTACT})
 
+# Additional installation command
+# SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS ExecWait '\\\"$INSTDIR\\\\vcredist_x86.exe\\\" /Q:a')
+
+# Additional uninstallation command
+# SET(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS ExecWait '??????')
+
+# Run the application on the finish page
+# SET(CPACK_NSIS_MUI_FINISHPAGE_RUN "qstopmotion.exe"
+
 ###############################################################################
 # DEB package - Linux only (Debian, OpenSuse, Ubuntu, ...)
 ###############################################################################
@@ -587,6 +655,13 @@ SET(CPACK_RPM_PACKAGE_URL ${QSTOPMOTION_HOMEPAGE})
 SET(CPACK_RPM_PACKAGE_REQUIRES "ffmpeg >= 0.6, gstreamer >= 0.10.30, qt4 >= 4.6.3")
 # CPACK_RPM_PACKAGE_SUGGESTS
 # CPACK_RPM_PACKAGE_PROVIDES
+
+# SET(CPACK_RPM_SPEC_INSTALL_POST "desktop-file-validate /usr/share/applications/qstopmotion.desktop")
+
+# SET(CPACK_RPM_PRE_INSTALL_SCRIPT_FILE "pre_install.sh")
+# SET(CPACK_RPM_POST_INSTALL_SCRIPT_FILE "post_install.sh")
+# SET(CPACK_RPM_PRE_UNINSTALL_SCRIPT_FILE "pre_install.sh")
+# SET(CPACK_RPM_POST_UNINSTALL_SCRIPT_FILE "post_install.sh")
 
 
 ###############################################################################

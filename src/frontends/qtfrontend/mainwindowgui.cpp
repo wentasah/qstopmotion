@@ -320,9 +320,9 @@ void MainWindowGUI::retranslateStrings(const QString &newLocale)
     quitAct->setText(tr("&Quit"));
     undoAct->setText(tr("&Undo"));
     redoAct->setText(tr("Re&do"));
-    cutAct->setText(tr("Cu&t"));
-    copyAct->setText(tr("&Copy"));
-    pasteAct->setText(tr("&Paste"));
+    // cutAct->setText(tr("Cu&t"));
+    // copyAct->setText(tr("&Copy"));
+    // pasteAct->setText(tr("&Paste"));
     configureAct->setText(tr("&Configure qStopMotion"));
     whatsthisAct->setText(tr("What's &This"));
     undoViewAct->setText(tr("&Undo stack"));
@@ -1140,7 +1140,7 @@ void MainWindowGUI::createActions()
     redoAct->setIconVisibleInMenu(true);
     redoAct->setEnabled(false);
     connect(redoAct, SIGNAL(triggered()), editMenuHandler, SLOT(redo()));
-
+/*
     cutAct = new QAction(this);
     iconFile.clear();
     iconFile.append(frontend->getIconsDirName());
@@ -1149,7 +1149,7 @@ void MainWindowGUI::createActions()
     cutAct->setIconVisibleInMenu(true);
     cutAct->setEnabled(false);
     cutAct->setShortcut(ControlModifier + Key_X);
-/*
+
     copyAct = new QAction(this);
     iconFile.clear();
     iconFile.append(frontend->getIconsDirName());
@@ -1246,8 +1246,8 @@ void MainWindowGUI::createMenus()
 
     undoAct->setEnabled(false);
     redoAct->setEnabled(false);
-    cutAct->setEnabled(false);
-    copyAct->setEnabled(false);
+    // cutAct->setEnabled(false);
+    // copyAct->setEnabled(false);
     // gotoFrameAct->setEnabled(false);
 
     settingsMenu = menuBar()->addMenu(tr("&Settings"));
@@ -1552,7 +1552,7 @@ void MainWindowGUI::retranslateHelpText()
     infoText =
         redoAct->toolTip().prepend(tr("Redo"));
     redoAct->setToolTip(infoText);
-
+/*
     infoText =
         tr("<h4>Cut</h4> "
            "<p><em>Cuts</em> the selected frames out of the animation and adds them "
@@ -1580,7 +1580,7 @@ void MainWindowGUI::retranslateHelpText()
     infoText =
         pasteAct->toolTip().prepend(tr("Paste"));
     pasteAct->setToolTip(infoText);
-/*
+
     infoText =
         tr("<h4>Go to frame</h4> "
            "<p>This will bring up a popup-menu at the bottom where you can choose "

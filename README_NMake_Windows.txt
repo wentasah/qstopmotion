@@ -1,5 +1,5 @@
 Building qStopMotion using MS Visual Studio 2010 / 2008
-Last Change: 2011/08/22
+Last Change: 2011/11/04
 
 1. Preparation of the development environment
 
@@ -65,6 +65,8 @@ There are two possibilities, to get the source code:
 * Select a separate directory as the destination directory
 * Press the configure button
 * Select the generator "NMake Makefiles"
+* Select the entry CPACK - CPACK_BINARY_NSIS
+* Press the configure button again
 * Press the generate button
 
 2.3 Build the application
@@ -85,11 +87,14 @@ There are two possibilities, to get the source code:
 
 5.1 Create the installer for qStopMotion
 * Start a Visual Studio command prompt
-* call "nmake package"
+* Call "nmake package"
+* A new installer with the name 'qstopmotion-x.y.z-win32.exe' will be created
+  in the destination directory
 
 5.2 Test the new installer
-* ...
-* ...
+* Copy the new installer to a temporary directory
+* Start the installer
+* Select the installation directory
 
 6. Create source documentation
 

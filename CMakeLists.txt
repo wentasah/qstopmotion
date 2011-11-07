@@ -352,6 +352,7 @@ ELSEIF(WIN32)
 
     add_executable(
         qstopmotion
+        src/qstopmotion.rc
 #         WIN32
         ${SOURCES}
         ${MOC_SOURCES}

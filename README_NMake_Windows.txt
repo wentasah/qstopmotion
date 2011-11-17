@@ -63,6 +63,7 @@ There are two possibilities, to get the source code:
 * Start the CMake GUI using the shortcut to the start script.
 * Select the directory with the cmakelist.txt file as the source code directory
 * Select a separate directory as the destination directory
+* Set the 'Grouped' and 'Advanced' checkboxes
 * Press the configure button
 * Select the generator "NMake Makefiles"
 * Select the entry CPACK - CPACK_BINARY_NSIS

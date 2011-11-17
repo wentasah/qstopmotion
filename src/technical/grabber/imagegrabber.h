@@ -48,19 +48,13 @@ public:
     /**
      * Initialization of the Command line grabber
      */
-    virtual bool initialization() = 0;
-
-    /**
-     * Checks if the process is running in deamon mode.
-     * @return true if it runs in deamon mode, false otherwise
-     */
-    bool isGrabberProcess() const;
+    virtual void initialization() = 0;
 
     /**
      * Abstract function for initializing the grabber.
      * @return true on success, false otherwise
      */
-    virtual bool init() = 0;
+    virtual void init() = 0;
 
     /**
      * Abstract function for shutting down the grabber.
@@ -74,8 +68,28 @@ public:
      */
     virtual bool grab() = 0;
 
+    /**
+     * Checks if the grabber is initialized.
+     * @return true if it is initialized, false otherwise
+     */
+    bool isGrabberInitialized() const;
+
+    /**
+     * Checks if the grabber is inited.
+     * @return true if it is inited, false otherwise
+     */
+    bool isGrabberInited() const;
+
+    /**
+     * Checks if the process is running in deamon mode.
+     * @return true if it runs in deamon mode, false otherwise
+     */
+    bool isGrabberProcess() const;
+
 protected:
     QString filePath;
+    bool isInitialized;
+    bool isInited;
     bool isProcess;
 };
 

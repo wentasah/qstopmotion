@@ -63,13 +63,13 @@ public:
     /**
      * Initialization of the Command line grabber
      */
-    bool initialization();
+    void initialization();
 
     /**
      * Starts the grabber if it is marked to be runned in deamon mode.
      * @return true on success, false otherwise
      */
-    bool init();
+    void init();
 
     /**
      * Grabs one picture from the device.
@@ -84,7 +84,19 @@ public:
      */
     bool tearDown();
 
-    static gboolean bus_callback(GstBus *bus, GstMessage *message, gpointer data);
+    /**
+     * Call back function for the message loop of gstreamer.
+     */
+    static gboolean bus_callback(GstBus     *bus,
+                                 GstMessage *message,
+                                 gpointer    data);
+
+    /**
+     * Pad to select the video stream from the demux to the decoder
+     */
+    static void on_pad_added (GstElement *element,
+                              GstPad     *pad,
+                              gpointer    data);
 
     // static GMainLoop *loop;
 
@@ -100,6 +112,10 @@ private:
     GstElement *filter3;
     GstElement *filter4;
     GstElement *filter5;
+    GstElement *queue1;
+    GstElement *queue2;
+    GstElement *queue3;
+    GstElement *queue4;
     GstElement *sink;
     // GstBus     *bus;
     // GMainLoop  *loop;

@@ -266,13 +266,15 @@ bool FrameViewInterface::on()
     GstreamerGrabber::GstreamerSource activeSource = (GstreamerGrabber::GstreamerSource)frontend->getProject()->getVideoSource();
     this->grabber = new GstreamerGrabber(activeSource, capturedImg);
 
-    if (grabber->initialization()) {
+    grabber->initialization();
+    if (grabber->isGrabberInitialized()) {
         this->initCompleted();
         this->isPlayingVideo = true;
 
         // If the grabber is running in it's own process we use a timer.
-        if (grabber->isGrabberProcess() == true) {
-            if (grabber->init()) {
+        if (grabber->isGrabberProcess()) {
+            grabber->init();
+            if (grabber->isGrabberInited()) {
                 grabTimer.start(150);
             } else {
                 frontend->showWarning(tr("Check image grabber"),

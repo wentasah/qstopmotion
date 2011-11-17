@@ -1,5 +1,5 @@
 Building qStopMotion using Qt-Creator IDE on Linux
-Last Change: 2011/10/15
+Last Change: 2011/11/10
 
 1. Preparation of the development environment
 =============================================
@@ -18,15 +18,18 @@ Last Change: 2011/10/15
   - gstreamer
   - gstreamer-dev
   - gstreamer-dbg
-  - gstreamer-plugins-base
+  - gstreamer-plugins-base (videotestsrc, ffmpegcolorspace, videorate, videoscale)
   - gstreamer-plugins-base-dev
   - gstreamer-plugins-base-dbg
-  - gstreamer-plugins-good
+  - gstreamer-plugins-good (v4l2src, dv1394src, dvdemux, dvdec, jpegenc, multifilesink)
   - gstreamer-plugins-good-dbg
-  - gstreamer-plugins-ugly
-  - gstreamer-plugins-ugly-dbg
-  - gstreamer-plugins-bad
-  - gstreamer-plugins-bad-dbg
+  - (gstreamer-plugins-ugly)
+  - (gstreamer-plugins-ugly-dbg)
+  - (gstreamer-plugins-bad) (dshowvideosrc)
+  - (gstreamer-plugins-bad-dbg)
+  - gstreamer-ffmpeg (ffdemux_dv, ffdec_dvvideo, ffdeinterlace)
+  - gstreamer-ffmpeg-dev
+  - gstreamer-ffmpeg-dbg
 * ffmpeg (Version x.x.x)
 
 2. Building qStopMotion

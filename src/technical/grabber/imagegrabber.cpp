@@ -29,6 +29,8 @@ ImageGrabber::ImageGrabber(const QString &filePath)
 {
     qDebug("ImageGrabber::Constructor --> Start");
 
+    isInitialized = false;
+    isInited = false;
     isProcess = false;
 
     qDebug("ImageGrabber::Constructor --> End");
@@ -40,6 +42,18 @@ ImageGrabber::~ImageGrabber()
     qDebug("ImageGrabber::Destructor --> Start");
 
     qDebug("ImageGrabber::Destructor --> End");
+}
+
+
+bool ImageGrabber::isGrabberInitialized() const
+{
+    return isInitialized;
+}
+
+
+bool ImageGrabber::isGrabberInited() const
+{
+    return isInited;
 }
 
 

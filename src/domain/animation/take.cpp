@@ -45,6 +45,7 @@ Take::~Take()
         delete exposures[exposureIndex];
         exposures[exposureIndex] = NULL;
     }
+    exposures.clear();
 }
 
 

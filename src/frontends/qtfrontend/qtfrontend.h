@@ -198,7 +198,7 @@ public:
      * @param infoText the text to display to the user
      * @param numOperations the number of calculated operations to do
      */
-    void showProgress(const char *infoText, unsigned int numOperations = 0);
+    void showProgress(const QString &infoText, unsigned int numOperations = 0);
 
     /**
      * Function for hiding the progress info.
@@ -301,6 +301,22 @@ public:
      * @return return value of the command
      */
     int runExternalCommand(const QString &command);
+
+    /**
+     * Turns on the webcamera/video import mode.
+     */
+    bool startGrabber();
+
+    /**
+     * Turns off the webcamera/video import mode.
+     */
+    void stopGrabber();
+
+    /**
+     * Get the actual image from the image grabber.
+     * @return actual image.
+     */
+    const QImage getActualImage();
 
     /**
      * Sets up the ExternalChangeMonitor to monitor the project directories

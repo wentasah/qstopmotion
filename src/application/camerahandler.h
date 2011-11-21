@@ -57,11 +57,6 @@ public:
     void setCameraButton(QPushButton *cameraButton);
 
     /**
-     *
-     */
-    void setFrameView(FrameViewInterface *frameView);
-
-    /**
      * A new capture button function is selected in the preferences menu.
      * @param newFunction New selected function.
      */
@@ -96,7 +91,6 @@ private:
     QTimer             *timer;
     QString             temp;
     bool                isCameraOn;
-    FrameViewInterface *frameView;
     PreferencesTool::captureButtonFunction captureFunction;
 
     void cameraOn();

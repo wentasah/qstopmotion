@@ -53,7 +53,7 @@ public:
      * Initializes the member variables.
      * @param filePath path to the output file grabbed from a device
      */
-    GstreamerGrabber(GstreamerSource activeSource, const QString &filePath);
+    GstreamerGrabber(Frontend *f);
 
     /**
      * Destructor
@@ -62,14 +62,25 @@ public:
 
     /**
      * Initialization of the Command line grabber
-     */
+     *
     void initialization();
+*/
+    /**
+     * Initialization of the Command line grabber
+     */
+    void initializationSubclass();
 
     /**
      * Starts the grabber if it is marked to be runned in deamon mode.
      * @return true on success, false otherwise
-     */
+     *
     void init();
+*/
+    /**
+     * Starts the grabber if it is marked to be runned in deamon mode.
+     * @return true on success, false otherwise
+     */
+    void initSubclass();
 
     /**
      * Grabs one picture from the device.
@@ -98,7 +109,13 @@ public:
                               GstPad     *pad,
                               gpointer    data);
 
-    // static GMainLoop *loop;
+    static void cb_typefound (GstElement *typefind,
+                              guint       probability,
+                              GstCaps    *caps,
+                              gpointer    data);
+
+    static gboolean link_elements_with_filter (GstElement *element1,
+                                               GstElement *element2);
 
 private:
     // QProcess process;

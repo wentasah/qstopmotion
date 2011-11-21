@@ -50,8 +50,8 @@ FrameViewImage::~FrameViewImage()
         off();
     }
 /*
-    if (activeImage) {
-        delete(activeImage);
+    if (actualImage) {
+        delete(actualImage);
     }
 */
     clearImageBuffer();
@@ -198,7 +198,7 @@ void FrameViewImage::redraw()
 {
     // qDebug("FrameViewImage::redraw --> Start");
 
-    activeImage.load(capturedImg);
+    actualImage = frontend->getActualImage();
 
     // qDebug("FrameViewImage::redraw --> Loading image finished");
 
@@ -217,9 +217,9 @@ void FrameViewImage::nextPlayBack()
     // Need to check that there is an active scene before checking
     // what its size is.
 
-        int activeSceneIndex = frontend->getProject()->getActiveSceneIndex();
-        int activeTakeIndex = frontend->getProject()->getActiveTakeIndex();
-        int activeExposureIndex = frontend->getProject()->getActiveExposureIndex();
+    int activeSceneIndex = frontend->getProject()->getActiveSceneIndex();
+    int activeTakeIndex = frontend->getProject()->getActiveTakeIndex();
+    int activeExposureIndex = frontend->getProject()->getActiveExposureIndex();
 
     if (activeSceneIndex >= 0) {
         if ((int)i < mixCount && i < (int)activeExposureIndex + 1) {
@@ -232,9 +232,9 @@ void FrameViewImage::nextPlayBack()
             }
 
             if (!exposure->isEmpty()) {
-                activeImage.load(exposure->getImagePath());
+                actualImage.load(exposure->getImagePath());
                 QPainter widgetPainter(this);
-                widgetPainter.drawImage(0, 0, activeImage);
+                widgetPainter.drawImage(0, 0, actualImage);
             }
 
             this->update();
@@ -265,7 +265,7 @@ void FrameViewImage::resizeEvent(QResizeEvent*)
 
     QString iconFile(frontend->getGraphicsDirName());
     iconFile.append(QLatin1String("qstopmotion_logo_60.png"));
-    activeImage.load(iconFile);
+    actualImage.load(iconFile);
 
     qDebug("FrameViewImage::resizeEvent --> End");
 }
@@ -275,15 +275,15 @@ void FrameViewImage::paintEvent(QPaintEvent *)
 {
     // qDebug("FrameViewImage::paintEvent --> Start");
 
-    QImage   outputImage(activeImage);
+    QImage   outputImage(actualImage);
     QPainter imagePainter(&outputImage);
     QPainter widgetPainter(this);
     QRect    widgetRect(this->rect());
-    QSize    imageSize(activeImage.size());
+    QSize    imageSize(actualImage.size());
     int      x = (widgetRect.width() - imageSize.width()) / 2;
     int      y = (widgetRect.height() - imageSize.height()) / 2;
 
-    if (!activeImage.isNull()) {
+    if (!actualImage.isNull()) {
         if (isPlayingVideo) {
             // Playing live video
             int offset;
@@ -306,7 +306,7 @@ void FrameViewImage::paintEvent(QPaintEvent *)
 
                 if (imageBuffer.count() > 0) {
                     QImage image(imageBuffer.last());
-                    QImage diffImage(this->createDifferentiatedImage(activeImage, image));
+                    QImage diffImage(this->createDifferentiatedImage(actualImage, image));
                     imagePainter.drawImage(0, 0, diffImage);
                 }
                 break;
@@ -326,7 +326,7 @@ void FrameViewImage::paintEvent(QPaintEvent *)
         }
         // Flip the screen???
 
-    }  // End if activeImage
+    }  // End if actualImage
 
     widgetPainter.drawImage(x, y, outputImage);
 
@@ -346,7 +346,7 @@ void FrameViewImage::activateExposure()
     Exposure *exposure = frontend->getProject()->getActiveExposure();
     if (exposure != NULL) {
         const QString fileName = exposure->getImagePath();
-        activeImage.load(fileName);
+        actualImage.load(fileName);
     } else {
         this->clearImageBuffer();
         this->showLogo();
@@ -439,11 +439,11 @@ void FrameViewImage::showLogo()
 {
     qDebug("FrameViewImage::showLogo --> Start");
 
-    // activeImage = new QImage(width(), height(), QImage::Format_ARGB32);
+    // actualImage = new QImage(width(), height(), QImage::Format_ARGB32);
     QString iconFile(frontend->getGraphicsDirName());
     iconFile.append(QLatin1String("qstopmotion_logo_60.png"));
 
-    activeImage.load(iconFile);
+    actualImage.load(iconFile);
 
     qDebug("FrameViewImage::showLogo --> End");
 }

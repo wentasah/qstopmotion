@@ -48,12 +48,14 @@ Scene::~Scene()
         delete sounds[soundIndex];
         sounds[soundIndex] = NULL;
     }
+    sounds.clear();
 
     unsigned int takeSize = takes.size();
     for (unsigned int takeIndex = 0; takeIndex < takeSize; ++takeIndex) {
         delete takes[takeIndex];
         takes[takeIndex] = NULL;
     }
+    takes.clear();
 }
 
 

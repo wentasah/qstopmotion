@@ -23,7 +23,34 @@
 #ifndef IMAGEGRABBER_H
 #define IMAGEGRABBER_H
 
+#include "frontends/frontend.h"
+#include "technical/grabber/imagegrabberthread.h"
+
 #include <QtCore/QString>
+#include <QtCore/QVector>
+#include <QtGui/QImage>
+
+class ImageGrabberThread;
+
+/**
+ * Video device capabilities
+ */
+enum ImageGrabberDeviceCapabilities {
+    video_x_none,
+    video_x_raw_rgb,
+    video_x_raw_yuv,
+    video_x_dv
+};
+
+/**
+ * Struct containing all the informations of a device.
+ */
+struct ImageGrabberDevice
+{
+    QString deviceName;
+    QString deviceId;
+    ImageGrabberDeviceCapabilities deviceCaps;
+};
 
 /**
  * Abstract class for the different video grabbers used by the SDLVideoView
@@ -34,11 +61,12 @@
 class ImageGrabber
 {
 public:
+
     /**
      * Constructs and initializes the object.
      * @param filePath path to the output file grabbed from a device
      */
-    ImageGrabber(const QString &filePath);
+    ImageGrabber(Frontend *f);
 
     /**
      * Destructor
@@ -46,15 +74,31 @@ public:
     ~ImageGrabber();
 
     /**
+     * Get the device list
+     */
+    const QVector<ImageGrabberDevice> getDevices();
+
+    /**
+     * Get the actual image
+     */
+    const QImage getActualImage();
+
+    /**
      * Initialization of the Command line grabber
      */
-    virtual void initialization() = 0;
+    void initialization();
 
     /**
      * Abstract function for initializing the grabber.
      * @return true on success, false otherwise
      */
-    virtual void init() = 0;
+    void init();
+
+    /**
+     * Abstract function for initializing the grabber.
+     * @return true on success, false otherwise
+     */
+    void finalize();
 
     /**
      * Abstract function for shutting down the grabber.
@@ -87,10 +131,32 @@ public:
     bool isGrabberProcess() const;
 
 protected:
+
+    /**
+     * Initialization of the Command line grabber
+     */
+    virtual void initializationSubclass() = 0;
+
+    /**
+     * Abstract function for initializing the grabber.
+     * @return true on success, false otherwise
+     */
+    virtual void initSubclass() = 0;
+
+protected:
+    /**
+     * Frontend of the application
+     */
+    Frontend *frontend;
+
     QString filePath;
     bool isInitialized;
     bool isInited;
     bool isProcess;
+    QVector<ImageGrabberDevice> devices;
+    QImage actualImage;
+    ImageGrabberThread *grabberThread;
+
 };
 
 #endif

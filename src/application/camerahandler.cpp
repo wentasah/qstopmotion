@@ -60,12 +60,6 @@ CameraHandler::~CameraHandler()
 }
 
 
-void CameraHandler::setFrameView(FrameViewInterface *frameView)
-{
-    this->frameView = frameView;
-}
-
-
 void CameraHandler::setCameraButton(QPushButton *cameraButton)
 {
     this->cameraButton = cameraButton;
@@ -92,9 +86,8 @@ void CameraHandler::cameraOn()
     QString iconFile(frontend->getIconsDirName());
     iconFile.append(QLatin1String("cameraoff.png"));
 
-    frontend->showProgress("Connecting camera... ");
     cameraButton->setIcon(QIcon(iconFile));
-    isCameraOn = frameView->on();
+    isCameraOn = frontend->startGrabber();
     if (!isCameraOn) {
         cameraOff();
     }
@@ -113,7 +106,7 @@ void CameraHandler::cameraOff()
 
     cameraButton->setIcon(QIcon(iconFile));
     emit cameraStateChanged(false);
-    frameView->off();
+    frontend->stopGrabber();
     isCameraOn = false;
 
     qDebug("CameraHandler::cameraOff --> End");

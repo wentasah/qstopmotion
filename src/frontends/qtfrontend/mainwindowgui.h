@@ -41,6 +41,7 @@
 #include "frontends/qtfrontend/tooltabs/projecttab.h"
 #include "frontends/qtfrontend/tooltabs/recordingtab.h"
 // #include "frontends/qtfrontend/tooltabs/viewtab.h"
+#include "technical/grabber/imagegrabber.h"
 
 #include <QtGui/QProgressBar>
 #include <QtGui/QProgressDialog>
@@ -137,7 +138,7 @@ public:
      * @param infoText the text to display to the user
      * @param numOperations the number of calculated operations to do
      */
-    void showProgress(const char *infoText, unsigned int numOperations = 0);
+    void showProgress(const QString &infoText, unsigned int numOperations = 0);
 
     /**
      * Function for hiding the progress info.
@@ -208,6 +209,22 @@ public:
      * Set all settings to the actual default settings.
      */
     void setProjectSettingsToDefault();
+
+    /**
+     * Turns on the webcamera/video import mode.
+     */
+    bool startGrabber();
+
+    /**
+     * Turns off the webcamera/video import mode.
+     */
+    void stopGrabber();
+
+    /**
+     * Get the actual image from the image grabber.
+     * @return actual image.
+     */
+    const QImage getActualImage();
 
     /**************************************************************************
      * Public slots
@@ -409,7 +426,8 @@ private:
     QVector<QString>  translationsLocales;
 
     // Others
-    QString lastVisitedDir;
+    QString           lastVisitedDir;
+    ImageGrabber     *grabber;
 
     /**************************************************************************
      * Private functions

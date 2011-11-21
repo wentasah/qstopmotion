@@ -30,6 +30,7 @@
 #include "frontends/qtfrontend/frameview/frameviewimage.h"
 #include "technical/preferencestool.h"
 #include "technical/util.h"
+#include "technical/grabber/gstreamergrabber.h"
 #include "technical/videoencoder/ffmpegencoder.h"
 
 #include <QtCore/QtDebug>
@@ -123,6 +124,7 @@ MainWindowGUI::MainWindowGUI(QApplication *stApp, Frontend *f)
     changeMonitor        = 0;
 
     translator           = NULL;
+    grabber              = 0;
 
     this->setObjectName("MainWindowGUI");
 
@@ -135,6 +137,16 @@ void MainWindowGUI::init()
 
     QDir homeDir = QDir::home();
     lastVisitedDir.append(homeDir.absolutePath());
+
+    grabber = new GstreamerGrabber(frontend);
+
+    grabber->initialization();
+    if (!grabber->isGrabberInitialized()) {
+        frontend->hideProgress();
+        frontend->showWarning(tr("Select image grabber"),
+                              tr("You have to define an image grabber to use.\n"
+                                 "This can be set in the preferences menu."));
+    }
 
     centerWidget = new QWidget;
     centerWidget->setObjectName("CenterWidget");
@@ -215,6 +227,11 @@ MainWindowGUI::~MainWindowGUI()
         helpBrowser->close();
         delete helpBrowser;
         helpBrowser = 0;
+    }
+
+    if (grabber != 0) {
+        delete grabber;
+        grabber = 0;
     }
 
     frontend = NULL;
@@ -392,7 +409,7 @@ void MainWindowGUI::retranslateStrings(const QString &newLocale)
 }
 
 
-void MainWindowGUI::showProgress(const char* operation, unsigned int numOperations)
+void MainWindowGUI::showProgress(const QString &operation, unsigned int numOperations)
 {
     if (numOperations > 0) {
         progressDialog = new QProgressDialog(operation, tr("Cancel"), 0, numOperations, this);
@@ -539,6 +556,44 @@ void MainWindowGUI::startDialog()
 
     qDebug("MainWindowGUI::startDialog --> End");
 }
+
+bool MainWindowGUI::startGrabber()
+{
+    qDebug("MainWindowGUI::on --> Start");
+
+    frontend->showProgress(tr("Connecting camera..."));
+    grabber->init();
+    if (!grabber->isGrabberInited()) {
+        frontend->hideProgress();
+        frontend->showWarning(tr("Select image grabber"),
+                              tr("You have to define an image grabber to use.\n"
+                                 "This can be set in the preferences menu."));
+        return false;
+    }
+    frameView->on();
+    frontend->hideProgress();
+
+    qDebug("MainWindowGUI::on --> End");
+    return true;
+}
+
+
+void MainWindowGUI::stopGrabber()
+{
+    qDebug("MainWindowGUI::off --> Start");
+
+    frameView->off();
+    grabber->finalize();
+
+    qDebug("MainWindowGUI::off --> End");
+}
+
+
+const QImage MainWindowGUI::getActualImage()
+{
+    return grabber->getActualImage();
+}
+
 
 /**************************************************************************
  * Public slots
@@ -1375,9 +1430,6 @@ void MainWindowGUI::makeViews(QHBoxLayout *layout)
 
     connect(frameView, SIGNAL(cameraReady()), cameraHandler, SLOT(switchToVideoView()));
     connect(cameraHandler, SIGNAL(capturedFrame()), this, SLOT(activateMenuOptions()));
-
-    cameraHandler->setFrameView(frameView);
-
 }
 
 

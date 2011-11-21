@@ -29,6 +29,7 @@
 
 #include <QtCore/QString>
 #include <QtCore/QVector>
+#include <QtGui/QImage>
 
 class PreferencesTool;
 class DomainFacade;
@@ -159,7 +160,7 @@ public:
      * @param infoText the text to display to the user
      * @param numOperations the number of calculated operations to do
      */
-    virtual void showProgress(const char *infoText, unsigned int numOperations = 0) = 0;
+    virtual void showProgress(const QString &infoText, unsigned int numOperations = 0) = 0;
 
     /**
      * Abstract function for hiding the progress info.
@@ -262,6 +263,22 @@ public:
      * @return return value of the command
      */
     virtual int runExternalCommand(const QString &command) = 0;
+
+    /**
+     * Turns on the webcamera/video import mode.
+     */
+    virtual bool startGrabber() = 0;
+
+    /**
+     * Turns off the webcamera/video import mode.
+     */
+    virtual void stopGrabber() = 0;
+
+    /**
+     * Abstract function to get the actual image from the image grabber.
+     * @return actual image.
+     */
+    virtual const QImage getActualImage() = 0;
 
     /**
      * Test function for debugging purposes

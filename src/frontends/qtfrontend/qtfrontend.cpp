@@ -61,15 +61,24 @@ QtFrontend::~QtFrontend()
 
     delete mw;
     mw = NULL;
-    delete stApp;
-    stApp = NULL;
-    domainFacade = NULL;
-    viewFacade = NULL;
+
+    if (domainFacade != NULL) {
+        delete domainFacade;
+        domainFacade = NULL;
+    }
+
+    if (viewFacade != NULL) {
+        delete viewFacade;
+        viewFacade = NULL;
+    }
 
     if(preferencesTool != NULL) {
         delete preferencesTool;
         preferencesTool = NULL;
     }
+
+    delete stApp;
+    stApp = NULL;
 
     qDebug("QtFrontend::Destructor --> End");
 }
@@ -416,7 +425,7 @@ void QtFrontend::changeCaptureButtonFunction(int newFunction)
 }
 
 
-void QtFrontend::showProgress(const char* operation, unsigned int numOperations)
+void QtFrontend::showProgress(const QString &operation, unsigned int numOperations)
 {
     mw->showProgress(operation, numOperations);
 }
@@ -601,6 +610,35 @@ int QtFrontend::runExternalCommand(const QString &command)
     ec->show();
     ec->run(command);
     return 0;
+}
+
+
+bool QtFrontend::startGrabber()
+{
+    bool ret;
+
+    qDebug("QtFrontend::on --> Start");
+
+    ret = mw->startGrabber();
+
+    qDebug("QtFrontend::on --> End");
+    return ret;
+}
+
+
+void QtFrontend::stopGrabber()
+{
+    qDebug("QtFrontend::off --> Start");
+
+    mw->stopGrabber();
+
+    qDebug("QtFrontend::off --> End");
+}
+
+
+const QImage QtFrontend::getActualImage()
+{
+    return mw->getActualImage();
 }
 
 

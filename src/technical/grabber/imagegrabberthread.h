@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2010 by                                                *
+ *  Copyright (C) 2005-2011 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -20,16 +20,15 @@
  *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                 *
  ******************************************************************************/
 
-#ifndef IMAGEGRABTHREAD_H
-#define IMAGEGRABTHREAD_H
+#ifndef IMAGEGRABBERTHREAD_H
+#define IMAGEGRABBERTHREAD_H
 
-#include "frontends/qtfrontend/frameview/frameviewinterface.h"
 #include "technical/grabber/imagegrabber.h"
 
 #include <QtCore/QThread>
 
 
-class FrameViewInterface;
+class ImageGrabber;
 
 /**
  * Thread used for polling an external program to update the camera. Only
@@ -37,7 +36,7 @@ class FrameViewInterface;
  *
  * @author Bjoern Erik Nilsen & Fredrik Berg Kjoelstad
  */
-class ImageGrabThread : public QThread
+class ImageGrabberThread : public QThread
 {
 public:
     /**
@@ -45,7 +44,7 @@ public:
      * @param frameView the frame view to be used for displaying images
      * @param grabber the grabber to use be used for grabbing images
      */
-	ImageGrabThread(FrameViewInterface *frameView, ImageGrabber *grabber);
+    ImageGrabberThread(ImageGrabber *grabber);
 
     /**
      * Displays the images grabbed with the registered grabber. These
@@ -61,7 +60,6 @@ public:
     bool wasGrabbingSuccess();
 
 private:
-	FrameViewInterface *frameView;
     ImageGrabber *grabber;
     bool wasGrabSuccess;
 };

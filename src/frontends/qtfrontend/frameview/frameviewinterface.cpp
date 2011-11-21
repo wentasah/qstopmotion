@@ -20,8 +20,6 @@
 
 #include "frameviewinterface.h"
 
-#include "technical/grabber/gstreamergrabber.h"
-
 #include <QtCore/QDir>
 #include <QtCore/QRect>
 #include <QtCore/QSize>
@@ -46,8 +44,6 @@ FrameViewInterface::FrameViewInterface(Frontend *f, QWidget *parent, int fps)
     // setAttribute(Qt::WA_OpaquePaintEvent);   // No erase of the image before updated
 
     frontend = f;
-    grabber = 0;
-    grabThread = 0;
 
     this->framesPerSecond = fps;
 
@@ -57,14 +53,6 @@ FrameViewInterface::FrameViewInterface(Frontend *f, QWidget *parent, int fps)
     heightConst = 3;
     mixCount = 2;
     viewingMode = 0;
-
-    QString rootDir;
-
-    rootDir.append(frontend->getUserDirName());
-    rootDir.append("/");
-    rootDir.append("capturedfile.jpg");
-
-    capturedImg.append(rootDir);
 
     setNormalRatio();
 
@@ -83,10 +71,6 @@ FrameViewInterface::~FrameViewInterface()
 {
     qDebug("FrameViewInterface::Destructor --> Start");
 
-    if (grabber) {
-        delete grabber;
-        grabber = NULL;
-    }
     frontend = NULL;
 
     qDebug("FrameViewInterface::Destructor --> End");
@@ -258,53 +242,13 @@ void FrameViewInterface::updateMoveExposures(int, int, int) {}
  * Frameview functions
  **************************************************************************/
 
-// TODO: Refactor this terrible ugly method. This one is really bad!!
 bool FrameViewInterface::on()
 {
     qDebug("FrameViewInterface::on --> Start");
 
-    GstreamerGrabber::GstreamerSource activeSource = (GstreamerGrabber::GstreamerSource)frontend->getProject()->getVideoSource();
-    this->grabber = new GstreamerGrabber(activeSource, capturedImg);
-
-    grabber->initialization();
-    if (grabber->isGrabberInitialized()) {
-        this->initCompleted();
-        this->isPlayingVideo = true;
-
-        // If the grabber is running in it's own process we use a timer.
-        if (grabber->isGrabberProcess()) {
-            grabber->init();
-            if (grabber->isGrabberInited()) {
-                grabTimer.start(150);
-            } else {
-                frontend->showWarning(tr("Check image grabber"),
-                                      tr("Grabbing failed. This may happen if you try\n"
-                                         "to grab from an invalid device. Please check\n"
-                                         "your grabber settings in the preferences menu."));
-                return false;
-            }
-        }
-        // Otherwise a thread is needed
-        else {
-            grabThread = new ImageGrabThread(this, grabber);
-            grabThread->start();
-            grabThread->wait(500);
-
-            if (grabThread->wasGrabbingSuccess() == false) {
-                frontend->showWarning(tr("Check image grabber"),
-                                      tr("Grabbing failed. This may happen if you try\n"
-                                         "to grab from an invalid device. Please check\n"
-                                         "your grabber settings in the preferences menu."));
-                return false;
-            }
-        }
-    } else {
-        frontend->hideProgress();
-        frontend->showWarning(tr("Select image grabber"),
-                              tr("You have to define an image grabber to use.\n"
-                                 "This can be set in the preferences menu."));
-        return false;
-    }
+    this->initCompleted();
+    this->isPlayingVideo = true;
+    grabTimer.start(150);
 
     qDebug("FrameViewInterface::on --> End");
     return true;
@@ -315,27 +259,12 @@ void FrameViewInterface::off()
 {
     qDebug("FrameViewInterface::off --> Start");
 
-    if (grabber != 0) {
-        if (grabber->isGrabberProcess()) {
-            grabber->tearDown();
-            grabTimer.stop();
-            playbackTimer.stop();
-        }
-        delete grabber;
-        grabber = 0;
-    }
-
-    if (grabThread != 0) {
-        grabThread->terminate();
-        grabThread->wait();
-        delete grabThread;
-        grabThread = 0;
-    }
+    grabTimer.stop();
+    playbackTimer.stop();
 
     clearImageBuffer();
 
     this->isPlayingVideo = false;
-
     this->update();
 
     qDebug("FrameViewInterface::off --> End");
@@ -354,20 +283,13 @@ bool FrameViewInterface::setViewingMode(int mode)
 
     // Going into playback mode.
     if (mode == 2 && this->viewingMode != 2) {
-        if (grabber->isGrabberProcess()) {
-            grabTimer.stop();
-            playbackTimer.start(1000 / framesPerSecond);
-        } else {
-            qDebug("FrameViewImage::setViewMode --> End (false)");
-            return false;
-        }
+        grabTimer.stop();
+        playbackTimer.start(1000 / framesPerSecond);
     }
     // Going out of playback mode.
     else if (mode != 2 && this->viewingMode == 2) {
-        if (grabber->isGrabberProcess()) {
-            playbackTimer.stop();
-            grabTimer.start(150);
-        }
+        playbackTimer.stop();
+        grabTimer.start(150);
     }
 
     this->viewingMode = mode;

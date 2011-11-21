@@ -24,8 +24,6 @@
 #include "domain/animation/exposure.h"
 #include "frontends/observer.h"
 #include "frontends/frontend.h"
-#include "frontends/qtfrontend/frameview/imagegrabthread.h"
-#include "technical/grabber/imagegrabber.h"
 
 #include <QtCore/QQueue>
 #include <QtCore/QString>
@@ -361,11 +359,8 @@ protected:
      */
     Frontend *frontend;
 
-    ImageGrabber    *grabber;
-    ImageGrabThread *grabThread;
     QTimer           grabTimer;
     QTimer           playbackTimer;
-    QString          capturedImg;
 
     /**
      *

@@ -66,6 +66,11 @@ AnimationProject::~AnimationProject()
 {
     qDebug("AnimationProject::Destructor --> Start");
 
+    unsigned int sceneSize = scenes.size();
+    for (unsigned int sceneIndex = 0; sceneIndex < sceneSize; ++sceneIndex) {
+        delete scenes[sceneIndex];
+        scenes[sceneIndex] = NULL;
+    }
     scenes.clear();
 
     if (serializer != NULL) {

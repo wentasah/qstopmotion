@@ -85,7 +85,6 @@ set(HEADERS
     src/frontends/frontend.h
     src/frontends/viewfacade.h
     src/frontends/qtfrontend/dialogs/licence.h
-    src/frontends/qtfrontend/frameview/imagegrabthread.h
     src/frontends/qtfrontend/timeline/exposurethumbview.h
     src/frontends/qtfrontend/timeline/thumbview.h
     src/technical/preferencestool.h
@@ -94,6 +93,7 @@ set(HEADERS
     src/technical/audio/audioformat.h
     src/technical/grabber/gstreamergrabber.h
     src/technical/grabber/imagegrabber.h
+    src/technical/grabber/imagegrabberthread.h
     src/technical/videoencoder/ffmpegencoder.h
     src/technical/videoencoder/videoencoder.h
     src/technical/videoencoder/videoencoderfactory.h
@@ -174,7 +174,6 @@ set(SOURCES
     src/frontends/qtfrontend/elements/flexiblespinbox.cpp
     src/frontends/qtfrontend/frameview/frameviewimage.cpp
     src/frontends/qtfrontend/frameview/frameviewinterface.cpp
-    src/frontends/qtfrontend/frameview/imagegrabthread.cpp
     src/frontends/qtfrontend/preferences/defaulttab.cpp
     src/frontends/qtfrontend/preferences/exporttab.cpp
     src/frontends/qtfrontend/preferences/generaltab.cpp
@@ -190,6 +189,7 @@ set(SOURCES
     src/technical/util.cpp
     src/technical/grabber/gstreamergrabber.cpp
     src/technical/grabber/imagegrabber.cpp
+    src/technical/grabber/imagegrabberthread.cpp
     src/technical/videoencoder/ffmpegencoder.cpp
     src/technical/videoencoder/videoencoder.cpp
     src/technical/videoencoder/videoencoderfactory.cpp

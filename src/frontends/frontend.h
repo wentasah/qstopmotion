@@ -26,6 +26,8 @@
 #include "domain/domainfacade.h"
 #include "frontends/viewfacade.h"
 #include "technical/preferencestool.h"
+#include "technical/grabber/imagegrabber.h"
+#include "technical/grabber/imagegrabberdevice.h"
 
 #include <QtCore/QString>
 #include <QtCore/QVector>
@@ -265,14 +267,26 @@ public:
     virtual int runExternalCommand(const QString &command) = 0;
 
     /**
-     * Turns on the webcamera/video import mode.
+     * Abstract function to turns on the webcamera/video import mode.
      */
     virtual bool startGrabber() = 0;
 
     /**
-     * Turns off the webcamera/video import mode.
+     * Abstract function to turns off the webcamera/video import mode.
      */
     virtual void stopGrabber() = 0;
+
+    /**
+     * Abstract function to get the possible video devices.
+     * @return Vector with the devices.
+     */
+    virtual const QVector<ImageGrabberDevice*> getDevices() = 0;
+
+    /**
+     * Abstract function to get the possible video device names.
+     * @return Vector with the device names.
+     */
+    virtual const QVector<QString> getDeviceNames() = 0;
 
     /**
      * Abstract function to get the actual image from the image grabber.

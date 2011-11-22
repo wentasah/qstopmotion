@@ -40,16 +40,6 @@ class GstreamerGrabber : public ImageGrabber
 public:
 
     /**
-     * All possible gstreamer sources.
-     */
-    enum GstreamerSource {
-        TestSource,
-        Video4LinuxSource,
-        Iee1394Source,
-        DirectShowSource
-    };
-
-    /**
      * Initializes the member variables.
      * @param filePath path to the output file grabbed from a device
      */
@@ -119,8 +109,8 @@ public:
 
 private:
     // QProcess process;
-    GstreamerSource activeSource;
-    bool            isInitSuccess;
+    ImageGrabberVideoSources activeSource;
+    bool        isInitSuccess;
 
     GstElement *pipeline;
     GstElement *source;

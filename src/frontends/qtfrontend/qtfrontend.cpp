@@ -636,6 +636,18 @@ void QtFrontend::stopGrabber()
 }
 
 
+const QVector<ImageGrabberDevice*> QtFrontend::getDevices()
+{
+    return mw->getDevices();
+}
+
+
+const QVector<QString> QtFrontend::getDeviceNames()
+{
+    return mw->getDeviceNames();
+}
+
+
 const QImage QtFrontend::getActualImage()
 {
     return mw->getActualImage();

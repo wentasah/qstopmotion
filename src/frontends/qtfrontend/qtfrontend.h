@@ -313,6 +313,18 @@ public:
     void stopGrabber();
 
     /**
+     * Get the possible video devices
+     * @return Vector with the devices.
+     */
+    const QVector<ImageGrabberDevice*> getDevices();
+
+    /**
+     * Get the possible video devices.
+     * @return Vector with the device names.
+     */
+    const QVector<QString> getDeviceNames();
+
+    /**
      * Get the actual image from the image grabber.
      * @return actual image.
      */

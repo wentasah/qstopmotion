@@ -93,6 +93,7 @@ set(HEADERS
     src/technical/audio/audioformat.h
     src/technical/grabber/gstreamergrabber.h
     src/technical/grabber/imagegrabber.h
+    src/technical/grabber/imagegrabberdevice.h
     src/technical/grabber/imagegrabberthread.h
     src/technical/videoencoder/ffmpegencoder.h
     src/technical/videoencoder/videoencoder.h
@@ -189,6 +190,7 @@ set(SOURCES
     src/technical/util.cpp
     src/technical/grabber/gstreamergrabber.cpp
     src/technical/grabber/imagegrabber.cpp
+    src/technical/grabber/imagegrabberdevice.cpp
     src/technical/grabber/imagegrabberthread.cpp
     src/technical/videoencoder/ffmpegencoder.cpp
     src/technical/videoencoder/videoencoder.cpp

@@ -1142,7 +1142,7 @@ const QVector<Exposure*> AnimationProject::removeFrames(unsigned int fromFrame, 
 /*
     Q_ASSERT(fromFrame <= toFrame);
 
-    QVector<Exposure> newImagePaths;
+    QVector<Exposure*> newImagePaths;
 
     if (activeFrame >= 0) {
         newImagePaths = scenes[activeScene].removeExposures(fromFrame, toFrame);

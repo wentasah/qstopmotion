@@ -70,21 +70,132 @@ void GstreamerGrabber::initializationSubclass()
     gchar *device_name = NULL;
     GstElementFactory *srcfactory = NULL;
     GstElement *src = NULL;
+    GObjectClass *klass = NULL;
     GstPropertyProbe *probe = NULL;
     gchar *property_name = NULL;
     gchar *property_id = NULL;
+    const GParamSpec *spec_name = NULL;
+    const GParamSpec *spec_id = NULL;
     GValueArray *values_name = NULL;
     GValueArray *values_id = NULL;
     int device_size;
+    ImageGrabberDevice *device = NULL;
 
     qDebug() << "gstreamergrabber::initialization --> Add video test device";
 
     // device_name = "videotestsrc";
 
     device_size = devices.size();
-    devices.resize(device_size + 1);
-    ((ImageGrabberDevice)devices[device_size]).deviceName.append(QObject::tr("Video test device"));
-    ((ImageGrabberDevice)devices[device_size]).deviceId.append("");
+    device = new ImageGrabberDevice("",
+                                    QObject::tr("Video test device"),
+                                    TestSource,
+                                    video_x_none);
+    devices.append(device);
+
+#ifdef Q_WS_X11
+    qDebug() << "gstreamergrabber::initialization --> Check devices of v4l2src";
+
+    device_name = "v4l2src";
+    property_name = "device-name";
+    property_id = "device";
+
+    srcfactory = gst_element_factory_find(device_name);
+    g_return_if_fail(srcfactory != NULL);
+    src = gst_element_factory_create(srcfactory, "source");
+    if (!src) {
+        qDebug() << "GstreamerGrabber::initialization --> Fatal: Can't create the source.";
+    }
+    g_return_if_fail(src != NULL);
+
+    klass = G_OBJECT_GET_CLASS(src);
+    if(!g_object_class_find_property(klass, property_id)) {
+        qDebug() << "GstreamerGrabber::initialization --> Fatal: Can't get class interface.";
+        gst_object_unref(GST_OBJECT(src));
+        return;
+    }
+
+    if (GST_IS_PROPERTY_PROBE(src)) {
+        probe = (GstPropertyProbe*)GST_PROPERTY_PROBE(src);
+        if (!probe) {
+            qDebug() << "GstreamerGrabber::initialization --> Fatal: Can't get probe interface.";
+            gst_object_unref(GST_OBJECT(src));
+        }
+
+        spec_id = gst_property_probe_get_property(probe, property_id);
+        if(!spec_id) {
+            qDebug() << "GstreamerGrabber::initialization --> Fatal: Can't get device spec.";
+            gst_object_unref(GST_OBJECT(src));
+        }
+
+        values_id = gst_property_probe_probe_and_get_values(probe, spec_id);
+        if(!values_id) {
+            qDebug() << "GstreamerGrabber::initialization --> Fatal: Can't get device id.";
+            gst_object_unref(GST_OBJECT(src));
+        }
+
+        spec_name = gst_property_probe_get_property(probe, property_name);
+        if(spec_name) {
+            values_name = gst_property_probe_probe_and_get_values(probe, spec_name);
+        }
+
+        if (values_id != NULL) {
+            qDebug() << "gstreamergrabber::initialization --> Check device count";
+            for (unsigned int i = 0 ; i < values_id->n_values ; i++) {
+                // Handle the device id
+                GValue* value_id_pointer = g_value_array_get_nth(values_id, i);
+                GValue value_id_string = {0,};
+                g_value_init(&value_id_string, G_TYPE_STRING);
+                GValue value_name_string = {0,};
+                g_value_init(&value_name_string, G_TYPE_STRING);
+                if (!g_value_transform(value_id_pointer, &value_id_string)) {
+                    qDebug() << "GstreamerGrabber::initialization --> Fatal: Can't copy string.";
+                    gst_object_unref(GST_OBJECT(src));
+                    return;
+                }
+                // Add the device to the device list
+                int device_size = devices.size();
+                if (values_name != NULL) {
+                    // Handle the device name
+                    GValue* value_name_pointer = g_value_array_get_nth(values_name, i);
+                    if (!g_value_transform(value_name_pointer, &value_name_string)) {
+                        qDebug() << "GstreamerGrabber::initialization --> Fatal: Can't copy string.";
+                        gst_object_unref(GST_OBJECT(src));
+                        return;
+                    }
+                    device = new ImageGrabberDevice((const char*)g_value_get_string(&value_id_string),
+                                                    (const char*)g_value_get_string(&value_name_string),
+                                                    Video4LinuxSource,
+                                                    video_x_none);
+                }
+                else {
+                    // No device name
+                    device = new ImageGrabberDevice((const char*)g_value_get_string(&value_id_string),
+                                                    QString(QObject::tr("Device %1")).arg(device_size),
+                                                    Video4LinuxSource,
+                                                    video_x_none);
+                 }
+                // Add the device to the device list
+                devices.append(device);
+                qDebug() << "gstreamergrabber::initialization --> device id " << i << " '" << devices[device_size]->getDeviceId() << "' (" << g_value_get_string(&value_id_string) << ")";
+                if (values_name != NULL) {
+                    qDebug() << "gstreamergrabber::initialization --> device name " << i << " '" << devices[device_size]->getDeviceName() << "' (" << g_value_get_string(&value_name_string) << ")";
+                }
+                else {
+                    // No device name
+                    qDebug() << "gstreamergrabber::initialization --> device name " << i << " '" << devices[device_size]->getDeviceName() << "' (empty)";
+                }
+            }
+            if (values_name != NULL) {
+                g_value_array_free(values_name);
+            }
+            g_value_array_free(values_id);
+        }
+    }
+
+    // Reset source object
+    // gst_object_unref(GST_OBJECT(src));
+
+#endif
 
 #ifdef Q_WS_X11
     qDebug() << "gstreamergrabber::initialization --> Check devices of dv1394src";
@@ -101,77 +212,93 @@ void GstreamerGrabber::initializationSubclass()
     }
     g_return_if_fail(src != NULL);
 
-    if (GST_IS_PROPERTY_PROBE(src)) {
-        gst_element_set_state (src, GST_STATE_READY);
-        // wait until it’s up and running or failed
-        if (gst_element_get_state (src, NULL, NULL, -1) == GST_STATE_CHANGE_FAILURE) {
-            qDebug() << "GstreamerGrabber::initialization --> Fatal: Source failed to go into READY state.";
-            gst_object_unref(GST_OBJECT(src));
-            return;
-        }
-        probe = GST_PROPERTY_PROBE(src);
+    klass = G_OBJECT_GET_CLASS(src);
+    if(!g_object_class_find_property(klass, property_id)) {
+        qDebug() << "GstreamerGrabber::initialization --> Fatal: Can't get class interface.";
+        gst_object_unref(GST_OBJECT(src));
+        return;
+    }
 
-        values_name = gst_property_probe_get_values_name (probe, property_name);
-        values_id = gst_property_probe_get_values_name (probe, property_id);
-        if ((values_name != NULL) && (values_id != NULL) && (values_name->n_values == values_id->n_values)) {
+    if (GST_IS_PROPERTY_PROBE(src)) {
+        probe = (GstPropertyProbe*)GST_PROPERTY_PROBE(src);
+        if (!probe) {
+            qDebug() << "GstreamerGrabber::initialization --> Fatal: Can't get probe interface.";
+            gst_object_unref(GST_OBJECT(src));
+        }
+
+        spec_id = gst_property_probe_get_property(probe, property_id);
+        if(!spec_id) {
+            qDebug() << "GstreamerGrabber::initialization --> Fatal: Can't get device spec.";
+            gst_object_unref(GST_OBJECT(src));
+        }
+
+        values_id = gst_property_probe_probe_and_get_values(probe, spec_id);
+        if(!values_id) {
+            qDebug() << "GstreamerGrabber::initialization --> Fatal: Can't get device id.";
+            gst_object_unref(GST_OBJECT(src));
+        }
+
+        spec_name = gst_property_probe_get_property(probe, property_name);
+        if(spec_name) {
+            values_name = gst_property_probe_probe_and_get_values(probe, spec_name);
+        }
+
+        if (values_id != NULL) {
             qDebug() << "gstreamergrabber::initialization --> Check device count";
-            for (unsigned int i = 0 ; i < values_name->n_values ; i++) {
-                // Handle the device name
-                GValue* value_name_pointer = g_value_array_get_nth(values_name, i);
-                GValue value_name_string = {0,};
-                g_value_init(&value_name_string, G_TYPE_STRING);
-                if (!g_value_transform(value_name_pointer, &value_name_string)) {
-                    qDebug() << "GstreamerGrabber::initialization --> Fatal: Can't copy string.";
-                    gst_object_unref(GST_OBJECT(src));
-                    return;
-                }
-                qDebug() << "gstreamergrabber::initialization --> device name " << i << " '" << g_value_get_string(&value_name_string) << "'";
+            for (unsigned int i = 0 ; i < values_id->n_values ; i++) {
                 // Handle the device id
                 GValue* value_id_pointer = g_value_array_get_nth(values_id, i);
                 GValue value_id_string = {0,};
                 g_value_init(&value_id_string, G_TYPE_STRING);
+                GValue value_name_string = {0,};
+                g_value_init(&value_name_string, G_TYPE_STRING);
                 if (!g_value_transform(value_id_pointer, &value_id_string)) {
                     qDebug() << "GstreamerGrabber::initialization --> Fatal: Can't copy string.";
                     gst_object_unref(GST_OBJECT(src));
                     return;
                 }
-                qDebug() << "gstreamergrabber::initialization --> device id " << i << " '" << g_value_get_string(&value_id_string) << "'";
-                // Add the device to the device list
                 int device_size = devices.size();
-                devices.resize(device_size + 1);
-                ((ImageGrabberDevice)devices[device_size]).deviceName.append(g_value_get_string(&value_name_string));
-                ((ImageGrabberDevice)devices[device_size]).deviceId.append(g_value_get_string(&value_id_string));
+                if (values_name != NULL) {
+                    // Handle the device name
+                    GValue* value_name_pointer = g_value_array_get_nth(values_name, i);
+                    if (!g_value_transform(value_name_pointer, &value_name_string)) {
+                        qDebug() << "GstreamerGrabber::initialization --> Fatal: Can't copy string.";
+                        gst_object_unref(GST_OBJECT(src));
+                        return;
+                    }
+                    device = new ImageGrabberDevice((const char*)g_value_get_string(&value_id_string),
+                                                    (const char*)g_value_get_string(&value_name_string),
+                                                    Iee1394Source,
+                                                    video_x_none);
+                }
+                else {
+                    // No device name
+                    device = new ImageGrabberDevice((const char*)g_value_get_string(&value_id_string),
+                                                    QString(QObject::tr("Device %1")).arg(device_size),
+                                                    Iee1394Source,
+                                                    video_x_none);
+                }
+                // Add the device to the device list
+                devices.append(device);
+                qDebug() << "gstreamergrabber::initialization --> device id " << i << " '" << devices[device_size]->getDeviceId() << "' (" << g_value_get_string(&value_id_string) << ")";
+                if (values_name != NULL) {
+                    qDebug() << "gstreamergrabber::initialization --> device name " << i << " '" << devices[device_size]->getDeviceName() << "' (" << g_value_get_string(&value_name_string) << ")";
+                }
+                else {
+                    // No device name
+                    qDebug() << "gstreamergrabber::initialization --> device name " << i << " '" << devices[device_size]->getDeviceName() << "' (empty)";
+                }
             }
-            g_value_array_free(values_name);
+            if (values_name != NULL) {
+                g_value_array_free(values_name);
+            }
             g_value_array_free(values_id);
         }
     }
 
     // Reset source object
-    gst_element_set_state(src, GST_STATE_NULL);
-    gst_object_unref(GST_OBJECT(src));
+    // gst_object_unref(GST_OBJECT(src));
 
-#endif
-
-#ifdef Q_WS_X11
-    qDebug() << "gstreamergrabber::initialization --> Check devices of v4l2src";
-
-    device_name = "v4l2src";
-    property_name = "device-name";
-    property_id = "device";
-
-    // R.L. In this time, the implementation of 'gst_property_probe_get_values_name'
-    // in the 'v4l2src' source is buggy.
-
-    device_size = devices.size();
-    devices.resize(device_size + 1);
-    ((ImageGrabberDevice)devices[device_size]).deviceName.append(QObject::tr("Device 1"));
-    ((ImageGrabberDevice)devices[device_size]).deviceId.append("/dev/video1");
-
-    device_size++;
-    devices.resize(device_size + 1);
-    ((ImageGrabberDevice)devices[device_size]).deviceName.append(QObject::tr("Device 2"));
-    ((ImageGrabberDevice)devices[device_size]).deviceId.append("/dev/video2");
 #endif
 
 #ifdef Q_WS_WIN
@@ -189,18 +316,26 @@ void GstreamerGrabber::initializationSubclass()
     }
     g_return_if_fail(src != NULL);
 
-    if (GST_IS_PROPERTY_PROBE(src)) {
+    klass = G_OBJECT_GET_CLASS(src);
+    if(!g_object_class_find_property(klass, property_id)) {
+        qDebug() << "GstreamerGrabber::initialization --> Fatal: Can't get class interface.";
+        gst_object_unref(GST_OBJECT(src));
+        return;
+    }
 
-        gst_element_set_state (src, GST_STATE_READY);
-        // wait until it’s up and running or failed
-        if (gst_element_get_state (src, NULL, NULL, -1) == GST_STATE_CHANGE_FAILURE) {
-            qDebug() << "GstreamerGrabber::initialization --> Fatal: Source failed to go into READY state.";
-            gst_object_unref(GST_OBJECT(src));
-            return;
+    if (GST_IS_PROPERTY_PROBE(src)) {
+        probe = (GstPropertyProbe*)GST_PROPERTY_PROBE(src);
+
+        spec_id = gst_property_probe_get_property(probe, "device");
+        if(spec_id) {
+            values_id = gst_property_probe_probe_and_get_values(probe, spec_id);
         }
 
-        probe = GST_PROPERTY_PROBE(src);
-        values_name = gst_property_probe_get_values_name (probe, property_id);
+        spec_name = gst_property_probe_get_property(probe, "device-name");
+        if(spec_name) {
+            values_name = gst_property_probe_probe_and_get_values(probe, spec_name);
+        }
+
         if (values_name != NULL) {
             qDebug() << "gstreamergrabber::initialization --> Check device count";
             for (unsigned int i = 0 ; i < values_name->n_values ; i++) {
@@ -208,27 +343,59 @@ void GstreamerGrabber::initializationSubclass()
                 GValue* value_name_pointer = g_value_array_get_nth(values_name, i);
                 GValue value_name_string = {0,};
                 g_value_init(&value_name_string, G_TYPE_STRING);
+                GValue value_id_string = {0,};
+                g_value_init(&value_id_string, G_TYPE_STRING);
                 if (!g_value_transform(value_name_pointer, &value_name_string)) {
                     qDebug() << "GstreamerGrabber::initialization --> Fatal: Can't copy string.";
                     gst_object_unref(GST_OBJECT(src));
                     return;
                 }
-                qDebug() << "gstreamergrabber::initialization --> device name " << i << " '" << g_value_get_string(&value_name_string) << "'";
-                // Add the device to the device list
                 int device_size = devices.size();
-                devices.resize(device_size + 1);
-                ((ImageGrabberDevice)devices[device_size]).deviceName.append(g_value_get_string(&value_name_string));
-                ((ImageGrabberDevice)devices[device_size]).deviceId.append("");
+                if (values_id != NULL) {
+                    // Handle the device id
+                    GValue* value_id_pointer = g_value_array_get_nth(values_id, i);
+                    GValue value_id_string = {0,};
+                    g_value_init(&value_id_string, G_TYPE_STRING);
+                    GValue value_name_string = {0,};
+                    g_value_init(&value_name_string, G_TYPE_STRING);
+                    if (!g_value_transform(value_id_pointer, &value_id_string)) {
+                        qDebug() << "GstreamerGrabber::initialization --> Fatal: Can't copy string.";
+                        gst_object_unref(GST_OBJECT(src));
+                        return;
+                    }
+                    device = new ImageGrabberDevice(g_value_get_string(&value_id_string),
+                                                    g_value_get_string(&value_name_string),
+                                                    DirectShowSource,
+                                                    video_x_none);
+                }
+                else {
+                    // No device id
+                    device = new ImageGrabberDevice(g_value_get_string(&value_name_string),
+                                                    g_value_get_string(&value_name_string),
+                                                    DirectShowSource,
+                                                    video_x_none);
+                }
+                // Add the device to the device list
+                devices.append(device);
+                if (values_id != NULL) {
+                    qDebug() << "gstreamergrabber::initialization --> device id " << i << " '" << devices[device_size]->getDeviceId() << "' (" << g_value_get_string(&value_id_string) << ")";
+                }
+                else {
+                    // No device id
+                    qDebug() << "gstreamergrabber::initialization --> device id " << i << " '" << devices[device_size]->getDeviceId() << "' (empty)";
+                }
+                qDebug() << "gstreamergrabber::initialization --> device name " << i << " '" << devices[device_size]->getDeviceName() << "' (" << g_value_get_string(&value_name_string) << ")";
+            }
+            if (values_id != NULL) {
+                g_value_array_free(values_id);
             }
             g_value_array_free(values_name);
         }
-        // Reset source object
-        gst_element_set_state(src, GST_STATE_NULL);
     }
 
     // Floating referenz counter of source object is 0 ?????
+    // Reset source object
     // gst_object_unref(GST_OBJECT(src));
-    // gst_object_unref(GST_OBJECT(srcfactory));
 
 #endif
 
@@ -251,20 +418,20 @@ void GstreamerGrabber::initSubclass()
 
     // gst_init(0,0);
 
-    switch ((GstreamerGrabber::GstreamerSource)frontend->getProject()->getVideoSource()) {
+    switch (frontend->getProject()->getVideoSource()) {
     case 1:
 #ifdef Q_WS_X11
-        activeSource = GstreamerGrabber::Video4LinuxSource;
+        activeSource = Video4LinuxSource;
 #endif
 #ifdef Q_WS_WIN
-        activeSource = GstreamerGrabber::DirectShowSource;
+        activeSource = DirectShowSource;
 #endif
         break;
     case 2:
-        activeSource = GstreamerGrabber::Iee1394Source;
+        activeSource = Iee1394Source;
         break;
     default:
-        activeSource = GstreamerGrabber::TestSource;
+        activeSource = TestSource;
         break;
     }
 

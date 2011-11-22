@@ -24,33 +24,15 @@
 #define IMAGEGRABBER_H
 
 #include "frontends/frontend.h"
+#include "technical/grabber/imagegrabberdevice.h"
 #include "technical/grabber/imagegrabberthread.h"
 
 #include <QtCore/QString>
 #include <QtCore/QVector>
 #include <QtGui/QImage>
 
+class ImageGrabberDevice;
 class ImageGrabberThread;
-
-/**
- * Video device capabilities
- */
-enum ImageGrabberDeviceCapabilities {
-    video_x_none,
-    video_x_raw_rgb,
-    video_x_raw_yuv,
-    video_x_dv
-};
-
-/**
- * Struct containing all the informations of a device.
- */
-struct ImageGrabberDevice
-{
-    QString deviceName;
-    QString deviceId;
-    ImageGrabberDeviceCapabilities deviceCaps;
-};
 
 /**
  * Abstract class for the different video grabbers used by the SDLVideoView
@@ -74,9 +56,16 @@ public:
     ~ImageGrabber();
 
     /**
-     * Get the device list
+     * Get the possible video devices.
+     * @return Vector with the devices.
      */
-    const QVector<ImageGrabberDevice> getDevices();
+    const QVector<ImageGrabberDevice*> getDevices();
+
+    /**
+     * Get the possible video devices.
+     * @return Vector with the device names.
+     */
+    const QVector<QString> getDeviceNames();
 
     /**
      * Get the actual image
@@ -153,7 +142,7 @@ protected:
     bool isInitialized;
     bool isInited;
     bool isProcess;
-    QVector<ImageGrabberDevice> devices;
+    QVector<ImageGrabberDevice*> devices;
     QImage actualImage;
     ImageGrabberThread *grabberThread;
 

@@ -52,6 +52,13 @@ ImageGrabber::~ImageGrabber()
 {
     qDebug("ImageGrabber::Destructor --> Start");
 
+    unsigned int deviceSize = devices.size();
+    for (unsigned int deviceIndex = 0; deviceIndex < deviceSize; ++deviceIndex) {
+        delete devices[deviceIndex];
+        devices[deviceIndex] = NULL;
+    }
+    devices.clear();
+
     qDebug("ImageGrabber::Destructor --> End");
 }
 
@@ -120,9 +127,21 @@ void ImageGrabber::finalize()
 }
 
 
-const QVector<ImageGrabberDevice> ImageGrabber::getDevices()
+const QVector<ImageGrabberDevice*> ImageGrabber::getDevices()
 {
     return devices;
+}
+
+
+const QVector<QString> ImageGrabber::getDeviceNames()
+{
+    QVector<QString> deviceNames;
+
+    for (int deviceIndex = 0 ; deviceIndex < devices.size() ; deviceIndex++) {
+        deviceNames.append(devices[deviceIndex]->getDeviceName());
+    }
+
+    return deviceNames;
 }
 
 

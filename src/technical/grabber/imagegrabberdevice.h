@@ -100,8 +100,9 @@ public:
     ImageGrabberDeviceCapabilities getDeviceCapability();
 
 private:
-    QString deviceId;
-    QString deviceName;
+    QString   deviceId;
+    // GSTValue *deviceIdValue;
+    QString   deviceName;
     ImageGrabberVideoSources deviceSource;
     ImageGrabberDeviceCapabilities deviceCap;
 };

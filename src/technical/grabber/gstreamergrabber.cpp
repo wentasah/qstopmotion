@@ -185,9 +185,11 @@ void GstreamerGrabber::initializationSubclass()
                     qDebug() << "gstreamergrabber::initialization --> device name " << i << " '" << devices[device_size]->getDeviceName() << "' (empty)";
                 }
             }
-            if (values_name != NULL) {
-                g_value_array_free(values_name);
-            }
+        }
+        if (values_name != NULL) {
+            g_value_array_free(values_name);
+        }
+        if (values_id != NULL) {
             g_value_array_free(values_id);
         }
     }
@@ -289,9 +291,11 @@ void GstreamerGrabber::initializationSubclass()
                     qDebug() << "gstreamergrabber::initialization --> device name " << i << " '" << devices[device_size]->getDeviceName() << "' (empty)";
                 }
             }
-            if (values_name != NULL) {
-                g_value_array_free(values_name);
-            }
+        }
+        if (values_name != NULL) {
+            g_value_array_free(values_name);
+        }
+        if (values_id != NULL) {
             g_value_array_free(values_id);
         }
     }
@@ -386,9 +390,11 @@ void GstreamerGrabber::initializationSubclass()
                 }
                 qDebug() << "gstreamergrabber::initialization --> device name " << i << " '" << devices[device_size]->getDeviceName() << "' (" << g_value_get_string(&value_name_string) << ")";
             }
-            if (values_id != NULL) {
-                g_value_array_free(values_id);
-            }
+        }
+        if (values_id != NULL) {
+            g_value_array_free(values_id);
+        }
+        if (values_name != NULL) {
             g_value_array_free(values_name);
         }
     }
@@ -415,25 +421,10 @@ void GstreamerGrabber::initSubclass()
     qDebug() << "gstreamergrabber::init --> Start";
 
     GstBus *bus;
+    int videoSource = frontend->getProject()->getVideoSource();
+    ImageGrabberDevice *videoDevice = frontend->getDevice(videoSource);
 
     // gst_init(0,0);
-
-    switch (frontend->getProject()->getVideoSource()) {
-    case 1:
-#ifdef Q_WS_X11
-        activeSource = Video4LinuxSource;
-#endif
-#ifdef Q_WS_WIN
-        activeSource = DirectShowSource;
-#endif
-        break;
-    case 2:
-        activeSource = Iee1394Source;
-        break;
-    default:
-        activeSource = TestSource;
-        break;
-    }
 
     pipeline = gst_pipeline_new("video_pipeline");
 
@@ -441,7 +432,7 @@ void GstreamerGrabber::initSubclass()
     gst_bus_add_watch(bus, bus_callback, NULL);
     gst_object_unref(bus);
 
-    switch (activeSource) {
+    switch (videoDevice->getDeviceSource()) {
     case TestSource:
         qDebug() << "gstreamergrabber::init --> Build the pipeline: videotestsrc ! ffmpegcolorspace ! jpegenc ! multifilesink location=$IMAGEFILE";
 
@@ -510,7 +501,7 @@ void GstreamerGrabber::initSubclass()
             return;
         }
         // this property needs to be set before linking the element, where the device id configured in get_caps() */
-        // g_object_set (G_OBJECT(source), "device", device_id, NULL);
+        g_object_set (G_OBJECT(source), "device", videoDevice->getDeviceId().toAscii().constData(), NULL);
 
         filter1 = gst_element_factory_make("ffmpegcolorspace", "filter1=ffmpegcolorspace");
         if (!filter1) {
@@ -576,9 +567,9 @@ void GstreamerGrabber::initSubclass()
             qDebug() << "gstreamergrabber::init --> Fatal: Can't create the source.";
             return;
         }
-        // g_object_set(G_OBJECT(source), "port", 0, NULL);
         // this property needs to be set before linking the element, where the device id configured in get_caps() */
-        // g_object_set(G_OBJECT(source), "guid", g_ascii_strtoull(device_id, NULL, 0), NULL);
+        g_object_set(G_OBJECT(source), "guid", g_ascii_strtoull(videoDevice->getDeviceId().toAscii().constData(), NULL, 0), NULL);
+        // g_object_set(G_OBJECT(source), "port", 0, NULL);
 
         filter1 = gst_element_factory_make("dvdemux", "filter1=dvdemux");
         if (!filter1) {
@@ -719,7 +710,7 @@ void GstreamerGrabber::initSubclass()
             return;
         }
         // this property needs to be set before linking the element, where the device id configured in get_caps() */
-        // g_object_set (G_OBJECT(source), "device-name", device_id, NULL);
+        g_object_set (G_OBJECT(source), "device-name", videoDevice->getDeviceId().toAscii().constData(), NULL);
         filter1 = gst_element_factory_make("ffmpegcolorspace", "filter1=ffmpegcolorspace");
         if (!filter1) {
             qDebug() << "gstreamergrabber::init --> Fatal: Can't create the filter1.";

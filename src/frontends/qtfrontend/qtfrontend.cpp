@@ -642,6 +642,12 @@ const QVector<ImageGrabberDevice*> QtFrontend::getDevices()
 }
 
 
+ImageGrabberDevice* QtFrontend::getDevice(int deviceIndex)
+{
+    return mw->getDevice(deviceIndex);
+}
+
+
 const QVector<QString> QtFrontend::getDeviceNames()
 {
     return mw->getDeviceNames();

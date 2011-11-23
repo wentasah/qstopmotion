@@ -62,6 +62,13 @@ public:
     const QVector<ImageGrabberDevice*> getDevices();
 
     /**
+     * Get one video devices.
+     * @arg deviceIndex The index of the device.
+     * @return The video devices.
+     */
+    ImageGrabberDevice *getDevice(int deviceIndex);
+
+    /**
      * Get the possible video devices.
      * @return Vector with the device names.
      */

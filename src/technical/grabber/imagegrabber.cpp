@@ -133,6 +133,12 @@ const QVector<ImageGrabberDevice*> ImageGrabber::getDevices()
 }
 
 
+ImageGrabberDevice* ImageGrabber::getDevice(int deviceIndex)
+{
+    return devices[deviceIndex];
+}
+
+
 const QVector<QString> ImageGrabber::getDeviceNames()
 {
     QVector<QString> deviceNames;

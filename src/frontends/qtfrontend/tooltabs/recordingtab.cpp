@@ -67,6 +67,8 @@ void RecordingTab::makeGUI()
     QString iconFile(frontend->getIconsDirName());
 
     QVBoxLayout *tabLayout = new QVBoxLayout;
+    QVector<QString> deviceNames = frontend->getDeviceNames();
+    int deviceSize = deviceNames.size();
 
     // ========================================================================
     // Camera group box
@@ -76,16 +78,9 @@ void RecordingTab::makeGUI()
     videoSourceCombo = new QComboBox();
     videoSourceCombo->setFocusPolicy(Qt::NoFocus);
     connect(videoSourceCombo, SIGNAL(activated(int)), this, SLOT(changeVideoSource(int)));
-    videoSourceCombo->addItem(tr("Test Source"));
-#ifdef Q_WS_X11
-    videoSourceCombo->addItem(tr("USB Source"));
-    videoSourceCombo->addItem(tr("FireWire Source"));
-#endif
-#ifdef Q_WS_WIN
-    videoSourceCombo->addItem(tr("DirectShow Source"));
-#endif
-#ifdef Q_WS_MAC
-#endif
+    for (int deviceIndex = 0 ; deviceIndex < deviceSize ; deviceIndex++) {
+        videoSourceCombo->addItem(deviceNames[deviceIndex]);
+    }
 
     cameraButton = new QPushButton;
     iconFile.append(QLatin1String("cameraon.png"));

@@ -283,6 +283,13 @@ public:
     virtual const QVector<ImageGrabberDevice*> getDevices() = 0;
 
     /**
+     * Abstract function to get one video devices.
+     * @arg deviceIndex The index of the device.
+     * @return The video devices.
+     */
+    virtual ImageGrabberDevice *getDevice(int deviceIndex) = 0;
+
+    /**
      * Abstract function to get the possible video device names.
      * @return Vector with the device names.
      */

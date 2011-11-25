@@ -27,6 +27,7 @@
 // #include "domain/animation/scene.h"
 #include "domain/animation/take.h"
 
+#include <QtCore/QObject>
 #include <QtCore/QString>
 #include <QtCore/QVector>
 #include <QtXml/QDomDocument>
@@ -42,8 +43,9 @@ class Take;
  *
  * @author Bjoern Erik Nilsen & Fredrik Berg Kjoelstad
  */
-class Exposure
+class Exposure : public QObject
 {
+    Q_OBJECT
 public:
 
     enum fileLocation {

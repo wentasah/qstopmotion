@@ -822,9 +822,6 @@ void TimeLine::addExposures(const QVector<Exposure*>& exposures, int index)
 {
     qDebug("TimeLine::addExposures --> Start");
 
-    QString msg(QObject::tr("Adding exposures to project ..."));
-    frontend->setProgressInfo(msg.toLatin1().constData());
-
     int size = thumbViews.size();
     int exposureSize = exposures.size();
     int from = index;

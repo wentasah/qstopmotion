@@ -1,7 +1,7 @@
 ###############################################################################
 # CMake file for the qStopMotion project                                      #
 # (c) Ralf Lange, longsoft.de                                                 #
-# Last update: 2011-10-17                                                     #
+# Last update: 2011-11-23                                                     #
 #                                                                             #
 # Usage:                                                                      #
 #   * Qt-Creator (Windows, Linux)                                             #
@@ -35,7 +35,7 @@ SET(CMAKE_PROJECT_NAME "qstopmotion")
 SET(QSTOPMOTION_HOMEPAGE "http://www.qstopmotion.org")
 SET(QSTOPMOTION_VERSION_MAJOR "0")
 SET(QSTOPMOTION_VERSION_MINOR "9")
-SET(QSTOPMOTION_VERSION_PATCH "8")
+SET(QSTOPMOTION_VERSION_PATCH "9")
 
 SET(FILES_TO_TRANSLATE )
 
@@ -60,12 +60,6 @@ include(${QT_USE_FILE})
 
 # add all header files of the project to HEADERS
 set(HEADERS
-    src/domain/domainfacade.h
-    src/domain/animation/animationproject.h
-    src/domain/animation/exposure.h
-    src/domain/animation/projectserializer.h
-    src/domain/animation/scene.h
-    src/domain/animation/take.h
     src/domain/undo/undoexposureadd.h
     src/domain/undo/undoexposureinsert.h
     src/domain/undo/undoexposuremove.h
@@ -87,12 +81,9 @@ set(HEADERS
     src/frontends/qtfrontend/dialogs/licence.h
     src/frontends/qtfrontend/timeline/exposurethumbview.h
     src/frontends/qtfrontend/timeline/thumbview.h
-    src/technical/preferencestool.h
     src/technical/util.h
     src/technical/audio/audiodriver.h
     src/technical/audio/audioformat.h
-    src/technical/grabber/gstreamergrabber.h
-    src/technical/grabber/imagegrabber.h
     src/technical/grabber/imagegrabberdevice.h
     src/technical/grabber/imagegrabberthread.h
     src/technical/videoencoder/ffmpegencoder.h
@@ -107,6 +98,12 @@ set(MOC_HEADERS
     src/application/externalchangemonitor.h
     src/application/runanimationhandler.h
     src/application/soundhandler.h
+    src/domain/domainfacade.h
+    src/domain/animation/animationproject.h
+    src/domain/animation/exposure.h
+    src/domain/animation/projectserializer.h
+    src/domain/animation/scene.h
+    src/domain/animation/take.h
     src/frontends/qtfrontend/mainwindowgui.h
     src/frontends/qtfrontend/menuframe.h
     src/frontends/qtfrontend/qtfrontend.h
@@ -130,6 +127,9 @@ set(MOC_HEADERS
     src/frontends/qtfrontend/tooltabs/projecttab.h
     src/frontends/qtfrontend/tooltabs/recordingtab.h
     src/frontends/qtfrontend/tooltabs/viewtab.h
+    src/technical/preferencestool.h
+    src/technical/grabber/gstreamergrabber.h
+    src/technical/grabber/imagegrabber.h
 )
 
 # add all source files to SOURCES

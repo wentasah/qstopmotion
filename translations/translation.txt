@@ -1,3 +1,8 @@
+Preparation of the development systems
+1. install the latest version of the Qt SDK from http://qt.nokia.com/
+2. download the actual sources of qStopMotion from http://qstopmotion.sourceforge.net/
+   or check out the latest revision of the sources from the repository
+
 Update the translations of qStopMotion:
 1. update the source files in qStopMotion.pro
 2. start a command line and move to the project directory
@@ -13,4 +18,8 @@ Add a new laguage:
 5. call lrelease qstopmotion.pro
 6. add the *.ts file for the new laguage in the cmakelists.txt file
 7. create new installer
+
+Check in the new translation in the repository
+1.
+2.
 

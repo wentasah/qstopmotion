@@ -123,10 +123,11 @@ MainWindowGUI::MainWindowGUI(QApplication *stApp, Frontend *f)
     soundHandler         = 0;
     changeMonitor        = 0;
 
-    translator           = NULL;
     grabber              = 0;
 
     this->setObjectName("MainWindowGUI");
+    stApp->installTranslator(&appTranslator);
+    stApp->installTranslator(&qtTranslator);
 
     qDebug("MainWindowGUI::Constructor --> End");
 }
@@ -137,6 +138,11 @@ void MainWindowGUI::init()
 
     QDir homeDir = QDir::home();
     lastVisitedDir.append(homeDir.absolutePath());
+
+    this->initTranslations();
+    PreferencesTool *pref = frontend->getPreferences();
+    QString activeLocale = pref->getBasicPreference("language", QString());
+    createTranslator(activeLocale);
 
     grabber = new GstreamerGrabber(frontend);
 
@@ -157,7 +163,6 @@ void MainWindowGUI::init()
 
     timeLine = new TimeLine(this->frontend);
 
-    this->initTranslations();
     createHandlers();
 
     // Initializes and sets up the workarea consisting of the toolsmenu and the frameview.
@@ -196,9 +201,7 @@ void MainWindowGUI::init()
     statusBar()->setSizeGripEnabled(false);
 
     // Sets all the text in the program.
-    PreferencesTool *pref = frontend->getPreferences();
-    QString activeLocale = pref->getBasicPreference("language", QString());
-    retranslateStrings(activeLocale);
+    retranslateStrings();
 
     /* Add another logo here
     QLabel *l = new QLabel(this);
@@ -311,7 +314,8 @@ const QVector<QString> MainWindowGUI::getLocales()
 
 void MainWindowGUI::changeLanguage(int newIndex)
 {
-    retranslateStrings(this->translationsLocales[newIndex]);
+    this->createTranslator(this->translationsLocales[newIndex]);
+    retranslateStrings();
 }
 
 
@@ -321,11 +325,9 @@ void MainWindowGUI::changeCaptureButtonFunction(PreferencesTool::captureButtonFu
 }
 
 
-void MainWindowGUI::retranslateStrings(const QString &newLocale)
+void MainWindowGUI::retranslateStrings()
 {
     qDebug("MainWindowGUI::retranslateStrings --> Start");
-
-    this->createTranslator(newLocale);
 
     //The actions caption texts
     newAct->setText(tr("&New"));
@@ -763,11 +765,15 @@ void MainWindowGUI::openFourthMostRecent()
 void MainWindowGUI::saveProject()
 {
     const QString fileName = frontend->getProject()->getProjectFileName();
+
+    frontend->showProgress(tr("Saving scenes to disk ..."), frontend->getProject()->getSceneSize());
+
     if (!fileName.isEmpty()) {
         frontend->getProject()->saveProject();
     } else {
         saveProjectAs();
     }
+    frontend->hideProgress();
 }
 
 
@@ -859,7 +865,11 @@ void MainWindowGUI::exportToVideo()
         return;
     }
     checkSaved();
+
+    frontend->showProgress(tr("Exporting ..."), 0);
     frontend->getProject()->exportToVideo(enc);
+    frontend->hideProgress();
+
     delete enc;
     enc = NULL;
 
@@ -947,61 +957,45 @@ void MainWindowGUI::createTranslator(const QString &newLocale)
 {
     qDebug("MainWindowGUI::createTranslator --> Start");
 
-    if (translator != NULL) {
-        delete translator;
-    }
-    translator = new QTranslator(this);
-
     QString locale(newLocale);
-    QString qmPath(frontend->getTranslationsDirName());
-
-    if (locale.isEmpty()) {
-        // Get system locale.
-        locale = QLocale::system().name().toLower();
-        if (locale == QLatin1String("nb_no"))
-            locale = QLatin1String("no_nb");
-        else if (locale == QLatin1String("nn_no"))
-            locale = QLatin1String("no_nn");
-        else if (locale == QLatin1String("se_no"))
-            locale = QLatin1String("no_se");
-        else
-            locale.truncate(2);
-    }
-
-    // Put together a translation file based on the qmPath or keep
-    // it empty if the locale is english.
-    const QString prefix = qmPath + QLatin1Char('/') + QLatin1String("qstopmotion_");
-    const bool englishLocale = (locale == QLatin1String("en"));
     QString translationFile;
-    if (!englishLocale) {
-        // It is not a english environment
-        translationFile.append(prefix);
-        translationFile.append(newLocale);
+    QString qmPath(frontend->getTranslationsDirName());
+    const QString prefix = QLatin1String("qstopmotion_");
+    const QString languagePref = frontend->getPreferences()->getBasicPreference("language", locale);
 
-        if (!QFile::exists(translationFile + QLatin1String(".qm"))) {
-            // It was not able to find a translation file for the locale
-            // so use the language saved in the preferences file
-            const QString languagePref = frontend->getPreferences()->getBasicPreference("language", locale);
-            if (!languagePref.isEmpty()) {
-                translationFile = prefix + languagePref;
-                if (!QFile::exists(translationFile + QLatin1String(".qm"))) {
-                    // It was not able to find a translation file for the language in the preferences
-                    // Use the english default language
-                    translationFile = QString();
-                }
-            }
+    if (languagePref.isEmpty()) {
+        if (locale.isEmpty()) {
+            // Get system locale.
+            locale = QLocale::system().name().toLower();
+            if (locale == QLatin1String("nb_no"))
+                locale = QLatin1String("no_nb");
+            else if (locale == QLatin1String("nn_no"))
+                locale = QLatin1String("no_nn");
+            else if (locale == QLatin1String("se_no"))
+                locale = QLatin1String("no_se");
+            else
+                locale.truncate(2);
         }
+
+        translationFile.append(prefix);
+        translationFile.append(locale);
+    }
+    else {
+        translationFile.append(prefix);
+        translationFile.append(languagePref);
     }
 
     if (!translationFile.isEmpty()) {
         qDebug() << "Loading translator: " << translationFile;
-        if (!translator->load(translationFile)) {
+        if (!appTranslator.load(translationFile, qmPath)) {
+            // Translation file not opend
+            qDebug("Translator not loaded!");
+        }
+        if (!qtTranslator.load("qt_" + locale, qmPath)) {
             // Translation file not opend
             qDebug("Translator not loaded!");
         }
     }
-
-    stApp->installTranslator(translator);
 
     qDebug("MainWindowGUI::createTranslator --> End");
 }

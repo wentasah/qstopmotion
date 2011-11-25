@@ -29,6 +29,7 @@
 #include "domain/animation/exposure.h"
 #include "frontends/frontend.h"
 
+#include <QtCore/QObject>
 #include <QtCore/QString>
 #include <QtCore/QVector>
 #include <QtXml/QDomDocument>
@@ -44,8 +45,9 @@ class Frontend;
  *
  * @author Bjoern Erik Nilsen & Fredrik Berg Kjoelstad
  */
-class Take
+class Take : public QObject
 {
+    Q_OBJECT
 public:
     /**
      * Initializes the take

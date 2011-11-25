@@ -525,12 +525,12 @@ const QVector<Exposure*> Scene::addExposures(const QVector<QString> &exposureNam
         if (fileInfo.isReadable()) {
             newExposures.append(insertExposure(file, index));
         } else {
-            QString msg(QObject::tr("You do not have permission to read that file"));
-            getFrontend()->showWarning(QObject::tr("Add Exposure"), msg);
+            QString msg(tr("You do not have permission to read that file"));
+            getFrontend()->showWarning(tr("Add Exposure"), msg);
             return newExposures;
         }
     } else {
-        QString msg(QObject::tr("Importing exposures from disk ..."));
+        QString msg(tr("Importing exposures from disk ..."));
         getFrontend()->showProgress(msg.toLatin1().constData(), numElem * 2);
 
         unsigned numNotReadable = 0;
@@ -566,10 +566,10 @@ const QVector<Exposure*> Scene::addExposures(const QVector<QString> &exposureNam
 
         if (numNotReadable > 0) {
             QString ss = QString("%1%2%3")
-                         .arg(QObject::tr("You do not have permission to read "))
+                         .arg(tr("You do not have permission to read "))
                          .arg(numNotReadable)
-                         .arg(QObject::tr(" file(s)"));
-            getFrontend()->showWarning(QObject::tr("Add Exposure"), ss);
+                         .arg(tr(" file(s)"));
+            getFrontend()->showWarning(tr("Add Exposure"), ss);
         }
     }
 
@@ -684,14 +684,14 @@ int Scene::addSound(const QString & /*filename*/, const QString & /*soundname*/)
         if (filename.indexOf(tempName, 0, Qt::CaseInsensitive) == -1) {
             if (!QFile::copy(filename, newSoundPath)) {
                 // Not successful
-                parent->getFrontend()->showCritical(QObject::tr("Critical"),
-                                                    QObject::tr("Can't copy sound file!"));
+                parent->getFrontend()->showCritical(tr("Critical"),
+                                                    tr("Can't copy sound file!"));
             }
         } else {
             if (!QFile::rename(filename, newSoundPath)) {
                 // Not successful
-                parent->getFrontend()->showCritical(QObject::tr("Critical"),
-                                                    QObject::tr("Can't rename soundfile!"));
+                parent->getFrontend()->showCritical(tr("Critical"),
+                                                    tr("Can't rename soundfile!"));
             }
         }
 
@@ -723,8 +723,8 @@ void Scene::removeSound(unsigned int soundNumber)
     if (QFile::exists(f->getSoundPath()) == 0) {
         if (!QFile::remove(f->getSoundPath())) {
             // Not successful
-            parent->getFrontend()->showCritical(QObject::tr("Critical"),
-                                                QObject::tr("Can't remove sound file!"));
+            parent->getFrontend()->showCritical(tr("Critical"),
+                                                tr("Can't remove sound file!"));
         }
     }
     delete sounds[soundNumber];
@@ -786,8 +786,8 @@ void Scene::moveToSoundDir(const QString &directory)
             // Move from old path to new path
             if (!QFile::rename(soundPath, newSoundPath)) {
                 // Not successful
-                parent->getFrontend()->showCritical(QObject::tr("Critical"),
-                                                    QObject::tr("Can't move sound file!"));
+                parent->getFrontend()->showCritical(tr("Critical"),
+                                                    tr("Can't move sound file!"));
             }
         }
         // Update with the new path

@@ -81,14 +81,14 @@ bool ProjectSerializer::read()
 
     QFile file(projectFileName);
     if (!file.open(QIODevice::ReadOnly)) {
-        frontend->showWarning(QObject::tr("DOM Parser"),
-                              QString(QObject::tr("Couldn't open XML file:\n%1")).arg(projectFileName));
+        frontend->showWarning(tr("DOM Parser"),
+                              QString(tr("Couldn't open XML file:\n%1")).arg(projectFileName));
         return false;
     }
     if (!doc.setContent(&file, true, &errorStr, &errorLine, &errorColumn)) {
         file.close();
-        frontend->showWarning(QObject::tr("DOM Parser"),
-                              QString(QObject::tr("Parse error at line %1, column %2:\n%3\n%4"))
+        frontend->showWarning(tr("DOM Parser"),
+                              QString(tr("Parse error at line %1, column %2:\n%3\n%4"))
                               .arg(errorLine)
                               .arg(errorColumn)
                               .arg(errorStr)
@@ -168,14 +168,14 @@ bool ProjectSerializer::save(AnimationProject *animation)
         if (QFile::exists(backup)) {
             if (!QFile::remove(backup)) {
                 // Not successful
-               frontend->showCritical(QObject::tr("Critical"),
-                                      QObject::tr("Can't remove old backup of project file!"));
+               frontend->showCritical(tr("Critical"),
+                                      tr("Can't remove old backup of project file!"));
             }
         }
         if (!QFile::rename(projectFileName, backup)) {
             // Not successful
-            frontend->showCritical(QObject::tr("Critical"),
-                                   QObject::tr("Can't rename project file to backup!"));
+            frontend->showCritical(tr("Critical"),
+                                   tr("Can't rename project file to backup!"));
         }
     }
     QFile file(projectFileName);
@@ -341,33 +341,33 @@ void ProjectSerializer::setProjectPath(const QString &projectFileName, bool isSa
     if (isSave) {
         if (!QFile::exists(projectPath)) {
             if (!QDir::root().mkpath(projectPath)) {
-                this->frontend->showCritical(QObject::tr("Critical"),
-                                             QObject::tr("Can't create project directory!"));
+                this->frontend->showCritical(tr("Critical"),
+                                             tr("Can't create project directory!"));
             }
             if (!QFile::setPermissions(projectPath, QFile::ReadUser | QFile::WriteUser | QFile::ExeUser | QFile::ReadGroup | QFile::WriteGroup | QFile::ReadOther | QFile::WriteOther)) {
-                this->frontend->showCritical(QObject::tr("Critical"),
-                                             QObject::tr("Can't change permissions of the project directory!"));
+                this->frontend->showCritical(tr("Critical"),
+                                             tr("Can't change permissions of the project directory!"));
             }
         }
         if (!QFile::exists(imagePath)) {
             if (!QDir::root().mkpath(imagePath)) {
-                this->frontend->showCritical(QObject::tr("Critical"),
-                                             QObject::tr("Can't create image directory!"));
+                this->frontend->showCritical(tr("Critical"),
+                                             tr("Can't create image directory!"));
             }
             // Set permissions to 0755
             if (!QFile::setPermissions(imagePath, QFile::ReadUser | QFile::WriteUser | QFile::ExeUser | QFile::ReadGroup | QFile::WriteGroup | QFile::ReadOther | QFile::WriteOther)) {
-                this->frontend->showCritical(QObject::tr("Critical"),
-                                             QObject::tr("Can't change permissions of the image directory!"));
+                this->frontend->showCritical(tr("Critical"),
+                                             tr("Can't change permissions of the image directory!"));
             }
         }
         if (!QFile::exists(soundPath)) {
             if (!QDir::root().mkpath(soundPath)) {
-                this->frontend->showCritical(QObject::tr("Critical"),
-                                             QObject::tr("Can't create sound directory!"));
+                this->frontend->showCritical(tr("Critical"),
+                                             tr("Can't create sound directory!"));
             }
             if (!QFile::setPermissions(soundPath, QFile::ReadUser | QFile::WriteUser | QFile::ExeUser | QFile::ReadGroup | QFile::WriteGroup | QFile::ReadOther | QFile::WriteOther)) {
-                this->frontend->showCritical(QObject::tr("Critical"),
-                                             QObject::tr("Can't change permissions of the sound directory!"));
+                this->frontend->showCritical(tr("Critical"),
+                                             tr("Can't change permissions of the sound directory!"));
             }
         }
     }

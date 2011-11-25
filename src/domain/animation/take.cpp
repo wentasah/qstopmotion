@@ -405,15 +405,15 @@ const QVector<Exposure*> Take::addExposures(const QVector<QString> &exposureName
         if (fileInfo.isReadable()) {
             newExposures.append(insertExposure(file, index));
         } else {
-            QString msg(QObject::tr("You do not have permission to read that file"));
-            frontend->showWarning(QObject::tr("Add Exposure"), msg);
+            QString msg(tr("You do not have permission to read that file"));
+            frontend->showWarning(tr("Add Exposure"), msg);
 
             this->getAnimationProject()->setUnsavedChanges();
 
             return newExposures;
         }
     } else {
-        QString msg(QObject::tr("Importing exposures from disk ..."));
+        QString msg(tr("Importing exposures from disk ..."));
         frontend->showProgress(msg.toLatin1().constData(), numElem * 2);
 
         unsigned numNotReadable = 0;
@@ -449,10 +449,10 @@ const QVector<Exposure*> Take::addExposures(const QVector<QString> &exposureName
 
         if (numNotReadable > 0) {
             QString ss = QString("%1%2%3")
-                         .arg(QObject::tr("You do not have permission to read "))
+                         .arg(tr("You do not have permission to read "))
                          .arg(numNotReadable)
-                         .arg(QObject::tr(" file(s)"));
-            frontend->showWarning(QObject::tr("Add Exposure"), ss);
+                         .arg(tr(" file(s)"));
+            frontend->showWarning(tr("Add Exposure"), ss);
         }
     }
 

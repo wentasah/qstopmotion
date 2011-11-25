@@ -734,7 +734,7 @@ void DomainFacade::addExposureToUndo(int sceneIndex,
                                      int takeIndex,
                                      const QString &fileName)
 {
-    UndoExposureAdd *u = new UndoExposureAdd(this, sceneIndex, takeIndex, 0, fileName, QObject::tr("<empty>"));
+    UndoExposureAdd *u = new UndoExposureAdd(this, sceneIndex, takeIndex, 0, fileName, tr("<empty>"));
     getUndoStack()->push(u);
 }
 
@@ -774,7 +774,7 @@ void DomainFacade::insertExposureToUndo(int sceneIndex,
                                         bool after,
                                         const QString &fileName)
 {
-    UndoExposureInsert *u = new UndoExposureInsert(this, sceneIndex, takeIndex, exposureIndex, after, fileName, QObject::tr("<empty>"));
+    UndoExposureInsert *u = new UndoExposureInsert(this, sceneIndex, takeIndex, exposureIndex, after, fileName, tr("<empty>"));
     getUndoStack()->push(u);
 }
 

@@ -30,6 +30,7 @@
 #include "technical/audio/audiodriver.h"
 #include "technical/audio/audioformat.h"
 
+#include <QtCore/QObject>
 #include <QtCore/QString>
 #include <QtCore/QVector>
 #include <QtXml/QDomDocument>
@@ -46,8 +47,9 @@ class Frontend;
  *
  * @author Bjoern Erik Nilsen & Fredrik Berg Kjoelstad
  */
-class Scene
+class Scene : public QObject
 {
+    Q_OBJECT
 public:
     /**
      * Initializes the scene

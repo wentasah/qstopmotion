@@ -313,8 +313,8 @@ bool AnimationProject::initAudioDevice()
     /*
     isAudioDriverInitialized = audioDriver->initialize();
     if (!isAudioDriverInitialized && numSounds > -1) {
-        frontend->showWarning(QObject::tr("Initialization Audio"),
-            QObject::tr("Cannot play sound. Check that you have the right\n"
+        frontend->showWarning(tr("Initialization Audio"),
+            tr("Cannot play sound. Check that you have the right\n"
             "permissions and other programs do not block\n"
             "the audio device. Audio will be disabled until you\n"
             "have fixed the problem."));
@@ -371,13 +371,10 @@ bool AnimationProject::exportToVideo(VideoEncoder * encoder)
     qDebug("AnimationProject::exportToVideo --> Start");
 
     VideoEncoderFactory factory(this->getFrontend());
-    QString msg(QObject::tr("Exporting ..."));
-    frontend->showProgress(msg.toLatin1().constData(), 0);
     if (factory.createVideoFile(encoder) != NULL) {
         frontend->hideProgress();
         return true;
     }
-    frontend->hideProgress();
 
     qDebug("AnimationProject::exportToVideo --> End");
     return false;
@@ -764,9 +761,7 @@ bool AnimationProject::saveScenesToProject(QDomDocument &doc, QDomElement &anima
         imageDir.remove(fileNameList[fileIndex]);
     }
 
-    QString msg(QObject::tr("Saving scenes to disk ..."));
     nextTotalExposureIndex = 0;
-    frontend->showProgress(msg.toLatin1().constData(), sceneSize);
     for (sceneIndex = 0; sceneIndex < sceneSize; ++sceneIndex) {
         frontend->updateProgress(sceneIndex);
         // Scenes
@@ -810,15 +805,15 @@ int AnimationProject::addSoundToScene(unsigned int sceneIndex, const QString &so
     ++numSounds;
     int ret = scenes[sceneIndex]->addSound(sound, soundName);
     if (ret == -1) {
-        frontend->showWarning(QObject::tr("Add Sound"),
-            QObject::tr("Cannot open the selected audio file for reading.\n"
+        frontend->showWarning(tr("Add Sound"),
+            tr("Cannot open the selected audio file for reading.\n"
             "Check that you have the right permissions set.\n"
             "The animation will be runned without sound if you\n"
             "choose to play."));
         --numSounds;
     } else if (ret == -2) {
-        frontend->showWarning(QObject::tr("Add Sound"),
-            QObject::tr("The selected audio file is not valid within the\n"
+        frontend->showWarning(tr("Add Sound"),
+            tr("The selected audio file is not valid within the\n"
             "given audio format. The animation will be runned\n"
             "without sound if you choose to play."));
         --numSounds;

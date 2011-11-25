@@ -129,9 +129,8 @@ public:
      *
      * This function is called after a new translator has been installed so that
      * the program strings are retranslated to the new language.
-     * @param newLocale The new locale for the retranslation.
      */
-    void retranslateStrings(const QString &newLocale);
+    void retranslateStrings();
 
     /**
      * Function for displaying progress on timeconsuming operations.
@@ -439,7 +438,8 @@ private:
     ExternalChangeMonitor *changeMonitor;
 
     // Translation handling
-    QTranslator      *translator;
+    QTranslator       appTranslator;
+    QTranslator       qtTranslator;
     QString           translationsPath;
     QVector<QString>  translationsLanguages;
     QVector<QString>  translationsLocales;

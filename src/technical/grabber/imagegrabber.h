@@ -27,6 +27,7 @@
 #include "technical/grabber/imagegrabberdevice.h"
 #include "technical/grabber/imagegrabberthread.h"
 
+#include <QtCore/QObject>
 #include <QtCore/QString>
 #include <QtCore/QVector>
 #include <QtGui/QImage>
@@ -40,8 +41,9 @@ class ImageGrabberThread;
  *
  * @author Bjoern Erik Nilsen, Fredrik Berg Kjoelstad, Ralf Lange
  */
-class ImageGrabber
+class ImageGrabber : public QObject
 {
+    Q_OBJECT
 public:
 
     /**
@@ -138,6 +140,13 @@ protected:
      * @return true on success, false otherwise
      */
     virtual void initSubclass() = 0;
+
+private:
+
+    /**
+     * Clear the device list
+     */
+    void clearDevices();
 
 protected:
     /**

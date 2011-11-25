@@ -26,6 +26,7 @@
 // #include "domain/animation/animationproject.h"
 #include "frontends/frontend.h"
 
+#include <QtCore/QObject>
 #include <QtCore/QString>
 #include <QtXml/QDomDocument>
 #include <QtXml/QDomElement>
@@ -40,8 +41,9 @@ class AnimationProject;
  *
  * @author Bjoern Erik Nilsen & Fredrik Berg Kjoelstad.
  */
-class ProjectSerializer
+class ProjectSerializer : public QObject
 {
+    Q_OBJECT
 public:
 
     /**

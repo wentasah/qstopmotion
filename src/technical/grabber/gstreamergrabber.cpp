@@ -24,6 +24,7 @@
 
 #include <QtCore/QtDebug>
 #include <QtCore/QtGlobal>
+#include <QtGui/QApplication>
 
 
 // GMainLoop *GstreamerGrabber::loop = 0;
@@ -67,13 +68,13 @@ void GstreamerGrabber::initializationSubclass()
 {
     qDebug("GstreamerGrabber::initialization --> Start");
 
-    gchar *device_name = NULL;
+    const gchar *device_name = NULL;
     GstElementFactory *srcfactory = NULL;
     GstElement *src = NULL;
     GObjectClass *klass = NULL;
     GstPropertyProbe *probe = NULL;
-    gchar *property_name = NULL;
-    gchar *property_id = NULL;
+    const gchar *property_name = NULL;
+    const gchar *property_id = NULL;
     const GParamSpec *spec_name = NULL;
     const GParamSpec *spec_id = NULL;
     GValueArray *values_name = NULL;
@@ -87,7 +88,7 @@ void GstreamerGrabber::initializationSubclass()
 
     device_size = devices.size();
     device = new ImageGrabberDevice("",
-                                    QObject::tr("Video test device"),
+                                    QApplication::translate("GstreamerGrabber", "Video test device"),
                                     TestSource,
                                     video_x_none);
     devices.append(device);
@@ -170,7 +171,7 @@ void GstreamerGrabber::initializationSubclass()
                 else {
                     // No device name
                     device = new ImageGrabberDevice((const char*)g_value_get_string(&value_id_string),
-                                                    QString(QObject::tr("Device %1")).arg(device_size),
+                                                    QString(QApplication::translate("GstreamerGrabber", "Device %1")).arg(device_size),
                                                     Video4LinuxSource,
                                                     video_x_none);
                  }
@@ -276,7 +277,7 @@ void GstreamerGrabber::initializationSubclass()
                 else {
                     // No device name
                     device = new ImageGrabberDevice((const char*)g_value_get_string(&value_id_string),
-                                                    QString(QObject::tr("Device %1")).arg(device_size),
+                                                    QString(QApplication::translate("GstreamerGrabber", "Device %1")).arg(device_size),
                                                     Iee1394Source,
                                                     video_x_none);
                 }
@@ -501,7 +502,7 @@ void GstreamerGrabber::initSubclass()
             return;
         }
         // this property needs to be set before linking the element, where the device id configured in get_caps() */
-        g_object_set (G_OBJECT(source), "device", videoDevice->getDeviceId().toAscii().constData(), NULL);
+        g_object_set (G_OBJECT(source), "device-name", videoDevice->getDeviceId().toAscii().constData(), NULL);
 
         filter1 = gst_element_factory_make("ffmpegcolorspace", "filter1=ffmpegcolorspace");
         if (!filter1) {

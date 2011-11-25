@@ -30,6 +30,7 @@
 #include "technical/audio/audiodriver.h"
 #include "technical/videoencoder/ffmpegencoder.h"
 
+#include <QtCore/QObject>
 #include <QtCore/QString>
 #include <QtCore/QVector>
 #include <QtGui/QUndoStack>
@@ -44,8 +45,9 @@ class ProjectSerializer;
  *
  * @author Bjoern Erik Nilsen & Fredrik Berg Kjoelstad
  */
-class AnimationProject
+class AnimationProject : public QObject
 {
+    Q_OBJECT
 public:
     /**
      * Initializes the variables of the animation to starting values.

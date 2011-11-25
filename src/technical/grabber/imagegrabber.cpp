@@ -52,6 +52,16 @@ ImageGrabber::~ImageGrabber()
 {
     qDebug("ImageGrabber::Destructor --> Start");
 
+    clearDevices();
+
+    qDebug("ImageGrabber::Destructor --> End");
+}
+
+
+void ImageGrabber::clearDevices()
+{
+    qDebug("ImageGrabber::clearDevices --> Start");
+
     unsigned int deviceSize = devices.size();
     for (unsigned int deviceIndex = 0; deviceIndex < deviceSize; ++deviceIndex) {
         delete devices[deviceIndex];
@@ -59,7 +69,7 @@ ImageGrabber::~ImageGrabber()
     }
     devices.clear();
 
-    qDebug("ImageGrabber::Destructor --> End");
+    qDebug("ImageGrabber::clearDevices --> End");
 }
 
 
@@ -67,6 +77,7 @@ void ImageGrabber::initialization()
 {
     qDebug("ImageGrabber::initialization --> Start");
 
+    clearDevices();
     initializationSubclass();
 
     qDebug("ImageGrabber::initialization --> End");
@@ -81,8 +92,8 @@ void ImageGrabber::init()
     if (isGrabberProcess()) {
         initSubclass();
         if (!isGrabberInited()) {
-            frontend->showWarning(QObject::tr("Check image grabber"),
-                                  QObject::tr("Grabbing failed. This may happen if you try\n"
+            frontend->showWarning(tr("Check image grabber"),
+                                  tr("Grabbing failed. This may happen if you try\n"
                                      "to grab from an invalid device. Please check\n"
                                      "your grabber settings in the preferences menu."));
             return;
@@ -95,8 +106,8 @@ void ImageGrabber::init()
         grabberThread->wait(500);
 
         if (grabberThread->wasGrabbingSuccess() == false) {
-            frontend->showWarning(QObject::tr("Check image grabber"),
-                                  QObject::tr("Grabbing failed. This may happen if you try\n"
+            frontend->showWarning(tr("Check image grabber"),
+                                  tr("Grabbing failed. This may happen if you try\n"
                                      "to grab from an invalid device. Please check\n"
                                      "your grabber settings in the preferences menu."));
             return;

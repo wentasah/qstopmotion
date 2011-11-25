@@ -40,6 +40,7 @@
  */
 class PreferencesTool : public QObject
 {
+    Q_OBJECT
 public:
 
     enum captureButtonFunction {

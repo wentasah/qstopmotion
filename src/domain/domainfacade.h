@@ -28,6 +28,7 @@
 // #include "frontends/viewfacade.h"
 #include "technical/videoencoder/videoencoder.h"
 
+#include <QtCore/QObject>
 #include <QtCore/QString>
 #include <QtCore/QVector>
 #include <QtGui/QTreeWidget>
@@ -49,8 +50,9 @@ class ViewFacade;
  *
  *@author Bjoern Erik Nilsen & Fredrik Berg Kjoelstad
  */
-class DomainFacade
+class DomainFacade : public QObject
 {
+    Q_OBJECT
 public:
     /**
      * The constructor. It is protected so that it will be impossible for other classes,

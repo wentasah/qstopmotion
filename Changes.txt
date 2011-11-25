@@ -1,13 +1,15 @@
 Last Changes in the sources on qStopMotion
 ===============================================================================
 
-qStopMotion (0.9.x)
+qStopMotion (1.0.0)
   * Fix Bugs
-  * Check source code quality with "cppcheck".
-  * Check source code quality with "valgrind".
-qStopMotion (0.9.9)
+qStopMotion (0.9.9, release candidat)
   * Fix Bugs
   * Feature freeze for version 1.0.0.
+  * Conzentration of the image grabber functionality in the technical/grabber classes.
+  * Change the selection of the video device from device type list to device name list.
+  * Handling of more than one device per device type.
+  * Check source code quality with "valgrind".
 qStopMotion (0.9.8)
   * Fix Bugs
   * Selection of the capture butten functionality in the general tab of the
@@ -15,6 +17,7 @@ qStopMotion (0.9.8)
   * Insert Scenes functionality.
   * Insert Takes functionality.
   * Insert Frames functionality.
+  * Check source code quality with "cppcheck".
 qStopMotion (0.9.7)
   * Fix Bugs
   * Syncronous selection of scene, take and exposure in the project tree.

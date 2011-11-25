@@ -1,7 +1,7 @@
 ###############################################################################
 # QtCreator file for the qStopMotion project                                  #
 # (c) Ralf Lange, longsoft.de                                                 #
-# Last update: 2011-08-31                                                     #
+# Last update: 2011-11-24                                                     #
 #                                                                             #
 # Please use CMake and the CMakeLists.txt file to build qStopMotion!          #
 ###############################################################################
@@ -51,7 +51,6 @@ HEADERS += src/config.h \
            src/frontends/qtfrontend/elements/flexiblespinbox.h \
            src/frontends/qtfrontend/frameview/frameviewimage.h \
            src/frontends/qtfrontend/frameview/frameviewinterface.h \
-           src/frontends/qtfrontend/frameview/imagegrabthread.h \
            src/frontends/qtfrontend/preferences/defaulttab.h \
            src/frontends/qtfrontend/preferences/exporttab.h \
            src/frontends/qtfrontend/preferences/generaltab.h \
@@ -69,6 +68,8 @@ HEADERS += src/config.h \
            src/technical/audio/audioformat.h \
            src/technical/grabber/gstreamergrabber.h \
            src/technical/grabber/imagegrabber.h \
+           src/technical/grabber/imagegrabberdevice.h \
+           src/technical/grabber/imagegrabberthread.h \
            src/technical/videoencoder/ffmpegencoder.h \
            src/technical/videoencoder/videoencoder.h \
            src/technical/videoencoder/videoencoderfactory.h
@@ -114,7 +115,6 @@ SOURCES += src/main.cpp \
            src/frontends/qtfrontend/elements/flexiblespinbox.cpp \
            src/frontends/qtfrontend/frameview/frameviewimage.cpp \
            src/frontends/qtfrontend/frameview/frameviewinterface.cpp \
-           src/frontends/qtfrontend/frameview/imagegrabthread.cpp \
            src/frontends/qtfrontend/preferences/defaulttab.cpp \
            src/frontends/qtfrontend/preferences/exporttab.cpp \
            src/frontends/qtfrontend/preferences/generaltab.cpp \
@@ -130,6 +130,8 @@ SOURCES += src/main.cpp \
            src/technical/util.cpp \
            src/technical/grabber/gstreamergrabber.cpp \
            src/technical/grabber/imagegrabber.cpp \
+           src/technical/grabber/imagegrabberdevice.cpp \
+           src/technical/grabber/imagegrabberthread.cpp \
            src/technical/videoencoder/ffmpegencoder.cpp \
            src/technical/videoencoder/videoencoder.cpp \
            src/technical/videoencoder/videoencoderfactory.cpp

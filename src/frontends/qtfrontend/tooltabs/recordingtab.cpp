@@ -416,7 +416,6 @@ void RecordingTab::cameraOn(bool isOn)
 
     if (isOn) {
         runAnimationHandler->stopAnimation();
-        this->initialize();
         captureGroupBox->show();
     } else {
         if (captureTimer->isActive()) {

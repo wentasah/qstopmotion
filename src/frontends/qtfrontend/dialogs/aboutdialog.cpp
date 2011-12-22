@@ -48,7 +48,7 @@ AboutDialog::AboutDialog(Frontend *f,
     layout->addWidget(new QLabel(
                           "<p>" + tr("This is the qStopMotion application for creating stop motion animations.") + "</p>"
                           "<p>" + tr("Version: ") + PreferencesTool::applicationVersion + "</p>"
-                          "<p> &copy; 2005-2010, Ralf Lange, Bjørn Erik Nilsen and Fredrik Berg Kjølstad </p>"));
+                          "<p> &copy; 2005-2011, Ralf Lange, Bjørn Erik Nilsen and Fredrik Berg Kjølstad </p>"));
     widget->setLayout(layout);
 
     tabWidget->addTab(widget, tr("&About"));

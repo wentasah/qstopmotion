@@ -572,6 +572,7 @@ bool MainWindowGUI::startGrabber()
                                  "This can be set in the preferences menu."));
         return false;
     }
+    recordingTab->initialize();
     frameView->on();
     frontend->hideProgress();
 

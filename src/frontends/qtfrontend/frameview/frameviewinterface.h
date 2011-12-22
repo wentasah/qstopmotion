@@ -311,8 +311,8 @@ public:
      */
     void setFps(int fps);
 
-// signals:
-    // void cameraReady();
+signals:
+    void cameraReady();
 
 public slots:
     /**

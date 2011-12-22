@@ -247,6 +247,9 @@ bool FrameViewInterface::on()
     qDebug("FrameViewInterface::on --> Start");
 
     this->initCompleted();
+
+    emit cameraReady();
+
     this->isPlayingVideo = true;
     grabTimer.start(150);
 

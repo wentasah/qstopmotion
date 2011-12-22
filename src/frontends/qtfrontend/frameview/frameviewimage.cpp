@@ -33,6 +33,9 @@ FrameViewImage::FrameViewImage(Frontend *f, QWidget *parent, int pS)
 {
     qDebug("FrameViewImage::Constructor --> Start");
 
+    frameViewWidth = 0;
+    frameViewHeight = 0;
+
     this->setObjectName("FrameViewImage");
 
     this->showLogo();
@@ -64,23 +67,8 @@ void FrameViewImage::initCompleted()
 {
     qDebug("FrameViewImage::initCompleted --> Start");
 
-    int activeExposure = frontend->getProject()->getActiveExposureIndex();
-    int exposureIndex = activeExposure - this->mixCount + 1;
-
-    if (exposureIndex < 0) {
-        exposureIndex = 0;
-    }
-
-    this->clearImageBuffer();
-
-    for ( ; exposureIndex <= activeExposure ; exposureIndex++ ) {
-        Exposure *exposure = frontend->getProject()->getExposure(frontend->getProject()->getActiveSceneIndex(),
-                                                                 frontend->getProject()->getActiveTakeIndex(),
-                                                                 exposureIndex);
-        addToImageBuffer(QImage(exposure->getImagePath()));
-    }
-
-    emit cameraReady();
+    clearImageBuffer();
+    loadImageBuffer();
 
     qDebug("FrameViewImage::initCompleted --> End");
 }
@@ -263,6 +251,8 @@ void FrameViewImage::resizeEvent(QResizeEvent*)
 {
     qDebug("FrameViewImage::resizeEvent --> Start");
 
+    frameViewWidth = width();
+    frameViewHeight = height();
     QString iconFile(frontend->getGraphicsDirName());
     iconFile.append(QLatin1String("qstopmotion_logo_60.png"));
     actualImage.load(iconFile);
@@ -275,11 +265,26 @@ void FrameViewImage::paintEvent(QPaintEvent *)
 {
     // qDebug("FrameViewImage::paintEvent --> Start");
 
-    QImage   outputImage(actualImage);
+    QImage   outputImage;
+
+    double imageWidth = actualImage.width();
+    double imageHeight = actualImage.height();
+    double widthScale = imageWidth / frameViewWidth;
+    double heightScale = imageHeight / frameViewHeight;
+
+    if (widthScale > heightScale) {
+        outputImage = actualImage.scaledToWidth(frameViewWidth);
+    }
+    else {
+        outputImage = actualImage.scaledToHeight(frameViewHeight);
+    }
+    int bufferWidth = outputImage.width();
+    int bufferHeigth = outputImage.height();
+
     QPainter imagePainter(&outputImage);
     QPainter widgetPainter(this);
     QRect    widgetRect(this->rect());
-    QSize    imageSize(actualImage.size());
+    QSize    imageSize(outputImage.size());
     int      x = (widgetRect.width() - imageSize.width()) / 2;
     int      y = (widgetRect.height() - imageSize.height()) / 2;
 
@@ -360,13 +365,50 @@ void FrameViewImage::addToImageBuffer(QImage const image)
 {
     qDebug("FrameViewImage::addToImageBuffer --> Start");
 
+    double imageWidth = image.width();
+    double imageHeight = image.height();
+    double widthScale = imageWidth / frameViewWidth;
+    double heightScale = imageHeight / frameViewHeight;
+
     while (imageBuffer.count() >= this->mixCount) {
         imageBuffer.removeFirst();
     }
 
-    imageBuffer.append(image);
+    if (widthScale > heightScale) {
+        imageBuffer.append(image.scaledToWidth(frameViewWidth));
+    }
+    else {
+        imageBuffer.append(image.scaledToHeight(frameViewHeight));
+    }
+    int bufferWidth = imageBuffer.last().width();
+    int bufferHeigth = imageBuffer.last().height();
+
+    int widgetWidth = width();
+    int widgetHeigth = height();
 
     qDebug("FrameViewImage::addToImageBuffer --> End");
+}
+
+
+void FrameViewImage::loadImageBuffer()
+{
+    qDebug("FrameViewImage::loadImageBuffer --> Start");
+
+    int activeExposure = frontend->getProject()->getActiveExposureIndex();
+    int exposureIndex = activeExposure - this->mixCount + 1;
+
+    if (exposureIndex < 0) {
+        exposureIndex = 0;
+    }
+
+    for ( ; exposureIndex <= activeExposure ; exposureIndex++ ) {
+        Exposure *exposure = frontend->getProject()->getExposure(frontend->getProject()->getActiveSceneIndex(),
+                                                                 frontend->getProject()->getActiveTakeIndex(),
+                                                                 exposureIndex);
+        addToImageBuffer(QImage(exposure->getImagePath()));
+    }
+
+    qDebug("FrameViewImage::loadImageBuffer --> End");
 }
 
 

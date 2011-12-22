@@ -134,9 +134,6 @@ public:
      */
     void updateActivateExposure();
 
-signals:
-    void cameraReady();
-
 public slots:
     /**
      * Draws the next frame from the camera.
@@ -155,12 +152,14 @@ protected:
 private:
     static const int alphaLut[5];
 
-    QImage          actualImage;
-    QQueue<QImage>  imageBuffer;
+    QImage           actualImage;
+    QQueue<QImage>   imageBuffer;
 
-    QTimer grabTimer;
-    QTimer playbackTimer;
+    QTimer           grabTimer;
+    QTimer           playbackTimer;
     ImageGrabThread *grabThread;
+    int              frameViewWidth;
+    int              frameViewHeight;
 
     /**
      * Loads the new frames picture into the frameview.
@@ -179,6 +178,11 @@ private:
      * Add a image to the image buffer
      */
     void addToImageBuffer(QImage const image);
+
+    /**
+     * Load all entries in the image buffer
+     */
+    void loadImageBuffer();
 
     /**
      * Delete all entries in the image buffer

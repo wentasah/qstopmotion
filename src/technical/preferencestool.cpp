@@ -314,10 +314,11 @@ void PreferencesTool::setBasicPreferenceDefaults()
 {
     setBasicPreference("language", "en");
     setBasicPreference("capturebutton", captureButtonAfter);
+    setBasicPreference("defaultrecordingmode", 0);
     setBasicPreference("defaultvideosource", 0);
-    setBasicPreference("defaultviewingmode", 0);
-    setBasicPreference("defaultframespersecond", 12);
+    setBasicPreference("defaultmixingmode", 0);
     setBasicPreference("defaultmixcount", 2);
+    setBasicPreference("defaultframespersecond", 12);
     setBasicPreference("defaultplaybackcount", 5);
 }
 

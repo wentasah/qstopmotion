@@ -52,7 +52,7 @@ FrameViewInterface::FrameViewInterface(Frontend *f, QWidget *parent, int fps)
     widthConst  = 4;
     heightConst = 3;
     mixCount = 2;
-    viewingMode = 0;
+    mixingMode = 0;
 
     setNormalRatio();
 
@@ -142,13 +142,13 @@ void FrameViewInterface::updateDescriptionsUpdated()
 }
 
 
-void FrameViewInterface::updateViewingMode(int newViewingMode)
+void FrameViewInterface::updateMixingMode(int newMixingMode)
 {
-    qDebug("FrameViewInterface::updateViewingMode --> Start");
+    qDebug("FrameViewInterface::updateMixingMode --> Start");
 
-    this->setViewingMode(newViewingMode);
+    this->setMixingMode(newMixingMode);
 
-    qDebug("FrameViewInterface::updateViewingMode --> End");
+    qDebug("FrameViewInterface::updateMixingMode --> End");
 }
 
 
@@ -248,8 +248,6 @@ bool FrameViewInterface::on()
 
     this->initCompleted();
 
-    emit cameraReady();
-
     this->isPlayingVideo = true;
     grabTimer.start(150);
 
@@ -274,30 +272,30 @@ void FrameViewInterface::off()
 }
 
 
-int FrameViewInterface::getViewingMode() const
+int FrameViewInterface::getMixingMode() const
 {
-    return viewingMode;
+    return mixingMode;
 }
 
 
-bool FrameViewInterface::setViewingMode(int mode)
+bool FrameViewInterface::setMixingMode(int mode)
 {
-    qDebug("FrameViewInterface::setViewMode --> Start");
+    qDebug("FrameViewInterface::setMixingMode --> Start");
 
     // Going into playback mode.
-    if (mode == 2 && this->viewingMode != 2) {
+    if (mode == 2 && this->mixingMode != 2) {
         grabTimer.stop();
         playbackTimer.start(1000 / framesPerSecond);
     }
     // Going out of playback mode.
-    else if (mode != 2 && this->viewingMode == 2) {
+    else if (mode != 2 && this->mixingMode == 2) {
         playbackTimer.stop();
         grabTimer.start(150);
     }
 
-    this->viewingMode = mode;
+    this->mixingMode = mode;
 
-    qDebug("FrameViewInterface::setViewMode --> End (true)");
+    qDebug("FrameViewInterface::setMixingMode --> End (true)");
     return true;
 }
 

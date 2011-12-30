@@ -428,7 +428,7 @@ bool Exposure::readDataFromProject(QDomElement &exposureNode)
     while (!currNode.isNull()) {
         QString nodeName = currNode.nodeName();
         if (nodeName.compare("theframe") == 0) {
-            // The node is a theFrame node
+            // The node is a 'the Frame' node
             QString filename = currNode.text();
             if (!filename.isNull()) {
                 theFrame.clear();
@@ -437,7 +437,7 @@ bool Exposure::readDataFromProject(QDomElement &exposureNode)
             }
         }
         else {
-            // The node is a captureFrame node
+            // The node is a 'capture Frame' node
         }
 
         currNode = currNode.nextSiblingElement();

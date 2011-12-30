@@ -144,15 +144,15 @@ void DomainFacade::setVideoSource(int newVideoSource)
 }
 
 
-int DomainFacade::getViewingMode()
+int DomainFacade::getMixingMode()
 {
-    return animationProject->getViewingMode();
+    return animationProject->getMixingMode();
 }
 
 
-void DomainFacade::setViewingMode(int newViewingMode)
+void DomainFacade::setMixingMode(int newMixingMode)
 {
-    animationProject->setViewingMode(newViewingMode);
+    animationProject->setMixingMode(newMixingMode);
 }
 
 

@@ -35,24 +35,30 @@ RecordingTab::RecordingTab(Frontend *f,
     frontend               = f;
     runAnimationHandler    = rah;
     cameraHandler          = ch;
+    isCameraOn             = false;
+
+    recordingGroupBox      = 0;
+    recordingModeCombo     = 0;
 
     cameraGroupBox         = 0;
     videoSourceCombo       = 0;
     cameraButton           = 0;
 
     captureGroupBox        = 0;
-    viewingModeChooseCombo = 0;
-    unitModeChooseCombo    = 0;
+    mixingModeCombo        = 0;
     mixCountSliderCaption  = 0;
     mixCountSlider         = 0;
+
+    // autoGroupBox           = 0;
+    // unitModeCombo          = 0;
 
     playAccel              = 0;
     mixAccel               = 0;
     diffAccel              = 0;
     playbackAccel          = 0;
 
-    captureTimer = new QTimer(this);
-    connect(captureTimer, SIGNAL(timeout()), cameraHandler, SLOT(captureFrame()));
+    // captureTimer = new QTimer(this);
+    // connect(captureTimer, SIGNAL(timeout()), cameraHandler, SLOT(captureFrame()));
 
     this->setObjectName("RecordingTab");
 
@@ -71,6 +77,23 @@ void RecordingTab::makeGUI()
     int deviceSize = deviceNames.size();
 
     // ========================================================================
+    // Recording group box
+    recordingGroupBox = new QGroupBox(tr("Auto"));
+    // recordingGroupBox->setFlat(true);
+
+    recordingModeCombo = new QComboBox();
+    recordingModeCombo->setFocusPolicy(Qt::NoFocus);
+    connect(recordingModeCombo, SIGNAL(activated(int)), this, SLOT(changeRecordingMode(int)));
+
+    QVBoxLayout *recordingLayout = new QVBoxLayout;
+    recordingLayout->setMargin(4);
+    // recordingLayout->setSpacing(2);
+    // recordingLayout->addStretch(1);
+    recordingLayout->addWidget(recordingModeCombo);
+    recordingLayout->addStretch(10);
+    recordingGroupBox->setLayout(recordingLayout);
+
+    // ========================================================================
     // Camera group box
     cameraGroupBox = new QGroupBox(tr("Camera"));
     // cameraGroupBox->setFlat(true);
@@ -87,8 +110,7 @@ void RecordingTab::makeGUI()
     cameraButton->setIcon(QPixmap(iconFile));
     // cameraButton->setFlat(true);
     cameraButton->setFocusPolicy(Qt::NoFocus);
-    cameraHandler->setCameraButton(cameraButton);
-    connect(cameraButton, SIGNAL(clicked()), cameraHandler, SLOT(toggleCamera()));
+    connect(cameraButton, SIGNAL(clicked()), this, SLOT(cameraButtonClicked()));
     // cameraButton->setEnabled(false);
 
     QVBoxLayout *cameraLayout = new QVBoxLayout;
@@ -105,14 +127,9 @@ void RecordingTab::makeGUI()
     captureGroupBox = new QGroupBox(tr("Capture"));
     // secondGroupBox->setFlat(true);
 
-    viewingModeChooseCombo = new QComboBox();
-    viewingModeChooseCombo->setFocusPolicy(Qt::NoFocus);
-    connect(viewingModeChooseCombo, SIGNAL(activated(int)), this, SLOT(changeViewingMode(int)));
-
-    unitModeChooseCombo = new QComboBox();
-    unitModeChooseCombo->setFocusPolicy(Qt::NoFocus);
-    unitModeChooseCombo->setEnabled(false);
-    connect(unitModeChooseCombo, SIGNAL(activated(int)), this, SLOT(changeUnitMode(int)));
+    mixingModeCombo = new QComboBox();
+    mixingModeCombo->setFocusPolicy(Qt::NoFocus);
+    connect(mixingModeCombo, SIGNAL(activated(int)), this, SLOT(changeMixingMode(int)));
 
     mixCountSliderCaption = new QLabel();
 
@@ -129,22 +146,39 @@ void RecordingTab::makeGUI()
     captureLayout->setMargin(4);
     // captureLayout->setSpacing(2);
     // captureLayout->addStretch(1);
-    captureLayout->addWidget(viewingModeChooseCombo);
-    captureLayout->addWidget(unitModeChooseCombo);
+    captureLayout->addWidget(mixingModeCombo);
     captureLayout->addWidget(mixCountSliderCaption);
     captureLayout->addWidget(mixCountSlider);
     captureLayout->addStretch(10);
     captureGroupBox->setLayout(captureLayout);
     captureGroupBox->hide();
 
+    /* ========================================================================
+    // Auto group box
+    autoGroupBox = new QGroupBox(tr("Auto"));
+    autoGroupBox->setFlat(true);
+
+    unitModeChooseCombo = new QComboBox();
+    unitModeChooseCombo->setFocusPolicy(Qt::NoFocus);
+    unitModeChooseCombo->setEnabled(false);
+    connect(unitModeChooseCombo, SIGNAL(activated(int)), this, SLOT(changeUnitMode(int)));
+
+    QVBoxLayout *autoLayout = new QVBoxLayout;
+    autoLayout->setMargin(4);
+    autoLayout->setSpacing(2);
+    autoLayout->addStretch(1);
+    autoLayout->addWidget(unitModeChooseCombo);
+    */
+
     // ========================================================================
     // Tab layout
     tabLayout->setMargin(0);
     tabLayout->setSpacing(2);
     // tabLayout->addStretch(1);
+    tabLayout->addWidget(recordingGroupBox);
     tabLayout->addWidget(cameraGroupBox);
     tabLayout->addWidget(captureGroupBox);
-    // tabLayout->addWidget(thirdGroupBox);
+    // tabLayout->addWidget(autoGroupBox);
     tabLayout->addStretch(1);
 
     setLayout(tabLayout);
@@ -155,16 +189,15 @@ void RecordingTab::initialize()
 {
     qDebug() << "RecordingTab::initialize --> Start";
 
-    // PreferencesTool *pref = PreferencesTool::get();
     int videoSource = frontend->getProject()->getAnimationProject()->getVideoSource();
     this->videoSourceCombo->setCurrentIndex(videoSource);
 
-    int viewingMode = frontend->getProject()->getAnimationProject()->getViewingMode();
-    changeViewingMode(viewingMode);
-
+    int mixingMode = frontend->getProject()->getAnimationProject()->getMixingMode();
+    changeMixingMode(mixingMode);
+    /*
     int unitMode = frontend->getProject()->getAnimationProject()->getUnitMode();
     this->unitModeChooseCombo->setCurrentIndex(unitMode);
-
+    */
     qDebug() << "RecordingTab::initialize --> End";
 }
 
@@ -211,21 +244,26 @@ void RecordingTab::apply()
 
 void RecordingTab::retranslateStrings()
 {
+    recordingGroupBox->setTitle(tr("Recording"));
+    recordingModeCombo->addItem(tr("Single frame capture"));
+    // recordingModeCombo->addItem(tr("Automated recording"));
+
     cameraGroupBox->setTitle(tr("Camera"));
 
     captureGroupBox->setTitle(tr("Capture"));
-    viewingModeChooseCombo->clear();
-    viewingModeChooseCombo->addItem(tr("Mix"));
-    viewingModeChooseCombo->addItem(tr("Diff"));
-    viewingModeChooseCombo->addItem(tr("Playback"));
-    viewingModeChooseCombo->addItem(tr("Auto"));
-
-    unitModeChooseCombo->clear();
-    unitModeChooseCombo->addItem("");
-    unitModeChooseCombo->addItem(tr("Pr sec"));
-    unitModeChooseCombo->addItem(tr("Pr min"));
-    unitModeChooseCombo->addItem(tr("Pr hr"));
-    unitModeChooseCombo->setCurrentIndex(0);
+    mixingModeCombo->clear();
+    mixingModeCombo->addItem(tr("Mix"));
+    mixingModeCombo->addItem(tr("Diff"));
+    mixingModeCombo->addItem(tr("Playback"));
+    /*
+    autoGroupBox->setTitle(tr("Auto"));
+    unitModeCombo->clear();
+    unitModeCombo->addItem("");
+    unitModeCombo->addItem(tr("Pr sec"));
+    unitModeCombo->addItem(tr("Pr min"));
+    unitModeCombo->addItem(tr("Pr hr"));
+    unitModeCombo->setCurrentIndex(0);
+    */
 
     QString infoText =
         tr("<h4>Toggle camera on/off (C)</h4> "
@@ -249,19 +287,28 @@ void RecordingTab::retranslateStrings()
 
 void RecordingTab::setMixingMode()
 {
-    changeViewingMode(0);
+    changeMixingMode(0);
 }
 
 
 void RecordingTab::setDiffingMode()
 {
-    changeViewingMode(1);
+    changeMixingMode(1);
 }
 
 
 void RecordingTab::setPlaybackMode()
 {
-    changeViewingMode(2);
+    changeMixingMode(2);
+}
+
+
+void RecordingTab::changeRecordingMode(int index)
+{
+    qDebug() << "RecordingTab::changeRecordingMode --> Start";
+
+
+    qDebug() << "RecordingTab::changeRecordingMode --> End";
 }
 
 
@@ -275,59 +322,92 @@ void RecordingTab::changeVideoSource(int index)
 }
 
 
-void RecordingTab::changeViewingMode(int newViewingMode)
+void RecordingTab::cameraButtonClicked()
 {
-    qDebug() << "RecordingTab::changeViewingMode --> Start";
+    qDebug("RecordingTab::cameraButtonClicked --> Start");
 
-    frontend->getProject()->getAnimationProject()->setViewingMode(newViewingMode);
+    if (isCameraOn == false) {
+        qDebug("RecordingTab::cameraButtonClicked --> Start playing video from webcam");
 
-    frontend->getProject()->getView()->notifyNewViewingMode(newViewingMode);
+        QString iconFile(frontend->getIconsDirName());
+        iconFile.append(QLatin1String("cameraoff.png"));
 
-    // viewingModeChooseCombo->setCurrentIndex(newViewingMode);
-    switch (newViewingMode) {
+        cameraButton->setIcon(QIcon(iconFile));
+
+        isCameraOn = frontend->startGrabber();
+    } else {
+        qDebug("RecordingTab::cameraButtonClicked --> Stop playing video from webcam");
+
+        QString iconFile(frontend->getIconsDirName());
+        iconFile.append(QLatin1String("cameraon.png"));
+
+        cameraButton->setIcon(QIcon(iconFile));
+
+        frontend->stopGrabber();
+
+        isCameraOn = false;
+    }
+
+    qDebug("RecordingTab::cameraButtonClicked --> End");
+}
+
+
+void RecordingTab::changeMixingMode(int newMixingMode)
+{
+    qDebug() << "RecordingTab::changeMixingMode --> Start";
+
+    frontend->getProject()->getAnimationProject()->setMixingMode(newMixingMode);
+
+    frontend->getProject()->getView()->notifyNewMixingMode(newMixingMode);
+
+    // mixingModeCombo->setCurrentIndex(newMixingMode);
+    switch (newMixingMode) {
     case 0:
         mixCountSliderCaption->setEnabled(true);
         mixCountSlider->setEnabled(true);
         mixCountSlider->setMaximum(5);
         mixCountSlider->setValue(frontend->getProject()->getAnimationProject()->getMixCount());
-        unitModeChooseCombo->setEnabled(false);
-        unitModeChooseCombo->setCurrentIndex(0);
-        captureTimer->stop();
         break;
     case 1:
         mixCountSliderCaption->setEnabled(false);
         mixCountSlider->setEnabled(false);
         mixCountSlider->setValue(1);
-        unitModeChooseCombo->setEnabled(false);
-        unitModeChooseCombo->setCurrentIndex(0);
-        captureTimer->stop();
         break;
     case 2:
         mixCountSliderCaption->setEnabled(true);
         mixCountSlider->setEnabled(true);
         mixCountSlider->setMaximum(50);
         mixCountSlider->setValue(frontend->getProject()->getAnimationProject()->getPlaybackCount());
-        unitModeChooseCombo->setEnabled(false);
-        unitModeChooseCombo->setCurrentIndex(0);
-        captureTimer->stop();
-        break;
-    case 3:
-        mixCountSliderCaption->setEnabled(true);
-        mixCountSlider->setEnabled(true);
-        mixCountSlider->setMaximum(10);
-        mixCountSlider->setValue(1);
-        unitModeChooseCombo->setEnabled(true);
-        unitModeChooseCombo->setCurrentIndex(0);
         break;
     default:
-        Q_ASSERT(newViewingMode < 4);
+        Q_ASSERT(newMixingMode < 3);
         break;
     }
 
-    qDebug() << "RecordingTab::changeViewingMode --> End";
+    qDebug() << "RecordingTab::changeMixingMode --> End";
 }
 
 
+void RecordingTab::changeMixCount(int newMixCount)
+{
+    int mixingMode = mixingModeCombo->currentIndex();
+    switch (mixingMode) {
+    case 0:
+        frontend->getProject()->getAnimationProject()->setMixCount(newMixCount);
+        break;
+    case 1:
+        break;
+    case 2:
+        frontend->getProject()->getAnimationProject()->setPlaybackCount(newMixCount);
+        break;
+    case 3:
+        break;
+    }
+
+    frontend->getProject()->getView()->notifyNewMixCount(newMixCount);
+}
+
+/*
 void RecordingTab::changeUnitMode(int index)
 {
     qDebug() << "RecordingTab::changeUnitMode --> Start";
@@ -336,8 +416,8 @@ void RecordingTab::changeUnitMode(int index)
 
     int sliderValue = mixCountSlider->value();
     if (sliderValue == 0 || index == 0) {
-        if (captureTimer->isActive()) {
-            captureTimer->stop();
+        if (autoCaptureTimer->isActive()) {
+            autoCaptureTimer->stop();
         }
         return;
     }
@@ -354,8 +434,8 @@ void RecordingTab::changeUnitMode(int index)
         factor = 3600000;
         break;
     default:
-        if (captureTimer->isActive()) {
-            captureTimer->stop();
+        if (autoCaptureTimer->isActive()) {
+            autoCaptureTimer->stop();
         }
         break;
     }
@@ -364,18 +444,18 @@ void RecordingTab::changeUnitMode(int index)
         // Grab the first frame manually
         cameraHandler->captureFrame();
         // then grab at the given interval
-        captureTimer->start(factor / sliderValue);
+        autoCaptureTimer->start(factor / sliderValue);
     } else {
-        captureTimer->setInterval(factor / sliderValue);
+        autoCaptureTimer->setInterval(factor / sliderValue);
     }
 
     qDebug() << "RecordingTab::changeUnitMode --> End";
 }
 
 
-void RecordingTab::changeMixCount(int newMixCount)
+void RecordingTab::changeFpuCount(int newFpuCount)
 {
-    if (captureTimer->isActive() && newMixCount != 0) {
+    if (autoCaptureTimer->isActive() && newMixCount != 0) {
         int factor = 0;
         int unitMode = unitModeChooseCombo->currentIndex();
         switch (unitMode) {
@@ -389,7 +469,7 @@ void RecordingTab::changeMixCount(int newMixCount)
             factor = 3600000;
             break;
         }
-        captureTimer->setInterval(factor / newMixCount);
+        autoCaptureTimer->setInterval(factor / newMixCount);
     }
 
     int viewingMode = viewingModeChooseCombo->currentIndex();
@@ -408,9 +488,9 @@ void RecordingTab::changeMixCount(int newMixCount)
 
     frontend->getProject()->getView()->notifyNewMixCount(newMixCount);
 }
+*/
 
-
-void RecordingTab::cameraOn(bool isOn)
+void RecordingTab::cameraStateChanged(bool isOn)
 {
     qDebug("RecordingTab::cameraOn --> Start");
 
@@ -418,9 +498,11 @@ void RecordingTab::cameraOn(bool isOn)
         runAnimationHandler->stopAnimation();
         captureGroupBox->show();
     } else {
-        if (captureTimer->isActive()) {
-            captureTimer->stop();
+        /*
+        if (autoCaptureTimer->isActive()) {
+            autoCaptureTimer->stop();
         }
+        */
         captureGroupBox->hide();
     }
 
@@ -442,6 +524,3 @@ void RecordingTab::createAccelerators()
     playbackAccel = new QShortcut(QKeySequence(Qt::Key_3), this);
     connect(playbackAccel, SIGNAL(activated()), this, SLOT(setPlaybackMode()));
 }
-
-
-

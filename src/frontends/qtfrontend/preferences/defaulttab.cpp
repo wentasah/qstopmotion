@@ -39,15 +39,16 @@ DefaultTab::DefaultTab(Frontend *f, QWidget *parent)
 
     frontend               = f;
 
+    recordingGroupBox      = 0;
+    recordingModeCombo     = 0;
+
     cameraGroupBox         = 0;
     videoSourceCombo       = 0;
     defaultVideoSource     = 0;
 
     captureGroupBox        = 0;
-    viewingModeChooseCombo = 0;
-    defaultViewingMode     = 0;
-    unitModeChooseCombo    = 0;
-    defaultUnitMode        = 0;
+    mixingModeCombo        = 0;
+    defaultMixingMode      = 0;
     mixCountSliderCaption  = 0;
     mixCountSlider         = 0;
     defaultMixCount        = 0;
@@ -55,6 +56,10 @@ DefaultTab::DefaultTab(Frontend *f, QWidget *parent)
     fpsChooserCaption      = 0;
     fpsChooser             = 0;
     defaultFps             = 0;
+
+    // autoGroupBox           = 0;
+    // unitModeCombo          = 0;
+    // defaultUnitMode        = 0;
 
     this->setObjectName("DefaultTab");
 
@@ -69,6 +74,23 @@ void DefaultTab::makeGUI()
     QString iconFile(frontend->getIconsDirName());
 
     QVBoxLayout *tabLayout = new QVBoxLayout;
+
+    recordingGroupBox = new QGroupBox(tr("Recording"));
+    // recordingGroupBox->setFlat(true);
+
+    recordingModeCombo = new QComboBox();
+    recordingModeCombo->setFocusPolicy(Qt::NoFocus);
+    connect(recordingModeCombo, SIGNAL(activated(int)), this, SLOT(changeRecordingMode(int)));
+    recordingModeCombo->addItem(tr("Single frame capture"));
+    // recordingModeCombo->addItem(tr("Automated recording"));
+
+    QVBoxLayout *recordingLayout = new QVBoxLayout;
+    // recordingLayout->setMargin(0);
+    // recordingLayout->setSpacing(2);
+    // recordingLayout->addStretch(1);
+    recordingLayout->addWidget(recordingModeCombo);
+    recordingLayout->addStretch(10);
+    recordingGroupBox->setLayout(recordingLayout);
 
     cameraGroupBox = new QGroupBox(tr("Camera"));
     // cameraGroupBox->setFlat(true);
@@ -87,35 +109,23 @@ void DefaultTab::makeGUI()
 #ifdef Q_WS_MAC
 #endif
 
-    QVBoxLayout *firstLayout = new QVBoxLayout;
-    // firstLayout->setMargin(0);
-    // firstLayout->setSpacing(2);
-    // firstLayout->addStretch(1);
-    firstLayout->addWidget(videoSourceCombo);
-    firstLayout->addStretch(10);
-    cameraGroupBox->setLayout(firstLayout);
+    QVBoxLayout *cameraLayout = new QVBoxLayout;
+    // cameraLayout->setMargin(0);
+    // cameraLayout->setSpacing(2);
+    // cameraLayout->addStretch(1);
+    cameraLayout->addWidget(videoSourceCombo);
+    cameraLayout->addStretch(10);
+    cameraGroupBox->setLayout(cameraLayout);
 
     captureGroupBox = new QGroupBox(tr("Capture"));
     // secondGroupBox->setFlat(true);
 
-    viewingModeChooseCombo = new QComboBox();
-    viewingModeChooseCombo->setFocusPolicy(Qt::NoFocus);
-    connect(viewingModeChooseCombo, SIGNAL(activated(int)), this, SLOT(changeViewingMode(int)));
-    viewingModeChooseCombo->addItem(tr("Mix"));
-    viewingModeChooseCombo->addItem(tr("Diff"));
-    viewingModeChooseCombo->addItem(tr("Playback"));
-    viewingModeChooseCombo->addItem(tr("Auto"));
-
-
-    unitModeChooseCombo = new QComboBox();
-    unitModeChooseCombo->setFocusPolicy(Qt::NoFocus);
-    // unitModeChooseCombo->setEnabled(false);
-    connect(unitModeChooseCombo, SIGNAL(activated(int)), this, SLOT(changeUnitMode(int)));
-    unitModeChooseCombo->addItem("");
-    unitModeChooseCombo->addItem(tr("Pr sec"));
-    unitModeChooseCombo->addItem(tr("Pr min"));
-    unitModeChooseCombo->addItem(tr("Pr hr"));
-
+    mixingModeCombo = new QComboBox();
+    mixingModeCombo->setFocusPolicy(Qt::NoFocus);
+    connect(mixingModeCombo, SIGNAL(activated(int)), this, SLOT(changeMixingMode(int)));
+    mixingModeCombo->addItem(tr("Mix"));
+    mixingModeCombo->addItem(tr("Diff"));
+    mixingModeCombo->addItem(tr("Playback"));
     mixCountSliderCaption = new QLabel(tr("Number of images:"));
     QString infoText =
         tr("<h4>Number of images</h4> "
@@ -134,7 +144,7 @@ void DefaultTab::makeGUI()
     mixCountSlider->setValue(2);
     mixCountSlider->setTickPosition(QSlider::TicksBelow);
     mixCountSlider->setFocusPolicy(Qt::NoFocus);
-    connect(mixCountSlider, SIGNAL(valueChanged(int)), this, SLOT(updateSliderValue(int)));
+    connect(mixCountSlider, SIGNAL(valueChanged(int)), this, SLOT(changeMixCount(int)));
     mixCountSlider->setWhatsThis(infoText);
 
     fpsChooserCaption = new QLabel(tr("FPS chooser"));
@@ -155,23 +165,40 @@ void DefaultTab::makeGUI()
     fpsChooser->setFocusPolicy(Qt::NoFocus);
     fpsChooser->setWhatsThis(infoText);
 
-    QVBoxLayout *secondLayout = new QVBoxLayout;
-    secondLayout->addWidget(viewingModeChooseCombo);
-    secondLayout->addWidget(unitModeChooseCombo);
-    secondLayout->addWidget(mixCountSliderCaption);
-    secondLayout->addWidget(mixCountSlider);
-    secondLayout->addWidget(fpsChooserCaption);
-    secondLayout->addWidget(fpsChooser);
-    secondLayout->addStretch(10);
-    captureGroupBox->setLayout(secondLayout);
-    // captureGroupBox->hide();
+    QVBoxLayout *captureLayout = new QVBoxLayout;
+    captureLayout->addWidget(mixingModeCombo);
+    captureLayout->addWidget(mixCountSliderCaption);
+    captureLayout->addWidget(mixCountSlider);
+    captureLayout->addWidget(fpsChooserCaption);
+    captureLayout->addWidget(fpsChooser);
+    captureLayout->addStretch(10);
+    captureGroupBox->setLayout(captureLayout);
+
+    /*
+    autoGroupBox = new QGroupBox(tr("Auto"));
+    // autoGroupBox->setFlat(true);
+
+    unitModeCombo = new QComboBox();
+    unitModeCombo->setFocusPolicy(Qt::NoFocus);
+    // unitModeCombo->setEnabled(false);
+    connect(unitModeCombo, SIGNAL(activated(int)), this, SLOT(changeUnitMode(int)));
+    unitModeCombo->addItem("");
+    unitModeCombo->addItem(tr("Pr sec"));
+    unitModeCombo->addItem(tr("Pr min"));
+    unitModeCombo->addItem(tr("Pr hr"));
+
+    QVBoxLayout *autoLayout = new QVBoxLayout;
+    autoLayout->addWidget(unitModeCombo);
+    autoGroupBox->setLayout(autoLayout);
+    */
 
     tabLayout->setMargin(0);
     tabLayout->setSpacing(2);
     // tabLayout->addStretch(1);
+    tabLayout->addWidget(recordingGroupBox);
     tabLayout->addWidget(cameraGroupBox);
     tabLayout->addWidget(captureGroupBox);
-    // tabLayout->addWidget(thirdGroupBox);
+    // tabLayout->addWidget(autoGroupBox);
     tabLayout->addStretch(1);
 
     setLayout(tabLayout);
@@ -186,22 +213,22 @@ void DefaultTab::initialize()
 
     PreferencesTool *pref = frontend->getPreferences();
 
+    defaultRecordingMode = pref->getBasicPreference("defaultrecordingmode", 0);
+    recordingModeCombo->setCurrentIndex(defaultRecordingMode);
+    changeRecordingMode(defaultRecordingMode);
+
     defaultVideoSource = pref->getBasicPreference("defaultvideosource", 0);
     videoSourceCombo->setCurrentIndex(defaultVideoSource);
     changeVideoSource(defaultVideoSource);
 
-    defaultViewingMode = pref->getBasicPreference("defaultviewingmode", 0);
-    viewingModeChooseCombo->setCurrentIndex(defaultViewingMode);
-    changeViewingMode(defaultViewingMode);
-
-    defaultUnitMode = pref->getBasicPreference("defaultunitmode", 0);
-    unitModeChooseCombo->setCurrentIndex(defaultUnitMode);
-    changeUnitMode(defaultUnitMode);
+    defaultMixingMode = pref->getBasicPreference("defaultmixingmode", 0);
+    mixingModeCombo->setCurrentIndex(defaultMixingMode);
+    changeMixingMode(defaultMixingMode);
 
     defaultMixCount = frontend->getPreferences()->getBasicPreference("defaultmixcount", 2);
     defaultPlaybackCount = frontend->getPreferences()->getBasicPreference("defaultplaybackcount", 5);
 
-    switch (defaultViewingMode) {
+    switch (defaultMixingMode) {
     case 0:
         mixCountSlider->setValue(defaultMixCount);
         break;
@@ -210,12 +237,16 @@ void DefaultTab::initialize()
     case 2:
         mixCountSlider->setValue(defaultPlaybackCount);
         break;
-    case 3:
-        break;
     }
 
     defaultFps = pref->getBasicPreference("defaultframespersecond", 10);
     fpsChooser->setValue(defaultFps);
+
+    /*
+        defaultUnitMode = pref->getBasicPreference("defaultunitmode", 0);
+        unitModeCombo->setCurrentIndex(defaultUnitMode);
+        changeUnitMode(defaultUnitMode);
+    */
 
     qDebug("DefaultTab::initialize --> End");
 }
@@ -237,6 +268,13 @@ void DefaultTab::apply()
 
     PreferencesTool *pref = frontend->getPreferences();
 
+    int newRecordingMode = recordingModeCombo->currentIndex();
+    if (defaultRecordingMode != newRecordingMode)
+    {
+        pref->setBasicPreference("defaultrecordingmode", newRecordingMode);
+        defaultRecordingMode = newRecordingMode;
+    }
+
     int newVideoSource = videoSourceCombo->currentIndex();
     if (defaultVideoSource != newVideoSource)
     {
@@ -244,24 +282,17 @@ void DefaultTab::apply()
         defaultVideoSource = newVideoSource;
     }
 
-    int newViewingMode = viewingModeChooseCombo->currentIndex();
-    if (defaultViewingMode != newViewingMode)
+    int newMixingMode = mixingModeCombo->currentIndex();
+    if (defaultMixingMode != newMixingMode)
     {
-        pref->setBasicPreference("defaultviewingmode", newViewingMode);
-        defaultViewingMode = newViewingMode;
-    }
-
-    int newUnitMode = unitModeChooseCombo->currentIndex();
-    if (defaultUnitMode != newUnitMode)
-    {
-        pref->setBasicPreference("defaultunitmode", newUnitMode);
-        defaultUnitMode = newUnitMode;
+        pref->setBasicPreference("defaultmixingmode", newMixingMode);
+        defaultMixingMode = newMixingMode;
     }
 
     int newMixCount = mixCountSlider->value();
     if (defaultMixCount != newMixCount)
     {
-        switch (newViewingMode) {
+        switch (newMixingMode) {
         case 0:
             pref->setBasicPreference("defaultmixcount", newMixCount);
             break;
@@ -283,7 +314,14 @@ void DefaultTab::apply()
         pref->setBasicPreference("defaultframespersecond", newFps);
         defaultFps = newFps;
     }
-
+/*
+    int newUnitMode = unitModeChooseCombo->currentIndex();
+    if (defaultUnitMode != newUnitMode)
+    {
+        pref->setBasicPreference("defaultunitmode", newUnitMode);
+        defaultUnitMode = newUnitMode;
+    }
+*/
     qDebug("DefaultTab::apply --> End");
 }
 
@@ -292,36 +330,21 @@ void DefaultTab::reset()
 {
     qDebug("DefaultTab::reset --> Start");
 
+    changeRecordingMode(defaultRecordingMode);
     changeVideoSource(defaultVideoSource);
-    changeViewingMode(defaultViewingMode);
-    changeUnitMode(defaultUnitMode);
+    changeMixingMode(defaultMixingMode);
     this->mixCountSlider->setValue(defaultMixCount);
     this->fpsChooser->setValue(defaultFps);
-
+/*
+    changeUnitMode(defaultUnitMode);
+*/
     qDebug("DefaultTab::reset --> End");
 }
 
 
-void DefaultTab::updateSliderValue(int /*sliderValue*/)
+void DefaultTab::changeRecordingMode(int index)
 {
-    /*
-    if (sliderValue != 0) {
-        int factor = 0;
-        int index = unitModeChooseCombo->currentIndex();
-        switch (index) {
-        case 1:
-            factor = 1000;
-            break;
-        case 2:
-            factor = 60000;
-            break;
-        case 3:
-            factor = 3600000;
-            break;
-        }
-        captureTimer->setInterval(factor / sliderValue);
-    }
-    */
+    this->recordingModeCombo->setCurrentIndex(index);
 }
 
 
@@ -331,7 +354,7 @@ void DefaultTab::changeVideoSource(int index)
 }
 
 
-void DefaultTab::changeViewingMode(int index)
+void DefaultTab::changeMixingMode(int index)
 {
     switch (index) {
     case 0:
@@ -339,42 +362,32 @@ void DefaultTab::changeViewingMode(int index)
         mixCountSlider->setEnabled(true);
         mixCountSlider->setMaximum(5);
         mixCountSlider->setValue(defaultMixCount);
-        unitModeChooseCombo->setEnabled(false);
-        unitModeChooseCombo->setCurrentIndex(0);
         break;
     case 1:
         mixCountSliderCaption->setEnabled(false);
         mixCountSlider->setEnabled(false);
-        unitModeChooseCombo->setEnabled(false);
-        unitModeChooseCombo->setCurrentIndex(0);
         break;
     case 2:
         mixCountSliderCaption->setEnabled(true);
         mixCountSlider->setEnabled(true);
         mixCountSlider->setMaximum(50);
         mixCountSlider->setValue(defaultPlaybackCount);
-        unitModeChooseCombo->setEnabled(false);
-        unitModeChooseCombo->setCurrentIndex(0);
-        break;
-    case 3:
-        mixCountSliderCaption->setEnabled(true);
-        mixCountSlider->setEnabled(true);
-        mixCountSlider->setMaximum(10);
-        mixCountSlider->setValue(1);
-        unitModeChooseCombo->setEnabled(true);
-        unitModeChooseCombo->setCurrentIndex(0);
         break;
     default:
-        Q_ASSERT(index <= 3);
+        Q_ASSERT(index < 3);
 
         break;
     }
 }
 
 
-void DefaultTab::changeUnitMode(int /*index*/)
+void DefaultTab::changeMixCount(int /*sliderValue*/)
 {
-    /*
+}
+
+/*
+void DefaultTab::changeUnitMode(int index)
+{
     int sliderValue = mixCountSlider->value();
     if (sliderValue == 0 || index == 0) {
         return;
@@ -394,5 +407,26 @@ void DefaultTab::changeUnitMode(int /*index*/)
     default:
         break;
     }
-    */
 }
+
+
+void DefaultTab::updateSliderValue(int sliderValue)
+{
+    if (sliderValue != 0) {
+        int factor = 0;
+        int index = unitModeCombo->currentIndex();
+        switch (index) {
+        case 1:
+            factor = 1000;
+            break;
+        case 2:
+            factor = 60000;
+            break;
+        case 3:
+            factor = 3600000;
+            break;
+        }
+        captureTimer->setInterval(factor / sliderValue);
+    }
+}
+*/

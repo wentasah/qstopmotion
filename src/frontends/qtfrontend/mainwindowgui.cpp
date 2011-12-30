@@ -576,6 +576,8 @@ bool MainWindowGUI::startGrabber()
     frameView->on();
     frontend->hideProgress();
 
+    emit cameraStateChanged(true);
+
     qDebug("MainWindowGUI::on --> End");
     return true;
 }
@@ -584,6 +586,8 @@ bool MainWindowGUI::startGrabber()
 void MainWindowGUI::stopGrabber()
 {
     qDebug("MainWindowGUI::off --> Start");
+
+    emit cameraStateChanged(false);
 
     frameView->off();
     grabber->finalize();
@@ -1069,7 +1073,7 @@ void MainWindowGUI::createAccelerators()
     connect(prevSceneAccel, SIGNAL(activated()), runAnimationHandler, SLOT(selectPreviousScene()));
 
     QShortcut *toggleCameraAccel = new QShortcut(QKeySequence(Qt::Key_C), this);
-    connect(toggleCameraAccel, SIGNAL(activated()), cameraHandler, SLOT(toggleCamera()));
+    connect(toggleCameraAccel, SIGNAL(activated()), recordingTab, SLOT(cameraButtonClicked()));
 
     QShortcut *captureAccel = new QShortcut(QKeySequence(Qt::Key_Space), this);
     connect(captureAccel, SIGNAL(activated()), cameraHandler, SLOT(captureFrame()));
@@ -1372,7 +1376,8 @@ void MainWindowGUI::makeToolsMenu(QHBoxLayout *layout)
     iconFile.append(QLatin1String("compositing.png"));
     sideBar->addTab(compositingTab, QIcon(iconFile), QString(tr("Compositing")));
 */
-    connect(cameraHandler, SIGNAL(cameraStateChanged(bool)), recordingTab, SLOT(cameraOn(bool)));
+    connect(this, SIGNAL(cameraStateChanged(bool)), recordingTab, SLOT(cameraStateChanged(bool)));
+    connect(this, SIGNAL(cameraStateChanged(bool)), cameraHandler, SLOT(cameraStateChanged(bool)));
 }
 
 /*
@@ -1441,7 +1446,6 @@ void MainWindowGUI::makeViews(QHBoxLayout *layout)
     viewArea->setLayout(viewAreaLayout);
     layout->addWidget(viewArea);
 
-    connect(frameView, SIGNAL(cameraReady()), cameraHandler, SLOT(switchToVideoView()));
     connect(cameraHandler, SIGNAL(capturedFrame()), this, SLOT(activateMenuOptions()));
 }
 
@@ -1853,7 +1857,7 @@ void MainWindowGUI::setProjectSettingsToDefault()
     PreferencesTool *pref = frontend->getPreferences();
 
     frontend->getProject()->setVideoSource(pref->getBasicPreference("defaultsource", 0));
-    frontend->getProject()->setViewingMode(pref->getBasicPreference("defaultviewingmode", 0));
+    frontend->getProject()->setMixingMode(pref->getBasicPreference("defaultmixingmode", 0));
     frontend->getProject()->setUnitMode(pref->getBasicPreference("defaultunitmode", 0));
     frontend->getProject()->setMixCount(pref->getBasicPreference("defaultmixcount", 0));
     frontend->getProject()->setPlaybackCount(pref->getBasicPreference("defaultplaybackcount", 0));

@@ -351,6 +351,12 @@ signals:
     void startOpenProject();
     void startExit();
 
+    /**
+     * This signal is emitted when the state of the camera is changed.
+     * @param isActivated true if the camera has been activated.
+     */
+    void cameraStateChanged(bool isActivated);
+
 public:
 
 private:

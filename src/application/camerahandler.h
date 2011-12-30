@@ -52,11 +52,6 @@ public:
     ~CameraHandler();
 
     /**
-     *
-     */
-    void setCameraButton(QPushButton *cameraButton);
-
-    /**
      * A new capture button function is selected in the preferences menu.
      * @param newFunction New selected function.
      */
@@ -72,29 +67,20 @@ public slots:
     /**
      *
      */
-    void toggleCamera();
-
-    /**
-     *
-     */
     void captureFrame();
 
     /**
-     * Slot to recieve a message when the videoView are finished seting up the
-     * camera.
+     * Slot for being notified when the camera is turned on.
+     * @param isOn true if the camera is turned on.
      */
-    void switchToVideoView();
+    void cameraStateChanged(bool isOn);
 
 private:
     Frontend           *frontend;
-    QPushButton        *cameraButton;
     QTimer             *timer;
     QString             temp;
     bool                isCameraOn;
     PreferencesTool::captureButtonFunction captureFunction;
-
-    void cameraOn();
-    void cameraOff();
 
 private slots:
     /**
@@ -107,12 +93,6 @@ signals:
      *
      */
     void capturedFrame();
-
-    /**
-     * This signal is emitted when the state of the camera is changed.
-     * @param isActivated true if the camera has been activated.
-     */
-    void cameraStateChanged(bool isActivated);
 
 };
 

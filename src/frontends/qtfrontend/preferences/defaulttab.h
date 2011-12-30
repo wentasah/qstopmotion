@@ -79,50 +79,70 @@ protected:
 
 private slots:
     /**
-     * Slot for notified the toolsmenu when the grabber source changes, so that grabber
+     * Slot for notified the default tab when the recording mode changes, so that widgets
+     * can be updated.
+     * @param index the new recording mode.
+     */
+    void changeRecordingMode(int index);
+
+    /**
+     * Slot for notified the default tab when the grabber source changes, so that grabber
      * can be updated.
      * @param index the new viewing mode.
      */
     void changeVideoSource(int index);
 
     /**
-     * Slot for notified the toolsmenu when the viewing mode changes, so that widgets
+     * Slot for notified the default tab when the viewing mode changes, so that widgets
      * can be updated.
      * @param index the new viewing mode.
      */
-    void changeViewingMode(int index);
+    void changeMixingMode(int index);
 
     /**
-     * Slot for notified the toolsmenu when the unit mode changes.
+     * Slot for updating the mix count slider value.
+     * @param value the new slider value.
+     */
+    void changeMixCount(int value);
+
+    /**
+     * Slot for notified the default tab when the unit mode changes.
      * @param index the new unit mode.
      */
-    void changeUnitMode(int index);
+    // void changeUnitMode(int index);
 
     /**
      * Slot for updating the slider value when running in automatic mode.
      * @param value the new slider value.
      */
-    void updateSliderValue(int value);
+    // void changeFpuCount(int value);
 
 private:
     Frontend    *frontend;
 
+    QGroupBox   *recordingGroupBox;
+    QComboBox   *recordingModeCombo;
+
     QGroupBox   *cameraGroupBox;
     QComboBox   *videoSourceCombo;
+
     QGroupBox   *captureGroupBox;
-    QComboBox   *viewingModeChooseCombo;
-    QComboBox   *unitModeChooseCombo;
+    QComboBox   *mixingModeCombo;
     QLabel      *mixCountSliderCaption;
     QSlider     *mixCountSlider;
     QLabel      *fpsChooserCaption;
     QSpinBox    *fpsChooser;
 
+    // QGroupBox   *autoGroupBox;
+    // QComboBox   *unitModeCombo;
+
+    int          defaultRecordingMode;
     int          defaultVideoSource;
-    int          defaultViewingMode;
-    int          defaultUnitMode;
+    int          defaultMixingMode;
     int          defaultMixCount;
     int          defaultPlaybackCount;
     int          defaultFps;
+    // int          defaultUnitMode;
 
 };
 

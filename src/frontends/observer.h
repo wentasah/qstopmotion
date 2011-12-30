@@ -75,10 +75,10 @@ public:
     virtual void updatePlaySound(int sceneIndex) = 0;
 
     /**
-     * Abstract function for recieving notification when a new viewing mode is set.
-     * @param newViewingMode the new viewing mode
+     * Abstract function for recieving notification when a new mixing mode is set.
+     * @param newMixingMode the new mixing mode
      */
-    virtual void updateViewingMode(int newViewingMode) = 0;
+    virtual void updateMixingMode(int newMixingMode) = 0;
 
     /**
      * Abstract function for recieving notification when a new mix count is set.

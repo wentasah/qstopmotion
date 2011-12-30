@@ -144,16 +144,16 @@ public:
     void setVideoSource(int newVideoSource);
 
     /**
-     * Get the active viewing of the project.
-     * @return active viewing mode.
+     * Get the active mixing mode of the project.
+     * @return active mixing mode.
      */
-    int getViewingMode() const;
+    int getMixingMode() const;
 
     /**
-     * Set the active viewing mode of the project.
-     * @param newViewingMode the new viewing mode.
+     * Set the active mixing mode of the project.
+     * @param newMixingMode the new mixing mode.
      */
-    void setViewingMode(int newViewingMode);
+    void setMixingMode(int newMixingMode);
 
     /**
      * Get the active unit of the project.
@@ -619,14 +619,9 @@ private:
     int videoSource;
 
     /**
-     * Active viewing mode of the project.
+     * Active mixing mode of the project.
      */
-    int viewingMode;
-
-    /**
-     * Active unit mode of the project.
-     */
-    int unitMode;
+    int mixingMode;
 
     /**
      * Active mix count of the project.
@@ -642,6 +637,11 @@ private:
      * Active frames pre second of the project.
      */
     int framesPerSecond;
+
+    /**
+     * Active unit mode of the project.
+     */
+    int unitMode;
 
     /**
      * All of the scenes in the animation.

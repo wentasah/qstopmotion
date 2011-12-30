@@ -470,7 +470,7 @@ void ProjectTab::updateDescriptionsUpdated()
 void ProjectTab::updatePlaySound(int) {}
 
 
-void ProjectTab::updateViewingMode(int) {}
+void ProjectTab::updateMixingMode(int) {}
 
 
 void ProjectTab::updateMixCount(int) {}

@@ -153,16 +153,16 @@ public:
     void setVideoSource(int newVideoSource);
 
     /**
-     * Get the active viewing of the project.
-     * @return active viewing mode.
+     * Get the active mixing mode of the project.
+     * @return active mixing mode.
      */
-    int getViewingMode();
+    int getMixingMode();
 
     /**
-     * Set the active viewing mode of the project.
-     * @param newViewingMode the new viewing mode.
+     * Set the active mixing mode of the project.
+     * @param newMixingMode the new mixing mode.
      */
-    void setViewingMode(int newViewingMode);
+    void setMixingMode(int newMixingMode);
 
     /**
      * Get the active unit of the project.

@@ -46,11 +46,12 @@ AnimationProject::AnimationProject(Frontend* f)
     nextTotalExposureIndex = 0;
 
     videoSource       = 0;
-    viewingMode       = 0;
-    unitMode          = 0;
+    mixingMode        = 0;
     mixCount          = 0;
     playbackCount     = 0;
     framesPerSecond   = 0;
+
+    unitMode          = 0;
 
     unsavedChanges    = false;
 
@@ -180,15 +181,15 @@ void AnimationProject::setVideoSource(int newVideoSource)
 }
 
 
-int AnimationProject::getViewingMode() const
+int AnimationProject::getMixingMode() const
 {
-    return viewingMode;
+    return mixingMode;
 }
 
 
-void AnimationProject::setViewingMode(int newViewingMode)
+void AnimationProject::setMixingMode(int newMixingMode)
 {
-    viewingMode = newViewingMode;
+    mixingMode = newMixingMode;
 }
 
 
@@ -401,13 +402,9 @@ bool AnimationProject::readSettingsFromProject(QDomElement &settingsNode)
             QString tmp = currElement.text();
             this->videoSource = tmp.toInt();
         }
-        else if (nodeName.compare("viewingmode") == 0) {
+        else if (nodeName.compare("mixingmode") == 0) {
             QString tmp = currElement.text();
-            viewingMode = tmp.toInt();
-        }
-        else if (nodeName.compare("unitmode") == 0) {
-            QString tmp = currElement.text();
-            unitMode = tmp.toInt();
+            mixingMode = tmp.toInt();
         }
         else if (nodeName.compare("mixcount") == 0) {
             QString tmp = currElement.text();
@@ -420,6 +417,10 @@ bool AnimationProject::readSettingsFromProject(QDomElement &settingsNode)
         else if (nodeName.compare("framespersecond") == 0) {
             QString tmp = currElement.text();
             framesPerSecond = tmp.toInt();
+        }
+        else if (nodeName.compare("unitmode") == 0) {
+            QString tmp = currElement.text();
+            unitMode = tmp.toInt();
         }
 
         currElement = currElement.nextSiblingElement();
@@ -442,17 +443,11 @@ bool AnimationProject::saveSettingsToProject(QDomDocument &doc, QDomElement &set
     videoSourceElement.appendChild(videoSourceText);
     settingsNode.appendChild(videoSourceElement);
 
-    // Save viewing mode parameter
-    QDomElement viewingModeElement = doc.createElement("viewingmode");
-    QDomText viewingModeText = doc.createTextNode(QString("%1").arg(viewingMode));
-    viewingModeElement.appendChild(viewingModeText);
-    settingsNode.appendChild(viewingModeElement);
-
-    // Save unit mode parameter
-    QDomElement unitModeElement = doc.createElement("unitmode");
-    QDomText unitModeText = doc.createTextNode(QString("%1").arg(unitMode));
-    unitModeElement.appendChild(unitModeText);
-    settingsNode.appendChild(unitModeElement);
+    // Save mixing mode parameter
+    QDomElement mixingModeElement = doc.createElement("mixingmode");
+    QDomText mixingModeText = doc.createTextNode(QString("%1").arg(mixingMode));
+    mixingModeElement.appendChild(mixingModeText);
+    settingsNode.appendChild(mixingModeElement);
 
     // Save mix count parameter
     QDomElement mixCountElement = doc.createElement("mixcount");
@@ -471,6 +466,12 @@ bool AnimationProject::saveSettingsToProject(QDomDocument &doc, QDomElement &set
     QDomText fpsText = doc.createTextNode(QString("%1").arg(framesPerSecond));
     fpsElement.appendChild(fpsText);
     settingsNode.appendChild(fpsElement);
+
+    // Save unit mode parameter
+    QDomElement unitModeElement = doc.createElement("unitmode");
+    QDomText unitModeText = doc.createTextNode(QString("%1").arg(unitMode));
+    unitModeElement.appendChild(unitModeText);
+    settingsNode.appendChild(unitModeElement);
 
     qDebug("AnimationProject::saveSettingsToProject --> End");
     return true;

@@ -292,7 +292,7 @@ void FrameViewImage::paintEvent(QPaintEvent *)
         if (isPlayingVideo) {
             // Playing live video
             int offset;
-            switch (viewingMode) {
+            switch (mixingMode) {
             case 0:
                 // Image mixing
 
@@ -317,10 +317,6 @@ void FrameViewImage::paintEvent(QPaintEvent *)
                 break;
             case 2:
                 // Image Playback mode
-
-                break;
-            case 3:
-                // Image Auto mode
 
                 break;
             }

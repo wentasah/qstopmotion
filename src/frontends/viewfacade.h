@@ -109,10 +109,10 @@ public:
     void notifyPlaySound(int sceneIndex);
 
     /**
-     * Notify the observers that a new viewing mode is selected.
-     * @param newViewingMode the new viewing mode.
+     * Notify the observers that a new mixing mode is selected.
+     * @param newMixingMode the new mixing mode.
      */
-    void notifyNewViewingMode(int newViewingMode);
+    void notifyNewMixingMode(int newMixingMode);
 
     /**
      * Notify the observers that a new mix count is selected.

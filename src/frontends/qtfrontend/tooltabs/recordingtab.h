@@ -83,27 +83,32 @@ private:
 protected:
     // void resizeEvent(QResizeEvent *event);
 
-private slots:
+public slots:
+    /**
+     * Slot for notified the recording tab when the recording mode changes, so that widgets
+     * can be updated.
+     * @param index the new viewing mode.
+     */
+    void changeRecordingMode(int index);
 
     /**
-     * Slot for notified the toolsmenu when the grabber source changes, so that grabber
+     * Slot for notified the recording tab when the grabber source changes, so that grabber
      * can be updated.
      * @param index the new viewing mode.
      */
     void changeVideoSource(int index);
 
     /**
-     * Slot for notified the toolsmenu when the viewing mode changes, so that widgets
+     * Slot for notified the recording tab when the camera button is pressed.
+     */
+    void cameraButtonClicked();
+
+    /**
+     * Slot for notified the recording tab when the viewing mode changes, so that widgets
      * can be updated.
      * @param index the new viewing mode.
      */
-    void changeViewingMode(int index);
-
-    /**
-     * Slot for notified the toolsmenu when the unit mode changes.
-     * @param index the new unit mode.
-     */
-    void changeUnitMode(int index);
+    void changeMixingMode(int index);
 
     /**
      * Slot for updating the slider value when running in automatic mode.
@@ -130,31 +135,51 @@ private slots:
     void setPlaybackMode();
 
     /**
+     * Slot for notified the recording tab when the unit mode changes.
+     * @param index the new unit mode.
+     */
+    // void changeUnitMode(int index);
+
+    /**
+     * Slot for updating the slider value when running in automatic mode.
+     * @param newFpuCount the new slider value.
+     */
+    // void changeFpuCount(int newFpuCount);
+
+    /**
      * Slot for being notified when the camera is turned on so that
      * it disable of some buttons.
      * @param isOn true if the camera is turned on.
      */
-    void cameraOn(bool isOn);
+    void cameraStateChanged(bool isOn);
 
 private:
     Frontend            *frontend;
     RunAnimationHandler *runAnimationHandler;
     CameraHandler       *cameraHandler;
+    bool                 isCameraOn;
     QShortcut           *playAccel;
     QShortcut           *mixAccel;
     QShortcut           *diffAccel;
     QShortcut           *playbackAccel;
-    QTimer              *captureTimer;
+
+    QGroupBox   *recordingGroupBox;
+    QComboBox   *recordingModeCombo;
 
     QGroupBox   *cameraGroupBox;
     QComboBox   *videoSourceCombo;
     QPushButton *cameraButton;
+
     QGroupBox   *captureGroupBox;
-    QComboBox   *viewingModeChooseCombo;
-    QComboBox   *unitModeChooseCombo;
+    QComboBox   *mixingModeCombo;
     QLabel      *mixCountSliderCaption;
     QSlider     *mixCountSlider;
 
+    // QGroupBox   *autoGroupBox;
+    // QComboBox   *unitChooseCombo;
+    // QLabel      *fpuSliderCaption;    // Frames per unit
+    // QSlider     *fpuSlider;
+    // QTimer      *autoCaptureTimer;
 };
 
 #endif

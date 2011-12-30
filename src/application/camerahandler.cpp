@@ -35,7 +35,6 @@ CameraHandler::CameraHandler(Frontend *f,
     : QObject(parent)
 {
     frontend = f;
-    cameraButton = 0;
 
     PreferencesTool *pref = frontend->getPreferences();
     captureFunction = (PreferencesTool::captureButtonFunction)pref->getBasicPreference("capturebutton", PreferencesTool::captureButtonAfter);
@@ -60,12 +59,6 @@ CameraHandler::~CameraHandler()
 }
 
 
-void CameraHandler::setCameraButton(QPushButton *cameraButton)
-{
-    this->cameraButton = cameraButton;
-}
-
-
 void CameraHandler::changeCaptureButtonFunction(PreferencesTool::captureButtonFunction newFunction)
 {
     // The function of the camera button is changed
@@ -79,52 +72,13 @@ bool CameraHandler::isCameraRunning()
 }
 
 
-void CameraHandler::cameraOn()
+void CameraHandler::cameraStateChanged(bool isOn)
 {
-    qDebug("CameraHandler::cameraOn --> Start");
+    qDebug("RecordingTab::cameraOn --> Start");
 
-    QString iconFile(frontend->getIconsDirName());
-    iconFile.append(QLatin1String("cameraoff.png"));
+    isCameraOn = isOn;
 
-    cameraButton->setIcon(QIcon(iconFile));
-    isCameraOn = frontend->startGrabber();
-    if (!isCameraOn) {
-        cameraOff();
-    }
-    frontend->hideProgress();
-
-    qDebug("CameraHandler::cameraOn --> End");
-}
-
-
-void CameraHandler::cameraOff()
-{
-    qDebug("CameraHandler::cameraOff --> Start");
-
-    QString iconFile(frontend->getIconsDirName());
-    iconFile.append(QLatin1String("cameraon.png"));
-
-    cameraButton->setIcon(QIcon(iconFile));
-    emit cameraStateChanged(false);
-    frontend->stopGrabber();
-    isCameraOn = false;
-
-    qDebug("CameraHandler::cameraOff --> End");
-}
-
-
-void CameraHandler::toggleCamera()
-{
-    qDebug("CameraHandler::toggleCamera --> Start");
-
-    if (isCameraOn == false) {
-        qDebug("Playing video from webcam");
-        cameraOn();
-    } else {
-        cameraOff();
-    }
-
-    qDebug("CameraHandler::toggleCamera --> End");
+    qDebug("RecordingTab::cameraOn --> Stop");
 }
 
 
@@ -167,12 +121,4 @@ void CameraHandler::storeFrame()
     }
 
     qDebug("CameraHandler::storeFrame --> End");
-}
-
-
-void CameraHandler::switchToVideoView()
-{
-    cameraButton->setEnabled(true);
-    emit cameraStateChanged(true);
-    frontend->hideProgress();
 }

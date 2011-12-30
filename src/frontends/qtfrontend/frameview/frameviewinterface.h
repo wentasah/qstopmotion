@@ -116,10 +116,10 @@ public:
     virtual void updatePlaySound(int sceneIndex) = 0;
 
     /**
-     * Function to recieve notification when new viewing mode is set.
-     * @param newViewingMode the new viewing mode
+     * Function to recieve notification when new mixing mode is set.
+     * @param newMixingMode the new mixing mode
      */
-    virtual void updateViewingMode(int newViewingMode);
+    virtual void updateMixingMode(int newMixingMode);
 
     /**
      * Function to recieve notification when new mix count is set.
@@ -285,14 +285,20 @@ public:
     void off();
 
     /**
-     * Sets the viewing mode/type of effect used when displaying the video.
+     * Returns the mixing mode.
+     * @return the mixing mode.
+     */
+    int getMixingMode() const;
+
+    /**
+     * Sets the mixing mode/type of effect used when displaying the video.
      * @param mode the type of effect to be showed on the video. The modes are:\n
      *             0: Image mixing/onion skinning\n
      *             1: Image differentiating\n
      *             2: Playback\n
      * @return true if the mode was succesfully changed
      */
-    bool setViewingMode(int mode);
+    bool setMixingMode(int mode);
 
     /**
      *
@@ -300,19 +306,10 @@ public:
     void setMixCount(int mixCount);
 
     /**
-     * Returns the view mode.
-     * @return the view mode.
-     */
-    int getViewingMode() const;
-
-    /**
      * Sets the speed for the playback.
      * @param playbackSpeed the speed to be setted
      */
     void setFps(int fps);
-
-signals:
-    void cameraReady();
 
 public slots:
     /**
@@ -380,7 +377,7 @@ protected:
     /**
      * Mode to viewing the images.
      */
-    int viewingMode;
+    int mixingMode;
 
 };
 

@@ -27,13 +27,11 @@
 
 
 RecordingTab::RecordingTab(Frontend *f,
-                           RunAnimationHandler *rah,
                            CameraHandler *ch,
                            QWidget *parent) :
     QWidget(parent)
 {
     frontend               = f;
-    runAnimationHandler    = rah;
     cameraHandler          = ch;
     isCameraOn             = false;
 
@@ -52,7 +50,6 @@ RecordingTab::RecordingTab(Frontend *f,
     // autoGroupBox           = 0;
     // unitModeCombo          = 0;
 
-    playAccel              = 0;
     mixAccel               = 0;
     diffAccel              = 0;
     playbackAccel          = 0;
@@ -495,14 +492,8 @@ void RecordingTab::cameraStateChanged(bool isOn)
     qDebug("RecordingTab::cameraOn --> Start");
 
     if (isOn) {
-        runAnimationHandler->stopAnimation();
         captureGroupBox->show();
     } else {
-        /*
-        if (autoCaptureTimer->isActive()) {
-            autoCaptureTimer->stop();
-        }
-        */
         captureGroupBox->hide();
     }
 
@@ -512,9 +503,6 @@ void RecordingTab::cameraStateChanged(bool isOn)
 
 void RecordingTab::createAccelerators()
 {
-    playAccel = new QShortcut(QKeySequence(Qt::Key_K), this);
-    connect(playAccel, SIGNAL(activated()), runAnimationHandler, SLOT(toggleRunning()));
-
     mixAccel = new QShortcut(QKeySequence(Qt::Key_1), this);
     connect(mixAccel, SIGNAL(activated()), this, SLOT(setMixingMode()));
 

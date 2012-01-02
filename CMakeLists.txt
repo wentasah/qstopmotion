@@ -96,7 +96,6 @@ set(MOC_HEADERS
     src/application/camerahandler.h
     src/application/editmenuhandler.h
     src/application/externalchangemonitor.h
-    src/application/runanimationhandler.h
     src/application/soundhandler.h
     src/domain/domainfacade.h
     src/domain/animation/animationproject.h
@@ -138,7 +137,6 @@ set(SOURCES
     src/application/camerahandler.cpp
     src/application/editmenuhandler.cpp
     src/application/externalchangemonitor.cpp
-    src/application/runanimationhandler.cpp
     src/application/soundhandler.cpp
     src/domain/domainfacade.cpp
     src/domain/animation/animationproject.cpp

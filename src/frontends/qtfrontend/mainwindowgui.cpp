@@ -119,7 +119,6 @@ MainWindowGUI::MainWindowGUI(QApplication *stApp, Frontend *f)
 
     cameraHandler        = 0;
     editMenuHandler      = 0;
-    runAnimationHandler  = 0;
     soundHandler         = 0;
     changeMonitor        = 0;
 
@@ -1046,7 +1045,6 @@ void MainWindowGUI::initTranslations()
 
 void MainWindowGUI::createHandlers()
 {
-    runAnimationHandler = new RunAnimationHandler(frontend, this);
     cameraHandler = new CameraHandler(frontend, this);
     editMenuHandler = new EditMenuHandler(frontend, this, timeLine);
     soundHandler = new SoundHandler(frontend, this, this->lastVisitedDir);
@@ -1057,20 +1055,20 @@ void MainWindowGUI::createHandlers()
 void MainWindowGUI::createAccelerators()
 {
     QShortcut *nextFrameAccel = new QShortcut(QKeySequence(Qt::Key_L), this);
-    connect(nextFrameAccel, SIGNAL(activated()), runAnimationHandler, SLOT(selectNextFrame()));
+    connect(nextFrameAccel, SIGNAL(activated()), toolBar, SLOT(selectNextFrame()));
     QShortcut *nextFrameAccel2 = new QShortcut(QKeySequence(Qt::Key_Right), this);
-    connect(nextFrameAccel2, SIGNAL(activated()), runAnimationHandler, SLOT(selectNextFrame()));
+    connect(nextFrameAccel2, SIGNAL(activated()), toolBar, SLOT(selectNextFrame()));
 
     QShortcut *previousFrameAccel = new QShortcut(QKeySequence(Qt::Key_J), this);
-    connect(previousFrameAccel, SIGNAL(activated()), runAnimationHandler, SLOT(selectPreviousFrame()));
+    connect(previousFrameAccel, SIGNAL(activated()), toolBar, SLOT(selectPreviousFrame()));
     QShortcut *previousFrameAccel2 = new QShortcut(QKeySequence(Qt::Key_Left), this);
-    connect(previousFrameAccel2, SIGNAL(activated()), runAnimationHandler, SLOT(selectPreviousFrame()));
+    connect(previousFrameAccel2, SIGNAL(activated()), toolBar, SLOT(selectPreviousFrame()));
 
     QShortcut *nextSceneAccel = new QShortcut(QKeySequence(Qt::Key_O), this);
-    connect(nextSceneAccel, SIGNAL(activated()), runAnimationHandler, SLOT(selectNextScene()));
+    connect(nextSceneAccel, SIGNAL(activated()), toolBar, SLOT(selectNextScene()));
 
     QShortcut *prevSceneAccel = new QShortcut(QKeySequence(Qt::Key_I), this);
-    connect(prevSceneAccel, SIGNAL(activated()), runAnimationHandler, SLOT(selectPreviousScene()));
+    connect(prevSceneAccel, SIGNAL(activated()), toolBar, SLOT(selectPreviousScene()));
 
     QShortcut *toggleCameraAccel = new QShortcut(QKeySequence(Qt::Key_C), this);
     connect(toggleCameraAccel, SIGNAL(activated()), recordingTab, SLOT(cameraButtonClicked()));
@@ -1349,7 +1347,6 @@ void MainWindowGUI::makeToolsMenu(QHBoxLayout *layout)
     Q_ASSERT(frontend != 0);
 
     recordingTab = new RecordingTab(frontend,
-                                    runAnimationHandler,
                                     cameraHandler,
                                     this);
     recordingTab->initialize();
@@ -1357,7 +1354,6 @@ void MainWindowGUI::makeToolsMenu(QHBoxLayout *layout)
     sideBar->addTab(recordingTab, QIcon(iconFile), QString(tr("Recording")));
 
     projectTab = new ProjectTab(frontend,
-                                runAnimationHandler,
                                 lastVisitedDir);
     iconFile.clear();
     iconFile.append(frontend->getIconsDirName());
@@ -1436,7 +1432,7 @@ void MainWindowGUI::makeViews(QHBoxLayout *layout)
 
     viewAreaLayout->addWidget(frameView);
 
-    toolBar = new ToolBar(frontend, runAnimationHandler, cameraHandler);
+    toolBar = new ToolBar(frontend, cameraHandler);
     toolBar->setObjectName("ToolBar");
     toolBar->setMinimumSize(400, 30);
     toolBar->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);

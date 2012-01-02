@@ -21,7 +21,6 @@
 #ifndef PROJECTTAB_H
 #define PROJECTTAB_H
 
-#include "application/runanimationhandler.h"
 #include "frontends/frontend.h"
 #include "frontends/observer.h"
 
@@ -43,12 +42,10 @@ public:
     /**
      * Sets up the tab.
      * @param f the frontend of the application
-     * @param rah the run animation handler
      * @param lvd the last visited directory
      * @param parent the parent of the this widget
      */
     ProjectTab(Frontend *f,
-               RunAnimationHandler *rah,
                const QString &lvd,
                QWidget *parent = 0);
 
@@ -377,7 +374,6 @@ private slots:
 
 private:
     Frontend            *frontend;
-    RunAnimationHandler *runAnimationHandler;
     QFileDialog         *fileDialog;
     QString              lastVisitedDir;
     bool                 tabEnabled;

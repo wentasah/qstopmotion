@@ -36,7 +36,6 @@
 
 
 ProjectTab::ProjectTab(Frontend *f,
-                       RunAnimationHandler *rah,
                        const QString &lvd,
                        QWidget *parent) :
     QWidget(parent)
@@ -44,7 +43,6 @@ ProjectTab::ProjectTab(Frontend *f,
     qDebug("ProjectTab::Constructor --> Start");
 
     frontend            = f;
-    runAnimationHandler = rah;
     if (!lvd.isEmpty()) {
       lastVisitedDir.append(lvd);
     }

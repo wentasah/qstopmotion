@@ -28,7 +28,6 @@
 #include <QSlider>
 #include <QLabel>
 
-#include "application/runanimationhandler.h"
 #include "application/camerahandler.h"
 #include "frontends/frontend.h"
 
@@ -45,7 +44,6 @@ public:
      * @param parent the parent of the this widget
      */
     ToolBar(Frontend *f,
-            RunAnimationHandler *runAnimationHandler,
             CameraHandler *cameraHandler,
             QWidget *parent = 0);
 
@@ -65,6 +63,73 @@ protected:
     // void resizeEvent(QResizeEvent *event);
 
 public slots:
+    /**
+     * Starts the animation if it isn't playing and stops it if it is.
+     *
+     * This function is provided for ease of use with keyaccelerators.
+     */
+    void toggleRunning();
+
+    /**
+     * Runs the animation as a sequence of pictures triggered by a timer
+     */
+    void runAnimation();
+
+    /**
+     * Stops the running of the animation.
+     */
+    void stopAnimation();
+
+    /**
+     * Freezes the running of the animation.
+     */
+    void pauseAnimation();
+
+    /**
+     * Selects the previous scene.
+     */
+    void selectPreviousScene();
+
+    /**
+     * Selects the previous take.
+     */
+    void selectPreviousTake();
+
+    /**
+     * Selects the first frame in the take.
+     */
+    void selectToBeginFrame();
+
+    /**
+     * Selects the previous frame.
+     */
+    void selectPreviousFrame();
+
+    /**
+     * Selects the next frame.
+     */
+    void selectNextFrame();
+
+    /**
+     * Selects the last frame in the take.
+     */
+    void selectToEndFrame();
+
+    /**
+     * Selects the next scene.
+     */
+    void selectNextTake();
+
+    /**
+     * Selects the next scene.
+     */
+    void selectNextScene();
+
+    /**
+     * Toggles between looping the animation when it is running and closing it
+     * when it reaches the end.
+     */
+    void toggleLooping();
 
     /**
      * This slot is notified when the size of the model changes so that menuframe
@@ -82,9 +147,9 @@ private slots:
         void toEnd();
     */
 private:
-    Frontend            *frontend;
-    RunAnimationHandler *runAnimationHandler;
-    CameraHandler       *cameraHandler;
+    Frontend      *frontend;
+    QTimer        *runAnimationTimer;
+    CameraHandler *cameraHandler;
 
     QLabel      *framesIcon;
     QSlider     *overlaySlider;
@@ -96,7 +161,18 @@ private:
     QPushButton *nextFrameButton;
     QPushButton *toEndButton;
 
+    int               frameNr;
+    int               fps;
+    int               exposureCount;
+    bool              isLooping;
+
     void makeGUI();
+
+private slots:
+    /**
+     * Slot for playing the next frame. This slot is triggered by the timer.
+     */
+    void playNextFrame();
 };
 
 #endif

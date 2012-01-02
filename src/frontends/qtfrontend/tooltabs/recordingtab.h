@@ -22,7 +22,6 @@
 #define RECORDINGTAB_H
 
 #include "application/camerahandler.h"
-#include "application/runanimationhandler.h"
 #include "frontends/frontend.h"
 
 #include <QtCore/QTimer>
@@ -47,12 +46,10 @@ public:
     /**
      * Sets up the tab.
      * @param df the domain facade of the application
-     * @param rah the run animation handler
      * @param ch the camera handler
      * @param parent the parent of the this widget
      */
     RecordingTab(Frontend *f,
-                 RunAnimationHandler *rah,
                  CameraHandler *ch,
                  QWidget *parent = 0);
 
@@ -155,10 +152,8 @@ public slots:
 
 private:
     Frontend            *frontend;
-    RunAnimationHandler *runAnimationHandler;
     CameraHandler       *cameraHandler;
     bool                 isCameraOn;
-    QShortcut           *playAccel;
     QShortcut           *mixAccel;
     QShortcut           *diffAccel;
     QShortcut           *playbackAccel;

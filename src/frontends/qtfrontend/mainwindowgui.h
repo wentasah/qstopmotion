@@ -26,7 +26,6 @@
 #include "application/camerahandler.h"
 #include "application/editmenuhandler.h"
 #include "application/externalchangemonitor.h"
-#include "application/runanimationhandler.h"
 #include "application/soundhandler.h"
 #include "frontends/frontend.h"
 #include "frontends/qtfrontend/menuframe.h"
@@ -440,7 +439,6 @@ private:
     SoundHandler          *soundHandler;
     CameraHandler         *cameraHandler;
     EditMenuHandler       *editMenuHandler;
-    RunAnimationHandler   *runAnimationHandler;
     ExternalChangeMonitor *changeMonitor;
 
     // Translation handling

@@ -27,14 +27,13 @@
 
 
 ToolBar::ToolBar(Frontend *f,
-                 RunAnimationHandler *runAnimationHandler,
                  CameraHandler *cameraHandler,
                  QWidget *parent) :
     QWidget(parent),
-    runAnimationHandler(runAnimationHandler),
     cameraHandler(cameraHandler)
 {
     frontend            = f;
+    runAnimationTimer   = NULL;
     framesIcon          = 0;
     overlaySlider       = 0;
     cameraIcon          = 0;
@@ -44,8 +43,18 @@ ToolBar::ToolBar(Frontend *f,
     playButton          = 0;
     nextFrameButton     = 0;
     toEndButton         = 0;
+    fps                 = 0;
+    exposureCount       = 0;
+
+    frameNr = 0;
+    isLooping = false;
+
+    setObjectName("ToolBar");
 
     makeGUI();
+
+    runAnimationTimer = new QTimer(this);
+    QObject::connect(runAnimationTimer, SIGNAL(timeout()), this, SLOT(playNextFrame()));
 }
 
 
@@ -73,7 +82,7 @@ void ToolBar::makeGUI()
     toBeginButton->setIcon(QPixmap(iconFile));
     // toBeginButton->setFlat(true);
     // toBeginButton->setFocusPolicy( Qt::NoFocus );
-    connect(toBeginButton, SIGNAL(clicked()), runAnimationHandler, SLOT(selectToBeginFrame()));
+    connect(toBeginButton, SIGNAL(clicked()), this, SLOT(selectToBeginFrame()));
     toBeginButton->setEnabled(false);
 
     previousFrameButton = new QPushButton;
@@ -83,7 +92,7 @@ void ToolBar::makeGUI()
     iconFile.append(QLatin1String("previousexposure.png"));
     previousFrameButton->setIcon(QPixmap(iconFile));
     // previousFrameButton->setFlat(true);
-    connect(previousFrameButton, SIGNAL(clicked()), runAnimationHandler, SLOT(selectPreviousFrame()));
+    connect(previousFrameButton, SIGNAL(clicked()), this, SLOT(selectPreviousFrame()));
     previousFrameButton->setEnabled(false);
 
     captureButton = new QPushButton;
@@ -101,8 +110,7 @@ void ToolBar::makeGUI()
     iconFile.append(QLatin1String("play.png"));
     playButton->setIcon(QPixmap(iconFile));
     // playButton->setFlat(true);
-    runAnimationHandler->setPlayButton(playButton);
-    connect(playButton, SIGNAL(clicked()), runAnimationHandler, SLOT(runAnimation()));
+    connect(playButton, SIGNAL(clicked()), this, SLOT(runAnimation()));
 
     nextFrameButton = new QPushButton;
     iconFile.clear();
@@ -112,7 +120,7 @@ void ToolBar::makeGUI()
     nextFrameButton->setIcon(QPixmap(iconFile));
     // nextFrameButton->setFlat(true);
     // nextFrameButton->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Minimum);
-    connect(nextFrameButton, SIGNAL(clicked()), runAnimationHandler, SLOT(selectNextFrame()));
+    connect(nextFrameButton, SIGNAL(clicked()), this, SLOT(selectNextFrame()));
     nextFrameButton->setEnabled(false);
 
     toEndButton = new QPushButton;
@@ -123,7 +131,7 @@ void ToolBar::makeGUI()
     toEndButton->setIcon(QPixmap(iconFile));
     // toEndButton->setFlat(true);
     // toEndButton->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Minimum);
-    connect(toEndButton, SIGNAL(clicked()), runAnimationHandler, SLOT(selectToEndFrame()));
+    connect(toEndButton, SIGNAL(clicked()), this, SLOT(selectToEndFrame()));
     toEndButton->setEnabled(false);
 
     QHBoxLayout *buttonLayout = new QHBoxLayout;
@@ -226,6 +234,204 @@ void ToolBar::apply()
 }
 
 
+void ToolBar::toggleRunning()
+{
+    if (runAnimationTimer->isActive()) {
+        stopAnimation();
+    } else {
+        runAnimation();
+    }
+}
+
+
+void ToolBar::runAnimation()
+{
+    int activeSceneIndex = frontend->getProject()->getActiveSceneIndex();
+    int activeTakeIndex = frontend->getProject()->getActiveTakeIndex();
+    exposureCount = frontend->getProject()->getTakeExposureSize(activeSceneIndex, activeTakeIndex);
+    fps = frontend->getProject()->getFramesPerSecond();
+
+    if (frontend->getProject()->getActiveSceneIndex() >= 0) {
+        if (exposureCount > 0) {
+            frontend->getProject()->initAudioDevice();
+            QObject::disconnect(playButton, SIGNAL(clicked()), this, SLOT(runAnimation()));
+            QObject::connect(playButton, SIGNAL(clicked()), this, SLOT(pauseAnimation()));
+
+            //playButton->setToggleButton(true);
+            playButton->setChecked(true);
+            playButton->toggle();
+            frameNr = frontend->getProject()->getActiveExposureIndex();
+            frontend->showMessage(tr("Running animation"), 2000);
+            runAnimationTimer->start(1000 / fps);
+            runAnimationTimer->setSingleShot(false);
+        }
+    }
+}
+
+
+void ToolBar::stopAnimation()
+{
+    if (runAnimationTimer->isActive()) {
+        QObject::disconnect(playButton, SIGNAL(clicked()), this, SLOT(pauseAnimation()));
+        QObject::connect(playButton, SIGNAL(clicked()), this, SLOT(runAnimation()));
+
+        if (playButton->isChecked()) {
+            playButton->toggle();
+        }
+
+        playButton->setChecked(false);
+
+        frontend->getProject()->setActiveExposureIndex(frameNr);
+
+        // frontend->shutdownAudioDevice();
+
+        frontend->clearMessage();
+        runAnimationTimer->stop();
+        frontend->getProject()->setActiveExposureIndex(0);
+    }
+}
+
+
+void ToolBar::pauseAnimation()
+{
+    if (runAnimationTimer->isActive()) {
+        QObject::disconnect(playButton, SIGNAL(clicked()), this, SLOT(pauseAnimation()));
+        QObject::connect(playButton, SIGNAL(clicked()), this, SLOT(runAnimation()));
+
+        if (playButton->isChecked()) {
+            playButton->toggle();
+        }
+
+        playButton->setChecked(false);
+
+        frontend->getProject()->setActiveExposureIndex(frameNr);
+
+        // frontend->shutdownAudioDevice();
+
+        frontend->clearMessage();
+        runAnimationTimer->stop();
+    }
+
+}
+
+// TODO: No selectPreviousScene button, no implementation
+void ToolBar::selectPreviousScene()
+{
+    /*
+    int activeSceneIndex = frontend->getProject()->getActiveSceneIndex();
+    if (activeSceneIndex > 0) {
+        frontend->getProject()->setActiveSceneIndex(activeSceneIndex - 1);
+    }
+    */
+}
+
+// TODO: No selectPreviousTake button, no implementation
+void ToolBar::selectPreviousTake()
+{
+    /*
+    int activeSceneIndex = frontend->getProject()->getActiveSceneIndex();
+    if (activeSceneIndex > 0) {
+        frontend->getProject()->setActiveSceneIndex(activeSceneIndex - 1);
+    }
+    */
+}
+
+
+void ToolBar::selectToBeginFrame()
+{
+    int activeExposureIndex = frontend->getProject()->getActiveExposureIndex();
+    if (activeExposureIndex > 0) {
+        frontend->getProject()->setActiveExposureIndex(0);
+    }
+}
+
+
+void ToolBar::selectPreviousFrame()
+{
+    int activeExposureIndex = frontend->getProject()->getActiveExposureIndex();
+    if (activeExposureIndex > 0) {
+        frontend->getProject()->setActiveExposureIndex(activeExposureIndex - 1);
+    }
+}
+
+
+void ToolBar::selectNextFrame()
+{
+    int activeSceneIndex = frontend->getProject()->getActiveSceneIndex();
+    int activeTakeIndex = frontend->getProject()->getActiveTakeIndex();
+    int activeExposureIndex = frontend->getProject()->getActiveExposureIndex();
+    int exposureCount = frontend->getProject()->getTakeExposureSize(activeSceneIndex, activeTakeIndex);
+    if ((activeExposureIndex > -1) && (activeExposureIndex < exposureCount - 1)) {
+        frontend->getProject()->setActiveExposureIndex(activeExposureIndex + 1);
+    }
+}
+
+
+void ToolBar::selectToEndFrame()
+{
+    int activeSceneIndex = frontend->getProject()->getActiveSceneIndex();
+    int activeTakeIndex = frontend->getProject()->getActiveTakeIndex();
+    int exposureCount = frontend->getProject()->getTakeExposureSize(activeSceneIndex, activeTakeIndex);
+    if (0 < exposureCount) {
+        frontend->getProject()->setActiveExposureIndex(exposureCount - 1);
+    }
+}
+
+// TODO: No selectNextTake button, no implementation
+void ToolBar::selectNextTake()
+{
+    /*
+    int activeSceneIndex = frontend->getProject()->getActiveSceneIndex();
+    int sceneCount = frontend->getProject()->getSceneSize();
+    if ((activeSceneIndex > -1) && (activeSceneIndex < sceneCount - 1)) {
+        frontend->getProject()->setActiveSceneIndex(activeSceneIndex + 1);
+    }
+    */
+}
+
+// TODO: No selectNextScene button, no implementation
+
+void ToolBar::selectNextScene()
+{
+    /*
+    int activeSceneIndex = frontend->getProject()->getActiveSceneIndex();
+    int sceneCount = frontend->getProject()->getSceneSize();
+    if ((activeSceneIndex > -1) && (activeSceneIndex < sceneCount - 1)) {
+        frontend->getProject()->setActiveSceneIndex(activeSceneIndex + 1);
+    }
+    */
+}
+
+
+void ToolBar::toggleLooping()
+{
+    isLooping = !isLooping;
+}
+
+
+void ToolBar::playNextFrame()
+{
+    if (frontend->getProject()->getActiveSceneIndex() >= 0) {
+
+        // frontend->playSound(frameNr);
+        // frontend->getView()->notifyPlaySound(sceneIndex);
+
+        if (isLooping) {
+            frameNr = (frameNr < exposureCount - 1) ? frameNr + 1 : 0;
+        }
+        else {
+            if (frameNr < exposureCount - 1) {
+                ++frameNr;
+            }
+            else {
+                this->stopAnimation();
+            }
+        }
+    }
+    else {
+        stopAnimation();
+    }
+}
 void ToolBar::modelSizeChanged(int modelSize)
 {
     qDebug("ToolBar::modelSizeChanged --> Start");

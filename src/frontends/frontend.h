@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2011 by                                                *
+ *  Copyright (C) 2005-2012 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -305,6 +305,26 @@ public:
      * Test function for debugging purposes
      */
     virtual void test(QWidget *parentWidget, int level) = 0;
+
+    /**
+     * Create all temporary application directories (temp, trash, packer)
+     */
+    virtual void makeApplicationDirectories() = 0;
+
+    /**
+     * Remove all temporary application directories (temp, trash, packer)
+     */
+    virtual void removeApplicationDirectories() = 0;
+
+    /**
+     * Remove all temporary application files
+     */
+    virtual void removeApplicationFiles() = 0;
+
+    /**
+     * Remove all temporary files
+     */
+    virtual void removeCaptureFiles() = 0;
 
     /**
      * Test function for debugging purposes

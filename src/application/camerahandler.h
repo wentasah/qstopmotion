@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2011 by                                                *
+ *  Copyright (C) 2005-2012 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -77,14 +77,15 @@ public slots:
 
 private:
     Frontend           *frontend;
-    QTimer             *timer;
-    QString             temp;
     bool                isCameraOn;
+
+    QTimer             *cameraTimer;
+    QString             captureFilePath;
     PreferencesTool::captureButtonFunction captureFunction;
 
 private slots:
     /**
-     * Slot called by the timer which checks if the frame has been fully captured.
+     * Slot called by the cameraTimer which checks if the frame has been fully captured.
      */
     void storeFrame();
 

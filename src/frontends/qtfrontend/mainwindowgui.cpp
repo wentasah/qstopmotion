@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2011 by                                                *
+ *  Copyright (C) 2005-2012 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -671,8 +671,13 @@ void MainWindowGUI::newProject()
     if (b) {
         int save = frontend->askQuestion(tr("Unsaved changes"),
                                          tr("There are unsaved changes. Do you want to save?"));
-        if (save == 0) { // user pressed button 0, which is 'yes'
+        if (save == 0) {
+            // user pressed button 0, which is 'yes'
             saveProject();
+        }
+        else {
+            // User pressed button 1, which is 'no'
+            frontend->removeApplicationFiles();
         }
     }
 

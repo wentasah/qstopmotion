@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2011 by                                                *
+ *  Copyright (C) 2005-2012 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -36,20 +36,21 @@ CameraHandler::CameraHandler(Frontend *f,
 {
     frontend = f;
 
+    isCameraOn = false;
+    setObjectName(name);
+
     PreferencesTool *pref = frontend->getPreferences();
     captureFunction = (PreferencesTool::captureButtonFunction)pref->getBasicPreference("capturebutton", PreferencesTool::captureButtonAfter);
 
-    isCameraOn = false;
     QString rootDir;
     rootDir.append(frontend->getUserDirName());
     rootDir.append(QLatin1String("/"));
     rootDir.append(QLatin1String("capturedfile.jpg"));
-    temp.append(rootDir.toLatin1().constData());
+    captureFilePath.append(rootDir.toLatin1().constData());
 
-    timer = new QTimer(this);
-    timer->setSingleShot(true);
-    QObject::connect(timer, SIGNAL(timeout()), this, SLOT(storeFrame()));
-    setObjectName(name);
+    cameraTimer = new QTimer(this);
+    cameraTimer->setSingleShot(true);
+    QObject::connect(cameraTimer, SIGNAL(timeout()), this, SLOT(storeFrame()));
 }
 
 
@@ -86,7 +87,7 @@ void CameraHandler::captureFrame()
 {
     qDebug("CameraHandler::captureFrame --> Start");
 
-    timer->start(60);
+    cameraTimer->start(60);
 
     qDebug("CameraHandler::captureFrame --> End");
 }
@@ -97,7 +98,7 @@ void CameraHandler::storeFrame()
     qDebug("CameraHandler::storeFrame --> Start");
 
     QImage i;
-    i.load(temp);
+    i.load(captureFilePath);
     if (!i.isNull()) {
 
         int sceneIndex = frontend->getProject()->getActiveSceneIndex();
@@ -105,19 +106,19 @@ void CameraHandler::storeFrame()
         int exposureIndex = frontend->getProject()->getActiveExposureIndex();
         switch (captureFunction) {
         case PreferencesTool::captureButtonBevor:
-            frontend->getProject()->insertExposureToUndo(sceneIndex, takeIndex, exposureIndex, false, temp);
+            frontend->getProject()->insertExposureToUndo(sceneIndex, takeIndex, exposureIndex, false, captureFilePath);
             break;
         case PreferencesTool::captureButtonAfter:
-            frontend->getProject()->insertExposureToUndo(sceneIndex, takeIndex, exposureIndex, true, temp);
+            frontend->getProject()->insertExposureToUndo(sceneIndex, takeIndex, exposureIndex, true, captureFilePath);
             break;
         case PreferencesTool::captureButtonAppend:
-            frontend->getProject()->addExposureToUndo(sceneIndex, takeIndex, temp);
+            frontend->getProject()->addExposureToUndo(sceneIndex, takeIndex, captureFilePath);
             break;
         }
 
         emit capturedFrame();
     } else {
-        timer->start(60);
+        cameraTimer->start(60);
     }
 
     qDebug("CameraHandler::storeFrame --> End");

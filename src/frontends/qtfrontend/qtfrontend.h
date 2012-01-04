@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2011 by                                                *
+ *  Copyright (C) 2005-2012 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -356,23 +356,29 @@ public:
     /**
      * Remove the content of the given directory.
      * @param path the path to te directory.
+     * @return true if the removing was successful.
      */
     bool removeContentInDirectory(const QString &path);
 
     /**
-     * Create all temporary directories (temp, trash, packer)
+     * Create all temporary application directories (temp, trash, packer)
      */
-    void makeTemporaryDirectories();
+    void makeApplicationDirectories();
 
     /**
-     * Remove all temporary directories (temp, trash, packer)
+     * Remove all temporary application directories (temp, trash, packer)
      */
-    void removeTemporaryDirectories();
+    void removeApplicationDirectories();
 
     /**
-     * Remove all temporary files
+     * Remove all temporary application files
      */
-    void removeTemporaryFiles();
+    void removeApplicationFiles();
+
+    /**
+     * Remove all capture files
+     */
+    void removeCaptureFiles();
 
     /**
      *

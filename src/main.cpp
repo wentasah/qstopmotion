@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2011 by                                                *
+ *  Copyright (C) 2005-2012 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -42,20 +42,22 @@ int main(int argc, char **argv)
 
     if (qtFrontend.isRecoveryMode()) {
         hasRecovered = qtFrontend.recover();
+        if (hasRecovered == false) {
+            qtFrontend.removeApplicationFiles();
+        }
+    }
+    else {
+        qtFrontend.makeApplicationDirectories();
     }
 
     if (hasRecovered == false) {
-        qtFrontend.removeTemporaryDirectories();
-        qtFrontend.makeTemporaryDirectories();
-        // TODO: now the tmp directory is blocked (on Windows). The application can`t
-        // create new files in the tmp directory!!!
-
         hasProjectArg = qtFrontend.handleArguments(argc, argv);
         if (hasProjectArg == false) {
             qtFrontend.startDialog();
         }
     }
-    qtFrontend.removeTemporaryFiles();
+
+    qtFrontend.removeCaptureFiles();
 
     qtFrontend.setupDirectoryMonitoring();
 

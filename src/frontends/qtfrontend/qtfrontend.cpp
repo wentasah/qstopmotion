@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2011 by                                                *
+ *  Copyright (C) 2005-2012 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -318,8 +318,9 @@ int QtFrontend::run(int, char **)
 
 void QtFrontend::finalize()
 {
-    this->removeTemporaryDirectories();
-    this->removeTemporaryFiles();
+    this->removeApplicationFiles();
+    this->removeApplicationDirectories();
+    this->removeCaptureFiles();
 }
 
 
@@ -668,74 +669,74 @@ void QtFrontend::setupDirectoryMonitoring()
 
 bool QtFrontend::removeContentInDirectory(const QString &dirPath)
 {
-    bool has_err = false;
+    bool ret = true;
     QDir aDir(dirPath);
 
     if (!(aDir.exists())) {
-        return true;
+        return false;
     }
 
     QFileInfoList entries = aDir.entryInfoList(QDir::NoDotAndDotDot |
                             QDir::Dirs | QDir::Files);
     int count = entries.size();
-    for (int idx = 0; ((idx < count) && (!has_err)); idx++) {
+    for (int idx = 0; ((idx < count) && (ret)); idx++) {
         QFileInfo entryInfo = entries[idx];
         QString path = entryInfo.absoluteFilePath();
         if (entryInfo.isDir()) {
             // This entry is a directory
-            has_err = removeContentInDirectory(path);
-            if (has_err) {
+            ret = removeContentInDirectory(path);
+            if (!ret) {
                 continue;
             }
             if (!aDir.rmdir(path)) {
-                has_err = true;
+                ret = false;
             }
         }
         else {
             // This entry is a file
             if (!aDir.remove(path)) {
-                has_err = true;
+                ret = false;
             }
         }
     }
 
-    return(has_err);
+    return(ret);
 }
 
 
-void QtFrontend::makeTemporaryDirectories()
+void QtFrontend::makeApplicationDirectories()
 {
     QDir homeDir = QDir::home();
 
-    homeDir.mkpath(getTempDirName());
+    Q_ASSERT(homeDir.mkpath(getTempDirName()) == true);
     // QFile appDir(homeDir.absolutePath() and temp subdirectory);
     // hasCorrectPermissions = appDir.setPermissions(QFile::ReadOwner | QFile::WriteOwner | QFile::ExeOwner);
-    homeDir.mkpath(getTrashDirName());
+    Q_ASSERT(homeDir.mkpath(getTrashDirName()) == true);
     // setPermissions(...)
-    homeDir.mkpath(getPackerDirName());
+    Q_ASSERT(homeDir.mkpath(getPackerDirName()) == true);
     // setPermissions(...)
 }
 
 
-void QtFrontend::removeTemporaryDirectories()
+void QtFrontend::removeApplicationDirectories()
 {
     QDir homeDir(getUserDirName());
 
-    if (!removeContentInDirectory(getTempDirName())) {
-        homeDir.rmdir(getTempDirName());
-    }
-
-    if (!removeContentInDirectory(getTrashDirName())) {
-        homeDir.rmdir(getTrashDirName());
-    }
-
-    if (!removeContentInDirectory(getPackerDirName())) {
-        homeDir.rmdir(getPackerDirName());
-    }
+    Q_ASSERT(homeDir.rmdir(getTempDirName()) == true);
+    Q_ASSERT(homeDir.rmdir(getTrashDirName()) == true);
+    Q_ASSERT(homeDir.rmdir(getPackerDirName()) == true);
 }
 
 
-void QtFrontend::removeTemporaryFiles()
+void QtFrontend::removeApplicationFiles()
+{
+    Q_ASSERT(removeContentInDirectory(getTempDirName()) == true);
+    Q_ASSERT(removeContentInDirectory(getTrashDirName()) == true);
+    Q_ASSERT(removeContentInDirectory(getPackerDirName()) == true);
+}
+
+
+void QtFrontend::removeCaptureFiles()
 {
     QDir homeDir(getUserDirName());
     QStringList nameFilter;
@@ -748,7 +749,7 @@ void QtFrontend::removeTemporaryFiles()
     homeDir.setFilter(QDir::Files);
     QStringList fileNames = homeDir.entryList();
     if (fileNames.count() > 0) {
-        homeDir.remove(fileNames[0]);
+        Q_ASSERT(homeDir.remove(fileNames[0]) == true);
     }
 }
 

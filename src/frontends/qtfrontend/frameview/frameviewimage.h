@@ -134,6 +134,12 @@ public:
      */
     void updateActivateExposure();
 
+    /**
+     * Function for performing the redraw with the next frame of the animation.
+     * @arg exposureIndex Index of the next frame
+     */
+    void nextAnimationFrame(int exposureIndex);
+
 public slots:
     /**
      * Draws the next frame from the camera.

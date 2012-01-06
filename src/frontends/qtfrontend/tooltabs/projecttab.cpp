@@ -699,7 +699,6 @@ void ProjectTab::updateRemoveExposures(int fromFrame,
     qDebug("ProjectTab::updateRemoveExposures --> Start");
 
     // removeExposures(fromFrame, toFrame);
-    // emit modelSizeChanged(frontend->getProject()->getTotalExposureSize());
 
     qDebug("ProjectTab::updateRemoveExposures --> End");
 }

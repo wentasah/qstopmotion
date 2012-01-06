@@ -302,6 +302,12 @@ public:
     virtual const QImage getActualImage() = 0;
 
     /**
+     * Function for performing the redraw with the next frame of the animation.
+     * @arg exposureIndex Index of the next frame
+     */
+    virtual void nextAnimationFrame(int exposureIndex) = 0;
+
+    /**
      * Test function for debugging purposes
      */
     virtual void test(QWidget *parentWidget, int level) = 0;

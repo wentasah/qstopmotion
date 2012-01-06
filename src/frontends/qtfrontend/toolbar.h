@@ -27,8 +27,8 @@
 #include <QGridLayout>
 #include <QSlider>
 #include <QLabel>
+#include <QTimer>
 
-#include "application/camerahandler.h"
 #include "frontends/frontend.h"
 
 /**
@@ -39,13 +39,24 @@ class ToolBar : public QWidget
 {
     Q_OBJECT
 public:
+    enum toolBarFunction {
+        toolBarNothing,
+        toolBarCameraOff,
+        toolBarCameraOn
+    };
+
     /**
      * Sets up the tab.
      * @param parent the parent of the this widget
      */
-    ToolBar(Frontend *f,
-            CameraHandler *cameraHandler,
-            QWidget *parent = 0);
+    ToolBar(Frontend     *f,
+            QWidget      *parent = 0);
+
+    /**
+     * Get the capture button of the tool bar
+     * @return The capture button
+     */
+    QPushButton* getCaptureButton();
 
     /**
      * Applies the settings in the import tab.
@@ -58,6 +69,12 @@ public:
     void initialize();
 
     void retranslateStrings();
+
+    /**
+     * Set an new state to the tool bar.
+     * @arg newState The new tool bar state.
+     */
+    void setActualState(toolBarFunction newState);
 
 protected:
     // void resizeEvent(QResizeEvent *event);
@@ -134,9 +151,30 @@ public slots:
     /**
      * This slot is notified when the size of the model changes so that menuframe
      * menu options can be adjusted (activated/deactivated, etc).
-     * @param modelSize the new size of the model.
      */
-    void modelSizeChanged(int modelSize);
+    void modelSizeChanged();
+
+private:
+    Frontend        *frontend;
+    QTimer          *runAnimationTimer;
+    toolBarFunction  actualState;
+
+    QLabel          *framesIcon;
+    QSlider         *overlaySlider;
+    QLabel          *cameraIcon;
+    QPushButton     *toBeginButton;
+    QPushButton     *previousFrameButton;
+    QPushButton     *captureButton;
+    QPushButton     *playButton;
+    QPushButton     *nextFrameButton;
+    QPushButton     *toEndButton;
+
+    int              fps;
+    int              exposureCount;
+    bool             isLooping;
+    int              exposureIndex;
+
+    void makeGUI();
 
 private slots:
     /*  void toBegin();
@@ -146,29 +184,7 @@ private slots:
         void nextFrame();
         void toEnd();
     */
-private:
-    Frontend      *frontend;
-    QTimer        *runAnimationTimer;
-    CameraHandler *cameraHandler;
 
-    QLabel      *framesIcon;
-    QSlider     *overlaySlider;
-    QLabel      *cameraIcon;
-    QPushButton *toBeginButton;
-    QPushButton *previousFrameButton;
-    QPushButton *playButton;
-    QPushButton *captureButton;
-    QPushButton *nextFrameButton;
-    QPushButton *toEndButton;
-
-    int               frameNr;
-    int               fps;
-    int               exposureCount;
-    bool              isLooping;
-
-    void makeGUI();
-
-private slots:
     /**
      * Slot for playing the next frame. This slot is triggered by the timer.
      */

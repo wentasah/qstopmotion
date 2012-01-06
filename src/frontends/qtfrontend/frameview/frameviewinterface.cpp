@@ -242,23 +242,23 @@ void FrameViewInterface::updateMoveExposures(int, int, int) {}
  * Frameview functions
  **************************************************************************/
 
-bool FrameViewInterface::on()
+bool FrameViewInterface::cameraOn()
 {
-    qDebug("FrameViewInterface::on --> Start");
+    qDebug("FrameViewInterface::cameraOn --> Start");
 
     this->initCompleted();
 
     this->isPlayingVideo = true;
     grabTimer.start(150);
 
-    qDebug("FrameViewInterface::on --> End");
+    qDebug("FrameViewInterface::cameraOn --> End");
     return true;
 }
 
 
-void FrameViewInterface::off()
+void FrameViewInterface::cameraOff()
 {
-    qDebug("FrameViewInterface::off --> Start");
+    qDebug("FrameViewInterface::cameraOff --> Start");
 
     grabTimer.stop();
     playbackTimer.stop();
@@ -268,7 +268,7 @@ void FrameViewInterface::off()
     this->isPlayingVideo = false;
     this->update();
 
-    qDebug("FrameViewInterface::off --> End");
+    qDebug("FrameViewInterface::cameraOff --> End");
 }
 
 

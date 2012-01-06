@@ -27,13 +27,13 @@
 
 
 RecordingTab::RecordingTab(Frontend *f,
-                           CameraHandler *ch,
-                           QWidget *parent) :
+                           ToolBar  *tb,
+                           QWidget  *parent) :
     QWidget(parent)
 {
     frontend               = f;
-    cameraHandler          = ch;
-    isCameraOn             = false;
+    toolBar                = tb;
+    cameraOn               = false;
 
     recordingGroupBox      = 0;
     recordingModeCombo     = 0;
@@ -59,9 +59,35 @@ RecordingTab::RecordingTab(Frontend *f,
 
     this->setObjectName("RecordingTab");
 
+    PreferencesTool *pref = frontend->getPreferences();
+    captureFunction = (PreferencesTool::captureButtonFunction)pref->getBasicPreference("capturebutton", PreferencesTool::captureButtonAfter);
+
+    QString rootDir;
+    rootDir.append(frontend->getUserDirName());
+    rootDir.append(QLatin1String("/"));
+    rootDir.append(QLatin1String("capturedfile.jpg"));
+    captureFilePath.append(rootDir.toLatin1().constData());
+
+    cameraTimer = new QTimer(this);
+    cameraTimer->setSingleShot(true);
+    QObject::connect(cameraTimer, SIGNAL(timeout()), this, SLOT(storeFrame()));
+
     makeGUI();
 
     createAccelerators();
+}
+
+
+bool RecordingTab::getCameraOn()
+{
+    return cameraOn;
+}
+
+
+void RecordingTab::changeCaptureButtonFunction(PreferencesTool::captureButtonFunction newFunction)
+{
+    // The function of the camera button is changed
+    captureFunction = newFunction;
 }
 
 
@@ -179,6 +205,8 @@ void RecordingTab::makeGUI()
     tabLayout->addStretch(1);
 
     setLayout(tabLayout);
+
+    connect(toolBar->getCaptureButton(), SIGNAL(clicked()), this, SLOT(captureFrame()));
 }
 
 
@@ -323,7 +351,7 @@ void RecordingTab::cameraButtonClicked()
 {
     qDebug("RecordingTab::cameraButtonClicked --> Start");
 
-    if (isCameraOn == false) {
+    if (cameraOn == false) {
         qDebug("RecordingTab::cameraButtonClicked --> Start playing video from webcam");
 
         QString iconFile(frontend->getIconsDirName());
@@ -331,7 +359,7 @@ void RecordingTab::cameraButtonClicked()
 
         cameraButton->setIcon(QIcon(iconFile));
 
-        isCameraOn = frontend->startGrabber();
+        cameraOn = frontend->startGrabber();
     } else {
         qDebug("RecordingTab::cameraButtonClicked --> Stop playing video from webcam");
 
@@ -342,7 +370,17 @@ void RecordingTab::cameraButtonClicked()
 
         frontend->stopGrabber();
 
-        isCameraOn = false;
+        cameraOn = false;
+    }
+
+    if (cameraOn) {
+        initialize();
+        captureGroupBox->show();
+        toolBar->setActualState(ToolBar::toolBarCameraOn);
+    }
+    else {
+        captureGroupBox->hide();
+        toolBar->setActualState(ToolBar::toolBarCameraOff);
     }
 
     qDebug("RecordingTab::cameraButtonClicked --> End");
@@ -487,20 +525,6 @@ void RecordingTab::changeFpuCount(int newFpuCount)
 }
 */
 
-void RecordingTab::cameraStateChanged(bool isOn)
-{
-    qDebug("RecordingTab::cameraOn --> Start");
-
-    if (isOn) {
-        captureGroupBox->show();
-    } else {
-        captureGroupBox->hide();
-    }
-
-    qDebug("RecordingTab::cameraOn --> Stop");
-}
-
-
 void RecordingTab::createAccelerators()
 {
     mixAccel = new QShortcut(QKeySequence(Qt::Key_1), this);
@@ -511,4 +535,44 @@ void RecordingTab::createAccelerators()
 
     playbackAccel = new QShortcut(QKeySequence(Qt::Key_3), this);
     connect(playbackAccel, SIGNAL(activated()), this, SLOT(setPlaybackMode()));
+}
+
+
+void RecordingTab::captureFrame()
+{
+    qDebug("CameraHandler::captureFrame --> Start");
+
+    cameraTimer->start(60);
+
+    qDebug("CameraHandler::captureFrame --> End");
+}
+
+
+void RecordingTab::storeFrame()
+{
+    qDebug("CameraHandler::storeFrame --> Start");
+
+    QImage i;
+    i.load(captureFilePath);
+    if (!i.isNull()) {
+
+        int sceneIndex = frontend->getProject()->getActiveSceneIndex();
+        int takeIndex = frontend->getProject()->getActiveTakeIndex();
+        int exposureIndex = frontend->getProject()->getActiveExposureIndex();
+        switch (captureFunction) {
+        case PreferencesTool::captureButtonBevor:
+            frontend->getProject()->insertExposureToUndo(sceneIndex, takeIndex, exposureIndex, false, captureFilePath);
+            break;
+        case PreferencesTool::captureButtonAfter:
+            frontend->getProject()->insertExposureToUndo(sceneIndex, takeIndex, exposureIndex, true, captureFilePath);
+            break;
+        case PreferencesTool::captureButtonAppend:
+            frontend->getProject()->addExposureToUndo(sceneIndex, takeIndex, captureFilePath);
+            break;
+        }
+    } else {
+        cameraTimer->start(60);
+    }
+
+    qDebug("CameraHandler::storeFrame --> End");
 }

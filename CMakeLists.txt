@@ -93,7 +93,6 @@ set(HEADERS
 
 # add all header files of the project to MOC to MOC_HEADERS
 set(MOC_HEADERS
-    src/application/camerahandler.h
     src/application/editmenuhandler.h
     src/application/externalchangemonitor.h
     src/application/soundhandler.h
@@ -134,7 +133,6 @@ set(MOC_HEADERS
 # add all source files to SOURCES
 set(SOURCES
     src/main.cpp
-    src/application/camerahandler.cpp
     src/application/editmenuhandler.cpp
     src/application/externalchangemonitor.cpp
     src/application/soundhandler.cpp

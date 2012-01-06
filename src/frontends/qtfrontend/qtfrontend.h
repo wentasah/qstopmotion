@@ -338,6 +338,12 @@ public:
     const QImage getActualImage();
 
     /**
+     * Function for performing the redraw with the next frame of the animation.
+     * @arg exposureIndex Index of the next frame
+     */
+    void nextAnimationFrame(int exposureIndex);
+
+    /**
      * Sets up the ExternalChangeMonitor to monitor the project directories
      * for changes in the project files.
      */

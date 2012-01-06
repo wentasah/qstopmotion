@@ -26,13 +26,12 @@
 #include <QtGui/QLabel>
 
 
-ToolBar::ToolBar(Frontend *f,
-                 CameraHandler *cameraHandler,
-                 QWidget *parent) :
-    QWidget(parent),
-    cameraHandler(cameraHandler)
+ToolBar::ToolBar(Frontend     *f,
+                 QWidget      *parent) :
+    QWidget(parent)
 {
     frontend            = f;
+    actualState         = toolBarNothing;
     runAnimationTimer   = NULL;
     framesIcon          = 0;
     overlaySlider       = 0;
@@ -46,7 +45,7 @@ ToolBar::ToolBar(Frontend *f,
     fps                 = 0;
     exposureCount       = 0;
 
-    frameNr = 0;
+    exposureIndex = -1;
     isLooping = false;
 
     setObjectName("ToolBar");
@@ -55,6 +54,12 @@ ToolBar::ToolBar(Frontend *f,
 
     runAnimationTimer = new QTimer(this);
     QObject::connect(runAnimationTimer, SIGNAL(timeout()), this, SLOT(playNextFrame()));
+}
+
+
+QPushButton* ToolBar::getCaptureButton()
+{
+    return captureButton;
 }
 
 
@@ -102,7 +107,6 @@ void ToolBar::makeGUI()
     captureButton->setIcon(QPixmap(iconFile));
     // captureButton->setFlat(true);
     // captureButton->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Minimum);
-    connect(captureButton, SIGNAL(clicked()), cameraHandler, SLOT(captureFrame()));
 
     playButton = new QPushButton;
     iconFile.clear();
@@ -253,14 +257,19 @@ void ToolBar::runAnimation()
 
     if (frontend->getProject()->getActiveSceneIndex() >= 0) {
         if (exposureCount > 0) {
-            frontend->getProject()->initAudioDevice();
+            // frontend->getProject()->initAudioDevice();
+
+            QString iconFile(frontend->getIconsDirName());
+            iconFile.append(QLatin1String("pause.png"));
+            playButton->setIcon(QPixmap(iconFile));
+
             QObject::disconnect(playButton, SIGNAL(clicked()), this, SLOT(runAnimation()));
             QObject::connect(playButton, SIGNAL(clicked()), this, SLOT(pauseAnimation()));
 
             //playButton->setToggleButton(true);
             playButton->setChecked(true);
             playButton->toggle();
-            frameNr = frontend->getProject()->getActiveExposureIndex();
+            exposureIndex = frontend->getProject()->getActiveExposureIndex();
             frontend->showMessage(tr("Running animation"), 2000);
             runAnimationTimer->start(1000 / fps);
             runAnimationTimer->setSingleShot(false);
@@ -272,8 +281,14 @@ void ToolBar::runAnimation()
 void ToolBar::stopAnimation()
 {
     if (runAnimationTimer->isActive()) {
+        QString iconFile(frontend->getIconsDirName());
+        iconFile.append(QLatin1String("play.png"));
+        playButton->setIcon(QPixmap(iconFile));
+
         QObject::disconnect(playButton, SIGNAL(clicked()), this, SLOT(pauseAnimation()));
         QObject::connect(playButton, SIGNAL(clicked()), this, SLOT(runAnimation()));
+
+        // frontend->shutdownAudioDevice();
 
         if (playButton->isChecked()) {
             playButton->toggle();
@@ -281,13 +296,9 @@ void ToolBar::stopAnimation()
 
         playButton->setChecked(false);
 
-        frontend->getProject()->setActiveExposureIndex(frameNr);
-
-        // frontend->shutdownAudioDevice();
-
         frontend->clearMessage();
         runAnimationTimer->stop();
-        frontend->getProject()->setActiveExposureIndex(0);
+        exposureIndex = -1;
     }
 }
 
@@ -295,18 +306,20 @@ void ToolBar::stopAnimation()
 void ToolBar::pauseAnimation()
 {
     if (runAnimationTimer->isActive()) {
+        QString iconFile(frontend->getIconsDirName());
+        iconFile.append(QLatin1String("play.png"));
+        playButton->setIcon(QPixmap(iconFile));
+
         QObject::disconnect(playButton, SIGNAL(clicked()), this, SLOT(pauseAnimation()));
         QObject::connect(playButton, SIGNAL(clicked()), this, SLOT(runAnimation()));
+
+        // frontend->shutdownAudioDevice();
 
         if (playButton->isChecked()) {
             playButton->toggle();
         }
 
         playButton->setChecked(false);
-
-        frontend->getProject()->setActiveExposureIndex(frameNr);
-
-        // frontend->shutdownAudioDevice();
 
         frontend->clearMessage();
         runAnimationTimer->stop();
@@ -417,11 +430,13 @@ void ToolBar::playNextFrame()
         // frontend->getView()->notifyPlaySound(sceneIndex);
 
         if (isLooping) {
-            frameNr = (frameNr < exposureCount - 1) ? frameNr + 1 : 0;
+            exposureIndex = (exposureIndex < exposureCount - 1) ? exposureIndex + 1 : 0;
+            frontend->nextAnimationFrame(exposureIndex);
         }
         else {
-            if (frameNr < exposureCount - 1) {
-                ++frameNr;
+            if (exposureIndex < exposureCount - 1) {
+                exposureIndex++;
+                frontend->nextAnimationFrame(exposureIndex);
             }
             else {
                 this->stopAnimation();
@@ -432,34 +447,37 @@ void ToolBar::playNextFrame()
         stopAnimation();
     }
 }
-void ToolBar::modelSizeChanged(int modelSize)
+
+
+void ToolBar::modelSizeChanged()
 {
     qDebug("ToolBar::modelSizeChanged --> Start");
 
-    //Not <=1 because it is signed with a meaning for -1.
-    if (modelSize == 0 || modelSize == 1) {
-        if (previousFrameButton->isEnabled()) {
-            previousFrameButton->setEnabled(false);
-            nextFrameButton->setEnabled(false);
-            playButton->setEnabled(false);
-            // pauseButton->setEnabled(false);
-            // stopButton->setEnabled(false);
-            toEndButton->setEnabled(false);
-            toBeginButton->setEnabled(false);
-        }
-    }
-    else {
-        if (modelSize >= 2) {
-            if ( !previousFrameButton->isEnabled() && !cameraHandler->isCameraRunning() ) {
-                previousFrameButton->setEnabled(true);
-                nextFrameButton->setEnabled(true);
-                playButton->setEnabled(true);
-                // pauseButton->setEnabled(true);
-                // stopButton->setEnabled(true);
-                toEndButton->setEnabled(true);
-                toBeginButton->setEnabled(true);
-            }
-        }
+    switch (actualState) {
+    case toolBarNothing:
+        previousFrameButton->setEnabled(false);
+        nextFrameButton->setEnabled(false);
+        captureButton->setEnabled(false);
+        playButton->setEnabled(false);
+        toEndButton->setEnabled(false);
+        toBeginButton->setEnabled(false);
+        break;
+    case toolBarCameraOff:
+        previousFrameButton->setEnabled(true);
+        nextFrameButton->setEnabled(true);
+        captureButton->setEnabled(false);
+        playButton->setEnabled(true);
+        toEndButton->setEnabled(true);
+        toBeginButton->setEnabled(true);
+        break;
+    case toolBarCameraOn:
+        previousFrameButton->setEnabled(false);
+        nextFrameButton->setEnabled(false);
+        captureButton->setEnabled(true);
+        playButton->setEnabled(false);
+        toEndButton->setEnabled(false);
+        toBeginButton->setEnabled(false);
+        break;
     }
 
     qDebug("ToolBar::modelSizeChanged --> End");
@@ -536,4 +554,11 @@ void ToolBar::retranslateStrings()
     captureButton->setWhatsThis(infoText);
     captureButton->setToolTip(infoText);
 
+}
+
+
+void ToolBar::setActualState(toolBarFunction newState)
+{
+    actualState = newState;
+    modelSizeChanged();
 }

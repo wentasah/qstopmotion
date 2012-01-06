@@ -661,6 +661,12 @@ const QImage QtFrontend::getActualImage()
 }
 
 
+void QtFrontend::nextAnimationFrame(int exposureIndex)
+{
+    mw->nextAnimationFrame(exposureIndex);
+}
+
+
 void QtFrontend::setupDirectoryMonitoring()
 {
     mw->setupDirectoryMonitoring();
@@ -811,7 +817,7 @@ bool QtFrontend::recover()
 
         //fileMenu->setItemEnabled(SAVE, false);
 
-        mw->modelSizeChanged(0);
+        mw->modelSizeChanged();
     }
     else {
         project->setProjectFileName(fileName);

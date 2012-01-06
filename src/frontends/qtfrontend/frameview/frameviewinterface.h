@@ -277,12 +277,12 @@ public:
     /**
      * Turns on the webcamera/video import mode.
      */
-    bool on();
+    bool cameraOn();
 
     /**
      * Turns off the webcamera/video import mode.
      */
-    void off();
+    void cameraOff();
 
     /**
      * Returns the mixing mode.
@@ -310,6 +310,12 @@ public:
      * @param playbackSpeed the speed to be setted
      */
     void setFps(int fps);
+
+    /**
+     * Function for performing the redraw with the next frame of the animation.
+     * @arg exposureIndex Index of the next frame
+     */
+    virtual void nextAnimationFrame(int exposureIndex) = 0;
 
 public slots:
     /**

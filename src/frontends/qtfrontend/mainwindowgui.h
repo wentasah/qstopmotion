@@ -23,7 +23,6 @@
 #ifndef QTGUI_H
 #define QTGUI_H
 
-#include "application/camerahandler.h"
 #include "application/editmenuhandler.h"
 #include "application/externalchangemonitor.h"
 #include "application/soundhandler.h"
@@ -243,23 +242,23 @@ public:
      */
     const QImage getActualImage();
 
+    /**
+     * Function for performing the redraw with the next frame of the animation.
+     * @arg exposureIndex Index of the next frame
+     */
+    void nextAnimationFrame(int exposureIndex);
+
+    /**
+     * This slot is notified when the size of the model changes so that menuframe
+     * menu options can be adjusted (activated/deactivated, etc).
+     */
+    void modelSizeChanged();
+
     /**************************************************************************
      * Public slots
      **************************************************************************/
 
 public slots:
-    /**
-     * This slot is notified when the size of the model changes so that menuframe
-     * menu options can be adjusted (activated/deactivated, etc).
-     * @param modelSize the new size of the model.
-     */
-    void modelSizeChanged(int modelSize);
-
-    /**
-     * Sets differents buttons such as undo, save as and copy to be enabled.
-     */
-    void activateMenuOptions();
-
     /**
      * Update the progress bar.
      */
@@ -342,19 +341,28 @@ private slots:
     void showAboutDialog();
 
 protected:
-   void closeEvent(QCloseEvent* event);
+    void closeEvent(QCloseEvent* event);
 
 signals:
+    /**
+     * This signal is emitted when in the start dialog a new project is selected.
+     */
     void startNewProject();
-    void startLastProject();
-    void startOpenProject();
-    void startExit();
 
     /**
-     * This signal is emitted when the state of the camera is changed.
-     * @param isActivated true if the camera has been activated.
+     * This signal is emitted when in the start dialog the last project is selected.
      */
-    void cameraStateChanged(bool isActivated);
+    void startLastProject();
+
+    /**
+     * This signal is emitted when in the start dialog open project is selected.
+     */
+    void startOpenProject();
+
+    /**
+     * This signal is emitted when in the start dialog exit is selected.
+     */
+    void startExit();
 
 public:
 
@@ -437,7 +445,6 @@ private:
 
     // Handlers
     SoundHandler          *soundHandler;
-    CameraHandler         *cameraHandler;
     EditMenuHandler       *editMenuHandler;
     ExternalChangeMonitor *changeMonitor;
 

@@ -21,8 +21,8 @@
 #ifndef RECORDINGTAB_H
 #define RECORDINGTAB_H
 
-#include "application/camerahandler.h"
 #include "frontends/frontend.h"
+#include "frontends/qtfrontend/toolbar.h"
 
 #include <QtCore/QTimer>
 #include <QtGui/QWidget>
@@ -46,12 +46,18 @@ public:
     /**
      * Sets up the tab.
      * @param df the domain facade of the application
-     * @param ch the camera handler
+     * @param tb the tool bar
      * @param parent the parent of the this widget
      */
     RecordingTab(Frontend *f,
-                 CameraHandler *ch,
-                 QWidget *parent = 0);
+                 ToolBar  *tb,
+                 QWidget  *parent = 0);
+
+    /**
+     * Is the camera switched on.
+     * @return true if the camera is on.
+     */
+    bool getCameraOn();
 
     /**
      * Applies the settings in the import tab.
@@ -64,6 +70,12 @@ public:
     void initialize();
 
     void retranslateStrings();
+
+    /**
+     * A new capture button function is selected in the preferences menu.
+     * @param newFunction New selected function.
+     */
+    void changeCaptureButtonFunction(PreferencesTool::captureButtonFunction newFunction);
 
 private:
     /**
@@ -81,6 +93,11 @@ protected:
     // void resizeEvent(QResizeEvent *event);
 
 public slots:
+    /**
+     *
+     */
+    void captureFrame();
+
     /**
      * Slot for notified the recording tab when the recording mode changes, so that widgets
      * can be updated.
@@ -143,17 +160,14 @@ public slots:
      */
     // void changeFpuCount(int newFpuCount);
 
-    /**
-     * Slot for being notified when the camera is turned on so that
-     * it disable of some buttons.
-     * @param isOn true if the camera is turned on.
-     */
-    void cameraStateChanged(bool isOn);
-
 private:
     Frontend            *frontend;
-    CameraHandler       *cameraHandler;
-    bool                 isCameraOn;
+    ToolBar             *toolBar;
+    bool                 cameraOn;
+    QTimer             *cameraTimer;
+    QString             captureFilePath;
+    PreferencesTool::captureButtonFunction captureFunction;
+
     QShortcut           *mixAccel;
     QShortcut           *diffAccel;
     QShortcut           *playbackAccel;
@@ -175,6 +189,13 @@ private:
     // QLabel      *fpuSliderCaption;    // Frames per unit
     // QSlider     *fpuSlider;
     // QTimer      *autoCaptureTimer;
+
+private slots:
+    /**
+     * Slot called by the cameraTimer which checks if the frame has been fully captured.
+     */
+    void storeFrame();
+
 };
 
 #endif

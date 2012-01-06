@@ -117,7 +117,6 @@ MainWindowGUI::MainWindowGUI(QApplication *stApp, Frontend *f)
     undoView             = 0;
     helpBrowser          = 0;
 
-    cameraHandler        = 0;
     editMenuHandler      = 0;
     soundHandler         = 0;
     changeMonitor        = 0;
@@ -320,7 +319,7 @@ void MainWindowGUI::changeLanguage(int newIndex)
 
 void MainWindowGUI::changeCaptureButtonFunction(PreferencesTool::captureButtonFunction newFunction)
 {
-    cameraHandler->changeCaptureButtonFunction(newFunction);
+    recordingTab->changeCaptureButtonFunction(newFunction);
 }
 
 
@@ -438,19 +437,22 @@ void MainWindowGUI::hideProgress()
         progressDialog->hide();
         delete progressDialog;
         progressDialog = NULL;
-    } else if (progressBar) {
-        // timer->stop();
-        // delete timer;
-        // timer = NULL;
-
-        // progressBar->hide();
-        // statusBar()->removeWidget(progressBar);
-        // delete progressBar;
-        // progressBar = NULL;
-
+    }
+    else {
         statusBar()->removeWidget(infoText);
         delete infoText;
         infoText = NULL;
+
+        if (progressBar) {
+            // timer->stop();
+            // delete timer;
+            // timer = NULL;
+
+            // progressBar->hide();
+            // statusBar()->removeWidget(progressBar);
+            // delete progressBar;
+            // progressBar = NULL;
+        }
     }
 }
 
@@ -562,7 +564,7 @@ bool MainWindowGUI::startGrabber()
 {
     qDebug("MainWindowGUI::on --> Start");
 
-    frontend->showProgress(tr("Connecting camera..."));
+    frontend->showMessage(tr("Connecting camera..."));
     grabber->init();
     if (!grabber->isGrabberInited()) {
         frontend->hideProgress();
@@ -571,11 +573,10 @@ bool MainWindowGUI::startGrabber()
                                  "This can be set in the preferences menu."));
         return false;
     }
-    recordingTab->initialize();
-    frameView->on();
-    frontend->hideProgress();
 
-    emit cameraStateChanged(true);
+    frameView->cameraOn();
+
+    frontend->clearMessage();
 
     qDebug("MainWindowGUI::on --> End");
     return true;
@@ -586,9 +587,8 @@ void MainWindowGUI::stopGrabber()
 {
     qDebug("MainWindowGUI::off --> Start");
 
-    emit cameraStateChanged(false);
+    frameView->cameraOff();
 
-    frameView->off();
     grabber->finalize();
 
     qDebug("MainWindowGUI::off --> End");
@@ -619,13 +619,21 @@ const QImage MainWindowGUI::getActualImage()
 }
 
 
+void MainWindowGUI::nextAnimationFrame(int exposureIndex)
+{
+    frameView->nextAnimationFrame(exposureIndex);
+}
+
+
 /**************************************************************************
  * Public slots
  **************************************************************************/
 
-void MainWindowGUI::modelSizeChanged(int modelSize)
+void MainWindowGUI::modelSizeChanged()
 {
-    qDebug("MainWindowGUI::modelSizeChanged --> Start (Empty)");
+    qDebug("MainWindowGUI::modelSizeChanged --> Start");
+
+    toolBar->modelSizeChanged();
 
     /*
     if (modelSize == 0) {
@@ -638,22 +646,9 @@ void MainWindowGUI::modelSizeChanged(int modelSize)
         // gotoFrameAct->setEnabled(true);
         saveAsAct->setEnabled(true);
     }
+    */
 
     qDebug("MainWindowGUI::modelSizeChanged --> End");
-    */
-}
-
-
-void MainWindowGUI::activateMenuOptions()
-{
-    qDebug("MainWindowGUI::activateMenuOptions --> Start (Empty)");
-
-    /*
-    undoAct->setEnabled(true);
-    redoAct->setEnabled(true);
-
-    qDebug("MainWindowGUI::activateMenuOptions --> End");
-    */
 }
 
 
@@ -713,8 +708,7 @@ void MainWindowGUI::newProject()
 
     //fileMenu->setItemEnabled(SAVE, false);
 
-    modelSizeChanged(0);
-    toolBar->modelSizeChanged(0);
+    modelSizeChanged();
 
     delete(dialog);
 
@@ -783,6 +777,7 @@ void MainWindowGUI::saveProject()
         saveProjectAs();
     }
     frontend->hideProgress();
+    toolBar->setActualState(ToolBar::toolBarNothing);
 }
 
 
@@ -1050,7 +1045,6 @@ void MainWindowGUI::initTranslations()
 
 void MainWindowGUI::createHandlers()
 {
-    cameraHandler = new CameraHandler(frontend, this);
     editMenuHandler = new EditMenuHandler(frontend, this, timeLine);
     soundHandler = new SoundHandler(frontend, this, this->lastVisitedDir);
     connect(soundHandler, SIGNAL(soundsChanged()), timeLine, SLOT(frameSoundsChanged()));
@@ -1079,7 +1073,7 @@ void MainWindowGUI::createAccelerators()
     connect(toggleCameraAccel, SIGNAL(activated()), recordingTab, SLOT(cameraButtonClicked()));
 
     QShortcut *captureAccel = new QShortcut(QKeySequence(Qt::Key_Space), this);
-    connect(captureAccel, SIGNAL(activated()), cameraHandler, SLOT(captureFrame()));
+    connect(captureAccel, SIGNAL(activated()), recordingTab, SLOT(captureFrame()));
 
     QShortcut *newSceneAccel = new QShortcut(QKeySequence(Qt::ControlModifier + Qt::Key_E), this);
     connect(newSceneAccel, SIGNAL(activated()), projectTab, SLOT(addSceneSlot()));
@@ -1352,7 +1346,7 @@ void MainWindowGUI::makeToolsMenu(QHBoxLayout *layout)
     Q_ASSERT(frontend != 0);
 
     recordingTab = new RecordingTab(frontend,
-                                    cameraHandler,
+                                    toolBar,
                                     this);
     recordingTab->initialize();
     iconFile.append(QLatin1String("clapper.png"));
@@ -1378,7 +1372,6 @@ void MainWindowGUI::makeToolsMenu(QHBoxLayout *layout)
     sideBar->addTab(compositingTab, QIcon(iconFile), QString(tr("Compositing")));
 */
     connect(this, SIGNAL(cameraStateChanged(bool)), recordingTab, SLOT(cameraStateChanged(bool)));
-    connect(this, SIGNAL(cameraStateChanged(bool)), cameraHandler, SLOT(cameraStateChanged(bool)));
 }
 
 /*
@@ -1437,7 +1430,7 @@ void MainWindowGUI::makeViews(QHBoxLayout *layout)
 
     viewAreaLayout->addWidget(frameView);
 
-    toolBar = new ToolBar(frontend, cameraHandler);
+    toolBar = new ToolBar(frontend, recordingTab);
     toolBar->setObjectName("ToolBar");
     toolBar->setMinimumSize(400, 30);
     toolBar->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
@@ -1446,8 +1439,6 @@ void MainWindowGUI::makeViews(QHBoxLayout *layout)
 
     viewArea->setLayout(viewAreaLayout);
     layout->addWidget(viewArea);
-
-    connect(cameraHandler, SIGNAL(capturedFrame()), this, SLOT(activateMenuOptions()));
 }
 
 
@@ -1822,20 +1813,11 @@ void MainWindowGUI::openProject(const QString &fileName)
     AnimationProject *project = frontend->getProject()->getAnimationProject();
 
     frontend->getProject()->setProjectFileName(fileName);
-    Q_ASSERT(!(project->getProjectFileName().isEmpty()));
     frontend->getProject()->openProject();
-    Q_ASSERT(!(project->getProjectFileName().isEmpty()));
 
     saveAsAct->setEnabled(true);
-    Q_ASSERT(!(project->getProjectFileName().isEmpty()));
     saveAct->setEnabled(true);
-    Q_ASSERT(!(project->getProjectFileName().isEmpty()));
-    int size = frontend->getProject()->getTotalExposureSize();
-    if (size > 0) {
-        activateMenuOptions();
-        modelSizeChanged(size);
-        toolBar->modelSizeChanged(size);
-    }
+    toolBar->setActualState(ToolBar::toolBarCameraOff);
 }
 
 

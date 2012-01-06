@@ -50,7 +50,7 @@ FrameViewImage::~FrameViewImage()
 
     // Turn off camera if it's on
     if (isPlayingVideo) {
-        off();
+        cameraOff();
     }
 /*
     if (actualImage) {
@@ -174,6 +174,33 @@ void FrameViewImage::updateActivateExposure()
     qDebug("FrameViewImage::updateActivateExposure --> End");
 }
 
+
+void FrameViewImage::nextAnimationFrame(int exposureIndex)
+{
+    qDebug("FrameViewImage::nextAnimationFrame --> Start");
+
+    int activeSceneIndex = frontend->getProject()->getActiveSceneIndex();
+    int activeTakeIndex = frontend->getProject()->getActiveTakeIndex();
+
+    Q_ASSERT(activeSceneIndex >= 0);
+    Q_ASSERT(activeTakeIndex >= 0);
+
+    Exposure *exposure;
+    exposure = frontend->getProject()->getExposure(activeSceneIndex, activeTakeIndex, exposureIndex);
+
+    if (!exposure->isEmpty()) {
+        actualImage.load(exposure->getImagePath());
+        QPainter widgetPainter(this);
+        widgetPainter.drawImage(0, 0, actualImage);
+    }
+
+    // Call the redraw function
+    this->update();
+
+    qDebug("FrameViewImage::nextAnimationFrame --> End");
+    return;
+}
+
 /**************************************************************************
  * Signals
  **************************************************************************/
@@ -209,6 +236,11 @@ void FrameViewImage::nextPlayBack()
     int activeTakeIndex = frontend->getProject()->getActiveTakeIndex();
     int activeExposureIndex = frontend->getProject()->getActiveExposureIndex();
 
+    Q_ASSERT(activeSceneIndex >= 0);
+    Q_ASSERT(activeTakeIndex >= 0);
+    Q_ASSERT(activeExposureIndex >= 0);
+
+    // TODO: remove activeSceneIndex-Test
     if (activeSceneIndex >= 0) {
         if ((int)i < mixCount && i < (int)activeExposureIndex + 1) {
 

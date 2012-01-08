@@ -142,7 +142,7 @@ unsigned int Exposure::getSceneIndex() const
 
 const QString Exposure::getImagePath() const
 {
-    qDebug("Exposure::getImagePath --> Start");
+    // qDebug("Exposure::getImagePath --> Start");
 
     Q_ASSERT(!theFrame.isEmpty());
 
@@ -164,7 +164,7 @@ const QString Exposure::getImagePath() const
     absImagePath.append(QLatin1String("/"));
     absImagePath.append(theFrame);
 
-    qDebug("Exposure::getImagePath --> End");
+    // qDebug("Exposure::getImagePath --> End");
     return absImagePath;
 }
 
@@ -419,7 +419,7 @@ Exposure::fileLocation Exposure::getExposureLocation()
 
 bool Exposure::readDataFromProject(QDomElement &exposureNode)
 {
-    qDebug("Exposure::readDataFromProject --> Start");
+    // qDebug("Exposure::readDataFromProject --> Start");
 
     id.append(exposureNode.attributeNode(QString("id")).value());
 
@@ -443,7 +443,7 @@ bool Exposure::readDataFromProject(QDomElement &exposureNode)
         currNode = currNode.nextSiblingElement();
     }
 
-    qDebug("Exposure::readDataFromProject --> End");
+    // qDebug("Exposure::readDataFromProject --> End");
     return true;
 }
 

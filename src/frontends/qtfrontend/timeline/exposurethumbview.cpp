@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2010 by                                                *
+ *  Copyright (C) 2005-2012 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -41,14 +41,14 @@
 ExposureThumbView::ExposureThumbView(TimeLine *line, QWidget *parent, int number, const char *name)
     : ThumbView(line, parent, number, name)
 {
-    qDebug("ExposureThumbView::Constructor --> Start");
+    // qDebug("ExposureThumbView::Constructor --> Start");
 
     setObjectName("ExposureThumbView");
     stringNumber = QString("%1").arg(number + 1);
     textWidth = 5 + stringNumber.length() * 8;
     selected = false;
 
-    qDebug("ExposureThumbView::Constructor --> End");
+    // qDebug("ExposureThumbView::Constructor --> End");
 }
 
 

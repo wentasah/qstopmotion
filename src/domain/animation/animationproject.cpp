@@ -270,11 +270,16 @@ bool AnimationProject::saveProject()
 {
     qDebug("AnimationProject::saveProject --> Start");
 
+    frontend->showProgress(tr("Saving scenes to disk ..."), frontend->getProject()->getTotalExposureSize());
+
     if (!serializer->save(this)) {
         qWarning("AnimationProject::saveProject --> save animation data failed");
+        frontend->hideProgress();
         return false;
     }
     this->unsavedChanges = false;
+
+    frontend->hideProgress();
 
     qDebug("AnimationProject::saveProject --> End");
     return true;
@@ -373,7 +378,6 @@ bool AnimationProject::exportToVideo(VideoEncoder * encoder)
 
     VideoEncoderFactory factory(this->getFrontend());
     if (factory.createVideoFile(encoder) != NULL) {
-        frontend->hideProgress();
         return true;
     }
 
@@ -978,13 +982,13 @@ Exposure *AnimationProject::getExposure(unsigned int sceneIndex,
                                         unsigned int takeIndex,
                                         unsigned int exposureIndex)
 {
-    qDebug("AnimationProject::getExposure --> Start");
+    // qDebug("AnimationProject::getExposure --> Start");
 
     Q_ASSERT(exposureIndex < scenes[sceneIndex]->getExposureSize());
 
     Exposure* exposure = scenes[sceneIndex]->getExposure(takeIndex, exposureIndex);
 
-    qDebug("AnimationProject::getExposure --> End");
+    // qDebug("AnimationProject::getExposure --> End");
     return exposure;
 }
 

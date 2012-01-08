@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2010-2010 by                                                *
+ *  Copyright (C) 2010-2012 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -139,14 +139,14 @@ void FrameViewImage::updateAddExposure(int sceneIndex,
                                        int takeIndex,
                                        int exposureIndex)
 {
-    qDebug("FrameViewImage::updateNewExposure --> Start");
+    // qDebug("FrameViewImage::updateAddExposure --> Start");
 
     if (isPlayingVideo) {
         Exposure *exposure = frontend->getProject()->getExposure(sceneIndex, takeIndex, exposureIndex);
         addToImageBuffer(QImage(exposure->getImagePath()));
     }
 
-    qDebug("FrameViewImage::updateNewExposure --> End");
+    // qDebug("FrameViewImage::updateAddExposure --> End");
 }
 
 
@@ -154,14 +154,14 @@ void FrameViewImage::updateInsertExposure(int sceneIndex,
                                           int takeIndex,
                                           int exposureIndex)
 {
-    qDebug("FrameViewImage::updateNewExposure --> Start");
+    qDebug("FrameViewImage::updateInsertExposure --> Start");
 
     if (isPlayingVideo) {
         Exposure *exposure = frontend->getProject()->getExposure(sceneIndex, takeIndex, exposureIndex);
         addToImageBuffer(QImage(exposure->getImagePath()));
     }
 
-    qDebug("FrameViewImage::updateNewExposure --> End");
+    qDebug("FrameViewImage::updateInsertExposure --> End");
 }
 
 
@@ -177,7 +177,7 @@ void FrameViewImage::updateActivateExposure()
 
 void FrameViewImage::nextAnimationFrame(int exposureIndex)
 {
-    qDebug("FrameViewImage::nextAnimationFrame --> Start");
+    // qDebug("FrameViewImage::nextAnimationFrame --> Start");
 
     int activeSceneIndex = frontend->getProject()->getActiveSceneIndex();
     int activeTakeIndex = frontend->getProject()->getActiveTakeIndex();
@@ -197,7 +197,7 @@ void FrameViewImage::nextAnimationFrame(int exposureIndex)
     // Call the redraw function
     this->update();
 
-    qDebug("FrameViewImage::nextAnimationFrame --> End");
+    // qDebug("FrameViewImage::nextAnimationFrame --> End");
     return;
 }
 

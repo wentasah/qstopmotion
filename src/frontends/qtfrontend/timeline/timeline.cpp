@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2011 by                                                *
+ *  Copyright (C) 2005-2012 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -39,7 +39,7 @@
 
 static QImage tryReadImage(const QString &filename)
 {
-    qDebug("TimeLine::tryReadImage --> Start");
+    // qDebug("TimeLine::tryReadImage --> Start");
 
     if (filename.isEmpty()) {
         qWarning() << "Couldn't read image: Invalid file name";
@@ -51,7 +51,7 @@ static QImage tryReadImage(const QString &filename)
     QImageReader imageReader(filename);
     const QImage image = imageReader.read();
     if (!image.isNull()) {
-        qDebug("TimeLine::tryReadImage --> End");
+        // qDebug("TimeLine::tryReadImage --> End");
         return image;
     }
 
@@ -390,11 +390,11 @@ void TimeLine::updateAddExposure(int sceneIndex,
                                  int takeIndex,
                                  int exposureIndex)
 {
-    qDebug("TimeLine::updateAddExposure --> Start");
+    // qDebug("TimeLine::updateAddExposure --> Start");
 
     this->newExposure(sceneIndex, takeIndex, exposureIndex);
 
-    qDebug("TimeLine::updateAddExposure --> End");
+    // qDebug("TimeLine::updateAddExposure --> End");
 }
 
 
@@ -767,12 +767,13 @@ void TimeLine::newExposure(int sceneIndex,
                            int takeIndex,
                            int newExposureIndex)
 {
-    qDebug("TimeLine::newExposure --> Start");
+    // qDebug("TimeLine::newExposure --> Start");
 
     Q_ASSERT(newExposureIndex >= 0);
 
     if (activeTakeIndex < 0) {
         // No active take in the timeline
+        // qDebug("TimeLine::newExposure --> End (nothing)");
         return;
     }
 
@@ -814,7 +815,7 @@ void TimeLine::newExposure(int sceneIndex,
         selectionFrame++;
     }
 
-    qDebug("TimeLine::newExposure --> End");
+    // qDebug("TimeLine::newExposure --> End");
 }
 
 

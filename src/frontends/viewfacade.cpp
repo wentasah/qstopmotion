@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2011 by                                                *
+ *  Copyright (C) 2005-2012 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -311,14 +311,14 @@ void ViewFacade::notifyAddExposure(int sceneIndex,
                                    int takeIndex,
                                    int exposureIndex)
 {
-    qDebug("ViewFacade::notifyAddExposure --> Start");
+    // qDebug("ViewFacade::notifyAddExposure --> Start");
 
     int numElem = observers.size();
     for (int i = 0; i < numElem; ++i) {
         observers[i]->updateAddExposure(sceneIndex, takeIndex, exposureIndex);
     }
 
-    qDebug("ViewFacade::notifyAddExposure --> End");
+    // qDebug("ViewFacade::notifyAddExposure --> End");
 }
 
 

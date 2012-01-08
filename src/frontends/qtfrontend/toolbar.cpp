@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2010-2011 by                                                *
+ *  Copyright (C) 2010-2012 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -270,7 +270,7 @@ void ToolBar::runAnimation()
             playButton->setChecked(true);
             playButton->toggle();
             exposureIndex = frontend->getProject()->getActiveExposureIndex();
-            frontend->showMessage(tr("Running animation"), 2000);
+            frontend->showMessage(tr("Running animation"), 0);
             runAnimationTimer->start(1000 / fps);
             runAnimationTimer->setSingleShot(false);
         }
@@ -475,6 +475,22 @@ void ToolBar::modelSizeChanged()
         nextFrameButton->setEnabled(false);
         captureButton->setEnabled(true);
         playButton->setEnabled(false);
+        toEndButton->setEnabled(false);
+        toBeginButton->setEnabled(false);
+        break;
+    case toolBarPlaying:
+        previousFrameButton->setEnabled(false);
+        nextFrameButton->setEnabled(false);
+        captureButton->setEnabled(false);
+        playButton->setEnabled(true);
+        toEndButton->setEnabled(false);
+        toBeginButton->setEnabled(false);
+        break;
+    case toolBarPause:
+        previousFrameButton->setEnabled(false);
+        nextFrameButton->setEnabled(false);
+        captureButton->setEnabled(true);
+        playButton->setEnabled(true);
         toEndButton->setEnabled(false);
         toBeginButton->setEnabled(false);
         break;

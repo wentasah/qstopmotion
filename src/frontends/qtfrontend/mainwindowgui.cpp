@@ -769,14 +769,12 @@ void MainWindowGUI::saveProject()
 {
     const QString fileName = frontend->getProject()->getProjectFileName();
 
-    frontend->showProgress(tr("Saving scenes to disk ..."), frontend->getProject()->getSceneSize());
-
     if (!fileName.isEmpty()) {
         frontend->getProject()->saveProject();
     } else {
         saveProjectAs();
     }
-    frontend->hideProgress();
+
     toolBar->setActualState(ToolBar::toolBarNothing);
 }
 
@@ -790,6 +788,10 @@ void MainWindowGUI::saveProjectAs()
                                    QString(tr("Project (*.%1);;Archive (*.%2)")).arg(PreferencesTool::projectSuffix).arg(PreferencesTool::archiveSuffix));
 
     if (!file.isNull()) {
+        if (!file.endsWith(PreferencesTool::projectSuffix)) {
+            file.append(".");
+            file.append(PreferencesTool::projectSuffix);
+        }
         frontend->getProject()->setProjectFileName(file.toLocal8Bit());
         frontend->getProject()->saveProject();
         QString path = frontend->getProject()->getProjectPath();
@@ -835,12 +837,15 @@ void MainWindowGUI::exportToVideo()
 
     if (pref->getBasicPreference("usedefaultoutputfile", 0) == 0) {
         QString filter;
+        QString exportSuffix;
         switch(pref->getBasicPreference("videoformat", VideoEncoder::noneFormat)) {
         case VideoEncoder::aviFormat:
             filter.append(tr("AVI Videos (*.avi)"));
+            exportSuffix.append("avi");
             break;
         case VideoEncoder::mp4Format:
             filter.append(tr("MP4 Videos (*.mp4)"));
+            exportSuffix.append("mp4");
             break;
         }
 
@@ -851,6 +856,10 @@ void MainWindowGUI::exportToVideo()
             enc = NULL;
             return;
         } else {
+            if (!outputFile.endsWith(exportSuffix)) {
+                outputFile.append(".");
+                outputFile.append(exportSuffix);
+            }
             enc->setOutputFile(outputFile);
         }
     } else {
@@ -870,7 +879,7 @@ void MainWindowGUI::exportToVideo()
     }
     checkSaved();
 
-    frontend->showProgress(tr("Exporting ..."), 0);
+    frontend->showProgress(tr("Exporting ..."), frontend->getProject()->getTotalExposureSize());
     frontend->getProject()->exportToVideo(enc);
     frontend->hideProgress();
 
@@ -1371,7 +1380,6 @@ void MainWindowGUI::makeToolsMenu(QHBoxLayout *layout)
     iconFile.append(QLatin1String("compositing.png"));
     sideBar->addTab(compositingTab, QIcon(iconFile), QString(tr("Compositing")));
 */
-    connect(this, SIGNAL(cameraStateChanged(bool)), recordingTab, SLOT(cameraStateChanged(bool)));
 }
 
 /*

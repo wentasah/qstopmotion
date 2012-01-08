@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2010-2011 by                                                *
+ *  Copyright (C) 2010-2012 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -655,7 +655,7 @@ void ProjectTab::updateAddExposure(int sceneIndex,
                                    int takeIndex,
                                    int exposureIndex)
 {
-    qDebug("ProjectTab::updateAddExposure --> Start");
+    // qDebug("ProjectTab::updateAddExposure --> Start");
 
     Exposure *exposure = frontend->getProject()->getScene(sceneIndex)->getTake(takeIndex)->getExposure(exposureIndex);
 
@@ -670,7 +670,7 @@ void ProjectTab::updateAddExposure(int sceneIndex,
                       Qt::ItemIsSelectable);
     takeItem->addChild(newItem);
 
-    qDebug("ProjectTab::updateAddExposure --> End");
+    // qDebug("ProjectTab::updateAddExposure --> End");
 }
 
 

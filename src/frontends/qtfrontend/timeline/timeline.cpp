@@ -831,6 +831,8 @@ void TimeLine::addExposures(const QVector<Exposure*>& exposures, int index)
 
     // Move the frames behind the place we are inserting the new ones.
     for (int i = from; i < size; ++i) {
+        qDebug("TimeLine::addExposures --> move frame");
+
         thumbViews[i]->move(thumbViews[i]->x() + (FRAME_WIDTH + SPACE) * exposureSize, 0);
         if (i < to) {
             thumbViews[i]->setThumbIndex(i + moveDistance);
@@ -841,8 +843,12 @@ void TimeLine::addExposures(const QVector<Exposure*>& exposures, int index)
     bool operationCanceled = false;
     int exposureIndex = 0;
 
+    frontend->showProgress(tr("Load images to time line"), exposureSize);
+
     // Adds the new frames to the timeline
     for (; exposureIndex < exposureSize; ++exposureIndex) {
+        qDebug("TimeLine::addExposures --> add frame");
+
         Exposure *exposure = exposures[exposureIndex];
         thumb = new ExposureThumbView(this, this, index + exposureIndex);
         thumb->setMinimumSize(FRAME_WIDTH, FRAME_HEIGHT);
@@ -861,7 +867,7 @@ void TimeLine::addExposures(const QVector<Exposure*>& exposures, int index)
 
         thumbViews.insert(index + exposureIndex, thumb);
 
-        frontend->updateProgress(exposureSize + exposureIndex);
+        frontend->updateProgress(exposureIndex);
         if ((exposureIndex % 10) == 0) {
             frontend->processEvents();
         }
@@ -872,13 +878,19 @@ void TimeLine::addExposures(const QVector<Exposure*>& exposures, int index)
         }
     }
 
+    frontend->hideProgress();
+
     if (operationCanceled) {
         for (int j = index + exposureIndex, k = index; j < exposureIndex + size; ++j, ++k) {
+            qDebug("TimeLine::addExposures --> move frame back");
+
             thumbViews[j]->move(thumbViews[j]->x() - exposureSize * (FRAME_WIDTH + SPACE), 0);
             thumbViews[j]->setThumbIndex(k);
         }
 
         for (int j = index; j <= index + exposureIndex; ++j) {
+            qDebug("TimeLine::addExposures --> delete frame");
+
             delete thumbViews[index];
         }
         thumbViews.erase(thumbViews.begin() + index, thumbViews.begin() + index + exposureIndex);
@@ -1063,29 +1075,13 @@ void TimeLine::activateExposure()
         // Nothing to do
         return;
     }
-    activeExposureIndex = newActiveExposure;
 
-    // If there is a frame to set as active
     if (activeExposureIndex >= 0) {
-        qDebug("TimeLine::activateExposure --> Setting new active frame in timeline");
-
-        if (selectionFrame > -1) {
-            int from = activeExposureIndex;
-            int to = selectionFrame;
-            int highend = (from < to) ? to : from;
-            int lowend = (from > to) ? to : from;
-
-            if (highend < static_cast<int>(thumbViews.size())) {
-                for (int i = lowend; i <= highend; ++i) {
-                    thumbViews[i]->setSelected(false);
-                }
-            }
-        }
-
-        thumbViews[activeExposureIndex]->setSelected(true);
-
-        ensureVisible(activeExposureIndex * (FRAME_WIDTH + SPACE), FRAME_HEIGHT);
+        thumbViews[activeExposureIndex]->setSelected(false);
     }
+    activeExposureIndex = newActiveExposure;
+    thumbViews[activeExposureIndex]->setSelected(true);
+    ensureVisible(activeExposureIndex * (FRAME_WIDTH + SPACE), FRAME_HEIGHT);
 
     selectionFrame = activeExposureIndex;
     this->selecting = false;

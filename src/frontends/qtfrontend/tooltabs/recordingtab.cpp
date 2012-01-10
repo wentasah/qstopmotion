@@ -360,6 +360,20 @@ void RecordingTab::cameraButtonClicked()
         cameraButton->setIcon(QIcon(iconFile));
 
         cameraOn = frontend->startGrabber();
+
+        if (cameraOn) {
+            switch (captureFunction) {
+            // case PreferencesTool::captureButtonBevor:
+            //     break;
+            // case PreferencesTool::captureButtonAfter:
+            //     break;
+            case PreferencesTool::captureButtonAppend:
+                int exposureIndex = frontend->getProject()->getActiveTake()->getExposureSize();
+
+                frontend->getProject()->setActiveExposureIndex(exposureIndex - 1);
+                break;
+            }
+        }
     } else {
         qDebug("RecordingTab::cameraButtonClicked --> Stop playing video from webcam");
 

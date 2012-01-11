@@ -801,6 +801,7 @@ void TimeLine::newExposure(int sceneIndex,
 
     thumbViews.insert(newExposureIndex, thumb);
 
+    // Move all tumbs after the new tumb
     for (int thumbIndex = newExposureIndex + 1; thumbIndex < thumbViews.count(); thumbIndex++) {
         thumb = (ExposureThumbView*)thumbViews[thumbIndex];
         thumb->setThumbIndex(thumbIndex);
@@ -829,6 +830,7 @@ void TimeLine::addExposures(const QVector<Exposure*>& exposures, int index)
     int to = size;
     int moveDistance = exposureSize - 1;
 
+    if (exposureSize)
     // Move the frames behind the place we are inserting the new ones.
     for (int i = from; i < size; ++i) {
         qDebug("TimeLine::addExposures --> move frame");
@@ -1081,7 +1083,11 @@ void TimeLine::activateExposure()
     }
     activeExposureIndex = newActiveExposure;
     thumbViews[activeExposureIndex]->setSelected(true);
-    ensureVisible(activeExposureIndex * (FRAME_WIDTH + SPACE), FRAME_HEIGHT);
+    int activeExposureX = activeExposureIndex * (FRAME_WIDTH + SPACE);
+    if (this->width() < (activeExposureX + SPACE + FRAME_WIDTH)) {
+        activeExposureX += SPACE + FRAME_WIDTH;
+    }
+    ensureVisible(activeExposureX, FRAME_HEIGHT);
 
     selectionFrame = activeExposureIndex;
     this->selecting = false;

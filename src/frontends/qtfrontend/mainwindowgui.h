@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2011 by                                                *
+ *  Copyright (C) 2005-2012 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -155,6 +155,13 @@ public:
     void setProgressInfo(const char *infoText);
 
     /**
+     * Function for checking if the user has aborted the operation
+     * (eg pressed cancel)
+     * @return true if the the operation is aborted, false otherwise
+     */
+    bool isOperationAborted();
+
+    /**
      * Display a message in the status bar.
      * @param message the message to display.
      * @param timeout the timeout for the message in mili-seconds.
@@ -165,13 +172,6 @@ public:
      * Removes any temporary message being shown in the status bar.
      */
     void clearMessage();
-
-    /**
-     * Function for checking if the user has aborted the operation
-     * (eg pressed cancel)
-     * @return true if the the operation is aborted, false otherwise
-     */
-    bool isOperationAborted();
 
     /**
      * Set the project ID in the status bar
@@ -259,10 +259,6 @@ public:
      **************************************************************************/
 
 public slots:
-    /**
-     * Update the progress bar.
-     */
-    void updateProgressBar();
 
     /**************************************************************************
      * Private slots
@@ -427,8 +423,7 @@ private:
 
     // Status bar
     QProgressDialog *progressDialog;
-    QProgressBar    *progressBar;
-    QLabel          *infoText;
+    // QLabel          *infoText;
     QTimer          *timer;
     QLabel          *projectLabel;
     QLabel          *projectID;

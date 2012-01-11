@@ -498,12 +498,6 @@ void QtFrontend::processEvents()
 }
 
 
-void QtFrontend::updateProgressBar()
-{
-    mw->updateProgressBar();
-}
-
-
 void QtFrontend::initializePreferences()
 {
     qDebug("QtFrontend::initializePreferences --> Start");

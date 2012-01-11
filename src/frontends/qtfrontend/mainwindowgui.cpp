@@ -101,8 +101,6 @@ MainWindowGUI::MainWindowGUI(QApplication *stApp, Frontend *f)
 
     // Status bar
     progressDialog       = 0;
-    progressBar          = 0;
-    infoText             = 0;
     timer                = 0;
     projectLabel         = 0;
     projectID            = 0;
@@ -411,23 +409,10 @@ void MainWindowGUI::retranslateStrings()
 
 void MainWindowGUI::showProgress(const QString &operation, unsigned int numOperations)
 {
-    if (numOperations > 0) {
-        progressDialog = new QProgressDialog(operation, tr("Cancel"), 0, numOperations, this);
-        progressDialog->show();
-    } else {
-        infoText = new QLabel(operation);
-        statusBar()->addWidget(infoText);
+    Q_ASSERT(numOperations != 0);
 
-        // progressBar = new QProgressBar;
-        // progressBar->setFixedWidth(150);
-        // progressBar->setRange(0, 100);
-        // progressBar->setValue(50);
-        // statusBar()->addWidget(progressBar);
-
-        // timer = new QTimer();
-        // connect(timer, SIGNAL(timeout()), this, SLOT(updateProgressBar()));
-        // timer->start(10);
-    }
+    progressDialog = new QProgressDialog(operation, tr("Cancel"), 0, numOperations, this);
+    progressDialog->show();
 }
 
 
@@ -437,22 +422,6 @@ void MainWindowGUI::hideProgress()
         progressDialog->hide();
         delete progressDialog;
         progressDialog = NULL;
-    }
-    else {
-        statusBar()->removeWidget(infoText);
-        delete infoText;
-        infoText = NULL;
-
-        if (progressBar) {
-            // timer->stop();
-            // delete timer;
-            // timer = NULL;
-
-            // progressBar->hide();
-            // statusBar()->removeWidget(progressBar);
-            // delete progressBar;
-            // progressBar = NULL;
-        }
     }
 }
 
@@ -473,18 +442,6 @@ void MainWindowGUI::setProgressInfo(const char *infoText)
 }
 
 
-void MainWindowGUI::showMessage(const QString &message, int timeout)
-{
-    statusBar()->showMessage(message, timeout);
-}
-
-
-void MainWindowGUI::clearMessage()
-{
-    statusBar()->clearMessage();
-}
-
-
 bool MainWindowGUI::isOperationAborted()
 {
     if (progressDialog) {
@@ -494,12 +451,15 @@ bool MainWindowGUI::isOperationAborted()
 }
 
 
-void MainWindowGUI::updateProgressBar()
+void MainWindowGUI::showMessage(const QString &message, int timeout)
 {
-    if (progressBar != 0) {
-        int p = progressBar->value();
-        progressBar->setValue(++p);
-    }
+    statusBar()->showMessage(message, timeout);
+}
+
+
+void MainWindowGUI::clearMessage()
+{
+    statusBar()->clearMessage();
 }
 
 

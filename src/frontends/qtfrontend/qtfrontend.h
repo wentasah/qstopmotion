@@ -404,7 +404,6 @@ public:
 
 
 protected slots:
-    void updateProgressBar();
 
 private:
     QApplication    *stApp;

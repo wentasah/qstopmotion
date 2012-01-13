@@ -973,6 +973,10 @@ void TimeLine::removeExposure(int sceneIndex,
 
     delete thumbViews[exposureIndex];
     thumbViews.remove(exposureIndex);
+    if (activeExposureIndex == exposureIndex) {
+        // The active exposure are deleted
+        activeExposureIndex = -1;
+    }
 
     mainWidget->resize((FRAME_WIDTH + SPACE) * thumbViews.size(), FRAME_HEIGHT);
 
@@ -1078,8 +1082,10 @@ void TimeLine::activateExposure()
         return;
     }
 
-    if (activeExposureIndex >= 0) {
-        thumbViews[activeExposureIndex]->setSelected(false);
+    if (activeExposureIndex < thumbViews.size()) {
+        if (activeExposureIndex >= 0) {
+            thumbViews[activeExposureIndex]->setSelected(false);
+        }
     }
     activeExposureIndex = newActiveExposure;
     thumbViews[activeExposureIndex]->setSelected(true);

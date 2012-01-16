@@ -60,6 +60,7 @@ include(${QT_USE_FILE})
 
 # add all header files of the project to HEADERS
 set(HEADERS
+    src/domain/undo/undobase.h
     src/domain/undo/undoexposureadd.h
     src/domain/undo/undoexposureinsert.h
     src/domain/undo/undoexposuremove.h
@@ -142,6 +143,7 @@ set(SOURCES
     src/domain/animation/projectserializer.cpp
     src/domain/animation/scene.cpp
     src/domain/animation/take.cpp
+    src/domain/undo/undobase.cpp
     src/domain/undo/undoexposureadd.cpp
     src/domain/undo/undoexposureinsert.cpp
     src/domain/undo/undoexposuremove.cpp

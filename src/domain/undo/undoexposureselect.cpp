@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2011 by                                                *
+ *  Copyright (C) 2005-2012 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -24,8 +24,8 @@
 UndoExposureSelect::UndoExposureSelect(DomainFacade *df,
                                        int lastIndex,
                                        int newIndex)
+    :UndoBase(df)
 {
-    facade = df;
     lastExposureIndex = lastIndex;
     newExposureIndex = newIndex;
     setText(QObject::tr("Select exposure"));

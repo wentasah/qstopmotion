@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2011 by                                                *
+ *  Copyright (C) 2005-2012 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -21,15 +21,12 @@
 #ifndef UNDOSCENESELECT_H
 #define UNDOSCENESELECT_H
 
-#include <domain/domainfacade.h>
-
-#include <QtGui/QUndoCommand>
-
+#include <domain/undo/undobase.h>
 
 /**
  * The UndoSceneSelect class for undoing sceneSelect(...) calls to the project.
  */
-class UndoSceneSelect : public QUndoCommand
+class UndoSceneSelect : public UndoBase
 {
 public:
 
@@ -47,7 +44,7 @@ public:
     /**
      * Destructor
      */
-    virtual ~UndoSceneSelect();
+    ~UndoSceneSelect();
 
     /**
      * Abstract function for undoing the command represented by this undo object.
@@ -64,7 +61,6 @@ private:
     /**
      * The model to perform the redo command on.
      */
-    DomainFacade *facade;
     int  lastSceneIndex;
     int  newSceneIndex;
 };

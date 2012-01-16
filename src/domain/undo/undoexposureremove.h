@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2011 by                                                *
+ *  Copyright (C) 2005-2012 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -23,14 +23,12 @@
 #ifndef UNDOEXPOSUREREMOVE_H
 #define UNDOEXPOSUREREMOVE_H
 
-#include <domain/domainfacade.h>
-
-#include <QtGui/QUndoCommand>
+#include <domain/undo/undobase.h>
 
 /**
  * The UndoExposureRemove class for undoing removeExposure(...) calls to the project.
  */
-class UndoExposureRemove : public QUndoCommand
+class UndoExposureRemove : public UndoBase
 {
 public:
 
@@ -50,7 +48,7 @@ public:
                        int  taIndex,
                        int  exIndex);
 
-    virtual ~UndoExposureRemove();
+    ~UndoExposureRemove();
 
     /**
      * Abstract function for undoing the command represented by this undo object.
@@ -67,11 +65,11 @@ private:
     /**
      * The model to perform the redo command on.
      */
-    DomainFacade     *facade;
-    int               sceneIndex;
-    int               takeIndex;
-    int               exposureIndex;
-    Exposure         *exposure;
+    DomainFacade *facade;
+    int           sceneIndex;
+    int           takeIndex;
+    int           exposureIndex;
+    Exposure     *exposure;
 };
 
 #endif

@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2011 by                                                *
+ *  Copyright (C) 2005-2012 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -28,8 +28,8 @@ UndoExposureMove::UndoExposureMove(DomainFacade *df,
                                    int to,
                                    int move,
                                    int activeScene)
+    :UndoBase(df)
 {
-    facade = df;
     fromIndex = from;
     toIndex = to;
     moveIndex = move;

@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2011 by                                                *
+ *  Copyright (C) 2005-2012 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -26,8 +26,8 @@
 UndoTakeRemove::UndoTakeRemove(DomainFacade *df,
                                int scene,
                                int take)
+    :UndoBase(df)
 {
-    facade = df;
     sceneIndex = scene;
     takeIndex = take;
     removedTake = NULL;

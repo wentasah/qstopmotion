@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2011 by                                                *
+ *  Copyright (C) 2005-2012 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -24,8 +24,8 @@
 UndoTakeMove::UndoTakeMove(DomainFacade *df,
                            int from,
                            int move)
+    :UndoBase(df)
 {
-    facade = df;
     fromIndex = from;
     moveIndex = move;
     setText(QObject::tr("Move take"));

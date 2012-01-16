@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2011 by                                                *
+ *  Copyright (C) 2005-2012 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -27,8 +27,8 @@
 UndoSceneAdd::UndoSceneAdd(DomainFacade *df,
                            int scIndex,
                            const QString &description)
+    :UndoBase(df)
 {
-    facade = df;
     sceneIndex = scIndex;
     sceneDescription.append(description);
     setText(QString(QObject::tr("Add scene '%1'")).arg(description));

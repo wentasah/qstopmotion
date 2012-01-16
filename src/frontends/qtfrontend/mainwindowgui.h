@@ -149,6 +149,11 @@ public:
     void updateProgress(int numOperationsDone);
 
     /**
+     * Function for increase the progress.
+     */
+    void increaseProgress();
+
+    /**
      * Function for changing the information to display to the user
      * @param infoText the text to display to the user
      */

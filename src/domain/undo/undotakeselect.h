@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2011 by                                                *
+ *  Copyright (C) 2005-2012 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -21,15 +21,12 @@
 #ifndef UNDOTAKESELECT_H
 #define UNDOTAKESELECT_H
 
-#include <domain/domainfacade.h>
-
-#include <QtGui/QUndoCommand>
-
+#include <domain/undo/undobase.h>
 
 /**
  * The UndoTakeSelect class for undoing takeSelect(...) calls to the project.
  */
-class UndoTakeSelect : public QUndoCommand
+class UndoTakeSelect : public UndoBase
 {
 public:
 
@@ -47,7 +44,7 @@ public:
     /**
      * Destructor
      */
-    virtual ~UndoTakeSelect();
+    ~UndoTakeSelect();
 
     /**
      * Abstract function for undoing the command represented by this undo object.
@@ -64,7 +61,6 @@ private:
     /**
      * The model to perform the redo command on.
      */
-    DomainFacade *facade;
     int  lastTakeIndex;
     int  newTakeIndex;
 };

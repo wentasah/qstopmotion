@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2011 by                                                *
+ *  Copyright (C) 2005-2012 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -206,6 +206,7 @@ bool Take::saveDataToProject(QDomDocument &doc, QDomElement &takeNode,
 
     // Save exposureses
     for (exposureIndex = 0; exposureIndex < exposureSize; ++exposureIndex) {
+        getFrontend()->increaseProgress();
         QDomElement exposureElement = doc.createElement("exposure");
         takeNode.appendChild(exposureElement);
         if (!exposures[exposureIndex]->saveDataToProject(doc, exposureElement, sceneId, id, exposureIndex)) {

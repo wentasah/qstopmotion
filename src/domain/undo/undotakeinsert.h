@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2011 by                                                *
+ *  Copyright (C) 2005-2012 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -23,15 +23,12 @@
 #ifndef UNDOTAKEINSERT_H
 #define UNDOTAKEINSERT_H
 
-#include <domain/domainfacade.h>
-
-#include <QtGui/QUndoCommand>
-
+#include <domain/undo/undobase.h>
 
 /**
  * The UndoTakeInsert class for undoing newTake(...) calls to the project.
  */
-class UndoTakeInsert : public QUndoCommand
+class UndoTakeInsert : public UndoBase
 {
 public:
 
@@ -51,7 +48,7 @@ public:
     /**
      * Cleans up after the undo object.
      */
-    virtual ~UndoTakeInsert();
+    ~UndoTakeInsert();
 
     /**
      * Abstract function for undoing the command represented by this undo object.
@@ -68,10 +65,9 @@ private:
     /**
      * The model to perform the redo command on.
      */
-    DomainFacade *facade;
-    QString       takeDescription;
-    int           sceneIndex;
-    int           takeIndex;
+    QString  takeDescription;
+    int      sceneIndex;
+    int      takeIndex;
 };
 
 #endif

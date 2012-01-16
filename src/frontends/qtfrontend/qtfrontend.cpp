@@ -444,6 +444,12 @@ void QtFrontend::updateProgress(int numOperationsDone)
 }
 
 
+void QtFrontend::increaseProgress()
+{
+    mw->increaseProgress();
+}
+
+
 void QtFrontend::setProgressInfo(const char *infoText)
 {
     mw->setProgressInfo(infoText);

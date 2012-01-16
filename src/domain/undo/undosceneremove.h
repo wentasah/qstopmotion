@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2011 by                                                *
+ *  Copyright (C) 2005-2012 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -23,15 +23,12 @@
 #ifndef UNDOSCENEREMOVE_H
 #define UNDOSCENEREMOVE_H
 
-#include <domain/domainfacade.h>
-
-#include <QtGui/QUndoCommand>
-
+#include <domain/undo/undobase.h>
 
 /**
  * The UndoSceneRemove class for undoing removeScene(...) calls to the project.
  */
-class UndoSceneRemove : public QUndoCommand
+class UndoSceneRemove : public UndoBase
 {
 public:
 
@@ -48,7 +45,7 @@ public:
     /**
      * Cleans up after the undo object.
      */
-    virtual ~UndoSceneRemove();
+    ~UndoSceneRemove();
 
     /**
      * Abstract function for undoing the command represented by this undo object.
@@ -65,9 +62,8 @@ private:
     /**
      * The model to perform the redo command on.
      */
-    DomainFacade *facade;
-    int  sceneIndex;
-    Scene        *removedScene;
+    int    sceneIndex;
+    Scene *removedScene;
 };
 
 #endif

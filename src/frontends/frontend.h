@@ -176,6 +176,11 @@ public:
     virtual void updateProgress(int numOperationsDone) = 0;
 
     /**
+     * Abstract function for increase the progress.
+     */
+    virtual void increaseProgress() = 0;
+
+    /**
      * Abstract function to display a message in the status bar.
      * @param message the message to display.
      * @param timeout the timeout for the message in mili-seconds.

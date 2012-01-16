@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2011 by                                                *
+ *  Copyright (C) 2005-2012 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -768,7 +768,6 @@ bool AnimationProject::saveScenesToProject(QDomDocument &doc, QDomElement &anima
 
     nextTotalExposureIndex = 0;
     for (sceneIndex = 0; sceneIndex < sceneSize; ++sceneIndex) {
-        frontend->updateProgress(sceneIndex);
         // Scenes
         sceneElement = doc.createElement("scene");
         animationNode.appendChild(sceneElement);

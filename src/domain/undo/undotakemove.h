@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2011 by                                                *
+ *  Copyright (C) 2005-2012 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -21,15 +21,12 @@
 #ifndef UndoTakeMove_H
 #define UndoTakeMove_H
 
-#include <domain/domainfacade.h>
-
-#include <QtGui/QUndoCommand>
-
+#include <domain/undo/undobase.h>
 
 /**
  * The UndoTakeMove class for undoing moveTake(...) calls to the project.
  */
-class UndoTakeMove : public QUndoCommand
+class UndoTakeMove : public UndoBase
 {
 public:
 
@@ -47,7 +44,7 @@ public:
     /**
      * Cleans up after the undo object.
      */
-    virtual ~UndoTakeMove();
+    ~UndoTakeMove();
 
     /**
      * Abstract function for undoing the command represented by this undo object.
@@ -64,9 +61,8 @@ private:
     /**
      * The model to perform the redo command on.
      */
-    DomainFacade *facade;
-    int           fromIndex;
-    int           moveIndex;
+    int  fromIndex;
+    int  moveIndex;
 };
 
 #endif

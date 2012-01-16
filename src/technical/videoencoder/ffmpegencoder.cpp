@@ -71,7 +71,7 @@ const QString FfmpegEncoder::getStartCommand() const
     // Input options
     // ===============================
 
-    // Frame rate (default = 25)
+    // Input frame rate (default = 25)
     startCommand.append(QString(" -r %1").arg(animationProject->getFramesPerSecond()));
 
     // ===============================
@@ -104,7 +104,7 @@ const QString FfmpegEncoder::getStartCommand() const
     // startCommand.append(" -target pal-vcd");
 
     // Use individual format options
-    // Frame rate (default = 25)
+    //Output frame rate (default = 25)
     startCommand.append(QString(" -r 25"));
 
     // Video size (default = Input size)

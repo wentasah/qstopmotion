@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2011 by                                                *
+ *  Copyright (C) 2005-2012 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -23,14 +23,12 @@
 #ifndef UNDOEXPOSUREINSERT_H
 #define UNDOEXPOSUREINSERT_H
 
-#include <domain/domainfacade.h>
-
-#include <QtGui/QUndoCommand>
+#include <domain/undo/undobase.h>
 
 /**
  * The UndoExposureInsert class for undoing newExposure(...) calls to the project.
  */
-class UndoExposureInsert : public QUndoCommand
+class UndoExposureInsert : public UndoBase
 {
 public:
 
@@ -56,7 +54,7 @@ public:
     /**
      * Destructor
      */
-    virtual ~UndoExposureInsert();
+    ~UndoExposureInsert();
 
     /**
      * Abstract function for undoing the command represented by this undo object.
@@ -73,13 +71,12 @@ private:
     /**
      * The model to perform the redo command on.
      */
-    DomainFacade *facade;
-    int  sceneIndex;
-    int  takeIndex;
-    int  exposureIndex;
-    bool afterFlag;
-    QString       fileName;
-    QString       exposureDescription;
+    int      sceneIndex;
+    int      takeIndex;
+    int      exposureIndex;
+    bool     afterFlag;
+    QString  fileName;
+    QString  exposureDescription;
 };
 
 #endif

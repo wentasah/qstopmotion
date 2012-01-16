@@ -434,6 +434,14 @@ void MainWindowGUI::updateProgress(int numOperationsDone)
 }
 
 
+void MainWindowGUI::increaseProgress()
+{
+    if (progressDialog) {
+        progressDialog->setValue(progressDialog->value() + 1);
+    }
+}
+
+
 void MainWindowGUI::setProgressInfo(const char *infoText)
 {
     if (progressDialog) {

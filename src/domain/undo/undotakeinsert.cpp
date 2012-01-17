@@ -23,10 +23,10 @@
 #include "undotakeinsert.h"
 
 
-UndoTakeInsert::UndoTakeInsert(DomainFacade *df,
-                               int scIndex,
-                               int taIndex,
-                               const QString &description)
+UndoTakeInsert::UndoTakeInsert(DomainFacade  *df,
+                               const QString &description,
+                               int            scIndex,
+                               int            taIndex)
     :UndoBase(df)
 {
     sceneIndex = scIndex;
@@ -45,12 +45,11 @@ UndoTakeInsert::~UndoTakeInsert()
 void UndoTakeInsert::undo()
 {
     // TODO: Change handling for undo
-    // facade->removeTake();
-    // facade->removeTake(takeNumber);
+    // facade->undoTakeInsert(sceneIndex, takeIndex);
 }
 
 
 void UndoTakeInsert::redo()
 {
-    facade->insertTakeRedo(sceneIndex, takeIndex, takeDescription);
+    facade->redoTakeInsert(takeDescription, sceneIndex, takeIndex);
 }

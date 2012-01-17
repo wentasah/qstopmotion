@@ -34,12 +34,12 @@ public:
      * Sets up the UndoSceneSelect command object with the information needed
      * to undo and redo the add commands.
      * @param df Domain facade for commands.
-     * @param lastIndex the index of the last selected scene.
-     * @param newIndex the index of the new selected scene.
+     * @param osi the index of the old selected scene.
+     * @param nsi the index of the new selected scene.
      */
     UndoSceneSelect(DomainFacade *df,
-                    int lastIndex,
-                    int newIndex);
+                    int           osi,
+                    int           nsi);
 
     /**
      * Destructor
@@ -61,7 +61,7 @@ private:
     /**
      * The model to perform the redo command on.
      */
-    int  lastSceneIndex;
+    int  oldSceneIndex;
     int  newSceneIndex;
 };
 

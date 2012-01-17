@@ -974,8 +974,8 @@ void ProjectTab::insertSceneSlot()
 
     getSelectedItems(sceneIndex, takeIndex, exposureIndex);
 
-    frontend->getProject()->insertSceneToUndo(sceneIndex, sceneDescription);
-    frontend->getProject()->addTakeToUndo(sceneIndex, takeDescription);
+    frontend->getProject()->insertSceneToUndo(sceneDescription, sceneIndex);
+    frontend->getProject()->addTakeToUndo(takeDescription, sceneIndex);
 
     qDebug("ProjectTab::insertSceneSlot --> End");
 }
@@ -1004,7 +1004,7 @@ void ProjectTab::addSceneSlot()
     frontend->getProject()->addSceneToUndo(sceneDescription);
 
     int activeSceneIndex = frontend->getProject()->getSceneSize() - 1;
-    frontend->getProject()->addTakeToUndo(activeSceneIndex, takeDescription);
+    frontend->getProject()->addTakeToUndo(takeDescription, activeSceneIndex);
 
     qDebug("ProjectTab::addSceneSlot --> End");
 }
@@ -1053,7 +1053,7 @@ void ProjectTab::insertTakeSlot()
 
     getSelectedItems(sceneIndex, takeIndex, exposureIndex);
 
-    frontend->getProject()->insertTakeToUndo(sceneIndex, takeIndex, takeDescription);
+    frontend->getProject()->insertTakeToUndo(takeDescription, sceneIndex, takeIndex);
 
     qDebug("ProjectTab::insertTakeSlot --> End");
 }
@@ -1081,7 +1081,7 @@ void ProjectTab::addTakeSlot()
 
     delete(dialog);
 
-    frontend->getProject()->addTakeToUndo(activeSceneIndex, takeDescription);
+    frontend->getProject()->addTakeToUndo(takeDescription, activeSceneIndex);
 
     qDebug("ProjectTab::addTakeSlot --> End");
 }

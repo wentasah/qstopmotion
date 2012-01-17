@@ -40,7 +40,8 @@ UndoExposureSelect::~UndoExposureSelect()
 void UndoExposureSelect::undo()
 {
     /* TODO: Change handling for undo
-    facade->moveFrames(moveIndex, moveIndex + (toIndex - fromIndex), toIndex);
+    facade->undoSelectExposure(fromSceneIndex, fromTakeIndex, fromExposureIndex,
+                               toSceneIndex, toTakeIndex, toExposureIndex);
     */
 }
 
@@ -48,6 +49,7 @@ void UndoExposureSelect::undo()
 void UndoExposureSelect::redo()
 {
     /* TODO: Change handling for redo
-    facade->moveFrames(fromIndex, toIndex, moveIndex);
+    facade->redoSelectExposure(fromSceneIndex, fromTakeIndex, fromExposureIndex,
+                               toSceneIndex, toTakeIndex, toExposureIndex);
     */
 }

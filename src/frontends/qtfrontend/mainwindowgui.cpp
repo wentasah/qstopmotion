@@ -663,15 +663,15 @@ void MainWindowGUI::newProject()
     QString takeDescription = dialog->getTakeDescription();
 
     // Create the new project
-    project->newProjectRedo(projectDescription);
+    project->newProjectToUndo(projectDescription);
     this->setProjectSettingsToDefault();
 
     // Create and activate the new scene
-    project->addSceneRedo(sceneDescription);
+    project->addSceneToUndo(sceneDescription);
     project->setActiveSceneIndex(0);
 
     // Create and activate the new take
-    project->addTakeRedo(0, takeDescription);
+    project->addTakeToUndo(takeDescription, 0);
     project->setActiveTakeIndex(0);
 
     //fileMenu->setItemEnabled(SAVE, false);

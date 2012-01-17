@@ -24,12 +24,12 @@
 
 
 UndoSceneRemove::UndoSceneRemove(DomainFacade *df,
-                                 int scene)
+                                 int           si)
     :UndoBase(df)
 {
-    sceneIndex = scene;
+    sceneIndex = si;
     removedScene = NULL;
-    setText(QObject::tr("Remove scene"));
+    setText(QString(QObject::tr("Remove scene (%1)")).arg(sceneIndex));
 }
 
 
@@ -42,12 +42,11 @@ UndoSceneRemove::~UndoSceneRemove()
 void UndoSceneRemove::undo()
 {
     // TODO: Change handling for undo
-    // facade->newScene(QString());
-    // facade->newScene(sceneNumber, QString());
+    // facade->undoSceneRemove(sceneIndex);
 }
 
 
 void UndoSceneRemove::redo()
 {
-    removedScene = facade->removeSceneRedo(sceneIndex);
+    removedScene = facade->redoSceneRemove(sceneIndex);
 }

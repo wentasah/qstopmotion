@@ -20,34 +20,32 @@
  *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                 *
  ******************************************************************************/
 
-#include "undosceneinsert.h"
+#include "undoprojectsave.h"
 
 
-UndoSceneInsert::UndoSceneInsert(DomainFacade  *df,
-                                 const QString &description,
-                                 int            scIndex)
+UndoProjectSave::UndoProjectSave(DomainFacade *df,
+                                 const QString &path)
     :UndoBase(df)
 {
-    sceneIndex = scIndex;
-    sceneDescription.append(description);
-    setText(QString(QObject::tr("Insert scene '%1'")).arg(description));
+    projectPath.append(path);
+    setText(QString(QObject::tr("Save project '%1'")).arg(path));
 }
 
 
-UndoSceneInsert::~UndoSceneInsert()
+UndoProjectSave::~UndoProjectSave()
 {
 
 }
 
 
-void UndoSceneInsert::undo()
+void UndoProjectSave::undo()
 {
     // TODO: Change handling for undo
-    // facade->undoSceneInsert(sceneDescription, sceneIndex);
+    // facade->saveProjectUndo(projectPath);
 }
 
 
-void UndoSceneInsert::redo()
+void UndoProjectSave::redo()
 {
-    facade->redoSceneInsert(sceneDescription, sceneIndex);
+    facade->saveProjectRedo(projectPath);
 }

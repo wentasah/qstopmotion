@@ -22,13 +22,17 @@
 
 
 UndoTakeMove::UndoTakeMove(DomainFacade *df,
-                           int from,
-                           int move)
+                           int           fsi,
+                           int           fti,
+                           int           tsi,
+                           int           tti)
     :UndoBase(df)
 {
-    fromIndex = from;
-    moveIndex = move;
-    setText(QObject::tr("Move take"));
+    fromSceneIndex = fsi;
+    fromTakeIndex = fti;
+    toSceneIndex = tsi;
+    toTakeIndex = tti;
+    setText(QString(QObject::tr("Move take (%1,%2)")).arg(toSceneIndex).arg(toTakeIndex));
 }
 
 
@@ -40,11 +44,11 @@ UndoTakeMove::~UndoTakeMove()
 void UndoTakeMove::undo()
 {
     // TODO: Change handling for undo
-    // facade->moveTake(moveIndex, fromIndex);
+    // facade->moveTakeUndo(toTakeIndex, fromTakeIndex);
 }
 
 
 void UndoTakeMove::redo()
 {
-    facade->moveTakeRedo(fromIndex, moveIndex);
+    facade->redoTakeMove(fromSceneIndex, fromTakeIndex, toSceneIndex, toTakeIndex);
 }

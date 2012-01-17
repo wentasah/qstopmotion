@@ -36,14 +36,12 @@ public:
      * Sets up the UndoTakeAdd command object with the information needed to undo and
      * redo the add command.
      * @param df Domain facade for commands.
-     * @param scIndex index of the scene the take were added to.
-     * @param taIndex the index of the new take.
      * @param description the description of the take.
+     * @param scIndex index of the scene the take were added to.
      */
     UndoTakeAdd(DomainFacade  *df,
-                int   scIndex,
-                int   taIndex,
-                const QString &description);
+                const QString &description,
+                int            scIndex);
 
     /**
      * Cleans up after the undo object.

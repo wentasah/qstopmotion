@@ -24,12 +24,12 @@
 
 
 UndoTakeRemove::UndoTakeRemove(DomainFacade *df,
-                               int scene,
-                               int take)
+                               int           si,
+                               int           ti)
     :UndoBase(df)
 {
-    sceneIndex = scene;
-    takeIndex = take;
+    sceneIndex = si;
+    takeIndex = ti;
     removedTake = NULL;
     setText(QObject::tr("Remove take"));
 }
@@ -44,12 +44,11 @@ UndoTakeRemove::~UndoTakeRemove()
 void UndoTakeRemove::undo()
 {
     // TODO: Change handling for undo
-    // facade->newTake(QString());
-    // facade->newTake(takeNumber, QString());
+    // facade->removeTakeUndo(sceneIndex, takeIndex);
 }
 
 
 void UndoTakeRemove::redo()
 {
-    removedTake = facade->removeTakeRedo(sceneIndex, takeIndex);
+    removedTake = facade->redoTakeRemove(sceneIndex, takeIndex);
 }

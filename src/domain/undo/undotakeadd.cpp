@@ -23,14 +23,13 @@
 #include "undotakeadd.h"
 
 
-UndoTakeAdd::UndoTakeAdd(DomainFacade *df,
-                         int scIndex,
-                         int taIndex,
-                         const QString &description)
+UndoTakeAdd::UndoTakeAdd(DomainFacade  *df,
+                         const QString &description,
+                         int            scIndex)
     :UndoBase(df)
 {
     sceneIndex = scIndex;
-    takeIndex = taIndex;
+    takeIndex = df->getScene(sceneIndex)->getTakeSize();
     takeDescription.append(description);
     setText(QString(QObject::tr("Add take '%1'")).arg(description));
 }
@@ -45,12 +44,11 @@ UndoTakeAdd::~UndoTakeAdd()
 void UndoTakeAdd::undo()
 {
     // TODO: Change handling for undo
-    // facade->removeTake();
-    // facade->removeTake(takeNumber);
+    // facade->undoTakeAdd(takeDescription, sceneIndex);
 }
 
 
 void UndoTakeAdd::redo()
 {
-    facade->addTakeRedo(sceneIndex, takeDescription);
+    facade->redoTakeAdd(takeDescription, sceneIndex);
 }

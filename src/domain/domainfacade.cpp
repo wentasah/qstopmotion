@@ -27,6 +27,10 @@
 #include "domain/undo/undoexposureinsert.h"
 #include "domain/undo/undoexposuremove.h"
 #include "domain/undo/undoexposureremove.h"
+#include "domain/undo/undoprojectclose.h"
+#include "domain/undo/undoprojectnew.h"
+#include "domain/undo/undoprojectopen.h"
+#include "domain/undo/undoprojectsave.h"
 #include "domain/undo/undosceneadd.h"
 #include "domain/undo/undosceneinsert.h"
 #include "domain/undo/undoscenemove.h"
@@ -205,6 +209,92 @@ void DomainFacade::setFramesPerSecond(int newFps)
 }
 
 
+void DomainFacade::newProjectToUndo(const QString &projectDescription)
+{
+    UndoProjectNew *u = new UndoProjectNew(this, projectDescription);
+    getUndoStack()->push(u);
+}
+
+
+bool DomainFacade::newProjectRedo(const QString &projectDescription)
+{
+    qDebug("DomainFacade::newProjectRedo --> Start");
+
+    getView()->notifyClear();
+    animationProject->newProject(projectDescription);
+    getView()->notifyNewProject();
+    frontend->setProjectID(getProjectID().toAscii());
+    frontend->setSceneID("");
+    frontend->setTakeID("");
+
+    animationProject->setUnsavedChanges();
+
+    qDebug("DomainFacade::newProjectRedo --> End");
+    return true;
+}
+
+/*
+bool DomainFacade::newProjectUndo(const QString &projectDescription)
+{
+    qDebug("DomainFacade::newProjectUndo --> Start");
+
+    qDebug("DomainFacade::newProjectUndo --> End");
+    return true;
+}
+*/
+
+bool DomainFacade::newProject(const QString &projectDescription)
+{
+    qDebug("DomainFacade::newProject --> Start");
+
+    getView()->notifyClear();
+    getView()->notifyNewProject();
+    frontend->setProjectID(projectDescription.toAscii());
+    // frontend->setProjectID(getProjectID().toAscii());
+    frontend->setSceneID("");
+    frontend->setTakeID("");
+
+    qDebug("DomainFacade::newProject --> End");
+    return true;
+}
+
+
+void DomainFacade::openProjectToUndo(const QString &projectPath)
+{
+    UndoProjectOpen *u = new UndoProjectOpen(this, projectPath);
+    getUndoStack()->push(u);
+}
+
+
+bool DomainFacade::openProjectRedo(const QString &projectPath)
+{
+    qDebug("DomainFacade::openProjectRedo --> Start");
+
+    /* TODO: Implementation of openProjectRedo
+    getView()->notifyClear();
+    animationProject->newProject(projectDescription);
+    getView()->notifyNewProject();
+    frontend->setProjectID(getProjectID().toAscii());
+    frontend->setSceneID("");
+    frontend->setTakeID("");
+
+    animationProject->setUnsavedChanges();
+    */
+
+    qDebug("DomainFacade::openProjectRedo --> End");
+    return true;
+}
+
+/*
+bool DomainFacade::openProjectUndo(const QString &projectDescription)
+{
+    qDebug("DomainFacade::openProjectUndo --> Start");
+
+    qDebug("DomainFacade::openProjectUndo --> End");
+    return true;
+}
+*/
+
 void DomainFacade::openProject()
 {
     qDebug("DomainFacade::openProject --> Start");
@@ -239,16 +329,18 @@ void DomainFacade::openProject()
 }
 
 
-bool DomainFacade::saveProject()
+void DomainFacade::saveProjectToUndo(const QString &projectPath)
 {
-    return animationProject->saveProject();
+    UndoProjectSave *u = new UndoProjectSave(this, projectPath);
+    getUndoStack()->push(u);
 }
 
 
-bool DomainFacade::newProjectRedo(const QString &projectDescription)
+bool DomainFacade::saveProjectRedo(const QString &projectPath)
 {
-    qDebug("DomainFacade::newProjectRedo --> Start");
+    qDebug("DomainFacade::saveProjectRedo --> Start");
 
+    /* TODO: Implementation of saveProjectRedo
     getView()->notifyClear();
     animationProject->newProject(projectDescription);
     getView()->notifyNewProject();
@@ -257,27 +349,63 @@ bool DomainFacade::newProjectRedo(const QString &projectDescription)
     frontend->setTakeID("");
 
     animationProject->setUnsavedChanges();
+    */
 
-    qDebug("DomainFacade::newProjectRedo --> End");
+    qDebug("DomainFacade::saveProjectRedo --> End");
     return true;
 }
 
-
-bool DomainFacade::newProject(const QString &projectDescription)
+/*
+bool DomainFacade::saveProjectUndo(const QString &projectDescription)
 {
-    qDebug("DomainFacade::newProject --> Start");
+    qDebug("DomainFacade::saveProjectUndo --> Start");
 
+    qDebug("DomainFacade::saveProjectUndo --> End");
+    return true;
+}
+*/
+
+bool DomainFacade::saveProject()
+{
+    return animationProject->saveProject();
+}
+
+
+void DomainFacade::closeProjectToUndo()
+{
+    UndoProjectClose *u = new UndoProjectClose(this);
+    getUndoStack()->push(u);
+}
+
+
+bool DomainFacade::closeProjectRedo()
+{
+    qDebug("DomainFacade::closeProjectRedo --> Start");
+
+    /* TODO: Implementation of closeProjectRedo
     getView()->notifyClear();
+    animationProject->newProject(projectDescription);
     getView()->notifyNewProject();
-    frontend->setProjectID(projectDescription.toAscii());
-    // frontend->setProjectID(getProjectID().toAscii());
+    frontend->setProjectID(getProjectID().toAscii());
     frontend->setSceneID("");
     frontend->setTakeID("");
 
-    qDebug("DomainFacade::newProject --> End");
+    animationProject->setUnsavedChanges();
+    */
+
+    qDebug("DomainFacade::closeProjectRedo --> End");
     return true;
 }
 
+/*
+bool DomainFacade::closeProjectUndo()
+{
+    qDebug("DomainFacade::closeProjectUndo --> Start");
+
+    qDebug("DomainFacade::closeProjectUndo --> End");
+    return true;
+}
+*/
 
 bool DomainFacade::exportToVideo(VideoEncoder *encoder)
 {
@@ -356,20 +484,20 @@ int DomainFacade::getSceneExposureSize(int sceneIndex)
 
 void DomainFacade::addSceneToUndo(const QString &sceneDescription)
 {
-    UndoSceneAdd *u = new UndoSceneAdd(this, 0, sceneDescription);
+    UndoSceneAdd *u = new UndoSceneAdd(this, sceneDescription);
     getUndoStack()->push(u);
 }
 
 /*
-void DomainFacade::addSceneUndo(const QString &sceneDescription)
+void DomainFacade::undoSceneAdd(const QString &sceneDescription)
 {
     animationProject->addScene(sceneDescription);
 }
 */
 
-Scene *DomainFacade::addSceneRedo(const QString &sceneDescription)
+Scene *DomainFacade::redoSceneAdd(const QString &sceneDescription)
 {
-    qDebug("DomainFacade::addSceneRedo --> Start");
+    qDebug("DomainFacade::redoSceneAdd --> Start");
 
     Scene *scene = animationProject->addScene(sceneDescription);
     getView()->notifyAddScene(scene->getIndex());
@@ -381,7 +509,7 @@ Scene *DomainFacade::addSceneRedo(const QString &sceneDescription)
 
     animationProject->setUnsavedChanges();
 
-    qDebug("DomainFacade::addSceneRedo --> End");
+    qDebug("DomainFacade::redoSceneAdd --> End");
     return scene;
 }
 
@@ -392,25 +520,25 @@ void DomainFacade::addScene(Scene *newScene)
 }
 
 
-void DomainFacade::insertSceneToUndo(int sceneIndex,
-                                     const QString &sceneDescription)
+void DomainFacade::insertSceneToUndo(const QString &sceneDescription,
+                                     int sceneIndex)
 {
-    UndoSceneInsert *u = new UndoSceneInsert(this, sceneIndex, sceneDescription);
+    UndoSceneInsert *u = new UndoSceneInsert(this, sceneDescription, sceneIndex);
     getUndoStack()->push(u);
 
 }
 
 /*
-void DomainFacade::insertSceneUndo(int sceneIndex,
-                                   const QString &sceneDescription)
+void DomainFacade::undoSceneInsert(const QString &sceneDescription,
+                                   int            sceneIndex)
 {
 }
 */
 
-Scene *DomainFacade::insertSceneRedo(int sceneIndex,
-                                     const QString &sceneDescription)
+Scene *DomainFacade::redoSceneInsert(const QString &sceneDescription,
+                                     int sceneIndex)
 {
-    qDebug("DomainFacade::insertSceneRedo --> Start");
+    qDebug("DomainFacade::redoSceneInsert --> Start");
 
     Scene *scene = animationProject->insertScene(sceneIndex, sceneDescription);
     getView()->notifyInsertScene(scene->getIndex());
@@ -422,7 +550,7 @@ Scene *DomainFacade::insertSceneRedo(int sceneIndex,
 
     animationProject->setUnsavedChanges();
 
-    qDebug("DomainFacade::insertSceneRedo --> End");
+    qDebug("DomainFacade::redoSceneInsert --> End");
     return scene;
 }
 
@@ -439,47 +567,47 @@ void DomainFacade::removeSceneUndo(int sceneIndex)
 }
 */
 
-Scene *DomainFacade::removeSceneRedo(int sceneIndex)
+Scene *DomainFacade::redoSceneRemove(int sceneIndex)
 {
-    qDebug("DomainFacade::removeSceneRedo --> Start");
+    qDebug("DomainFacade::redoSceneRemove --> Start");
 
     Scene *removedScene = animationProject->removeScene(sceneIndex);
     animationProject->setUnsavedChanges();
 
     getView()->notifyRemoveScene(sceneIndex);
 
-    qDebug("DomainFacade::removeSceneRedo --> End");
+    qDebug("DomainFacade::redoSceneRemove --> End");
     return removedScene;
 }
 
 
-void DomainFacade::moveSceneToUndo(int sceneIndex,
-                                   int movePosition)
+void DomainFacade::moveSceneToUndo(int fromSceneIndex,
+                                   int toSceneIndex)
 {
-    UndoSceneMove *u = new UndoSceneMove(this, sceneIndex, movePosition);
+    UndoSceneMove *u = new UndoSceneMove(this, fromSceneIndex, toSceneIndex);
     getUndoStack()->push(u);
 }
 
 /*
-void DomainFacade::moveSceneUndo(int sceneIndex,
-                                 int movePosition)
+void DomainFacade::undoSceneMove(int fromSceneIndex,
+                                 int toSceneIndex)
 {
 }
 */
 
-void DomainFacade::moveSceneRedo(int sceneIndex,
-                                 int movePosition)
+void DomainFacade::redoSceneMove(int fromSceneIndex,
+                                 int toSceneIndex)
 {
-    qDebug("DomainFacade::moveSceneRedo --> Start");
+    qDebug("DomainFacade::redoSceneMove --> Start");
 
-    animationProject->moveScene(sceneIndex, movePosition);
+    animationProject->moveScene(fromSceneIndex, toSceneIndex);
     animationProject->setUnsavedChanges();
 
-    qDebug("DomainFacade::moveSceneRedo --> Start");
+    qDebug("DomainFacade::redoSceneMove --> Start");
 }
 
 
-int DomainFacade::addSoundToScene(int sceneIndex,
+int DomainFacade::addSoundToScene(int           sceneIndex,
                                   const QString filename,
                                   const QString soundName)
 {
@@ -548,24 +676,24 @@ int DomainFacade::getTakeExposureSize(int sceneIndex,
 }
 
 
-void DomainFacade::addTakeToUndo(int sceneIndex,
-                                 const QString &takeDescription)
+void DomainFacade::addTakeToUndo(const QString &takeDescription,
+                                 int            sceneIndex)
 {
-    UndoTakeAdd *u = new UndoTakeAdd(this, sceneIndex, 0, takeDescription);
+    UndoTakeAdd *u = new UndoTakeAdd(this, takeDescription, sceneIndex);
     getUndoStack()->push(u);
 }
 
 /*
-void DomainFacade::addTakeToUndo(int sceneIndex,
-                                 const QString &takeDescription)
+void DomainFacade::undoTakeAdd(const QString &takeDescription,
+                               int            sceneIndex)
 {
 }
 */
 
-Take *DomainFacade::addTakeRedo(int sceneIndex,
-                                const QString &takeDescription)
+Take *DomainFacade::redoTakeAdd(const QString &takeDescription,
+                                int            sceneIndex)
 {
-    qDebug("DomainFacade::addTakeRedo --> Start");
+    qDebug("DomainFacade::redoTakeAdd --> Start");
 
     Take *take = animationProject->addTake(sceneIndex, takeDescription);
     getView()->notifyAddTake(sceneIndex, take->getIndex());
@@ -576,7 +704,7 @@ Take *DomainFacade::addTakeRedo(int sceneIndex,
 
     animationProject->setUnsavedChanges();
 
-    qDebug("DomainFacade::addTakeRedo --> End");
+    qDebug("DomainFacade::redoTakeAdd --> End");
     return take;
 }
 
@@ -587,27 +715,27 @@ void DomainFacade::addTake(Take *newTake)
 }
 
 
-void DomainFacade::insertTakeToUndo(int sceneIndex,
-                                    int takeIndex,
-                                    const QString &takeDescription)
+void DomainFacade::insertTakeToUndo(const QString &takeDescription,
+                                    int            sceneIndex,
+                                    int            takeIndex)
 {
-    UndoTakeInsert *u = new UndoTakeInsert(this, sceneIndex, takeIndex, takeDescription);
+    UndoTakeInsert *u = new UndoTakeInsert(this, takeDescription, sceneIndex, takeIndex);
     getUndoStack()->push(u);
 }
 
 /*
-void DomainFacade::insertTakeToUndo(int sceneIndex,
-                                    int takeIndex,
-                                    const QString &takeDescription)
+void DomainFacade::undoTakeInsert(const QString &takeDescription,
+                                  int            sceneIndex,
+                                  int            takeIndex)
 {
 }
 */
 
-Take *DomainFacade::insertTakeRedo(int sceneIndex,
-                                   int takeIndex,
-                                   const QString &takeDescription)
+Take *DomainFacade::redoTakeInsert(const QString &takeDescription,
+                                   int sceneIndex,
+                                   int takeIndex)
 {
-    qDebug("DomainFacade::insertTakeRedo --> Start");
+    qDebug("DomainFacade::redoTakeInsert --> Start");
 
     Take *take = animationProject->insertTake(sceneIndex, takeDescription);
     getView()->notifyInsertTake(sceneIndex, takeIndex);
@@ -618,7 +746,7 @@ Take *DomainFacade::insertTakeRedo(int sceneIndex,
 
     animationProject->setUnsavedChanges();
 
-    qDebug("DomainFacade::insertTakeRedo --> End");
+    qDebug("DomainFacade::redoTakeInsert --> End");
     return take;
 }
 
@@ -631,50 +759,56 @@ void DomainFacade::removeTakeToUndo(int sceneIndex,
 }
 
 /*
-void DomainFacade::removeTakeUndo(int sceneIndex,
+void DomainFacade::undoTakeRemove(int sceneIndex,
                                   int takeIndex)
 {
 }
 */
 
-Take *DomainFacade::removeTakeRedo(int sceneIndex,
+Take *DomainFacade::redoTakeRemove(int sceneIndex,
                                    int takeIndex)
 {
-    qDebug("DomainFacade::removeTakeRedo --> Start");
+    qDebug("DomainFacade::redoTakeRemove --> Start");
 
     Take *removedTake = animationProject->removeTake(sceneIndex, takeIndex);
     animationProject->setUnsavedChanges();
 
     getView()->notifyRemoveTake(sceneIndex, takeIndex);
 
-    qDebug("DomainFacade::removeTakeRedo --> End");
+    qDebug("DomainFacade::redoTakeRemove --> End");
     return removedTake;
 }
 
 
-void DomainFacade::moveTakeToUndo(int fromIndex,
-                                  int moveIndex)
+void DomainFacade::moveTakeToUndo(int fromSceneIndex,
+                                  int fromTakeIndex,
+                                  int toSceneIndex,
+                                  int toTakeIndex)
 {
-    UndoTakeMove *u = new UndoTakeMove(this, fromIndex, moveIndex);
+    UndoTakeMove *u = new UndoTakeMove(this, fromSceneIndex, fromTakeIndex, toSceneIndex, toTakeIndex);
     getUndoStack()->push(u);
 }
 
 /*
-void DomainFacade::moveTakeUndo(int fromIndex,
-                                int moveIndex)
+void DomainFacade::undoTakeMove(int fromSceneIndex,
+                                int fromTakeIndex,
+                                int toSceneIndex,
+                                int toTakeIndex)
 {
 }
 */
 
-void DomainFacade::moveTakeRedo(int fromIndex,
-                                int moveIndex)
+void DomainFacade::redoTakeMove(int fromSceneIndex,
+                                int fromTakeIndex,
+                                int toSceneIndex,
+                                int toTakeIndex)
 {
-    qDebug("DomainFacade::moveTakeRedo --> Start");
+    qDebug("DomainFacade::redoTakeMove --> Start");
 
-    animationProject->moveTake(fromIndex, moveIndex);
+    animationProject->moveTake(fromSceneIndex, fromTakeIndex, toSceneIndex, toTakeIndex);
     animationProject->setUnsavedChanges();
 
-    qDebug("DomainFacade::moveTakeRedo --> Start");
+    qDebug("DomainFacade::redoTakeMove --> Start");
 }
 
 

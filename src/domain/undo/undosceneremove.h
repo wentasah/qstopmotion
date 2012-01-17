@@ -36,11 +36,11 @@ public:
      * Sets up the UndoRemoveScene command object with the information needed to undo and
      * redo the add command.
      * @param df Domain facade for commands.
-     * @param scene the index the removed scene had.
+     * @param si the index the removed scene had.
      * command
      */
     UndoSceneRemove(DomainFacade *df,
-                    int scene);
+                    int           si);
 
     /**
      * Cleans up after the undo object.

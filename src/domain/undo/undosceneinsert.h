@@ -36,12 +36,12 @@ public:
      * Sets up the UndoSceneInsert command object with the information needed to undo and
      * redo the insert command.
      * @param df Domain facade for commands.
-     * @param scIndex The index of the new scene.
      * @param description The description of the new scene.
+     * @param scIndex The index of the new scene.
      */
-    UndoSceneInsert(DomainFacade *df,
-                    int scIndex,
-                    const QString &description);
+    UndoSceneInsert(DomainFacade  *df,
+                    const QString &description,
+                    int            scIndex);
 
     /**
      * Cleans up after the undo object.

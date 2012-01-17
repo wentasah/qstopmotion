@@ -23,13 +23,11 @@
 #include "undosceneadd.h"
 
 
-
-UndoSceneAdd::UndoSceneAdd(DomainFacade *df,
-                           int scIndex,
+UndoSceneAdd::UndoSceneAdd(DomainFacade  *df,
                            const QString &description)
     :UndoBase(df)
 {
-    sceneIndex = scIndex;
+    sceneIndex = df->getSceneSize();
     sceneDescription.append(description);
     setText(QString(QObject::tr("Add scene '%1'")).arg(description));
 }
@@ -44,12 +42,11 @@ UndoSceneAdd::~UndoSceneAdd()
 void UndoSceneAdd::undo()
 {
     // TODO: Change handling for undo
-    // facade->removeScene();
-    // facade->removeScene(sceneNumber);
+    // facade->undoSceneAdd(sceneDescription);
 }
 
 
 void UndoSceneAdd::redo()
 {
-    facade->addSceneRedo(sceneDescription);
+    facade->redoSceneAdd(sceneDescription);
 }

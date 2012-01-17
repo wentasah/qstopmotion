@@ -36,12 +36,12 @@ public:
      * Sets up the UndoMoveScene command object with the information needed to undo and
      * redo the add command.
      * @param df Domain facade for commands.
-     * @param from the index the scene had before being moved.
-     * @param move the index of the scene after moving.
+     * @param fsi the index the scene had before being moved.
+     * @param tsi the index of the scene after moving.
      */
     UndoSceneMove(DomainFacade *df,
-                  int from,
-                  int move);
+                  int           fsi,
+                  int           tsi);
 
     /**
      * Cleans up after the undo object.
@@ -63,8 +63,8 @@ private:
     /**
      * The model to perform the redo command on.
      */
-    int  fromIndex;
-    int  moveIndex;
+    int  fromSceneIndex;
+    int  toSceneIndex;
 };
 
 #endif

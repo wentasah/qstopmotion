@@ -20,34 +20,45 @@
  *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                 *
  ******************************************************************************/
 
-#include "undosceneinsert.h"
+#ifndef UNDOPROJECTCLOSE_H
+#define UNDOPROJECTCLOSE_H
 
+#include <domain/undo/undobase.h>
 
-UndoSceneInsert::UndoSceneInsert(DomainFacade  *df,
-                                 const QString &description,
-                                 int            scIndex)
-    :UndoBase(df)
+/**
+ * The UndoProjectClose class for undoing closeProject(...) calls to the project.
+ */
+class UndoProjectClose : public UndoBase
 {
-    sceneIndex = scIndex;
-    sceneDescription.append(description);
-    setText(QString(QObject::tr("Insert scene '%1'")).arg(description));
-}
+public:
 
+    /**
+     * Sets up the UndoProjectClose command object with the information needed to undo and
+     * redo the add command.
+     * @param df Domain facade for commands.
+     */
+    UndoProjectClose(DomainFacade  *df);
 
-UndoSceneInsert::~UndoSceneInsert()
-{
+    /**
+     * Cleans up after the undo object.
+     */
+    ~UndoProjectClose();
 
-}
+    /**
+     * Abstract function for undoing the command represented by this undo object.
+     */
+    virtual void undo();
 
+    /**
+     * Abstract function for redoing (performing) the command represented by this
+     * undo object.
+     */
+    virtual void redo();
 
-void UndoSceneInsert::undo()
-{
-    // TODO: Change handling for undo
-    // facade->undoSceneInsert(sceneDescription, sceneIndex);
-}
+private:
+    /**
+     * The model to perform the redo command on.
+     */
+};
 
-
-void UndoSceneInsert::redo()
-{
-    facade->redoSceneInsert(sceneDescription, sceneIndex);
-}
+#endif

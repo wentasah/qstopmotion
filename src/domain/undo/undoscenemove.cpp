@@ -24,12 +24,12 @@
 
 
 UndoSceneMove::UndoSceneMove(DomainFacade *df,
-                             int from,
-                             int move)
+                             int           fsi,
+                             int           tsi)
     :UndoBase(df)
 {
-    fromIndex = from;
-    moveIndex = move;
+    fromSceneIndex = fsi;
+    toSceneIndex = tsi;
     setText(QObject::tr("Move scene"));
 }
 
@@ -42,11 +42,11 @@ UndoSceneMove::~UndoSceneMove()
 void UndoSceneMove::undo()
 {
     // TODO: Change handling for undo
-    // facade->moveSceneUndo(moveIndex, fromIndex);
+    // facade->undoSceneMove(fromSceneIndex, toSceneIndex);
 }
 
 
 void UndoSceneMove::redo()
 {
-    facade->moveSceneRedo(fromIndex, moveIndex);
+    facade->redoSceneMove(fromSceneIndex, toSceneIndex);
 }

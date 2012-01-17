@@ -34,12 +34,16 @@ public:
      * Sets up the UndoTakeSelect command object with the information needed
      * to undo and redo the add commands.
      * @param df Domain facade for commands.
-     * @param lastIndex the index of the last selected take.
-     * @param newIndex the index of the new selected take.
+     * @param osi the old index of the scene of the take.
+     * @param oti the old index of the take.
+     * @param nsi the new index of the scene of the take.
+     * @param nti the new index of the tabe.
      */
     UndoTakeSelect(DomainFacade *df,
-                   int  lastIndex,
-                   int  newIndex);
+                   int           osi,
+                   int           oti,
+                   int           nsi,
+                   int           nti);
 
     /**
      * Destructor
@@ -61,7 +65,9 @@ private:
     /**
      * The model to perform the redo command on.
      */
-    int  lastTakeIndex;
+    int  oldSceneIndex;
+    int  oldTakeIndex;
+    int  newSceneIndex;
     int  newTakeIndex;
 };
 

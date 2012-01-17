@@ -22,13 +22,17 @@
 
 
 UndoTakeSelect::UndoTakeSelect(DomainFacade *df,
-                               int lastIndex,
-                               int newIndex)
+                               int           osi,
+                               int           oti,
+                               int           nsi,
+                               int           nti)
     :UndoBase(df)
 {
-    lastTakeIndex = lastIndex;
-    newTakeIndex = newIndex;
-    setText(QObject::tr("Select take"));
+    oldSceneIndex = osi;
+    oldTakeIndex = oti;
+    newSceneIndex = nsi;
+    newTakeIndex = nti;
+    setText(QString(QObject::tr("Select take (%1,%2)")).arg(newSceneIndex).arg(newTakeIndex));
 }
 
 
@@ -40,7 +44,7 @@ UndoTakeSelect::~UndoTakeSelect()
 void UndoTakeSelect::undo()
 {
     /* TODO: Change handling for undo
-    facade->moveFrames(moveIndex, moveIndex + (toIndex - fromIndex), toIndex);
+    facade->undoTakeSelect(oldSceneIndex, oldTakeIndex, newSceneIndex, newTakeIndex);
     */
 }
 
@@ -48,6 +52,6 @@ void UndoTakeSelect::undo()
 void UndoTakeSelect::redo()
 {
     /* TODO: Change handling for redo
-    facade->moveFrames(fromIndex, toIndex, moveIndex);
+    facade->redoTakeSelect(oldSceneIndex, oldTakeIndex, newSceneIndex, newTakeIndex);
     */
 }

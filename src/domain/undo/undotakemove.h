@@ -31,15 +31,19 @@ class UndoTakeMove : public UndoBase
 public:
 
     /**
-     * Sets up the UndoTakeScene command object with the information needed to undo and
+     * Sets up the UndoTakeMove command object with the information needed to undo and
      * redo the add command.
      * @param df Domain facade for commands.
-     * @param from the index the scene had before being moved.
-     * @param move the index of the scene after moving.
+     * @param fsi the index the scene of the take had before being moved.
+     * @param fti the index of the take had before being moved.
+     * @param tsi the index the scene of the take after moving.
+     * @param tti the index of the take after moving.
      */
     UndoTakeMove(DomainFacade *df,
-                 int from,
-                 int move);
+                 int           fsi,
+                 int           fti,
+                 int           tsi,
+                 int           tti);
 
     /**
      * Cleans up after the undo object.
@@ -61,8 +65,10 @@ private:
     /**
      * The model to perform the redo command on.
      */
-    int  fromIndex;
-    int  moveIndex;
+    int  fromSceneIndex;
+    int  fromTakeIndex;
+    int  toSceneIndex;
+    int  toTakeIndex;
 };
 
 #endif

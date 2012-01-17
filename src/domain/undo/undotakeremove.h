@@ -36,13 +36,13 @@ public:
      * Sets up the UndoTakeRemove command object with the information needed to undo and
      * redo the add command.
      * @param df Domain facade for commands.
-     * @param scene the index of the scene the removed take had.
-     * @param take the index the removed take had.
+     * @param si the index of the scene the removed take had.
+     * @param ti the index the removed take had.
      * command
      */
     UndoTakeRemove(DomainFacade *df,
-                   int scene,
-                   int take);
+                   int           si,
+                   int           ti);
 
     /**
      * Cleans up after the undo object.

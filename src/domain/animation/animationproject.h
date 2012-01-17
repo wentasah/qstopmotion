@@ -444,10 +444,12 @@ public:
 
     /**
      * Moves the take at position takeIndex to the position movePosition.
-     * @param takeIndex the index of the take to move.
-     * @param movePosition the position to move the take to.
+     * @param fromSceneIndex the index of the scene of the take to move.
+     * @param fromTakeIndex the index of the take to move.
+     * @param toSceneIndex the scene position to move the take to.
+     * @param toTakeIndex the position to move the take to.
      */
-    void moveTake(int takeIndex, int movePosition);
+    void moveTake(int fromSceneIndex, int fromTakeIndex, int toSceneIndex, int toTakeIndex);
 
     /**
      * Removes the active take from the animation.

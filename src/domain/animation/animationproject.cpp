@@ -894,13 +894,17 @@ Take *AnimationProject::insertTake(unsigned int sceneIndex, const QString &takeD
 }
 
 
-void AnimationProject::moveTake(int takeIndex, int movePosition)
+void AnimationProject::moveTake(int fromSceneIndex, int fromTakeIndex, int toSceneIndex, int toTakeIndex)
 {
-    Q_ASSERT(activeSceneIndex > -1);
+    Q_ASSERT(fromSceneIndex > -1);
+    Q_ASSERT(toSceneIndex > -1);
 
-    Scene *activeScene = scenes[activeSceneIndex];
+    // TODO: Implement the move from one scene to another
+    Q_ASSERT(fromSceneIndex == toSceneIndex);
 
-    activeScene->moveTake(takeIndex, movePosition);
+    Scene *fromScene = scenes[fromSceneIndex];
+
+    fromScene->moveTake(fromTakeIndex, toTakeIndex);
 }
 
 /*

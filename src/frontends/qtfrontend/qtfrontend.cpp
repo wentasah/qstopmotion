@@ -804,15 +804,15 @@ bool QtFrontend::recover()
     QString fileName(pref->getProject(0));
     if (fileName.isEmpty()) {
         // Create the new project
-        project->newProjectRedo(tr("Recover project"));
+        project->newProjectToUndo(tr("Recover project"));
         mw->setProjectSettingsToDefault();
 
         // Create and activate the new scene
-        project->addSceneRedo(tr("Recover scene"));
+        project->addSceneToUndo(tr("Recover scene"));
         project->setActiveSceneIndex(0);
 
         // Create and activate the new take
-        project->addTakeRedo(0, tr("Recover take"));
+        project->addTakeToUndo(tr("Recover take"), 0);
         project->setActiveTakeIndex(0);
 
         //fileMenu->setItemEnabled(SAVE, false);

@@ -213,14 +213,10 @@ public:
     void setFramesPerSecond(int newFPS);
 
     /**
-     * Opens a project.
+     * Add a new newProject object to the undo history.
+     * @param projectDescription the description of the scene or a empty string.
      */
-    void openProject();
-
-    /**
-     * Saves the active project to a XML-file which is written to disk.
-     */
-    bool saveProject();
+    void newProjectToUndo(const QString &projectDescription);
 
     /**
      * Creates a new project.
@@ -229,10 +225,77 @@ public:
     bool newProjectRedo(const QString &projectDescription);
 
     /**
+     * Undo create a new project.
+     * @param projectDescription the description of the project or a empty string.
+     */
+    // bool newProjectUndo(const QString &projectDescription);
+
+    /**
      * Creates a new project.
      * @param projectDescription the description of the project or a empty string.
      */
     bool newProject(const QString &projectDescription);
+
+    /**
+     * Add a new openProject object to the undo history.
+     * @param projectPath the path to the project file.
+     */
+    void openProjectToUndo(const QString &projectPath);
+
+    /**
+     * Open a project.
+     * @param projectPath the path to the project file.
+     */
+    bool openProjectRedo(const QString &projectPath);
+
+    /**
+     * Undo open project.
+     * @param projectPath the path to the project file.
+     */
+    // bool openProjectUndo(const QString &projectPath);
+
+    /**
+     * Opens a project.
+     */
+    void openProject();
+
+    /**
+     * Add a new saveProject object to the undo history.
+     * @param projectPath the path to the project file.
+     */
+    void saveProjectToUndo(const QString &projectPath);
+
+    /**
+     * Save a project.
+     * @param projectPath the path to the project file.
+     */
+    bool saveProjectRedo(const QString &projectPath);
+
+    /**
+     * Undo save project.
+     * @param projectPath the path to the project file.
+     */
+    // bool saveProjectUndo(const QString &projectPath);
+
+    /**
+     * Saves the active project to a XML-file which is written to disk.
+     */
+    bool saveProject();
+
+    /**
+     * Add a new closeProject object to the undo history.
+     */
+    void closeProjectToUndo();
+
+    /**
+     * Close a project.
+     */
+    bool closeProjectRedo();
+
+    /**
+     * Undo close project.
+     */
+    // bool closeProjectUndo();
 
     /**
      * Exports the current project to a video file as specified by the video encoder.
@@ -309,14 +372,14 @@ public:
      * Create a new scene and adds the scene to the end of the animation.
      * @param sceneDescription the description of the scene or a empty string.
      */
-    // void addSceneUndo(const QString &sceneDescription);
+    // void undoSceneAdd(const QString &sceneDescription);
 
     /**
      * Create a new scene and adds the scene to the end of the animation.
      * @param sceneDescription the description of the scene or a empty string.
      * @return The new added scene.
      */
-    Scene *addSceneRedo(const QString &sceneDescription);
+    Scene *redoSceneAdd(const QString &sceneDescription);
 
     /**
      * Add a scene to the animation project.
@@ -326,19 +389,19 @@ public:
 
     /**
      * Add a new insert scene object to the undo history.
-     * @param sceneIndex The index of the scene where the new scene is inserted bevor.
      * @param sceneDescription the description of the scene or a empty string.
+     * @param sceneIndex The index of the scene where the new scene is inserted bevor.
      */
-    void insertSceneToUndo(int sceneIndex,
-                           const QString &sceneDescription);
+    void insertSceneToUndo(const QString &sceneDescription,
+                           int            sceneIndex);
 
     /**
      * Undo create a new scene and insert the scene bevor the active scene in the animation.
-     * @param sceneIndex The index of the scene where the new scene is inserted bevor.
      * @param sceneDescription the description of the scene or a empty string.
+     * @param sceneIndex The index of the scene where the new scene is inserted bevor.
      */
-    // void insertSceneUndo(int sceneIndex,
-    //                      const QString &sceneDescription);
+    // void undoSceneInsert(const QString &sceneDescription,
+    //                      int sceneIndex);
 
     /**
      * Create a new scene and insert the scene bevor the active scene in the animation.
@@ -346,8 +409,8 @@ public:
      * @param sceneDescription the description of the scene or a empty string.
      * @return The new inserted scene.
      */
-    Scene *insertSceneRedo(int sceneIndex,
-                           const QString &sceneDescription);
+    Scene *redoSceneInsert(const QString &sceneDescription,
+                           int sceneIndex);
 
     /**
      * Add a remove scene object to the undo history.
@@ -359,38 +422,38 @@ public:
      * Undo removes the active scene from the animation.
      * @param sceneIndex the index of the scene to retrieve.
      */
-    // void removeSceneUndo(int sceneIndex);
+    // void undoSceneRemove(int sceneIndex);
 
     /**
      * Removes the active scene from the animation.
      * @param sceneIndex the index of the scene to retrieve.
      * @return The removed scene.
      */
-    Scene *removeSceneRedo(int sceneIndex);
+    Scene *redoSceneRemove(int sceneIndex);
 
     /**
      * Add a move scene object to the undo history.
-     * @param sceneIndex the number of the scene to move.
-     * @param movePosition the position to move the scene to.
+     * @param fromSceneIndex the number of the scene to move.
+     * @param toSceneIndex the position to move the scene to.
      */
-    void moveSceneToUndo(int sceneIndex,
-                         int movePosition);
+    void moveSceneToUndo(int fromSceneIndex,
+                         int toSceneIndex);
 
     /**
      * Undo moves the scene at position sceneIndex to the position movePosition.
-     * @param sceneIndex the number of the scene to move.
-     * @param movePosition the position to move the scene to.
+     * @param fromSceneIndex the number of the scene to move.
+     * @param toSceneIndex the position to move the scene to.
      */
-    // void moveSceneUndo(int sceneIndex,
-    //                    int movePosition);
+    // void undoSceneMove(int fromSceneIndex,
+    //                    int toSceneIndex);
 
     /**
      * Moves the scene at position sceneIndex to the position movePosition.
-     * @param sceneIndex the number of the scene to move.
-     * @param movePosition the position to move the scene to.
+     * @param fromSceneIndex the number of the scene to move.
+     * @param toSceneIndex the position to move the scene to.
      */
-    void moveSceneRedo(int sceneIndex,
-                       int movePosition);
+    void redoSceneMove(int fromSceneIndex,
+                       int toSceneIndex);
 
     /**
      * Adds a sound the given frame number. An error message will be
@@ -461,28 +524,28 @@ public:
 
     /**
      * Add a new add take object to the undo history.
-     * @param sceneIndex the index of the scene the take to add
      * @param takeDescription the description of the take or a empty string.
+     * @param sceneIndex the index of the scene the take to add
      */
-    void addTakeToUndo(int sceneIndex,
-                       const QString &takeDescription);
+    void addTakeToUndo(const QString &takeDescription,
+                       int            sceneIndex);
 
     /**
      * Undo create a new take and add the take as the last to the scene.
-     * @param sceneIndex the index of the scene the take to add
      * @param takeDescription the description of the take or a empty string.
+     * @param sceneIndex the index of the scene the take to add
      */
-    // void addTakeUndo(int sceneIndex,
-    //                  const QString &takeDescription);
+    // void undoTakeAdd(const QString &takeDescription,
+    //                  int            sceneIndex);
 
     /**
      * Create a new take and add the take as the last to the scene.
-     * @param sceneIndex the index of the scene the take to add
      * @param takeDescription the description of the take or a empty string.
+     * @param sceneIndex the index of the scene the take to add
      * @return The new inserted take.
      */
-    Take *addTakeRedo(int sceneIndex,
-                      const QString &takeDescription);
+    Take *redoTakeAdd(const QString &takeDescription,
+                      int            sceneIndex);
 
     /**
      * Add a take to the scene.
@@ -492,34 +555,34 @@ public:
 
     /**
      * Add a new insert take object to the undo history.
+     * @param takeDescription The description of the take or a empty string.
      * @param sceneIndex The index of the scene the take to add
      * @param takeIndex The index of the take where the new take is inserted bevor.
-     * @param takeDescription The description of the take or a empty string.
      */
-    void insertTakeToUndo(int sceneIndex,
-                          int takeIndex,
-                          const QString &takeDescription);
+    void insertTakeToUndo(const QString &takeDescription,
+                          int            sceneIndex,
+                          int            takeIndex);
 
     /**
      * Undo create a new take and insert the take bevor the active scene.
+     * @param takeDescription the description of the take or a empty string.
      * @param sceneIndex the index of the scene the take to add
      * @param takeIndex The index of the take where the new take is inserted bevor.
-     * @param takeDescription the description of the take or a empty string.
      */
-    // void insertTakeUndo(int sceneIndex,
-    //                     int sceneIndex,
-    //                     const QString &takeDescription);
+    // void undoTakeInsert(const QString &takeDescription,
+    //                     int            sceneIndex,
+    //                     int            sceneIndex);
 
     /**
      * Createa new take and insert the take bevor the active scene.
+     * @param takeDescription the description of the take or a empty string.
      * @param sceneIndex the index of the scene the take to add
      * @param takeIndex The index of the take where the new take is inserted bevor.
-     * @param takeDescription the description of the take or a empty string.
      * @return The new inserted take.
      */
-    Take *insertTakeRedo(int sceneIndex,
-                         int takeIndex,
-                         const QString &takeDescription);
+    Take *redoTakeInsert(const QString &takeDescription,
+                         int            sceneIndex,
+                         int            takeIndex);
 
     /**
      * Removes the active take from the animation.
@@ -534,7 +597,7 @@ public:
      * @param sceneIndex the index of the scene to retrieve the take from.
      * @param takeIndex the index of the take to retrieve.
      */
-    // void removeTakeUndo(int sceneIndex,
+    // void undoTakeRemove(int sceneIndex,
     //                     int takeIndex);
 
     /**
@@ -543,32 +606,42 @@ public:
      * @param takeIndex the index of the take to retrieve.
      * @return The removed take.
      */
-    Take *removeTakeRedo(int sceneIndex,
+    Take *redoTakeRemove(int sceneIndex,
                          int takeIndex);
 
     /**
      * Add a new move take object to the undo history.
-     * @param takeIndex the number of the take to move.
-     * @param movePosition the position to move the scene to.
+     * @param fromSceneIndex the index of the scene of the take to move.
+     * @param fromTakeIndex the index of the take to move.
+     * @param toSceneIndex the index of the scene of move the take to.
+     * @param toTakeIndex the index to move the take to.
      */
-    void moveTakeToUndo(int takeIndex,
-                        int moveIndex);
+    void moveTakeToUndo(int fromSceneIndex,
+                        int fromTakeIndex,
+                        int toSceneIndex,
+                        int toTakeIndex);
 
     /**
      * Undo moves the take at position takeIndex to the position movePosition.
-     * @param takeIndex the number of the take to move.
-     * @param movePosition the position to move the scene to.
+     * @param fromSceneIndex the index of the scene of the take to move.
+     * @param fromTakeIndex the index of the take to move.
+     * @param toSceneIndex the index of the scene of move the take to.
+     * @param toTakeIndex the index to move the take to.
      */
-    // void moveTakeUndo(int takeIndex,
-    //                   int moveIndex);
+    // void undoTakeMove(int fromSceneIndex,
+    //                   int fromTakeIndex,
+    //                   int toSceneIndex,
+    //                   int toTakeIndex);
 
     /**
      * Moves the take at position takeIndex to the position movePosition.
      * @param takeIndex the number of the take to move.
      * @param movePosition the position to move the scene to.
      */
-    void moveTakeRedo(int takeIndex,
-                      int moveIndex);
+    void redoTakeMove(int fromSceneIndex,
+                      int fromTakeIndex,
+                      int toSceneIndex,
+                      int toTakeIndex);
 
     /**************************************************************************
      * Exposure functions

@@ -36,11 +36,9 @@ public:
      * Sets up the UndoSceneAdd command object with the information needed to undo and
      * redo the add command.
      * @param df Domain facade for commands.
-     * @param scIndex the index of the new scene.
      * @param description the description of the new scene.
      */
-    UndoSceneAdd(DomainFacade *df,
-                 int  scIndex,
+    UndoSceneAdd(DomainFacade  *df,
                  const QString &description);
 
     /**

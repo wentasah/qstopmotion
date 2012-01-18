@@ -112,12 +112,6 @@ bool DomainFacade::isUnsavedChanges()
 }
 
 
-void DomainFacade::setProjectFileName(const QString &fileName)
-{
-    animationProject->setProjectFileName(fileName);
-}
-
-
 const QString DomainFacade::getProjectFileName()
 {
     return animationProject->getProjectFileName();
@@ -215,6 +209,15 @@ void DomainFacade::newProjectToUndo(const QString &projectDescription)
     getUndoStack()->push(u);
 }
 
+/*
+bool DomainFacade::newProjectUndo(const QString &projectDescription)
+{
+    qDebug("DomainFacade::newProjectUndo --> Start");
+
+    qDebug("DomainFacade::newProjectUndo --> End");
+    return true;
+}
+*/
 
 bool DomainFacade::newProjectRedo(const QString &projectDescription)
 {
@@ -233,56 +236,10 @@ bool DomainFacade::newProjectRedo(const QString &projectDescription)
     return true;
 }
 
-/*
-bool DomainFacade::newProjectUndo(const QString &projectDescription)
-{
-    qDebug("DomainFacade::newProjectUndo --> Start");
-
-    qDebug("DomainFacade::newProjectUndo --> End");
-    return true;
-}
-*/
-
-bool DomainFacade::newProject(const QString &projectDescription)
-{
-    qDebug("DomainFacade::newProject --> Start");
-
-    getView()->notifyClear();
-    getView()->notifyNewProject();
-    frontend->setProjectID(projectDescription.toAscii());
-    // frontend->setProjectID(getProjectID().toAscii());
-    frontend->setSceneID("");
-    frontend->setTakeID("");
-
-    qDebug("DomainFacade::newProject --> End");
-    return true;
-}
-
-
 void DomainFacade::openProjectToUndo(const QString &projectPath)
 {
     UndoProjectOpen *u = new UndoProjectOpen(this, projectPath);
     getUndoStack()->push(u);
-}
-
-
-bool DomainFacade::openProjectRedo(const QString &projectPath)
-{
-    qDebug("DomainFacade::openProjectRedo --> Start");
-
-    /* TODO: Implementation of openProjectRedo
-    getView()->notifyClear();
-    animationProject->newProject(projectDescription);
-    getView()->notifyNewProject();
-    frontend->setProjectID(getProjectID().toAscii());
-    frontend->setSceneID("");
-    frontend->setTakeID("");
-
-    animationProject->setUnsavedChanges();
-    */
-
-    qDebug("DomainFacade::openProjectRedo --> End");
-    return true;
 }
 
 /*
@@ -295,11 +252,14 @@ bool DomainFacade::openProjectUndo(const QString &projectDescription)
 }
 */
 
-void DomainFacade::openProject()
+bool DomainFacade::openProjectRedo(const QString &projectPath)
 {
-    qDebug("DomainFacade::openProject --> Start");
+    qDebug("DomainFacade::openProjectRedo --> Start");
 
-    if (animationProject->openProject()) {
+    getView()->notifyClear();
+    getView()->notifyNewProject();
+
+    if (animationProject->openProject(projectPath)) {
         getView()->notifyDescriptionsUpdated();
         getView()->notifyActivateScene();
         getView()->notifyActivateTake();
@@ -307,25 +267,20 @@ void DomainFacade::openProject()
         frontend->setProjectID(getProjectID().toAscii());
 
         Scene *scene = getActiveScene();
-        if (NULL == scene) {
-            return;
-        }
+        Q_ASSERT(NULL != scene);
         frontend->setSceneID(scene->getId().toAscii());
 
         Take *take = getActiveTake();
-        if (NULL == take) {
-            return;
-        }
+        Q_ASSERT(NULL != take);
         frontend->setTakeID(take->getId().toAscii());
 
         Exposure *exposure = getActiveExposure();
-        if (NULL == exposure) {
-            return;
-        }
+        Q_ASSERT(NULL != exposure);
         frontend->setExposureID(exposure->getId().toAscii());
     }
 
-    qDebug("DomainFacade::openProject --> End");
+    qDebug("DomainFacade::openProjectRedo --> End");
+    return true;
 }
 
 
@@ -333,26 +288,6 @@ void DomainFacade::saveProjectToUndo(const QString &projectPath)
 {
     UndoProjectSave *u = new UndoProjectSave(this, projectPath);
     getUndoStack()->push(u);
-}
-
-
-bool DomainFacade::saveProjectRedo(const QString &projectPath)
-{
-    qDebug("DomainFacade::saveProjectRedo --> Start");
-
-    /* TODO: Implementation of saveProjectRedo
-    getView()->notifyClear();
-    animationProject->newProject(projectDescription);
-    getView()->notifyNewProject();
-    frontend->setProjectID(getProjectID().toAscii());
-    frontend->setSceneID("");
-    frontend->setTakeID("");
-
-    animationProject->setUnsavedChanges();
-    */
-
-    qDebug("DomainFacade::saveProjectRedo --> End");
-    return true;
 }
 
 /*
@@ -365,9 +300,14 @@ bool DomainFacade::saveProjectUndo(const QString &projectDescription)
 }
 */
 
-bool DomainFacade::saveProject()
+bool DomainFacade::saveProjectRedo(const QString &projectPath)
 {
-    return animationProject->saveProject();
+    qDebug("DomainFacade::saveProjectRedo --> Start");
+
+    return animationProject->saveProject(projectPath);
+
+    qDebug("DomainFacade::saveProjectRedo --> End");
+    return true;
 }
 
 
@@ -377,6 +317,15 @@ void DomainFacade::closeProjectToUndo()
     getUndoStack()->push(u);
 }
 
+/*
+bool DomainFacade::closeProjectUndo()
+{
+    qDebug("DomainFacade::closeProjectUndo --> Start");
+
+    qDebug("DomainFacade::closeProjectUndo --> End");
+    return true;
+}
+*/
 
 bool DomainFacade::closeProjectRedo()
 {
@@ -397,15 +346,6 @@ bool DomainFacade::closeProjectRedo()
     return true;
 }
 
-/*
-bool DomainFacade::closeProjectUndo()
-{
-    qDebug("DomainFacade::closeProjectUndo --> Start");
-
-    qDebug("DomainFacade::closeProjectUndo --> End");
-    return true;
-}
-*/
 
 bool DomainFacade::exportToVideo(VideoEncoder *encoder)
 {
@@ -864,35 +804,35 @@ int DomainFacade::getTotalExposureSize()
 }
 
 
-void DomainFacade::addExposureToUndo(int sceneIndex,
-                                     int takeIndex,
-                                     const QString &fileName)
+void DomainFacade::addExposureToUndo(const QString &filePath,
+                                     int            sceneIndex,
+                                     int            takeIndex)
 {
-    UndoExposureAdd *u = new UndoExposureAdd(this, sceneIndex, takeIndex, 0, fileName, tr("<empty>"));
+    UndoExposureAdd *u = new UndoExposureAdd(this, filePath, sceneIndex, takeIndex);
     getUndoStack()->push(u);
 }
 
 /*
-void DomainFacade::addExposureUndo(int sceneIndex,
-                                   int takeIndex,
-                                   const QString &fileName)
+void DomainFacade::undoExposureAdd(const QString &filePath,
+                                   int            sceneIndex,
+                                   int            takeIndex)
 {
 }
 */
 
-void DomainFacade::addExposureRedo(int sceneIndex,
-                                   int takeIndex,
-                                   const QString &fileName)
+void DomainFacade::redoExposureAdd(const QString &filePath,
+                                   int            sceneIndex,
+                                   int            takeIndex)
 {
-    qDebug("DomainFacade::addExposureRedo --> Start");
+    qDebug("DomainFacade::redoExposureAdd --> Start");
 
-    Exposure *exposure = animationProject->addExposure(fileName);
+    Exposure *exposure = animationProject->addExposure(filePath);
     getView()->notifyAddExposure(sceneIndex, takeIndex, exposure->getIndex());
     animationProject->setActiveExposureIndex(exposure->getIndex());
     getView()->notifyActivateExposure();
     animationProject->setUnsavedChanges();
 
-    qDebug("DomainFacade::addExposureRedo --> End");
+    qDebug("DomainFacade::redoExposureAdd --> End");
 }
 
 
@@ -902,52 +842,43 @@ void DomainFacade::addExposure(Exposure *newExposure)
 }
 
 
-void DomainFacade::insertExposureToUndo(int sceneIndex,
-                                        int takeIndex,
-                                        int exposureIndex,
-                                        bool after,
-                                        const QString &fileName)
+void DomainFacade::insertExposureToUndo(const QString &filePath,
+                                        int            sceneIndex,
+                                        int            takeIndex,
+                                        int            exposureIndex)
 {
-    UndoExposureInsert *u = new UndoExposureInsert(this, sceneIndex, takeIndex, exposureIndex, after, fileName, tr("<empty>"));
+    UndoExposureInsert *u = new UndoExposureInsert(this, filePath, sceneIndex, takeIndex, exposureIndex);
     getUndoStack()->push(u);
 }
 
 /*
-void DomainFacade::insertExposureUndo(int sceneIndex,
-                                      int takeIndex,
-                                      int exposureIndex,
-                                      bool after,
-                                      const QString &fileName)
+void DomainFacade::undoExposureInsert(const QString &filePath,
+                                      int            sceneIndex,
+                                      int            takeIndex,
+                                      int            exposureIndex)
 {
 }
 */
 
-void DomainFacade::insertExposureRedo(int sceneIndex,
-                                      int takeIndex,
-                                      int exposureIndex,
-                                      bool after,
-                                      const QString &fileName)
+void DomainFacade::redoExposureInsert(const QString &filePath,
+                                      int            sceneIndex,
+                                      int            takeIndex,
+                                      int            exposureIndex)
 {
-    qDebug("DomainFacade::insertExposureRedo --> Start");
+    qDebug("DomainFacade::redoExposureInsert --> Start");
 
     Exposure *exposure = NULL;
 
-    if (after) {
-        exposure = animationProject->insertExposure(sceneIndex, takeIndex, exposureIndex + 1, fileName);
-    }
-    else {
-        exposure = animationProject->insertExposure(sceneIndex, takeIndex, exposureIndex, fileName);
-    }
-    getView()->notifyInsertExposure(sceneIndex,
-                                    takeIndex,
-                                    exposure->getIndex());
+    exposure = animationProject->insertExposure(sceneIndex, takeIndex, exposureIndex, filePath);
+    getView()->notifyInsertExposure(sceneIndex, takeIndex, exposure->getIndex());
 
     animationProject->setActiveExposureIndex(exposure->getIndex());
     getView()->notifyActivateExposure();
     animationProject->setUnsavedChanges();
 
-    qDebug("DomainFacade::insertExposureRedo --> End");
+    qDebug("DomainFacade::redoExposureInsert --> End");
 }
+
 
 void DomainFacade::removeExposureToUndo(int sceneIndex,
                                         int takeIndex,
@@ -958,18 +889,18 @@ void DomainFacade::removeExposureToUndo(int sceneIndex,
 }
 
 /*
-void DomainFacade::removeExposureUndo(QTreeWidgetItem *scItem,
-                                      QTreeWidgetItem *taItem,
-                                      QTreeWidgetItem *exItem)
+void DomainFacade::undoExposureRemove(int sceneIndex,
+                                      int takeIndex,
+                                      int exposureIndex)
 {
 }
 */
 
-Exposure *DomainFacade::removeExposureRedo(int sceneIndex,
+Exposure *DomainFacade::redoExposureRemove(int sceneIndex,
                                            int takeIndex,
                                            int exposureIndex)
 {
-    qDebug("DomainFacade::removeExposureRedo --> Start");
+    qDebug("DomainFacade::redoExposureRemove --> Start");
 
     Exposure* exposure = animationProject->removeExposure(sceneIndex, takeIndex, exposureIndex);
     getView()->notifyRemoveExposure(sceneIndex, takeIndex, exposureIndex);
@@ -983,7 +914,7 @@ Exposure *DomainFacade::removeExposureRedo(int sceneIndex,
 
     animationProject->setUnsavedChanges();
 
-    qDebug("DomainFacade::removeExposureRedo --> End");
+    qDebug("DomainFacade::redoExposureRemove --> End");
     return exposure;
 }
 

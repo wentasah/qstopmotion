@@ -593,6 +593,19 @@ void MainWindowGUI::nextAnimationFrame(int exposureIndex)
 }
 
 
+void MainWindowGUI::openProject(const QString &filePath)
+{
+    Q_ASSERT(filePath != NULL);
+
+    frontend->getProject()->openProjectToUndo(filePath);
+    setMostRecentProject();
+
+    saveAsAct->setEnabled(true);
+    saveAct->setEnabled(true);
+    toolBar->setActualState(ToolBar::toolBarCameraOff);
+}
+
+
 /**************************************************************************
  * Public slots
  **************************************************************************/
@@ -696,7 +709,6 @@ void MainWindowGUI::openProject()
     if (!openFile.isNull()) {
         openProject(openFile);
     }
-    setMostRecentProject();
 
     qDebug("MainWindowGUI::openProject --> End");
 }
@@ -735,10 +747,10 @@ void MainWindowGUI::openFourthMostRecent()
 
 void MainWindowGUI::saveProject()
 {
-    const QString fileName = frontend->getProject()->getProjectFileName();
+    const QString filePath = frontend->getProject()->getProjectFileName();
 
-    if (!fileName.isEmpty()) {
-        frontend->getProject()->saveProject();
+    if (!filePath.isEmpty()) {
+        frontend->getProject()->saveProjectToUndo(filePath);
     } else {
         saveProjectAs();
     }
@@ -760,8 +772,7 @@ void MainWindowGUI::saveProjectAs()
             file.append(".");
             file.append(PreferencesTool::projectSuffix);
         }
-        frontend->getProject()->setProjectFileName(file.toLocal8Bit());
-        frontend->getProject()->saveProject();
+        frontend->getProject()->saveProjectToUndo(file.toLocal8Bit());
         QString path = frontend->getProject()->getProjectPath();
         path.append("/");
         path.append(PreferencesTool::imageDirectory);
@@ -1779,21 +1790,6 @@ void MainWindowGUI::updateMostRecentMenu()
         }
         ProjectFileIndex++;
     } while (1);
-}
-
-
-void MainWindowGUI::openProject(const QString &fileName)
-{
-    Q_ASSERT(fileName != NULL);
-
-    AnimationProject *project = frontend->getProject()->getAnimationProject();
-
-    frontend->getProject()->setProjectFileName(fileName);
-    frontend->getProject()->openProject();
-
-    saveAsAct->setEnabled(true);
-    saveAct->setEnabled(true);
-    toolBar->setActualState(ToolBar::toolBarCameraOff);
 }
 
 

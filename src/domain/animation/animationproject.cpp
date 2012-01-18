@@ -133,12 +133,6 @@ const QString AnimationProject::getAppTrashDirName() const
 }
 
 
-void AnimationProject::setProjectFileName(const QString &fileName)
-{
-    serializer->setProjectFileName(fileName);
-}
-
-
 const QString AnimationProject::getProjectFileName() const
 {
     return serializer->getProjectFileName();
@@ -242,10 +236,11 @@ void AnimationProject::setFramesPerSecond(int newFPS)
 }
 
 
-bool AnimationProject::openProject()
+bool AnimationProject::openProject(const QString &filePath)
 {
     qDebug("AnimationProject::openProject --> Start");
 
+    serializer->setProjectFileName(filePath);
     serializer->read();
 
     if (!readSettingsFromProject(serializer->getSettingsElement())) {
@@ -266,9 +261,13 @@ bool AnimationProject::openProject()
 }
 
 
-bool AnimationProject::saveProject()
+bool AnimationProject::saveProject(const QString &filePath)
 {
     qDebug("AnimationProject::saveProject --> Start");
+
+    if (!filePath.isEmpty()) {
+        serializer->setProjectFileName(filePath);
+    }
 
     frontend->showProgress(tr("Saving scenes to disk ..."), frontend->getProject()->getTotalExposureSize());
 
@@ -683,7 +682,6 @@ bool AnimationProject::readScenesFromProject(QDomElement &animationNode)
     qDebug("AnimationProject::readScenesFromProject --> Start");
 
     description.append(animationNode.attributeNode(QString("descr")).value());
-    this->frontend->getProject()->newProject(description);
 
     QDomElement currElement = animationNode.firstChildElement();
 

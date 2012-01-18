@@ -22,13 +22,21 @@
 
 
 UndoExposureSelect::UndoExposureSelect(DomainFacade *df,
-                                       int lastIndex,
-                                       int newIndex)
+                                       int           osi,
+                                       int           oti,
+                                       int           oei,
+                                       int           nsi,
+                                       int           nti,
+                                       int           nei)
     :UndoBase(df)
 {
-    lastExposureIndex = lastIndex;
-    newExposureIndex = newIndex;
-    setText(QObject::tr("Select exposure"));
+    oldSceneIndex = osi;
+    oldTakeIndex = oti;
+    oldExposureIndex = oei;
+    newSceneIndex = nsi;
+    newTakeIndex = nti;
+    newExposureIndex = nei;
+    setText(QString(QObject::tr("Select exposure (%1,%2,%3)")).arg(newSceneIndex).arg(newTakeIndex).arg(newExposureIndex));
 }
 
 

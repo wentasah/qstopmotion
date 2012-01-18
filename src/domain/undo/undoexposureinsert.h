@@ -36,20 +36,16 @@ public:
      * Sets up the UndoInsert command object with the information needed to undo and
      * redo the add command.
      * @param df Domain facade for commands.
+     * @param fp the path of the file with the image.
      * @param scIndex index of the scene of the take the frames were inserted to.
      * @param taIndex index of the take the frames were inserted to.
      * @param exIndex index of the frames were inserted to.
-     * @param after The new exposure is inserterd after the exposure index.
-     * @param name the name of the file with the image.
-     * @param description the description of the exposure.
      */
     UndoExposureInsert(DomainFacade  *df,
-                       int   scIndex,
-                       int   taIndex,
-                       int   exIndex,
-                       bool  after,
-                       const QString &name,
-                       const QString &description);
+                       const QString &fp,
+                       int            si,
+                       int            ti,
+                       int            ei);
 
     /**
      * Destructor
@@ -74,9 +70,7 @@ private:
     int      sceneIndex;
     int      takeIndex;
     int      exposureIndex;
-    bool     afterFlag;
-    QString  fileName;
-    QString  exposureDescription;
+    QString  filePath;
 };
 
 #endif

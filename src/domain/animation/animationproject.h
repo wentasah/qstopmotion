@@ -96,12 +96,6 @@ public:
     const QString getAppTrashDirName() const;
 
     /**
-     * Set a new the project file name.
-     * @param fileName the new project file name.
-     */
-    void setProjectFileName(const QString &fileName);
-
-    /**
      * Retrieves the project file name
      * @return the project file name if it's setted, NULL otherwise.
      */
@@ -205,16 +199,17 @@ public:
 
     /**
      * Opens a project.
+     * @param filePath the project file path of the project to open.
      * @return true on success, false otherwise
      */
-    bool openProject();
+    bool openProject(const QString &filePath);
 
     /**
      * Saves the active project to a XML-file which is written to disk.
-     * @param filename the filename to store the project files within.
+     * @param filepath the path to store the project files within.
      * @return true on success, false otherwise
      */
-    bool saveProject();
+    bool saveProject(const QString &filePath);
 
     /**
      * Creates a new project.

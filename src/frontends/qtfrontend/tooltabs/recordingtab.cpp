@@ -569,19 +569,28 @@ void RecordingTab::storeFrame()
     QImage i;
     i.load(captureFilePath);
     if (!i.isNull()) {
-
         int sceneIndex = frontend->getProject()->getActiveSceneIndex();
         int takeIndex = frontend->getProject()->getActiveTakeIndex();
         int exposureIndex = frontend->getProject()->getActiveExposureIndex();
+        int exposureSize = frontend->getProject()->getScene(sceneIndex)->getTake(takeIndex)->getExposureSize();
+
         switch (captureFunction) {
         case PreferencesTool::captureButtonBevor:
-            frontend->getProject()->insertExposureToUndo(sceneIndex, takeIndex, exposureIndex, false, captureFilePath);
+            frontend->getProject()->insertExposureToUndo(captureFilePath, sceneIndex, takeIndex, exposureIndex);
             break;
         case PreferencesTool::captureButtonAfter:
-            frontend->getProject()->insertExposureToUndo(sceneIndex, takeIndex, exposureIndex, true, captureFilePath);
+            exposureIndex++;
+            if (exposureIndex == exposureSize) {
+                // actual exposure index is the last in the take
+                frontend->getProject()->addExposureToUndo(captureFilePath, sceneIndex, takeIndex);
+            }
+            else {
+                // actual exposure index is not the last in the take
+                frontend->getProject()->insertExposureToUndo(captureFilePath, sceneIndex, takeIndex, exposureIndex);
+            }
             break;
         case PreferencesTool::captureButtonAppend:
-            frontend->getProject()->addExposureToUndo(sceneIndex, takeIndex, captureFilePath);
+            frontend->getProject()->addExposureToUndo(captureFilePath, sceneIndex, takeIndex);
             break;
         }
     } else {

@@ -33,19 +33,23 @@ class UndoExposureMove : public UndoBase
 public:
 
     /**
-     * Sets up the UndoAdd command object with the information needed to undo and
+     * Sets up the UndoExposureMove command object with the information needed to undo and
      * redo the add commands.
      * @param df Domain facade for commands.
-     * @param from the first of the exposures which were moved.
-     * @param to the last of the exposures which were moved.
-     * @param move the position the exposures was moved to.
-     * @param activeScene the scene the exposures were moved within.
+     * @param fsi the index the scene of the take of the exposure had before being moved.
+     * @param fti the index the take of the exposure had before being moved.
+     * @param fei the index of the exposure had before being moved.
+     * @param tsi the index the scene of the take of the exposure after moving.
+     * @param tti the index the take of the exposure after moving.
+     * @param tei the index of the exposure after moving.
      */
     UndoExposureMove(DomainFacade *df,
-                     int from,
-                     int to,
-                     int move,
-                     int activeScene);
+                     int           fsi,
+                     int           fti,
+                     int           fei,
+                     int           tsi,
+                     int           tti,
+                     int           tei);
 
     /**
      * Destructor
@@ -67,10 +71,12 @@ private:
     /**
      * The model to perform the redo command on.
      */
-    int  fromIndex;
-    int  toIndex;
-    int  moveIndex;
-    int  activeSceneIndex;
+    int  fromSceneIndex;
+    int  fromTakeIndex;
+    int  fromExposureIndex;
+    int  toSceneIndex;
+    int  toTakeIndex;
+    int  toExposureIndex;
 };
 
 #endif

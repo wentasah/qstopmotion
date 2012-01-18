@@ -25,16 +25,16 @@
 #include "domain/animation/exposure.h"
 
 UndoExposureRemove::UndoExposureRemove(DomainFacade *df,
-                                       int  scIndex,
-                                       int  taIndex,
-                                       int  exIndex)
+                                       int           si,
+                                       int           ti,
+                                       int           ei)
     :UndoBase(df)
 {
-    sceneIndex = scIndex;
-    takeIndex = taIndex;
-    exposureIndex = exIndex;
+    sceneIndex = si;
+    takeIndex = ti;
+    exposureIndex = ei;
     exposure = NULL;
-    setText(QObject::tr("Remove exposure"));
+    setText(QString(QObject::tr("Remove exposure (%1,%2,%3)")).arg(sceneIndex).arg(takeIndex).arg(exposureIndex));
 }
 
 
@@ -46,20 +46,12 @@ UndoExposureRemove::~UndoExposureRemove()
 void UndoExposureRemove::undo()
 {
     /* TODO: Change handling for undo
-    facade->setActiveSceneIndex(activeSceneIndex);
-
-    QVector<Exposure*> newExposures = animationProject->addFrames(frameNames, fromIndex);
-
-    // Deallocates the old allocated image paths.
-    int numElem = newExposures.size();
-    for (int i = 0; i < numElem; ++i) {
-        frameNames[i] = newExposures[i]->getImagePath();
-    }
+    facade->undoExposureRemove(sceneIndex, takeIndex, exposureIndex);
     */
 }
 
 
 void UndoExposureRemove::redo()
 {
-    exposure = facade->removeExposureRedo(sceneIndex, takeIndex, exposureIndex);
+    exposure = facade->redoExposureRemove(sceneIndex, takeIndex, exposureIndex);
 }

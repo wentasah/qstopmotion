@@ -26,20 +26,17 @@
 
 #include <QtCore/QVector>
 
-UndoExposureAdd::UndoExposureAdd(DomainFacade *df,
-                                 int scIndex,
-                                 int taIndex,
-                                 int exIndex,
-                                 const QString &name,
-                                 const QString &description)
+UndoExposureAdd::UndoExposureAdd(DomainFacade  *df,
+                                 const QString &fp,
+                                 int            si,
+                                 int            ti)
     :UndoBase(df)
 {
-    sceneIndex = scIndex;
-    takeIndex = taIndex;
-    exposureIndex = exIndex;
-    fileName.append(name);
-    exposureDescription.append(description);
-    setText(QString(QObject::tr("Add exposure '%1'")).arg(description));
+    sceneIndex = si;
+    takeIndex = ti;
+    exposureIndex = facade->getScene(sceneIndex)->getTake(takeIndex)->getExposureSize();
+    filePath.append(fp);
+    setText(QString(QObject::tr("Add exposure (%1,%2,%3) '%4'")).arg(sceneIndex).arg(takeIndex).arg(exposureIndex).arg(filePath));
 }
 
 
@@ -51,21 +48,12 @@ UndoExposureAdd::~UndoExposureAdd()
 void UndoExposureAdd::undo()
 {
     /* TODO: Change handling for undo
-    facade->setActiveSceneIndex(activeSceneIndex);
-
-    // Give animation model order to remove frames in the range 'fromIndex -> end of vector'.
-    QVector<Exposure*> newExposures = facade->removeFrames(fromIndex, fromIndex +   frameNames.size() - 1);
-
-    // Deallocates the old allocated image paths.
-    int exposuresSize = newExposures.size();
-    for (int i = 0; i < exposuresSize; ++i) {
-        frameNames[i] = newExposures[i]->getImagePath();
-    }
+    facade->undoExposureAdd(sceneIndex, takeIndex, fileName);
     */
 }
 
 
 void UndoExposureAdd::redo()
 {
-    facade->addExposureRedo(sceneIndex, takeIndex, fileName);
+    facade->redoExposureAdd(filePath, sceneIndex, takeIndex);
 }

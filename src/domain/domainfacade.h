@@ -117,12 +117,6 @@ public:
     bool isUnsavedChanges();
 
     /**
-     * Set a new the project file name.
-     * @param fileName the new project file name.
-     */
-    void setProjectFileName(const QString &fileName);
-
-    /**
      * Retrieves the project file name.
      * @return the project file name if it's setted, NULL otherwise.
      */
@@ -219,12 +213,6 @@ public:
     void newProjectToUndo(const QString &projectDescription);
 
     /**
-     * Creates a new project.
-     * @param projectDescription the description of the project or a empty string.
-     */
-    bool newProjectRedo(const QString &projectDescription);
-
-    /**
      * Undo create a new project.
      * @param projectDescription the description of the project or a empty string.
      */
@@ -234,7 +222,7 @@ public:
      * Creates a new project.
      * @param projectDescription the description of the project or a empty string.
      */
-    bool newProject(const QString &projectDescription);
+    bool newProjectRedo(const QString &projectDescription);
 
     /**
      * Add a new openProject object to the undo history.
@@ -243,21 +231,16 @@ public:
     void openProjectToUndo(const QString &projectPath);
 
     /**
-     * Open a project.
-     * @param projectPath the path to the project file.
-     */
-    bool openProjectRedo(const QString &projectPath);
-
-    /**
      * Undo open project.
      * @param projectPath the path to the project file.
      */
     // bool openProjectUndo(const QString &projectPath);
 
     /**
-     * Opens a project.
+     * Open a project.
+     * @param projectPath the path to the project file.
      */
-    void openProject();
+    bool openProjectRedo(const QString &projectPath);
 
     /**
      * Add a new saveProject object to the undo history.
@@ -266,21 +249,16 @@ public:
     void saveProjectToUndo(const QString &projectPath);
 
     /**
-     * Save a project.
-     * @param projectPath the path to the project file.
-     */
-    bool saveProjectRedo(const QString &projectPath);
-
-    /**
      * Undo save project.
      * @param projectPath the path to the project file.
      */
     // bool saveProjectUndo(const QString &projectPath);
 
     /**
-     * Saves the active project to a XML-file which is written to disk.
+     * Save a project.
+     * @param projectPath the path to the project file.
      */
-    bool saveProject();
+    bool saveProjectRedo(const QString &projectPath);
 
     /**
      * Add a new closeProject object to the undo history.
@@ -288,14 +266,14 @@ public:
     void closeProjectToUndo();
 
     /**
-     * Close a project.
-     */
-    bool closeProjectRedo();
-
-    /**
      * Undo close project.
      */
     // bool closeProjectUndo();
+
+    /**
+     * Close a project.
+     */
+    bool closeProjectRedo();
 
     /**
      * Exports the current project to a video file as specified by the video encoder.
@@ -684,33 +662,33 @@ public:
 
     /**
      * Creates a new addExposure object in the undo history.
+     * @param filePath the file path ot the image file of the exposure.
      * @param sceneIndex the index of the scene of the take the exposure to add
      * @param takeIndex the index of the take the exposure to add
-     * @param fileName the file name ot the image file of the exposure.
      */
-    void addExposureToUndo(int sceneIndex,
-                           int takeIndex,
-                           const QString &fileName);
+    void addExposureToUndo(const QString &filePath,
+                           int            sceneIndex,
+                           int            takeIndex);
 
     /**
      * Undo creates a new exposure and add it to the animation project.
+     * @param filePath the file path of the image file of the exposure.
      * @param sceneIndex the index of the scene of the take the exposure to add
      * @param takeIndex the index of the take the exposure to add
-     * @param fileName the file name of the image file of the exposure.
      */
-    // void addExposureUndo(int sceneIndex,
-    //                      int takeIndex,
-    //                      const QString &fileName);
+    // void undoExposureAdd(const QString &filePath,
+    //                      int            sceneIndex,
+    //                      int            takeIndex);
 
     /**
      * Creates a new exposure and add it to the animation project.
+     * @param filePath the file path of the image file of the exposure.
      * @param sceneIndex the index of the scene of the take the exposure to add
      * @param takeIndex the index of the take the exposure to add
-     * @param fileName the file name of the image file of the exposure.
      */
-    void addExposureRedo(int sceneIndex,
-                         int takeIndex,
-                         const QString &fileName);
+    void redoExposureAdd(const QString &filePath,
+                         int            sceneIndex,
+                         int            takeIndex);
 
     /**
      * Add a new Exposure to the take.
@@ -720,31 +698,27 @@ public:
 
     /**
      * Creates a new insertExposure object in the undo history.
+     * @param filePath the file path of the image file of the exposure or a empty string.
      * @param sceneIndex the index of the scene of the take the exposure to add
      * @param takeIndex the index of the take the exposure to add
      * @param exposureIndex The index of the exposure where the new exposures are inserted bevor.
-     * @param after The new exposure is inserterd after the exposure index.
-     * @param fileName the file name of the image file of the exposure or a empty string.
      */
-    void insertExposureToUndo(int sceneIndex,
-                              int takeIndex,
-                              int exposureIndex,
-                              bool after,
-                              const QString &fileName);
+    void insertExposureToUndo(const QString &filePath,
+                              int            sceneIndex,
+                              int            takeIndex,
+                              int            exposureIndex);
 
     /**
      * Undo creates a new exposure and insert it in the animation project.
+     * @param filePath the file path of the image file of the exposure or a empty string.
      * @param sceneIndex the index of the scene of the take the exposure to add
      * @param takeIndex the index of the take the exposure to add
      * @param exposureIndex The index of the exposure where the new exposures are inserted bevor.
-     * @param after The new exposure is inserterd after the exposure index.
-     * @param fileName the file name of the image file of the exposure or a empty string.
      */
-    // void insertExposureToUndo(int sceneIndex,
-    //                           int takeIndex,
-    //                           int exposureIndex,
-    //                           bool after,
-    //                           const QString &fileName);
+    // void undoExposureInsert(const QString &filePath
+    //                         int            sceneIndex,
+    //                         int            takeIndex,
+    //                         int            exposureIndex);
 
     /**
      * Creates a new exposure and insert it in the animation project.
@@ -754,11 +728,10 @@ public:
      * @param after The new exposure is inserterd after the exposure index.
      * @param fileName the file name of the image file of the exposure or a empty string.
      */
-    void insertExposureRedo(int sceneIndex,
-                            int takeIndex,
-                            int exposureIndex,
-                            bool after,
-                            const QString &fileName);
+    void redoExposureInsert(const QString &filePath,
+                            int            sceneIndex,
+                            int            takeIndex,
+                            int            exposureIndex);
 
     /**
      * Add a new remove exposure object to the undo history.
@@ -776,7 +749,7 @@ public:
      * @arg takeIndex the index of the take of the exposure to remove
      * @arg exposureIndex the index of the exposure to remove
      */
-    // void removeExposureUndo(int sceneIndex,
+    // void undoExposureRemove(int sceneIndex,
     //                         int takeIndex,
     //                         int exposureIndex);
 
@@ -786,7 +759,7 @@ public:
      * @arg takeIndex the index of the take of the exposure to remove
      * @arg exposureIndex the index of the exposure to remove
      */
-    Exposure *removeExposureRedo(int sceneIndex,
+    Exposure *redoExposureRemove(int sceneIndex,
                                  int takeIndex,
                                  int exposureIndex);
 

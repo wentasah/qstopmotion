@@ -1120,7 +1120,7 @@ void ProjectTab::insertFramesSlot()
     int activeExposureIndex = frontend->getProject()->getActiveExposureIndex();
     for (selectedFilesIndex = 0 ; selectedFilesIndex < selectedFilesCount ; selectedFilesIndex++) {
         // insert the selected files
-        frontend->getProject()->insertExposureToUndo(activeSceneIndex, activeTakeIndex, activeExposureIndex, false, selectedFiles[selectedFilesIndex]);
+        frontend->getProject()->insertExposureToUndo(selectedFiles[selectedFilesIndex], activeSceneIndex, activeTakeIndex, activeExposureIndex);
         activeExposureIndex++;
     }
 
@@ -1144,7 +1144,7 @@ void ProjectTab::addFramesSlot()
     int activeTakeIndex = frontend->getProject()->getActiveTakeIndex();
     for (selectedFilesIndex = 0 ; selectedFilesIndex < selectedFilesCount ; selectedFilesIndex++) {
         // Add the selected files
-        frontend->getProject()->addExposureToUndo(activeSceneIndex, activeTakeIndex, selectedFiles[selectedFilesIndex]);
+        frontend->getProject()->addExposureToUndo(selectedFiles[selectedFilesIndex], activeSceneIndex, activeTakeIndex);
     }
 
     qDebug("ProjectTab::addFramesSlot --> End");

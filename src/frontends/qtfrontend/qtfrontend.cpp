@@ -291,15 +291,8 @@ bool QtFrontend::handleArguments(int argc, char **argv)
         return false;
     }
 
-    DomainFacade *facadePtr = getProject();
-
     if (QFileInfo(argv[1]).isReadable()) {
-        facadePtr->setProjectFileName(argv[1]);
-        facadePtr->openProject();
-        const QString proFile = facadePtr->getProjectFileName();
-        if (proFile != NULL) {
-            preferencesTool->setBasicPreference("mostrecent", proFile);
-        }
+        mw->openProject(argv[1]);
         qDebug("QtFrontend::handleArguments --> End (true)");
         return true;
     }
@@ -820,8 +813,7 @@ bool QtFrontend::recover()
         mw->modelSizeChanged();
     }
     else {
-        project->setProjectFileName(fileName);
-        project->openProject();
+        project->openProjectToUndo(fileName);
     }
 
     // Handle new added file from the temp direcory

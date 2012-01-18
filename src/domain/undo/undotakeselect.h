@@ -37,7 +37,7 @@ public:
      * @param osi the old index of the scene of the take.
      * @param oti the old index of the take.
      * @param nsi the new index of the scene of the take.
-     * @param nti the new index of the tabe.
+     * @param nti the new index of the take.
      */
     UndoTakeSelect(DomainFacade *df,
                    int           osi,

@@ -24,17 +24,21 @@
 
 
 UndoExposureMove::UndoExposureMove(DomainFacade *df,
-                                   int from,
-                                   int to,
-                                   int move,
-                                   int activeScene)
+                                   int           fsi,
+                                   int           fti,
+                                   int           fei,
+                                   int           tsi,
+                                   int           tti,
+                                   int           tei)
     :UndoBase(df)
 {
-    fromIndex = from;
-    toIndex = to;
-    moveIndex = move;
-    activeSceneIndex = activeScene;
-    setText(QObject::tr("Move exposure"));
+    fromSceneIndex = fsi;
+    fromTakeIndex = fti;
+    fromExposureIndex = fei;
+    toSceneIndex = tsi;
+    toTakeIndex = tti;
+    toExposureIndex = tei;
+    setText(QString(QObject::tr("Move exposure (%1,%2,%3)")).arg(toSceneIndex).arg(toTakeIndex).arg(toExposureIndex));
 }
 
 
@@ -46,13 +50,8 @@ UndoExposureMove::~UndoExposureMove()
 void UndoExposureMove::undo()
 {
     /* TODO: Change handling for undo
-    facade->setActiveSceneIndex(activeSceneIndex);
-
-    if (moveIndex < fromIndex) {
-        facade->moveFrames(moveIndex, moveIndex + (toIndex - fromIndex), toIndex);
-    } else {
-        facade->moveFrames(moveIndex - (toIndex - fromIndex), moveIndex, fromIndex);
-    }
+    facade->undoExposureMove(fromSceneIndex, fromTakeIndex, fromExposureIndex,
+                             toSceneIndex, toTakeIndex, toExposureIndex);
     */
 }
 
@@ -60,7 +59,7 @@ void UndoExposureMove::undo()
 void UndoExposureMove::redo()
 {
     /* TODO: Change handling for redo
-    facade->setActiveSceneIndex(activeSceneIndex);
-    facade->moveFrames(fromIndex, toIndex, moveIndex);
+    facade->redoExposureMove(fromSceneIndex, fromTakeIndex, fromExposureIndex,
+                             toSceneIndex, toTakeIndex, toExposureIndex);
     */
 }

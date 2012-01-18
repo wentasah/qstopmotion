@@ -26,22 +26,18 @@
 
 #include <QtCore/QVector>
 
-UndoExposureInsert::UndoExposureInsert(DomainFacade *df,
-                                       int scIndex,
-                                       int taIndex,
-                                       int exIndex,
-                                       bool after,
-                                       const QString &name,
-                                       const QString &description)
+UndoExposureInsert::UndoExposureInsert(DomainFacade  *df,
+                                       const QString &fp,
+                                       int            si,
+                                       int            ti,
+                                       int            ei)
     :UndoBase(df)
 {
-    sceneIndex = scIndex;
-    takeIndex = taIndex;
-    exposureIndex = exIndex;
-    afterFlag = after,
-    fileName.append(name);
-    exposureDescription.append(description);
-    setText(QString(QObject::tr("Insert exposure '%1'")).arg(description));
+    sceneIndex = si;
+    takeIndex = ti;
+    exposureIndex = ei;
+    filePath.append(fp);
+    setText(QString(QObject::tr("Insert exposure (%1,%2,%3) '%4'")).arg(sceneIndex).arg(takeIndex).arg(exposureIndex).arg(filePath));
 }
 
 
@@ -53,21 +49,12 @@ UndoExposureInsert::~UndoExposureInsert()
 void UndoExposureInsert::undo()
 {
     /* TODO: Change handling for undo
-    facade->setActiveSceneIndex(activeSceneIndex);
-
-    // Give animation model order to remove frames in the range 'fromIndex -> end of vector'.
-    QVector<Exposure*> newExposures = facade->removeFrames(fromIndex, fromIndex +   frameNames.size() - 1);
-
-    // Deallocates the old allocated image paths.
-    int exposuresSize = newExposures.size();
-    for (int i = 0; i < exposuresSize; ++i) {
-        frameNames[i] = newExposures[i]->getImagePath();
-    }
+    facade->undoExposureInsert(fileName, sceneIndex, takeIndex, exposureIndex);
     */
 }
 
 
 void UndoExposureInsert::redo()
 {
-    facade->insertExposureRedo(sceneIndex, takeIndex, exposureIndex, afterFlag, fileName);
+    facade->redoExposureInsert(filePath, sceneIndex, takeIndex, exposureIndex);
 }

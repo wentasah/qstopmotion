@@ -259,6 +259,12 @@ public:
      */
     void modelSizeChanged();
 
+    /**
+     * Opens a saved project.
+     * @param projectFile the project to open
+     */
+    void openProject(const QString &projectFile);
+
     /**************************************************************************
      * Public slots
      **************************************************************************/
@@ -555,12 +561,6 @@ private:
      * Updates the most recent menu.
      */
     void updateMostRecentMenu();
-
-    /**
-     * Opens a saved project.
-     * @param projectFile the project to open
-     */
-    void openProject(const QString &projectFile);
 
     /**
      * Check for saving of all changes.

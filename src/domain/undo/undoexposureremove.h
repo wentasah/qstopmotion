@@ -39,14 +39,14 @@ public:
      * Note: The needed information ``toIndex'' is extracted from the length of the
      * frameNames vector.
      * @param df Domain facade for commands.
-     * @arg scIndex the index of the scene of the exposure to remove
-     * @arg taIndex the index of the take of the exposure to remove
-     * @arg exIndex the index of the exposure to remove
+     * @arg si the index of the scene of the exposure to remove
+     * @arg ti the index of the take of the exposure to remove
+     * @arg ei the index of the exposure to remove
      */
     UndoExposureRemove(DomainFacade *df,
-                       int  scIndex,
-                       int  taIndex,
-                       int  exIndex);
+                       int           si,
+                       int           ti,
+                       int           ei);
 
     ~UndoExposureRemove();
 

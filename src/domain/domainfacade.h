@@ -360,12 +360,6 @@ public:
     Scene *redoSceneAdd(const QString &sceneDescription);
 
     /**
-     * Add a scene to the animation project.
-     * @param newScene The new scene.
-     */
-    void addScene(Scene *newScene);
-
-    /**
      * Add a new insert scene object to the undo history.
      * @param sceneDescription the description of the scene or a empty string.
      * @param sceneIndex The index of the scene where the new scene is inserted bevor.
@@ -526,12 +520,6 @@ public:
                       int            sceneIndex);
 
     /**
-     * Add a take to the scene.
-     * @param newTake The new take.
-     */
-    void addTake(Take *newTake);
-
-    /**
      * Add a new insert take object to the undo history.
      * @param takeDescription The description of the take or a empty string.
      * @param sceneIndex The index of the scene the take to add
@@ -689,12 +677,6 @@ public:
     void redoExposureAdd(const QString &filePath,
                          int            sceneIndex,
                          int            takeIndex);
-
-    /**
-     * Add a new Exposure to the take.
-     * @param newExposure The new Exposure to add.
-     */
-    void addExposure(Exposure *newExposure);
 
     /**
      * Creates a new insertExposure object in the undo history.

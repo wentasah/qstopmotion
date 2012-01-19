@@ -690,11 +690,11 @@ bool AnimationProject::readScenesFromProject(QDomElement &animationNode)
 
         // The node is a scene node
         if (nodeName.compare("scene") == 0) {
-            Scene *scene = new Scene(this);
-            scenes.append(scene);
-            this->frontend->getProject()->addScene(scene);
+            Scene *newScene = new Scene(this);
+            scenes.append(newScene);
+            frontend->getView()->notifyAddScene(newScene->getIndex());
 
-            if (!scene->readDataFromProject(currElement)) {
+            if (!newScene->readDataFromProject(currElement)) {
                 qDebug("AnimationProject::readScenesFromProject --> End (false)");
                 return false;
             }

@@ -454,12 +454,6 @@ Scene *DomainFacade::redoSceneAdd(const QString &sceneDescription)
 }
 
 
-void DomainFacade::addScene(Scene *newScene)
-{
-    getView()->notifyAddScene(newScene->getIndex());
-}
-
-
 void DomainFacade::insertSceneToUndo(const QString &sceneDescription,
                                      int sceneIndex)
 {
@@ -649,12 +643,6 @@ Take *DomainFacade::redoTakeAdd(const QString &takeDescription,
 }
 
 
-void DomainFacade::addTake(Take *newTake)
-{
-    getView()->notifyAddTake(newTake->getSceneIndex(), newTake->getIndex());
-}
-
-
 void DomainFacade::insertTakeToUndo(const QString &takeDescription,
                                     int            sceneIndex,
                                     int            takeIndex)
@@ -833,12 +821,6 @@ void DomainFacade::redoExposureAdd(const QString &filePath,
     animationProject->setUnsavedChanges();
 
     qDebug("DomainFacade::redoExposureAdd --> End");
-}
-
-
-void DomainFacade::addExposure(Exposure *newExposure)
-{
-    getView()->notifyAddExposure(newExposure->getSceneIndex(), newExposure->getTakeIndex(), newExposure->getIndex());
 }
 
 

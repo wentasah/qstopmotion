@@ -802,11 +802,11 @@ bool QtFrontend::recover()
 
         // Create and activate the new scene
         project->addSceneToUndo(tr("Recover scene"));
-        project->setActiveSceneIndex(0);
+        project->selectSceneToUndo(0);
 
         // Create and activate the new take
         project->addTakeToUndo(tr("Recover take"), 0);
-        project->setActiveTakeIndex(0);
+        project->selectTakeToUndo(0, 0);
 
         //fileMenu->setItemEnabled(SAVE, false);
 

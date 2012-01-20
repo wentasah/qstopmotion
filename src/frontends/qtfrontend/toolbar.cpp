@@ -352,18 +352,22 @@ void ToolBar::selectPreviousTake()
 
 void ToolBar::selectToBeginFrame()
 {
+    int activeSceneIndex = frontend->getProject()->getActiveSceneIndex();
+    int activeTakeIndex = frontend->getProject()->getActiveTakeIndex();
     int activeExposureIndex = frontend->getProject()->getActiveExposureIndex();
     if (activeExposureIndex > 0) {
-        frontend->getProject()->setActiveExposureIndex(0);
+        frontend->getProject()->selectExposureToUndo(activeSceneIndex, activeTakeIndex, 0);
     }
 }
 
 
 void ToolBar::selectPreviousFrame()
 {
+    int activeSceneIndex = frontend->getProject()->getActiveSceneIndex();
+    int activeTakeIndex = frontend->getProject()->getActiveTakeIndex();
     int activeExposureIndex = frontend->getProject()->getActiveExposureIndex();
     if (activeExposureIndex > 0) {
-        frontend->getProject()->setActiveExposureIndex(activeExposureIndex - 1);
+        frontend->getProject()->selectExposureToUndo(activeSceneIndex, activeTakeIndex, activeExposureIndex - 1);
     }
 }
 
@@ -375,7 +379,7 @@ void ToolBar::selectNextFrame()
     int activeExposureIndex = frontend->getProject()->getActiveExposureIndex();
     int exposureCount = frontend->getProject()->getTakeExposureSize(activeSceneIndex, activeTakeIndex);
     if ((activeExposureIndex > -1) && (activeExposureIndex < exposureCount - 1)) {
-        frontend->getProject()->setActiveExposureIndex(activeExposureIndex + 1);
+        frontend->getProject()->selectExposureToUndo(activeSceneIndex, activeTakeIndex, activeExposureIndex + 1);
     }
 }
 
@@ -386,7 +390,7 @@ void ToolBar::selectToEndFrame()
     int activeTakeIndex = frontend->getProject()->getActiveTakeIndex();
     int exposureCount = frontend->getProject()->getTakeExposureSize(activeSceneIndex, activeTakeIndex);
     if (0 < exposureCount) {
-        frontend->getProject()->setActiveExposureIndex(exposureCount - 1);
+        frontend->getProject()->selectExposureToUndo(activeSceneIndex, activeTakeIndex, exposureCount - 1);
     }
 }
 

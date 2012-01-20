@@ -52,10 +52,13 @@ void EditMenuHandler::setGotoMenu(QWidget * gotoMenu)
 }
 
 
+// TODO: New implementation of goto frame
 void EditMenuHandler::gotoFrame(int frameNumber)
 {
+    /*
     frontend->getProject()->setActiveExposureIndex(frameNumber);
     this->closeGotoMenu();
+    */
 }
 
 

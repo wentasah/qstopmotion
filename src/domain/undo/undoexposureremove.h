@@ -65,7 +65,6 @@ private:
     /**
      * The model to perform the redo command on.
      */
-    DomainFacade *facade;
     int           sceneIndex;
     int           takeIndex;
     int           exposureIndex;

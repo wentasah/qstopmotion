@@ -264,18 +264,18 @@ void MainWindowGUI::mousePressEvent(QMouseEvent *)
 void MainWindowGUI::keyPressEvent(QKeyEvent *k)
 {
     DomainFacade *facade = frontend->getProject();
-    int activeScene = facade->getActiveSceneIndex();
-    // int activeTake = facade->getActiveTakeIndex();
+    int activeSceneIndex = facade->getActiveSceneIndex();
+    int activeTakeIndex = facade->getActiveTakeIndex();
 
     switch (k->key()) {
     case Key_Shift:
         timeLine->setSelecting(true);
         break;
     case Key_A:
-        if (activeScene >= 0) {
-            if (facade->getSceneExposureSize(activeScene) > 1) {
-                facade->setActiveExposureIndex(0);
-                timeLine->setSelection(facade->getSceneExposureSize(activeScene) - 1);
+        if (activeSceneIndex >= 0) {
+            if (facade->getSceneExposureSize(activeSceneIndex) > 1) {
+                facade->selectExposureToUndo(activeSceneIndex, activeTakeIndex, 0);
+                // timeLine->setSelection(facade->getSceneExposureSize(activeScene) - 1);
             }
         }
         break;
@@ -681,11 +681,11 @@ void MainWindowGUI::newProject()
 
     // Create and activate the new scene
     project->addSceneToUndo(sceneDescription);
-    project->setActiveSceneIndex(0);
+    project->selectSceneToUndo(0);
 
     // Create and activate the new take
     project->addTakeToUndo(takeDescription, 0);
-    project->setActiveTakeIndex(0);
+    project->selectTakeToUndo(0, 0);
 
     //fileMenu->setItemEnabled(SAVE, false);
 
@@ -906,13 +906,15 @@ void MainWindowGUI::showPreferencesDialog()
 
 void MainWindowGUI::showUndoStack()
 {
+    QRect fGeo = this->frameGeometry();
+
     // Open up undo stack window
     if (undoView == 0) {
         undoView = new QUndoView(frontend->getProject()->getUndoStack());
         undoView->setWindowTitle(tr("qStopMotion - Undo stack"));
         undoView->setAttribute(Qt::WA_QuitOnClose, false);
-        undoView->setGeometry(this->x() + this->width() + 15, this->y(),
-                              200, 100);
+        undoView->setGeometry(geometry().x() + fGeo.width(), geometry().y(),
+                              200, height());
     }
     undoView->show();
 }

@@ -289,16 +289,6 @@ public:
      */
     bool exportToCinelerra(const QString file);
 
-    /**
-     * The active scene, take and exposure are changed
-     * @param newActiveScene The new selected scene.
-     * @param newActiveTake The new selected take.
-     * @param newActiveExposuree The new selected exposure.
-     */
-    void activeItemChanged(int newActiveScene,
-                           int newActiveTake,
-                           int newActiveExposure);
-
     /**************************************************************************
      * Scene functions
      **************************************************************************/
@@ -308,12 +298,6 @@ public:
      * @return the index of the active scene.
      */
     int getActiveSceneIndex();
-
-    /**
-     * Sets a new active scene (the scene to be worked on now).
-     * @param sceneIndex the new active scene.
-     */
-    void setActiveSceneIndex(int sceneIndex);
 
     /**
      * Return the active scene.
@@ -405,7 +389,7 @@ public:
 
     /**
      * Add a move scene object to the undo history.
-     * @param fromSceneIndex the number of the scene to move.
+     * @param fromSceneIndex the index of the scene to move.
      * @param toSceneIndex the position to move the scene to.
      */
     void moveSceneToUndo(int fromSceneIndex,
@@ -413,7 +397,7 @@ public:
 
     /**
      * Undo moves the scene at position sceneIndex to the position movePosition.
-     * @param fromSceneIndex the number of the scene to move.
+     * @param fromSceneIndex the index of the scene to move.
      * @param toSceneIndex the position to move the scene to.
      */
     // void undoSceneMove(int fromSceneIndex,
@@ -421,11 +405,37 @@ public:
 
     /**
      * Moves the scene at position sceneIndex to the position movePosition.
-     * @param fromSceneIndex the number of the scene to move.
+     * @param fromSceneIndex the index of the scene to move.
      * @param toSceneIndex the position to move the scene to.
      */
     void redoSceneMove(int fromSceneIndex,
                        int toSceneIndex);
+
+    /**
+     * Add a select scene object to the undo history.
+     * @param newSceneIndex the position to move the scene to.
+     */
+    void selectSceneToUndo(int newSceneIndex);
+
+    /**
+     * Undo select the scene at position newSceneIndex to the position oldSceneIndex.
+     * @param oldSceneIndex the old index of the scene.
+     * @param newSceneIndex the new index of the scene.
+     */
+    // void undoSceneSelect(int oldSceneIndex,
+    //                      int newSceneIndex);
+
+    /**
+     * Redo select the scene at position oldSceneIndex to the position newSceneIndex.
+     * @param oldSceneIndex the old index of the scene.
+     * @param newSceneIndex the new index of the scene.
+     */
+    void redoSceneSelect(int oldSceneIndex,
+                         int newSceneIndex);
+
+    /**************************************************************************
+     * Scene sound functions
+     **************************************************************************/
 
     /**
      * Adds a sound the given frame number. An error message will be
@@ -463,12 +473,6 @@ public:
      * @return the index of the active take.
      */
     int getActiveTakeIndex();
-
-    /**
-     * Sets a new active take (the take to be worked on now).
-     * @param takeIndex the new active take.
-     */
-    void setActiveTakeIndex(int takeIndex);
 
     /**
      * Return the active take from the active scene.
@@ -609,6 +613,38 @@ public:
                       int toSceneIndex,
                       int toTakeIndex);
 
+    /**
+     * Add a new select take object to the undo history.
+     * @param newSceneIndex the new index of the scene of the take.
+     * @param newTakeIndex the new index of the take.
+     */
+    void selectTakeToUndo(int newSceneIndex,
+                          int newTakeIndex);
+
+    /**
+     * Undo select a new take.
+     * @param oldSceneIndex the old index of the scene of the take.
+     * @param oldTakeIndex the old index of the take.
+     * @param newSceneIndex the new index of the scene of the take.
+     * @param newTakeIndex the new index of the take.
+     */
+    // void undoTakeSelect(int oldSceneIndex,
+    //                     int oldTakeIndex,
+    //                     int newSceneIndex,
+    //                     int newTakeIndex);
+
+    /**
+     * Redo select a new take.
+     * @param oldSceneIndex the old index of the scene of the take.
+     * @param oldTakeIndex the old index of the take.
+     * @param newSceneIndex the new index of the scene of the take.
+     * @param newTakeIndex the new index of the take.
+     */
+    void redoTakeSelect(int oldSceneIndex,
+                        int oldTakeIndex,
+                        int newSceneIndex,
+                        int newTakeIndex);
+
     /**************************************************************************
      * Exposure functions
      **************************************************************************/
@@ -618,12 +654,6 @@ public:
      * @return the index of the active exposure.
      */
     int getActiveExposureIndex();
-
-    /**
-     * Function to change the currently active exposure. (Working frame).
-     * @param exposureIndex the index of the new active exposure.
-     */
-    void setActiveExposureIndex(int exposureIndex);
 
     /**
      * Return the active exposure from the active scene and active take.
@@ -744,6 +774,96 @@ public:
     Exposure *redoExposureRemove(int sceneIndex,
                                  int takeIndex,
                                  int exposureIndex);
+
+    /**
+     * Add a new move exposure object to the undo history.
+     * @arg fromSceneIndex the from index of the scene of the take of the exposure to move
+     * @arg fromTakeIndex the from index of the take of the exposure to move
+     * @arg fromExposureIndex the from index of the exposure to move
+     * @arg toSceneIndex the to index of the scene of the take of the exposure to move
+     * @arg toTakeIndex the to index of the take of the exposure to move
+     * @arg toExposureIndex the to index of the exposure to move
+     */
+    void moveExposureToUndo(int fromSceneIndex,
+                            int fromTakeIndex,
+                            int fromExposureIndex,
+                            int toSceneIndex,
+                            int toTakeIndex,
+                            int toExposureIndex);
+
+    /**
+     * Undo the move of the exposure from one position to a new position in the tree.
+     * @arg fromSceneIndex the from index of the scene of the take of the exposure to move
+     * @arg fromTakeIndex the from index of the take of the exposure to move
+     * @arg fromExposureIndex the from index of the exposure to move
+     * @arg toSceneIndex the to index of the scene of the take of the exposure to move
+     * @arg toTakeIndex the to index of the take of the exposure to move
+     * @arg toExposureIndex the to index of the exposure to move
+     */
+    // void undoExposureMove(int fromSceneIndex,
+    //                       int fromTakeIndex,
+    //                       int fromExposureIndex,
+    //                       int toSceneIndex,
+    //                       int toTakeIndex,
+    //                       int toExposureIndex);
+
+    /**
+     * Redo the move of the exposure from one position to a new position in the tree.
+     * @arg fromSceneIndex the from index of the scene of the take of the exposure to move
+     * @arg fromTakeIndex the from index of the take of the exposure to move
+     * @arg fromExposureIndex the from index of the exposure to move
+     * @arg toSceneIndex the to index of the scene of the take of the exposure to move
+     * @arg toTakeIndex the to index of the take of the exposure to move
+     * @arg toExposureIndex the to index of the exposure to move
+     */
+    Exposure *redoExposureMove(int fromSceneIndex,
+                               int fromTakeIndex,
+                               int fromExposureIndex,
+                               int toSceneIndex,
+                               int toTakeIndex,
+                               int toExposureIndex);
+
+    /**
+     * Add a new select exposure object to the undo history.
+     * @arg newSceneIndex the new index of the scene of the take of the exposure to select
+     * @arg newTakeIndex the new index of the take of the exposure to select
+     * @arg newExposureIndex the new index of the exposure to select
+     */
+    void selectExposureToUndo(int newSceneIndex,
+                              int newTakeIndex,
+                              int newExposureIndex);
+
+    /**
+     * Undo the select of the exposure from old position to a new position in the tree.
+     * @arg oldSceneIndex the old index of the scene of the take of the exposure to select
+     * @arg oldTakeIndex the old index of the take of the exposure to select
+     * @arg oldExposureIndex the old index of the exposure to select
+     * @arg newSceneIndex the new index of the scene of the take of the exposure to select
+     * @arg newTakeIndex the new index of the take of the exposure to select
+     * @arg newExposureIndex the new index of the exposure to select
+     */
+    // void undoExposureSelect(int oldSceneIndex,
+    //                         int oldTakeIndex,
+    //                         int oldExposureIndex,
+    //                         int newSceneIndex,
+    //                         int newTakeIndex,
+    //                         int newExposureIndex);
+
+    /**
+     * Redo the select of the exposure from old position to a new position in the tree.
+     * @arg oldSceneIndex the old index of the scene of the take of the exposure to select
+     * @arg oldTakeIndex the old index of the take of the exposure to select
+     * @arg oldExposureIndex the old index of the exposure to select
+     * @arg newSceneIndex the new index of the scene of the take of the exposure to select
+     * @arg newTakeIndex the new index of the take of the exposure to select
+     * @arg newExposureIndex the new index of the exposure to select
+     */
+    void redoExposureSelect(int oldSceneIndex,
+                            int oldTakeIndex,
+                            int oldExposureIndex,
+                            int newSceneIndex,
+                            int newTakeIndex,
+                            int newExposureIndex);
 
     /**************************************************************************
      * Old frames functions

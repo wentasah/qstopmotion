@@ -22,11 +22,10 @@
 
 
 UndoSceneSelect::UndoSceneSelect(DomainFacade *df,
-                                 int           osi,
                                  int           nsi)
     :UndoBase(df)
 {
-    oldSceneIndex = osi;
+    oldSceneIndex = facade->getActiveSceneIndex();
     newSceneIndex = nsi;
     setText(QString(QObject::tr("Select scene (%1)")).arg(newSceneIndex));
 }
@@ -40,14 +39,12 @@ UndoSceneSelect::~UndoSceneSelect()
 void UndoSceneSelect::undo()
 {
     /* TODO: Change handling for undo
-    facade->undoSceneMove(oldSceneIndex, newSceneIndex);
+    facade->undoSceneSelect(oldSceneIndex, newSceneIndex);
     */
 }
 
 
 void UndoSceneSelect::redo()
 {
-    /* TODO: Change handling for redo
-    facade->redoSceneMove(oldSceneIndex, newSceneIndex);
-    */
+    facade->redoSceneSelect(oldSceneIndex, newSceneIndex);
 }

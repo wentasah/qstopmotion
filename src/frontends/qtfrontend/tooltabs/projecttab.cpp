@@ -862,7 +862,7 @@ void ProjectTab::setActiveItems()
 
 
 void ProjectTab::itemClicked(QTreeWidgetItem * /*exposureItem*/,
-                             int /*column*/)
+                             int               /*column*/)
 {
     qDebug("ProjectTab::itemClicked --> Start");
 
@@ -887,7 +887,7 @@ void ProjectTab::itemClicked(QTreeWidgetItem * /*exposureItem*/,
             Take *take = scene->getTake(takeIndex);
             exposureIndex = take->getActiveExposureIndex();
         }
-        frontend->getProject()->activeItemChanged(sceneIndex, takeIndex, exposureIndex);
+        frontend->getProject()->selectExposureToUndo(sceneIndex, takeIndex, exposureIndex);
 
         qDebug("ProjectTab::itemClicked --> End (Scene selected)");
         return;
@@ -899,14 +899,14 @@ void ProjectTab::itemClicked(QTreeWidgetItem * /*exposureItem*/,
         exposureIndex = take->getActiveExposureIndex();
     }
 
-    frontend->getProject()->activeItemChanged(sceneIndex, takeIndex, exposureIndex);
+    frontend->getProject()->selectExposureToUndo(sceneIndex, takeIndex, exposureIndex);
 
     qDebug("ProjectTab::itemClicked --> End (Take or exposure selected)");
 }
 
 
-void ProjectTab::itemDoubleClicked(QTreeWidgetItem * exposureItem,
-                                   int /*column*/)
+void ProjectTab::itemDoubleClicked(QTreeWidgetItem* /*exposureItem*/,
+                                   int              /*column*/)
 {
     qDebug("ProjectTab::itemDoubleClicked --> Start");
 
@@ -921,9 +921,7 @@ void ProjectTab::itemDoubleClicked(QTreeWidgetItem * exposureItem,
         return;
     }
 
-    frontend->getProject()->activeItemChanged(sceneIndex,
-                                              takeIndex,
-                                              exposureIndex);
+    frontend->getProject()->selectExposureToUndo(sceneIndex, takeIndex, exposureIndex);
 
     qDebug("ProjectTab::itemDoubleClicked --> End");
 }

@@ -370,7 +370,9 @@ void RecordingTab::cameraButtonClicked()
             case PreferencesTool::captureButtonAppend:
                 int exposureIndex = frontend->getProject()->getActiveTake()->getExposureSize();
 
-                frontend->getProject()->setActiveExposureIndex(exposureIndex - 1);
+                frontend->getProject()->selectExposureToUndo(frontend->getProject()->getActiveSceneIndex(),
+                                                             frontend->getProject()->getActiveTakeIndex(),
+                                                             exposureIndex - 1);
                 break;
             }
         }

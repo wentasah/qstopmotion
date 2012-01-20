@@ -27,6 +27,7 @@
 #include "domain/undo/undoexposureinsert.h"
 #include "domain/undo/undoexposuremove.h"
 #include "domain/undo/undoexposureremove.h"
+#include "domain/undo/undoexposureselect.h"
 #include "domain/undo/undoprojectclose.h"
 #include "domain/undo/undoprojectnew.h"
 #include "domain/undo/undoprojectopen.h"
@@ -35,10 +36,12 @@
 #include "domain/undo/undosceneinsert.h"
 #include "domain/undo/undoscenemove.h"
 #include "domain/undo/undosceneremove.h"
+#include "domain/undo/undosceneselect.h"
 #include "domain/undo/undotakeadd.h"
 #include "domain/undo/undotakeinsert.h"
-#include "domain/undo/undotakeremove.h"
 #include "domain/undo/undotakemove.h"
+#include "domain/undo/undotakeremove.h"
+#include "domain/undo/undotakeselect.h"
 
 #include <QtCore/QtDebug>
 
@@ -358,20 +361,6 @@ bool DomainFacade::exportToCinelerra(const QString file)
     return animationProject->exportToCinelerra(file);
 }
 
-void DomainFacade::activeItemChanged(int newActiveScene,
-                                     int newActiveTake,
-                                     int newActiveExposure)
-{
-    // Set the new scene index
-    setActiveSceneIndex(newActiveScene);
-
-    // Set the new take index
-    setActiveTakeIndex(newActiveTake);
-
-    // Set the new exposure index
-    setActiveExposureIndex(newActiveExposure);
-}
-
 /**************************************************************************
  * Scene functions
  **************************************************************************/
@@ -379,22 +368,6 @@ void DomainFacade::activeItemChanged(int newActiveScene,
 int DomainFacade::getActiveSceneIndex()
 {
     return animationProject->getActiveSceneIndex();
-}
-
-
-void DomainFacade::setActiveSceneIndex(int sceneIndex)
-{
-    animationProject->setActiveSceneIndex(sceneIndex);
-    if (0 <= sceneIndex) {
-        Scene *activeScene = animationProject->getActiveScene();
-        frontend->setSceneID(activeScene->getDescription().toAscii());
-    }
-    else {
-        frontend->setSceneID("---");
-    }
-    getView()->notifyActivateScene();
-
-    animationProject->setUnsavedChanges();
 }
 
 
@@ -541,6 +514,44 @@ void DomainFacade::redoSceneMove(int fromSceneIndex,
 }
 
 
+void DomainFacade::selectSceneToUndo(int newSceneIndex)
+{
+    UndoSceneSelect *u = new UndoSceneSelect(this, newSceneIndex);
+    getUndoStack()->push(u);
+}
+
+/*
+void DomainFacade::undoSceneSelect(int oldSceneIndex,
+                                   int newSceneIndex)
+{
+}
+*/
+
+void DomainFacade::redoSceneSelect(int oldSceneIndex,
+                                   int newSceneIndex)
+{
+    qDebug("DomainFacade::redoSceneSelect --> Start");
+
+    animationProject->setActiveSceneIndex(newSceneIndex);
+    if (0 <= newSceneIndex) {
+        Scene *activeScene = animationProject->getActiveScene();
+        frontend->setSceneID(activeScene->getDescription().toAscii());
+    }
+    else {
+        frontend->setSceneID("---");
+    }
+    getView()->notifyActivateScene();
+
+    animationProject->setUnsavedChanges();
+
+    qDebug("DomainFacade::redoSceneSelect --> Start");
+}
+
+
+/**************************************************************************
+ * Scene sound functions
+ **************************************************************************/
+
 int DomainFacade::addSoundToScene(int           sceneIndex,
                                   const QString filename,
                                   const QString soundName)
@@ -571,22 +582,6 @@ void DomainFacade::playSound(int sceneIndex)
 int DomainFacade::getActiveTakeIndex()
 {
     return animationProject->getActiveTakeIndex();
-}
-
-
-void DomainFacade::setActiveTakeIndex(int takeIndex)
-{
-    animationProject->setActiveTakeIndex(takeIndex);
-    if (0 <= takeIndex) {
-        Take *activeTake = animationProject->getActiveTake();
-        frontend->setTakeID(activeTake->getDescription().toAscii());
-    }
-    else {
-        frontend->setTakeID("---");
-    }
-    getView()->notifyActivateTake();
-
-    animationProject->setUnsavedChanges();
 }
 
 
@@ -740,6 +735,45 @@ void DomainFacade::redoTakeMove(int fromSceneIndex,
 }
 
 
+void DomainFacade::selectTakeToUndo(int newSceneIndex,
+                                    int newTakeIndex)
+{
+    UndoTakeSelect *u = new UndoTakeSelect(this, newSceneIndex, newTakeIndex);
+    getUndoStack()->push(u);
+}
+
+/*
+void DomainFacade::undoTakeSelect(int oldSceneIndex,
+                                  int oldTakeIndex,
+                                  int newSceneIndex,
+                                  int newTakeIndex)
+{
+}
+*/
+
+void DomainFacade::redoTakeSelect(int oldSceneIndex,
+                                  int oldTakeIndex,
+                                  int newSceneIndex,
+                                  int newTakeIndex)
+{
+    qDebug("DomainFacade::redoTakeSelect --> Start");
+
+    animationProject->setActiveTakeIndex(newTakeIndex);
+    if (0 <= newTakeIndex) {
+        Take *activeTake = animationProject->getActiveTake();
+        frontend->setTakeID(activeTake->getDescription().toAscii());
+    }
+    else {
+        frontend->setTakeID("---");
+    }
+    getView()->notifyActivateTake();
+
+    animationProject->setUnsavedChanges();
+
+    qDebug("DomainFacade::redoTakeSelect --> End");
+}
+
+
 /**************************************************************************
  * Exposure functions
  **************************************************************************/
@@ -749,22 +783,6 @@ int DomainFacade::getActiveExposureIndex()
     int activeExposureIndex = animationProject->getActiveExposureIndex();
 
     return activeExposureIndex;
-}
-
-
-void DomainFacade::setActiveExposureIndex(int exposureIndex)
-{
-    animationProject->setActiveExposureIndex(exposureIndex);
-    if (0 <= exposureIndex) {
-        Exposure *activeExposure = animationProject->getActiveExposure();
-        frontend->setExposureID(activeExposure->getId().toAscii());
-    }
-    else {
-        frontend->setExposureID("---");
-    }
-    getView()->notifyActivateExposure();
-
-    animationProject->setUnsavedChanges();
 }
 
 
@@ -888,6 +906,73 @@ Exposure *DomainFacade::redoExposureRemove(int sceneIndex,
     getView()->notifyRemoveExposure(sceneIndex, takeIndex, exposureIndex);
 
     if (exposureIndex == animationProject->getActiveScene()->getActiveTake()->getExposureSize()) {
+        // this->setActiveExposureIndex(exposureIndex - 1);
+        animationProject->setActiveExposureIndex(exposureIndex - 1);
+        if (0 <= (exposureIndex - 1)) {
+            Exposure *activeExposure = animationProject->getActiveExposure();
+            frontend->setExposureID(activeExposure->getId().toAscii());
+        }
+        else {
+            frontend->setExposureID("---");
+        }
+    }
+    else {
+        animationProject->setActiveExposureIndex(exposureIndex);
+        if (0 <= exposureIndex) {
+            Exposure *activeExposure = animationProject->getActiveExposure();
+            frontend->setExposureID(activeExposure->getId().toAscii());
+        }
+        else {
+            frontend->setExposureID("---");
+        }
+    }
+
+    getView()->notifyActivateExposure();
+    animationProject->setUnsavedChanges();
+
+    qDebug("DomainFacade::redoExposureRemove --> End");
+    return exposure;
+}
+
+
+void DomainFacade::moveExposureToUndo(int fromSceneIndex,
+                                      int fromTakeIndex,
+                                      int fromExposureIndex,
+                                      int toSceneIndex,
+                                      int toTakeIndex,
+                                      int toExposureIndex)
+{
+    UndoExposureMove *u = new UndoExposureMove(this, fromSceneIndex, fromTakeIndex, fromExposureIndex,
+                                               toSceneIndex, toTakeIndex, toExposureIndex);
+    getUndoStack()->push(u);
+}
+
+/*
+void DomainFacade::undoExposureMove(int fromSceneIndex,
+                                    int fromTakeIndex,
+                                    int fromExposureIndex,
+                                    int toSceneIndex,
+                                    int toTakeIndex,
+                                    int toExposureIndex)
+{
+}
+*/
+
+Exposure *DomainFacade::redoExposureMove(int fromSceneIndex,
+                                         int fromTakeIndex,
+                                         int fromExposureIndex,
+                                         int toSceneIndex,
+                                         int toTakeIndex,
+                                         int toExposureIndex)
+{
+    /* TODO: Implementation of the redoExposureMove function
+
+    qDebug("DomainFacade::redoExposureMove --> Start");
+
+    Exposure* exposure = animationProject->removeExposure(sceneIndex, takeIndex, exposureIndex);
+    getView()->notifyRemoveExposure(sceneIndex, takeIndex, exposureIndex);
+
+    if (exposureIndex == animationProject->getActiveScene()->getActiveTake()->getExposureSize()) {
         this->setActiveExposureIndex(exposureIndex - 1);
     }
     else {
@@ -896,8 +981,54 @@ Exposure *DomainFacade::redoExposureRemove(int sceneIndex,
 
     animationProject->setUnsavedChanges();
 
-    qDebug("DomainFacade::redoExposureRemove --> End");
+    qDebug("DomainFacade::redoExposureMove --> End");
     return exposure;
+    */
+    return NULL;
+}
+
+
+void DomainFacade::selectExposureToUndo(int newSceneIndex,
+                                        int newTakeIndex,
+                                        int newExposureIndex)
+{
+    UndoExposureSelect *u = new UndoExposureSelect(this, newSceneIndex, newTakeIndex, newExposureIndex);
+    getUndoStack()->push(u);
+}
+
+/*
+void DomainFacade::undoExposureSelect(int oldSceneIndex,
+                                      int oldTakeIndex,
+                                      int oldExposureIndex,
+                                      int newSceneIndex,
+                                      int newTakeIndex,
+                                      int newExposureIndex)
+{
+}
+*/
+
+void DomainFacade::redoExposureSelect(int oldSceneIndex,
+                                      int oldTakeIndex,
+                                      int oldExposureIndex,
+                                      int newSceneIndex,
+                                      int newTakeIndex,
+                                      int newExposureIndex)
+{
+    qDebug("DomainFacade::redoExposureSelect --> Start");
+
+    animationProject->setActiveExposureIndex(newExposureIndex);
+    if (0 <= newExposureIndex) {
+        Exposure *activeExposure = animationProject->getActiveExposure();
+        frontend->setExposureID(activeExposure->getId().toAscii());
+    }
+    else {
+        frontend->setExposureID("---");
+    }
+    getView()->notifyActivateExposure();
+
+    animationProject->setUnsavedChanges();
+
+    qDebug("DomainFacade::redoExposureSelect --> End");
 }
 
 

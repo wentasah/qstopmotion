@@ -34,14 +34,10 @@ public:
      * Sets up the UndoTakeSelect command object with the information needed
      * to undo and redo the add commands.
      * @param df Domain facade for commands.
-     * @param osi the old index of the scene of the take.
-     * @param oti the old index of the take.
      * @param nsi the new index of the scene of the take.
      * @param nti the new index of the take.
      */
     UndoTakeSelect(DomainFacade *df,
-                   int           osi,
-                   int           oti,
                    int           nsi,
                    int           nti);
 

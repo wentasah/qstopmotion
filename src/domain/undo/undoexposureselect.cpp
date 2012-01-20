@@ -22,17 +22,14 @@
 
 
 UndoExposureSelect::UndoExposureSelect(DomainFacade *df,
-                                       int           osi,
-                                       int           oti,
-                                       int           oei,
                                        int           nsi,
                                        int           nti,
                                        int           nei)
     :UndoBase(df)
 {
-    oldSceneIndex = osi;
-    oldTakeIndex = oti;
-    oldExposureIndex = oei;
+    oldSceneIndex = facade->getActiveSceneIndex();
+    oldTakeIndex = facade->getActiveTakeIndex();
+    oldExposureIndex = facade->getActiveExposureIndex();
     newSceneIndex = nsi;
     newTakeIndex = nti;
     newExposureIndex = nei;
@@ -48,16 +45,14 @@ UndoExposureSelect::~UndoExposureSelect()
 void UndoExposureSelect::undo()
 {
     /* TODO: Change handling for undo
-    facade->undoSelectExposure(fromSceneIndex, fromTakeIndex, fromExposureIndex,
-                               toSceneIndex, toTakeIndex, toExposureIndex);
+    facade->undoExposureSelect(oldSceneIndex, oldTakeIndex, oldExposureIndex,
+                               newSceneIndex, newTakeIndex, newExposureIndex);
     */
 }
 
 
 void UndoExposureSelect::redo()
 {
-    /* TODO: Change handling for redo
-    facade->redoSelectExposure(fromSceneIndex, fromTakeIndex, fromExposureIndex,
-                               toSceneIndex, toTakeIndex, toExposureIndex);
-    */
+    facade->redoExposureSelect(oldSceneIndex, oldTakeIndex, oldExposureIndex,
+                               newSceneIndex, newTakeIndex, newExposureIndex);
 }

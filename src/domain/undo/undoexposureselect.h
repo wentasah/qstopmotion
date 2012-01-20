@@ -34,17 +34,11 @@ public:
      * Sets up the UndoExposureSelect command object with the information needed
      * to undo and redo the add commands.
      * @param df Domain facade for commands.
-     * @param osi the old index of the scene of the take of the exposure.
-     * @param oti the old index of the take of the exposure.
-     * @param oei the old index of the exposure.
      * @param nsi the new index of the scene of the take of the exposure.
      * @param nti the new index of the take of the exposure.
      * @param nei the new index of the exposure.
      */
     UndoExposureSelect(DomainFacade *df,
-                       int           osi,
-                       int           oti,
-                       int           oei,
                        int           nsi,
                        int           nti,
                        int           nei);

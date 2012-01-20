@@ -96,7 +96,9 @@ void ExposureThumbView::mouseReleaseEvent(QMouseEvent * e)
             int highend = (selectionFrame > activeFrame) ? selectionFrame : activeFrame;
             int lowend = (selectionFrame < activeFrame) ? selectionFrame : activeFrame;
             if (thumbIndex <= highend || thumbIndex >= lowend) {
-                timeLine->getFrontend()->getProject()->setActiveExposureIndex(thumbIndex);
+                timeLine->getFrontend()->getProject()->selectExposureToUndo(timeLine->getFrontend()->getProject()->getActiveSceneIndex(),
+                                                                            timeLine->getFrontend()->getProject()->getActiveTakeIndex(),
+                                                                            thumbIndex);
             }
         }
     }
@@ -234,7 +236,9 @@ void ExposureThumbView::contentsDropped(QDropEvent * event)
         timeLine->getFrontend()->getProject()->moveFrames(lowend, highend, thumbIndex);
     } else {
         qDebug("Adding picture(s)");
-        timeLine->getFrontend()->getProject()->setActiveExposureIndex(thumbIndex);
+        timeLine->getFrontend()->getProject()->selectExposureToUndo(timeLine->getFrontend()->getProject()->getActiveSceneIndex(),
+                                                                    timeLine->getFrontend()->getProject()->getActiveTakeIndex(),
+                                                                    thumbIndex);
 
         if (event->mimeData()->hasUrls()) {
             QStringList fileNames;

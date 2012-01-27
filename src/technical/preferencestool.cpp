@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2011 by                                                *
+ *  Copyright (C) 2005-2012 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -30,7 +30,7 @@
 
 
 const QString PreferencesTool::applicationName = QLatin1String("qstopmotion");
-const QString PreferencesTool::applicationVersion = QLatin1String("0.9.9");
+const QString PreferencesTool::applicationVersion = QLatin1String("0.9.10");
 const QString PreferencesTool::preferencesSuffix = QLatin1String("qsmp");
 const QString PreferencesTool::preferencesName = QLatin1String("preferences");
 const QString PreferencesTool::projectSuffix = QLatin1String("qsmd");
@@ -49,6 +49,7 @@ const QString PreferencesTool::iconsDirectory = QLatin1String("icons");
 const QString PreferencesTool::picturesDirectory = QLatin1String("pictures");
 const QString PreferencesTool::capturedFileName = QLatin1String("capturedfile");
 const QString PreferencesTool::capturedFileSuffix = QLatin1String("jpg");
+const QString PreferencesTool::historyFileName = QLatin1String(".history");
 
 
 PreferencesTool::PreferencesTool(Frontend *f)

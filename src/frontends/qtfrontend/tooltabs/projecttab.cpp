@@ -1446,8 +1446,8 @@ QStringList ProjectTab::selectFiles()
 
     //PicturePreview* p = new PicturePreview(fileDialog);
 
-    QObject::connect(fileDialog, SIGNAL(filesSelected(const QStringList &)),
-                     this, SLOT(addFrames(const QStringList &)));
+    // QObject::connect(fileDialog, SIGNAL(filesSelected(const QStringList &)),
+    //                  this, SLOT(addFrames(const QStringList &)));
 
     int ret = fileDialog->exec();
     if (ret == QDialog::Rejected) {

@@ -43,7 +43,7 @@ Exposure::Exposure(Take *take)
 
     theFrame.clear();
 
-    exposureLocation = NoFile;
+    exposureLocation = AnimationProject::NoFile;
 
     id.clear();
 }
@@ -64,13 +64,13 @@ Exposure::Exposure(Exposure *exposure)
 }
 
 
-Exposure::Exposure(const QString &filename, fileLocation location)
+Exposure::Exposure(Take *take, const QString &fileName, int location)
 {
-    parent = NULL;
+    parent = take;
 
-    Q_ASSERT(!filename.isEmpty());
+    Q_ASSERT(!fileName.isEmpty());
     theFrame.clear();
-    theFrame.append(filename);
+    theFrame.append(fileName);
 
     exposureLocation = location;
 
@@ -149,13 +149,13 @@ const QString Exposure::getImagePath() const
     QString absImagePath;
 
     switch (exposureLocation) {
-    case InProjectPath:
+    case AnimationProject::InProjectPath:
         absImagePath.append(parent->getImagePath());
         break;
-    case InTempPath:
+    case AnimationProject::InTempPath:
         absImagePath.append(parent->getAppTempDirName());
         break;
-    case InTrashPath:
+    case AnimationProject::InTrashPath:
         absImagePath.append(parent->getAppTrashDirName());
         break;
     default:
@@ -206,71 +206,16 @@ void Exposure::moveToImageDir(const QString &directory, unsigned int imgNum)
 }
 */
 
-void Exposure::copyToTemp(const QString &fromImagePath)
-{
-    // creates a new image name
-    QString toImageName(QString("tmp_%1%2").arg(Exposure::tempNum)
-                        .arg(fromImagePath.mid(fromImagePath.lastIndexOf('.'))));
-    // creates a new image path
-    QString toImagePath(QString("%1/%2")
-                        .arg(parent->getAppTempDirName())
-                        .arg(toImageName));
-
-    // the image isn't in the trash directory
-    QString trashName;
-    trashName.append(QLatin1String("/"));
-    trashName.append(PreferencesTool::applicationDirectory);
-    trashName.append(QLatin1String("/"));
-    trashName.append(PreferencesTool::trashDirectory);
-    if (fromImagePath.indexOf(trashName) == -1) {
-        if (fromImagePath.compare(toImagePath, Qt::CaseInsensitive) != 0) {
-            if (!QFile::copy(fromImagePath, toImagePath)) {
-                // Not successful
-                parent->getFrontend()->showCritical(tr("Critical"),
-                                                    tr("Can't copy image to temp directory!"));
-            }
-        }
-    } else {
-        QString packerName;
-        packerName.append(QLatin1String("/"));
-        packerName.append(PreferencesTool::applicationDirectory);
-        packerName.append(QLatin1String("/"));
-        packerName.append(PreferencesTool::packerDirectory);
-        if (fromImagePath.indexOf(packerName) != -1) {
-            if (!QFile::rename(fromImagePath, toImagePath)) {
-                // Not successful
-                parent->getFrontend()->showCritical(tr("Critical"),
-                                                    tr("Can't rename image file!"));
-            }
-        } else {
-            if (fromImagePath.compare(toImagePath, Qt::CaseInsensitive) != 0) {
-                if (!QFile::rename(fromImagePath, toImagePath)) {
-                    // Not successful
-                    parent->getFrontend()->showCritical(tr("Critical"),
-                                                        tr("Can't rename image file!"));
-                }
-                // Exposure::trashNum--;
-            }
-        }
-    }
-
-    Exposure::tempNum++;
-
-    theFrame.append(toImageName);
-    exposureLocation = InTempPath;
-}
-
-
 void Exposure::moveToTemp()
 {
     QString fromImagePath;
     QString toImagePath;
 
     switch (exposureLocation) {
-    case InProjectPath:
+    case AnimationProject::InProjectPath:
         fromImagePath.append(parent->getImagePath());
         break;
-    case InTrashPath:
+    case AnimationProject::InTrashPath:
         fromImagePath.append(parent->getAppTrashDirName());
         break;
     default:
@@ -301,7 +246,7 @@ void Exposure::moveToTemp()
 
     theFrame.clear();
     theFrame.append(toImageName);
-    exposureLocation = InTempPath;
+    exposureLocation = AnimationProject::InTempPath;
 }
 
 
@@ -311,10 +256,10 @@ void Exposure::moveToTrash()
     QString toImagePath;
 
     switch (exposureLocation) {
-    case InProjectPath:
+    case AnimationProject::InProjectPath:
         fromImagePath.append(parent->getImagePath());
         break;
-    case InTempPath:
+    case AnimationProject::InTempPath:
         fromImagePath.append(parent->getAppTempDirName());
         break;
     default:
@@ -345,7 +290,7 @@ void Exposure::moveToTrash()
 
     theFrame.clear();
     theFrame.append(toImageName);
-    exposureLocation = InTrashPath;
+    exposureLocation = AnimationProject::InTrashPath;
 }
 
 
@@ -355,10 +300,10 @@ void Exposure::moveToProject(const QString newName)
     QString toImagePath;
 
     switch (exposureLocation) {
-    case InTrashPath:
+    case AnimationProject::InTrashPath:
         fromImagePath.append(parent->getAppTrashDirName());
         break;
-    case InTempPath:
+    case AnimationProject::InTempPath:
         fromImagePath.append(parent->getAppTempDirName());
         break;
     default:
@@ -379,10 +324,10 @@ void Exposure::moveToProject(const QString newName)
     }
 
     switch (exposureLocation) {
-    case InTrashPath:
+    case AnimationProject::InTrashPath:
         Exposure::trashNum--;
         break;
-    case InTempPath:
+    case AnimationProject::InTempPath:
         Exposure::tempNum--;
         break;
     default:
@@ -391,7 +336,7 @@ void Exposure::moveToProject(const QString newName)
 
     theFrame.clear();
     theFrame.append(newName);
-    exposureLocation = InProjectPath;
+    exposureLocation = AnimationProject::InProjectPath;
 }
 
 /*
@@ -433,7 +378,7 @@ bool Exposure::readDataFromProject(QDomElement &exposureNode)
             if (!filename.isNull()) {
                 theFrame.clear();
                 theFrame.append(filename);
-                exposureLocation = InProjectPath;
+                exposureLocation = AnimationProject::InProjectPath;
             }
         }
         else {

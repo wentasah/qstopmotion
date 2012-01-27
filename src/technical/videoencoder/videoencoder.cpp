@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2010 by                                                *
+ *  Copyright (C) 2005-2012 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -48,12 +48,15 @@ const QString VideoEncoder::getEncoderCommand() const
 }
 
 
-void VideoEncoder::setEncoderCommand(const QString &command)
+void VideoEncoder::setEncoderCommand(const QString &command, bool v)
 {
     if (!encoderCommand.isEmpty()) {
         encoderCommand.clear();
     }
     encoderCommand.append(command);
+    if (v) {
+        valid = 1;
+    }
 }
 
 

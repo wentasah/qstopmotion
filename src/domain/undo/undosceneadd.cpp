@@ -29,7 +29,7 @@ UndoSceneAdd::UndoSceneAdd(DomainFacade  *df,
 {
     sceneIndex = df->getSceneSize();
     sceneDescription.append(description);
-    setText(QString(QObject::tr("Add scene '%1'")).arg(description));
+    setText(QString(QObject::tr("Add scene (%1) '%2'")).arg(sceneIndex).arg(sceneDescription));
 }
 
 
@@ -49,4 +49,5 @@ void UndoSceneAdd::undo()
 void UndoSceneAdd::redo()
 {
     facade->redoSceneAdd(sceneDescription);
+    facade->writeHistoryEntry(QString("redoSceneAdd %1 %2").arg(sceneIndex).arg(sceneDescription));
 }

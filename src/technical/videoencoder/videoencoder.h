@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2010 by                                                *
+ *  Copyright (C) 2005-2012 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -119,8 +119,9 @@ protected:
     /**
      * Sets the encoder command to be used.
      * @param command the encode command.
+     * @param v Is the command valid.
      */
-    void setEncoderCommand(const QString &command);
+    void setEncoderCommand(const QString &command, bool v);
 
     /**
      * Sets the stop command to be used for stopping the encoder.

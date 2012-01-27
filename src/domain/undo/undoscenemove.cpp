@@ -30,7 +30,7 @@ UndoSceneMove::UndoSceneMove(DomainFacade *df,
 {
     fromSceneIndex = fsi;
     toSceneIndex = tsi;
-    setText(QObject::tr("Move scene"));
+    setText(QString(QObject::tr("Move scene (%1,%2)")).arg(fromSceneIndex).arg(toSceneIndex));
 }
 
 
@@ -49,4 +49,5 @@ void UndoSceneMove::undo()
 void UndoSceneMove::redo()
 {
     facade->redoSceneMove(fromSceneIndex, toSceneIndex);
+    facade->writeHistoryEntry(QString("redoSceneMove %1 %2").arg(fromSceneIndex).arg(toSceneIndex));
 }

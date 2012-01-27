@@ -26,8 +26,9 @@
 
 #include <QtCore/QVector>
 
+
 UndoExposureInsert::UndoExposureInsert(DomainFacade  *df,
-                                       const QString &fp,
+                                       const QString &fn,
                                        int            si,
                                        int            ti,
                                        int            ei)
@@ -36,8 +37,8 @@ UndoExposureInsert::UndoExposureInsert(DomainFacade  *df,
     sceneIndex = si;
     takeIndex = ti;
     exposureIndex = ei;
-    filePath.append(fp);
-    setText(QString(QObject::tr("Insert exposure (%1,%2,%3) '%4'")).arg(sceneIndex).arg(takeIndex).arg(exposureIndex).arg(filePath));
+    fileName.append(fn);
+    setText(QString(QObject::tr("Insert exposure (%1,%2,%3) '%4'")).arg(sceneIndex).arg(takeIndex).arg(exposureIndex).arg(fileName));
 }
 
 
@@ -56,5 +57,6 @@ void UndoExposureInsert::undo()
 
 void UndoExposureInsert::redo()
 {
-    facade->redoExposureInsert(filePath, sceneIndex, takeIndex, exposureIndex);
+    facade->redoExposureInsert(fileName, sceneIndex, takeIndex, exposureIndex);
+    facade->writeHistoryEntry(QString("redoExposureInsert %1 %2 %3 %4").arg(sceneIndex).arg(takeIndex).arg(exposureIndex).arg(fileName));
 }

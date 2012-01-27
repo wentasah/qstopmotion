@@ -134,6 +134,12 @@ public:
     const char* getPackerDirName();
 
     /**
+     * Function for getting the application directory
+     * @return the application directory name string
+     */
+    const char* getApplicationDirName();
+
+    /**
      * Function for getting the binary directory
      * @return the binary directory name string
      */
@@ -420,6 +426,7 @@ private:
     QByteArray       appTempDirName;
     QByteArray       appTrashDirName;
     QByteArray       appPackerDirName;
+    QByteArray       appApplicationDirName;
     QByteArray       appBinDirName;
     QByteArray       appManualDirName;
     QByteArray       appTranslationsDirName;

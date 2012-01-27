@@ -32,7 +32,7 @@ UndoTakeInsert::UndoTakeInsert(DomainFacade  *df,
     sceneIndex = scIndex;
     takeIndex = taIndex;
     takeDescription.append(description);
-    setText(QString(QObject::tr("Insert take '%1'")).arg(description));
+    setText(QString(QObject::tr("Insert take (%1,%2) '%3'")).arg(sceneIndex).arg(takeIndex).arg(takeDescription));
 }
 
 
@@ -52,4 +52,5 @@ void UndoTakeInsert::undo()
 void UndoTakeInsert::redo()
 {
     facade->redoTakeInsert(takeDescription, sceneIndex, takeIndex);
+    facade->writeHistoryEntry(QString("redoTakeInsert %1 %2 %3").arg(sceneIndex).arg(takeIndex).arg(takeDescription));
 }

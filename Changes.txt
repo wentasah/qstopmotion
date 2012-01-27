@@ -3,6 +3,12 @@ Last Changes in the sources on qStopMotion
 
 qStopMotion (1.0.0)
   * Fix Bugs
+qStopMotion (0.9.10, release candidat 2)
+  * Fix Bugs
+  * Add the Qt runtime to the windows installer.
+  * Add the ffmpeg runtime to the windows installer.
+  * Add the download and installation of the 'GStreamer OSS Build' to the windows installer.
+  * Now all actions are in the undo list. Undo is not possible.
 qStopMotion (0.9.9, release candidat)
   * Fix Bugs
   * Feature freeze for version 1.0.0.

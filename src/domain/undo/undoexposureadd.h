@@ -36,12 +36,12 @@ public:
      * Sets up the UndoAdd command object with the information needed to undo and
      * redo the add command.
      * @param df Domain facade for commands.
-     * @param fp the path of the file with the image.
+     * @param fn the name of the file with the image.
      * @param si index of the scene of the take the frames were added to.
      * @param ti index of the take the frames were added to.
      */
     UndoExposureAdd(DomainFacade  *df,
-                    const QString &fp,
+                    const QString &fn,
                     int            si,
                     int            ti);
 
@@ -68,7 +68,7 @@ private:
     int      sceneIndex;
     int      takeIndex;
     int      exposureIndex;
-    QString  filePath;
+    QString  fileName;
 };
 
 #endif

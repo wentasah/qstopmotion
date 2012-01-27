@@ -495,86 +495,15 @@ void Scene::getExposures(QVector<Exposure*>& allExposures)
 }
 
 
-Exposure* Scene::addExposure(const QString &exposureName)
+Exposure* Scene::addExposure(const QString &fileName, int location)
 {
-    return takes[activeTakeIndex]->addExposure(exposureName);
+    return takes[activeTakeIndex]->addExposure(fileName, location);
 }
 
 
-Exposure* Scene::insertExposure(const QString &exposureName, int &index)
+Exposure* Scene::insertExposure(const QString &fileName, int location, int &index)
 {
-    return takes[activeTakeIndex]->insertExposure(exposureName, index);
-}
-
-
-const QVector<Exposure*> Scene::addExposures(const QVector<QString> &exposureNames,
-                                             int index,
-                                             unsigned int &numberOfCanceledExposures)
-{
-    qDebug("Scene::addExposures --> Start");
-
-    QVector<Exposure*> newExposures;
-    bool isImportingAborted = false;
-
-    unsigned i = 0;
-    unsigned numElem = exposureNames.size();
-
-    if (exposureNames.size() == 1) {
-        QString file = exposureNames[i];
-        QFileInfo fileInfo(file);
-        if (fileInfo.isReadable()) {
-            newExposures.append(insertExposure(file, index));
-        } else {
-            QString msg(tr("You do not have permission to read that file"));
-            getFrontend()->showWarning(tr("Add Exposure"), msg);
-            return newExposures;
-        }
-    } else {
-        QString msg(tr("Importing exposures from disk ..."));
-        getFrontend()->showProgress(msg.toLatin1().constData(), numElem * 2);
-
-        unsigned numNotReadable = 0;
-        for (; i < numElem; ++i) {
-            getFrontend()->updateProgress(i);
-            QString file = exposureNames[i];
-            QFileInfo fileInfo(file);
-            if (fileInfo.isReadable()) {
-                newExposures.push_back(insertExposure(exposureNames[i], index));
-            } else {
-                qWarning() << "Wrong permission: " << file;
-                ++numNotReadable;
-            }
-
-            // Doesn't want to process events for each new exposure added.
-            if ((i % 10) == 0) {
-                getFrontend()->processEvents();
-            }
-            if (getFrontend()->isOperationAborted()) {
-                isImportingAborted = true;
-                ++i; // does this to make cleaning of exposures general
-                break;
-            }
-        }
-        getFrontend()->updateProgress(numElem);
-
-        if (isImportingAborted) {
-            numberOfCanceledExposures = i;
-            newExposures.clear();
-        } else {
-            numberOfCanceledExposures = numElem;
-        }
-
-        if (numNotReadable > 0) {
-            QString ss = QString("%1%2%3")
-                         .arg(tr("You do not have permission to read "))
-                         .arg(numNotReadable)
-                         .arg(tr(" file(s)"));
-            getFrontend()->showWarning(tr("Add Exposure"), ss);
-        }
-    }
-
-    qDebug("Scene::addExposures --> End");
-    return newExposures;
+    return takes[activeTakeIndex]->insertExposure(fileName, location, index);
 }
 
 

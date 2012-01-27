@@ -23,7 +23,7 @@
 #ifndef EXPOSURE_H
 #define EXPOSURE_H
 
-// #include "domain/animation/animationproject.h"
+#include "domain/animation/animationproject.h"
 // #include "domain/animation/scene.h"
 #include "domain/animation/take.h"
 
@@ -48,13 +48,6 @@ class Exposure : public QObject
     Q_OBJECT
 public:
 
-    enum fileLocation {
-        NoFile,
-        InProjectPath,
-        InTempPath,
-        InTrashPath
-    };
-
     /**
      * Number of files in the temporary directory.
      */
@@ -66,7 +59,8 @@ public:
     static unsigned int trashNum;
 
     /**
-     * Empty constructor
+     * Default constructor
+     * @param take The parent of the exposure
      */
     Exposure(Take *take);
 
@@ -80,10 +74,11 @@ public:
     /**
      * Creates a Exposure with the picture in the file with name
      * filename,
-     *
-     * @param filename the filename of the picture for this Exposure.
+     * @param take The parent of the exposure
+     * @param fileName the name of the image file for this Exposure.
+     * @param location the location of the picture
      */
-    Exposure(const QString &filename, fileLocation location);
+    Exposure(Take *take, const QString &fileName, int location);
 
     /**
      * Cleans up after the Exposure
@@ -162,12 +157,6 @@ public:
     // void moveToImageDir(const QString &directory, unsigned int imgNum);
 
     /**
-     * Copies the files belonging to this Exposure to a temporary directory.
-     * @param fromImagePath the path to the image to copy.
-     */
-    void copyToTemp(const QString &fromImagePath);
-
-    /**
      * Moves the files belonging to this Exposure from the current directory
      * to the temporary directory.
      */
@@ -224,7 +213,7 @@ private:
      * True if this Exposure is saved to a project file. It is also true if the
      * Exposure is loaded from a previously saved project.
      */
-    fileLocation exposureLocation;
+    int exposureLocation;
 
     /**************************************************************************
      * Private functions

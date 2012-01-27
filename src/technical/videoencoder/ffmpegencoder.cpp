@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2010 by                                                *
+ *  Copyright (C) 2005-2012 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -23,6 +23,7 @@
 #include "ffmpegencoder.h"
 
 #include "domain/animation/projectserializer.h"
+#include "frontends/frontend.h"
 
 #include <QtCore/QDir>
 #include <QtCore/QString>
@@ -35,14 +36,44 @@ FfmpegEncoder::FfmpegEncoder(AnimationProject *ap)
     QString encoderCommand;
     QString stopCommand;
 
+#ifdef Q_WS_WIN
+    // Windows version
+
+    Frontend *frontend = animationProject->getFrontend();
+    encoderCommand.append(frontend->getApplicationDirName());
+    encoderCommand.append("ffmpeg/bin/ffmpeg.exe");
+    if (QFile::exists(encoderCommand)) {
+        // Set start command
+        setEncoderCommand(encoderCommand, true);
+    }
+    else {
+        // The ffmpeg encoder is not a part of the qStopMotion installation
+        // Search in the windows installation
+        encoderCommand.clear();
+        encoderCommand.append("ffmpeg");
+        // Set start command
+        setEncoderCommand(encoderCommand, false);
+    }
+
+    // Prepare stop command
+    stopCommand.append("");
+    // Set stop command
+    setStopCommand(stopCommand);
+
+#else
+    // Linux and Apple OS X version
+
     encoderCommand.append("ffmpeg");
 
     // Prepare stop command
     stopCommand.append("");
 
     // Set start and stop command
-    setEncoderCommand(encoderCommand);
+    setEncoderCommand(encoderCommand, false);
     setStopCommand(stopCommand);
+
+#endif
+
 }
 
 
@@ -65,7 +96,9 @@ const QString FfmpegEncoder::getStartCommand() const
     //
 
     // Encoder
+    startCommand.append("\"");
     startCommand.append(getEncoderCommand());
+    startCommand.append("\"");
 
     // ===============================
     // Input options

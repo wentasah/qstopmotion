@@ -254,7 +254,7 @@ void ExposureThumbView::contentsDropped(QDropEvent * event)
                 fNames.push_back(fileName);
                 ++it;
             }
-            timeLine->getFrontend()->getProject()->addFrames(fNames);
+            // timeLine->getFrontend()->getProject()->addFrames(fNames);
         }
     }
 

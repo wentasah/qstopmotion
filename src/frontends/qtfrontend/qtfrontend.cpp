@@ -94,7 +94,6 @@ bool QtFrontend::checkApplicationDirectory(char *binDirName)
     QDir homeDir = QDir::home();
     QString userDirName;
     QString otherDirName;
-    QString appDirName;
 
     // Check if ~./qstopmotion directory exists, create it if not
     bool prefsFileExists = homeDir.exists(PreferencesTool::applicationDirectory);
@@ -152,44 +151,44 @@ bool QtFrontend::checkApplicationDirectory(char *binDirName)
 #ifdef Q_WS_WIN
         // Windows version
 
-        appDirName.append("C:/Program Files/qstopmotion/");
+        appApplicationDirName.append("C:/Program Files/qstopmotion/");
 #else
         // Linux and Apple OS X version
 
-        appDirName.append("/usr/");
+        appApplicationDirName.append("/usr/");
 #endif
         otherDirName.clear();
-        otherDirName.append(appDirName);
+        otherDirName.append(appApplicationDirName);
         otherDirName.append(QLatin1String("bin/"));
         appBinDirName.append(otherDirName.toLatin1());
     }
     else
     {
         // The binDirName is a full qualified application name
-        appDirName.append(absoluteAppName.left(pathLength + 1));
+        appApplicationDirName.append(absoluteAppName.left(pathLength + 1));
         pathLength = absoluteAppName.lastIndexOf("/");
         appBinDirName.append(absoluteAppName.left(pathLength + 1));
     }
-    qDebug() << "QtFrontend::checkApplicationDirectory --> Application Direcory: " << appDirName;
+    qDebug("QtFrontend::checkApplicationDirectory --> Application Direcory: " + appApplicationDirName);
     qDebug("QtFrontend::checkApplicationDirectory --> Application Binary Direcory: " + appBinDirName);
 
 #ifdef Q_WS_WIN
     // Windows version
 
     otherDirName.clear();
-    otherDirName.append(appDirName);
+    otherDirName.append(appApplicationDirName);
     otherDirName.append(PreferencesTool::manualDirectory);
     otherDirName.append(QLatin1String("/"));
     appManualDirName.append(otherDirName.toLatin1());
 
     otherDirName.clear();
-    otherDirName.append(appDirName);
+    otherDirName.append(appApplicationDirName);
     otherDirName.append(PreferencesTool::translationsDirectory);
     otherDirName.append(QLatin1String("/"));
     appTranslationsDirName.append(otherDirName.toLatin1());
 
     otherDirName.clear();
-    otherDirName.append(appDirName);
+    otherDirName.append(appApplicationDirName);
     otherDirName.append(PreferencesTool::graphicsDirectory);
     otherDirName.append(QLatin1String("/"));
     appGraphicsDirName.append(otherDirName.toLatin1());
@@ -198,7 +197,7 @@ bool QtFrontend::checkApplicationDirectory(char *binDirName)
     // Linux and Apple OS X version
 
     otherDirName.clear();
-    otherDirName.append(appDirName);
+    otherDirName.append(appApplicationDirName);
     otherDirName.append(QLatin1String("share/doc/"));
     otherDirName.append(PreferencesTool::applicationName);
     otherDirName.append(QLatin1String("/"));
@@ -207,7 +206,7 @@ bool QtFrontend::checkApplicationDirectory(char *binDirName)
     appManualDirName.append(otherDirName.toLatin1());
 
     otherDirName.clear();
-    otherDirName.append(appDirName);
+    otherDirName.append(appApplicationDirName);
     otherDirName.append(QLatin1String("share/"));
     otherDirName.append(PreferencesTool::applicationName);
     otherDirName.append(QLatin1String("/"));
@@ -216,7 +215,7 @@ bool QtFrontend::checkApplicationDirectory(char *binDirName)
     appTranslationsDirName.append(otherDirName.toLatin1());
 
     otherDirName.clear();
-    otherDirName.append(appDirName);
+    otherDirName.append(appApplicationDirName);
     otherDirName.append(QLatin1String("share/"));
     otherDirName.append(PreferencesTool::applicationName);
     otherDirName.append(QLatin1String("/"));
@@ -356,6 +355,12 @@ const char* QtFrontend::getTrashDirName()
 const char* QtFrontend::getPackerDirName()
 {
     return this->appPackerDirName.constData();
+}
+
+
+const char* QtFrontend::getApplicationDirName()
+{
+    return this->appApplicationDirName.constData();
 }
 
 
@@ -706,13 +711,17 @@ bool QtFrontend::removeContentInDirectory(const QString &dirPath)
 void QtFrontend::makeApplicationDirectories()
 {
     QDir homeDir = QDir::home();
+    bool ret;
 
-    Q_ASSERT(homeDir.mkpath(getTempDirName()) == true);
+    ret = homeDir.mkpath(getTempDirName());
+    Q_ASSERT(ret == true);
     // QFile appDir(homeDir.absolutePath() and temp subdirectory);
     // hasCorrectPermissions = appDir.setPermissions(QFile::ReadOwner | QFile::WriteOwner | QFile::ExeOwner);
-    Q_ASSERT(homeDir.mkpath(getTrashDirName()) == true);
+    ret = homeDir.mkpath(getTrashDirName());
+    Q_ASSERT(ret == true);
     // setPermissions(...)
-    Q_ASSERT(homeDir.mkpath(getPackerDirName()) == true);
+    ret = homeDir.mkpath(getPackerDirName());
+    Q_ASSERT(ret == true);
     // setPermissions(...)
 }
 
@@ -720,23 +729,34 @@ void QtFrontend::makeApplicationDirectories()
 void QtFrontend::removeApplicationDirectories()
 {
     QDir homeDir(getUserDirName());
+    bool ret;
 
-    Q_ASSERT(homeDir.rmdir(getTempDirName()) == true);
-    Q_ASSERT(homeDir.rmdir(getTrashDirName()) == true);
-    Q_ASSERT(homeDir.rmdir(getPackerDirName()) == true);
+    ret = homeDir.rmdir(getTempDirName());
+    Q_ASSERT(ret == true);
+    ret = homeDir.rmdir(getTrashDirName());
+    Q_ASSERT(ret == true);
+    ret = homeDir.rmdir(getPackerDirName());
+    Q_ASSERT(ret == true);
 }
 
 
 void QtFrontend::removeApplicationFiles()
 {
-    Q_ASSERT(removeContentInDirectory(getTempDirName()) == true);
-    Q_ASSERT(removeContentInDirectory(getTrashDirName()) == true);
-    Q_ASSERT(removeContentInDirectory(getPackerDirName()) == true);
+    bool ret;
+
+    ret = removeContentInDirectory(getTempDirName());
+    Q_ASSERT(ret == true);
+    ret = removeContentInDirectory(getTrashDirName());
+    Q_ASSERT(ret == true);
+    ret = removeContentInDirectory(getPackerDirName());
+    Q_ASSERT(ret == true);
 }
 
 
 void QtFrontend::removeCaptureFiles()
 {
+    bool ret;
+
     QDir homeDir(getUserDirName());
     QStringList nameFilter;
     QString fileName(PreferencesTool::capturedFileName);
@@ -748,7 +768,8 @@ void QtFrontend::removeCaptureFiles()
     homeDir.setFilter(QDir::Files);
     QStringList fileNames = homeDir.entryList();
     if (fileNames.count() > 0) {
-        Q_ASSERT(homeDir.remove(fileNames[0]) == true);
+        ret = homeDir.remove(fileNames[0]);
+        Q_ASSERT(ret == true);
     }
 }
 
@@ -835,7 +856,7 @@ bool QtFrontend::recover()
 
         if (frames.size() > 0) {
             recovered = true;
-            project->addFrames(frames);
+            // project->addFrames(frames);
         }
     }
 

@@ -24,6 +24,7 @@
 
 #include "domain/animation/exposure.h"
 
+
 UndoExposureRemove::UndoExposureRemove(DomainFacade *df,
                                        int           si,
                                        int           ti,
@@ -54,4 +55,5 @@ void UndoExposureRemove::undo()
 void UndoExposureRemove::redo()
 {
     exposure = facade->redoExposureRemove(sceneIndex, takeIndex, exposureIndex);
+    facade->writeHistoryEntry(QString("redoExposureRemove %1 %2 %3").arg(sceneIndex).arg(takeIndex).arg(exposureIndex));
 }

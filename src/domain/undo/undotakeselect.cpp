@@ -50,4 +50,6 @@ void UndoTakeSelect::undo()
 void UndoTakeSelect::redo()
 {
     facade->redoTakeSelect(oldSceneIndex, oldTakeIndex, newSceneIndex, newTakeIndex);
+    facade->writeHistoryEntry(QString("redoTakeSelect %1 %2 %3 %4").arg(oldSceneIndex).arg(oldTakeIndex)
+                              .arg(newSceneIndex).arg(newTakeIndex));
 }

@@ -43,6 +43,7 @@
 #include "domain/undo/undotakeremove.h"
 #include "domain/undo/undotakeselect.h"
 
+#include <QtCore/QFile>
 #include <QtCore/QtDebug>
 
 
@@ -50,15 +51,29 @@ DomainFacade::DomainFacade(Frontend *f)
 {
     frontend = f;
     animationProject = new AnimationProject(frontend);
+
+    historyFilePath.clear();
+    historyFilePath.append(frontend->getUserDirName());
+    historyFilePath.append("/");
+    historyFilePath.append(PreferencesTool::historyFileName);
+
+    historyFile = new QFile(historyFilePath);
 }
 
 
 DomainFacade::~DomainFacade()
 {
     if (animationProject != NULL) {
+        clearUndoStack();
         delete animationProject;
         animationProject = NULL;
     }
+
+    if (historyFile != NULL) {
+        delete historyFile;
+        historyFile = NULL;
+    }
+
     frontend = NULL;
 }
 
@@ -69,29 +84,14 @@ Frontend* DomainFacade::getFrontend()
 }
 
 
-AnimationProject* DomainFacade::getAnimationProject()
-{
-    return this->animationProject;
-}
-
-
-QUndoStack* DomainFacade::getUndoStack()
-{
-    return animationProject->getUndoStack();
-}
-
-
 ViewFacade* DomainFacade::getView()
 {
     return frontend->getView();
 }
 
-
-void DomainFacade::clearUndoStack()
-{
-    animationProject->clearUndoStack();
-}
-
+/**************************************************************************
+ * Audio functions
+ **************************************************************************/
 
 bool DomainFacade::initAudioDevice()
 {
@@ -104,10 +104,60 @@ void DomainFacade::shutdownAudioDevice()
     return animationProject->shutdownAudioDevice();
 }
 
+/**************************************************************************
+ * Undo functions
+ **************************************************************************/
+
+QUndoStack* DomainFacade::getUndoStack()
+{
+    return animationProject->getUndoStack();
+}
+
+
+void DomainFacade::clearUndoStack()
+{
+    animationProject->clearUndoStack();
+    if (!historyFile->remove()) {
+        // Error
+        frontend->showCritical(tr("Critical"),
+                               tr("Can't remove history file!"));
+    }
+}
+
+
+void DomainFacade::writeHistoryEntry(const QString &entry)
+{
+    if (!historyFile->open(QIODevice::Append | QIODevice::Text)) {
+        // Error
+        frontend->showCritical(tr("Critical"),
+                               tr("Can't open history file!"));
+        return;
+    }
+
+    QTextStream out(historyFile);
+    out << entry << "\n";
+
+    // Flush and close the file
+    historyFile->close();
+
+    return;
+}
+
+
+void DomainFacade::recover()
+{
+    return;
+}
 
 /**************************************************************************
  * Animation functions
  **************************************************************************/
+
+AnimationProject* DomainFacade::getAnimationProject()
+{
+    return this->animationProject;
+}
+
 
 bool DomainFacade::isUnsavedChanges()
 {
@@ -814,25 +864,26 @@ void DomainFacade::addExposureToUndo(const QString &filePath,
                                      int            sceneIndex,
                                      int            takeIndex)
 {
-    UndoExposureAdd *u = new UndoExposureAdd(this, filePath, sceneIndex, takeIndex);
+    QString newFileName = copyToTemp(filePath);
+    UndoExposureAdd *u = new UndoExposureAdd(this, newFileName, sceneIndex, takeIndex);
     getUndoStack()->push(u);
 }
 
 /*
-void DomainFacade::undoExposureAdd(const QString &filePath,
+void DomainFacade::undoExposureAdd(const QString &fileName,
                                    int            sceneIndex,
                                    int            takeIndex)
 {
 }
 */
 
-void DomainFacade::redoExposureAdd(const QString &filePath,
+void DomainFacade::redoExposureAdd(const QString &fileName,
                                    int            sceneIndex,
                                    int            takeIndex)
 {
     qDebug("DomainFacade::redoExposureAdd --> Start");
 
-    Exposure *exposure = animationProject->addExposure(filePath);
+    Exposure *exposure = animationProject->addExposure(fileName, AnimationProject::InTempPath);
     getView()->notifyAddExposure(sceneIndex, takeIndex, exposure->getIndex());
     animationProject->setActiveExposureIndex(exposure->getIndex());
     getView()->notifyActivateExposure();
@@ -847,12 +898,14 @@ void DomainFacade::insertExposureToUndo(const QString &filePath,
                                         int            takeIndex,
                                         int            exposureIndex)
 {
-    UndoExposureInsert *u = new UndoExposureInsert(this, filePath, sceneIndex, takeIndex, exposureIndex);
+    QString newFileName = copyToTemp(filePath);
+    UndoExposureInsert *u = new UndoExposureInsert(this, newFileName,
+                                                   sceneIndex, takeIndex, exposureIndex);
     getUndoStack()->push(u);
 }
 
 /*
-void DomainFacade::undoExposureInsert(const QString &filePath,
+void DomainFacade::undoExposureInsert(const QString &fileName,
                                       int            sceneIndex,
                                       int            takeIndex,
                                       int            exposureIndex)
@@ -860,7 +913,7 @@ void DomainFacade::undoExposureInsert(const QString &filePath,
 }
 */
 
-void DomainFacade::redoExposureInsert(const QString &filePath,
+void DomainFacade::redoExposureInsert(const QString &fileName,
                                       int            sceneIndex,
                                       int            takeIndex,
                                       int            exposureIndex)
@@ -869,7 +922,8 @@ void DomainFacade::redoExposureInsert(const QString &filePath,
 
     Exposure *exposure = NULL;
 
-    exposure = animationProject->insertExposure(sceneIndex, takeIndex, exposureIndex, filePath);
+    exposure = animationProject->insertExposure(sceneIndex, takeIndex, exposureIndex,
+                                                fileName, AnimationProject::InTempPath);
     getView()->notifyInsertExposure(sceneIndex, takeIndex, exposure->getIndex());
 
     animationProject->setActiveExposureIndex(exposure->getIndex());
@@ -1036,28 +1090,6 @@ void DomainFacade::redoExposureSelect(int oldSceneIndex,
  * Old Frames functions
  **************************************************************************/
 
-void DomainFacade::addFrames(const QVector<QString>& frameNames)
-{
-    if (!(animationProject->getActiveSceneIndex() < 0 &&
-            animationProject->getSceneSize() > 0)) {
-
-        qDebug("Adding frames in the domainfacade");
-
-        QVector<Exposure*> tmp = animationProject->addFrames(frameNames,
-                                 animationProject->getActiveExposureIndex() + 1);
-
-        int numElem = tmp.size();
-        // there are no elements in the vector if the user has aborted the operation
-        if (numElem > 0) {
-        }
-    }
-
-    // TODO: Implementation of addFrames undo
-    // UndoExposureNew *u = new UndoExposureNew(this, "<empty>", fromIndex, frameNames, getActiveSceneIndex());
-    // undoStack->push(u);
-}
-
-
 void DomainFacade::removeFrames(int fromFrame,
                                 int toFrame)
 {
@@ -1091,3 +1123,33 @@ void DomainFacade::moveFrames(int fromFrame,
     //                            animationProject->getActiveSceneIndex());
     // undoStack->push(u);
 }
+
+/**************************************************************************
+ * Private functions
+ **************************************************************************/
+
+const QString DomainFacade::copyToTemp(const QString &fromImagePath)
+{
+    // creates a new image name
+    QString toImageName(QString("tmp_%1%2").arg(Exposure::tempNum)
+                        .arg(fromImagePath.mid(fromImagePath.lastIndexOf('.'))));
+
+    // creates a new image path
+    QString toImagePath;
+    toImagePath.append(frontend->getTempDirName());
+    toImagePath.append(QLatin1String("/"));
+    toImagePath.append(toImageName);
+
+    // Copy file to temp directory
+    if (!QFile::copy(fromImagePath, toImagePath)) {
+        // Not successful
+        frontend->showCritical(tr("Critical"),
+                               tr("Can't copy image to temp directory!"));
+    }
+
+    Exposure::tempNum++;
+
+    return toImageName;
+}
+
+

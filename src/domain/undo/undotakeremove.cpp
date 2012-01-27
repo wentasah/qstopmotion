@@ -31,7 +31,7 @@ UndoTakeRemove::UndoTakeRemove(DomainFacade *df,
     sceneIndex = si;
     takeIndex = ti;
     removedTake = NULL;
-    setText(QObject::tr("Remove take"));
+    setText(QString(QObject::tr("Remove take (%1,%2)")).arg(sceneIndex).arg(takeIndex));
 }
 
 
@@ -51,4 +51,5 @@ void UndoTakeRemove::undo()
 void UndoTakeRemove::redo()
 {
     removedTake = facade->redoTakeRemove(sceneIndex, takeIndex);
+    facade->writeHistoryEntry(QString("redoTakeRemove %1 %2").arg(sceneIndex).arg(takeIndex));
 }

@@ -28,7 +28,7 @@ UndoProjectOpen::UndoProjectOpen(DomainFacade *df,
     :UndoBase(df)
 {
     projectPath.append(path);
-    setText(QString(QObject::tr("Open project '%1'")).arg(path));
+    setText(QString(QObject::tr("Open project '%1'")).arg(projectPath));
 }
 
 
@@ -48,4 +48,5 @@ void UndoProjectOpen::undo()
 void UndoProjectOpen::redo()
 {
     facade->openProjectRedo(projectPath);
+    facade->writeHistoryEntry(QString("redoProjectOpen %1").arg(projectPath));
 }

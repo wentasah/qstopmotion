@@ -262,35 +262,21 @@ public:
     /**
      * Creates a exposure with the picture at location exposureName and adds it the
      * end in the scene.
-     * @param exposureName the path to the picture to the exposure to create.
+     * @param fileName the name fo the image file to the exposure to create.
+     * @param location the location of the picture
      * @return the new path to the picture file for the undo object.
      */
-    Exposure* addExposure(const QString &exposureName);
+    Exposure* addExposure(const QString &fileName, int location);
 
     /**
      * Creates a exposure with the picture at location exposureName and adds it at position
      * at position index in the scene.
-     * @param exposureName the path to the picture to the exposure to create.
+     * @param fileName the name to the image file to the exposure to create.
+     * @param location the location of the picture
      * @param index the place to create the exposure.
      * @return the new path to the picture file for the undo object.
      */
-    Exposure* insertExposure(const QString &exposureName, int &index);
-
-    /**
-     * Adds the exposures in the vector exposureNames to the vector at position
-     * index.
-     * @param exposureNames the paths to the pictures of the exposures to add to the
-     * scene.
-     * @param index the location to add the exposures to.
-     * @param numberOfCanceledExposures reference transfered int for setting how many
-     * exposures was canceled in case the user aborts the adding while this functions
-     * runs.
-     * @return the new paths of the exposures for the undo object, or NULL if the
-     * operation was canceled.
-     */
-    const QVector<Exposure*> addExposures(const QVector<QString> &exposureNames,
-                                          int index,
-                                          unsigned int &numberOfCanceledExposures);
+    Exposure* insertExposure(const QString &fileName, int location, int &index);
 
     /**
      * Remove the exposures at the positions from fromExposure to toExposure (inclusive)

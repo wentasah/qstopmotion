@@ -28,6 +28,7 @@
 // #include "frontends/viewfacade.h"
 #include "technical/videoencoder/videoencoder.h"
 
+#include <QtCore/QFile>
 #include <QtCore/QObject>
 #include <QtCore/QString>
 #include <QtCore/QVector>
@@ -73,25 +74,13 @@ public:
     Frontend* getFrontend();
 
     /**
-     * Retrieves the animation model.
-     * @return the animation model.
-     */
-    AnimationProject* getAnimationProject();
-
-    /**
-     * Undoes the last undoable operation on the model.
-     */
-    QUndoStack* getUndoStack();
-
-    /**
      * Get the view facade.
      */
     ViewFacade* getView();
 
-    /**
-     * Clears the undo stack.
-     */
-    void clearUndoStack();
+    /**************************************************************************
+     * Audio functions
+     **************************************************************************/
 
     /**
      * Initializes the audio device so it is ready to play sounds. It will sends
@@ -107,8 +96,39 @@ public:
     void shutdownAudioDevice();
 
     /**************************************************************************
+     * Undo functions
+     **************************************************************************/
+
+    /**
+     * Get the undo stack.
+     * @return The undo stack.
+     */
+    QUndoStack* getUndoStack();
+
+    /**
+     * Clears the undo stack and erase the history file.
+     */
+    void clearUndoStack();
+
+    /**
+     * Write a entry to the history file
+     */
+    void writeHistoryEntry(const QString &entry);
+
+    /**
+     * Read and process the history file
+     */
+    void recover();
+
+    /**************************************************************************
      * Animation functions
      **************************************************************************/
+
+    /**
+     * Retrieves the animation model.
+     * @return the animation model.
+     */
+    AnimationProject* getAnimationProject();
 
     /**
      * Checks if there are unsaved changes in the model.
@@ -690,21 +710,21 @@ public:
 
     /**
      * Undo creates a new exposure and add it to the animation project.
-     * @param filePath the file path of the image file of the exposure.
+     * @param fileName the file name of the image file of the exposure.
      * @param sceneIndex the index of the scene of the take the exposure to add
      * @param takeIndex the index of the take the exposure to add
      */
-    // void undoExposureAdd(const QString &filePath,
+    // void undoExposureAdd(const QString &fileName,
     //                      int            sceneIndex,
     //                      int            takeIndex);
 
     /**
      * Creates a new exposure and add it to the animation project.
-     * @param filePath the file path of the image file of the exposure.
+     * @param fileName the file name of the image file of the exposure.
      * @param sceneIndex the index of the scene of the take the exposure to add
      * @param takeIndex the index of the take the exposure to add
      */
-    void redoExposureAdd(const QString &filePath,
+    void redoExposureAdd(const QString &fileName,
                          int            sceneIndex,
                          int            takeIndex);
 
@@ -722,12 +742,12 @@ public:
 
     /**
      * Undo creates a new exposure and insert it in the animation project.
-     * @param filePath the file path of the image file of the exposure or a empty string.
+     * @param fileName the file name of the image file of the exposure or a empty string.
      * @param sceneIndex the index of the scene of the take the exposure to add
      * @param takeIndex the index of the take the exposure to add
      * @param exposureIndex The index of the exposure where the new exposures are inserted bevor.
      */
-    // void undoExposureInsert(const QString &filePath
+    // void undoExposureInsert(const QString &fileName
     //                         int            sceneIndex,
     //                         int            takeIndex,
     //                         int            exposureIndex);
@@ -738,9 +758,9 @@ public:
      * @param takeIndex the index of the take the exposure to add
      * @param exposureIndex The index of the exposure where the new exposures are inserted bevor.
      * @param after The new exposure is inserterd after the exposure index.
-     * @param fileName the file name of the image file of the exposure or a empty string.
+     * @param filename the file name of the image file of the exposure or a empty string.
      */
-    void redoExposureInsert(const QString &filePath,
+    void redoExposureInsert(const QString &fileName,
                             int            sceneIndex,
                             int            takeIndex,
                             int            exposureIndex);
@@ -870,13 +890,6 @@ public:
      **************************************************************************/
 
     /**
-     * Adds the frames in the vector to the animation model and sets up the undo
-     * command object
-     * @param frameNames a vector containing the frames to be added to the animation.
-     */
-    void addFrames(const QVector<QString> &frameNames);
-
-    /**
      * Removes the frame between (inclusive) fromFrame and toFrame from
      * the animation model.
      * @param fromFrame the first frame to remove.
@@ -908,6 +921,30 @@ private:
      * The animation project in the program
      */
     AnimationProject *animationProject;
+
+    /**
+     * Path of the history file.
+     */
+    QString historyFilePath;
+
+    /**
+     * The history file.
+     */
+    QFile *historyFile;
+
+    /**************************************************************************
+     * Private functions
+     **************************************************************************/
+
+private:
+
+    /**
+     * Copies the files belonging to this Exposure to a temporary directory.
+     * @param fromImagePath the path to the image to copy.
+     * @return the file name of the new file.
+     */
+    const QString copyToTemp(const QString &fromImagePath);
+
 };
 
 #endif

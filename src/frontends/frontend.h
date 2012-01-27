@@ -98,6 +98,12 @@ public:
     virtual const char* getPackerDirName() = 0;
 
     /**
+     * Abstract function for getting the application directory
+     * @return the application directory name string
+     */
+    virtual const char* getApplicationDirName() = 0;
+
+    /**
      * Abstract function for getting the binary directory
      * @return the binary directory name string
      */

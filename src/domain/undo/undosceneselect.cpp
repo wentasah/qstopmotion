@@ -47,4 +47,5 @@ void UndoSceneSelect::undo()
 void UndoSceneSelect::redo()
 {
     facade->redoSceneSelect(oldSceneIndex, newSceneIndex);
+    facade->writeHistoryEntry(QString("redoSceneSelect %1 %2").arg(oldSceneIndex).arg(newSceneIndex));
 }

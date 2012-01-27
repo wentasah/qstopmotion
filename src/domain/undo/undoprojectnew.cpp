@@ -28,7 +28,7 @@ UndoProjectNew::UndoProjectNew(DomainFacade *df,
     :UndoBase(df)
 {
     projectDescription.append(description);
-    setText(QString(QObject::tr("New project '%1'")).arg(description));
+    setText(QString(QObject::tr("New project '%1'")).arg(projectDescription));
 }
 
 
@@ -48,4 +48,5 @@ void UndoProjectNew::undo()
 void UndoProjectNew::redo()
 {
     facade->newProjectRedo(projectDescription);
+    facade->writeHistoryEntry(QString("redoProjectNew %1").arg(projectDescription));
 }

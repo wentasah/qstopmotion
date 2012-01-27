@@ -49,6 +49,13 @@ class AnimationProject : public QObject
 {
     Q_OBJECT
 public:
+    enum ExposureFileLocation {
+        NoFile,
+        InProjectPath,
+        InTempPath,
+        InTrashPath
+    };
+
     /**
      * Initializes the variables of the animation to starting values.
      * @param f The frontend of the application.
@@ -518,23 +525,27 @@ public:
 
     /**
      * Creare a new exposure and add it to the vector containing the exposures.
-     * @param exposureDescription the description of the exposure or a empty string.
+     * @param fileName the name of the image file.
+     * @param location the location of the picture
      * @return the new exposure.
      */
-    Exposure *addExposure(const QString &exposureDescription);
+    Exposure *addExposure(const QString &fileName,
+                          int location);
 
     /**
      * Creare a new exposure and insert it in the vector containing the exposures.
      * @arg sceneIndex the index of the scene with the exposure to insert
      * @arg takeIndex the index of the take with the exposure to insert
      * @arg exposureIndex the index of the new exposure where inserted bevor.
-     * @param exposureDescription the description of the exposure or a empty string.
+     * @param fileName the name to the image file.
+     * @param location the location of the picture
      * @return the new exposure.
      */
     Exposure *insertExposure(int sceneIndex,
                              int takeIndex,
                              int exposureIndex,
-                             const QString &exposureDescription);
+                             const QString &fileName,
+                             int location);
 
     /**
      * Removes the active exposure from the animation.
@@ -562,16 +573,6 @@ public:
     /**************************************************************************
      * Old frame functions
      **************************************************************************/
-
-    /**
-     * Inserts a new frame into the animationmodel.
-     * @param frameNames a vector containing the names to be added in the model
-     * @param index the place to add the frames in the animation.
-     * @return a vector containing paths to the images which has been
-     * copied to a temporary directory
-     */
-    const QVector<Exposure*> addFrames(const QVector<QString> &frameNames,
-                                       unsigned int index);
 
     /**
      * Removes the frames between (inclusive) fromFrame and toFrame from

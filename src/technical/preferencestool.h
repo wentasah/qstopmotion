@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2011 by                                                *
+ *  Copyright (C) 2005-2012 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -148,6 +148,11 @@ public:
      * Suffix of the captured file
      */
     static const QString capturedFileSuffix;
+
+    /**
+     * Name of the history file
+     */
+    static const QString historyFileName;
 
     /**
      * Protected constructor to deny external instanciation of the singleton.

@@ -61,5 +61,7 @@ void UndoExposureMove::redo()
     /* TODO: Change handling for redo
     facade->redoExposureMove(fromSceneIndex, fromTakeIndex, fromExposureIndex,
                              toSceneIndex, toTakeIndex, toExposureIndex);
+    facade->writeHistoryEntry(QString("redoExposureMove %1 %2 %3 %4 %5 %6").arg(fromSceneIndex).arg(fromTakeIndex)
+                              .arg(fromExposureIndex).arg(toSceneIndex).arg(toTakeIndex).arg(toExposureIndex));
     */
 }

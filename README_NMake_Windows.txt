@@ -61,27 +61,29 @@ There are two possibilities, to get the source code:
 
 2.2 Create the NMake makefile
 * Start the CMake GUI using the shortcut to the start script.
-* Select the directory with the cmakelist.txt file as the source code directory
-* Select a separate directory as the destination directory
-* Set the 'Grouped' and 'Advanced' checkboxes
-* Press the configure button
-* Select the generator "NMake Makefiles"
-* Select the entry CPACK - CPACK_BINARY_NSIS
-* Press the configure button again
-* Press the generate button
+* Select the directory with the cmakelist.txt file as the source code directory.
+* Select a separate directory as the destination directory.
+* Set the 'Grouped' and 'Advanced' checkboxes.
+* To build the release version add a new string entry with the name 'CMAKE_BUILD_TYPE' and the value 'Release'.
+  The default build type is 'Debug'.
+* Press the configure button.
+* Select the generator "NMake Makefiles".
+* Select the entry CPACK - CPACK_BINARY_NSIS.
+* Press the configure button again.
+* Press the generate button.
 
 2.3 Build the application
-* Start a Visual Studio command prompt
+* Start a Visual Studio command prompt.
 * Move to the new created destination directory.
-* call "nmake"
-* Locking for error and warning messages
+* call "nmake".
+* Locking for error and warning messages.
 
 3. Installation
-* Start a Visual Studio command prompt with administration rights
-* call "nmake install"
+* Start a Visual Studio command prompt with administration rights.
+* call "nmake install".
 
 4. Starting qStopMotion
-* Select the video source
+* Select the video source.
 * Have fun.
 
 5. Creating installer for Windows

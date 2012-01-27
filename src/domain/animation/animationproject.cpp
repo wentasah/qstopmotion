@@ -1017,14 +1017,15 @@ Exposure *AnimationProject::getActiveExposure()
 }
 
 
-Exposure *AnimationProject::addExposure(const QString &fileName)
+Exposure *AnimationProject::addExposure(const QString &fileName,
+                                        int location)
 {
     Q_ASSERT(activeSceneIndex > -1);
 
     Scene *activeScene = scenes[activeSceneIndex];
     Take  *activeTake = activeScene->getTake(activeScene->getActiveTakeIndex());
 
-    Exposure *exposure = activeTake->addExposure(fileName);
+    Exposure *exposure = activeTake->addExposure(fileName, location);
 
     return exposure;
 }
@@ -1033,14 +1034,15 @@ Exposure *AnimationProject::addExposure(const QString &fileName)
 Exposure *AnimationProject::insertExposure(int sceneIndex,
                                            int takeIndex,
                                            int exposureIndex,
-                                           const QString &fileName)
+                                           const QString &fileName,
+                                           int location)
 {
     Q_ASSERT(activeSceneIndex > -1);
 
     Scene *scene = scenes[sceneIndex];
     Take  *take = scene->getTake(takeIndex);
 
-    Exposure *exposure = take->insertExposure(fileName, exposureIndex);
+    Exposure *exposure = take->insertExposure(fileName, location, exposureIndex);
 
     return exposure;
 }
@@ -1081,61 +1083,6 @@ unsigned int AnimationProject::getNextTotalExposureIndex()
 /**************************************************************************
  * Old frame functions
  **************************************************************************/
-
-const QVector<Exposure*> AnimationProject::addFrames(const QVector<QString> &frameNames,
-        unsigned int firstFrameIndex)
-{
-    qDebug("AnimationProject::addFrames --> Start");
-
-    Q_ASSERT(this->getActiveSceneIndex() >= 0);
-    // if (this->getActiveSceneIndex() < 0) {
-    //     this->newScene(0, QString());
-    // }
-
-    bool isAddingAborted = false;
-    unsigned int numberOfCanceledExposures = 0;
-    QVector<Exposure*> newExposures(scenes[activeSceneIndex]->addExposures(frameNames, firstFrameIndex, numberOfCanceledExposures));
-
-    unsigned int newFramesSize = newExposures.size();
-
-    // if (newFramesSize == 1) {
-    //     this->notifyNewExposure(firstFrameIndex);
-    // } else if (newFramesSize > 1) {
-    //     for (unsigned int index = firstFrameIndex ; index < (firstFrameIndex + newFramesSize) ; index++) {
-    //         this->notifyNewExposure(index);
-    //     }
-        isAddingAborted = frontend->isOperationAborted();
-    // } else
-    if (newFramesSize == 0) {
-        return newExposures;
-    }
-
-    // The user has aborted the operation either when importing frames
-    // or adding frames. The cleanup routine is equal for both cases, the
-    // only difference is the number of frames added to the 'frames' vector.
-    if (newFramesSize == 0 || isAddingAborted) {
-        scenes[activeSceneIndex]->cleanExposures(firstFrameIndex, firstFrameIndex + numberOfCanceledExposures);
-        newExposures.clear();
-    } else {
-        this->unsavedChanges = true;
-    }
-
-    if (newFramesSize != 1) {
-        frontend->updateProgress(frameNames.size() * 2);
-        frontend->hideProgress();
-    }
-
-    if (newFramesSize == 1) {
-        setActiveExposureIndex(firstFrameIndex);
-    } else if (newFramesSize > 1 && !isAddingAborted) {
-        setActiveExposureIndex(firstFrameIndex + newFramesSize - 1);
-    }
-    this->unsavedChanges = true;
-
-    qDebug("AnimationProject::addFrames --> End");
-    return newExposures;
-}
-
 
 const QVector<Exposure*> AnimationProject::removeFrames(unsigned int fromFrame, unsigned int toFrame)
 {

@@ -343,16 +343,15 @@ Exposure* Take::getExposure(unsigned int exposureNumber)
 }
 
 
-Exposure* Take::addExposure(const QString &exposureName)
+Exposure* Take::addExposure(const QString &fileName, int location)
 {
     qDebug("Take::addExposure --> Start");
 
-    Exposure *newExposure = new Exposure(this);
+    Exposure *newExposure = new Exposure(this, fileName, location);
 
     newExposure->setId(QString("%1").arg(nextExposureIndex, 4, 10, QChar('0')));
     nextExposureIndex++;
 
-    newExposure->copyToTemp(exposureName);
     exposures.append(newExposure);
 
     qDebug("Take::addExposure --> End");
@@ -361,16 +360,15 @@ Exposure* Take::addExposure(const QString &exposureName)
 }
 
 
-Exposure* Take::insertExposure(const QString &exposureName, int index)
+Exposure* Take::insertExposure(const QString &fileName, int location, int index)
 {
     qDebug("Take::insertExposure --> Start");
 
-    Exposure *newExposure = new Exposure(this);
+    Exposure *newExposure = new Exposure(this, fileName, location);
 
     newExposure->setId(QString("%1").arg(nextExposureIndex, 4, 10, QChar('0')));
     nextExposureIndex++;
 
-    newExposure->copyToTemp(exposureName);
     if (index < 0) {
         exposures.append(newExposure);
     }
@@ -386,81 +384,6 @@ Exposure* Take::insertExposure(const QString &exposureName, int index)
     qDebug("Take::insertExposure --> End");
 
     return newExposure;
-}
-
-
-const QVector<Exposure*> Take::addExposures(const QVector<QString> &exposureNames, int index,
-                                            Frontend *frontend, unsigned int &numberOfCanceledExposures)
-{
-    qDebug("Take::addExposures --> Start");
-
-    QVector<Exposure*> newExposures;
-    bool isImportingAborted = false;
-
-    unsigned i = 0;
-    unsigned numElem = exposureNames.size();
-
-    if (exposureNames.size() == 1) {
-        QString file = exposureNames[i];
-        QFileInfo fileInfo(file);
-        if (fileInfo.isReadable()) {
-            newExposures.append(insertExposure(file, index));
-        } else {
-            QString msg(tr("You do not have permission to read that file"));
-            frontend->showWarning(tr("Add Exposure"), msg);
-
-            this->getAnimationProject()->setUnsavedChanges();
-
-            return newExposures;
-        }
-    } else {
-        QString msg(tr("Importing exposures from disk ..."));
-        frontend->showProgress(msg.toLatin1().constData(), numElem * 2);
-
-        unsigned numNotReadable = 0;
-        for (; i < numElem; ++i) {
-            frontend->updateProgress(i);
-            QString file = exposureNames[i];
-            QFileInfo fileInfo(file);
-            if (fileInfo.isReadable()) {
-                newExposures.append(insertExposure(exposureNames[i], index));
-            } else {
-                qWarning() << "Wrong permission: " << file;
-                ++numNotReadable;
-            }
-
-            // Doesn't want to process events for each new exposure added.
-            if ((i % 10) == 0) {
-                frontend->processEvents();
-            }
-            if (frontend->isOperationAborted()) {
-                isImportingAborted = true;
-                ++i; // does this to make cleaning of exposures general
-                break;
-            }
-        }
-        frontend->updateProgress(numElem);
-
-        if (isImportingAborted) {
-            numberOfCanceledExposures = i;
-            newExposures.clear();
-        } else {
-            numberOfCanceledExposures = numElem;
-        }
-
-        if (numNotReadable > 0) {
-            QString ss = QString("%1%2%3")
-                         .arg(tr("You do not have permission to read "))
-                         .arg(numNotReadable)
-                         .arg(tr(" file(s)"));
-            frontend->showWarning(tr("Add Exposure"), ss);
-        }
-    }
-
-    this->getAnimationProject()->setUnsavedChanges();
-
-    qDebug("Take::addExposures --> End");
-    return newExposures;
 }
 
 

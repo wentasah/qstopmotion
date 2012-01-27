@@ -1,7 +1,7 @@
 ###############################################################################
 # CMake file for the qStopMotion project                                      #
 # (c) Ralf Lange, longsoft.de                                                 #
-# Last update: 2011-11-23                                                     #
+# Last update: 2012-01-27                                                     #
 #                                                                             #
 # Usage:                                                                      #
 #   * Qt-Creator (Windows, Linux)                                             #
@@ -35,7 +35,7 @@ SET(CMAKE_PROJECT_NAME "qstopmotion")
 SET(QSTOPMOTION_HOMEPAGE "http://www.qstopmotion.org")
 SET(QSTOPMOTION_VERSION_MAJOR "0")
 SET(QSTOPMOTION_VERSION_MINOR "9")
-SET(QSTOPMOTION_VERSION_PATCH "9")
+SET(QSTOPMOTION_VERSION_PATCH "10")
 
 SET(FILES_TO_TRANSLATE )
 
@@ -394,6 +394,10 @@ IF(WIN32)
     file(COPY ${ICON_FILES} DESTINATION ".")
     file(COPY ${GENERAL_FILES} DESTINATION ".")
 
+    file(COPY ffmpeg DESTINATION ".")
+
+    file(COPY qtruntime DESTINATION ".")
+
 ELSE(WIN32)
 
     file(COPY graphics DESTINATION "share/qstopmotion/")
@@ -534,6 +538,20 @@ IF(CPACK_GENERATOR STREQUAL "DEB")
     )
 ENDIF(CPACK_GENERATOR STREQUAL "DEB")
 
+# installation on Windows systems
+IF(WIN32)
+    # installation of ffmpeg
+    install(
+        DIRECTORY ffmpeg
+        DESTINATION ${QSTOPMOTION_GENERALS_INSTALL_DIR}
+    )
+    # installation of Qt runtime
+    install(
+        DIRECTORY qtruntime/
+        DESTINATION ${QSTOPMOTION_BIN_INSTALL_DIR}
+    )
+ENDIF(WIN32)
+
 ###############################################################################
 ###############################################################################
 #
@@ -552,7 +570,7 @@ SET(CPACK_PACKAGE_VENDOR "Ralf Lange, qstopmotion.org")
 SET(CPACK_PACKAGE_CONTACT "Ralf.Lange@qstopmotion.org")
 SET(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_CURRENT_SOURCE_DIR}/README.txt")
 SET(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/COPYING")
-SET(CPACK_PACKAGE_ICON "${CMAKE_CURRENT_SOURCE_DIR}\\\\graphics\\\\qstopmotion_logo_30.bmp")
+SET(CPACK_PACKAGE_ICON "${CMAKE_CURRENT_SOURCE_DIR}\\\\graphics\\\\qstopmotion_logo_installer.bmp")
 SET(CPACK_PACKAGE_INSTALL_DIRECTORY "qStopMotion ${QSTOPMOTION_VERSION_MAJOR}.${QSTOPMOTION_VERSION_MINOR}.${QSTOPMOTION_VERSION_PATCH}")
 SET(CPACK_PACKAGE_EXECUTABLES "qstopmotion" "qStopMotion")
 SET(CPACK_STRIP_FILES "qstopmotion")
@@ -598,18 +616,26 @@ SET(CPACK_NSIS_MENU_LINKS
     "http://www.qstopmotion.org" "qStopMotion Web Site"
 )
 
+# Additional installation command
+# Install the GStreamer OSS Build
+SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "
+    NSISdl::download http://ossbuild.googlecode.com/files/GStreamer-WinBuilds-GPL-x86.msi $INSTDIR\\\\GStreamer-WinBuilds-GPL-x86.msi
+    ExecWait 'msiexec /i \\\"$INSTDIR\\\\GStreamer-WinBuilds-GPL-x86.msi\\\" '
+")
+
+# Additional uninstallation command
+# Uninstall the GStreamer OSS Build
+SET(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "
+    ExecWait 'msiexec /x \\\"$INSTDIR\\\\GStreamer-WinBuilds-GPL-x86.msi\\\" '
+    Delete \\\"$INSTDIR\\\\GStreamer-WinBuilds-GPL-x86.msi\\\"
+")
+
 # SET(CPACK_NSIS_INSTALLED_ICON_NAME "qstopmotion.exe")
 # SET(CPACK_NSIS_DISPLAY_NAME "qStopMotion")
 # SET(CPACK_NSIS_PACKAGE_NAME "qStopMotion")
 # SET(CPACK_NSIS_HELP_LINK "http:\\\\\\\\www.qstopmotion.org")
 # SET(CPACK_NSIS_URL_INFO_ABOUT "http:\\\\\\\\www.longsoft.de")
-# SET(CPACK_NSIS_CONTACT ${CPACK_PACKAGE_CONTACT})
-
-# Additional installation command
-# SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS ExecWait '\\\"$INSTDIR\\\\vcredist_x86.exe\\\" /Q:a')
-
-# Additional uninstallation command
-# SET(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS ExecWait '??????')
+SET(CPACK_NSIS_CONTACT ${CPACK_PACKAGE_VENDOR})
 
 # Run the application on the finish page
 # SET(CPACK_NSIS_MUI_FINISHPAGE_RUN "qstopmotion.exe"

@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2011 by                                                *
+ *  Copyright (C) 2005-2012 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -24,6 +24,7 @@
 
 #include "technical/util.h"
 
+#include <QtCore/QtDebug>
 #include <QtGui/QMessageBox>
 #include <QtGui/QTextCursor>
 
@@ -78,8 +79,16 @@ ExternalCommandDialog::ExternalCommandDialog(QWidget *parent)
 
 void ExternalCommandDialog::run(const QString &command)
 {
+    qDebug("ExternalCommandDialog::run --> Start");
+
     QString osCommand(Util::convertPathToOsSpecific(command));
+    qDebug("ExternalCommandDialog::run --> Command");
+    qDebug() << osCommand;
+
     process->start(osCommand);
+
+    qDebug("ExternalCommandDialog::run --> End");
+
 }
 
 

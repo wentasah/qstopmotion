@@ -1,16 +1,14 @@
 ###############################################################################
 # QtCreator file for the qStopMotion project                                  #
 # (c) Ralf Lange, longsoft.de                                                 #
-# Last update: 2011-11-24                                                     #
+# Last update: 2012-02-01                                                     #
 #                                                                             #
 # Please use CMake and the CMakeLists.txt file to build qStopMotion!          #
 ###############################################################################
 
 HEADERS += src/config.h \
-           src/application/camerahandler.h \
            src/application/editmenuhandler.h \
            src/application/externalchangemonitor.h \
-           src/application/runanimationhandler.h \
            src/application/soundhandler.h \
            src/domain/domainfacade.h \
            src/domain/animation/animationproject.h \
@@ -18,11 +16,16 @@ HEADERS += src/config.h \
            src/domain/animation/projectserializer.h \
            src/domain/animation/scene.h \
            src/domain/animation/take.h \
+           src/domain/undo/undobase.h \
            src/domain/undo/undoexposureadd.h \
            src/domain/undo/undoexposureinsert.h \
            src/domain/undo/undoexposuremove.h \
            src/domain/undo/undoexposureremove.h \
            src/domain/undo/undoexposureselect.h \
+           src/domain/undo/undoprojectclose.h \
+           src/domain/undo/undoprojectnew.h \
+           src/domain/undo/undoprojectopen.h \
+           src/domain/undo/undoprojectsave.h \
            src/domain/undo/undosceneadd.h \
            src/domain/undo/undosceneinsert.h \
            src/domain/undo/undoscenemove.h \
@@ -75,10 +78,8 @@ HEADERS += src/config.h \
            src/technical/videoencoder/videoencoderfactory.h
 
 SOURCES += src/main.cpp \
-           src/application/camerahandler.cpp \
            src/application/editmenuhandler.cpp \
            src/application/externalchangemonitor.cpp \
-           src/application/runanimationhandler.cpp \
            src/application/soundhandler.cpp \
            src/domain/domainfacade.cpp \
            src/domain/animation/animationproject.cpp \
@@ -86,11 +87,16 @@ SOURCES += src/main.cpp \
            src/domain/animation/projectserializer.cpp \
            src/domain/animation/scene.cpp \
            src/domain/animation/take.cpp \
+           src/domain/undo/undobase.cpp \
            src/domain/undo/undoexposureadd.cpp \
            src/domain/undo/undoexposureinsert.cpp \
            src/domain/undo/undoexposuremove.cpp \
            src/domain/undo/undoexposureremove.cpp \
            src/domain/undo/undoexposureselect.cpp \
+           src/domain/undo/undoprojectclose.cpp \
+           src/domain/undo/undoprojectnew.cpp \
+           src/domain/undo/undoprojectopen.cpp \
+           src/domain/undo/undoprojectsave.cpp \
            src/domain/undo/undosceneadd.cpp \
            src/domain/undo/undosceneinsert.cpp \
            src/domain/undo/undoscenemove.cpp \

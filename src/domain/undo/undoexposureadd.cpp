@@ -57,5 +57,5 @@ void UndoExposureAdd::undo()
 void UndoExposureAdd::redo()
 {
     facade->redoExposureAdd(fileName, sceneIndex, takeIndex);
-    facade->writeHistoryEntry(QString("redoExposureAdd %1 %2 %3 %4").arg(sceneIndex).arg(takeIndex).arg(exposureIndex).arg(fileName));
+    facade->writeHistoryEntry(QString("redoExposureAdd|%1|%2|%3|%4").arg(sceneIndex).arg(takeIndex).arg(exposureIndex).arg(fileName));
 }

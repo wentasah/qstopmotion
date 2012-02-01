@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2010-2011 by                                                *
+ *  Copyright (C) 2010-2012 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -21,6 +21,7 @@
 #ifndef DESCRIPTIONDIALOG_H
 #define DESCRIPTIONDIALOG_H
 
+#include "frontends/frontend.h"
 #include <QtGui/QDialog>
 #include <QtGui/QLabel>
 #include <QtGui/QLineEdit>
@@ -39,10 +40,11 @@ public:
 
     /**
      * Constructor
+     * @param f The frontend of the application
      * @param type Type of the dialog
      * @param parent Parent of the dialog
      */
-    DescriptionDialog(descriptionType type, QWidget *parent = 0);
+    DescriptionDialog(Frontend *f, descriptionType type, QWidget *parent = 0);
 
     /**
      * Get the content of the project description edit line.
@@ -80,7 +82,13 @@ public:
      */
     void setTakeDescription(const QString &descr);
 
+private slots:
+    void checkProjectText(const QString &text);
+    void checkSceneText(const QString &text);
+    void checkTakeText(const QString &text);
+
 private:
+    Frontend    *frontend;
     QLabel      *projectDescrLabel;
     QLineEdit   *projectDescrEdit;
     QLabel      *sceneDescrLabel;

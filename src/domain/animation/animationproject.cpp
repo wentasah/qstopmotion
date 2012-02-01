@@ -54,6 +54,7 @@ AnimationProject::AnimationProject(Frontend* f)
     unitMode          = 0;
 
     unsavedChanges    = false;
+    activeProject     = false;
 
     isAudioDriverInitialized = false;
 
@@ -117,6 +118,7 @@ ProjectSerializer* AnimationProject::getProjectSerializer()
 // TODO: Implement clearing of undo stack
 void AnimationProject::clearUndoStack()
 {
+    undoStack->clear();
     return;
 }
 
@@ -133,9 +135,9 @@ const QString AnimationProject::getAppTrashDirName() const
 }
 
 
-const QString AnimationProject::getProjectFileName() const
+const QString AnimationProject::getProjectFilePath() const
 {
-    return serializer->getProjectFileName();
+    return serializer->getProjectFilePath();
 }
 
 
@@ -240,7 +242,7 @@ bool AnimationProject::openProject(const QString &filePath)
 {
     qDebug("AnimationProject::openProject --> Start");
 
-    serializer->setProjectFileName(filePath);
+    serializer->setProjectFilePath(filePath);
     serializer->read();
 
     if (!readSettingsFromProject(serializer->getSettingsElement())) {
@@ -256,6 +258,8 @@ bool AnimationProject::openProject(const QString &filePath)
         return false;
     }
 
+    activeProject = true;
+
     qDebug("AnimationProject::openProject --> End");
     return true;
 }
@@ -266,7 +270,7 @@ bool AnimationProject::saveProject(const QString &filePath)
     qDebug("AnimationProject::saveProject --> Start");
 
     if (!filePath.isEmpty()) {
-        serializer->setProjectFileName(filePath);
+        serializer->setProjectFilePath(filePath);
     }
 
     frontend->showProgress(tr("Saving scenes to disk ..."), frontend->getProject()->getTotalExposureSize());
@@ -289,14 +293,35 @@ bool AnimationProject::newProject(const QString &projectDescription)
 {
     qDebug("AnimationProject::newProject --> Start");
 
-    clear();
-
-    undoStack->clear();
-
     description.append(projectDescription);
+
+    activeProject = true;
 
     qDebug("AnimationProject::newProject --> End");
     return true;
+}
+
+
+void AnimationProject::clearProject()
+{
+    qDebug("AnimationProject::clearProject --> Start");
+
+    unsigned int sceneSize = scenes.size();
+    for (unsigned int sceneIndex = 0; sceneIndex < sceneSize; ++sceneIndex) {
+        delete scenes[sceneIndex];
+        scenes[sceneIndex] = NULL;
+    }
+
+    scenes.clear();
+    serializer->cleanup();
+    activeSceneIndex = -1;
+    unsavedChanges = false;
+    activeProject = false;
+    Exposure::tempNum = 0;
+    Exposure::trashNum = 0;
+    description.clear();
+
+    qDebug("AnimationProject::clearProject --> End");
 }
 
 
@@ -309,6 +334,12 @@ bool AnimationProject::isUnsavedChanges() const
 void AnimationProject::setUnsavedChanges()
 {
     unsavedChanges = true;
+}
+
+
+bool AnimationProject::isActiveProject() const
+{
+    return activeProject;
 }
 
 
@@ -1136,27 +1167,6 @@ void AnimationProject::moveFrames(unsigned int fromFrame, unsigned int toFrame,
 /**************************************************************************
  * Private functions
  **************************************************************************/
-
-void AnimationProject::clear()
-{
-    qDebug("AnimationProject::clear --> Start");
-
-    unsigned int sceneSize = scenes.size();
-    for (unsigned int sceneIndex = 0; sceneIndex < sceneSize; ++sceneIndex) {
-        delete scenes[sceneIndex];
-        scenes[sceneIndex] = NULL;
-    }
-
-    scenes.clear();
-    serializer->cleanup();
-    activeSceneIndex = -1;
-    unsavedChanges = false;
-    Exposure::tempNum = 0;
-    Exposure::trashNum = 0;
-    description.clear();
-
-    qDebug("AnimationProject::clear --> End");
-}
 
 /*
 void AnimationProject::loadSavedScenes()

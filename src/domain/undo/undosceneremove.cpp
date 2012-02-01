@@ -49,5 +49,5 @@ void UndoSceneRemove::undo()
 void UndoSceneRemove::redo()
 {
     removedScene = facade->redoSceneRemove(sceneIndex);
-    facade->writeHistoryEntry(QString("redoSceneRemove %1").arg(sceneIndex));
+    facade->writeHistoryEntry(QString("redoSceneRemove|%1").arg(sceneIndex));
 }

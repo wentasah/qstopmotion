@@ -578,21 +578,21 @@ void RecordingTab::storeFrame()
 
         switch (captureFunction) {
         case PreferencesTool::captureButtonBevor:
-            frontend->getProject()->insertExposureToUndo(captureFilePath, sceneIndex, takeIndex, exposureIndex);
+            frontend->getProject()->insertExposureToUndo(captureFilePath, sceneIndex, takeIndex, exposureIndex, true);
             break;
         case PreferencesTool::captureButtonAfter:
             exposureIndex++;
             if (exposureIndex == exposureSize) {
                 // actual exposure index is the last in the take
-                frontend->getProject()->addExposureToUndo(captureFilePath, sceneIndex, takeIndex);
+                frontend->getProject()->addExposureToUndo(captureFilePath, sceneIndex, takeIndex, true);
             }
             else {
                 // actual exposure index is not the last in the take
-                frontend->getProject()->insertExposureToUndo(captureFilePath, sceneIndex, takeIndex, exposureIndex);
+                frontend->getProject()->insertExposureToUndo(captureFilePath, sceneIndex, takeIndex, exposureIndex, true);
             }
             break;
         case PreferencesTool::captureButtonAppend:
-            frontend->getProject()->addExposureToUndo(captureFilePath, sceneIndex, takeIndex);
+            frontend->getProject()->addExposureToUndo(captureFilePath, sceneIndex, takeIndex, true);
             break;
         }
     } else {

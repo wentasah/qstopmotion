@@ -76,7 +76,13 @@ public:
      * Set an new state to the tool bar.
      * @arg newState The new tool bar state.
      */
-    void setActualState(toolBarFunction newState);
+    void setActualState(int newState);
+
+    /**
+     * This function is called when the size of the model changes so that menuframe
+     * menu options can be adjusted (activated/deactivated, etc).
+     */
+    void toolBarStateChanged();
 
 protected:
     // void resizeEvent(QResizeEvent *event);
@@ -150,16 +156,10 @@ public slots:
      */
     void toggleLooping();
 
-    /**
-     * This slot is notified when the size of the model changes so that menuframe
-     * menu options can be adjusted (activated/deactivated, etc).
-     */
-    void modelSizeChanged();
-
 private:
     Frontend        *frontend;
     QTimer          *runAnimationTimer;
-    toolBarFunction  actualState;
+    int              actualState;
 
     QLabel          *framesIcon;
     QSlider         *overlaySlider;

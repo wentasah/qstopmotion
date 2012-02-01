@@ -49,5 +49,5 @@ void UndoSceneAdd::undo()
 void UndoSceneAdd::redo()
 {
     facade->redoSceneAdd(sceneDescription);
-    facade->writeHistoryEntry(QString("redoSceneAdd %1 %2").arg(sceneIndex).arg(sceneDescription));
+    facade->writeHistoryEntry(QString("redoSceneAdd|%1|%2").arg(sceneIndex).arg(sceneDescription));
 }

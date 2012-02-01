@@ -797,73 +797,22 @@ bool QtFrontend::isRecoveryMode()
 }
 
 
-bool QtFrontend::recover()
+bool QtFrontend::recoverProject()
 {
-    qDebug("QtFrontend::recover --> Start");
+    qDebug("QtFrontend::recoverProject --> Start");
 
     int ret = askQuestion(tr("Recovery"),
                   tr("Something caused qStopmotion to exit abnormally\n"
                   "last time it was runned. Do you want to recover?"));
     // The user wants to recover
     if (ret != 0) {
-        qDebug("QtFrontend::recover --> End (False)");
+        qDebug("QtFrontend::recoverProject --> End (False)");
         return false;
     }
 
-    bool recovered = false;
-    DomainFacade* project = getProject();
+    bool recovered = getProject()->recoverProject();
 
-    // Open the last modified project
-    PreferencesTool *pref = getPreferences();
-    QString fileName(pref->getProject(0));
-    if (fileName.isEmpty()) {
-        // Create the new project
-        project->newProjectToUndo(tr("Recover project"));
-        mw->setProjectSettingsToDefault();
-
-        // Create and activate the new scene
-        project->addSceneToUndo(tr("Recover scene"));
-        project->selectSceneToUndo(0);
-
-        // Create and activate the new take
-        project->addTakeToUndo(tr("Recover take"), 0);
-        project->selectTakeToUndo(0, 0);
-
-        //fileMenu->setItemEnabled(SAVE, false);
-
-        mw->modelSizeChanged();
-    }
-    else {
-        project->openProjectToUndo(fileName);
-    }
-
-    // Handle new added file from the temp direcory
-    QDir dp(this->getTempDirName());
-    if (dp.isReadable()) {
-        QVector<QString> frames;
-
-        QFileInfoList fileList = dp.entryInfoList();
-
-        for (int i = 0 ; i < fileList.size() ; i++) {
-            QFileInfo fileInfo = fileList.at(i);
-
-            // Is a regular file, not a directory
-            if (fileInfo.isFile()) {
-                // Image file
-                frames.append(fileInfo.absolutePath());
-            }
-        }
-
-        if (frames.size() > 0) {
-            recovered = true;
-            // project->addFrames(frames);
-        }
-    }
-
-    // TODO: Handle deleted files from the trash direcory
-    dp.setPath(this->getTrashDirName());
-
-    qDebug("QtFrontend::recover --> End");
+    qDebug("QtFrontend::recoverProject --> End");
     return recovered;
 }
 
@@ -875,6 +824,16 @@ void QtFrontend::startDialog()
     mw->startDialog();
 
     qDebug("QtFrontend::startDialog --> End");
+}
+
+
+void QtFrontend::setToolBarState(int newState)
+{
+    qDebug("MainWindowGUI::setToolBarState --> Start");
+
+    mw->setToolBarState(newState);
+
+    qDebug("MainWindowGUI::setToolBarState --> End");
 }
 
 

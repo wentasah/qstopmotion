@@ -49,5 +49,5 @@ void UndoSceneMove::undo()
 void UndoSceneMove::redo()
 {
     facade->redoSceneMove(fromSceneIndex, toSceneIndex);
-    facade->writeHistoryEntry(QString("redoSceneMove %1 %2").arg(fromSceneIndex).arg(toSceneIndex));
+    facade->writeHistoryEntry(QString("redoSceneMove|%1|%2").arg(fromSceneIndex).arg(toSceneIndex));
 }

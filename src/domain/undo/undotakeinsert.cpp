@@ -52,5 +52,5 @@ void UndoTakeInsert::undo()
 void UndoTakeInsert::redo()
 {
     facade->redoTakeInsert(takeDescription, sceneIndex, takeIndex);
-    facade->writeHistoryEntry(QString("redoTakeInsert %1 %2 %3").arg(sceneIndex).arg(takeIndex).arg(takeDescription));
+    facade->writeHistoryEntry(QString("redoTakeInsert|%1|%2|%3").arg(sceneIndex).arg(takeIndex).arg(takeDescription));
 }

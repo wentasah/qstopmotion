@@ -55,6 +55,6 @@ void UndoExposureSelect::redo()
 {
     facade->redoExposureSelect(oldSceneIndex, oldTakeIndex, oldExposureIndex,
                                newSceneIndex, newTakeIndex, newExposureIndex);
-    facade->writeHistoryEntry(QString("redoExposureSelect %1 %2 %3 %4 %5 %6").arg(oldSceneIndex).arg(oldTakeIndex).arg(oldExposureIndex)
+    facade->writeHistoryEntry(QString("redoExposureSelect|%1|%2|%3|%4|%5|%6").arg(oldSceneIndex).arg(oldTakeIndex).arg(oldExposureIndex)
                               .arg(newSceneIndex).arg(newTakeIndex).arg(newExposureIndex));
 }

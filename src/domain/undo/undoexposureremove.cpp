@@ -55,5 +55,5 @@ void UndoExposureRemove::undo()
 void UndoExposureRemove::redo()
 {
     exposure = facade->redoExposureRemove(sceneIndex, takeIndex, exposureIndex);
-    facade->writeHistoryEntry(QString("redoExposureRemove %1 %2 %3").arg(sceneIndex).arg(takeIndex).arg(exposureIndex));
+    facade->writeHistoryEntry(QString("redoExposureRemove|%1|%2|%3").arg(sceneIndex).arg(takeIndex).arg(exposureIndex));
 }

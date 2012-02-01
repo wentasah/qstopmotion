@@ -409,10 +409,10 @@ void MainWindowGUI::retranslateStrings()
 
 void MainWindowGUI::showProgress(const QString &operation, unsigned int numOperations)
 {
-    Q_ASSERT(numOperations != 0);
-
-    progressDialog = new QProgressDialog(operation, tr("Cancel"), 0, numOperations, this);
-    progressDialog->show();
+    if (numOperations > 0) {
+        progressDialog = new QProgressDialog(operation, tr("Cancel"), 0, numOperations, this);
+        progressDialog->show();
+    }
 }
 
 
@@ -606,32 +606,18 @@ void MainWindowGUI::openProject(const QString &filePath)
 }
 
 
+void MainWindowGUI::setToolBarState(int newState)
+{
+    qDebug("MainWindowGUI::setToolBarState --> Start");
+
+    toolBar->setActualState(newState);
+
+    qDebug("MainWindowGUI::setToolBarState --> End");
+}
+
 /**************************************************************************
  * Public slots
  **************************************************************************/
-
-void MainWindowGUI::modelSizeChanged()
-{
-    qDebug("MainWindowGUI::modelSizeChanged --> Start");
-
-    toolBar->modelSizeChanged();
-
-    /*
-    if (modelSize == 0) {
-        cutAct->setEnabled(false);
-        copyAct->setEnabled(false);
-        // gotoFrameAct->setEnabled(false);
-    } else {
-        cutAct->setEnabled(true);
-        copyAct->setEnabled(true);
-        // gotoFrameAct->setEnabled(true);
-        saveAsAct->setEnabled(true);
-    }
-    */
-
-    qDebug("MainWindowGUI::modelSizeChanged --> End");
-}
-
 
 /**************************************************************************
  * Private slots
@@ -643,28 +629,16 @@ void MainWindowGUI::newProject()
 
     DomainFacade* project = frontend->getProject();
 
-    bool b = project->isUnsavedChanges();
-    if (b) {
-        int save = frontend->askQuestion(tr("Unsaved changes"),
-                                         tr("There are unsaved changes. Do you want to save?"));
-        if (save == 0) {
-            // user pressed button 0, which is 'yes'
-            saveProject();
-        }
-        else {
-            // User pressed button 1, which is 'no'
-            frontend->removeApplicationFiles();
-        }
-    }
+    checkSaved();
 
-    DescriptionDialog *dialog = new DescriptionDialog(DescriptionDialog::ProjectDescription);
+    DescriptionDialog *dialog = new DescriptionDialog(frontend, DescriptionDialog::ProjectDescription);
     dialog->setProjectDescription(tr("The Project"));
     dialog->setSceneDescription("001");
     dialog->setTakeDescription("01");
     int ret = dialog->exec();
     if (ret == QDialog::Rejected) {
         // The user canceled the input dialog
-        qDebug("ModelHandler::newScene --> End (cancel)");
+        qDebug("MainWindowGUI::newProject --> End (cancel)");
 
         delete(dialog);
 
@@ -675,9 +649,13 @@ void MainWindowGUI::newProject()
     QString sceneDescription = dialog->getSceneDescription();
     QString takeDescription = dialog->getTakeDescription();
 
+    if (frontend->getProject()->isActiveProject()) {
+        // Close the old project
+        frontend->getProject()->closeProjectToUndo();
+    }
+
     // Create the new project
     project->newProjectToUndo(projectDescription);
-    this->setProjectSettingsToDefault();
 
     // Create and activate the new scene
     project->addSceneToUndo(sceneDescription);
@@ -689,7 +667,7 @@ void MainWindowGUI::newProject()
 
     //fileMenu->setItemEnabled(SAVE, false);
 
-    modelSizeChanged();
+    setToolBarState(ToolBar::toolBarCameraOff);
 
     delete(dialog);
 
@@ -707,6 +685,14 @@ void MainWindowGUI::openProject()
                                    lastVisitedDir,
                                    QString(tr("Project (*.%1);;Archive (*.%2)")).arg(PreferencesTool::projectSuffix).arg(PreferencesTool::archiveSuffix));
     if (!openFile.isNull()) {
+        checkSaved();
+
+        if (frontend->getProject()->isActiveProject()) {
+            // Close the old project
+            frontend->getProject()->closeProjectToUndo();
+        }
+
+        // Open the new project
         openProject(openFile);
     }
 
@@ -717,6 +703,15 @@ void MainWindowGUI::openProject()
 void MainWindowGUI::openMostRecent()
 {
     const QString fileName = Util::convertPathFromOsSpecific(mostRecentAct->text());
+
+    checkSaved();
+
+    if (frontend->getProject()->isActiveProject()) {
+        // Close the old project
+        frontend->getProject()->closeProjectToUndo();
+    }
+
+    // Open the new project
     openProject(fileName);
 }
 
@@ -724,7 +719,17 @@ void MainWindowGUI::openMostRecent()
 void MainWindowGUI::openSecondMostRecent()
 {
     const QString fileName = Util::convertPathFromOsSpecific(secondMostRecentAct->text());
+
+    checkSaved();
+
+    if (frontend->getProject()->isActiveProject()) {
+        // Close the old project
+        frontend->getProject()->closeProjectToUndo();
+    }
+
+    // Open the new project
     openProject(fileName);
+
     setMostRecentProject();
 }
 
@@ -732,6 +737,15 @@ void MainWindowGUI::openSecondMostRecent()
 void MainWindowGUI::openThirdMostRecent()
 {
     const QString fileName = Util::convertPathFromOsSpecific(thirdMostRecentAct->text());
+
+    checkSaved();
+
+    if (frontend->getProject()->isActiveProject()) {
+        // Close the old project
+        frontend->getProject()->closeProjectToUndo();
+    }
+
+    // Open the new project
     openProject(fileName);
     setMostRecentProject();
 }
@@ -740,6 +754,15 @@ void MainWindowGUI::openThirdMostRecent()
 void MainWindowGUI::openFourthMostRecent()
 {
     const QString fileName = Util::convertPathFromOsSpecific(fourthMostRecentAct->text());
+
+    checkSaved();
+
+    if (frontend->getProject()->isActiveProject()) {
+        // Close the old project
+        frontend->getProject()->closeProjectToUndo();
+    }
+
+    // Open the new project
     openProject(fileName);
     setMostRecentProject();
 }
@@ -747,7 +770,7 @@ void MainWindowGUI::openFourthMostRecent()
 
 void MainWindowGUI::saveProject()
 {
-    const QString filePath = frontend->getProject()->getProjectFileName();
+    const QString filePath = frontend->getProject()->getProjectFilePath();
 
     if (!filePath.isEmpty()) {
         frontend->getProject()->saveProjectToUndo(filePath);
@@ -771,6 +794,10 @@ void MainWindowGUI::saveProjectAs()
         if (!file.endsWith(PreferencesTool::projectSuffix)) {
             file.append(".");
             file.append(PreferencesTool::projectSuffix);
+        }
+        if (file.indexOf('|') != -1) {
+            frontend->showInformation(tr("Information"), tr("The character '|' is not allowed in the project file name and will be removed."));
+            file.remove('|');
         }
         frontend->getProject()->saveProjectToUndo(file.toLocal8Bit());
         QString path = frontend->getProject()->getProjectPath();
@@ -1740,7 +1767,7 @@ void MainWindowGUI::retranslateHelpText()
 
 void MainWindowGUI::setMostRecentProject()
 {
-    const QString newFirst = frontend->getProject()->getProjectFileName();
+    const QString newFirst = frontend->getProject()->getProjectFilePath();
 
     Q_ASSERT(!newFirst.isEmpty());
 
@@ -1807,18 +1834,4 @@ void MainWindowGUI::checkSaved()
         }
     }
 }
-
-
-void MainWindowGUI::setProjectSettingsToDefault()
-{
-    PreferencesTool *pref = frontend->getPreferences();
-
-    frontend->getProject()->setVideoSource(pref->getBasicPreference("defaultsource", 0));
-    frontend->getProject()->setMixingMode(pref->getBasicPreference("defaultmixingmode", 0));
-    frontend->getProject()->setUnitMode(pref->getBasicPreference("defaultunitmode", 0));
-    frontend->getProject()->setMixCount(pref->getBasicPreference("defaultmixcount", 0));
-    frontend->getProject()->setPlaybackCount(pref->getBasicPreference("defaultplaybackcount", 0));
-    frontend->getProject()->setFramesPerSecond(pref->getBasicPreference("defaultframespersecond", 0));
-}
-
 

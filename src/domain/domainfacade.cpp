@@ -42,7 +42,9 @@
 #include "domain/undo/undotakemove.h"
 #include "domain/undo/undotakeremove.h"
 #include "domain/undo/undotakeselect.h"
+#include "frontends/qtfrontend/toolbar.h"
 
+#include <QtCore/QDir>
 #include <QtCore/QFile>
 #include <QtCore/QtDebug>
 
@@ -58,6 +60,8 @@ DomainFacade::DomainFacade(Frontend *f)
     historyFilePath.append(PreferencesTool::historyFileName);
 
     historyFile = new QFile(historyFilePath);
+
+    writeHistory = true;
 }
 
 
@@ -68,6 +72,8 @@ DomainFacade::~DomainFacade()
         delete animationProject;
         animationProject = NULL;
     }
+
+    writeHistory = false;
 
     if (historyFile != NULL) {
         delete historyFile;
@@ -127,10 +133,15 @@ void DomainFacade::clearUndoStack()
 
 void DomainFacade::writeHistoryEntry(const QString &entry)
 {
+    if (!writeHistory) {
+        // Write history functionality is off
+        return;
+    }
+
     if (!historyFile->open(QIODevice::Append | QIODevice::Text)) {
         // Error
         frontend->showCritical(tr("Critical"),
-                               tr("Can't open history file!"));
+                               tr("Can't open history file to write entry!"));
         return;
     }
 
@@ -140,12 +151,6 @@ void DomainFacade::writeHistoryEntry(const QString &entry)
     // Flush and close the file
     historyFile->close();
 
-    return;
-}
-
-
-void DomainFacade::recover()
-{
     return;
 }
 
@@ -165,9 +170,15 @@ bool DomainFacade::isUnsavedChanges()
 }
 
 
-const QString DomainFacade::getProjectFileName()
+bool DomainFacade::isActiveProject()
 {
-    return animationProject->getProjectFileName();
+    return animationProject->isActiveProject();
+}
+
+
+const QString DomainFacade::getProjectFilePath()
+{
+    return animationProject->getProjectFilePath();
 }
 
 
@@ -256,6 +267,216 @@ void DomainFacade::setFramesPerSecond(int newFps)
 }
 
 
+bool DomainFacade::exportToVideo(VideoEncoder *encoder)
+{
+    return animationProject->exportToVideo(encoder);
+}
+
+
+bool DomainFacade::exportToCinelerra(const QString file)
+{
+    return animationProject->exportToCinelerra(file);
+}
+
+/**************************************************************************
+ * Project functions
+ **************************************************************************/
+
+bool DomainFacade::recoverProject()
+{
+    qDebug("DomainFacade::recoverProject --> Start");
+
+    bool recovered = false;
+
+    // Open the history file
+    if (!historyFile->open(QIODevice::ReadOnly | QIODevice::Text)) {
+        // Error
+        frontend->showCritical(tr("Critical"),
+                               tr("Can't open history file to recover project!"));
+        return recovered;
+    }
+
+    // Switch the write history functionality off
+    writeHistory = false;
+
+    QTextStream in(historyFile);
+    while (!in.atEnd()) {
+        QString line = in.readLine();
+        QStringList partStringList = line.split('|');
+        //
+        // Project entries
+        //
+        if (0 == partStringList.at(0).compare("redoProjectNew")) {
+            // Create the new project
+            newProjectToUndo(partStringList.at(1));
+
+            recovered = true;
+
+            continue;
+        }
+        if (0 == partStringList.at(0).compare("redoProjectOpen")) {
+            // Open project
+            openProjectToUndo(partStringList.at(1));
+
+            recovered = true;
+
+            continue;
+        }
+        if (0 == partStringList.at(0).compare("redoProjectSave")) {
+            // Save project
+            openProjectToUndo(partStringList.at(1));
+
+            recovered = true;
+
+            continue;
+        }
+        if (0 == partStringList.at(0).compare("redoProjectClose")) {
+            // Close project --> Nothing to do
+            Q_ASSERT(1);
+
+            continue;
+        }
+        //
+        // Exposure entries
+        //
+        if (0 == partStringList.at(0).compare("redoExposureAdd")) {
+            // Add a exposure
+            int sceneIndex = partStringList.at(1).toInt();
+            int takeIndex = partStringList.at(2).toInt();
+
+            addExposureToUndo(partStringList.at(4), sceneIndex, takeIndex, false);
+
+            continue;
+        }
+        if (0 == partStringList.at(0).compare("redoExposureInsert")) {
+            // Insert a exposure
+            int sceneIndex = partStringList.at(1).toInt();
+            int takeIndex = partStringList.at(2).toInt();
+            int exposureIndex = partStringList.at(3).toInt();
+
+            insertExposureToUndo(partStringList.at(4), sceneIndex, takeIndex, exposureIndex, false);
+
+            continue;
+        }
+        if (0 == partStringList.at(0).compare("redoExposureMove")) {
+            // Move a exposure --> Not implemented
+            Q_ASSERT(1);
+
+            continue;
+        }
+        if (0 == partStringList.at(0).compare("redoExposureRemove")) {
+            // Remove a exposure
+            int sceneIndex = partStringList.at(1).toInt();
+            int takeIndex = partStringList.at(2).toInt();
+            int exposureIndex = partStringList.at(3).toInt();
+
+            removeExposureToUndo(sceneIndex, takeIndex, exposureIndex);
+
+            continue;
+        }
+        if (0 == partStringList.at(0).compare("redoExposureSelect")) {
+            // Select a exposure
+            int sceneIndex = partStringList.at(1).toInt();
+            int takeIndex = partStringList.at(2).toInt();
+            int exposureIndex = partStringList.at(3).toInt();
+
+            selectExposureToUndo(sceneIndex, takeIndex, exposureIndex);
+
+            continue;
+        }
+        //
+        // Take entries
+        //
+        if (0 == partStringList.at(0).compare("redoTakeAdd")) {
+            // Add a take
+            int sceneIndex = partStringList.at(1).toInt();
+
+            addTakeToUndo(partStringList.at(3), sceneIndex);
+
+            continue;
+        }
+        if (0 == partStringList.at(0).compare("redoTakeInsert")) {
+            // Insert a take
+            int sceneIndex = partStringList.at(1).toInt();
+            int takeIndex = partStringList.at(2).toInt();
+
+            insertTakeToUndo(partStringList.at(3), sceneIndex, takeIndex);
+
+            continue;
+        }
+        if (0 == partStringList.at(0).compare("redoTakeMove")) {
+            // Move a take --> Not implemented
+            Q_ASSERT(1);
+
+            continue;
+        }
+        if (0 == partStringList.at(0).compare("redoTakeRemove")) {
+            // Remove a take
+            int sceneIndex = partStringList.at(1).toInt();
+            int takeIndex = partStringList.at(2).toInt();
+
+            removeTakeToUndo(sceneIndex, takeIndex);
+
+            continue;
+        }
+        if (0 == partStringList.at(0).compare("redoTakeSelect")) {
+            // Select a take
+            int sceneIndex = partStringList.at(1).toInt();
+            int takeIndex = partStringList.at(2).toInt();
+
+            selectTakeToUndo(sceneIndex, takeIndex);
+
+            continue;
+        }
+        //
+        // Scene entries
+        //
+        if (0 == partStringList.at(0).compare("redoSceneAdd")) {
+            // Add a scene
+            addSceneToUndo(partStringList.at(2));
+
+            continue;
+        }
+        if (0 == partStringList.at(0).compare("redoSceneInsert")) {
+            // Insert a scene
+            int sceneIndex = partStringList.at(1).toInt();
+
+            insertSceneToUndo(partStringList.at(2), sceneIndex);
+
+            continue;
+        }
+        if (0 == partStringList.at(0).compare("redoSceneMove")) {
+            // Move a scene --> Not implemented
+            Q_ASSERT(1);
+
+            continue;
+        }
+        if (0 == partStringList.at(0).compare("redoSceneRemove")) {
+            // Remove a scene
+            int sceneIndex = partStringList.at(1).toInt();
+
+            removeSceneToUndo(sceneIndex);
+
+            continue;
+        }
+        if (0 == partStringList.at(0).compare("redoSceneSelect")) {
+            // Select a scene
+            int sceneIndex = partStringList.at(1).toInt();
+
+            selectSceneToUndo(sceneIndex);
+
+            continue;
+        }
+    }
+
+    // Switch the write history functionality on
+    writeHistory = true;
+
+    qDebug("DomainFacade::recoverProject --> End");
+    return recovered;
+}
+
+
 void DomainFacade::newProjectToUndo(const QString &projectDescription)
 {
     UndoProjectNew *u = new UndoProjectNew(this, projectDescription);
@@ -278,10 +499,12 @@ bool DomainFacade::newProjectRedo(const QString &projectDescription)
 
     getView()->notifyClear();
     animationProject->newProject(projectDescription);
+    setProjectSettingsToDefault();
     getView()->notifyNewProject();
     frontend->setProjectID(getProjectID().toAscii());
     frontend->setSceneID("");
     frontend->setTakeID("");
+    frontend->setToolBarState(ToolBar::toolBarCameraOff);
 
     animationProject->setUnsavedChanges();
 
@@ -328,8 +551,9 @@ bool DomainFacade::openProjectRedo(const QString &projectPath)
         frontend->setTakeID(take->getId().toAscii());
 
         Exposure *exposure = getActiveExposure();
-        Q_ASSERT(NULL != exposure);
-        frontend->setExposureID(exposure->getId().toAscii());
+        if (NULL != exposure) {
+            frontend->setExposureID(exposure->getId().toAscii());
+        }
     }
 
     qDebug("DomainFacade::openProjectRedo --> End");
@@ -357,10 +581,15 @@ bool DomainFacade::saveProjectRedo(const QString &projectPath)
 {
     qDebug("DomainFacade::saveProjectRedo --> Start");
 
-    return animationProject->saveProject(projectPath);
+    bool ret;
+
+    ret = animationProject->saveProject(projectPath);
+    if (ret) {
+        clearUndoStack();
+    }
 
     qDebug("DomainFacade::saveProjectRedo --> End");
-    return true;
+    return ret;
 }
 
 
@@ -384,31 +613,15 @@ bool DomainFacade::closeProjectRedo()
 {
     qDebug("DomainFacade::closeProjectRedo --> Start");
 
-    /* TODO: Implementation of closeProjectRedo
     getView()->notifyClear();
-    animationProject->newProject(projectDescription);
-    getView()->notifyNewProject();
-    frontend->setProjectID(getProjectID().toAscii());
-    frontend->setSceneID("");
-    frontend->setTakeID("");
+    animationProject->clearProject();
+    clearUndoStack();
 
-    animationProject->setUnsavedChanges();
-    */
+    // neccessary??
+    frontend->removeApplicationFiles();
 
     qDebug("DomainFacade::closeProjectRedo --> End");
     return true;
-}
-
-
-bool DomainFacade::exportToVideo(VideoEncoder *encoder)
-{
-    return animationProject->exportToVideo(encoder);
-}
-
-
-bool DomainFacade::exportToCinelerra(const QString file)
-{
-    return animationProject->exportToCinelerra(file);
 }
 
 /**************************************************************************
@@ -862,9 +1075,17 @@ int DomainFacade::getTotalExposureSize()
 
 void DomainFacade::addExposureToUndo(const QString &filePath,
                                      int            sceneIndex,
-                                     int            takeIndex)
+                                     int            takeIndex,
+                                     bool           copy)
 {
-    QString newFileName = copyToTemp(filePath);
+    QString newFileName;
+    if (copy) {
+        newFileName = copyToTemp(filePath);
+    }
+    else {
+        newFileName = filePath;
+        Exposure::tempNum++;
+    }
     UndoExposureAdd *u = new UndoExposureAdd(this, newFileName, sceneIndex, takeIndex);
     getUndoStack()->push(u);
 }
@@ -896,9 +1117,18 @@ void DomainFacade::redoExposureAdd(const QString &fileName,
 void DomainFacade::insertExposureToUndo(const QString &filePath,
                                         int            sceneIndex,
                                         int            takeIndex,
-                                        int            exposureIndex)
+                                        int            exposureIndex,
+                                        bool           copy)
 {
-    QString newFileName = copyToTemp(filePath);
+    QString newFileName;
+
+    if (copy) {
+        newFileName = copyToTemp(filePath);
+    }
+    else {
+        newFileName = filePath;
+        Exposure::tempNum++;
+    }
     UndoExposureInsert *u = new UndoExposureInsert(this, newFileName,
                                                    sceneIndex, takeIndex, exposureIndex);
     getUndoStack()->push(u);
@@ -1153,3 +1383,14 @@ const QString DomainFacade::copyToTemp(const QString &fromImagePath)
 }
 
 
+void DomainFacade::setProjectSettingsToDefault()
+{
+    PreferencesTool *pref = frontend->getPreferences();
+
+    setVideoSource(pref->getBasicPreference("defaultsource", 0));
+    setMixingMode(pref->getBasicPreference("defaultmixingmode", 0));
+    setUnitMode(pref->getBasicPreference("defaultunitmode", 0));
+    setMixCount(pref->getBasicPreference("defaultmixcount", 0));
+    setPlaybackCount(pref->getBasicPreference("defaultplaybackcount", 0));
+    setFramesPerSecond(pref->getBasicPreference("defaultframespersecond", 0));
+}

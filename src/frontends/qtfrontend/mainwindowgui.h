@@ -208,11 +208,6 @@ public:
     void startDialog();
 
     /**
-     * Set all settings to the actual default settings.
-     */
-    void setProjectSettingsToDefault();
-
-    /**
      * Turns on the webcamera/video import mode.
      */
     bool startGrabber();
@@ -254,16 +249,16 @@ public:
     void nextAnimationFrame(int exposureIndex);
 
     /**
-     * This slot is notified when the size of the model changes so that menuframe
-     * menu options can be adjusted (activated/deactivated, etc).
-     */
-    void modelSizeChanged();
-
-    /**
      * Opens a saved project.
      * @param projectFile the project to open
      */
     void openProject(const QString &projectFile);
+
+    /**
+     * Set a new state to the tool bar.
+     * @param newState the new tool bar state.
+     */
+    void setToolBarState(int newState);
 
     /**************************************************************************
      * Public slots

@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2010-2011 by                                                *
+ *  Copyright (C) 2010-2012 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -25,10 +25,12 @@
 #include <QtGui/QSizePolicy>
 #include <QtGui/QVBoxLayout>
 
-DescriptionDialog::DescriptionDialog(descriptionType type, QWidget *parent)
+DescriptionDialog::DescriptionDialog(Frontend *f, descriptionType type, QWidget *parent)
     : QDialog(parent)
 
 {
+    frontend = f;
+
     projectDescrLabel = new QLabel(tr("&Project Description:"));
     projectDescrEdit = new QLineEdit;
     projectDescrLabel->setBuddy(projectDescrEdit);
@@ -42,9 +44,9 @@ DescriptionDialog::DescriptionDialog(descriptionType type, QWidget *parent)
     okButton = new QPushButton(tr("&OK"));
     cancelButton = new QPushButton(tr("&Cancel"));
 
-    connect(projectDescrEdit, SIGNAL(textChanged(const QString &)), this, SLOT(enableOkButton(const QString &)));
-    connect(sceneDescrEdit, SIGNAL(textChanged(const QString &)), this, SLOT(enableOkButton(const QString &)));
-    connect(takeDescrEdit, SIGNAL(textChanged(const QString &)), this, SLOT(enableOkButton(const QString &)));
+    connect(projectDescrEdit, SIGNAL(textChanged(const QString &)), this, SLOT(checkProjectText(const QString &)));
+    connect(sceneDescrEdit, SIGNAL(textChanged(const QString &)), this, SLOT(checkSceneText(const QString &)));
+    connect(takeDescrEdit, SIGNAL(textChanged(const QString &)), this, SLOT(checkTakeText(const QString &)));
     connect(okButton, SIGNAL(clicked()), this, SLOT(accept()));
     connect(cancelButton, SIGNAL(clicked()), this, SLOT(reject()));
 
@@ -96,7 +98,9 @@ DescriptionDialog::DescriptionDialog(descriptionType type, QWidget *parent)
 
 const QString DescriptionDialog::getProjectDescription()
 {
-    return this->projectDescrEdit->text();
+    QString text = projectDescrEdit->text();
+    text.replace('|', '_');
+    return text;
 }
 
 
@@ -108,7 +112,9 @@ void DescriptionDialog::setProjectDescription(const QString &descr)
 
 const QString DescriptionDialog::getSceneDescription()
 {
-    return this->sceneDescrEdit->text();
+    QString text = sceneDescrEdit->text();
+    text.replace('|', '_');
+    return text;
 }
 
 
@@ -120,11 +126,46 @@ void DescriptionDialog::setSceneDescription(const QString &descr)
 
 const QString DescriptionDialog::getTakeDescription()
 {
-    return this->takeDescrEdit->text();
+    QString text = takeDescrEdit->text();
+    text.replace('|', '_');
+    return text;
 }
 
 
 void DescriptionDialog::setTakeDescription(const QString &descr)
 {
     this->takeDescrEdit->setText(descr);
+}
+
+
+void DescriptionDialog::checkProjectText(const QString &text)
+{
+    int position = text.indexOf('|');
+    if (position != -1) {
+        frontend->showInformation(tr("Information"), tr("The character '|' is not allowed in the project description."));
+        QString newText(text);
+        projectDescrEdit->setText(newText.remove('|'));
+    }
+}
+
+
+void DescriptionDialog::checkSceneText(const QString &text)
+{
+    int position = text.indexOf('|');
+    if (position != -1) {
+        frontend->showInformation(tr("Information"), tr("The character '|' is not allowed in the scene description."));
+        QString newText(text);
+        sceneDescrEdit->setText(newText.remove('|'));
+    }
+}
+
+
+void DescriptionDialog::checkTakeText(const QString &text)
+{
+    int position = text.indexOf('|');
+    if (position != -1) {
+        frontend->showInformation(tr("Information"), tr("The character '|' is not allowed in the take description."));
+        QString newText(text);
+        takeDescrEdit->setText(newText.remove('|'));
+    }
 }

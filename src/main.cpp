@@ -41,7 +41,7 @@ int main(int argc, char **argv)
     qtFrontend.processEvents();
 
     if (qtFrontend.isRecoveryMode()) {
-        hasRecovered = qtFrontend.recover();
+        hasRecovered = qtFrontend.recoverProject();
         if (hasRecovered == false) {
             qtFrontend.removeApplicationFiles();
         }

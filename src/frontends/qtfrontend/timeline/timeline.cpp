@@ -1267,7 +1267,10 @@ void TimeLine::clearTake()
         delete thumbViews[i];
     }
     thumbViews.clear();
+
     activeExposureIndex = -1;
+    activeTakeIndex = -1;
+    activeSceneIndex = -1;
 
     qDebug("TimeLine::clearTake --> End");
 }

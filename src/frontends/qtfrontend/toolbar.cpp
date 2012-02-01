@@ -453,9 +453,9 @@ void ToolBar::playNextFrame()
 }
 
 
-void ToolBar::modelSizeChanged()
+void ToolBar::toolBarStateChanged()
 {
-    qDebug("ToolBar::modelSizeChanged --> Start");
+    qDebug("ToolBar::toolBarStateChanged --> Start");
 
     switch (actualState) {
     case toolBarNothing:
@@ -500,7 +500,7 @@ void ToolBar::modelSizeChanged()
         break;
     }
 
-    qDebug("ToolBar::modelSizeChanged --> End");
+    qDebug("ToolBar::toolBarStateChanged --> End");
 }
 
 /*
@@ -577,8 +577,8 @@ void ToolBar::retranslateStrings()
 }
 
 
-void ToolBar::setActualState(toolBarFunction newState)
+void ToolBar::setActualState(int newState)
 {
     actualState = newState;
-    modelSizeChanged();
+    toolBarStateChanged();
 }

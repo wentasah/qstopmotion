@@ -115,11 +115,6 @@ public:
      */
     void writeHistoryEntry(const QString &entry);
 
-    /**
-     * Read and process the history file
-     */
-    void recover();
-
     /**************************************************************************
      * Animation functions
      **************************************************************************/
@@ -137,10 +132,16 @@ public:
     bool isUnsavedChanges();
 
     /**
-     * Retrieves the project file name.
-     * @return the project file name if it's setted, NULL otherwise.
+     * Checks if there are a active project.
+     * @return true if there are a active project, false otherwise.
      */
-    const QString getProjectFileName();
+    bool isActiveProject();
+
+    /**
+     * Retrieves the project file path.
+     * @return the project file path if it's setted, NULL otherwise.
+     */
+    const QString getProjectFilePath();
 
     /**
      * Retrieves the project path.
@@ -227,6 +228,30 @@ public:
     void setFramesPerSecond(int newFPS);
 
     /**
+     * Exports the current project to a video file as specified by the video encoder.
+     * @param encoder the video encoder to use for export to video
+     * @return true on success, false otherwise
+     */
+    bool exportToVideo(VideoEncoder *encoder);
+
+    /**
+     * Exports the current project to a cinelerra-cv project.
+     * @param file the cinelerra-cv project file
+     * @return true on success, false otherwise
+     */
+    bool exportToCinelerra(const QString file);
+
+    /**************************************************************************
+     * Project functions
+     **************************************************************************/
+
+    /**
+     * Recover the last changes after a crash.
+     * @return true if an crashed project is recovered
+     */
+    bool recoverProject();
+
+    /**
      * Add a new newProject object to the undo history.
      * @param projectDescription the description of the scene or a empty string.
      */
@@ -294,20 +319,6 @@ public:
      * Close a project.
      */
     bool closeProjectRedo();
-
-    /**
-     * Exports the current project to a video file as specified by the video encoder.
-     * @param encoder the video encoder to use for export to video
-     * @return true on success, false otherwise
-     */
-    bool exportToVideo(VideoEncoder *encoder);
-
-    /**
-     * Exports the current project to a cinelerra-cv project.
-     * @param file the cinelerra-cv project file
-     * @return true on success, false otherwise
-     */
-    bool exportToCinelerra(const QString file);
 
     /**************************************************************************
      * Scene functions
@@ -703,10 +714,12 @@ public:
      * @param filePath the file path ot the image file of the exposure.
      * @param sceneIndex the index of the scene of the take the exposure to add
      * @param takeIndex the index of the take the exposure to add
+     * @param copy the file has to copy to the temp dirctory
      */
     void addExposureToUndo(const QString &filePath,
                            int            sceneIndex,
-                           int            takeIndex);
+                           int            takeIndex,
+                           bool           copy);
 
     /**
      * Undo creates a new exposure and add it to the animation project.
@@ -734,11 +747,13 @@ public:
      * @param sceneIndex the index of the scene of the take the exposure to add
      * @param takeIndex the index of the take the exposure to add
      * @param exposureIndex The index of the exposure where the new exposures are inserted bevor.
+     * @param copy the file has to copy to the temp dirctory
      */
     void insertExposureToUndo(const QString &filePath,
                               int            sceneIndex,
                               int            takeIndex,
-                              int            exposureIndex);
+                              int            exposureIndex,
+                              bool           copy);
 
     /**
      * Undo creates a new exposure and insert it in the animation project.
@@ -932,6 +947,11 @@ private:
      */
     QFile *historyFile;
 
+    /**
+     * Flag to enable/disable history write function.
+     */
+    bool writeHistory;
+
     /**************************************************************************
      * Private functions
      **************************************************************************/
@@ -944,6 +964,11 @@ private:
      * @return the file name of the new file.
      */
     const QString copyToTemp(const QString &fromImagePath);
+
+    /**
+     * Set all settings to the actual default settings.
+     */
+    void setProjectSettingsToDefault();
 
 };
 

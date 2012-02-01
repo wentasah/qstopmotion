@@ -344,6 +344,12 @@ public:
     virtual void removeCaptureFiles() = 0;
 
     /**
+     * Set a new state to the tool bar.
+     * @param newState the new tool bar state.
+     */
+    virtual void setToolBarState(int newState) = 0;
+
+    /**
      * Test function for debugging purposes
      */
     virtual void testMainWidget() = 0;

@@ -361,6 +361,12 @@ public:
     void setupDirectoryMonitoring();
 
     /**
+     * Set a new state to the tool bar.
+     * @param newState the new tool bar state.
+     */
+    void setToolBarState(int newState);
+
+    /**
      * Test function for debugging purposes
      */
     void test(QWidget *parentWidget, int level);
@@ -406,7 +412,7 @@ public:
      * Recover the last changes after a crash.
      * @return true if an crashed project is recovered
      */
-    bool recover();
+    bool recoverProject();
 
     /**
      * Open the start dialog

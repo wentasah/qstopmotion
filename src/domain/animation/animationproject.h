@@ -106,7 +106,7 @@ public:
      * Retrieves the project file name
      * @return the project file name if it's setted, NULL otherwise.
      */
-    const QString getProjectFileName() const;
+    const QString getProjectFilePath() const;
 
     /**
      * Get the project path of the project
@@ -226,6 +226,11 @@ public:
     bool newProject(const QString &projectDescription);
 
     /**
+     * Clears the project.
+     */
+    void clearProject();
+
+    /**
      * Checks if there are unsaved changes in the model.
      * @return true if there are unsaved changes, false otherwise.
      */
@@ -235,6 +240,12 @@ public:
      * Set the flag that there are unsaved changes in the model.
      */
     void setUnsavedChanges();
+
+    /**
+     * Checks if there are a active project.
+     * @return true if there are a active project, false otherwise.
+     */
+    bool isActiveProject() const;
 
     /**
      * Initializes the audio device so it is ready to play sounds.
@@ -672,6 +683,11 @@ private:
     int numSounds;
 
     /**
+     * Variable for checking if there is a active project.
+     */
+    bool activeProject;
+
+    /**
      * Variable for checking if there are unsaved changes in the model
      */
     bool unsavedChanges;
@@ -695,11 +711,6 @@ private:
     /**************************************************************************
      * Private functions
      **************************************************************************/
-
-    /**
-     * Clears the model.
-     */
-    void clear();
 
     /**
      * Loads frames into the model. This acts excatly like the addframes

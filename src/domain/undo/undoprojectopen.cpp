@@ -48,5 +48,5 @@ void UndoProjectOpen::undo()
 void UndoProjectOpen::redo()
 {
     facade->openProjectRedo(projectPath);
-    facade->writeHistoryEntry(QString("redoProjectOpen %1").arg(projectPath));
+    facade->writeHistoryEntry(QString("redoProjectOpen|%1").arg(projectPath));
 }

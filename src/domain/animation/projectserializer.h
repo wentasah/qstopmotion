@@ -71,17 +71,16 @@ public:
     bool save(AnimationProject *animation);
 
     /**
-     * Set a new the project file name.
-     * @param fileName the new project file name.
-     * @return true if this is a new file name.
+     * Set a new the project file path.
+     * @param fileName the new project file path.
      */
-    bool setProjectFileName(const QString &fileName);
+    void setProjectFilePath(const QString &filePath);
 
     /**
-     * Retrieves the project file name.
+     * Retrieves the project file path.
      * @return the project path if it exist, NULL otherwise
      */
-    const QString getProjectFileName() const;
+    const QString getProjectFilePath() const;
 
     /**
      * Retrieves the absolute project path.
@@ -157,24 +156,14 @@ private:
     QString soundPath;
 
     /**
-     * Absolute file name of the project file
+     * Absolute file path of the project file
      */
-    QString projectFileName;
+    QString projectFilePath;
 
     /**
-     * Absolute file name of the archiv file
+     * Absolute file path of the archiv file
      */
-    QString archiveFileName;
-
-    QString prevProjectPath;                 // absolute
-    QString prevImgPath;                 // absolute
-    QString prevArchiveFileName;             // absolute
-
-    // void saveDOMToFile(const QDomDocument &doc);
-    void cleanupPrev();
-    void storeOldPaths();
-
-    void setProjectPath(const QString &unpacked, bool isSave);
+    QString archiveFilePath;
 
 };
 

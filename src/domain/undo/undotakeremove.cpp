@@ -51,5 +51,5 @@ void UndoTakeRemove::undo()
 void UndoTakeRemove::redo()
 {
     removedTake = facade->redoTakeRemove(sceneIndex, takeIndex);
-    facade->writeHistoryEntry(QString("redoTakeRemove %1 %2").arg(sceneIndex).arg(takeIndex));
+    facade->writeHistoryEntry(QString("redoTakeRemove|%1|%2").arg(sceneIndex).arg(takeIndex));
 }

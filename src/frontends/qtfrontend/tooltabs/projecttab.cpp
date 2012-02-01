@@ -405,7 +405,7 @@ void ProjectTab::updateClear()
 {
     qDebug("ProjectTab::updateClear --> Start");
 
-//    clear();
+    projectTree->clear();
 
     qDebug("ProjectTab::updateClear --> End");
 }
@@ -950,7 +950,7 @@ void ProjectTab::insertSceneSlot()
 {
     qDebug("ProjectTab::insertSceneSlot --> Start");
 
-    DescriptionDialog *dialog = new DescriptionDialog(DescriptionDialog::SceneDescription);
+    DescriptionDialog *dialog = new DescriptionDialog(frontend, DescriptionDialog::SceneDescription);
     dialog->setProjectDescription(frontend->getProject()->getProjectID());
     dialog->setSceneDescription("Scene ???");
     dialog->setTakeDescription("Take ???");
@@ -983,7 +983,7 @@ void ProjectTab::addSceneSlot()
 {
     qDebug("ProjectTab::addSceneSlot --> Start");
 
-    DescriptionDialog *dialog = new DescriptionDialog(DescriptionDialog::SceneDescription);
+    DescriptionDialog *dialog = new DescriptionDialog(frontend, DescriptionDialog::SceneDescription);
     dialog->setProjectDescription(frontend->getProject()->getProjectID());
     dialog->setSceneDescription("Scene ???");
     dialog->setTakeDescription("Take ???");
@@ -1030,7 +1030,7 @@ void ProjectTab::insertTakeSlot()
 
     Scene *activeScene = frontend->getProject()->getActiveScene();
 
-    DescriptionDialog *dialog = new DescriptionDialog(DescriptionDialog::TakeDescription);
+    DescriptionDialog *dialog = new DescriptionDialog(frontend, DescriptionDialog::TakeDescription);
     dialog->setProjectDescription(frontend->getProject()->getProjectID());
     dialog->setSceneDescription(activeScene->getId());
     dialog->setTakeDescription("Take ???");
@@ -1064,7 +1064,7 @@ void ProjectTab::addTakeSlot()
     Scene *activeScene = frontend->getProject()->getActiveScene();
     int activeSceneIndex = activeScene->getIndex();
 
-    DescriptionDialog *dialog = new DescriptionDialog(DescriptionDialog::TakeDescription);
+    DescriptionDialog *dialog = new DescriptionDialog(frontend, DescriptionDialog::TakeDescription);
     dialog->setProjectDescription(frontend->getProject()->getProjectID());
     dialog->setSceneDescription(activeScene->getId());
     dialog->setTakeDescription("Take ???");
@@ -1118,7 +1118,7 @@ void ProjectTab::insertFramesSlot()
     int activeExposureIndex = frontend->getProject()->getActiveExposureIndex();
     for (selectedFilesIndex = 0 ; selectedFilesIndex < selectedFilesCount ; selectedFilesIndex++) {
         // insert the selected files
-        frontend->getProject()->insertExposureToUndo(selectedFiles[selectedFilesIndex], activeSceneIndex, activeTakeIndex, activeExposureIndex);
+        frontend->getProject()->insertExposureToUndo(selectedFiles[selectedFilesIndex], activeSceneIndex, activeTakeIndex, activeExposureIndex, true);
         activeExposureIndex++;
     }
 
@@ -1142,7 +1142,7 @@ void ProjectTab::addFramesSlot()
     int activeTakeIndex = frontend->getProject()->getActiveTakeIndex();
     for (selectedFilesIndex = 0 ; selectedFilesIndex < selectedFilesCount ; selectedFilesIndex++) {
         // Add the selected files
-        frontend->getProject()->addExposureToUndo(selectedFiles[selectedFilesIndex], activeSceneIndex, activeTakeIndex);
+        frontend->getProject()->addExposureToUndo(selectedFiles[selectedFilesIndex], activeSceneIndex, activeTakeIndex, true);
     }
 
     qDebug("ProjectTab::addFramesSlot --> End");

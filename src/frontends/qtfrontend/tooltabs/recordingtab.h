@@ -57,7 +57,13 @@ public:
      * Is the camera switched on.
      * @return true if the camera is on.
      */
-    bool getCameraOn();
+    bool isCameraOn();
+
+    /**
+     * Check that the camera is switched off.
+     * If not the camera is switched off.
+     */
+    void checkCameraOff();
 
     /**
      * Applies the settings in the import tab.

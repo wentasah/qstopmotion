@@ -65,44 +65,60 @@ public:
     /**
      * Saves the files in differents directories.
      * @param animation the project to be saved
-     * @param frontend the frontend to display progress to
+     * @param saveAs the project sa to saved to a new project
      * @return true if saving was successfull, false otherwise
      */
-    bool save(AnimationProject *animation);
+    bool save(AnimationProject *animation, bool saveAs);
 
     /**
      * Set a new the project file path.
      * @param fileName the new project file path.
      */
-    void setProjectFilePath(const QString &filePath);
+    void setNewProjectFilePath(const QString &filePath);
 
     /**
-     * Retrieves the project file path.
+     * Retrieves the new project file path.
      * @return the project path if it exist, NULL otherwise
      */
-    const QString getProjectFilePath() const;
+    const QString getNewProjectFilePath() const;
 
     /**
-     * Retrieves the absolute project path.
+     * Retrieves the absolute new project path.
      * This is the path where the files within the tarball are located or
      * the path to the project directory
      * @return the project path if it exist, NULL otherwise
      */
-    const QString getProjectPath() const;
+    const QString getNewProjectPath() const;
 
     /**
-     * Retrieves the absolute image path, a subdirectory of the project path.
+     * Retrieves the absolute new image path, a subdirectory of the project path.
      * This is the path where the images can be found.
      * @return the image path if it exist, NULL otherwise
      */
-    const QString getImagePath() const;
+    const QString getNewImagePath() const;
 
     /**
-     * Retrieves the absolute sound path, a subdirectory of the project path.
+     * Retrieves the absolute old image path, a subdirectory of the project path.
+     * This is the path where the images can be found.
+     * If the old path is empty, the new one is returned.
+     * @return the image path if it exist, NULL otherwise
+     */
+    const QString getOldImagePath() const;
+
+    /**
+     * Retrieves the absolute new sound path, a subdirectory of the project path.
      * This is the path where the sound can be found.
      * @return the sound path if it exist, NULL otherwise
      */
-    const QString getSoundPath() const;
+    const QString getNewSoundPath() const;
+
+    /**
+     * Retrieves the absolute old sound path, a subdirectory of the project path.
+     * This is the path where the sound can be found.
+     * If the old path is empty, the new one is returned.
+     * @return the sound path if it exist, NULL otherwise
+     */
+    const QString getOldSoundPath() const;
 
     /**
      * Get the animation element of the projet tree
@@ -127,6 +143,11 @@ public:
      */
     void cleanup();
 
+    /**
+     * Deletes unessecary files and pointers.
+     */
+    void cleanupOldFiles();
+
 private:
 
     /**
@@ -143,27 +164,32 @@ private:
     /**
      * Absolute path to the project
      */
-    QString projectPath;
+    QString newProjectPath;
+    QString oldProjectPath;
 
     /**
      * Absolute path to the image files
      */
-    QString imagePath;
+    QString newImagePath;
+    QString oldImagePath;
 
     /**
      * Absolute path to the sound files
      */
-    QString soundPath;
+    QString newSoundPath;
+    QString oldSoundPath;
 
     /**
      * Absolute file path of the project file
      */
-    QString projectFilePath;
+    QString newProjectFilePath;
+    QString oldProjectFilePath;
 
     /**
      * Absolute file path of the archiv file
      */
-    QString archiveFilePath;
+    QString newArchiveFilePath;
+    QString oldArchiveFilePath;
 
 };
 

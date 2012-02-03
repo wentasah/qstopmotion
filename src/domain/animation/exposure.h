@@ -163,6 +163,12 @@ public:
     void moveToTemp();
 
     /**
+     * Copy the files belonging to this Exposure from the old directory
+     * to the temporary directory.
+     */
+    void copyToTemp();
+
+    /**
      * Moves the files belonging to this Exposure from the current directory
      * to the trash directory.
      */

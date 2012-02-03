@@ -142,7 +142,7 @@ unsigned int Exposure::getSceneIndex() const
 
 const QString Exposure::getImagePath() const
 {
-    // qDebug("Exposure::getImagePath --> Start");
+    // qDebug("Exposure::getNewImagePath --> Start");
 
     Q_ASSERT(!theFrame.isEmpty());
 
@@ -150,7 +150,7 @@ const QString Exposure::getImagePath() const
 
     switch (exposureLocation) {
     case AnimationProject::InProjectPath:
-        absImagePath.append(parent->getImagePath());
+        absImagePath.append(parent->getNewImagePath());
         break;
     case AnimationProject::InTempPath:
         absImagePath.append(parent->getAppTempDirName());
@@ -164,7 +164,7 @@ const QString Exposure::getImagePath() const
     absImagePath.append(QLatin1String("/"));
     absImagePath.append(theFrame);
 
-    // qDebug("Exposure::getImagePath --> End");
+    // qDebug("Exposure::getNewImagePath --> End");
     return absImagePath;
 }
 
@@ -213,7 +213,7 @@ void Exposure::moveToTemp()
 
     switch (exposureLocation) {
     case AnimationProject::InProjectPath:
-        fromImagePath.append(parent->getImagePath());
+        fromImagePath.append(parent->getNewImagePath());
         break;
     case AnimationProject::InTrashPath:
         fromImagePath.append(parent->getAppTrashDirName());
@@ -250,6 +250,50 @@ void Exposure::moveToTemp()
 }
 
 
+void Exposure::copyToTemp()
+{
+    QString fromImagePath;
+    QString toImagePath;
+
+    switch (exposureLocation) {
+    case AnimationProject::InProjectPath:
+        fromImagePath.append(parent->getOldImagePath());
+        break;
+    case AnimationProject::InTrashPath:
+        fromImagePath.append(parent->getAppTrashDirName());
+        break;
+    default:
+        return;
+    }
+
+    fromImagePath.append(QLatin1String("/"));
+    fromImagePath.append(theFrame);
+
+    // creates a new image name
+    QString toImageName(QString("tmp_%1%2").arg(Exposure::tempNum)
+                        .arg(fromImagePath.mid(fromImagePath.lastIndexOf('.'))));
+    Exposure::tempNum++;
+
+    toImagePath.append(parent->getAppTempDirName());
+    toImagePath.append(QLatin1String("/"));
+    toImagePath.append(toImageName);
+
+    if (!QFile::copy(fromImagePath, toImagePath)) {
+        // Not successful
+        parent->getFrontend()->showCritical(tr("Critical"),
+                                            tr("Can't copy image to temporary directory!"));
+    }
+
+    // if (exposureLocation == InTrashPath) {
+    //     Exposure::trashNum--;
+    // }
+
+    theFrame.clear();
+    theFrame.append(toImageName);
+    exposureLocation = AnimationProject::InTempPath;
+}
+
+
 void Exposure::moveToTrash()
 {
     QString fromImagePath;
@@ -257,7 +301,7 @@ void Exposure::moveToTrash()
 
     switch (exposureLocation) {
     case AnimationProject::InProjectPath:
-        fromImagePath.append(parent->getImagePath());
+        fromImagePath.append(parent->getOldImagePath());
         break;
     case AnimationProject::InTempPath:
         fromImagePath.append(parent->getAppTempDirName());
@@ -313,7 +357,7 @@ void Exposure::moveToProject(const QString newName)
     fromImagePath.append(QLatin1String("/"));
     fromImagePath.append(theFrame);
 
-    toImagePath.append(parent->getImagePath());
+    toImagePath.append(parent->getNewImagePath());
     toImagePath.append(QLatin1String("/"));
     toImagePath.append(newName);
 

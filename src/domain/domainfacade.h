@@ -138,16 +138,16 @@ public:
     bool isActiveProject();
 
     /**
-     * Retrieves the project file path.
+     * Retrieves the new project file path.
      * @return the project file path if it's setted, NULL otherwise.
      */
-    const QString getProjectFilePath();
+    const QString getNewProjectFilePath();
 
     /**
-     * Retrieves the project path.
+     * Retrieves the new project path.
      * @return the project path if it's setted, NULL otherwise.
      */
-    const QString getProjectPath();
+    const QString getNewProjectPath();
 
     /**
      * Retrieves the project ID.
@@ -290,8 +290,9 @@ public:
     /**
      * Add a new saveProject object to the undo history.
      * @param projectPath the path to the project file.
+     * @param saveAs this is a save as operation.
      */
-    void saveProjectToUndo(const QString &projectPath);
+    void saveProjectToUndo(const QString &projectPath, bool saveAs);
 
     /**
      * Undo save project.
@@ -302,8 +303,9 @@ public:
     /**
      * Save a project.
      * @param projectPath the path to the project file.
+     * @param saveAs this is a save as operation.
      */
-    bool saveProjectRedo(const QString &projectPath);
+    bool saveProjectRedo(const QString &projectPath, bool saveAs);
 
     /**
      * Add a new closeProject object to the undo history.

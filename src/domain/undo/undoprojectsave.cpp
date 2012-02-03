@@ -24,10 +24,12 @@
 
 
 UndoProjectSave::UndoProjectSave(DomainFacade *df,
-                                 const QString &path)
+                                 const QString &path,
+                                 bool sa)
     :UndoBase(df)
 {
     projectPath.append(path);
+    saveAs = sa;
     setText(QString(QObject::tr("Save project '%1'")).arg(projectPath));
 }
 
@@ -41,12 +43,12 @@ UndoProjectSave::~UndoProjectSave()
 void UndoProjectSave::undo()
 {
     // TODO: Change handling for undo
-    // facade->saveProjectUndo(projectPath);
+    // facade->saveProjectUndo(projectPath, saveAs);
 }
 
 
 void UndoProjectSave::redo()
 {
-    facade->saveProjectRedo(projectPath);
+    facade->saveProjectRedo(projectPath, saveAs);
     facade->writeHistoryEntry(QString("redoProjectSave|%1").arg(projectPath));
 }

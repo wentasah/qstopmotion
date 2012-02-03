@@ -76,7 +76,6 @@ AnimationProject::~AnimationProject()
     scenes.clear();
 
     if (serializer != NULL) {
-        serializer->cleanup();
         delete serializer;
     }
 
@@ -135,15 +134,15 @@ const QString AnimationProject::getAppTrashDirName() const
 }
 
 
-const QString AnimationProject::getProjectFilePath() const
+const QString AnimationProject::getNewProjectFilePath() const
 {
-    return serializer->getProjectFilePath();
+    return serializer->getNewProjectFilePath();
 }
 
 
-const QString AnimationProject::getProjectPath() const
+const QString AnimationProject::getNewProjectPath() const
 {
-    return serializer->getProjectPath();
+    return serializer->getNewProjectPath();
 }
 
 
@@ -153,15 +152,27 @@ const QString AnimationProject::getProjectID() const
 }
 
 
-const QString AnimationProject::getImagePath() const
+const QString AnimationProject::getNewImagePath() const
 {
-    return serializer->getImagePath();
+    return serializer->getNewImagePath();
 }
 
 
-const QString AnimationProject::getSoundPath() const
+const QString AnimationProject::getOldImagePath() const
 {
-    return serializer->getSoundPath();
+    return serializer->getOldImagePath();
+}
+
+
+const QString AnimationProject::getNewSoundPath() const
+{
+    return serializer->getNewSoundPath();
+}
+
+
+const QString AnimationProject::getOldSoundPath() const
+{
+    return serializer->getOldSoundPath();
 }
 
 
@@ -242,7 +253,7 @@ bool AnimationProject::openProject(const QString &filePath)
 {
     qDebug("AnimationProject::openProject --> Start");
 
-    serializer->setProjectFilePath(filePath);
+    serializer->setNewProjectFilePath(filePath);
     serializer->read();
 
     if (!readSettingsFromProject(serializer->getSettingsElement())) {
@@ -265,17 +276,17 @@ bool AnimationProject::openProject(const QString &filePath)
 }
 
 
-bool AnimationProject::saveProject(const QString &filePath)
+bool AnimationProject::saveProject(const QString &filePath, bool saveAs)
 {
     qDebug("AnimationProject::saveProject --> Start");
 
     if (!filePath.isEmpty()) {
-        serializer->setProjectFilePath(filePath);
+        serializer->setNewProjectFilePath(filePath);
     }
 
     frontend->showProgress(tr("Saving scenes to disk ..."), frontend->getProject()->getTotalExposureSize());
 
-    if (!serializer->save(this)) {
+    if (!serializer->save(this, saveAs)) {
         qWarning("AnimationProject::saveProject --> save animation data failed");
         frontend->hideProgress();
         return false;
@@ -788,11 +799,69 @@ bool AnimationProject::saveScenesToProject(QDomDocument &doc, QDomElement &anima
 
     // Delete all image file that stay in the image directory
     // (All files that deleted from the project.)
-    QString     imagePath = this->getImagePath();
+    QString     imagePath = this->getOldImagePath();
     QDir        imageDir(imagePath);
     QStringList fileNameList = imageDir.entryList(QDir::Files);
     for (int fileIndex = 0 ; fileIndex < fileNameList.count() ; fileIndex++) {
         imageDir.remove(fileNameList[fileIndex]);
+    }
+
+    nextTotalExposureIndex = 0;
+    for (sceneIndex = 0; sceneIndex < sceneSize; ++sceneIndex) {
+        // Scenes
+        sceneElement = doc.createElement("scene");
+        animationNode.appendChild(sceneElement);
+
+        if (!scenes[sceneIndex]->saveDataToProject(doc, sceneElement, sceneIndex)) {
+            qDebug("AnimationProject::saveScenesToProject --> End (false)");
+            return false;
+        }
+    }
+
+    if (activeSceneIndex >= 0) {
+        // Save activeSceneIndex parameter after the scenes, because the names of
+        // the scenes are modifyed during the writing of the project file.
+        QDomElement asiElement = doc.createElement("activescene");
+        QDomText asiText = doc.createTextNode(scenes[activeSceneIndex]->getId());
+        asiElement.appendChild(asiText);
+        animationNode.appendChild(asiElement);
+
+        // Save nextSceneIndex parameter.
+        QDomElement leiElement = doc.createElement("nextscene");
+        QDomText leiText = doc.createTextNode(QString("%1").arg(sceneSize));
+        leiElement.appendChild(leiText);
+        animationNode.appendChild(leiElement);
+    }
+
+    qDebug("AnimationProject::saveScenesToProject --> End");
+    return true;
+}
+
+
+bool AnimationProject::saveAsScenesToProject(QDomDocument &doc, QDomElement &animationNode)
+{
+    qDebug("AnimationProject::saveScenesToProject --> Start");
+
+    unsigned int  sceneSize = scenes.size();
+    unsigned int  sceneIndex;
+    QDomElement   sceneElement;
+
+    // Save project parameter
+    animationNode.setAttribute("descr", description);
+
+    // Removes frames which already are saved. Had to do this to prevent
+    // frames to overwrite each other.
+    for (sceneIndex = 0; sceneIndex < sceneSize; ++sceneIndex) {
+        Scene *scene = scenes[sceneIndex];
+        unsigned int takeSize = scene->getTakeSize();
+        for (unsigned int takeIndex = 0; takeIndex < takeSize; ++takeIndex) {
+            Take *take = scene->getTake(takeIndex);
+            unsigned int exposureSize = take->getExposureSize();
+            for (unsigned int exposureIndex = 0; exposureIndex < exposureSize; ++exposureIndex) {
+                Exposure *exposure = take->getExposure(exposureIndex);
+                exposure->copyToTemp();
+            }
+        }
     }
 
     nextTotalExposureIndex = 0;

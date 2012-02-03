@@ -78,9 +78,18 @@ RecordingTab::RecordingTab(Frontend *f,
 }
 
 
-bool RecordingTab::getCameraOn()
+bool RecordingTab::isCameraOn()
 {
     return cameraOn;
+}
+
+
+void RecordingTab::checkCameraOff()
+{
+    if (cameraOn) {
+        // The camera is on --> switch off.
+        cameraButtonClicked();
+    }
 }
 
 

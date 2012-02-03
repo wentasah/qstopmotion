@@ -95,9 +95,15 @@ void Scene::setDescription(const QString &newDescription)
 }
 
 
-const QString Scene::getImagePath() const
+const QString Scene::getNewImagePath() const
 {
-    return parent->getImagePath();
+    return parent->getNewImagePath();
+}
+
+
+const QString Scene::getOldImagePath() const
+{
+    return parent->getOldImagePath();
 }
 
 

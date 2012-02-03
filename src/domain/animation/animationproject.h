@@ -103,16 +103,16 @@ public:
     const QString getAppTrashDirName() const;
 
     /**
-     * Retrieves the project file name
+     * Retrieves the new project file name
      * @return the project file name if it's setted, NULL otherwise.
      */
-    const QString getProjectFilePath() const;
+    const QString getNewProjectFilePath() const;
 
     /**
-     * Get the project path of the project
+     * Get the new project path of the project
      * @return project path of the project
      */
-    const QString getProjectPath() const;
+    const QString getNewProjectPath() const;
 
     /**
      * Get the project ID of the project
@@ -121,16 +121,28 @@ public:
     const QString getProjectID() const;
 
     /**
-     * Get the image path of the project
+     * Get the new image path of the project
      * @return image path of the project
      */
-    const QString getImagePath() const;
+    const QString getNewImagePath() const;
 
     /**
-     * Get the sound path of the project
+     * Get the old image path of the project
+     * @return image path of the project
+     */
+    const QString getOldImagePath() const;
+
+    /**
+     * Get the new sound path of the project
      * @return sound path of the project
      */
-    const QString getSoundPath() const;
+    const QString getNewSoundPath() const;
+
+    /**
+     * Get the old sound path of the project
+     * @return sound path of the project
+     */
+    const QString getOldSoundPath() const;
 
     /**
      * Get the active source of the project.
@@ -214,9 +226,10 @@ public:
     /**
      * Saves the active project to a XML-file which is written to disk.
      * @param filepath the path to store the project files within.
+     * @param saveAs the project sa to saved to a new project
      * @return true on success, false otherwise
      */
-    bool saveProject(const QString &filePath);
+    bool saveProject(const QString &filePath, bool saveAs);
 
     /**
      * Creates a new project.
@@ -386,6 +399,11 @@ public:
      * Set the data of the scenes to the project file
      */
     bool saveScenesToProject(QDomDocument &doc, QDomElement &animationNode);
+
+    /**
+     * Set the data of the scenes to the project file
+     */
+    bool saveAsScenesToProject(QDomDocument &doc, QDomElement &animationNode);
 
     /**************************************************************************
      * Sound functions

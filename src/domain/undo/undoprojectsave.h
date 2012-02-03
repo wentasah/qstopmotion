@@ -36,10 +36,12 @@ public:
      * Sets up the UndoProjectSave command object with the information needed to undo and
      * redo the add command.
      * @param df Domain facade for commands.
+     * @param this is a save as operation.
      * @param path the path of the project to save.
      */
     UndoProjectSave(DomainFacade  *df,
-                    const QString &path);
+                    const QString &path,
+                    bool sa);
 
     /**
      * Cleans up after the undo object.
@@ -62,6 +64,8 @@ private:
      * The model to perform the redo command on.
      */
     QString  projectPath;
+
+    bool saveAs;
 };
 
 #endif

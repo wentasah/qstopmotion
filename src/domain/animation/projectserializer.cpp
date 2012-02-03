@@ -46,12 +46,7 @@ ProjectSerializer::ProjectSerializer(Frontend* f)
     doc = QDomDocument(dtd);
     // rootNode = NULL;
 
-    projectFilePath.clear();
-    archiveFilePath.clear();
-
-    projectPath.clear();
-    imagePath.clear();
-    soundPath.clear();
+    cleanup();
 }
 
 
@@ -60,7 +55,6 @@ ProjectSerializer::~ProjectSerializer()
     doc.clear();
     versionElement.clear();
     animationElement.clear();
-
     cleanup();
 }
 
@@ -75,10 +69,10 @@ bool ProjectSerializer::read()
     QDomElement  rootElement;
     QDomElement  element;
 
-    QFile file(projectFilePath);
+    QFile file(newProjectFilePath);
     if (!file.open(QIODevice::ReadOnly)) {
         frontend->showWarning(tr("DOM Parser"),
-                              QString(tr("Couldn't open XML file:\n%1")).arg(projectFilePath));
+                              QString(tr("Couldn't open XML file:\n%1")).arg(newProjectFilePath));
         return false;
     }
     if (!doc.setContent(&file, true, &errorStr, &errorLine, &errorColumn)) {
@@ -88,7 +82,7 @@ bool ProjectSerializer::read()
                               .arg(errorLine)
                               .arg(errorColumn)
                               .arg(errorStr)
-                              .arg(projectFilePath));
+                              .arg(newProjectFilePath));
         return false;
     }
     file.close();
@@ -119,7 +113,7 @@ bool ProjectSerializer::read()
 
 
 // check if the user wants to save an opened project to an another file.
-bool ProjectSerializer::save(AnimationProject *animation)
+bool ProjectSerializer::save(AnimationProject *animation, bool saveAs)
 {
     qDebug("ProjectSerializer::save --> Start");
 
@@ -157,10 +151,15 @@ bool ProjectSerializer::save(AnimationProject *animation)
     animationElement = doc.createElement("animation");
     rootElement.appendChild(animationElement);
 
-    animation->saveScenesToProject(doc, animationElement);
+    if (saveAs) {
+        animation->saveAsScenesToProject(doc, animationElement);
+    }
+    else {
+        animation->saveScenesToProject(doc, animationElement);
+    }
 
-    if (QFile::exists(projectFilePath)) {
-        QString backup(projectFilePath + ".bak");
+    if (QFile::exists(newProjectFilePath)) {
+        QString backup(newProjectFilePath + ".bak");
         if (QFile::exists(backup)) {
             if (!QFile::remove(backup)) {
                 // Not successful
@@ -168,13 +167,13 @@ bool ProjectSerializer::save(AnimationProject *animation)
                                       tr("Can't remove old backup of project file!"));
             }
         }
-        if (!QFile::rename(projectFilePath, backup)) {
+        if (!QFile::rename(newProjectFilePath, backup)) {
             // Not successful
             frontend->showCritical(tr("Critical"),
                                    tr("Can't rename project file to backup!"));
         }
     }
-    QFile file(projectFilePath);
+    QFile file(newProjectFilePath);
     if (!file.open(QIODevice::ReadWrite | QIODevice::Truncate)) {
         qWarning("ProjectSerializer::save --> Can't open project file");
         return isSaved;
@@ -204,16 +203,27 @@ void ProjectSerializer::saveDOMToFile(const QDomDocument &doc)
 }
 */
 
-void ProjectSerializer::setProjectFilePath(const QString &pfp)
+void ProjectSerializer::setNewProjectFilePath(const QString &pfp)
 {
     Q_ASSERT(!pfp.isEmpty());
 
-    if(projectFilePath.compare(pfp) == 0) {
+    if(newProjectFilePath.compare(pfp) == 0) {
         // No new file path
         return;
     }
 
     // This is a new project file name
+
+    oldProjectFilePath.append(newProjectFilePath);
+    newProjectFilePath.clear();
+    oldArchiveFilePath.append(newArchiveFilePath);
+    newArchiveFilePath.clear();
+    oldProjectPath.append(newProjectPath);
+    newProjectPath.clear();
+    oldImagePath.append(newImagePath);
+    newImagePath.clear();
+    oldSoundPath.append(newSoundPath);
+    newSoundPath.clear();
 
     QString rootDir;
     QFileInfo projectFileInfo(pfp);
@@ -221,50 +231,48 @@ void ProjectSerializer::setProjectFilePath(const QString &pfp)
     // Get the absolute path of the project file
     rootDir.append(projectFileInfo.absoluteDir().absolutePath());
 
-    cleanup();
+    newProjectPath.append(rootDir);
 
-    projectPath.append(rootDir);
+    newProjectFilePath.append(pfp);
 
-    projectFilePath.append(pfp);
+    newArchiveFilePath.append(pfp);
+    newArchiveFilePath.replace(PreferencesTool::projectSuffix, PreferencesTool::archiveSuffix);
 
-    archiveFilePath.append(pfp);
-    archiveFilePath.replace(PreferencesTool::projectSuffix, PreferencesTool::archiveSuffix);
+    newImagePath.append(QString("%1/%2")
+                        .arg(newProjectPath)
+                        .arg(PreferencesTool::imageDirectory));
 
-    imagePath.append(QString("%1/%2")
-                     .arg(projectPath)
-                     .arg(PreferencesTool::imageDirectory));
+    newSoundPath.append(QString("%1/%2")
+                        .arg(newProjectPath)
+                        .arg(PreferencesTool::soundDirectory));
 
-    soundPath.append(QString("%1/%2")
-                     .arg(projectPath)
-                     .arg(PreferencesTool::soundDirectory));
-
-    if (!QFile::exists(projectPath)) {
-        if (!QDir::root().mkpath(projectPath)) {
+    if (!QFile::exists(newProjectPath)) {
+        if (!QDir::root().mkpath(newProjectPath)) {
             this->frontend->showCritical(tr("Critical"),
                                          tr("Can't create project directory!"));
         }
-        if (!QFile::setPermissions(projectPath, QFile::ReadUser | QFile::WriteUser | QFile::ExeUser | QFile::ReadGroup | QFile::WriteGroup | QFile::ReadOther | QFile::WriteOther)) {
+        if (!QFile::setPermissions(newProjectPath, QFile::ReadUser | QFile::WriteUser | QFile::ExeUser | QFile::ReadGroup | QFile::WriteGroup | QFile::ReadOther | QFile::WriteOther)) {
             this->frontend->showCritical(tr("Critical"),
                                          tr("Can't change permissions of the project directory!"));
         }
     }
-    if (!QFile::exists(imagePath)) {
-        if (!QDir::root().mkpath(imagePath)) {
+    if (!QFile::exists(newImagePath)) {
+        if (!QDir::root().mkpath(newImagePath)) {
             this->frontend->showCritical(tr("Critical"),
                                          tr("Can't create image directory!"));
         }
         // Set permissions to 0755
-        if (!QFile::setPermissions(imagePath, QFile::ReadUser | QFile::WriteUser | QFile::ExeUser | QFile::ReadGroup | QFile::WriteGroup | QFile::ReadOther | QFile::WriteOther)) {
+        if (!QFile::setPermissions(newImagePath, QFile::ReadUser | QFile::WriteUser | QFile::ExeUser | QFile::ReadGroup | QFile::WriteGroup | QFile::ReadOther | QFile::WriteOther)) {
             this->frontend->showCritical(tr("Critical"),
                                          tr("Can't change permissions of the image directory!"));
         }
     }
-    if (!QFile::exists(soundPath)) {
-        if (!QDir::root().mkpath(soundPath)) {
+    if (!QFile::exists(newSoundPath)) {
+        if (!QDir::root().mkpath(newSoundPath)) {
             this->frontend->showCritical(tr("Critical"),
                                          tr("Can't create sound directory!"));
         }
-        if (!QFile::setPermissions(soundPath, QFile::ReadUser | QFile::WriteUser | QFile::ExeUser | QFile::ReadGroup | QFile::WriteGroup | QFile::ReadOther | QFile::WriteOther)) {
+        if (!QFile::setPermissions(newSoundPath, QFile::ReadUser | QFile::WriteUser | QFile::ExeUser | QFile::ReadGroup | QFile::WriteGroup | QFile::ReadOther | QFile::WriteOther)) {
             this->frontend->showCritical(tr("Critical"),
                                          tr("Can't change permissions of the sound directory!"));
         }
@@ -272,27 +280,45 @@ void ProjectSerializer::setProjectFilePath(const QString &pfp)
 }
 
 
-const QString ProjectSerializer::getProjectFilePath() const
+const QString ProjectSerializer::getNewProjectFilePath() const
 {
-    return projectFilePath;
+    return newProjectFilePath;
 }
 
 
-const QString ProjectSerializer::getProjectPath() const
+const QString ProjectSerializer::getNewProjectPath() const
 {
-    return projectPath;
+    return newProjectPath;
 }
 
 
-const QString ProjectSerializer::getImagePath() const
+const QString ProjectSerializer::getNewImagePath() const
 {
-    return imagePath;
+    return newImagePath;
 }
 
 
-const QString ProjectSerializer::getSoundPath() const
+const QString ProjectSerializer::getOldImagePath() const
 {
-    return soundPath;
+    if (!oldImagePath.isEmpty()) {
+        return oldImagePath;
+    }
+    return newImagePath;
+}
+
+
+const QString ProjectSerializer::getNewSoundPath() const
+{
+    return newSoundPath;
+}
+
+
+const QString ProjectSerializer::getOldSoundPath() const
+{
+    if (!oldSoundPath.isEmpty()) {
+        return oldSoundPath;
+    }
+    return newSoundPath;
 }
 
 
@@ -316,12 +342,24 @@ const QDomElement ProjectSerializer::getVersionElement() const
 
 void ProjectSerializer::cleanup()
 {
-    if (projectPath != NULL) {
-        projectPath.clear();
-        projectFilePath.clear();
-        archiveFilePath.clear();
-        imagePath.clear();
-        soundPath.clear();
-    }
+    newProjectFilePath.clear();
+    newArchiveFilePath.clear();
+
+    newProjectPath.clear();
+    newImagePath.clear();
+    newSoundPath.clear();
+
+    cleanupOldFiles();
+}
+
+
+void ProjectSerializer::cleanupOldFiles()
+{
+    oldProjectFilePath.clear();
+    oldArchiveFilePath.clear();
+
+    oldProjectPath.clear();
+    oldImagePath.clear();
+    oldSoundPath.clear();
 }
 

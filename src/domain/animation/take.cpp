@@ -111,9 +111,15 @@ unsigned int Take::getSceneIndex()
 }
 
 
-const QString Take::getImagePath() const
+const QString Take::getNewImagePath() const
 {
-    return parent->getImagePath();
+    return parent->getNewImagePath();
+}
+
+
+const QString Take::getOldImagePath() const
+{
+    return parent->getOldImagePath();
 }
 
 

@@ -91,10 +91,16 @@ public:
     void setDescription(const QString &newDescription);
 
     /**
-     * Get the image path of the project
+     * Get the new image path of the project
      * @return image path of the project
      */
-    const QString getImagePath() const;
+    const QString getNewImagePath() const;
+
+    /**
+     * Get the old image path of the project
+     * @return image path of the project
+     */
+    const QString getOldImagePath() const;
 
     /**
      * Get the parent of the scene

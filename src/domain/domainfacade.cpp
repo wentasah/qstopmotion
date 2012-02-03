@@ -176,15 +176,15 @@ bool DomainFacade::isActiveProject()
 }
 
 
-const QString DomainFacade::getProjectFilePath()
+const QString DomainFacade::getNewProjectFilePath()
 {
-    return animationProject->getProjectFilePath();
+    return animationProject->getNewProjectFilePath();
 }
 
 
-const QString DomainFacade::getProjectPath()
+const QString DomainFacade::getNewProjectPath()
 {
-    return animationProject->getProjectPath();
+    return animationProject->getNewProjectPath();
 }
 
 
@@ -469,8 +469,12 @@ bool DomainFacade::recoverProject()
         }
     }
 
+    historyFile->close();
+
     // Switch the write history functionality on
     writeHistory = true;
+
+    frontend->setToolBarState(ToolBar::toolBarCameraOff);
 
     qDebug("DomainFacade::recoverProject --> End");
     return recovered;
@@ -561,14 +565,14 @@ bool DomainFacade::openProjectRedo(const QString &projectPath)
 }
 
 
-void DomainFacade::saveProjectToUndo(const QString &projectPath)
+void DomainFacade::saveProjectToUndo(const QString &projectPath, bool saveAs)
 {
-    UndoProjectSave *u = new UndoProjectSave(this, projectPath);
+    UndoProjectSave *u = new UndoProjectSave(this, projectPath, saveAs);
     getUndoStack()->push(u);
 }
 
 /*
-bool DomainFacade::saveProjectUndo(const QString &projectDescription)
+bool DomainFacade::saveProjectUndo(const QString &projectDescription, bool saveAs)
 {
     qDebug("DomainFacade::saveProjectUndo --> Start");
 
@@ -577,13 +581,13 @@ bool DomainFacade::saveProjectUndo(const QString &projectDescription)
 }
 */
 
-bool DomainFacade::saveProjectRedo(const QString &projectPath)
+bool DomainFacade::saveProjectRedo(const QString &projectPath, bool saveAs)
 {
     qDebug("DomainFacade::saveProjectRedo --> Start");
 
     bool ret;
 
-    ret = animationProject->saveProject(projectPath);
+    ret = animationProject->saveProject(projectPath, saveAs);
     if (ret) {
         clearUndoStack();
     }

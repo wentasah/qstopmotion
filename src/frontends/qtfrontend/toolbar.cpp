@@ -107,6 +107,7 @@ void ToolBar::makeGUI()
     captureButton->setIcon(QPixmap(iconFile));
     // captureButton->setFlat(true);
     // captureButton->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Minimum);
+    captureButton->setEnabled(false);
 
     playButton = new QPushButton;
     iconFile.clear();
@@ -115,6 +116,7 @@ void ToolBar::makeGUI()
     playButton->setIcon(QPixmap(iconFile));
     // playButton->setFlat(true);
     connect(playButton, SIGNAL(clicked()), this, SLOT(runAnimation()));
+    playButton->setEnabled(false);
 
     nextFrameButton = new QPushButton;
     iconFile.clear();

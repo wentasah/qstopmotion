@@ -629,6 +629,7 @@ void MainWindowGUI::newProject()
 
     DomainFacade* project = frontend->getProject();
 
+    recordingTab->checkCameraOff();
     checkSaved();
 
     DescriptionDialog *dialog = new DescriptionDialog(frontend, DescriptionDialog::ProjectDescription);
@@ -679,6 +680,8 @@ void MainWindowGUI::openProject()
 {
     qDebug("MainWindowGUI::openProject --> Start");
 
+    recordingTab->checkCameraOff();
+
     QString openFile = QFileDialog::
                    getOpenFileName(this,
                                    tr("Choose project file"),
@@ -704,6 +707,7 @@ void MainWindowGUI::openMostRecent()
 {
     const QString fileName = Util::convertPathFromOsSpecific(mostRecentAct->text());
 
+    recordingTab->checkCameraOff();
     checkSaved();
 
     if (frontend->getProject()->isActiveProject()) {
@@ -720,6 +724,7 @@ void MainWindowGUI::openSecondMostRecent()
 {
     const QString fileName = Util::convertPathFromOsSpecific(secondMostRecentAct->text());
 
+    recordingTab->checkCameraOff();
     checkSaved();
 
     if (frontend->getProject()->isActiveProject()) {
@@ -738,6 +743,7 @@ void MainWindowGUI::openThirdMostRecent()
 {
     const QString fileName = Util::convertPathFromOsSpecific(thirdMostRecentAct->text());
 
+    recordingTab->checkCameraOff();
     checkSaved();
 
     if (frontend->getProject()->isActiveProject()) {
@@ -755,6 +761,7 @@ void MainWindowGUI::openFourthMostRecent()
 {
     const QString fileName = Util::convertPathFromOsSpecific(fourthMostRecentAct->text());
 
+    recordingTab->checkCameraOff();
     checkSaved();
 
     if (frontend->getProject()->isActiveProject()) {
@@ -770,20 +777,22 @@ void MainWindowGUI::openFourthMostRecent()
 
 void MainWindowGUI::saveProject()
 {
-    const QString filePath = frontend->getProject()->getProjectFilePath();
+    const QString filePath = frontend->getProject()->getNewProjectFilePath();
+
+    recordingTab->checkCameraOff();
 
     if (!filePath.isEmpty()) {
-        frontend->getProject()->saveProjectToUndo(filePath);
+        frontend->getProject()->saveProjectToUndo(filePath, false);
     } else {
         saveProjectAs();
     }
-
-    toolBar->setActualState(ToolBar::toolBarNothing);
 }
 
 
 void MainWindowGUI::saveProjectAs()
 {
+    recordingTab->checkCameraOff();
+
     QString file = QFileDialog::
                    getSaveFileName(this,
                                    tr("Save As"),
@@ -799,8 +808,8 @@ void MainWindowGUI::saveProjectAs()
             frontend->showInformation(tr("Information"), tr("The character '|' is not allowed in the project file name and will be removed."));
             file.remove('|');
         }
-        frontend->getProject()->saveProjectToUndo(file.toLocal8Bit());
-        QString path = frontend->getProject()->getProjectPath();
+        frontend->getProject()->saveProjectToUndo(file.toLocal8Bit(), true);
+        QString path = frontend->getProject()->getNewProjectPath();
         path.append("/");
         path.append(PreferencesTool::imageDirectory);
         changeMonitor->addDirectory(path);
@@ -814,6 +823,8 @@ void MainWindowGUI::saveProjectAs()
 void MainWindowGUI::exportToVideo()
 {
     qDebug("MainWindowGUI::exportToVideo --> Start");
+
+    recordingTab->checkCameraOff();
 
     VideoEncoder *enc = NULL;
     PreferencesTool *pref = frontend->getPreferences();
@@ -898,6 +909,8 @@ void MainWindowGUI::exportToVideo()
 
 void MainWindowGUI::exportToCinelerra()
 {
+    recordingTab->checkCameraOff();
+
     QString outputFile = QFileDialog::
                    getSaveFileName(this, tr("Export to file"), lastVisitedDir, "Cinelerra (*.XML)");
 
@@ -909,6 +922,8 @@ void MainWindowGUI::exportToCinelerra()
 
 void MainWindowGUI::closeApplication()
 {
+    recordingTab->checkCameraOff();
+
     // Last changes saved?
     checkSaved();
 
@@ -1767,7 +1782,7 @@ void MainWindowGUI::retranslateHelpText()
 
 void MainWindowGUI::setMostRecentProject()
 {
-    const QString newFirst = frontend->getProject()->getProjectFilePath();
+    const QString newFirst = frontend->getProject()->getNewProjectFilePath();
 
     Q_ASSERT(!newFirst.isEmpty());
 

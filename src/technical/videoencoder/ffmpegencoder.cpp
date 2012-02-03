@@ -85,7 +85,7 @@ FfmpegEncoder::~FfmpegEncoder()
 const QString FfmpegEncoder::getStartCommand() const
 {
     QString startCommand;
-    QString imagePath = animationProject->getImagePath();
+    QString imagePath = animationProject->getNewImagePath();
     PreferencesTool *pref = animationProject->getFrontend()->getPreferences();
 
     // Prepare start command

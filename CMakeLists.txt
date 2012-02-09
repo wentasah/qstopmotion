@@ -1,7 +1,7 @@
 ###############################################################################
 # CMake file for the qStopMotion project                                      #
 # (c) Ralf Lange, longsoft.de                                                 #
-# Last update: 2012-01-27                                                     #
+# Last update: 2012-02-09                                                    08
 #                                                                             #
 # Usage:                                                                      #
 #   * Qt-Creator (Windows, Linux)                                             #
@@ -25,7 +25,7 @@
 
 project(qStopMotion)
 
-cmake_minimum_required(VERSION 2.6.3)
+cmake_minimum_required(VERSION 2.6.2)
 
 ###############################################################################
 # General project settings
@@ -238,9 +238,20 @@ set(GENERAL_FILES
 
 set(UNIX_FILES
     qstopmotion.desktop   # .desktop is installed in a separate step
-    qstopmotion.menufile  # .menufile is installed in a separate step
     qstopmotion.mime      # ???
 #     qstopmotion.1         # Linux man page
+)
+
+set(DEBIAN_FILES
+    debian/changelog             # changelog file
+    debian/copyright             # copyright file
+    debian/qstopmotion.menu      # .menu is installed in a separate step for Debian systems
+    debian/qstopmotion.desktop   # .desktop is installed in a separate step for Ubuntu systems
+)
+
+set(FEDORA_FILES
+    qstopmotion.desktop   # .desktop is installed in a separate step for Fedora systems
+    qstopmotion.mime      # ???
 )
 
 ###############################################################################
@@ -407,6 +418,8 @@ ELSE(WIN32)
     file(COPY ${ICON_FILES} DESTINATION "share/qstopmotion/")
     file(COPY ${GENERAL_FILES} DESTINATION "share/qstopmotion/")
     file(COPY ${UNIX_FILES} DESTINATION "share/qstopmotion/")
+    file(COPY ${DEBIAN_FILES} DESTINATION "share/qstopmotion/debian/")
+    file(COPY ${FEDORA_FILES} DESTINATION "share/qstopmotion/rpm/")
 
 ENDIF(WIN32)
 
@@ -457,7 +470,7 @@ ELSE(WIN32)
     set(QSTOPMOTION_GENERALS_INSTALL_DIR "share/qstopmotion")
     set(QSTOPMOTION_MANUAL_INSTALL_DIR "share/doc/qstopmotion")
     set(QSTOPMOTION_DESKTOP_INSTALL_DIR "share/applications")
-    set(QSTOPMOTION_MENUFILE_INSTALL_DIR "share/menus")
+    set(QSTOPMOTION_MENUFILE_INSTALL_DIR "share/menu")
     set(QSTOPMOTION_PIXMAP_INSTALL_DIR "share/pixmaps")
     set(QSTOPMOTION_ICONS_INSTALL_DIR "share/icons")
 
@@ -527,14 +540,26 @@ ENDIF(CPACK_GENERATOR STREQUAL "RPM")
 IF(CPACK_GENERATOR STREQUAL "DEB")
     # installation of the icon file
     install(
-        FILES "qstopmotion.xpm"
+        FILES "debian/qstopmotion.xpm"
         DESTINATION ${QSTOPMOTION_PIXMAP_INSTALL_DIR}
     )
 
     # installation of the .menufile file
     install(
-        FILES "qstopmotion.menufile"
+        FILES "debian/qstopmotion.menu"
         DESTINATION ${QSTOPMOTION_MENUFILE_INSTALL_DIR}
+    )
+
+    # installation of the .menufile file
+    install(
+        FILES "debian/qstopmotion.menu"
+        DESTINATION ${QSTOPMOTION_MENUFILE_INSTALL_DIR}/qstopmotion
+    )
+
+    # installation of the .desktop file
+    install(
+        FILES "debian/qstopmotion.desktop"
+        DESTINATION ${QSTOPMOTION_DESKTOP_INSTALL_DIR}
     )
 ENDIF(CPACK_GENERATOR STREQUAL "DEB")
 
@@ -655,7 +680,7 @@ SET(CPACK_DEBIAN_PACKAGE_PRIORITY "optional")
 
 
 # Options
-SET(CPACK_DEBIAN_PACKAGE_DEPENDS "ffmpeg (>=0.5.2), gstreamer-tools (>=0.10.30), libqt4-dev (>=4.6.3), libqt4-xml (>=4.6.3)")
+SET(CPACK_DEBIAN_PACKAGE_DEPENDS "libc6 (>=2.11), ffmpeg (>=0.5.2), gstreamer-tools (>=0.10.28), libqt4-core (>=4.6.2), libqt4-gui (>=4.6.2), libqt4-xml (>=4.6.2)")
 SET(CPACK_DEBIAN_PACKAGE_HOMEPAGE ${QSTOPMOTION_HOMEPAGE})
 # CPACK_DEBIAN_PACKAGE_SHLIBDEPS
 # SET(CPACK_DEBIAN_PACKAGE_DEBUG "ON")
@@ -687,7 +712,7 @@ SET(CPACK_RPM_PACKAGE_URL ${QSTOPMOTION_HOMEPAGE})
 # CPACK_RPM_PACKAGE_DESCRIPTION = CPACK_PACKAGE_DESCRIPTION_FILE
 # CPACK_RPM_COMPRESSION_TYPE
 # requireses must be in a aphabetic order
-SET(CPACK_RPM_PACKAGE_REQUIRES "ffmpeg >= 0.6, gstreamer >= 0.10.30, qt4 >= 4.6.3")
+SET(CPACK_RPM_PACKAGE_REQUIRES "glibc >= 2.14, ffmpeg >= 0.6, gstreamer >= 0.10.28, qt >= 4.6.2")
 # CPACK_RPM_PACKAGE_SUGGESTS
 # CPACK_RPM_PACKAGE_PROVIDES
 

@@ -1,0 +1,6 @@
+1 qstopmotion (0.9.11-0) unstable; urgency=low
+2
+3 * Initial release of the Debian package
+4
+5 -- Ralf Lange <ralf.lange@longsoft.de> Thu, 09 Feb 2012 00:09:11 +0100
+6

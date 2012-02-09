@@ -337,12 +337,12 @@ void RecordingTab::setPlaybackMode()
 }
 
 
-void RecordingTab::changeRecordingMode(int index)
+void RecordingTab::changeRecordingMode(int /*index*/)
 {
-    qDebug() << "RecordingTab::changeRecordingMode --> Start";
+    qDebug() << "RecordingTab::changeRecordingMode --> Empty";
 
 
-    qDebug() << "RecordingTab::changeRecordingMode --> End";
+    // qDebug() << "RecordingTab::changeRecordingMode --> End";
 }
 
 
@@ -565,17 +565,21 @@ void RecordingTab::createAccelerators()
 
 void RecordingTab::captureFrame()
 {
-    qDebug("CameraHandler::captureFrame --> Start");
+    qDebug("RecordingTab::captureFrame --> Start");
+
+    toolBar->setActualState(ToolBar::toolBarNothing);
 
     cameraTimer->start(60);
 
-    qDebug("CameraHandler::captureFrame --> End");
+    toolBar->setActualState(ToolBar::toolBarCameraOn);
+
+    qDebug("RecordingTab::captureFrame --> End");
 }
 
 
 void RecordingTab::storeFrame()
 {
-    qDebug("CameraHandler::storeFrame --> Start");
+    qDebug("RecordingTab::storeFrame --> Start");
 
     QImage i;
     i.load(captureFilePath);
@@ -608,5 +612,5 @@ void RecordingTab::storeFrame()
         cameraTimer->start(60);
     }
 
-    qDebug("CameraHandler::storeFrame --> End");
+    qDebug("RecordingTab::storeFrame --> End");
 }

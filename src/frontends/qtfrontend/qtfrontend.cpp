@@ -88,7 +88,7 @@ bool QtFrontend::checkApplicationDirectory(char *binDirName)
 {
     qDebug("QtFrontend::checkApplicationDirectory --> Start");
 
-    qDebug() << "QtFrontend::checkApplicationDirectory --> binDirName: " << binDirName;
+    qDebug() << "QtFrontend::checkApplicationDirectory --> Call command: " << binDirName;
 
     bool hasCorrectPermissions = true;
     QDir homeDir = QDir::home();
@@ -144,6 +144,14 @@ bool QtFrontend::checkApplicationDirectory(char *binDirName)
 
     QString absoluteAppName = Util::convertPathFromOsSpecific(QString(binDirName));
     int pathLength = absoluteAppName.lastIndexOf("/bin/");
+
+    if (pathLength == -1)
+    {
+        QString command = Util::checkCommand(binDirName);
+        qDebug() << "QtFrontend::checkApplicationDirectory --> Check command: " << command;
+        absoluteAppName = Util::convertPathFromOsSpecific(QString(command));
+        pathLength = absoluteAppName.lastIndexOf("/bin/");
+    }
 
     if (pathLength == -1)
     {

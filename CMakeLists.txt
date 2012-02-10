@@ -550,12 +550,6 @@ IF(CPACK_GENERATOR STREQUAL "DEB")
         DESTINATION ${QSTOPMOTION_MENUFILE_INSTALL_DIR}
     )
 
-    # installation of the .menufile file
-    install(
-        FILES "debian/qstopmotion.menu"
-        DESTINATION ${QSTOPMOTION_MENUFILE_INSTALL_DIR}/qstopmotion
-    )
-
     # installation of the .desktop file
     install(
         FILES "debian/qstopmotion.desktop"

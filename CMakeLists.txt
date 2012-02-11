@@ -1,7 +1,7 @@
 ###############################################################################
 # CMake file for the qStopMotion project                                      #
 # (c) Ralf Lange, longsoft.de                                                 #
-# Last update: 2012-02-09                                                    08
+# Last update: 2012-02-11                                                     #
 #                                                                             #
 # Usage:                                                                      #
 #   * Qt-Creator (Windows, Linux)                                             #
@@ -14,7 +14,7 @@
 #      + nmake install (with administration rights)                           #
 #      + nmake package                                                        #
 #   * makefile: (Linux)                                                       #
-#      + cmake -G "Unix Makefile"                                             #
+#      + cmake .                                                              #
 #      + make                                                                 #
 #      + sudo make install                                                    #
 #   * MS Visual Studio (Windows)                                              #
@@ -237,7 +237,7 @@ set(GENERAL_FILES
 )
 
 set(UNIX_FILES
-    qstopmotion.desktop   # .desktop is installed in a separate step
+    qstopmotion.desktop   # .desktop is installed in a separate step Unix systems
     qstopmotion.mime      # ???
 #     qstopmotion.1         # Linux man page
 )
@@ -246,12 +246,6 @@ set(DEBIAN_FILES
     debian/changelog             # changelog file
     debian/copyright             # copyright file
     debian/qstopmotion.menu      # .menu is installed in a separate step for Debian systems
-    debian/qstopmotion.desktop   # .desktop is installed in a separate step for Ubuntu systems
-)
-
-set(FEDORA_FILES
-    qstopmotion.desktop   # .desktop is installed in a separate step for Fedora systems
-    qstopmotion.mime      # ???
 )
 
 ###############################################################################
@@ -519,10 +513,7 @@ IF(UNIX)
         DIRECTORY icons/
         DESTINATION ${QSTOPMOTION_ICONS_INSTALL_DIR}
     )
-ENDIF(UNIX)
 
-# installation only on FEDORA systems
-IF(CPACK_GENERATOR STREQUAL "RPM")
     # installation of the icon file
     install(
         FILES "qstopmotion.png"
@@ -534,7 +525,7 @@ IF(CPACK_GENERATOR STREQUAL "RPM")
         FILES "qstopmotion.desktop"
         DESTINATION ${QSTOPMOTION_DESKTOP_INSTALL_DIR}
     )
-ENDIF(CPACK_GENERATOR STREQUAL "RPM")
+ENDIF(UNIX)
 
 # installation on DEBIAN systems
 IF(CPACK_GENERATOR STREQUAL "DEB")
@@ -548,12 +539,6 @@ IF(CPACK_GENERATOR STREQUAL "DEB")
     install(
         FILES "debian/qstopmotion.menu"
         DESTINATION ${QSTOPMOTION_MENUFILE_INSTALL_DIR}
-    )
-
-    # installation of the .desktop file
-    install(
-        FILES "debian/qstopmotion.desktop"
-        DESTINATION ${QSTOPMOTION_DESKTOP_INSTALL_DIR}
     )
 ENDIF(CPACK_GENERATOR STREQUAL "DEB")
 

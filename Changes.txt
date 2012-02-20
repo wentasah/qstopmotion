@@ -3,6 +3,10 @@ Last Changes in the sources on qStopMotion
 
 qStopMotion (1.0.0)
   * Fix Bugs
+qStopMotion (0.9.11, release candidat 3)
+  * Fix Bugs
+  * Add packaging for Linux DEB package.
+  * Update the German language translation.
 qStopMotion (0.9.10, release candidat 2)
   * Fix Bugs
   * Add the Qt runtime to the windows installer.
@@ -42,7 +46,6 @@ qStopMotion (0.9.6)
   * Add installation functionality
   * Add packaging for Windows (NSIS Installer).
   * Add packaging for Linux RPM package.
-  * Add packaging for Linux DEB package.
   * Add packaging for source package.
 qStopMotion (0.9.5)
   * Fix Bugs

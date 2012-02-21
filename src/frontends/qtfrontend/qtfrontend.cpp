@@ -209,8 +209,8 @@ bool QtFrontend::checkApplicationDirectory(char *binDirName)
     otherDirName.append(QLatin1String("share/doc/"));
     otherDirName.append(PreferencesTool::applicationName);
     otherDirName.append(QLatin1String("/"));
-    otherDirName.append(PreferencesTool::manualDirectory);
-    otherDirName.append(QLatin1String("/"));
+    // otherDirName.append(PreferencesTool::manualDirectory);
+    // otherDirName.append(QLatin1String("/"));
     appManualDirName.append(otherDirName.toLatin1());
 
     otherDirName.clear();

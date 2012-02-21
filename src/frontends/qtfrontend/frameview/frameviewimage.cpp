@@ -355,7 +355,7 @@ void FrameViewImage::paintEvent(QPaintEvent *)
         }
         else {
             // Playing still image
-            widgetPainter.fillRect(widgetRect, QColor(204, 204, 153, 255));
+            widgetPainter.fillRect(widgetRect, QColor(225, 225, 225, 255));
         }
         // Flip the screen???
 

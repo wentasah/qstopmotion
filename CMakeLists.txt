@@ -1,7 +1,7 @@
 ###############################################################################
 # CMake file for the qStopMotion project                                      #
 # (c) Ralf Lange, longsoft.de                                                 #
-# Last update: 2012-02-20                                                     #
+# Last update: 2012-02-21                                                     #
 #                                                                             #
 # Usage:                                                                      #
 #   * Qt-Creator (Windows, Linux)                                             #
@@ -406,7 +406,7 @@ IF(WIN32)
 ELSE(WIN32)
 
     file(COPY graphics DESTINATION "share/qstopmotion/")
-    file(COPY manual DESTINATION "share/doc/qstopmotion/")
+    file(COPY manual/ DESTINATION "share/doc/qstopmotion/")
     file(COPY translations DESTINATION "share/qstopmotion/")
     file(COPY icons DESTINATION "share/qstopmotion/")
     file(COPY ${ICON_FILES} DESTINATION "share/qstopmotion/")

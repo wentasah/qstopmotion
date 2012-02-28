@@ -1104,8 +1104,16 @@ void MainWindowGUI::createAccelerators()
     QShortcut *toggleCameraAccel = new QShortcut(QKeySequence(Qt::Key_C), this);
     connect(toggleCameraAccel, SIGNAL(activated()), recordingTab, SLOT(cameraButtonClicked()));
 
-    QShortcut *captureAccel = new QShortcut(QKeySequence(Qt::Key_Space), this);
-    connect(captureAccel, SIGNAL(activated()), recordingTab, SLOT(captureFrame()));
+    QShortcut *captureAccel1 = new QShortcut(QKeySequence(Qt::Key_Space), this);
+    connect(captureAccel1, SIGNAL(activated()), recordingTab, SLOT(captureFrame()));
+    QShortcut *captureAccel2 = new QShortcut(QKeySequence(Qt::Key_Return), this);     // Return key on the keyboard
+    connect(captureAccel2, SIGNAL(activated()), recordingTab, SLOT(captureFrame()));
+    QShortcut *captureAccel3 = new QShortcut(QKeySequence(Qt::Key_Enter), this);      // Enter key on the keypad
+    connect(captureAccel3, SIGNAL(activated()), recordingTab, SLOT(captureFrame()));
+    QShortcut *captureAccel4 = new QShortcut(QKeySequence(Qt::Key_5), this);
+    connect(captureAccel4, SIGNAL(activated()), recordingTab, SLOT(captureFrame()));
+    // QShortcut *captureAccel4 = new QShortcut(QKeySequence(Qt::KeypadModifier + Qt::Key_1), this);
+    // connect(captureAccel4, SIGNAL(activated()), recordingTab, SLOT(captureFrame()));
 
     QShortcut *newSceneAccel = new QShortcut(QKeySequence(Qt::ControlModifier + Qt::Key_E), this);
     connect(newSceneAccel, SIGNAL(activated()), projectTab, SLOT(addSceneSlot()));

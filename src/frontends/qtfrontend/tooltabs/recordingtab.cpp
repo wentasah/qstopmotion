@@ -552,6 +552,7 @@ void RecordingTab::changeFpuCount(int newFpuCount)
 
 void RecordingTab::createAccelerators()
 {
+    /*
     mixAccel = new QShortcut(QKeySequence(Qt::Key_1), this);
     connect(mixAccel, SIGNAL(activated()), this, SLOT(setMixingMode()));
 
@@ -560,6 +561,7 @@ void RecordingTab::createAccelerators()
 
     playbackAccel = new QShortcut(QKeySequence(Qt::Key_3), this);
     connect(playbackAccel, SIGNAL(activated()), this, SLOT(setPlaybackMode()));
+    */
 }
 
 

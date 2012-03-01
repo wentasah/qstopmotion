@@ -1083,49 +1083,131 @@ void MainWindowGUI::createHandlers()
 }
 
 
-void MainWindowGUI::createAccelerators()
+void MainWindowGUI:: createAccelerators()
 {
-    QShortcut *nextFrameAccel = new QShortcut(QKeySequence(Qt::Key_L), this);
-    connect(nextFrameAccel, SIGNAL(activated()), toolBar, SLOT(selectNextFrame()));
-    QShortcut *nextFrameAccel2 = new QShortcut(QKeySequence(Qt::Key_Right), this);
-    connect(nextFrameAccel2, SIGNAL(activated()), toolBar, SLOT(selectNextFrame()));
+    // First Exposure
+    QShortcut *firstExposureAccel1 = new QShortcut(QKeySequence(Qt::Key_3), this);
+    connect(firstExposureAccel1, SIGNAL(activated()), toolBar, SLOT(selectFirstFrame()));
+    QShortcut *firstExposureAccel2 = new QShortcut(QKeySequence(Qt::Key_PageDown), this);
+    connect(firstExposureAccel2, SIGNAL(activated()), toolBar, SLOT(selectFirstFrame()));
+    QShortcut *firstExposureAccel3 = new QShortcut(QKeySequence(Qt::Key_L), this);
+    connect(firstExposureAccel3, SIGNAL(activated()), toolBar, SLOT(selectFirstFrame()));
 
-    QShortcut *previousFrameAccel = new QShortcut(QKeySequence(Qt::Key_J), this);
-    connect(previousFrameAccel, SIGNAL(activated()), toolBar, SLOT(selectPreviousFrame()));
-    QShortcut *previousFrameAccel2 = new QShortcut(QKeySequence(Qt::Key_Left), this);
-    connect(previousFrameAccel2, SIGNAL(activated()), toolBar, SLOT(selectPreviousFrame()));
+    // Previous Exposure
+    QShortcut *previousExposureAccel = new QShortcut(QKeySequence(Qt::Key_6), this);
+    connect(previousExposureAccel, SIGNAL(activated()), toolBar, SLOT(selectPreviousFrame()));
+    QShortcut *previousExposureAccel2 = new QShortcut(QKeySequence(Qt::Key_Right), this);
+    connect(previousExposureAccel2, SIGNAL(activated()), toolBar, SLOT(selectPreviousFrame()));
+    QShortcut *previousExposureAcce3 = new QShortcut(QKeySequence(Qt::Key_O), this);
+    connect(previousExposureAcce3, SIGNAL(activated()), toolBar, SLOT(selectPreviousFrame()));
 
-    QShortcut *nextSceneAccel = new QShortcut(QKeySequence(Qt::Key_O), this);
-    connect(nextSceneAccel, SIGNAL(activated()), toolBar, SLOT(selectNextScene()));
+    // Next Exposure
+    QShortcut *nextExposureAccel1 = new QShortcut(QKeySequence(Qt::Key_9), this);
+    connect(nextExposureAccel1, SIGNAL(activated()), toolBar, SLOT(selectNextFrame()));
+    QShortcut *nextExposureAccel2 = new QShortcut(QKeySequence(Qt::Key_PageUp), this);
+    connect(nextExposureAccel2, SIGNAL(activated()), toolBar, SLOT(selectNextFrame()));
 
-    QShortcut *prevSceneAccel = new QShortcut(QKeySequence(Qt::Key_I), this);
-    connect(prevSceneAccel, SIGNAL(activated()), toolBar, SLOT(selectPreviousScene()));
+    // Last Exposure
+    QShortcut *lastExposureAccel1 = new QShortcut(QKeySequence(Qt::Key_Asterisk), this);
+    connect(lastExposureAccel1, SIGNAL(activated()), toolBar, SLOT(selectLastFrame()));
+    QShortcut *lastExposureAccel2 = new QShortcut(QKeySequence(Qt::Key_P), this);
+    connect(lastExposureAccel2, SIGNAL(activated()), toolBar, SLOT(selectLastFrame()));
 
-    QShortcut *toggleCameraAccel = new QShortcut(QKeySequence(Qt::Key_C), this);
-    connect(toggleCameraAccel, SIGNAL(activated()), recordingTab, SLOT(cameraButtonClicked()));
-
+    // Add exposure
     QShortcut *captureAccel1 = new QShortcut(QKeySequence(Qt::Key_Space), this);
     connect(captureAccel1, SIGNAL(activated()), recordingTab, SLOT(captureFrame()));
     QShortcut *captureAccel2 = new QShortcut(QKeySequence(Qt::Key_Return), this);     // Return key on the keyboard
     connect(captureAccel2, SIGNAL(activated()), recordingTab, SLOT(captureFrame()));
     QShortcut *captureAccel3 = new QShortcut(QKeySequence(Qt::Key_Enter), this);      // Enter key on the keypad
     connect(captureAccel3, SIGNAL(activated()), recordingTab, SLOT(captureFrame()));
+
+    // Delete exposure
+    QShortcut *removeFramesAccel = new QShortcut(QKeySequence(Qt::Key_Delete), this);
+    connect(removeFramesAccel, SIGNAL(activated()), projectTab, SLOT(removeFramesSlot()));
+
+    // First take
+    QShortcut *firstTakeAccel1 = new QShortcut(QKeySequence(Qt::Key_2), this);
+    connect(firstTakeAccel1, SIGNAL(activated()), toolBar, SLOT(selectFirstTake()));
+    QShortcut *firstTakeAccel2 = new QShortcut(QKeySequence(Qt::Key_Down), this);
+    connect(firstTakeAccel2, SIGNAL(activated()), toolBar, SLOT(selectFirstTake()));
+    QShortcut *firstTakeAccel3 = new QShortcut(QKeySequence(Qt::Key_K), this);
+    connect(firstTakeAccel3, SIGNAL(activated()), toolBar, SLOT(selectFirstTake()));
+
+    // Previous take
+    QShortcut *prevTakeAccel1 = new QShortcut(QKeySequence(Qt::Key_5), this);
+    connect(prevTakeAccel1, SIGNAL(activated()), toolBar, SLOT(selectPreviousTake()));
+    QShortcut *prevTakeAccel2 = new QShortcut(QKeySequence(Qt::Key_Clear), this);
+    connect(prevTakeAccel2, SIGNAL(activated()), toolBar, SLOT(selectPreviousTake()));
+    QShortcut *prevTakeAccel3 = new QShortcut(QKeySequence(Qt::Key_I), this);
+    connect(prevTakeAccel3, SIGNAL(activated()), toolBar, SLOT(selectPreviousTake()));
+
+    // Next take
+    QShortcut *nextTakeAccel1 = new QShortcut(QKeySequence(Qt::Key_8), this);
+    connect(nextTakeAccel1, SIGNAL(activated()), toolBar, SLOT(selectNextTake()));
+    QShortcut *nextTakeAccel2 = new QShortcut(QKeySequence(Qt::Key_Up), this);
+    connect(nextTakeAccel2, SIGNAL(activated()), toolBar, SLOT(selectNextTake()));
+
+    // Last take
+    QShortcut *lastTakeAccel1 = new QShortcut(QKeySequence(Qt::Key_Slash), this);
+    connect(lastTakeAccel1, SIGNAL(activated()), toolBar, SLOT(selectLastTake()));
+
+    // Add take
+    QShortcut *addTakeAccel1 = new QShortcut(QKeySequence(Qt::Key_Plus), this);
+    connect(addTakeAccel1, SIGNAL(activated()), projectTab, SLOT(addTakeSlot()));
+
+    // First scene
+    QShortcut *firstSceneAccel1 = new QShortcut(QKeySequence(Qt::Key_0), this);
+    connect(firstSceneAccel1, SIGNAL(activated()), toolBar, SLOT(selectFirstScene()));
+    QShortcut *firstSceneAccel2 = new QShortcut(QKeySequence(Qt::Key_Insert), this);
+    connect(firstSceneAccel2, SIGNAL(activated()), toolBar, SLOT(selectFirstScene()));
+    QShortcut *firstSceneAccel3 = new QShortcut(QKeySequence(Qt::Key_M), this);
+    connect(firstSceneAccel3, SIGNAL(activated()), toolBar, SLOT(selectFirstScene()));
+
+    // Previous scene
+    QShortcut *prevSceneAccel1 = new QShortcut(QKeySequence(Qt::Key_1), this);
+    connect(prevSceneAccel1, SIGNAL(activated()), toolBar, SLOT(selectPreviousScene()));
+    QShortcut *prevSceneAccel2 = new QShortcut(QKeySequence(Qt::Key_End), this);
+    connect(prevSceneAccel2, SIGNAL(activated()), toolBar, SLOT(selectPreviousScene()));
+    QShortcut *prevSceneAccel3 = new QShortcut(QKeySequence(Qt::Key_J), this);
+    connect(prevSceneAccel3, SIGNAL(activated()), toolBar, SLOT(selectPreviousScene()));
+
+    // Next scene
+    QShortcut *nextSceneAccel1 = new QShortcut(QKeySequence(Qt::Key_4), this);
+    connect(nextSceneAccel1, SIGNAL(activated()), toolBar, SLOT(selectNextScene()));
+    QShortcut *nextSceneAccel2 = new QShortcut(QKeySequence(Qt::Key_Left), this);
+    connect(nextSceneAccel2, SIGNAL(activated()), toolBar, SLOT(selectNextScene()));
+    QShortcut *nextSceneAccel3 = new QShortcut(QKeySequence(Qt::Key_U), this);
+    connect(nextSceneAccel3, SIGNAL(activated()), toolBar, SLOT(selectNextScene()));
+
+    // Last scene
+    QShortcut *lastSceneAccel1 = new QShortcut(QKeySequence(Qt::Key_7), this);
+    connect(lastSceneAccel1, SIGNAL(activated()), toolBar, SLOT(selectLastScene()));
+    QShortcut *lastSceneAccel2 = new QShortcut(QKeySequence(Qt::Key_Home), this);
+    connect(lastSceneAccel2, SIGNAL(activated()), toolBar, SLOT(selectLastScene()));
+
+    // Add scene
+    QShortcut *addSceneAccel1 = new QShortcut(QKeySequence(Qt::Key_Minus), this);
+    connect(addSceneAccel1, SIGNAL(activated()), projectTab, SLOT(addSceneSlot()));
+    QShortcut *addSceneAccel2 = new QShortcut(QKeySequence(Qt::Key_Odiaeresis), this);
+    connect(addSceneAccel2, SIGNAL(activated()), projectTab, SLOT(addSceneSlot()));
+
+    // Camera button clicked
+    QShortcut *toggleCameraAccel = new QShortcut(QKeySequence(Qt::Key_C), this);
+    connect(toggleCameraAccel, SIGNAL(activated()), recordingTab, SLOT(cameraButtonClicked()));
+
+    /* Test test test
+
     QShortcut *captureAccel4 = new QShortcut(QKeySequence(Qt::Key_5), this);
     connect(captureAccel4, SIGNAL(activated()), recordingTab, SLOT(captureFrame()));
-    // QShortcut *captureAccel4 = new QShortcut(QKeySequence(Qt::KeypadModifier + Qt::Key_1), this);
-    // connect(captureAccel4, SIGNAL(activated()), recordingTab, SLOT(captureFrame()));
-
-    QShortcut *newSceneAccel = new QShortcut(QKeySequence(Qt::ControlModifier + Qt::Key_E), this);
-    connect(newSceneAccel, SIGNAL(activated()), projectTab, SLOT(addSceneSlot()));
+    QShortcut *captureAccel5 = new QShortcut(QKeySequence(Qt::KeypadModifier + Qt::Key_1), this);
+    connect(captureAccel5, SIGNAL(activated()), recordingTab, SLOT(captureFrame()));
 
     QShortcut *removeSceneAccel = new QShortcut(QKeySequence(Qt::ShiftModifier + Qt::Key_Delete), this);
     connect(removeSceneAccel, SIGNAL(activated()), projectTab, SLOT(removeSceneSlot()));
 
-    QShortcut *addFrameAccel = new QShortcut(QKeySequence(Qt::Key_F), this);
-    connect(addFrameAccel, SIGNAL(activated()), projectTab, SLOT(addFramesSlot()));
-
-    QShortcut *removeFramesAccel = new QShortcut(QKeySequence(Qt::Key_Delete), this);
-    connect(removeFramesAccel, SIGNAL(activated()), projectTab, SLOT(removeFramesSlot()));
+    QShortcut *addExposureAccel = new QShortcut(QKeySequence(Qt::Key_F), this);
+    connect(addExposureAccel, SIGNAL(activated()), projectTab, SLOT(addFramesSlot()));
+    */
 }
 
 

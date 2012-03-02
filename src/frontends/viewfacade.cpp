@@ -139,16 +139,16 @@ void ViewFacade::notifyPlaySound(int sceneIndex)
 }
 
 
-void ViewFacade::notifyNewMixingMode(int newMixingMode)
+void ViewFacade::notifyNewMixMode(int newMixMode)
 {
-    qDebug("ViewFacade::notifyNewMixingMode --> Start");
+    qDebug("ViewFacade::notifyNewMixMode --> Start");
 
     int numElem = observers.size();
     for (int i = 0; i < numElem; ++i) {
-        observers[i]->updateMixingMode(newMixingMode);
+        observers[i]->updateMixMode(newMixMode);
     }
 
-    qDebug("ViewFacade::notifyNewMixingMode --> End");
+    qDebug("ViewFacade::notifyNewMixMode --> End");
 }
 
 

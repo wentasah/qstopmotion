@@ -206,15 +206,15 @@ void DomainFacade::setVideoSource(int newVideoSource)
 }
 
 
-int DomainFacade::getMixingMode()
+int DomainFacade::getMixMode()
 {
-    return animationProject->getMixingMode();
+    return animationProject->getMixMode();
 }
 
 
-void DomainFacade::setMixingMode(int newMixingMode)
+void DomainFacade::setMixMode(int newMixMode)
 {
-    animationProject->setMixingMode(newMixingMode);
+    animationProject->setMixMode(newMixMode);
 }
 
 
@@ -1392,7 +1392,7 @@ void DomainFacade::setProjectSettingsToDefault()
     PreferencesTool *pref = frontend->getPreferences();
 
     setVideoSource(pref->getBasicPreference("defaultsource", 0));
-    setMixingMode(pref->getBasicPreference("defaultmixingmode", 0));
+    setMixMode(pref->getBasicPreference("defaultmixingmode", 0));
     setUnitMode(pref->getBasicPreference("defaultunitmode", 0));
     setMixCount(pref->getBasicPreference("defaultmixcount", 0));
     setPlaybackCount(pref->getBasicPreference("defaultplaybackcount", 0));

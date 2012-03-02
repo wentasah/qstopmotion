@@ -468,7 +468,7 @@ void ProjectTab::updateDescriptionsUpdated()
 void ProjectTab::updatePlaySound(int) {}
 
 
-void ProjectTab::updateMixingMode(int) {}
+void ProjectTab::updateMixMode(int) {}
 
 
 void ProjectTab::updateMixCount(int) {}

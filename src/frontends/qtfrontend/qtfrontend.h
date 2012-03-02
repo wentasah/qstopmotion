@@ -367,6 +367,43 @@ public:
     void setToolBarState(int newState);
 
     /**
+     * Get the video source index.
+     * @return video source index
+     */
+    int getVideoSource();
+
+    /**
+     * Set the video source index.
+     * @param index Index of the new video source
+     * @return true if the new index is set, false else.
+     */
+    bool setVideoSource(int index);
+
+    /**
+     * Get the mix mode.
+     * @return The mix mode.
+     */
+    int getMixMode();
+
+    /**
+     * Set the mix mode.
+     * @param mode The new mix mode
+     */
+    void setMixMode(int mode);
+
+    /**
+     * Get the mix count.
+     * @return The mix count.
+     */
+    int getMixCount();
+
+    /**
+     * Set the mix count.
+     * @param count The new mix count.
+     */
+    void setMixCount(int count);
+
+    /**
      * Test function for debugging purposes
      */
     void test(QWidget *parentWidget, int level);

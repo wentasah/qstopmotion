@@ -350,6 +350,43 @@ public:
     virtual void setToolBarState(int newState) = 0;
 
     /**
+     * Get the video source index.
+     * @return video source index
+     */
+    virtual int getVideoSource() = 0;
+
+    /**
+     * Set the video source index.
+     * @param index Index of the new video source
+     * @return true if the new index is set, false else.
+     */
+    virtual bool setVideoSource(int index) = 0;
+
+    /**
+     * Get the mix mode.
+     * @return The mix mode.
+     */
+    virtual int getMixMode() = 0;
+
+    /**
+     * Set the mix mode.
+     * @param mode The new mix mode
+     */
+    virtual void setMixMode(int mode) = 0;
+
+    /**
+     * Get the mix count.
+     * @return The mix count.
+     */
+    virtual int getMixCount() = 0;
+
+    /**
+     * Set the mix count.
+     * @param count The new mix count.
+     */
+    virtual void setMixCount(int count) = 0;
+
+    /**
      * Test function for debugging purposes
      */
     virtual void testMainWidget() = 0;

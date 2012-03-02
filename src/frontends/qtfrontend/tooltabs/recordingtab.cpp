@@ -43,7 +43,7 @@ RecordingTab::RecordingTab(Frontend *f,
     cameraButton           = 0;
 
     captureGroupBox        = 0;
-    mixingModeCombo        = 0;
+    mixModeCombo           = 0;
     mixCountSliderCaption  = 0;
     mixCountSlider         = 0;
 
@@ -90,6 +90,52 @@ void RecordingTab::checkCameraOff()
         // The camera is on --> switch off.
         cameraButtonClicked();
     }
+}
+
+
+int RecordingTab::getVideoSource()
+{
+    return videoSourceCombo->currentIndex();
+}
+
+
+bool RecordingTab::setVideoSource(int index)
+{
+    Q_ASSERT(index >= 0);
+
+    if (index >= videoSourceCombo->count()) {
+        return false;
+    }
+    videoSourceCombo->setCurrentIndex(index);
+
+    return true;
+}
+
+
+int RecordingTab::getMixMode()
+{
+    return mixModeCombo->currentIndex();
+}
+
+
+void RecordingTab::setMixMode(int mode)
+{
+    Q_ASSERT(mode >= 0);
+    Q_ASSERT(mode < 3);
+
+    mixModeCombo->setCurrentIndex(mode);
+}
+
+
+int RecordingTab::getMixCount()
+{
+    return mixCountSlider->value();
+}
+
+
+void RecordingTab::setMixCount(int count)
+{
+    mixCountSlider->setValue(count);
 }
 
 
@@ -159,9 +205,9 @@ void RecordingTab::makeGUI()
     captureGroupBox = new QGroupBox(tr("Capture"));
     // secondGroupBox->setFlat(true);
 
-    mixingModeCombo = new QComboBox();
-    mixingModeCombo->setFocusPolicy(Qt::NoFocus);
-    connect(mixingModeCombo, SIGNAL(activated(int)), this, SLOT(changeMixingMode(int)));
+    mixModeCombo = new QComboBox();
+    mixModeCombo->setFocusPolicy(Qt::NoFocus);
+    connect(mixModeCombo, SIGNAL(activated(int)), this, SLOT(changeMixMode(int)));
 
     mixCountSliderCaption = new QLabel();
 
@@ -178,7 +224,7 @@ void RecordingTab::makeGUI()
     captureLayout->setMargin(4);
     // captureLayout->setSpacing(2);
     // captureLayout->addStretch(1);
-    captureLayout->addWidget(mixingModeCombo);
+    captureLayout->addWidget(mixModeCombo);
     captureLayout->addWidget(mixCountSliderCaption);
     captureLayout->addWidget(mixCountSlider);
     captureLayout->addStretch(10);
@@ -222,13 +268,13 @@ void RecordingTab::makeGUI()
 void RecordingTab::initialize()
 {
     qDebug() << "RecordingTab::initialize --> Start";
-
+    /*
     int videoSource = frontend->getProject()->getAnimationProject()->getVideoSource();
     this->videoSourceCombo->setCurrentIndex(videoSource);
 
     int mixingMode = frontend->getProject()->getAnimationProject()->getMixingMode();
     changeMixingMode(mixingMode);
-    /*
+
     int unitMode = frontend->getProject()->getAnimationProject()->getUnitMode();
     this->unitModeChooseCombo->setCurrentIndex(unitMode);
     */
@@ -285,10 +331,10 @@ void RecordingTab::retranslateStrings()
     cameraGroupBox->setTitle(tr("Camera"));
 
     captureGroupBox->setTitle(tr("Capture"));
-    mixingModeCombo->clear();
-    mixingModeCombo->addItem(tr("Mix"));
-    mixingModeCombo->addItem(tr("Diff"));
-    mixingModeCombo->addItem(tr("Playback"));
+    mixModeCombo->clear();
+    mixModeCombo->addItem(tr("Mix"));
+    mixModeCombo->addItem(tr("Diff"));
+    mixModeCombo->addItem(tr("Playback"));
     /*
     autoGroupBox->setTitle(tr("Auto"));
     unitModeCombo->clear();
@@ -319,21 +365,21 @@ void RecordingTab::retranslateStrings()
 }
 
 
-void RecordingTab::setMixingMode()
+void RecordingTab::setMixModeMixing()
 {
-    changeMixingMode(0);
+    changeMixMode(0);
 }
 
 
-void RecordingTab::setDiffingMode()
+void RecordingTab::setMixModeDiffing()
 {
-    changeMixingMode(1);
+    changeMixMode(1);
 }
 
 
-void RecordingTab::setPlaybackMode()
+void RecordingTab::setMixModePlayback()
 {
-    changeMixingMode(2);
+    changeMixMode(2);
 }
 
 
@@ -412,16 +458,16 @@ void RecordingTab::cameraButtonClicked()
 }
 
 
-void RecordingTab::changeMixingMode(int newMixingMode)
+void RecordingTab::changeMixMode(int newMixMode)
 {
-    qDebug() << "RecordingTab::changeMixingMode --> Start";
+    qDebug() << "RecordingTab::changeMixMode --> Start";
 
-    frontend->getProject()->getAnimationProject()->setMixingMode(newMixingMode);
+    frontend->getProject()->getAnimationProject()->setMixMode(newMixMode);
 
-    frontend->getProject()->getView()->notifyNewMixingMode(newMixingMode);
+    frontend->getProject()->getView()->notifyNewMixMode(newMixMode);
 
     // mixingModeCombo->setCurrentIndex(newMixingMode);
-    switch (newMixingMode) {
+    switch (newMixMode) {
     case 0:
         mixCountSliderCaption->setEnabled(true);
         mixCountSlider->setEnabled(true);
@@ -440,18 +486,18 @@ void RecordingTab::changeMixingMode(int newMixingMode)
         mixCountSlider->setValue(frontend->getProject()->getAnimationProject()->getPlaybackCount());
         break;
     default:
-        Q_ASSERT(newMixingMode < 3);
+        Q_ASSERT(newMixMode < 3);
         break;
     }
 
-    qDebug() << "RecordingTab::changeMixingMode --> End";
+    qDebug() << "RecordingTab::changeMixMode --> End";
 }
 
 
 void RecordingTab::changeMixCount(int newMixCount)
 {
-    int mixingMode = mixingModeCombo->currentIndex();
-    switch (mixingMode) {
+    int mixMode = mixModeCombo->currentIndex();
+    switch (mixMode) {
     case 0:
         frontend->getProject()->getAnimationProject()->setMixCount(newMixCount);
         break;
@@ -554,13 +600,13 @@ void RecordingTab::createAccelerators()
 {
     /*
     mixAccel = new QShortcut(QKeySequence(Qt::Key_1), this);
-    connect(mixAccel, SIGNAL(activated()), this, SLOT(setMixingMode()));
+    connect(mixAccel, SIGNAL(activated()), this, SLOT(setMixModeMixing()));
 
     diffAccel = new QShortcut(QKeySequence(Qt::Key_2), this);
-    connect(diffAccel, SIGNAL(activated()), this, SLOT(setDiffingMode()));
+    connect(diffAccel, SIGNAL(activated()), this, SLOT(setMixModeDiffing()));
 
     playbackAccel = new QShortcut(QKeySequence(Qt::Key_3), this);
-    connect(playbackAccel, SIGNAL(activated()), this, SLOT(setPlaybackMode()));
+    connect(playbackAccel, SIGNAL(activated()), this, SLOT(setMixModePlayback()));
     */
 }
 

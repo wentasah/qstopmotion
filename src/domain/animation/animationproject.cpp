@@ -46,7 +46,7 @@ AnimationProject::AnimationProject(Frontend* f)
     nextTotalExposureIndex = 0;
 
     videoSource       = 0;
-    mixingMode        = 0;
+    mixMode           = 0;
     mixCount          = 0;
     playbackCount     = 0;
     framesPerSecond   = 0;
@@ -185,18 +185,20 @@ int AnimationProject::getVideoSource() const
 void AnimationProject::setVideoSource(int newVideoSource)
 {
     videoSource = newVideoSource;
+    setUnsavedChanges();
 }
 
 
-int AnimationProject::getMixingMode() const
+int AnimationProject::getMixMode() const
 {
-    return mixingMode;
+    return mixMode;
 }
 
 
-void AnimationProject::setMixingMode(int newMixingMode)
+void AnimationProject::setMixMode(int newMixMode)
 {
-    mixingMode = newMixingMode;
+    mixMode = newMixMode;
+    setUnsavedChanges();
 }
 
 
@@ -209,6 +211,7 @@ int AnimationProject::getUnitMode() const
 void AnimationProject::setUnitMode(int newUnitMode)
 {
     unitMode = newUnitMode;
+    setUnsavedChanges();
 }
 
 
@@ -221,6 +224,7 @@ int AnimationProject::getMixCount() const
 void AnimationProject::setMixCount(int newMixCount)
 {
     mixCount = newMixCount;
+    setUnsavedChanges();
 }
 
 
@@ -233,6 +237,7 @@ int AnimationProject::getPlaybackCount() const
 void AnimationProject::setPlaybackCount(int newPlaybackCount)
 {
     playbackCount = newPlaybackCount;
+    setUnsavedChanges();
 }
 
 
@@ -445,15 +450,22 @@ bool AnimationProject::readSettingsFromProject(QDomElement &settingsNode)
         // The node is a source node
         if (nodeName.compare("videosource") == 0) {
             QString tmp = currElement.text();
-            this->videoSource = tmp.toInt();
+            if (frontend->setVideoSource(tmp.toInt())) {
+                videoSource = tmp.toInt();
+            }
+            else {
+                setVideoSource(frontend->getVideoSource());
+            }
         }
-        else if (nodeName.compare("mixingmode") == 0) {
+        else if (nodeName.compare("mixmode") == 0) {
             QString tmp = currElement.text();
-            mixingMode = tmp.toInt();
+            mixMode = tmp.toInt();
+            frontend->setMixMode(tmp.toInt());
         }
         else if (nodeName.compare("mixcount") == 0) {
             QString tmp = currElement.text();
             mixCount = tmp.toInt();
+            frontend->setMixCount(tmp.toInt());
         }
         else if (nodeName.compare("playbackcount") == 0) {
             QString tmp = currElement.text();
@@ -489,8 +501,8 @@ bool AnimationProject::saveSettingsToProject(QDomDocument &doc, QDomElement &set
     settingsNode.appendChild(videoSourceElement);
 
     // Save mixing mode parameter
-    QDomElement mixingModeElement = doc.createElement("mixingmode");
-    QDomText mixingModeText = doc.createTextNode(QString("%1").arg(mixingMode));
+    QDomElement mixingModeElement = doc.createElement("mixmode");
+    QDomText mixingModeText = doc.createTextNode(QString("%1").arg(mixMode));
     mixingModeElement.appendChild(mixingModeText);
     settingsNode.appendChild(mixingModeElement);
 

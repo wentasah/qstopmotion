@@ -845,6 +845,42 @@ void QtFrontend::setToolBarState(int newState)
 }
 
 
+int QtFrontend::getVideoSource()
+{
+    return mw->getVideoSource();
+}
+
+
+bool QtFrontend::setVideoSource(int index)
+{
+    return mw->setVideoSource(index);
+}
+
+
+int QtFrontend::getMixMode()
+{
+    return mw->getMixMode();
+}
+
+
+void QtFrontend::setMixMode(int mode)
+{
+    mw->setMixMode(mode);
+}
+
+
+int QtFrontend::getMixCount()
+{
+    return mw->getMixCount();
+}
+
+
+void QtFrontend::setMixCount(int count)
+{
+    mw->setMixCount(count);
+}
+
+
 void QtFrontend::test(QWidget *parentWidget, int level)
 {
     QDebug(QtDebugMsg) << "QtFrontend::test of level: " << level << " --> Start <<<<<<<<<<<<<<<=======================";

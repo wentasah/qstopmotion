@@ -66,6 +66,43 @@ public:
     void checkCameraOff();
 
     /**
+     * Get the video source index.
+     * @return video source index
+     */
+    int getVideoSource();
+
+    /**
+     * Set the video source index.
+     * @param index Index of the new video source
+     * @return true if the new index is set, false else.
+     */
+    bool setVideoSource(int index);
+
+    /**
+     * Get the mix mode.
+     * @return The mix mode.
+     */
+    int getMixMode();
+
+    /**
+     * Set the mix mode.
+     * @param mode The new mix mode
+     */
+    void setMixMode(int mode);
+
+    /**
+     * Get the mix count.
+     * @return The mix count.
+     */
+    int getMixCount();
+
+    /**
+     * Set the mix count.
+     * @param count The new mix count.
+     */
+    void setMixCount(int count);
+
+    /**
      * Applies the settings in the import tab.
      */
     // void apply();
@@ -124,11 +161,11 @@ public slots:
     void cameraButtonClicked();
 
     /**
-     * Slot for notified the recording tab when the viewing mode changes, so that widgets
+     * Slot for notified the recording tab when the mix mode changes, so that widgets
      * can be updated.
-     * @param index the new viewing mode.
+     * @param index the new mix mode.
      */
-    void changeMixingMode(int index);
+    void changeMixMode(int index);
 
     /**
      * Slot for updating the slider value when running in automatic mode.
@@ -137,22 +174,22 @@ public slots:
     void changeMixCount(int value);
 
     /**
-     * Slot for setting the camera mode to mixing.
+     * Slot for setting the mix mode to Mixing.
      * Used by the shortcut key.
      */
-    void setMixingMode();
+    void setMixModeMixing();
 
     /**
-     * Slot for setting the camera mode to Diffing.
+     * Slot for setting the mix mode to Diffing.
      * Used by the shortcut key.
      */
-    void setDiffingMode();
+    void setMixModeDiffing();
 
     /**
-     * Slot for setting the camera mode to Playback.
+     * Slot for setting the mix mode to Playback.
      * Used by the shortcut key.
      */
-    void setPlaybackMode();
+    void setMixModePlayback();
 
     /**
      * Slot for notified the recording tab when the unit mode changes.
@@ -167,16 +204,16 @@ public slots:
     // void changeFpuCount(int newFpuCount);
 
 private:
-    Frontend            *frontend;
-    ToolBar             *toolBar;
-    bool                 cameraOn;
-    QTimer             *cameraTimer;
-    QString             captureFilePath;
+    Frontend    *frontend;
+    ToolBar     *toolBar;
+    bool         cameraOn;
+    QTimer      *cameraTimer;
+    QString      captureFilePath;
     PreferencesTool::captureButtonFunction captureFunction;
 
-    QShortcut           *mixAccel;
-    QShortcut           *diffAccel;
-    QShortcut           *playbackAccel;
+    QShortcut   *mixAccel;
+    QShortcut   *diffAccel;
+    QShortcut   *playbackAccel;
 
     QGroupBox   *recordingGroupBox;
     QComboBox   *recordingModeCombo;
@@ -186,7 +223,7 @@ private:
     QPushButton *cameraButton;
 
     QGroupBox   *captureGroupBox;
-    QComboBox   *mixingModeCombo;
+    QComboBox   *mixModeCombo;
     QLabel      *mixCountSliderCaption;
     QSlider     *mixCountSlider;
 

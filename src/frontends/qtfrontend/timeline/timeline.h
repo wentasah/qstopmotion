@@ -103,10 +103,10 @@ public:
     void updatePlaySound(int sceneIndex);
 
     /**
-     * Function to recieve notification when new mixing mode is set.
-     * @param newMixingMode the new mixing mode
+     * Function to recieve notification when new mix mode is set.
+     * @param newMixMode the new mix mode
      */
-    void updateMixingMode(int newMixingMode);
+    void updateMixMode(int newMixMode);
 
     /**
      * Function to recieve notification when new mix count is set.

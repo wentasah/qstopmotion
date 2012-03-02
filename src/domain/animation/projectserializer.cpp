@@ -159,7 +159,7 @@ bool ProjectSerializer::save(AnimationProject *animation, bool saveAs)
     }
 
     if (QFile::exists(newProjectFilePath)) {
-        QString backup(newProjectFilePath + ".bak");
+        QString backup(newProjectFilePath + PreferencesTool::backupSuffix);
         if (QFile::exists(backup)) {
             if (!QFile::remove(backup)) {
                 // Not successful

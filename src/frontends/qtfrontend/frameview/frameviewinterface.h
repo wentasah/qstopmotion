@@ -116,10 +116,10 @@ public:
     virtual void updatePlaySound(int sceneIndex) = 0;
 
     /**
-     * Function to recieve notification when new mixing mode is set.
-     * @param newMixingMode the new mixing mode
+     * Function to recieve notification when new mix mode is set.
+     * @param newMixMode the new mix mode
      */
-    virtual void updateMixingMode(int newMixingMode);
+    virtual void updateMixMode(int newMixMode);
 
     /**
      * Function to recieve notification when new mix count is set.
@@ -285,20 +285,20 @@ public:
     void cameraOff();
 
     /**
-     * Returns the mixing mode.
-     * @return the mixing mode.
+     * Returns the mix mode.
+     * @return the mix mode.
      */
-    int getMixingMode() const;
+    int getMixMode() const;
 
     /**
-     * Sets the mixing mode/type of effect used when displaying the video.
+     * Sets the mix mode/type of effect used when displaying the video.
      * @param mode the type of effect to be showed on the video. The modes are:\n
      *             0: Image mixing/onion skinning\n
      *             1: Image differentiating\n
      *             2: Playback\n
      * @return true if the mode was succesfully changed
      */
-    bool setMixingMode(int mode);
+    bool setMixMode(int mode);
 
     /**
      *
@@ -362,17 +362,34 @@ protected:
      */
     Frontend *frontend;
 
-    QTimer           grabTimer;
-    QTimer           playbackTimer;
+    /**
+     *
+     */
+    QTimer grabTimer;
+
+    /**
+     *
+     */
+    QTimer playbackTimer;
 
     /**
      *
      */
     int framesPerSecond;
 
+    /**
+     *
+     */
     bool isPlayingVideo;
 
+    /**
+     *
+     */
     int widthConst;
+
+    /**
+     *
+     */
     int heightConst;
 
     /**
@@ -383,7 +400,7 @@ protected:
     /**
      * Mode to viewing the images.
      */
-    int mixingMode;
+    int mixMode;
 
 };
 

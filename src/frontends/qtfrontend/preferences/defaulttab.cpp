@@ -47,8 +47,8 @@ DefaultTab::DefaultTab(Frontend *f, QWidget *parent)
     defaultVideoSource     = 0;
 
     captureGroupBox        = 0;
-    mixingModeCombo        = 0;
-    defaultMixingMode      = 0;
+    mixModeCombo           = 0;
+    defaultMixMode         = 0;
     mixCountSliderCaption  = 0;
     mixCountSlider         = 0;
     defaultMixCount        = 0;
@@ -120,12 +120,12 @@ void DefaultTab::makeGUI()
     captureGroupBox = new QGroupBox(tr("Capture"));
     // secondGroupBox->setFlat(true);
 
-    mixingModeCombo = new QComboBox();
-    mixingModeCombo->setFocusPolicy(Qt::NoFocus);
-    connect(mixingModeCombo, SIGNAL(activated(int)), this, SLOT(changeMixingMode(int)));
-    mixingModeCombo->addItem(tr("Mix"));
-    mixingModeCombo->addItem(tr("Diff"));
-    mixingModeCombo->addItem(tr("Playback"));
+    mixModeCombo = new QComboBox();
+    mixModeCombo->setFocusPolicy(Qt::NoFocus);
+    connect(mixModeCombo, SIGNAL(activated(int)), this, SLOT(changeMixMode(int)));
+    mixModeCombo->addItem(tr("Mix"));
+    mixModeCombo->addItem(tr("Diff"));
+    mixModeCombo->addItem(tr("Playback"));
     mixCountSliderCaption = new QLabel(tr("Number of images:"));
     QString infoText =
         tr("<h4>Number of images</h4> "
@@ -166,7 +166,7 @@ void DefaultTab::makeGUI()
     fpsChooser->setWhatsThis(infoText);
 
     QVBoxLayout *captureLayout = new QVBoxLayout;
-    captureLayout->addWidget(mixingModeCombo);
+    captureLayout->addWidget(mixModeCombo);
     captureLayout->addWidget(mixCountSliderCaption);
     captureLayout->addWidget(mixCountSlider);
     captureLayout->addWidget(fpsChooserCaption);
@@ -221,14 +221,14 @@ void DefaultTab::initialize()
     videoSourceCombo->setCurrentIndex(defaultVideoSource);
     changeVideoSource(defaultVideoSource);
 
-    defaultMixingMode = pref->getBasicPreference("defaultmixingmode", 0);
-    mixingModeCombo->setCurrentIndex(defaultMixingMode);
-    changeMixingMode(defaultMixingMode);
+    defaultMixMode = pref->getBasicPreference("defaultmixmode", 0);
+    mixModeCombo->setCurrentIndex(defaultMixMode);
+    changeMixMode(defaultMixMode);
 
     defaultMixCount = frontend->getPreferences()->getBasicPreference("defaultmixcount", 2);
     defaultPlaybackCount = frontend->getPreferences()->getBasicPreference("defaultplaybackcount", 5);
 
-    switch (defaultMixingMode) {
+    switch (defaultMixMode) {
     case 0:
         mixCountSlider->setValue(defaultMixCount);
         break;
@@ -282,17 +282,17 @@ void DefaultTab::apply()
         defaultVideoSource = newVideoSource;
     }
 
-    int newMixingMode = mixingModeCombo->currentIndex();
-    if (defaultMixingMode != newMixingMode)
+    int newMixMode = mixModeCombo->currentIndex();
+    if (defaultMixMode != newMixMode)
     {
-        pref->setBasicPreference("defaultmixingmode", newMixingMode);
-        defaultMixingMode = newMixingMode;
+        pref->setBasicPreference("defaultmixmode", newMixMode);
+        defaultMixMode = newMixMode;
     }
 
     int newMixCount = mixCountSlider->value();
     if (defaultMixCount != newMixCount)
     {
-        switch (newMixingMode) {
+        switch (newMixMode) {
         case 0:
             pref->setBasicPreference("defaultmixcount", newMixCount);
             break;
@@ -332,7 +332,7 @@ void DefaultTab::reset()
 
     changeRecordingMode(defaultRecordingMode);
     changeVideoSource(defaultVideoSource);
-    changeMixingMode(defaultMixingMode);
+    changeMixMode(defaultMixMode);
     this->mixCountSlider->setValue(defaultMixCount);
     this->fpsChooser->setValue(defaultFps);
 /*
@@ -354,7 +354,7 @@ void DefaultTab::changeVideoSource(int index)
 }
 
 
-void DefaultTab::changeMixingMode(int index)
+void DefaultTab::changeMixMode(int index)
 {
     switch (index) {
     case 0:

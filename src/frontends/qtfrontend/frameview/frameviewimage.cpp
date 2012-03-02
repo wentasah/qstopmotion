@@ -324,7 +324,7 @@ void FrameViewImage::paintEvent(QPaintEvent *)
         if (isPlayingVideo) {
             // Playing live video
             int offset;
-            switch (mixingMode) {
+            switch (mixMode) {
             case 0:
                 // Image mixing
 

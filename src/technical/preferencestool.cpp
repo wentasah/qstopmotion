@@ -317,7 +317,7 @@ void PreferencesTool::setBasicPreferenceDefaults()
     setBasicPreference("capturebutton", captureButtonAfter);
     setBasicPreference("defaultrecordingmode", 0);
     setBasicPreference("defaultvideosource", 0);
-    setBasicPreference("defaultmixingmode", 0);
+    setBasicPreference("defaultmixmode", 0);
     setBasicPreference("defaultmixcount", 2);
     setBasicPreference("defaultframespersecond", 12);
     setBasicPreference("defaultplaybackcount", 5);

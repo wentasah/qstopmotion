@@ -241,7 +241,7 @@ void TimeLine::updateDescriptionsUpdated()
 void TimeLine::updatePlaySound(int) {}
 
 
-void TimeLine::updateMixingMode(int) {}
+void TimeLine::updateMixMode(int) {}
 
 
 void TimeLine::updateMixCount(int) {}

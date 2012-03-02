@@ -93,11 +93,11 @@ private slots:
     void changeVideoSource(int index);
 
     /**
-     * Slot for notified the default tab when the viewing mode changes, so that widgets
+     * Slot for notified the default tab when the mix mode changes, so that widgets
      * can be updated.
-     * @param index the new viewing mode.
+     * @param index the new mix mode.
      */
-    void changeMixingMode(int index);
+    void changeMixMode(int index);
 
     /**
      * Slot for updating the mix count slider value.
@@ -127,7 +127,7 @@ private:
     QComboBox   *videoSourceCombo;
 
     QGroupBox   *captureGroupBox;
-    QComboBox   *mixingModeCombo;
+    QComboBox   *mixModeCombo;
     QLabel      *mixCountSliderCaption;
     QSlider     *mixCountSlider;
     QLabel      *fpsChooserCaption;
@@ -138,7 +138,7 @@ private:
 
     int          defaultRecordingMode;
     int          defaultVideoSource;
-    int          defaultMixingMode;
+    int          defaultMixMode;
     int          defaultMixCount;
     int          defaultPlaybackCount;
     int          defaultFps;

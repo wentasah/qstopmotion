@@ -52,7 +52,7 @@ FrameViewInterface::FrameViewInterface(Frontend *f, QWidget *parent, int fps)
     widthConst  = 4;
     heightConst = 3;
     mixCount = 2;
-    mixingMode = 0;
+    mixMode = 0;
 
     setNormalRatio();
 
@@ -142,13 +142,13 @@ void FrameViewInterface::updateDescriptionsUpdated()
 }
 
 
-void FrameViewInterface::updateMixingMode(int newMixingMode)
+void FrameViewInterface::updateMixMode(int newMixMode)
 {
-    qDebug("FrameViewInterface::updateMixingMode --> Start");
+    qDebug("FrameViewInterface::updateMixMode --> Start");
 
-    this->setMixingMode(newMixingMode);
+    this->setMixMode(newMixMode);
 
-    qDebug("FrameViewInterface::updateMixingMode --> End");
+    qDebug("FrameViewInterface::updateMixMode --> End");
 }
 
 
@@ -272,30 +272,30 @@ void FrameViewInterface::cameraOff()
 }
 
 
-int FrameViewInterface::getMixingMode() const
+int FrameViewInterface::getMixMode() const
 {
-    return mixingMode;
+    return mixMode;
 }
 
 
-bool FrameViewInterface::setMixingMode(int mode)
+bool FrameViewInterface::setMixMode(int mode)
 {
-    qDebug("FrameViewInterface::setMixingMode --> Start");
+    qDebug("FrameViewInterface::setMixMode --> Start");
 
     // Going into playback mode.
-    if (mode == 2 && this->mixingMode != 2) {
+    if (mode == 2 && this->mixMode != 2) {
         grabTimer.stop();
         playbackTimer.start(1000 / framesPerSecond);
     }
     // Going out of playback mode.
-    else if (mode != 2 && this->mixingMode == 2) {
+    else if (mode != 2 && mixMode == 2) {
         playbackTimer.stop();
         grabTimer.start(150);
     }
 
-    this->mixingMode = mode;
+    mixMode = mode;
 
-    qDebug("FrameViewInterface::setMixingMode --> End (true)");
+    qDebug("FrameViewInterface::setMixMode --> End (true)");
     return true;
 }
 

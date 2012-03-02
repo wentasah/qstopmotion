@@ -160,13 +160,13 @@ public:
      * Get the active mixing mode of the project.
      * @return active mixing mode.
      */
-    int getMixingMode() const;
+    int getMixMode() const;
 
     /**
      * Set the active mixing mode of the project.
      * @param newMixingMode the new mixing mode.
      */
-    void setMixingMode(int newMixingMode);
+    void setMixMode(int newMixingMode);
 
     /**
      * Get the active unit of the project.
@@ -648,7 +648,7 @@ private:
     /**
      * Active mixing mode of the project.
      */
-    int mixingMode;
+    int mixMode;
 
     /**
      * Active mix count of the project.

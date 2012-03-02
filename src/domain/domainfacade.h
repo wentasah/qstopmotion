@@ -171,13 +171,13 @@ public:
      * Get the active mixing mode of the project.
      * @return active mixing mode.
      */
-    int getMixingMode();
+    int getMixMode();
 
     /**
-     * Set the active mixing mode of the project.
-     * @param newMixingMode the new mixing mode.
+     * Set the active mix mode of the project.
+     * @param newMixMode the new mix mode.
      */
-    void setMixingMode(int newMixingMode);
+    void setMixMode(int newMixMode);
 
     /**
      * Get the active unit of the project.

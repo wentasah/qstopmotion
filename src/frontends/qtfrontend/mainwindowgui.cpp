@@ -615,6 +615,42 @@ void MainWindowGUI::setToolBarState(int newState)
     qDebug("MainWindowGUI::setToolBarState --> End");
 }
 
+
+int MainWindowGUI::getVideoSource()
+{
+    return recordingTab->getVideoSource();
+}
+
+
+bool MainWindowGUI::setVideoSource(int index)
+{
+    return recordingTab->setVideoSource(index);
+}
+
+
+int MainWindowGUI::getMixMode()
+{
+    return recordingTab->getMixMode();
+}
+
+
+void MainWindowGUI::setMixMode(int mode)
+{
+    recordingTab->setMixMode(mode);
+}
+
+
+int MainWindowGUI::getMixCount()
+{
+    return recordingTab->getMixCount();
+}
+
+
+void MainWindowGUI::setMixCount(int count)
+{
+    recordingTab->setMixCount(count);
+}
+
 /**************************************************************************
  * Public slots
  **************************************************************************/

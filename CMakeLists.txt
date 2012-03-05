@@ -1,7 +1,7 @@
 ###############################################################################
 # CMake file for the qStopMotion project                                      #
 # (c) Ralf Lange, longsoft.de                                                 #
-# Last update: 2012-02-21                                                     #
+# Last update: 2012-03-03                                                     #
 #                                                                             #
 # Usage:                                                                      #
 #   * Qt-Creator (Windows, Linux)                                             #
@@ -33,9 +33,9 @@ cmake_minimum_required(VERSION 2.6.2)
 
 SET(CMAKE_PROJECT_NAME "qstopmotion")
 SET(QSTOPMOTION_HOMEPAGE "http://www.qstopmotion.org")
-SET(QSTOPMOTION_VERSION_MAJOR "0")
-SET(QSTOPMOTION_VERSION_MINOR "9")
-SET(QSTOPMOTION_VERSION_PATCH "11")
+SET(QSTOPMOTION_VERSION_MAJOR "1")
+SET(QSTOPMOTION_VERSION_MINOR "0")
+SET(QSTOPMOTION_VERSION_PATCH "0")
 
 SET(FILES_TO_TRANSLATE )
 

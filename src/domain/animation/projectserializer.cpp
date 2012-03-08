@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2011 by                                                *
+ *  Copyright (C) 2005-2012 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -159,7 +159,7 @@ bool ProjectSerializer::save(AnimationProject *animation, bool saveAs)
     }
 
     if (QFile::exists(newProjectFilePath)) {
-        QString backup(newProjectFilePath + PreferencesTool::backupSuffix);
+        QString backup(newProjectFilePath + "." + PreferencesTool::backupSuffix);
         if (QFile::exists(backup)) {
             if (!QFile::remove(backup)) {
                 // Not successful

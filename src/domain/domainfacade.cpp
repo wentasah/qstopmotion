@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2011 by                                                *
+ *  Copyright (C) 2005-2012 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -188,9 +188,9 @@ const QString DomainFacade::getNewProjectPath()
 }
 
 
-const QString DomainFacade::getProjectID()
+const QString DomainFacade::getProjectDescription()
 {
-    return animationProject->getProjectID();
+    return animationProject->getDescription();
 }
 
 
@@ -505,7 +505,7 @@ bool DomainFacade::newProjectRedo(const QString &projectDescription)
     animationProject->newProject(projectDescription);
     setProjectSettingsToDefault();
     getView()->notifyNewProject();
-    frontend->setProjectID(getProjectID().toAscii());
+    frontend->setProjectID(getProjectDescription().toAscii());
     frontend->setSceneID("");
     frontend->setTakeID("");
     frontend->setToolBarState(ToolBar::toolBarCameraOff);
@@ -541,21 +541,21 @@ bool DomainFacade::openProjectRedo(const QString &projectPath)
 
     if (animationProject->openProject(projectPath)) {
         getView()->notifyDescriptionsUpdated();
-        getView()->notifyActivateScene();
-        getView()->notifyActivateTake();
-        getView()->notifyActivateExposure();
-        frontend->setProjectID(getProjectID().toAscii());
+        frontend->setProjectID(getProjectDescription().toAscii());
 
         Scene *scene = getActiveScene();
         Q_ASSERT(NULL != scene);
-        frontend->setSceneID(scene->getId().toAscii());
+        getView()->notifyActivateScene();
+        frontend->setSceneID(scene->getDescription().toAscii());
 
         Take *take = getActiveTake();
         Q_ASSERT(NULL != take);
-        frontend->setTakeID(take->getId().toAscii());
+        getView()->notifyActivateTake();
+        frontend->setTakeID(take->getDescription().toAscii());
 
         Exposure *exposure = getActiveExposure();
         if (NULL != exposure) {
+            getView()->notifyActivateExposure();
             frontend->setExposureID(exposure->getId().toAscii());
         }
     }
@@ -682,10 +682,8 @@ Scene *DomainFacade::redoSceneAdd(const QString &sceneDescription)
     Scene *scene = animationProject->addScene(sceneDescription);
     getView()->notifyAddScene(scene->getIndex());
 
-    animationProject->setActiveSceneIndex(scene->getIndex());
-    getView()->notifyActivateScene();
-    getView()->notifyActivateTake();
-    getView()->notifyActivateExposure();
+    // animationProject->setActiveSceneIndex(scene->getIndex());
+    // getView()->notifyActivateScene();
 
     animationProject->setUnsavedChanges();
 
@@ -717,10 +715,8 @@ Scene *DomainFacade::redoSceneInsert(const QString &sceneDescription,
     Scene *scene = animationProject->insertScene(sceneIndex, sceneDescription);
     getView()->notifyInsertScene(scene->getIndex());
 
-    animationProject->setActiveSceneIndex(scene->getIndex());
-    getView()->notifyActivateScene();
-    getView()->notifyActivateTake();
-    getView()->notifyActivateExposure();
+    // animationProject->setActiveSceneIndex(scene->getIndex());
+    // getView()->notifyActivateScene();
 
     animationProject->setUnsavedChanges();
 
@@ -894,9 +890,8 @@ Take *DomainFacade::redoTakeAdd(const QString &takeDescription,
     Take *take = animationProject->addTake(sceneIndex, takeDescription);
     getView()->notifyAddTake(sceneIndex, take->getIndex());
 
-    animationProject->setActiveTakeIndex(take->getIndex());
-    getView()->notifyActivateTake();
-    getView()->notifyActivateExposure();
+    // animationProject->setActiveTakeIndex(take->getIndex());
+    // getView()->notifyActivateTake();
 
     animationProject->setUnsavedChanges();
 
@@ -930,9 +925,8 @@ Take *DomainFacade::redoTakeInsert(const QString &takeDescription,
     Take *take = animationProject->insertTake(sceneIndex, takeDescription);
     getView()->notifyInsertTake(sceneIndex, takeIndex);
 
-    animationProject->setActiveTakeIndex(take->getIndex());
-    getView()->notifyActivateTake();
-    getView()->notifyActivateExposure();
+    // animationProject->setActiveTakeIndex(take->getIndex());
+    // getView()->notifyActivateTake();
 
     animationProject->setUnsavedChanges();
 
@@ -1110,8 +1104,10 @@ void DomainFacade::redoExposureAdd(const QString &fileName,
 
     Exposure *exposure = animationProject->addExposure(fileName, AnimationProject::InTempPath);
     getView()->notifyAddExposure(sceneIndex, takeIndex, exposure->getIndex());
-    animationProject->setActiveExposureIndex(exposure->getIndex());
-    getView()->notifyActivateExposure();
+
+    // animationProject->setActiveExposureIndex(exposure->getIndex());
+    // getView()->notifyActivateExposure();
+
     animationProject->setUnsavedChanges();
 
     qDebug("DomainFacade::redoExposureAdd --> End");
@@ -1160,8 +1156,9 @@ void DomainFacade::redoExposureInsert(const QString &fileName,
                                                 fileName, AnimationProject::InTempPath);
     getView()->notifyInsertExposure(sceneIndex, takeIndex, exposure->getIndex());
 
-    animationProject->setActiveExposureIndex(exposure->getIndex());
-    getView()->notifyActivateExposure();
+    // animationProject->setActiveExposureIndex(exposure->getIndex());
+    // getView()->notifyActivateExposure();
+
     animationProject->setUnsavedChanges();
 
     qDebug("DomainFacade::redoExposureInsert --> End");

@@ -146,7 +146,7 @@ const QString AnimationProject::getNewProjectPath() const
 }
 
 
-const QString AnimationProject::getProjectID() const
+const QString AnimationProject::getDescription() const
 {
     return this->description;
 }

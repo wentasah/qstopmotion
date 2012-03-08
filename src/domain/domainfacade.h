@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2011 by                                                *
+ *  Copyright (C) 2005-2012 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -150,10 +150,10 @@ public:
     const QString getNewProjectPath();
 
     /**
-     * Retrieves the project ID.
-     * @return the project ID if it's setted, NULL otherwise.
+     * Retrieves the project description.
+     * @return the project description if it's setted, NULL otherwise.
      */
-    const QString getProjectID();
+    const QString getProjectDescription();
 
     /**
      * Get the active source of the project.

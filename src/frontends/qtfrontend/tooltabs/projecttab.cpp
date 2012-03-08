@@ -68,6 +68,10 @@ ProjectTab::ProjectTab(Frontend *f,
     editGroupBox        = 0;
     editFrameButton     = 0;
 
+    activeSceneIndex    = -1;
+    activeTakeIndex     = -1;
+    activeExposureIndex = -1;
+
     this->setObjectName("ProjectTab");
 
     makeGUI();
@@ -416,7 +420,7 @@ void ProjectTab::updateNewProject()
     qDebug("ProjectTab::updateNewProject --> Start");
 
     QTreeWidgetItem *topLevelItem = new QTreeWidgetItem(projectTree);
-    topLevelItem->setText(0, this->frontend->getProject()->getProjectID());
+    topLevelItem->setText(0, this->frontend->getProject()->getProjectDescription());
     topLevelItem->setFlags(Qt::ItemIsEnabled);
     projectTree->insertTopLevelItem(0, topLevelItem);
 
@@ -442,7 +446,7 @@ void ProjectTab::updateDescriptionsUpdated()
     int exposureIndex;
     Exposure *exposure;
 
-    topLevelItem->setText(0, this->frontend->getProject()->getProjectID());
+    topLevelItem->setText(0, this->frontend->getProject()->getProjectDescription());
     for (sceneIndex = 0; sceneIndex < sceneCount ; sceneIndex++) {
         sceneItem = topLevelItem->child(sceneIndex);
         scene = this->frontend->getProject()->getScene(sceneIndex);
@@ -517,6 +521,8 @@ void ProjectTab::updateInsertScene(int sceneIndex)
                       Qt::ItemIsSelectable);
     this->projectTree->topLevelItem(0)->insertChild(sceneIndex, newItem);
 
+    activeSceneIndex++;
+
     qDebug("ProjectTab::updateInsertScene --> End");
 }
 
@@ -535,7 +541,17 @@ void ProjectTab::updateActivateScene()
 {
     qDebug("ProjectTab::updateActivateScene --> Start");
 
-    // this->activateScene();
+    int newSceneIndex = frontend->getProject()->getActiveSceneIndex();
+
+    Q_ASSERT(newSceneIndex != activeSceneIndex);
+
+    this->unsetActiveItems();
+
+    activeSceneIndex = newSceneIndex;
+    activeTakeIndex = -1;
+    activeExposureIndex = -1;
+
+    this->setActiveItems();
 
     qDebug("ProjectTab::updateActivateScene --> End");
 }
@@ -607,6 +623,8 @@ void ProjectTab::updateInsertTake(int sceneIndex,
                       Qt::ItemIsSelectable);
     sceneItem->insertChild(takeIndex, newItem);
 
+    activeTakeIndex++;
+
     qDebug("ProjectTab::updateInsertTake --> End");
 }
 
@@ -625,7 +643,16 @@ void ProjectTab::updateActivateTake()
 {
     qDebug("ProjectTab::updateActivateTake --> Start");
 
-    // this->unsetActiveExposure();
+    int newTakeIndex = frontend->getProject()->getActiveTakeIndex();
+
+    Q_ASSERT(newTakeIndex != activeTakeIndex);
+
+    this->unsetActiveItems();
+
+    activeTakeIndex = newTakeIndex;
+    activeExposureIndex = -1;
+
+    this->setActiveItems();
 
     qDebug("ProjectTab::updateActivateTake --> End");
 }
@@ -688,6 +715,10 @@ void ProjectTab::updateInsertExposure(int sceneIndex,
     newItem->setFlags(Qt::ItemIsEnabled |
                       Qt::ItemIsSelectable);
     takeItem->insertChild(exposureIndex, newItem);
+
+    if (-1 < activeExposureIndex) {
+        activeExposureIndex++;
+    }
 
     qDebug("ProjectTab::updateInsertExposure --> End");
 }
@@ -771,7 +802,14 @@ void ProjectTab::updateActivateExposure()
 {
     qDebug("ProjectTab::updateActivateExposure --> Start");
 
+    int newExposureIndex = frontend->getProject()->getActiveExposureIndex();
+
+    Q_ASSERT(newExposureIndex != activeExposureIndex);
+
     this->unsetActiveItems();
+
+    activeExposureIndex = newExposureIndex;
+
     this->setActiveItems();
 
     qDebug("ProjectTab::updateActivateExposure --> End");
@@ -817,45 +855,38 @@ void ProjectTab::setActiveItems()
 {
     qDebug("ProjectTab::setActiveExposure --> Start");
 
-    int activeSceneIndex;
-    int activeTakeIndex;
-    int activeExposureIndex;
+    QTreeWidgetItem *newExposureItem = NULL;
+    QTreeWidgetItem *newTakeItem = NULL;
+    QTreeWidgetItem *newSceneItem = NULL;
+    QTreeWidgetItem *newProjectItem = projectTree->topLevelItem(0);
+    newProjectItem->setExpanded(TRUE);
+    newProjectItem->setSelected(TRUE);
 
-    QTreeWidgetItem *activeExposureItem = NULL;
-    QTreeWidgetItem *activeTakeItem = NULL;
-    QTreeWidgetItem *activeSceneItem = NULL;
-    QTreeWidgetItem *activeProjectItem = projectTree->topLevelItem(0);
-    activeProjectItem->setExpanded(TRUE);
-    activeProjectItem->setSelected(TRUE);
-
-    activeSceneIndex = frontend->getProject()->getActiveSceneIndex();
     if (0 > activeSceneIndex) {
         qDebug("ProjectTab::setActiveExposure --> End (Only project)");
         return;
     }
-    activeSceneItem = activeProjectItem->child(activeSceneIndex);
-    activeSceneItem->setExpanded(TRUE);
-    activeSceneItem->setSelected(TRUE);
-    projectTree->scrollToItem(activeSceneItem);
+    newSceneItem = newProjectItem->child(activeSceneIndex);
+    newSceneItem->setExpanded(TRUE);
+    newSceneItem->setSelected(TRUE);
+    projectTree->scrollToItem(newSceneItem);
 
-    activeTakeIndex = frontend->getProject()->getActiveTakeIndex();
     if (0 > activeTakeIndex) {
         qDebug("ProjectTab::setActiveExposure --> End (Up to scene)");
         return;
     }
-    activeTakeItem = activeSceneItem->child(activeTakeIndex);
-    activeTakeItem->setExpanded(TRUE);
-    activeTakeItem->setSelected(TRUE);
-    projectTree->scrollToItem(activeTakeItem);
+    newTakeItem = newSceneItem->child(activeTakeIndex);
+    newTakeItem->setExpanded(TRUE);
+    newTakeItem->setSelected(TRUE);
+    projectTree->scrollToItem(newTakeItem);
 
-    activeExposureIndex = frontend->getProject()->getActiveExposureIndex();
     if (0 > activeExposureIndex) {
         qDebug("ProjectTab::setActiveExposure --> End (Up to take)");
         return;
     }
-    activeExposureItem = activeTakeItem->child(activeExposureIndex);
-    activeExposureItem->setSelected(TRUE);
-    projectTree->scrollToItem(activeExposureItem);
+    newExposureItem = newTakeItem->child(activeExposureIndex);
+    newExposureItem->setSelected(TRUE);
+    projectTree->scrollToItem(newExposureItem);
 
     qDebug("ProjectTab::setActiveExposure --> End (All)");
 }
@@ -866,42 +897,50 @@ void ProjectTab::itemClicked(QTreeWidgetItem * /*exposureItem*/,
 {
     qDebug("ProjectTab::itemClicked --> Start");
 
-    int sceneIndex;
-    int takeIndex;
-    int exposureIndex;
+    int    newSceneIndex;
+    int    newTakeIndex;
+    int    newExposureIndex;
+    Scene *scene = NULL;
+    Take  *take = NULL;
 
-    if (!getSelectedItems(sceneIndex, takeIndex, exposureIndex)) {
+    if (!getSelectedItems(newSceneIndex, newTakeIndex, newExposureIndex)) {
         // Project item selected
         setActiveItems();
         return;
     }
-    if (-1 == takeIndex) {
-        // Scene item selected
-        Scene *scene = frontend->getProject()->getScene(sceneIndex);
-        takeIndex = scene->getActiveTakeIndex();
-        if (-1 == takeIndex) {
-            // This is an empty scene
-        }
-        else {
-            // One or more takes exists
-            Take *take = scene->getTake(takeIndex);
-            exposureIndex = take->getActiveExposureIndex();
-        }
-        frontend->getProject()->selectExposureToUndo(sceneIndex, takeIndex, exposureIndex);
 
-        qDebug("ProjectTab::itemClicked --> End (Scene selected)");
+    if (activeSceneIndex != newSceneIndex) {
+        frontend->getProject()->selectSceneToUndo(newSceneIndex);
+        newTakeIndex = -1;
+        newExposureIndex = -1;
+    }
+
+    scene = frontend->getProject()->getScene(activeSceneIndex);
+    if (-1 == newTakeIndex) {
+        // Scene item selected
+        newTakeIndex = scene->getActiveTakeIndex();
+    }
+
+    if (activeTakeIndex != newTakeIndex) {
+        frontend->getProject()->selectTakeToUndo(newSceneIndex, newTakeIndex);
+        newExposureIndex = -1;
+    }
+
+    take = scene->getTake(newTakeIndex);
+    if (-1 == newExposureIndex) {
+        // Take item selected
+        newExposureIndex = take->getActiveExposureIndex();
+    }
+
+    if (activeExposureIndex != newExposureIndex) {
+        frontend->getProject()->selectExposureToUndo(newSceneIndex, newTakeIndex, newExposureIndex);
+        qDebug("ProjectTab::itemClicked --> End (Scene, Take or exposure selected)");
         return;
     }
-    if (-1 == exposureIndex) {
-        // Take item selected
-        Scene *scene = frontend->getProject()->getScene(sceneIndex);
-        Take *take = scene->getTake(takeIndex);
-        exposureIndex = take->getActiveExposureIndex();
-    }
 
-    frontend->getProject()->selectExposureToUndo(sceneIndex, takeIndex, exposureIndex);
+    this->setActiveItems();
 
-    qDebug("ProjectTab::itemClicked --> End (Take or exposure selected)");
+    qDebug("ProjectTab::itemClicked --> End (Nothing new selected)");
 }
 
 
@@ -951,7 +990,7 @@ void ProjectTab::insertSceneSlot()
     qDebug("ProjectTab::insertSceneSlot --> Start");
 
     DescriptionDialog *dialog = new DescriptionDialog(frontend, DescriptionDialog::SceneDescription);
-    dialog->setProjectDescription(frontend->getProject()->getProjectID());
+    dialog->setProjectDescription(frontend->getProject()->getProjectDescription());
     dialog->setSceneDescription("Scene ???");
     dialog->setTakeDescription("Take ???");
     int ret = dialog->exec();
@@ -966,14 +1005,10 @@ void ProjectTab::insertSceneSlot()
 
     delete(dialog);
 
-    int sceneIndex;
-    int takeIndex;
-    int exposureIndex;
+    int newSceneIndex = activeSceneIndex;
 
-    getSelectedItems(sceneIndex, takeIndex, exposureIndex);
-
-    frontend->getProject()->insertSceneToUndo(sceneDescription, sceneIndex);
-    frontend->getProject()->addTakeToUndo(takeDescription, sceneIndex);
+    frontend->getProject()->insertSceneToUndo(sceneDescription, newSceneIndex);
+    frontend->getProject()->addTakeToUndo(takeDescription, newSceneIndex);
 
     qDebug("ProjectTab::insertSceneSlot --> End");
 }
@@ -984,7 +1019,7 @@ void ProjectTab::addSceneSlot()
     qDebug("ProjectTab::addSceneSlot --> Start");
 
     DescriptionDialog *dialog = new DescriptionDialog(frontend, DescriptionDialog::SceneDescription);
-    dialog->setProjectDescription(frontend->getProject()->getProjectID());
+    dialog->setProjectDescription(frontend->getProject()->getProjectDescription());
     dialog->setSceneDescription("Scene ???");
     dialog->setTakeDescription("Take ???");
     int ret = dialog->exec();
@@ -999,10 +1034,11 @@ void ProjectTab::addSceneSlot()
 
     delete(dialog);
 
+    int newSceneIndex = frontend->getProject()->getSceneSize();
+
     frontend->getProject()->addSceneToUndo(sceneDescription);
 
-    int activeSceneIndex = frontend->getProject()->getSceneSize() - 1;
-    frontend->getProject()->addTakeToUndo(takeDescription, activeSceneIndex);
+    frontend->getProject()->addTakeToUndo(takeDescription, newSceneIndex);
 
     qDebug("ProjectTab::addSceneSlot --> End");
 }
@@ -1012,13 +1048,7 @@ void ProjectTab::removeSceneSlot()
 {
     qDebug("ProjectTab::removeSceneSlot --> Start");
 
-    int sceneIndex;
-    int takeIndex;
-    int exposureIndex;
-
-    getSelectedItems(sceneIndex, takeIndex, exposureIndex);
-
-    frontend->getProject()->removeSceneToUndo(sceneIndex);
+    frontend->getProject()->removeSceneToUndo(activeSceneIndex);
 
     qDebug("ProjectTab::removeSceneSlot --> End");
 }
@@ -1028,11 +1058,9 @@ void ProjectTab::insertTakeSlot()
 {
     qDebug("ProjectTab::insertTakeSlot --> Start");
 
-    Scene *activeScene = frontend->getProject()->getActiveScene();
-
     DescriptionDialog *dialog = new DescriptionDialog(frontend, DescriptionDialog::TakeDescription);
-    dialog->setProjectDescription(frontend->getProject()->getProjectID());
-    dialog->setSceneDescription(activeScene->getId());
+    dialog->setProjectDescription(frontend->getProject()->getProjectDescription());
+    dialog->setSceneDescription(frontend->getProject()->getActiveScene()->getDescription());
     dialog->setTakeDescription("Take ???");
     int ret = dialog->exec();
     if (ret == QDialog::Rejected) {
@@ -1045,13 +1073,7 @@ void ProjectTab::insertTakeSlot()
 
     delete(dialog);
 
-    int sceneIndex;
-    int takeIndex;
-    int exposureIndex;
-
-    getSelectedItems(sceneIndex, takeIndex, exposureIndex);
-
-    frontend->getProject()->insertTakeToUndo(takeDescription, sceneIndex, takeIndex);
+    frontend->getProject()->insertTakeToUndo(takeDescription, activeSceneIndex, activeTakeIndex);
 
     qDebug("ProjectTab::insertTakeSlot --> End");
 }
@@ -1061,12 +1083,9 @@ void ProjectTab::addTakeSlot()
 {
     qDebug("ProjectTab::addTakeSlot --> Start");
 
-    Scene *activeScene = frontend->getProject()->getActiveScene();
-    int activeSceneIndex = activeScene->getIndex();
-
     DescriptionDialog *dialog = new DescriptionDialog(frontend, DescriptionDialog::TakeDescription);
-    dialog->setProjectDescription(frontend->getProject()->getProjectID());
-    dialog->setSceneDescription(activeScene->getId());
+    dialog->setProjectDescription(frontend->getProject()->getProjectDescription());
+    dialog->setSceneDescription(frontend->getProject()->getActiveScene()->getDescription());
     dialog->setTakeDescription("Take ???");
     int ret = dialog->exec();
     if (ret == QDialog::Rejected) {
@@ -1089,13 +1108,7 @@ void ProjectTab::removeTakeSlot()
 {
     qDebug("ProjectTab::removeTakeSlot --> Start");
 
-    int sceneIndex;
-    int takeIndex;
-    int exposureIndex;
-
-    getSelectedItems(sceneIndex, takeIndex, exposureIndex);
-
-    frontend->getProject()->removeTakeToUndo(sceneIndex, takeIndex);
+    frontend->getProject()->removeTakeToUndo(activeSceneIndex, activeTakeIndex);
 
     qDebug("ProjectTab::removeTakeSlot --> End");
 }
@@ -1113,13 +1126,9 @@ void ProjectTab::insertFramesSlot()
         return;
     }
     int selectedFilesIndex;
-    int activeSceneIndex = frontend->getProject()->getActiveSceneIndex();
-    int activeTakeIndex = frontend->getProject()->getActiveTakeIndex();
-    int activeExposureIndex = frontend->getProject()->getActiveExposureIndex();
     for (selectedFilesIndex = 0 ; selectedFilesIndex < selectedFilesCount ; selectedFilesIndex++) {
         // insert the selected files
         frontend->getProject()->insertExposureToUndo(selectedFiles[selectedFilesIndex], activeSceneIndex, activeTakeIndex, activeExposureIndex, true);
-        activeExposureIndex++;
     }
 
     qDebug("ProjectTab::insertFramesSlot --> End");
@@ -1138,8 +1147,6 @@ void ProjectTab::addFramesSlot()
         return;
     }
     int selectedFilesIndex;
-    int activeSceneIndex = frontend->getProject()->getActiveSceneIndex();
-    int activeTakeIndex = frontend->getProject()->getActiveTakeIndex();
     for (selectedFilesIndex = 0 ; selectedFilesIndex < selectedFilesCount ; selectedFilesIndex++) {
         // Add the selected files
         frontend->getProject()->addExposureToUndo(selectedFiles[selectedFilesIndex], activeSceneIndex, activeTakeIndex, true);
@@ -1153,20 +1160,14 @@ void ProjectTab::removeFramesSlot()
 {
     qDebug("ProjectTab::removeFramesSlot --> Start");
 
-    int sceneIndex;
-    int takeIndex;
-    int exposureIndex;
-
-    getSelectedItems(sceneIndex, takeIndex, exposureIndex);
-
-    if (-1 == exposureIndex) {
+    if (-1 == activeExposureIndex) {
         // Selected item is not a exposure item
         qDebug("ProjectTab::removeFramesSlot --> End (Nothing)");
         return;
     }
 
     // TODO: Optinaly save the image to remove in a separate directory
-    frontend->getProject()->removeExposureToUndo(sceneIndex, takeIndex, exposureIndex);
+    frontend->getProject()->removeExposureToUndo(activeSceneIndex, activeTakeIndex, activeExposureIndex);
 
     qDebug("ProjectTab::removeFramesSlot --> End");
 }
@@ -1184,17 +1185,13 @@ void ProjectTab::editFrameSlot()
     }
 
     // Determine the active scene and active frame.
-    int activeScene = frontend->getProject()->getActiveSceneIndex();
-    int activeTake = frontend->getProject()->getActiveTakeIndex();
-    int activeExposure = frontend->getProject()->getActiveExposureIndex();
-
-    if (activeScene < 0 || activeTake < 0 || activeExposure < 0) {
+    if (activeSceneIndex < 0 || activeTakeIndex < 0 || activeExposureIndex < 0) {
         frontend->showWarning(tr("Warning"),
                               tr("There is no active frame to open"));
         return;
     }
 
-    Exposure *exposure = frontend->getProject()->getExposure(activeScene, activeTake, activeExposure);
+    Exposure *exposure = frontend->getProject()->getExposure(activeSceneIndex, activeTakeIndex, activeExposureIndex);
     if (exposure->isEmpty()) {
         frontend->showWarning(tr("Warning"),
                               tr("The active frame is corrupt"));

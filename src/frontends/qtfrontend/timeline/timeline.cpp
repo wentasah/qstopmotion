@@ -997,6 +997,8 @@ void TimeLine::removeAllExposures()
 
     mainWidget->resize((FRAME_WIDTH + SPACE) * thumbViews.size(), FRAME_HEIGHT);
 
+    activeExposureIndex = -1;
+
     qDebug("TimeLine::removeAllExposures --> End");
 }
 
@@ -1088,12 +1090,14 @@ void TimeLine::activateExposure()
         }
     }
     activeExposureIndex = newActiveExposure;
-    thumbViews[activeExposureIndex]->setSelected(true);
-    int activeExposureX = activeExposureIndex * (FRAME_WIDTH + SPACE);
-    if (this->width() < (activeExposureX + SPACE + FRAME_WIDTH)) {
-        activeExposureX += SPACE + FRAME_WIDTH;
+    if (activeExposureIndex > -1) {
+        thumbViews[activeExposureIndex]->setSelected(true);
+        int activeExposureX = activeExposureIndex * (FRAME_WIDTH + SPACE);
+        if (this->width() < (activeExposureX + SPACE + FRAME_WIDTH)) {
+            activeExposureX += SPACE + FRAME_WIDTH;
+        }
+        ensureVisible(activeExposureX, FRAME_HEIGHT);
     }
-    ensureVisible(activeExposureX, FRAME_HEIGHT);
 
     selectionFrame = activeExposureIndex;
     this->selecting = false;

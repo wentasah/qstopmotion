@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2011 by                                                *
+ *  Copyright (C) 2005-2012 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -356,6 +356,11 @@ Take* Scene::addTake(const QString &takeDescription)
         take->setDescription(takeDescription);
     }
     takes.append(take);
+
+    if (-1 == activeTakeIndex) {
+        activeTakeIndex = 0;
+        activeTakeId.append(take->getId());
+    }
 
     qDebug("Scene::addTake --> End");
 

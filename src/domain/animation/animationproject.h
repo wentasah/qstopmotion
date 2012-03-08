@@ -115,10 +115,10 @@ public:
     const QString getNewProjectPath() const;
 
     /**
-     * Get the project ID of the project
-     * @return project ID of the project
+     * Get the description of the project
+     * @return Description of the project
      */
-    const QString getProjectID() const;
+    const QString getDescription() const;
 
     /**
      * Get the new image path of the project

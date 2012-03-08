@@ -670,8 +670,8 @@ void MainWindowGUI::newProject()
 
     DescriptionDialog *dialog = new DescriptionDialog(frontend, DescriptionDialog::ProjectDescription);
     dialog->setProjectDescription(tr("The Project"));
-    dialog->setSceneDescription("001");
-    dialog->setTakeDescription("01");
+    dialog->setSceneDescription(tr("Scene 001"));
+    dialog->setTakeDescription(tr("Take 01"));
     int ret = dialog->exec();
     if (ret == QDialog::Rejected) {
         // The user canceled the input dialog

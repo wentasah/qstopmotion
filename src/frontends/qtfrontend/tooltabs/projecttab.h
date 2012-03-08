@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2010-2011 by Ralf Lange                                 *
+ *   Copyright (C) 2010-2012 by Ralf Lange                                 *
  *   ralf.lange@longsoft.de                                                *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -379,13 +379,13 @@ private:
     bool                 tabEnabled;
 
     /** The active scene in the projecttree */
-    int activeScene;
+    int activeSceneIndex;
 
     /** The active take in the timeline */
-    int activeTake;
+    int activeTakeIndex;
 
     /** The active exposure in the timeline*/
-    int activeExposure;
+    int activeExposureIndex;
 
     QGroupBox   *projectGroupBox;
     QTreeWidget *projectTree;

@@ -642,9 +642,12 @@ void RecordingTab::storeFrame()
 
         switch (captureFunction) {
         case PreferencesTool::captureButtonBevor:
-            frontend->getProject()->insertExposureToUndo(captureFilePath, activeSceneIndex, activeTakeIndex, activeExposureIndex, true);
             if (-1 == newExposureIndex) {
+                frontend->getProject()->addExposureToUndo(captureFilePath, activeSceneIndex, activeTakeIndex, true);
                 newExposureIndex++;
+            }
+            else {
+                frontend->getProject()->insertExposureToUndo(captureFilePath, activeSceneIndex, activeTakeIndex, activeExposureIndex, true);
             }
             frontend->getProject()->selectExposureToUndo(activeSceneIndex, activeTakeIndex, newExposureIndex);
             break;

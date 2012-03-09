@@ -520,28 +520,6 @@ bool TimeLine::isSelecting() const
 }
 
 
-void TimeLine::setSelection(int selectionIndex)
-{
-    qDebug("TimeLine::setSelection --> Start");
-
-    this->selectionFrame = selectionFrame;
-    selectionFrame += 1;
-
-    int exposureIndex = activeExposureIndex + 1;
-    if (selectionIndex >= exposureIndex) {
-        for (int i = exposureIndex; i <= selectionIndex; ++i) {
-            thumbViews[i]->setSelected(true);
-        }
-    } else if (selectionFrame < exposureIndex) {
-        for (int i = selectionIndex; i <= exposureIndex; ++i) {
-            thumbViews[i]->setSelected(true);
-        }
-    }
-
-    qDebug("TimeLine::setSelection --> End");
-}
-
-
 int TimeLine::getSelectionFrame() const
 {
     return selectionFrame;
@@ -713,6 +691,11 @@ void TimeLine::newTake(int /*sceneIndex*/,
 void TimeLine::activateTake()
 {
     qDebug("TimeLine::activateTake --> Start");
+
+    if (activeSceneIndex < 0) {
+        // Nothing to do
+        return;
+    }
 
     int newActiveTake = frontend->getProject()->getActiveTakeIndex();
 
@@ -961,7 +944,7 @@ void TimeLine::removeExposure(int sceneIndex,
     int numExposures = thumbViews.size();
 
     // The exposure to be deleted are between other exposures
-    if (fromExposure < numExposures - 1) {
+    if (fromExposure < numExposures) {
 
         // Move all exposures behind the deleted exposure forward.
         // int stop = numExposures - frontend->getProject()->getSceneSize() + 1;
@@ -973,12 +956,21 @@ void TimeLine::removeExposure(int sceneIndex,
 
     delete thumbViews[exposureIndex];
     thumbViews.remove(exposureIndex);
-    if (activeExposureIndex == exposureIndex) {
-        // The active exposure are deleted
-        activeExposureIndex = -1;
+    mainWidget->resize((FRAME_WIDTH + SPACE) * thumbViews.size(), FRAME_HEIGHT);
+
+    // int newExposureIndex = activeExposureIndex;
+    if (exposureIndex < activeExposureIndex) {
+        activeExposureIndex--;
+    }
+    else {
+        if (exposureIndex == thumbViews.size()) {
+            activeExposureIndex--;
+        }
     }
 
-    mainWidget->resize((FRAME_WIDTH + SPACE) * thumbViews.size(), FRAME_HEIGHT);
+    if (-1 < activeExposureIndex) {
+        thumbViews[activeExposureIndex]->setSelected(true);
+    }
 
     qDebug("TimeLine::removeExposure --> End");
 }
@@ -1074,6 +1066,10 @@ void TimeLine::activateExposure()
 {
     qDebug("TimeLine::activateExposure --> Start");
 
+    if (activeSceneIndex < 0) {
+        // Nothing to do
+        return;
+    }
     if (activeTakeIndex < 0) {
         // Nothing to do
         return;

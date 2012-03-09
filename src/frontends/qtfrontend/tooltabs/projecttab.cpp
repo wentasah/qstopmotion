@@ -562,7 +562,31 @@ void ProjectTab::updateRemoveScene(int sceneIndex)
     qDebug("ProjectTab::updateRemoveScene --> Start");
 
     this->unsetActiveItems();
+    QTreeWidgetItem *topLevelItem = this->projectTree->topLevelItem(0);
+    Q_ASSERT(sceneIndex < topLevelItem->childCount());
     this->removeScene(sceneIndex);
+
+    if (sceneIndex < activeSceneIndex) {
+        activeSceneIndex--;
+    }
+    else {
+        if (sceneIndex == topLevelItem->childCount()) {
+            activeSceneIndex--;
+        }
+    }
+    if (-1 == activeSceneIndex) {
+        activeTakeIndex = -1;
+        activeExposureIndex = -1;
+    }
+    else {
+        activeTakeIndex = frontend->getProject()->getActiveTakeIndex();
+        if (-1 == activeTakeIndex) {
+            activeExposureIndex = -1;
+        }
+        else {
+            activeExposureIndex = frontend->getProject()->getActiveExposureIndex();
+        }
+    }
     this->setActiveItems();
 
     qDebug("ProjectTab::updateRemoveScene --> End");
@@ -666,8 +690,23 @@ void ProjectTab::updateRemoveTake(int sceneIndex,
     this->unsetActiveItems();
     QTreeWidgetItem *topLevelItem = this->projectTree->topLevelItem(0);
     Q_ASSERT(sceneIndex < topLevelItem->childCount());
-    QTreeWidgetItem *sceneItem = topLevelItem->child(sceneIndex);
-    this->removeTake(sceneItem, takeIndex);
+    QTreeWidgetItem *activeSceneItem = topLevelItem->child(sceneIndex);
+    this->removeTake(activeSceneItem, takeIndex);
+
+    if (takeIndex < activeTakeIndex) {
+        activeTakeIndex--;
+    }
+    else {
+        if (takeIndex == activeSceneItem->childCount()) {
+            activeTakeIndex--;
+        }
+    }
+    if (-1 == activeTakeIndex) {
+        activeExposureIndex = -1;
+    }
+    else {
+        activeExposureIndex = frontend->getProject()->getActiveExposureIndex();
+    }
     this->setActiveItems();
 
     qDebug("ProjectTab::updateRemoveTake --> End");
@@ -707,6 +746,8 @@ void ProjectTab::updateInsertExposure(int sceneIndex,
 {
     qDebug("ProjectTab::updateInsertExposure --> Start");
 
+    Q_ASSERT(-1 < activeExposureIndex);
+
     Exposure *exposure = frontend->getProject()->getScene(sceneIndex)->getTake(takeIndex)->getExposure(exposureIndex);
 
     QTreeWidgetItem *takeItem = this->projectTree->topLevelItem(0)->child(sceneIndex)->child(takeIndex);
@@ -716,7 +757,7 @@ void ProjectTab::updateInsertExposure(int sceneIndex,
                       Qt::ItemIsSelectable);
     takeItem->insertChild(exposureIndex, newItem);
 
-    if (-1 < activeExposureIndex) {
+    if (exposureIndex <= activeExposureIndex) {
         activeExposureIndex++;
     }
 
@@ -741,21 +782,21 @@ void ProjectTab::updateRemoveExposure(int sceneIndex,
 {
     qDebug("ProjectTab::updateRemoveExposure --> Start");
 
-    int newExposureIndex;
-
     this->unsetActiveItems();
     QTreeWidgetItem *activeSceneItem = this->projectTree->topLevelItem(0)->child(sceneIndex);
     QTreeWidgetItem *activeTakeItem = activeSceneItem->child(takeIndex);
     QTreeWidgetItem *activeExposureItem = activeTakeItem->child(exposureIndex);
     activeTakeItem->removeChild(activeExposureItem);
     delete activeExposureItem;
-    if (exposureIndex == activeTakeItem->childCount()) {
-        newExposureIndex = exposureIndex - 1;
+
+    if (exposureIndex < activeExposureIndex) {
+        activeExposureIndex--;
     }
     else {
-        newExposureIndex = exposureIndex;
+        if (exposureIndex == activeTakeItem->childCount()) {
+            activeExposureIndex--;
+        }
     }
-    activeExposureItem = activeTakeItem->child(newExposureIndex);
     this->setActiveItems();
 
     qDebug("ProjectTab::updateRemoveExposure --> End");
@@ -1007,7 +1048,13 @@ void ProjectTab::insertSceneSlot()
 
     int newSceneIndex = activeSceneIndex;
 
-    frontend->getProject()->insertSceneToUndo(sceneDescription, newSceneIndex);
+    if (-1 == newSceneIndex) {
+        frontend->getProject()->addSceneToUndo(sceneDescription);
+        newSceneIndex = 0;
+    }
+    else {
+        frontend->getProject()->insertSceneToUndo(sceneDescription, newSceneIndex);
+    }
     frontend->getProject()->addTakeToUndo(takeDescription, newSceneIndex);
 
     qDebug("ProjectTab::insertSceneSlot --> End");
@@ -1073,7 +1120,12 @@ void ProjectTab::insertTakeSlot()
 
     delete(dialog);
 
-    frontend->getProject()->insertTakeToUndo(takeDescription, activeSceneIndex, activeTakeIndex);
+    if (-1 == activeTakeIndex) {
+        frontend->getProject()->addTakeToUndo(takeDescription, activeSceneIndex);
+    }
+    else {
+        frontend->getProject()->insertTakeToUndo(takeDescription, activeSceneIndex, activeTakeIndex);
+    }
 
     qDebug("ProjectTab::insertTakeSlot --> End");
 }

@@ -110,6 +110,11 @@ void FrameViewImage::updatePlaySound(int /*sceneIndex*/ )
 
 void FrameViewImage::updateRemoveScene(int)
 {
+    if (frontend->getProject()->getActiveSceneIndex() < 0) {
+        showLogo();
+        update();
+        return;
+    }
     if (frontend->getProject()->getActiveTakeIndex() < 0) {
         showLogo();
         update();

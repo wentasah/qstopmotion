@@ -682,9 +682,6 @@ Scene *DomainFacade::redoSceneAdd(const QString &sceneDescription)
     Scene *scene = animationProject->addScene(sceneDescription);
     getView()->notifyAddScene(scene->getIndex());
 
-    // animationProject->setActiveSceneIndex(scene->getIndex());
-    // getView()->notifyActivateScene();
-
     animationProject->setUnsavedChanges();
 
     qDebug("DomainFacade::redoSceneAdd --> End");
@@ -714,9 +711,6 @@ Scene *DomainFacade::redoSceneInsert(const QString &sceneDescription,
 
     Scene *scene = animationProject->insertScene(sceneIndex, sceneDescription);
     getView()->notifyInsertScene(scene->getIndex());
-
-    // animationProject->setActiveSceneIndex(scene->getIndex());
-    // getView()->notifyActivateScene();
 
     animationProject->setUnsavedChanges();
 
@@ -890,9 +884,6 @@ Take *DomainFacade::redoTakeAdd(const QString &takeDescription,
     Take *take = animationProject->addTake(sceneIndex, takeDescription);
     getView()->notifyAddTake(sceneIndex, take->getIndex());
 
-    // animationProject->setActiveTakeIndex(take->getIndex());
-    // getView()->notifyActivateTake();
-
     animationProject->setUnsavedChanges();
 
     qDebug("DomainFacade::redoTakeAdd --> End");
@@ -924,9 +915,6 @@ Take *DomainFacade::redoTakeInsert(const QString &takeDescription,
 
     Take *take = animationProject->insertTake(sceneIndex, takeDescription);
     getView()->notifyInsertTake(sceneIndex, takeIndex);
-
-    // animationProject->setActiveTakeIndex(take->getIndex());
-    // getView()->notifyActivateTake();
 
     animationProject->setUnsavedChanges();
 
@@ -1105,9 +1093,6 @@ void DomainFacade::redoExposureAdd(const QString &fileName,
     Exposure *exposure = animationProject->addExposure(fileName, AnimationProject::InTempPath);
     getView()->notifyAddExposure(sceneIndex, takeIndex, exposure->getIndex());
 
-    // animationProject->setActiveExposureIndex(exposure->getIndex());
-    // getView()->notifyActivateExposure();
-
     animationProject->setUnsavedChanges();
 
     qDebug("DomainFacade::redoExposureAdd --> End");
@@ -1156,9 +1141,6 @@ void DomainFacade::redoExposureInsert(const QString &fileName,
                                                 fileName, AnimationProject::InTempPath);
     getView()->notifyInsertExposure(sceneIndex, takeIndex, exposure->getIndex());
 
-    // animationProject->setActiveExposureIndex(exposure->getIndex());
-    // getView()->notifyActivateExposure();
-
     animationProject->setUnsavedChanges();
 
     qDebug("DomainFacade::redoExposureInsert --> End");
@@ -1191,6 +1173,8 @@ Exposure *DomainFacade::redoExposureRemove(int sceneIndex,
     getView()->notifyRemoveExposure(sceneIndex, takeIndex, exposureIndex);
 
     if (exposureIndex == animationProject->getActiveScene()->getActiveTake()->getExposureSize()) {
+        // The last Exposure are removed
+
         // this->setActiveExposureIndex(exposureIndex - 1);
         animationProject->setActiveExposureIndex(exposureIndex - 1);
         if (0 <= (exposureIndex - 1)) {
@@ -1202,6 +1186,8 @@ Exposure *DomainFacade::redoExposureRemove(int sceneIndex,
         }
     }
     else {
+        // Not the last Exposure are removed
+
         animationProject->setActiveExposureIndex(exposureIndex);
         if (0 <= exposureIndex) {
             Exposure *activeExposure = animationProject->getActiveExposure();
@@ -1212,7 +1198,7 @@ Exposure *DomainFacade::redoExposureRemove(int sceneIndex,
         }
     }
 
-    getView()->notifyActivateExposure();
+    // getView()->notifyActivateExposure();
     animationProject->setUnsavedChanges();
 
     qDebug("DomainFacade::redoExposureRemove --> End");

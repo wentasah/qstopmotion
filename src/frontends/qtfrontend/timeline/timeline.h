@@ -288,13 +288,6 @@ public:
     bool isSelecting() const;
 
     /**
-     * Sets a selection of frames between (including) this frame and the activeFrame.
-     * @todo change name to setSelectionFrame
-     * @param selectionFrame the other border frame of the selection in addition to activeFrame
-     */
-    void setSelection(int selectionFrame);
-
-    /**
      * Returns the current selectionFrame
      * @return the current selectionFrame
      */

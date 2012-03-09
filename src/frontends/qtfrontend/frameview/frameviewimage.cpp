@@ -321,9 +321,9 @@ void FrameViewImage::paintEvent(QPaintEvent *)
     QPainter imagePainter(&outputImage);
     QPainter widgetPainter(this);
     QRect    widgetRect(this->rect());
-    QSize    imageSize(outputImage.size());
-    int      x = (widgetRect.width() - imageSize.width()) / 2;
-    int      y = (widgetRect.height() - imageSize.height()) / 2;
+    QSize    outputImageSize(outputImage.size());
+    int      x = (widgetRect.width() - outputImageSize.width()) / 2;
+    int      y = (widgetRect.height() - outputImageSize.height()) / 2;
 
     if (!actualImage.isNull()) {
         if (isPlayingVideo) {
@@ -348,7 +348,8 @@ void FrameViewImage::paintEvent(QPaintEvent *)
 
                 if (imageBuffer.count() > 0) {
                     QImage image(imageBuffer.last());
-                    QImage diffImage(this->createDifferentiatedImage(actualImage, image));
+                    QImage diffImage(this->createDifferentiatedImage(outputImage, image));
+                    imagePainter.eraseRect(outputImage.rect());
                     imagePainter.drawImage(0, 0, diffImage);
                 }
                 break;

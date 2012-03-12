@@ -1032,8 +1032,8 @@ void ProjectTab::insertSceneSlot()
 
     DescriptionDialog *dialog = new DescriptionDialog(frontend, DescriptionDialog::SceneDescription);
     dialog->setProjectDescription(frontend->getProject()->getProjectDescription());
-    dialog->setSceneDescription("Scene ???");
-    dialog->setTakeDescription("Take ???");
+    dialog->setSceneDescription(tr("Scene 000"));
+    dialog->setTakeDescription(tr("Take 00"));
     int ret = dialog->exec();
     if (ret == QDialog::Rejected) {
         // The user canceled the input dialog
@@ -1067,8 +1067,8 @@ void ProjectTab::addSceneSlot()
 
     DescriptionDialog *dialog = new DescriptionDialog(frontend, DescriptionDialog::SceneDescription);
     dialog->setProjectDescription(frontend->getProject()->getProjectDescription());
-    dialog->setSceneDescription("Scene ???");
-    dialog->setTakeDescription("Take ???");
+    dialog->setSceneDescription(tr("Scene 000"));
+    dialog->setTakeDescription(tr("Take 00"));
     int ret = dialog->exec();
     if (ret == QDialog::Rejected) {
         // The user canceled the input dialog
@@ -1108,7 +1108,7 @@ void ProjectTab::insertTakeSlot()
     DescriptionDialog *dialog = new DescriptionDialog(frontend, DescriptionDialog::TakeDescription);
     dialog->setProjectDescription(frontend->getProject()->getProjectDescription());
     dialog->setSceneDescription(frontend->getProject()->getActiveScene()->getDescription());
-    dialog->setTakeDescription("Take ???");
+    dialog->setTakeDescription(tr("Take 00"));
     int ret = dialog->exec();
     if (ret == QDialog::Rejected) {
         // The user canceled the input dialog
@@ -1138,7 +1138,7 @@ void ProjectTab::addTakeSlot()
     DescriptionDialog *dialog = new DescriptionDialog(frontend, DescriptionDialog::TakeDescription);
     dialog->setProjectDescription(frontend->getProject()->getProjectDescription());
     dialog->setSceneDescription(frontend->getProject()->getActiveScene()->getDescription());
-    dialog->setTakeDescription("Take ???");
+    dialog->setTakeDescription(tr("Take 00"));
     int ret = dialog->exec();
     if (ret == QDialog::Rejected) {
         // The user canceled the input dialog

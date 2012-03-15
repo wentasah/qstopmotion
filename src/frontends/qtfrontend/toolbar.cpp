@@ -87,7 +87,7 @@ void ToolBar::makeGUI()
     toBeginButton->setIcon(QPixmap(iconFile));
     // toBeginButton->setFlat(true);
     // toBeginButton->setFocusPolicy( Qt::NoFocus );
-    connect(toBeginButton, SIGNAL(clicked()), this, SLOT(selectToBeginFrame()));
+    connect(toBeginButton, SIGNAL(clicked()), this, SLOT(selectFirstFrame()));
     toBeginButton->setEnabled(false);
 
     previousFrameButton = new QPushButton;
@@ -137,7 +137,7 @@ void ToolBar::makeGUI()
     toEndButton->setIcon(QPixmap(iconFile));
     // toEndButton->setFlat(true);
     // toEndButton->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Minimum);
-    connect(toEndButton, SIGNAL(clicked()), this, SLOT(selectToEndFrame()));
+    connect(toEndButton, SIGNAL(clicked()), this, SLOT(selectLastFrame()));
     toEndButton->setEnabled(false);
 
     QHBoxLayout *buttonLayout = new QHBoxLayout;
@@ -329,6 +329,17 @@ void ToolBar::pauseAnimation()
 
 }
 
+// TODO: No selectFirstScene button, no implementation
+void ToolBar::selectFirstScene()
+{
+    /*
+    int activeSceneIndex = frontend->getProject()->getActiveSceneIndex();
+    if (activeSceneIndex > 0) {
+        frontend->getProject()->setActiveSceneIndex(activeSceneIndex - 1);
+    }
+    */
+}
+
 // TODO: No selectPreviousScene button, no implementation
 void ToolBar::selectPreviousScene()
 {
@@ -339,6 +350,18 @@ void ToolBar::selectPreviousScene()
     }
     */
 }
+
+// TODO: No selectFirstTake button, no implementation
+void ToolBar::selectFirstTake()
+{
+    /*
+    int activeSceneIndex = frontend->getProject()->getActiveSceneIndex();
+    if (activeSceneIndex > 0) {
+        frontend->getProject()->setActiveSceneIndex(activeSceneIndex - 1);
+    }
+    */
+}
+
 
 // TODO: No selectPreviousTake button, no implementation
 void ToolBar::selectPreviousTake()
@@ -352,7 +375,7 @@ void ToolBar::selectPreviousTake()
 }
 
 
-void ToolBar::selectToBeginFrame()
+void ToolBar::selectFirstFrame()
 {
     int activeSceneIndex = frontend->getProject()->getActiveSceneIndex();
     int activeTakeIndex = frontend->getProject()->getActiveTakeIndex();
@@ -386,7 +409,7 @@ void ToolBar::selectNextFrame()
 }
 
 
-void ToolBar::selectToEndFrame()
+void ToolBar::selectLastFrame()
 {
     int activeSceneIndex = frontend->getProject()->getActiveSceneIndex();
     int activeTakeIndex = frontend->getProject()->getActiveTakeIndex();
@@ -408,9 +431,32 @@ void ToolBar::selectNextTake()
     */
 }
 
-// TODO: No selectNextScene button, no implementation
+// TODO: No selectLastTake button, no implementation
+void ToolBar::selectLastTake()
+{
+    /*
+    int activeSceneIndex = frontend->getProject()->getActiveSceneIndex();
+    int sceneCount = frontend->getProject()->getSceneSize();
+    if ((activeSceneIndex > -1) && (activeSceneIndex < sceneCount - 1)) {
+        frontend->getProject()->setActiveSceneIndex(activeSceneIndex + 1);
+    }
+    */
+}
 
+// TODO: No selectNextScene button, no implementation
 void ToolBar::selectNextScene()
+{
+    /*
+    int activeSceneIndex = frontend->getProject()->getActiveSceneIndex();
+    int sceneCount = frontend->getProject()->getSceneSize();
+    if ((activeSceneIndex > -1) && (activeSceneIndex < sceneCount - 1)) {
+        frontend->getProject()->setActiveSceneIndex(activeSceneIndex + 1);
+    }
+    */
+}
+
+// TODO: No selectLastScene button, no implementation
+void ToolBar::selectLastScene()
 {
     /*
     int activeSceneIndex = frontend->getProject()->getActiveSceneIndex();

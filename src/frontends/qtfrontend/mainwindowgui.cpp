@@ -1065,14 +1065,15 @@ void MainWindowGUI::createTranslator(const QString &newLocale)
     }
 
     if (!translationFile.isEmpty()) {
-        qDebug() << "Loading translator: " << translationFile;
+        qDebug() << "MainWindowGUI::createTranslator --> Loading translator:" << translationFile;
         if (!appTranslator.load(translationFile, qmPath)) {
             // Translation file not opend
-            qDebug("Translator not loaded!");
+            qDebug("MainWindowGUI::createTranslator --> qStopMotion translator not loaded!");
         }
+        qDebug() << "MainWindowGUI::createTranslator --> Loading translator:" << "qt_" << locale;
         if (!qtTranslator.load("qt_" + locale, qmPath)) {
             // Translation file not opend
-            qDebug("Translator not loaded!");
+            qDebug("MainWindowGUI::createTranslator --> Qt translator not loaded!");
         }
     }
 

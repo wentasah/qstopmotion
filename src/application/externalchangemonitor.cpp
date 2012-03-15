@@ -31,6 +31,7 @@
 #include <QtCore/QTime>
 #include <QtCore/QSocketNotifier>
 
+
 /**
  * Class to monitor the changes to the file system and notify the application.
  *
@@ -58,6 +59,7 @@ ExternalChangeMonitor::ExternalChangeMonitor(Frontend *f,
 
     qDebug() << "ExternalChangeMonitor::Constructor --> End";
 }
+
 
 ExternalChangeMonitor::~ExternalChangeMonitor()
 {
@@ -92,6 +94,7 @@ void ExternalChangeMonitor::addDirectory(const QString &directory)
 
     qDebug() << "ExternalChangeMonitor::addDirectory --> End";
 }
+
 
 void ExternalChangeMonitor::startMonitoring()
 {
@@ -134,6 +137,7 @@ void ExternalChangeMonitor::startMonitoring()
     qDebug() << "ExternalChangeMonitor::startMonitoring --> End";
 }
 
+
 void ExternalChangeMonitor::stopMonitoring()
 {
     qDebug() << "ExternalChangeMonitor::stopMonitoring --> Start";
@@ -152,9 +156,10 @@ void ExternalChangeMonitor::stopMonitoring()
     qDebug() << "ExternalChangeMonitor::stopMonitoring --> End";
 }
 
-void ExternalChangeMonitor::directoryChangedEvents(const QString &/*dir*/)
+
+void ExternalChangeMonitor::directoryChangedEvents(const QString &dir)
 {
-    qDebug() << "ExternalChangeMonitor::directoryChangedEvents --> Start (Nothing)";
+    qDebug() << "ExternalChangeMonitor::directoryChangedEvents --> Start (Nothing) [" << dir << "]";
 /*
     Q_UNUSED(socket);
 
@@ -180,14 +185,16 @@ void ExternalChangeMonitor::directoryChangedEvents(const QString &/*dir*/)
 */
 }
 
-void ExternalChangeMonitor::fileChangedEvents(const QString &/*file*/)
+
+void ExternalChangeMonitor::fileChangedEvents(const QString &file)
 {
-    qDebug() << "ExternalChangeMonitor::fileChangedEvents --> Start";
+    qDebug() << "ExternalChangeMonitor::fileChangedEvents --> Start [" << file << "]";
 
     frontend->showInformation("Not implemented", "ExternalChangeMonitor::fileChangedEvents.");
 
     qDebug() << "ExternalChangeMonitor::fileChangedEvents --> End";
 }
+
 
 void ExternalChangeMonitor::suspendMonitor()
 {
@@ -198,6 +205,7 @@ void ExternalChangeMonitor::suspendMonitor()
 */
     qDebug() << "ExternalChangeMonitor::suspendMonitor --> End";
 }
+
 
 void ExternalChangeMonitor::resumeMonitor()
 {
@@ -211,4 +219,3 @@ void ExternalChangeMonitor::resumeMonitor()
 
     qDebug() << "ExternalChangeMonitor::resumeMonitor --> End";
 }
-

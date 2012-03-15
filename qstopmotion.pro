@@ -143,7 +143,7 @@ SOURCES += src/main.cpp \
            src/technical/videoencoder/videoencoderfactory.cpp
 
 TRANSLATIONS += translations/qstopmotion_de.ts \
-                translations/qstopmotion_fr.ts
+                translations/qstopmotion_fr.ts \
 #                translations/qstopmotion_br.ts \
 #                translations/qstopmotion_cz.ts \
 #                translations/qstopmotion_dk.ts \
@@ -159,7 +159,9 @@ TRANSLATIONS += translations/qstopmotion_de.ts \
 #                translations/qstopmotion_ru.ts \
 #                translations/qstopmotion_se.ts \
 #                translations/qstopmotion_sl.ts \
-#                translations/qstopmotion_tr.ts
+#                translations/qstopmotion_tr.ts \
+                translations/qt_de.ts \
+                translations/qt_fr.ts
 
 DEPENDPATH += src
 

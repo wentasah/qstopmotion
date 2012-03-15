@@ -111,9 +111,19 @@ public slots:
     void pauseAnimation();
 
     /**
+     * Selects the first scene.
+     */
+    void selectFirstScene();
+
+    /**
      * Selects the previous scene.
      */
     void selectPreviousScene();
+
+    /**
+     * Selects the first take.
+     */
+    void selectFirstTake();
 
     /**
      * Selects the previous take.
@@ -123,7 +133,7 @@ public slots:
     /**
      * Selects the first frame in the take.
      */
-    void selectToBeginFrame();
+    void selectFirstFrame();
 
     /**
      * Selects the previous frame.
@@ -138,7 +148,7 @@ public slots:
     /**
      * Selects the last frame in the take.
      */
-    void selectToEndFrame();
+    void selectLastFrame();
 
     /**
      * Selects the next scene.
@@ -146,9 +156,19 @@ public slots:
     void selectNextTake();
 
     /**
+     * Selects the last scene.
+     */
+    void selectLastTake();
+
+    /**
      * Selects the next scene.
      */
     void selectNextScene();
+
+    /**
+     * Selects the last scene.
+     */
+    void selectLastScene();
 
     /**
      * Toggles between looping the animation when it is running and closing it

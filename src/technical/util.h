@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2011 by                                                *
+ *  Copyright (C) 2005-2012 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -30,17 +30,23 @@ class Util
 {
 public:
     /**
-     * Check the existence of the command on the os.
+     * Check the existence of the command on the OS.
+     * @arg command The command to search for.
+     * @return The path to the command with Qt specific separators or an empty string.
      */
     static const QString checkCommand(const QString &command);
 
     /**
-     * Converts separators to the OS specific separator.
+     * Converts Qt specific separators to the OS specific separator.
+     * @arg path The Qt specific path string.
+     * @return The OS specific path string.
      */
     static const QString convertPathToOsSpecific(const QString &path);
 
     /**
-     * Converts separators from the OS specific separator.
+     * Converts separators from the OS specific separator to Qt specific separator.
+     * @arg path The OS specific path string.
+     * @return The Qt specific path string.
      */
     static const QString convertPathFromOsSpecific(const QString &path);
 

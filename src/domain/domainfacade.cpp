@@ -501,7 +501,6 @@ bool DomainFacade::newProjectRedo(const QString &projectDescription)
 {
     qDebug("DomainFacade::newProjectRedo --> Start");
 
-    getView()->notifyClear();
     animationProject->newProject(projectDescription);
     setProjectSettingsToDefault();
     getView()->notifyNewProject();
@@ -536,7 +535,6 @@ bool DomainFacade::openProjectRedo(const QString &projectPath)
 {
     qDebug("DomainFacade::openProjectRedo --> Start");
 
-    getView()->notifyClear();
     getView()->notifyNewProject();
 
     if (animationProject->openProject(projectPath)) {
@@ -1300,6 +1298,15 @@ void DomainFacade::redoExposureSelect(int oldSceneIndex,
     animationProject->setUnsavedChanges();
 
     qDebug("DomainFacade::redoExposureSelect --> End");
+}
+
+
+bool DomainFacade::getModifyedExposure(const QString &filePath,
+                                       int &modSceneIndex,
+                                       int &modTakeIndex,
+                                       int &modExposureIndex)
+{
+    return animationProject->getModifyedExposure(filePath, modSceneIndex, modTakeIndex, modExposureIndex);
 }
 
 

@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2010-2010 by                                                *
+ *  Copyright (C) 2010-2012 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -135,6 +135,20 @@ public:
     void updateActivateExposure();
 
     /**
+     * Function to recieve notification when the frame of an exposure has modifyed.
+     * @param modSceneIndex The index of the scene of the modifyed exposure.
+     * @param modTakeIndex The index of the take of the modifyed exposure.
+     * @param modExposureIndex The index of the modifyed exposure.
+     */
+    void updateModifyExposure(int modSceneIndex,
+                              int modTakeIndex,
+                              int modExposureIndex);
+
+    /**************************************************************************
+     * Other functions
+     **************************************************************************/
+
+    /**
      * Function for performing the redraw with the next frame of the animation.
      * @arg exposureIndex Index of the next frame
      */
@@ -176,9 +190,19 @@ private:
     // void setFrame(int sceneIndex, int takeIndex, int exposureIndex);
 
     /**
-     * Loads the new active frames picture into the frameview.
+     * Loads the new active frame picture into the frameview.
      */
     void activateExposure();
+
+    /**
+     * Loads the modifyed frame picture into the frameview.
+     * @param modSceneIndex The index of the scene of the modifyed exposure.
+     * @param modTakeIndex The index of the take of the modifyed exposure.
+     * @param modExposureIndex The index of the modifyed exposure.
+     */
+    void modifyExposure(int modSceneIndex,
+                        int modTakeIndex,
+                        int modExposureIndex);
 
     /**
      * Add a image to the image buffer

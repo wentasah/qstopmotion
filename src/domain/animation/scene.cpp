@@ -518,6 +518,29 @@ Exposure* Scene::insertExposure(const QString &fileName, int location, int &inde
 }
 
 
+bool Scene::getModifyedExposure(const QString &filePath,
+                                int &modTakeIndex,
+                                int &modExposureIndex)
+{
+    qDebug("Scene::getModifyedExposure --> Start");
+
+    int takeSize = takes.size();
+
+    for (modTakeIndex = 0; modTakeIndex < takeSize; ++modTakeIndex) {
+        if (takes[modTakeIndex]->getModifyedExposure(filePath, modExposureIndex)) {
+            // Exposure found
+            qDebug("Scene::getModifyedExposure --> End");
+            return true;
+        }
+    }
+
+    modTakeIndex = -1;
+
+    qDebug("Scene::getModifyedExposure --> End (Error)");
+    return false;
+}
+
+
 void Scene::cleanExposures(unsigned int fromExposure, unsigned int toExposure)
 {
     takes.erase(takes.begin() + fromExposure, takes.begin() + toExposure);

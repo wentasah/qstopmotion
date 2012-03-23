@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2011 by                                                *
+ *  Copyright (C) 2005-2012 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -254,6 +254,15 @@ public:
      * @return The removed exposure or NULL if nothing is done
      */
     Exposure* removeExposure(unsigned int exposureIndex);
+
+    /**
+     * Get the position of the modified exposure in the project.
+     * @arg filePath The path to the modified exposure.
+     * @arg modExposureIndex the index of the modified exposure.
+     * @return True if the exposure is found and false else.
+     */
+    bool getModifyedExposure(const QString &filePath,
+                             int &modExposureIndex);
 
     /**
      * Cleans exposures from the scene without moving them around. Used when the user

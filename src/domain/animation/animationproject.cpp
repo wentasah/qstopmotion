@@ -1192,6 +1192,30 @@ unsigned int AnimationProject::getNextTotalExposureIndex()
 }
 
 
+bool AnimationProject::getModifyedExposure(const QString &filePath,
+                                           int &modSceneIndex,
+                                           int &modTakeIndex,
+                                           int &modExposureIndex)
+{
+    qDebug("AnimationProject::getModifyedExposure --> Start");
+
+    int sceneSize = scenes.size();
+
+    for (modSceneIndex = 0; modSceneIndex < sceneSize; ++modSceneIndex) {
+        if (scenes[modSceneIndex]->getModifyedExposure(filePath, modTakeIndex, modExposureIndex)) {
+            // Exposure found
+            qDebug("AnimationProject::getModifyedExposure --> End");
+            return true;
+        }
+    }
+
+    modSceneIndex = -1;
+
+    qDebug("AnimationProject::getModifyedExposure --> End (Error)");
+    return false;
+}
+
+
 /**************************************************************************
  * Old frame functions
  **************************************************************************/

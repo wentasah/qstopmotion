@@ -902,6 +902,19 @@ public:
                             int newTakeIndex,
                             int newExposureIndex);
 
+    /**
+     * Get the position of the modified exposure in the project.
+     * @arg filePath The path to the modified exposure.
+     * @arg modSceneIndex the index of the scene of the take of the modified exposure.
+     * @arg modTakeIndex the index of the take of the modified exposure.
+     * @arg modExposureIndex the index of the modified exposure.
+     * @return True if the exposure is found and false else.
+     */
+    bool getModifyedExposure(const QString &filePath,
+                             int &modSceneIndex,
+                             int &modTakeIndex,
+                             int &modExposureIndex);
+
     /**************************************************************************
      * Old frames functions
      **************************************************************************/

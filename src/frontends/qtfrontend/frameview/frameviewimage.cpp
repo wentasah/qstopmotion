@@ -82,7 +82,8 @@ void FrameViewImage::updateClear()
 {
     qDebug("FrameViewImage::updateClear --> Start");
 
-    this->update();
+    showLogo();
+    update();
 
     qDebug("FrameViewImage::updateClear --> End");
 }
@@ -179,6 +180,22 @@ void FrameViewImage::updateActivateExposure()
     qDebug("FrameViewImage::updateActivateExposure --> End");
 }
 
+
+void FrameViewImage::updateModifyExposure(int modSceneIndex,
+                                          int modTakeIndex,
+                                          int modExposureIndex)
+{
+    qDebug("FrameViewImage::updateModifyExposure --> Start");
+
+    modifyExposure(modSceneIndex, modTakeIndex, modExposureIndex);
+
+    qDebug("FrameViewImage::updateModifyExposure --> End");
+}
+
+
+/**************************************************************************
+ * Other functions
+ **************************************************************************/
 
 void FrameViewImage::nextAnimationFrame(int exposureIndex)
 {
@@ -394,6 +411,48 @@ void FrameViewImage::activateExposure()
 
     qDebug("FrameViewImage::activateExposure --> End");
 }
+
+
+void FrameViewImage::modifyExposure(int modSceneIndex,
+                                    int modTakeIndex,
+                                    int modExposureIndex)
+{
+    qDebug("FrameViewImage::modifyExposure --> Start");
+
+    int activeSceneIndex = frontend->getProject()->getActiveSceneIndex();
+    if (activeSceneIndex != modSceneIndex) {
+        // The scene of the modifyed exposure is not displayed in the frame view
+        qDebug("FrameViewImage::modifyExposure --> End (Nothing)");
+        return;
+    }
+
+    int activeTakeIndex = frontend->getProject()->getActiveTakeIndex();
+    if (activeTakeIndex != modTakeIndex) {
+        // The take of the modifyed exposure is not displayed in the frame view
+        qDebug("FrameViewImage::modifyExposure --> End (Nothing)");
+        return;
+    }
+
+    int activeExposureIndex = frontend->getProject()->getActiveSceneIndex();
+    if (activeExposureIndex != modExposureIndex) {
+        // The modifyed exposure is not displayed in the frame view
+        qDebug("FrameViewImage::modifyExposure --> End (Nothing)");
+        return;
+    }
+
+    Exposure *exposure = frontend->getProject()->getActiveExposure();
+    if (exposure != NULL) {
+        const QString fileName = exposure->getImagePath();
+        actualImage.load(fileName);
+    } else {
+        this->clearImageBuffer();
+        this->showLogo();
+    }
+    this->update();
+
+    qDebug("FrameViewImage::modifyExposure --> End");
+}
+
 
 void FrameViewImage::addToImageBuffer(QImage const image)
 {

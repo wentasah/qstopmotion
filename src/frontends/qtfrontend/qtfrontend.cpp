@@ -673,12 +673,6 @@ void QtFrontend::nextAnimationFrame(int exposureIndex)
 }
 
 
-void QtFrontend::setupDirectoryMonitoring()
-{
-    mw->setupDirectoryMonitoring();
-}
-
-
 bool QtFrontend::removeContentInDirectory(const QString &dirPath)
 {
     bool ret = true;
@@ -878,6 +872,48 @@ int QtFrontend::getMixCount()
 void QtFrontend::setMixCount(int count)
 {
     mw->setMixCount(count);
+}
+
+
+void QtFrontend::setupDirectoryMonitoring()
+{
+    mw->setupDirectoryMonitoring();
+}
+
+
+void QtFrontend::addDirectoryToMonitoring(const QString &directory)
+{
+    mw->addDirectoryToMonitoring(directory);
+}
+
+
+void QtFrontend::removeDirectoryFromMonitoring(const QString &directory)
+{
+    mw->removeDirectoryFromMonitoring(directory);
+}
+
+
+void QtFrontend::removeAllDirectoriesFromMonitoring()
+{
+    mw->removeAllDirectoriesFromMonitoring();
+}
+
+
+void QtFrontend::addFileToMonitoring(const QString &file)
+{
+    mw->addFileToMonitoring(file);
+}
+
+
+void QtFrontend::removeFileFromMonitoring(const QString &file)
+{
+    mw->removeFileFromMonitoring(file);
+}
+
+
+void QtFrontend::removeAllFilesFromMonitoring()
+{
+    mw->removeAllFilesFromMonitoring();
 }
 
 

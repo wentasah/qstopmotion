@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2011 by                                                *
+ *  Copyright (C) 2005-2012 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -252,12 +252,14 @@ public:
                              int movePosition);
 
     /**
-     * Notify the observers the active frame in the model has changed.
-     * @param frameNumber the number of the new active frame.
+     * Notify the observers the frame of an exposure has changed.
+     * @param modSceneIndex The index of the scene of the modified exposure.
+     * @param modTakeIndex The index of the take of the modified exposure.
+     * @param modExposureIndex The index of the modified exposure.
      */
-    // void notifyExposure(int sceneIndex,
-    //                     int takeIndex,
-    //                     int exposureIndex);
+    void notifyModifyExposure(int modSceneIndex,
+                              int modTakeIndex,
+                              int modExposureIndex);
 
 protected:
 

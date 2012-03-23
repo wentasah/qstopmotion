@@ -337,6 +337,19 @@ void ViewFacade::notifyInsertExposure(int sceneIndex,
 }
 
 
+void ViewFacade::notifyActivateExposure()
+{
+    qDebug("ViewFacade::notifyActivateExposure --> Start");
+
+    int numElem = observers.size();
+    for (int i = 0; i < numElem; ++i) {
+        observers[i]->updateActivateExposure();
+    }
+
+    qDebug("ViewFacade::notifyActivateExposure --> End");
+}
+
+
 void ViewFacade::notifyRemoveExposure(int sceneIndex,
                                       int takeIndex,
                                       int exposureIndex)
@@ -380,14 +393,19 @@ void ViewFacade::notifyMoveExposures(int fromFrame,
     qDebug("ViewFacade::notifyMoveExposures --> End");
 }
 
-void ViewFacade::notifyActivateExposure()
+
+void ViewFacade::notifyModifyExposure(int modSceneIndex,
+                                      int modTakeIndex,
+                                      int modExposureIndex)
 {
-    qDebug("ViewFacade::notifyActivateExposure --> Start");
+    qDebug("ViewFacade::notifyModifyExposure --> Start");
 
     int numElem = observers.size();
     for (int i = 0; i < numElem; ++i) {
-        observers[i]->updateActivateExposure();
+        observers[i]->updateModifyExposure(modSceneIndex, modTakeIndex, modExposureIndex);
     }
 
-    qDebug("ViewFacade::notifyActivateExposure --> End");
+    qDebug("ViewFacade::notifyModifyExposure --> End");
 }
+
+

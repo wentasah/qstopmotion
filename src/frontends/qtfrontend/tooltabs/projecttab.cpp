@@ -72,6 +72,8 @@ ProjectTab::ProjectTab(Frontend *f,
     activeTakeIndex     = -1;
     activeExposureIndex = -1;
 
+    gimpProcess         = NULL;
+
     this->setObjectName("ProjectTab");
 
     makeGUI();
@@ -79,6 +81,21 @@ ProjectTab::ProjectTab(Frontend *f,
     frontend->getView()->attatch(this);
 
     qDebug("ProjectTab::Constructor --> End");
+}
+
+
+ProjectTab::~ProjectTab()
+{
+    qDebug("ProjectTab::Destructor --> Start");
+
+
+    if (NULL != gimpProcess) {
+        gimpProcess->close();
+        delete gimpProcess;
+        gimpProcess = NULL;
+    }
+
+    qDebug("ProjectTab::Destructor --> End");
 }
 
 
@@ -334,7 +351,7 @@ void ProjectTab::enableTab()
     insertFramesButton->setEnabled(true);
     addFramesButton->setEnabled(true);
     removeFramesButton->setEnabled(true);
-    editFrameButton->setEnabled(false);
+    editFrameButton->setEnabled(true);
 
     tabEnabled = true;
 }
@@ -410,6 +427,9 @@ void ProjectTab::updateClear()
     qDebug("ProjectTab::updateClear --> Start");
 
     projectTree->clear();
+    activeSceneIndex = -1;
+    activeTakeIndex = -1;
+    activeExposureIndex = -1;
 
     qDebug("ProjectTab::updateClear --> End");
 }
@@ -856,18 +876,18 @@ void ProjectTab::updateActivateExposure()
     qDebug("ProjectTab::updateActivateExposure --> End");
 }
 
-/*
-void ProjectTab::updateFrame(int sceneIndex,
-                             int takeIndex,
-                             int exposureIndex)
+
+void ProjectTab::updateModifyExposure(int modSceneIndex,
+                                      int modTakeIndex,
+                                      int modExposureIndex)
 {
-    qDebug("ProjectTab::updateFrame --> Start");
+    qDebug("ProjectTab::updateModifyExposure --> Start");
 
-    updateNewActiveFrame(exposureIndex);
+    // modifyExposure();
 
-    qDebug("ProjectTab::updateFrame --> End");
+    qDebug("ProjectTab::updateModifyExposure --> End");
 }
-*/
+
 
 /**************************************************************************
  * Other functions
@@ -1229,13 +1249,6 @@ void ProjectTab::editFrameSlot()
 {
     qDebug("ProjectTab::editFrameSlot --> Start");
 
-    const QString gimpCommand = Util::checkCommand("gimp");
-    if (gimpCommand.isEmpty()) {
-        frontend->showWarning(tr("Warning"),
-                              tr("You do not have Gimp installed on your system"));
-        return;
-    }
-
     // Determine the active scene and active frame.
     if (activeSceneIndex < 0 || activeTakeIndex < 0 || activeExposureIndex < 0) {
         frontend->showWarning(tr("Warning"),
@@ -1249,21 +1262,43 @@ void ProjectTab::editFrameSlot()
                               tr("The active frame is corrupt"));
         return;
     }
+    QString exposureImagePath(exposure->getImagePath());
 
-    QStringList argList;
-    // arg0 are the options, and arg1 is the path of the frame.
-    // Start Gimp without splash screen.
-    argList.append(QLatin1String("--no-splash"));
-    argList.append(exposure->getImagePath());
+    frontend->addFileToMonitoring(exposureImagePath);
 
-    QProcess process;
-    if (!process.startDetached(gimpCommand, argList)) {
-        frontend->showWarning(tr("Warning"),
-                              tr("Failed to start Gimp!"));
-        return;
+    if (NULL == gimpProcess) {
+        startGimpProcess(exposureImagePath);
     }
 
     qDebug("ProjectTab::editFrameSlot --> End");
+}
+
+
+void ProjectTab::gimpProcessStarted()
+{
+    qDebug("ProjectTab::gimpProcessStarted --> Start (Nothing)");
+
+    // qDebug("ProjectTab::gimpProcessStarted --> End");
+}
+
+
+void ProjectTab::gimpProcessError(QProcess::ProcessError error)
+{
+    qDebug("ProjectTab::gimpProcessError --> Start (Nothing)");
+
+    // qDebug("ProjectTab::gimpProcessError --> End");
+}
+
+
+void ProjectTab::gimpProcessFinished(int /*exitCode*/, QProcess::ExitStatus /*exitStatus*/)
+{
+    qDebug("ProjectTab::gimpProcessFinished --> Start");
+
+    stopGimpProcess();
+
+    frontend->removeAllFilesFromMonitoring();
+
+    qDebug("ProjectTab::gimpProcessFinished --> End");
 }
 
 
@@ -1509,4 +1544,82 @@ QStringList ProjectTab::selectFiles()
 
     qDebug("ProjectTab::selectFiles --> End");
     return fileDialog->selectedFiles();
+}
+
+
+void ProjectTab::startGimpProcess(const QString &exposureImagePath)
+{
+    qDebug("ProjectTab::startGimpProcess --> Start");
+
+    Q_ASSERT(NULL == gimpProcess);
+
+#ifdef Q_WS_WIN
+    // Windows version
+    const QString gimpCommand(Util::checkCommand("gimp-?.?"));
+#else
+    // Linux and Apple OS X version
+    const QString gimpCommand = Util::checkCommand("gimp");
+#endif
+
+    if (gimpCommand.isEmpty()) {
+        frontend->showWarning(tr("Warning"),
+                              tr("You do not have Gimp installed on your system"));
+        return;
+    }
+
+    QStringList argList;
+    // arg0 are the options, and arg1 is the path of the frame.
+    // Start Gimp without splash screen.
+    argList.append(QLatin1String("--no-splash"));
+    argList.append(exposureImagePath);
+
+    /*
+    // Start the process with communication.
+    gimpProcess = new QProcess(this);
+
+    connect(gimpProcess, SIGNAL(started()), this, SLOT(gimpProcessStarted()));
+    connect(gimpProcess, SIGNAL(error(QProcess::ProcessError)), this, SLOT(gimpProcessError(QProcess::ProcessError)));
+    connect(gimpProcess, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(gimpProcessFinished(int, QProcess::ExitStatus)));
+
+    gimpProcess->start(gimpCommand, argList);
+    gimpProcess->waitForStarted();
+    switch(gimpProcess->state()) {
+    case QProcess::NotRunning:
+        qDebug("ProjectTab::startGimpProcess --> Gimp Process not running");
+        break;
+    case QProcess::Starting:
+        qDebug("ProjectTab::startGimpProcess --> Gimp Process starting");
+        break;
+    case QProcess::Running:
+        qDebug("ProjectTab::startGimpProcess --> Gimp process running");
+        break;
+    }
+    */
+
+    QProcess process;
+    if (!process.startDetached(gimpCommand, argList)) {
+        frontend->showWarning(tr("Warning"),
+                              tr("Failed to start Gimp!"));
+        frontend->removeFileFromMonitoring(exposureImagePath);
+        qDebug("ProjectTab::startGimpProcess --> End (Error)");
+        return;
+    }
+
+    qDebug("ProjectTab::startGimpProcess --> End");
+}
+
+
+void ProjectTab::stopGimpProcess()
+{
+    qDebug("ProjectTab::stopGimpProcess --> Start");
+
+    /*
+    Q_ASSERT(NULL != gimpProcess);
+
+    gimpProcess->close();
+    delete gimpProcess;
+    gimpProcess = NULL;
+    */
+
+    qDebug("ProjectTab::stopGimpProcess --> End");
 }

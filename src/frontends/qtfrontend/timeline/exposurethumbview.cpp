@@ -93,6 +93,10 @@ void ExposureThumbView::mouseReleaseEvent(QMouseEvent * e)
         if (!timeLine->isSelecting()) {
             int selectionFrame = timeLine->getSelectionFrame();
             int activeFrame = timeLine->getFrontend()->getProject()->getActiveExposureIndex();
+            if (selectionFrame == activeFrame) {
+                // Click the avtive frame --> nothing to do!
+                return;
+            }
             int highend = (selectionFrame > activeFrame) ? selectionFrame : activeFrame;
             int lowend = (selectionFrame < activeFrame) ? selectionFrame : activeFrame;
             if (thumbIndex <= highend || thumbIndex >= lowend) {

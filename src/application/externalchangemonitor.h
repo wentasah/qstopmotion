@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2011 by                                                *
+ *  Copyright (C) 2005-2012 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -67,35 +67,65 @@ public:
     void addDirectory(const QString &directory);
 
     /**
+     * Remove the directory from monitoring.
+     * @param directory the directory to remove.
+     */
+    void removeDirectory(const QString &directory);
+
+    /**
+     * Remove the directory from monitoring.
+     * @param directory the directory to remove.
+     */
+    void removeAllDirectories();
+
+    /**
+     * Register the file for monitoring.
+     * @param file the file to listen for changes in.
+     */
+    void addFile(const QString &file);
+
+    /**
+     * Remove the file from monitoring.
+     * @param file the file to remove.
+     */
+    void removeFile(const QString &file);
+
+    /**
+     * Remove all files from monitoring.
+     */
+    void removeAllFiles();
+
+    /**
      * Creates a inotify connection and listens for changes in the project directories.
      */
     void startMonitoring();
 
+    /**
+     * Stop the listening for changes in the project directories.
+     */
     void stopMonitoring();
 
-    /**
-     * Suspends the monitoring until resumeMonitor() is called.
-     */
-    void suspendMonitor();
-
-    /**
-     * Resumes monitoring the directories.
-     */
-    void resumeMonitor();
-
-private:
-    /** For polling the file connection through the qt event loop */
-    Frontend           *frontend;
-    QSocketNotifier    *socketNotifier;
-    QStringList         directories;
-    QFileSystemWatcher *fileSystemWatcher;
-
 private slots:
+
     /**
-     * Callback function for when the QSocketNotifier recieves an Inotify event.
+     * Callback function for when the QFileSystemWatcher send a directory changed event.
+     * @arg dir The changed directory.
      */
     void directoryChangedEvents(const QString &dir);
+
+    /**
+     * Callback function for when the QFileSystemWatcher send a file changed event.
+     * @arg file The changed file.
+     */
     void fileChangedEvents(const QString &file);
+
+private:
+
+    Frontend           *frontend;
+    QStringList         directoryList;
+    QStringList         fileList;
+    QFileSystemWatcher *fileSystemWatcher;
+
 };
 
 #endif

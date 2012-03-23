@@ -475,16 +475,18 @@ void TimeLine::updateActivateExposure()
     qDebug("TimeLine::updateActivateExposure --> End");
 }
 
-/*
-void TimeLine::updateFrame(int sceneIndex, int takeIndex, int exposureIndex)
+
+void TimeLine::updateModifyExposure(int modSceneIndex,
+                                    int modTakeIndex,
+                                    int modExposureIndex)
 {
-    qDebug("TimeLine::updateFrame --> Start");
+    qDebug("TimeLine::updateModifyExposure --> Start");
 
-    updateNewActiveFrame(exposureIndex);
+    modifyExposure(modSceneIndex, modTakeIndex, modExposureIndex);
 
-    qDebug("TimeLine::updateFrame --> End");
+    qDebug("TimeLine::updateModifyExposure --> End");
 }
-*/
+
 
 /**************************************************************************
  * Other functions
@@ -1099,6 +1101,31 @@ void TimeLine::activateExposure()
     this->selecting = false;
 
     qDebug("TimeLine::activateExposure --> End");
+}
+
+
+void TimeLine::modifyExposure(int modSceneIndex,
+                              int modTakeIndex,
+                              int modExposureIndex)
+{
+    qDebug("TimeLine::modifyExposure --> Start");
+
+    if (activeSceneIndex != modSceneIndex) {
+        // The scene of the modifyed exposure is not displayed in the frame view
+        qDebug("TimeLine::modifyExposure --> End (Nothing)");
+        return;
+    }
+
+    if (activeTakeIndex != modTakeIndex) {
+        // The take of the modifyed exposure is not displayed in the frame view
+        qDebug("TimeLine::modifyExposure --> End (Nothing)");
+        return;
+    }
+
+    Exposure *exposure = frontend->getProject()->getExposure(activeSceneIndex, activeTakeIndex, modExposureIndex);
+    thumbViews[modExposureIndex]->setPixmap(QPixmap::fromImage(tryReadImage(exposure->getImagePath()).scaled(FRAME_WIDTH, FRAME_HEIGHT)));
+
+    qDebug("TimeLine::modifyExposure --> End");
 }
 
 

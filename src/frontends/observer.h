@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2011 by                                                *
+ *  Copyright (C) 2005-2012 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -250,18 +250,14 @@ public:
     virtual void updateActivateExposure() = 0;
 
     /**
-     * Abstract function for recieving notification when a new frame are selected.
-     * @param frameNumber the new active frame.
+     * Abstract function for recieving notification when the frame of an exposure has modifyed.
+     * @param modSceneIndex The index of the scene of the modifyed exposure.
+     * @param modTakeIndex The index of the take of the modifyed exposure.
+     * @param modExposureIndex The index of the modifyed exposure.
      */
-    // virtual void updateNewActiveExposure(int frameNumber) = 0;
-
-    /**
-     * Abstract function for recieving notification when a new frame are selected.
-     * @param frameNumber the new active frame.
-     */
-    // virtual void updateExposure(int sceneIndex,
-    //                             int takeIndex,
-    //                             int exposureIndex) = 0;
+    virtual void updateModifyExposure(int modSceneIndex,
+                                      int modTakeIndex,
+                                      int modExposureIndex) = 0;
 };
 
 #endif

@@ -393,6 +393,29 @@ Exposure* Take::insertExposure(const QString &fileName, int location, int index)
 }
 
 
+bool Take::getModifyedExposure(const QString &filePath,
+                               int &modExposureIndex)
+{
+    qDebug("Take::getModifyedExposure --> Start");
+
+    int exposureSize = exposures.size();
+
+    for (modExposureIndex = 0; modExposureIndex < exposureSize; ++modExposureIndex) {
+        QString imagePath(exposures[modExposureIndex]->getImagePath());
+        if (0 == filePath.compare(imagePath)) {
+            // Exposure found
+            qDebug("Take::getModifyedExposure --> End");
+            return true;
+        }
+    }
+
+    modExposureIndex = -1;
+
+    qDebug("Take::getModifyedExposure --> End (Error)");
+    return false;
+}
+
+
 void Take::cleanExposures(unsigned int fromExposure, unsigned int toExposure)
 {
     exposures.erase(exposures.begin() + fromExposure, exposures.begin() + toExposure);

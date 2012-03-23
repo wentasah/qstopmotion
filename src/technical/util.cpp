@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2011 by                                                *
+ *  Copyright (C) 2005-2012 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -42,18 +42,24 @@ const QString Util::checkCommand(const QString &command)
     QProcess which;
     which.start(tmp);
     if (!which.waitForStarted())
-        return QString("");
+        return QString();
 
     if (!which.waitForFinished())
-        return QString("");
+        return QString();
 
     QString line(which.readAll());
 
     if (!line.isEmpty()) {
         if (line.endsWith("\n")) {
-            return line.left(line.length()-1);
+#ifdef Q_WS_WIN
+            // Windows version (remove CR and LF)
+            return Util::convertPathFromOsSpecific(line.left(line.length()-2));
+#else
+            // Linux and Apple OS X version (remove LF)
+            return Util::convertPathFromOsSpecific(line.left(line.length()-1));
+#endif
         }
-        return line;
+        return Util::convertPathFromOsSpecific(line);
     }
 
     return QString();

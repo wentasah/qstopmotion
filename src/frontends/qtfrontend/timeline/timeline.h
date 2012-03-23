@@ -266,9 +266,14 @@ public:
     void updateActivateExposure();
 
     /**
-     * Function to recieve notification when a new frame is selected.
+     * Function to recieve notification when the frame of an exposure has modifyed.
+     * @param modSceneIndex The index of the scene of the modifyed exposure.
+     * @param modTakeIndex The index of the take of the modifyed exposure.
+     * @param modExposureIndex The index of the modifyed exposure.
      */
-    // void updateFrame(int sceneIndex, int takeIndex, int exposureIndex);
+    void updateModifyExposure(int modSceneIndex,
+                              int modTakeIndex,
+                              int modExposureIndex);
 
     /**************************************************************************
      * Other functions
@@ -547,16 +552,25 @@ private:
     void moveExposures(int fromFrame, int toFrame, int movePosition);
 
     /**
-     *Sets the thumbview frameNumber in the timeline to be the active frame.
-     *@param frameNumber the number of the new active frame
+     * Sets the thumbview frameNumber in the timeline to be the active frame.
+     * @param frameNumber the number of the new active frame
      */
     // void setNewActiveExposure(int exposureIndex);
 
     /**
-     *Sets the thumbview frameNumber in the timeline to be the active frame.
-     *@param frameNumber the number of the new active frame
+     * Sets the thumbview frameNumber in the timeline to be the active frame.
      */
     void activateExposure();
+
+    /**
+     * Loads the modifyed frame picture into the frameview.
+     * @param modSceneIndex The index of the scene of the modifyed exposure.
+     * @param modTakeIndex The index of the take of the modifyed exposure.
+     * @param modExposureIndex The index of the modifyed exposure.
+     */
+    void modifyExposure(int modSceneIndex,
+                        int modTakeIndex,
+                        int modExposureIndex);
 
     /**************************************************************************
      * Other private functions

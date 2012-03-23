@@ -1,7 +1,7 @@
 ###############################################################################
 # CMake file for the qStopMotion project                                      #
 # (c) Ralf Lange, longsoft.de                                                 #
-# Last update: 2012-03-03                                                     #
+# Last update: 2012-03-22                                                     #
 #                                                                             #
 # Usage:                                                                      #
 #   * Qt-Creator (Windows, Linux)                                             #
@@ -584,6 +584,32 @@ SET(CPACK_PACKAGE_VERSION_MINOR "${QSTOPMOTION_VERSION_MINOR}")
 SET(CPACK_PACKAGE_VERSION_PATCH "${QSTOPMOTION_VERSION_PATCH}")
 SET(CPACK_TOPLEVEL_TAG "/user")
 # CPACK_PACKAGE_VERSION - generated from major, minor, patch
+
+###############################################################################
+# Source Packages
+###############################################################################
+
+IF(WIN32)
+    # Exclude only Mercurial SMC files
+    SET(
+        CPACK_SOURCE_IGNORE_FILES
+        "${CPACK_SOURCE_IGNORE_FILES}"
+        "${PROJECT_SOURCE_DIR}/.hg/"
+        "${PROJECT_SOURCE_DIR}/.hgtags"
+    )
+
+ELSE(WIN32)
+    # Exclude Mercurial SMC files, ffmpeg Windows binarys and Qt Windows runtime
+    SET(
+        CPACK_SOURCE_IGNORE_FILES
+        "${CPACK_SOURCE_IGNORE_FILES}"
+        "${PROJECT_SOURCE_DIR}/.hg/"
+        "${PROJECT_SOURCE_DIR}/ffmpeg/"
+        "${PROJECT_SOURCE_DIR}/qtruntime/"
+        "${PROJECT_SOURCE_DIR}/.hgtags"
+    )
+
+ENDIF(WIN32)
 
 ###############################################################################
 # NSIS - Windows only

@@ -24,6 +24,7 @@
 #include "frontends/frontend.h"
 #include "frontends/observer.h"
 
+#include <QtCore/QProcess>
 #include <QtGui/QFileDialog>
 #include <QtGui/QGroupBox>
 #include <QtGui/QPushButton>
@@ -48,6 +49,11 @@ public:
     ProjectTab(Frontend *f,
                const QString &lvd,
                QWidget *parent = 0);
+
+    /**
+     * Descructor
+     */
+    ~ProjectTab();
 
     /**
      * Applies the settings in the import tab.
@@ -250,6 +256,16 @@ public:
      */
     void updateActivateExposure();
 
+    /**
+     * Function to recieve notification when the frame of an exposure has modifyed.
+     * @param modSceneIndex The index of the scene of the modifyed exposure.
+     * @param modTakeIndex The index of the take of the modifyed exposure.
+     * @param modExposureIndex The index of the modifyed exposure.
+     */
+    void updateModifyExposure(int modSceneIndex,
+                              int modTakeIndex,
+                              int modExposureIndex);
+
 protected:
     // void resizeEvent(QResizeEvent *event);
 
@@ -294,6 +310,22 @@ private:
      * @return List with selected files
      */
     QStringList selectFiles();
+
+    /**
+     * Create all GUI elements.
+     */
+    void makeGUI();
+
+    /**
+     * Start the gimp process.
+     * @arg exposureImagePath The path to the first image to edit.
+     */
+    void startGimpProcess(const QString &exposureImagePath);
+
+    /**
+     * Stop the gimp process.
+     */
+    void stopGimpProcess();
 
 private slots:
     /**
@@ -372,6 +404,21 @@ private slots:
      */
     void chooseFrame();
 
+    /**
+     *
+     */
+    void gimpProcessStarted();
+
+    /**
+     *
+     */
+    void gimpProcessError(QProcess::ProcessError error);
+
+    /**
+     *
+     */
+    void gimpProcessFinished(int exitCode, QProcess::ExitStatus exitStatus);
+
 private:
     Frontend            *frontend;
     QFileDialog         *fileDialog;
@@ -408,7 +455,7 @@ private:
     QGroupBox   *editGroupBox;
     QPushButton *editFrameButton;
 
-    void makeGUI();
+    QProcess    *gimpProcess;
 };
 
 #endif

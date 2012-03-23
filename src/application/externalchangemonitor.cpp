@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2011 by                                                *
+ *  Copyright (C) 2005-2012 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -34,28 +34,16 @@
 
 /**
  * Class to monitor the changes to the file system and notify the application.
- *
- * @todo replace this class with QFileSystemWatcher!!!!
  */
 ExternalChangeMonitor::ExternalChangeMonitor(Frontend *f,
                                              QObject *parent)
-    : QObject(parent), socketNotifier(0), fileSystemWatcher(0)
+    : QObject(parent)
 {
     qDebug() << "ExternalChangeMonitor::Constructor --> Start";
 
-    frontend = f;
-    // Create the full path of the temp directory
-    QDir homeDir = QDir::home();
-    QString tmpDirectory;
-    tmpDirectory.append(homeDir.absolutePath());
-    tmpDirectory.append(QLatin1String("/"));
-    tmpDirectory.append(PreferencesTool::applicationDirectory);
-    tmpDirectory.append(QLatin1String("/"));
-    tmpDirectory.append(PreferencesTool::tempDirectory);
-    tmpDirectory.append(QLatin1String("/"));
+    fileSystemWatcher = NULL;
 
-    // Add the temp directory to the monitored pathes
-    addDirectory(tmpDirectory);
+    frontend = f;
 
     qDebug() << "ExternalChangeMonitor::Constructor --> End";
 }
@@ -67,7 +55,9 @@ ExternalChangeMonitor::~ExternalChangeMonitor()
 
     // If the monitoring is running, stop it
     stopMonitoring();
-    frontend = NULL;
+
+    directoryList.clear();
+    fileList.clear();
 
     qDebug() << "ExternalChangeMonitor::Destructor --> End";
 }
@@ -77,22 +67,134 @@ void ExternalChangeMonitor::addDirectory(const QString &directory)
 {
     qDebug() << "ExternalChangeMonitor::addDirectory --> Start";
 
-    // Is the directory always in the list?
-    if (directory.isEmpty() || directories.contains(directory)) {
-        qDebug() << "ExternalChangeMonitor::addDirectory --> End (without action)";
+    Q_ASSERT(!directory.isEmpty());
 
-        return;
-    }
+    // Is the directory always in the list?
+    Q_ASSERT(!directoryList.contains(directory));
+
+    // Stop monitoring
+    stopMonitoring();
 
     qDebug() << "ExternalChangeMonitor::addDirectory --> Registering directory for changelistening:" << directory;
-    // qDebug() << directory.toLocal8Bit();
 
-    directories.append(directory);
+    directoryList.append(directory);
 
-    // Restart monitoring with new directory
+    // Start monitoring with new directory
     startMonitoring();
 
     qDebug() << "ExternalChangeMonitor::addDirectory --> End";
+}
+
+
+void ExternalChangeMonitor::removeDirectory(const QString &directory)
+{
+    qDebug() << "ExternalChangeMonitor::removeDirectory --> Start";
+
+    Q_ASSERT(!directory.isEmpty());
+    Q_ASSERT(!directoryList.isEmpty());
+
+    // Is the directory in the list?
+    Q_ASSERT(directoryList.contains(directory));
+
+    // Stop monitoring
+    stopMonitoring();
+
+    qDebug() << "ExternalChangeMonitor::removeDirectory --> Removing directory:" << directory;
+
+    Q_ASSERT(directoryList.removeOne(directory));
+
+    // Start monitoring without the directory
+    startMonitoring();
+
+    qDebug() << "ExternalChangeMonitor::removeDirectory --> End";
+}
+
+
+void ExternalChangeMonitor::removeAllDirectories()
+{
+    qDebug() << "ExternalChangeMonitor::removeAllDirectories --> Start";
+
+    Q_ASSERT(!directoryList.isEmpty());
+
+    // Stop monitoring
+    stopMonitoring();
+
+    // Remove all directories from the list
+    directoryList.clear();
+
+    // Start monitoring without the directories
+    startMonitoring();
+
+    qDebug() << "ExternalChangeMonitor::removeAllDirectories --> End";
+}
+
+
+void ExternalChangeMonitor::addFile(const QString &file)
+{
+    qDebug() << "ExternalChangeMonitor::addFile --> Start";
+
+    Q_ASSERT(!file.isEmpty());
+
+    if (fileList.contains(file)) {
+        // The file is always in the list!
+        qDebug() << "ExternalChangeMonitor::addFile --> End (File exist)";
+        return;
+    }
+
+    // Stop monitoring
+    stopMonitoring();
+
+    qDebug() << "ExternalChangeMonitor::addFile --> Registering file for changelistening:" << file;
+
+    fileList.append(file);
+
+    // Start monitoring with new file
+    startMonitoring();
+
+    qDebug() << "ExternalChangeMonitor::addFile --> End";
+}
+
+
+void ExternalChangeMonitor::removeFile(const QString &file)
+{
+    qDebug() << "ExternalChangeMonitor::removeFile --> Start";
+
+    Q_ASSERT(!file.isEmpty());
+    Q_ASSERT(!fileList.isEmpty());
+
+    // Is the file in the list?
+    Q_ASSERT(fileList.contains(file));
+
+    // Stop monitoring
+    stopMonitoring();
+
+    qDebug() << "ExternalChangeMonitor::removeFile --> Removing file:" << file;
+
+    Q_ASSERT(fileList.removeOne(file));
+
+    // Start monitoring without the file
+    startMonitoring();
+
+    qDebug() << "ExternalChangeMonitor::removeFile --> End";
+}
+
+
+void ExternalChangeMonitor::removeAllFiles()
+{
+    qDebug() << "ExternalChangeMonitor::removeAllFiles --> Start";
+
+    Q_ASSERT(!fileList.isEmpty());
+
+    // Stop monitoring
+    stopMonitoring();
+
+    // Remove all files from the file list
+    fileList.clear();
+
+    // Start monitoring without the file
+    startMonitoring();
+
+    qDebug() << "ExternalChangeMonitor::removeAllFiles --> End";
 }
 
 
@@ -100,39 +202,28 @@ void ExternalChangeMonitor::startMonitoring()
 {
     qDebug() << "ExternalChangeMonitor::startMonitoring --> Start";
 
-    if (fileSystemWatcher != 0) {
-        qDebug() << "ExternalChangeMonitor::startMonitoring --> Stop Monitoring";
-        stopMonitoring();
+    Q_ASSERT(NULL == fileSystemWatcher);
+
+    if ((0 == directoryList.length()) && (0 == fileList.length())) {
+        // Nothing to monitor
+        qDebug() << "ExternalChangeMonitor::startMonitoring --> End (Nothing)";
+        return;
     }
 
-    qDebug() << "ExternalChangeMonitor::startMonitoring --> Create file system watcher";
     fileSystemWatcher = new QFileSystemWatcher;
-    qDebug() << "ExternalChangeMonitor::startMonitoring --> File system watcher created";
-
-    foreach(QString directory, directories) {
-        qDebug() << "ExternalChangeMonitor::startMonitoring --> Add directory";
-        QString osDirectory(Util::convertPathToOsSpecific(directory));
-        fileSystemWatcher->addPath(osDirectory);
-        // fileSystemWatcher->addPath(osDirectory.toLocal8Bit());
-        qDebug() << "ExternalChangeMonitor::startMonitoring --> Directory added";
-        /*
-        if (!inotifytools_watch_recursively(directory.toLocal8Bit(), IN_CLOSE_WRITE | IN_DELETE_SELF)) {
-            qWarning() << "Failed to start monitoring:";
-            qWarning() << strerror(inotifytools_error());
-            inotifytools_cleanup();
-
-            qDebug() << "ExternalChangeMonitor::startMonitoring --> End (Error2)";
-            return;
-        }
-        */
-    }
-
-    // socketNotifier = new QSocketNotifier(inotifyFd, QSocketNotifier::Read, this);
-
-    qDebug() << "ExternalChangeMonitor::startMonitoring --> Connect to signals";
 
     connect(fileSystemWatcher, SIGNAL(directoryChanged(const QString &)), this, SLOT(directoryChangedEvents(const QString &)));
     connect(fileSystemWatcher, SIGNAL(fileChanged(const QString &)), this, SLOT(fileChangedEvents(const QString &)));
+
+    foreach(QString directory, directoryList) {
+        QString osDirectory(Util::convertPathToOsSpecific(directory));
+        fileSystemWatcher->addPath(osDirectory);
+    }
+
+    foreach(QString file, fileList) {
+        QString osFile(Util::convertPathToOsSpecific(file));
+        fileSystemWatcher->addPath(osFile);
+    }
 
     qDebug() << "ExternalChangeMonitor::startMonitoring --> End";
 }
@@ -142,16 +233,14 @@ void ExternalChangeMonitor::stopMonitoring()
 {
     qDebug() << "ExternalChangeMonitor::stopMonitoring --> Start";
 
-    if (socketNotifier != 0) {
-        delete socketNotifier;
-        socketNotifier = 0;
+    if (NULL == fileSystemWatcher) {
+        qDebug() << "ExternalChangeMonitor::stopMonitoring --> End (Nothing)";
+        // Nothing to do
+        return;
     }
 
-    // inotifytools_cleanup();
-    if (fileSystemWatcher != 0) {
-        delete fileSystemWatcher;
-        fileSystemWatcher = 0;
-    }
+    delete fileSystemWatcher;
+    fileSystemWatcher = NULL;
 
     qDebug() << "ExternalChangeMonitor::stopMonitoring --> End";
 }
@@ -159,30 +248,11 @@ void ExternalChangeMonitor::stopMonitoring()
 
 void ExternalChangeMonitor::directoryChangedEvents(const QString &dir)
 {
-    qDebug() << "ExternalChangeMonitor::directoryChangedEvents --> Start (Nothing) [" << dir << "]";
-/*
-    Q_UNUSED(socket);
+    qDebug() << "ExternalChangeMonitor::directoryChangedEvents --> Start [" << dir << "]";
 
-    QTime time;
-    time.start();
-
-    struct inotify_event *event = inotifytools_next_event(1);
-    if (!event) {
-        return;
-    }
-
-    do {
-        QString filename = QString::fromLocal8Bit(inotifytools_filename_from_wd(event->wd));
-        if (event->mask & IN_DELETE_SELF) {
-            directories.removeAll(filename);
-        } else if (event->len > 0) { // IN_CLOSE_WRITE
-            filename += QString::fromLocal8Bit(event->name);
-            frontend->getProject()->animationChanged(filename.toLocal8Bit().constData());
-        }
-    } while (time.msec() < 250 && (event = inotifytools_next_event(1)));
+    frontend->showInformation("Not implemented", "ExternalChangeMonitor::directoryChangedEvents.");
 
     qDebug() << "ExternalChangeMonitor::directoryChangedEvents --> End";
-*/
 }
 
 
@@ -190,32 +260,18 @@ void ExternalChangeMonitor::fileChangedEvents(const QString &file)
 {
     qDebug() << "ExternalChangeMonitor::fileChangedEvents --> Start [" << file << "]";
 
-    frontend->showInformation("Not implemented", "ExternalChangeMonitor::fileChangedEvents.");
+    int modSceneIndex;
+    int modTakeIndex;
+    int modExposureIndex;
+
+    if (!frontend->getProject()->getModifyedExposure(Util::convertPathFromOsSpecific(file),
+                                                     modSceneIndex, modTakeIndex, modExposureIndex)) {
+        // Exposure not found!
+
+        qDebug() << "ExternalChangeMonitor::fileChangedEvents --> End (Error)";
+        return;
+    }
+    frontend->getView()->notifyModifyExposure(modSceneIndex, modTakeIndex, modExposureIndex);
 
     qDebug() << "ExternalChangeMonitor::fileChangedEvents --> End";
-}
-
-
-void ExternalChangeMonitor::suspendMonitor()
-{
-    qDebug() << "ExternalChangeMonitor::suspendMonitor --> Start";
-/*
-    if (socketNotifier)
-        socketNotifier->setEnabled(false);
-*/
-    qDebug() << "ExternalChangeMonitor::suspendMonitor --> End";
-}
-
-
-void ExternalChangeMonitor::resumeMonitor()
-{
-    qDebug() << "ExternalChangeMonitor::resumeMonitor --> Start";
-/*
-    if (socketNotifier)
-        socketNotifier->setEnabled(true);
-    if (!isMonitoring)
-*/
-    startMonitoring();
-
-    qDebug() << "ExternalChangeMonitor::resumeMonitor --> End";
 }

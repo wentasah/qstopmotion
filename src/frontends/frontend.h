@@ -319,6 +319,40 @@ public:
     virtual void nextAnimationFrame(int exposureIndex) = 0;
 
     /**
+     * Register the directory for external change monitoring.
+     * @param directory the directory to listen for changes in.
+     */
+    virtual void addDirectoryToMonitoring(const QString &directory) = 0;
+
+    /**
+     * Remove the directory from external change monitoring.
+     * @param directory the directory to remove.
+     */
+    virtual void removeDirectoryFromMonitoring(const QString &directory) = 0;
+
+    /**
+     * Remove all directories from external change monitoring.
+     */
+    virtual void removeAllDirectoriesFromMonitoring() = 0;
+
+    /**
+     * Register the file for external change monitoring.
+     * @param file the file to listen for changes in.
+     */
+    virtual void addFileToMonitoring(const QString &file) = 0;
+
+    /**
+     * Remove the file from external change monitoring.
+     * @param file the file to remove.
+     */
+    virtual void removeFileFromMonitoring(const QString &file) = 0;
+
+    /**
+     * Remove all files from external change monitoring.
+     */
+    virtual void removeAllFilesFromMonitoring() = 0;
+
+    /**
      * Test function for debugging purposes
      */
     virtual void test(QWidget *parentWidget, int level) = 0;

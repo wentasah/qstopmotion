@@ -93,12 +93,6 @@ public:
     void keyPressEvent(QKeyEvent *k);
 
     /**
-     * Sets up the ExternalChangeMonitor to monitor the project directories
-     * for changes in the project files.
-     */
-    void setupDirectoryMonitoring();
-
-    /**
      * Getting all possible GUI languages
      * @return A vector with all languages
      */
@@ -296,6 +290,46 @@ public:
      * @param count The new mix count.
      */
     void setMixCount(int count);
+
+    /**
+     * Sets up the ExternalChangeMonitor to monitor the project directories
+     * for changes in the project files.
+     */
+    void setupDirectoryMonitoring();
+
+    /**
+     * Register the directory for external change monitoring.
+     * @param directory the directory to listen for changes in.
+     */
+    void addDirectoryToMonitoring(const QString &directory);
+
+    /**
+     * Remove the directory from external change monitoring.
+     * @param directory the directory to remove.
+     */
+    void removeDirectoryFromMonitoring(const QString &directory);
+
+    /**
+     * Remove all directories from external change monitoring.
+     */
+    void removeAllDirectoriesFromMonitoring();
+
+    /**
+     * Register the file for external change monitoring.
+     * @param file the file to listen for changes in.
+     */
+    void addFileToMonitoring(const QString &file);
+
+    /**
+     * Remove the file from external change monitoring.
+     * @param file the file to remove.
+     */
+    void removeFileFromMonitoring(const QString &file);
+
+    /**
+     * Remove all files from external change monitoring.
+     */
+    void removeAllFilesFromMonitoring();
 
     /**************************************************************************
      * Public slots

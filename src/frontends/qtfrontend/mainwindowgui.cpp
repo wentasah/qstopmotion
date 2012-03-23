@@ -286,16 +286,6 @@ void MainWindowGUI::keyPressEvent(QKeyEvent *k)
 }
 
 
-void MainWindowGUI::setupDirectoryMonitoring()
-{
-    qDebug("MainWindowGUI::setupDirectoryMonitoring --> Start");
-
-    changeMonitor = new ExternalChangeMonitor(frontend, this);
-
-    qDebug("MainWindowGUI::setupDirectoryMonitoring --> End");
-}
-
-
 const QVector<QString> MainWindowGUI::getLanguages()
 {
     return this->translationsLanguages;
@@ -649,6 +639,51 @@ int MainWindowGUI::getMixCount()
 void MainWindowGUI::setMixCount(int count)
 {
     recordingTab->setMixCount(count);
+}
+
+
+void MainWindowGUI::setupDirectoryMonitoring()
+{
+    qDebug("MainWindowGUI::setupDirectoryMonitoring --> Start");
+
+    changeMonitor = new ExternalChangeMonitor(frontend, this);
+
+    qDebug("MainWindowGUI::setupDirectoryMonitoring --> End");
+}
+
+
+void MainWindowGUI::addDirectoryToMonitoring(const QString &directory)
+{
+    changeMonitor->addDirectory(directory);
+}
+
+
+void MainWindowGUI::removeDirectoryFromMonitoring(const QString &directory)
+{
+    changeMonitor->removeDirectory(directory);
+}
+
+
+void MainWindowGUI::removeAllDirectoriesFromMonitoring()
+{
+    changeMonitor->removeAllDirectories();
+}
+
+
+void MainWindowGUI::addFileToMonitoring(const QString &file)
+{
+    changeMonitor->addFile(file);
+}
+
+
+void MainWindowGUI::removeFileFromMonitoring(const QString &file)
+{
+    changeMonitor->removeFile(file);
+}
+
+void MainWindowGUI::removeAllFilesFromMonitoring()
+{
+    changeMonitor->removeAllFiles();
 }
 
 /**************************************************************************

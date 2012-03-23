@@ -315,6 +315,17 @@ public:
                        unsigned int movePosition);
 
     /**
+     * Get the position of the modified exposure in the project.
+     * @arg filePath The path to the modified exposure.
+     * @arg modTakeIndex the index of the take of the modified exposure.
+     * @arg modExposureIndex the index of the modified exposure.
+     * @return True if the exposure is found and false else.
+     */
+    bool getModifyedExposure(const QString &filePath,
+                             int &modTakeIndex,
+                             int &modExposureIndex);
+
+    /**
      * Cleans exposures from the scene without moving them around. Used when the user
      * aborts while adding exposures.
      * @param fromExposure the first exposure to remove.

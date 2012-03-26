@@ -23,9 +23,6 @@
 #ifndef QTGUI_H
 #define QTGUI_H
 
-#include "application/editmenuhandler.h"
-#include "application/externalchangemonitor.h"
-#include "application/soundhandler.h"
 #include "frontends/frontend.h"
 #include "frontends/qtfrontend/menuframe.h"
 #include "frontends/qtfrontend/toolbar.h"
@@ -39,6 +36,7 @@
 #include "frontends/qtfrontend/tooltabs/projecttab.h"
 #include "frontends/qtfrontend/tooltabs/recordingtab.h"
 // #include "frontends/qtfrontend/tooltabs/viewtab.h"
+#include "technical/externalchangemonitor.h"
 #include "technical/grabber/imagegrabber.h"
 
 #include <QtGui/QProgressBar>
@@ -388,6 +386,36 @@ private slots:
     void closeApplication();
 
     /**
+     * Start a undo task.
+     */
+    void undo();
+
+    /**
+     * Start a redo task.
+     */
+    void redo();
+
+    /**
+     * Copies a selection to the global clipboard.
+     */
+    void copy();
+
+    /**
+     * Pastes a selection from the global clipboard to the program.
+     */
+    void paste();
+
+    /**
+     * Attatches a sound to a frame in the animation.
+     */
+    void addSound();
+
+    /**
+     * Removes a sound from a frame in the animation.
+     */
+    void removeSound();
+
+    /**
      * Brings up a preferences dialog where the user can set preferences for the
      * application.
      */
@@ -466,6 +494,15 @@ private:
     QAction *quitAct;
     QAction *undoAct;
     QAction *redoAct;
+    QAction *insertSceneAct;
+    QAction *addSceneAct;
+    QAction *removeSceneAct;
+    QAction *insertTakeAct;
+    QAction *addTakeAct;
+    QAction *removeTakeAct;
+    QAction *insertFramesAct;
+    QAction *addFramesAct;
+    QAction *removeFramesAct;
     QAction *cutAct;
     QAction *copyAct;
     QAction *pasteAct;
@@ -516,8 +553,6 @@ private:
     HelpBrowser     *helpBrowser;
 
     // Handlers
-    SoundHandler          *soundHandler;
-    EditMenuHandler       *editMenuHandler;
     ExternalChangeMonitor *changeMonitor;
 
     // Translation handling
@@ -545,11 +580,6 @@ private:
      * Initialize the possible languages
      */
     void initTranslations();
-
-    /**
-     * Creates the handlers for handling user requests.
-     */
-    void createHandlers();
 
     /**
      * Creates key accelerators (keyboard shortcuts)

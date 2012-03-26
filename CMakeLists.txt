@@ -98,9 +98,6 @@ set(HEADERS
 
 # add all header files of the project to MOC to MOC_HEADERS
 set(MOC_HEADERS
-    src/application/editmenuhandler.h
-    src/application/externalchangemonitor.h
-    src/application/soundhandler.h
     src/domain/domainfacade.h
     src/domain/animation/animationproject.h
     src/domain/animation/exposure.h
@@ -130,6 +127,7 @@ set(MOC_HEADERS
     src/frontends/qtfrontend/tooltabs/projecttab.h
     src/frontends/qtfrontend/tooltabs/recordingtab.h
     src/frontends/qtfrontend/tooltabs/viewtab.h
+    src/technical/externalchangemonitor.h
     src/technical/preferencestool.h
     src/technical/grabber/gstreamergrabber.h
     src/technical/grabber/imagegrabber.h
@@ -138,9 +136,6 @@ set(MOC_HEADERS
 # add all source files to SOURCES
 set(SOURCES
     src/main.cpp
-    src/application/editmenuhandler.cpp
-    src/application/externalchangemonitor.cpp
-    src/application/soundhandler.cpp
     src/domain/domainfacade.cpp
     src/domain/animation/animationproject.cpp
     src/domain/animation/exposure.cpp
@@ -192,6 +187,7 @@ set(SOURCES
     src/frontends/qtfrontend/tooltabs/projecttab.cpp
     src/frontends/qtfrontend/tooltabs/recordingtab.cpp
     src/frontends/qtfrontend/tooltabs/viewtab.cpp
+    src/technical/externalchangemonitor.cpp
     src/technical/preferencestool.cpp
     src/technical/util.cpp
     src/technical/grabber/gstreamergrabber.cpp

@@ -70,6 +70,15 @@ MainWindowGUI::MainWindowGUI(QApplication *stApp, Frontend *f)
     quitAct              = 0;
     undoAct              = 0;
     redoAct              = 0;
+    insertSceneAct       = 0;
+    addSceneAct          = 0;
+    removeSceneAct       = 0;
+    insertTakeAct        = 0;
+    addTakeAct           = 0;
+    removeTakeAct        = 0;
+    insertFramesAct      = 0;
+    addFramesAct         = 0;
+    removeFramesAct      = 0;
     cutAct               = 0;
     copyAct              = 0;
     pasteAct             = 0;
@@ -115,8 +124,6 @@ MainWindowGUI::MainWindowGUI(QApplication *stApp, Frontend *f)
     undoView             = 0;
     helpBrowser          = 0;
 
-    editMenuHandler      = 0;
-    soundHandler         = 0;
     changeMonitor        = 0;
 
     grabber              = 0;
@@ -158,8 +165,6 @@ void MainWindowGUI::init()
     centerWidgetLayout->setMargin(0);
 
     timeLine = new TimeLine(this->frontend);
-
-    createHandlers();
 
     // Initializes and sets up the workarea consisting of the toolsmenu and the frameview.
     workArea = new QWidget;
@@ -325,6 +330,15 @@ void MainWindowGUI::retranslateStrings()
     quitAct->setText(tr("&Quit"));
     undoAct->setText(tr("&Undo"));
     redoAct->setText(tr("Re&do"));
+    insertSceneAct->setText(tr("Insert Scene"));
+    addSceneAct->setText(tr("Add Scene"));
+    removeSceneAct->setText(tr("Remove Scene"));
+    insertTakeAct->setText(tr("Insert Take"));
+    addTakeAct->setText(tr("Add Take"));
+    removeTakeAct->setText(tr("Remove Take"));
+    insertFramesAct->setText(tr("Insert Frames"));
+    addFramesAct->setText(tr("Add Frames"));
+    removeFramesAct->setText(tr("Remove Frames"));
     // cutAct->setText(tr("Cu&t"));
     // copyAct->setText(tr("&Copy"));
     // pasteAct->setText(tr("&Paste"));
@@ -1010,6 +1024,109 @@ void MainWindowGUI::closeApplication()
 }
 
 
+void MainWindowGUI::undo()
+{
+    // TODO: Implement undo task!
+}
+
+
+void MainWindowGUI::redo()
+{
+    // TODO: Implement redo task!
+}
+
+// TODO: New implementation of copy necessary
+void MainWindowGUI::copy()
+{
+    /*
+    QList<QUrl> urls;
+
+    // TODO: return the scene, take and frame from the frame bar!!!!
+    int selectionFrame = timeLine->getSelectionFrame();
+    int activeFrame = 1; // frontend->getProject()->getActiveExposureIndex();
+    int highend = (selectionFrame > activeFrame) ? selectionFrame : activeFrame;
+    int lowend = (selectionFrame < activeFrame) ? selectionFrame : activeFrame;
+
+    for (int i = lowend; i <= highend; ++i) {
+        // TODO: Get the filename from the frame bar
+        Exposure* exposure = frontend->getProject()->getExposure(1, 1, i);
+        urls.append(QUrl::fromLocalFile(exposure->getImagePath()));
+    }
+
+    //QDrag *drag = new QDrag((MainWindowGUI*)this->parent());
+    QMimeData *mimeData = new QMimeData;
+
+    mimeData->setUrls(urls);
+    //drag->setMimeData(mimeData);
+
+    //drag->start(Qt::MoveAction);
+    QApplication::clipboard()->setMimeData(mimeData);
+    */
+}
+
+// TODO: New implementation of past necessary
+void MainWindowGUI::paste()
+{
+    /*
+    const QMimeData *mimeData = QApplication::clipboard()->mimeData();
+    if (mimeData->hasUrls()) {
+        QStringList fileNames;
+        QList<QUrl> urls = mimeData->urls();
+        int numFrames = urls.size();
+        for (int i = 0; i < numFrames; ++i) {
+            fileNames.append(urls[i].toLocalFile());
+        }
+        emit addFrames(fileNames);
+    }
+    */
+}
+
+// TODO: New Implementation of add sound
+void MainWindowGUI::addSound()
+{
+    /*
+    QString openFile = QFileDialog::getOpenFileName(0, tr("Choose sound file"), QString(homeDir), tr("Sounds (*.ogg)"));
+    if (!openFile.isNull()) {
+        DomainFacade *facade = frontend->getProject();
+        bool ok = false;
+        int ret = 0;
+        QString text = QInputDialog::getText(0, tr("Sound name"), tr("Enter the name of the sound:"),
+                                             QLineEdit::Normal, QString::null, &ok);
+        if (ok && !text.isEmpty()) {
+            ret = facade->addSoundToScene(facade->getActiveSceneIndex(), openFile, text);
+        }
+        else {
+            ret = facade->addSoundToScene(facade->getActiveSceneIndex(), openFile, QString());
+        }
+
+        if (ret == 0) {
+            Scene *scene = facade->getScene(facade->getActiveSceneIndex());
+            if (!scene->isEmpty()) {
+                soundsList->insertItem(soundsList->count(),
+                                       new QListWidgetItem(scene->getSoundName(soundsList->count())));
+                soundsList->item(soundsList->currentRow())->setText(text);
+                emit soundsChanged();
+            }
+        }
+    }
+    */
+}
+
+// TODO: New Implementation of remove sound
+void MainWindowGUI::removeSound()
+{
+    /*
+    int index = soundsList->currentRow();
+    if (index >= 0) {
+        frontend->getProject()->removeSoundFromScene(frontend->getProject()->getActiveSceneIndex(), index);
+        QListWidgetItem *qlwi = soundsList->takeItem(index);
+        delete qlwi;
+        emit soundsChanged();
+    }
+    */
+}
+
+
 void MainWindowGUI::showPreferencesDialog()
 {
     PreferencesDialog *preferencesDialog;
@@ -1151,14 +1268,6 @@ void MainWindowGUI::initTranslations()
     }
 
     qDebug("MainWindowGUI::initTranslations --> End");
-}
-
-
-void MainWindowGUI::createHandlers()
-{
-    editMenuHandler = new EditMenuHandler(frontend, this, timeLine);
-    soundHandler = new SoundHandler(frontend, this, this->lastVisitedDir);
-    connect(soundHandler, SIGNAL(soundsChanged()), timeLine, SLOT(frameSoundsChanged()));
 }
 
 
@@ -1398,8 +1507,7 @@ void MainWindowGUI::createActions()
     undoAct->setIcon(QIcon(iconFile));
     undoAct->setShortcut(ControlModifier + Key_Z);
     undoAct->setIconVisibleInMenu(true);
-    undoAct->setEnabled(false);
-    connect(undoAct, SIGNAL(triggered()), editMenuHandler, SLOT(undo()));
+    connect(undoAct, SIGNAL(triggered()), this, SLOT(undo()));
 
     redoAct = frontend->getProject()->getUndoStack()->createRedoAction(this);
     iconFile.clear();
@@ -1408,9 +1516,90 @@ void MainWindowGUI::createActions()
     redoAct->setIcon(QIcon(iconFile));
     redoAct->setShortcut(ControlModifier + ShiftModifier + Key_Z);
     redoAct->setIconVisibleInMenu(true);
-    redoAct->setEnabled(false);
-    connect(redoAct, SIGNAL(triggered()), editMenuHandler, SLOT(redo()));
-/*
+    connect(redoAct, SIGNAL(triggered()), this, SLOT(redo()));
+
+    insertSceneAct = new QAction(this);
+    iconFile.clear();
+    iconFile.append(frontend->getIconsDirName());
+    iconFile.append(QLatin1String("insertscene.png"));
+    insertSceneAct->setIcon(QIcon(iconFile));
+    // insertSceneAct->setShortcut(ControlModifier + Key_Q);
+    insertSceneAct->setIconVisibleInMenu(true);
+    connect(insertSceneAct, SIGNAL(triggered()), projectTab, SLOT(insertSceneSlot()));
+
+    addSceneAct = new QAction(this);
+    iconFile.clear();
+    iconFile.append(frontend->getIconsDirName());
+    iconFile.append(QLatin1String("addscene.png"));
+    addSceneAct->setIcon(QIcon(iconFile));
+    // addSceneAct->setShortcut(ControlModifier + Key_Q);
+    addSceneAct->setIconVisibleInMenu(true);
+    connect(addSceneAct, SIGNAL(triggered()), projectTab, SLOT(addSceneSlot()));
+
+    removeSceneAct = new QAction(this);
+    iconFile.clear();
+    iconFile.append(frontend->getIconsDirName());
+    iconFile.append(QLatin1String("removescene.png"));
+    removeSceneAct->setIcon(QIcon(iconFile));
+    // removeSceneAct->setShortcut(ControlModifier + Key_Q);
+    removeSceneAct->setIconVisibleInMenu(true);
+    connect(removeSceneAct, SIGNAL(triggered()), projectTab, SLOT(removeSceneSlot()));
+
+    insertTakeAct = new QAction(this);
+    iconFile.clear();
+    iconFile.append(frontend->getIconsDirName());
+    iconFile.append(QLatin1String("inserttake.png"));
+    insertTakeAct->setIcon(QIcon(iconFile));
+    // insertTakeAct->setShortcut(ControlModifier + Key_Q);
+    insertTakeAct->setIconVisibleInMenu(true);
+    connect(insertTakeAct, SIGNAL(triggered()), projectTab, SLOT(insertTakeSlot()));
+
+    addTakeAct = new QAction(this);
+    iconFile.clear();
+    iconFile.append(frontend->getIconsDirName());
+    iconFile.append(QLatin1String("addtake.png"));
+    addTakeAct->setIcon(QIcon(iconFile));
+    // addTakeAct->setShortcut(ControlModifier + Key_Q);
+    addTakeAct->setIconVisibleInMenu(true);
+    connect(addSceneAct, SIGNAL(triggered()), projectTab, SLOT(addTakeSlot()));
+
+    removeTakeAct = new QAction(this);
+    iconFile.clear();
+    iconFile.append(frontend->getIconsDirName());
+    iconFile.append(QLatin1String("removetake.png"));
+    removeTakeAct->setIcon(QIcon(iconFile));
+    // removeTakeAct->setShortcut(ControlModifier + Key_Q);
+    removeTakeAct->setIconVisibleInMenu(true);
+    connect(removeTakeAct, SIGNAL(triggered()), projectTab, SLOT(removeTakeSlot()));
+
+    insertFramesAct = new QAction(this);
+    iconFile.clear();
+    iconFile.append(frontend->getIconsDirName());
+    iconFile.append(QLatin1String("insertframes.png"));
+    insertFramesAct->setIcon(QIcon(iconFile));
+    // insertFramesAct->setShortcut(ControlModifier + Key_Q);
+    insertFramesAct->setIconVisibleInMenu(true);
+    connect(insertFramesAct, SIGNAL(triggered()), projectTab, SLOT(insertFramesSlot()));
+
+    addFramesAct = new QAction(this);
+    iconFile.clear();
+    iconFile.append(frontend->getIconsDirName());
+    iconFile.append(QLatin1String("addframes.png"));
+    addFramesAct->setIcon(QIcon(iconFile));
+    // addFramesAct->setShortcut(ControlModifier + Key_Q);
+    addFramesAct->setIconVisibleInMenu(true);
+    connect(addFramesAct, SIGNAL(triggered()), projectTab, SLOT(addFramesSlot()));
+
+    removeFramesAct = new QAction(this);
+    iconFile.clear();
+    iconFile.append(frontend->getIconsDirName());
+    iconFile.append(QLatin1String("removeframes.png"));
+    removeFramesAct->setIcon(QIcon(iconFile));
+    // removeFramesAct->setShortcut(ControlModifier + Key_Q);
+    removeFramesAct->setIconVisibleInMenu(true);
+    connect(removeFramesAct, SIGNAL(triggered()), projectTab, SLOT(removeFramesSlot()));
+
+    /*
     cutAct = new QAction(this);
     iconFile.clear();
     iconFile.append(frontend->getIconsDirName());
@@ -1428,7 +1617,7 @@ void MainWindowGUI::createActions()
     copyAct->setShortcut(ControlModifier + Key_C);
     copyAct->setIconVisibleInMenu(true);
     copyAct->setEnabled(false);
-    connect(copyAct, SIGNAL(triggered()), editMenuHandler, SLOT(copy()));
+    connect(copyAct, SIGNAL(triggered()), this, SLOT(copy()));
 
     pasteAct = new QAction(this);
     iconFile.clear();
@@ -1438,18 +1627,9 @@ void MainWindowGUI::createActions()
     pasteAct->setShortcut(ControlModifier + Key_V);
     pasteAct->setIconVisibleInMenu(true);
     pasteAct->setEnabled(false);
-    connect(pasteAct, SIGNAL(triggered()), editMenuHandler, SLOT(paste()));
-
-    gotoFrameAct = new QAction(this);
-    iconFile.clear();
-    iconFile.append(frontend->getIconsDirName());
-    iconFile.append(QLatin1String("window.png"));
-    gotoFrameAct->setIcon(QIcon(iconFile));
-    gotoFrameAct->setShortcut(ControlModifier + Key_G);
-    gotoFrameAct->setIconVisibleInMenu(true);
-    connect(gotoFrameAct, SIGNAL(triggered()), gotoMenuWidget, SLOT(show()));
+    connect(pasteAct, SIGNAL(triggered()), this, SLOT(paste()));
 */
-    // Configure menu
+    // Preferences menu
     configureAct = new QAction(this);
     iconFile.clear();
     iconFile.append(frontend->getIconsDirName());
@@ -1508,17 +1688,21 @@ void MainWindowGUI::createMenus()
     editMenu->addAction(undoAct);
     editMenu->addAction(redoAct);
     editMenu->addSeparator();
-    editMenu->addAction(cutAct);
-    editMenu->addAction(copyAct);
-    editMenu->addAction(pasteAct);
+    editMenu->addAction(insertSceneAct);
+    editMenu->addAction(addSceneAct);
+    editMenu->addAction(removeSceneAct);
     editMenu->addSeparator();
-    // editMenu->addAction(gotoFrameAct);
-
-    undoAct->setEnabled(false);
-    redoAct->setEnabled(false);
-    // cutAct->setEnabled(false);
-    // copyAct->setEnabled(false);
-    // gotoFrameAct->setEnabled(false);
+    editMenu->addAction(insertTakeAct);
+    editMenu->addAction(addTakeAct);
+    editMenu->addAction(removeTakeAct);
+    editMenu->addSeparator();
+    editMenu->addAction(insertFramesAct);
+    editMenu->addAction(addFramesAct);
+    editMenu->addAction(removeFramesAct);
+    // editMenu->addSeparator();
+    // editMenu->addAction(cutAct);
+    // editMenu->addAction(copyAct);
+    // editMenu->addAction(pasteAct);
 
     settingsMenu = menuBar()->addMenu(tr("&Settings"));
 
@@ -1591,9 +1775,6 @@ void MainWindowGUI::makeGotoMenu(QVBoxLayout *layout)
     gotoSpinner->setMaximumWidth(60);
     gotoSpinner->setRange(1, 1);
 
-    connect(gotoSpinner, SIGNAL(spinBoxTriggered(int)), editMenuHandler, SLOT(gotoFrame(int)));
-    connect(gotoSpinner, SIGNAL(spinBoxCanceled()), editMenuHandler, SLOT(closeGotoMenu()));
-
     gotoMenuCloseButton = new QPushButton;
     iconFile.append(QLatin1String("close.png"));
     gotoMenuCloseButton->setIcon(QPixmap(iconFile));
@@ -1610,7 +1791,6 @@ void MainWindowGUI::makeGotoMenu(QVBoxLayout *layout)
 
     layout->addWidget(gotoMenuWidget);
     gotoMenuWidget->hide();
-    editMenuHandler->setGotoMenu(gotoMenuWidget);
 }
 */
 

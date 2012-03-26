@@ -266,6 +266,52 @@ public:
                               int modTakeIndex,
                               int modExposureIndex);
 
+public slots:
+    /**
+     * Insert scene butten pressed.
+     */
+    void insertSceneSlot();
+
+    /**
+     * Add scene butten pressed.
+     */
+    void addSceneSlot();
+
+    /**
+     * Remove scene button pressed.
+     */
+    void removeSceneSlot();
+
+    /**
+     * Insert take butten pressed.
+     */
+    void insertTakeSlot();
+
+    /**
+     * Add take butten pressed.
+     */
+    void addTakeSlot();
+
+    /**
+     * Remove take button pressed.
+     */
+    void removeTakeSlot();
+
+    /**
+     * Insert frames button pressed.
+     */
+    void insertFramesSlot();
+
+    /**
+     * Add frames button pressed.
+     */
+    void addFramesSlot();
+
+    /**
+     * Remove frames button pressed.
+     */
+    void removeFramesSlot();
+
 protected:
     // void resizeEvent(QResizeEvent *event);
 
@@ -348,51 +394,6 @@ private slots:
      * Double click in the project tree
      */
     void itemSelectionChanged();
-
-    /**
-     * Insert scene butten pressed.
-     */
-    void insertSceneSlot();
-
-    /**
-     * Add scene butten pressed.
-     */
-    void addSceneSlot();
-
-    /**
-     * Remove scene button pressed.
-     */
-    void removeSceneSlot();
-
-    /**
-     * Insert take butten pressed.
-     */
-    void insertTakeSlot();
-
-    /**
-     * Add take butten pressed.
-     */
-    void addTakeSlot();
-
-    /**
-     * Remove take button pressed.
-     */
-    void removeTakeSlot();
-
-    /**
-     * Insert frames button pressed.
-     */
-    void insertFramesSlot();
-
-    /**
-     * Add frames button pressed.
-     */
-    void addFramesSlot();
-
-    /**
-     * Remove frames button pressed.
-     */
-    void removeFramesSlot();
 
     /**
      * Launch the photo editor button pressed

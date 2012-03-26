@@ -1,15 +1,12 @@
 ###############################################################################
 # QtCreator file for the qStopMotion project                                  #
 # (c) Ralf Lange, longsoft.de                                                 #
-# Last update: 2012-02-01                                                     #
+# Last update: 2012-03-26                                                     #
 #                                                                             #
 # Please use CMake and the CMakeLists.txt file to build qStopMotion!          #
 ###############################################################################
 
 HEADERS += src/config.h \
-           src/application/editmenuhandler.h \
-           src/application/externalchangemonitor.h \
-           src/application/soundhandler.h \
            src/domain/domainfacade.h \
            src/domain/animation/animationproject.h \
            src/domain/animation/exposure.h \
@@ -65,6 +62,7 @@ HEADERS += src/config.h \
            src/frontends/qtfrontend/tooltabs/projecttab.h \
            src/frontends/qtfrontend/tooltabs/recordingtab.h \
            src/frontends/qtfrontend/tooltabs/viewtab.h \
+           src/technical/externalchangemonitor.h \
            src/technical/preferencestool.h \
            src/technical/util.h \
            src/technical/audio/audiodriver.h \
@@ -78,9 +76,6 @@ HEADERS += src/config.h \
            src/technical/videoencoder/videoencoderfactory.h
 
 SOURCES += src/main.cpp \
-           src/application/editmenuhandler.cpp \
-           src/application/externalchangemonitor.cpp \
-           src/application/soundhandler.cpp \
            src/domain/domainfacade.cpp \
            src/domain/animation/animationproject.cpp \
            src/domain/animation/exposure.cpp \
@@ -132,6 +127,7 @@ SOURCES += src/main.cpp \
            src/frontends/qtfrontend/tooltabs/projecttab.cpp \
            src/frontends/qtfrontend/tooltabs/recordingtab.cpp \
            src/frontends/qtfrontend/tooltabs/viewtab.cpp \
+           src/technical/externalchangemonitor.cpp \
            src/technical/preferencestool.cpp \
            src/technical/util.cpp \
            src/technical/grabber/gstreamergrabber.cpp \

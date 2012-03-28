@@ -30,6 +30,7 @@
  */
 class UndoExposureMove : public UndoBase
 {
+    Q_OBJECT
 public:
 
     /**

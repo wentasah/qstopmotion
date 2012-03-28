@@ -28,6 +28,7 @@
  */
 class UndoTakeMove : public UndoBase
 {
+    Q_OBJECT
 public:
 
     /**

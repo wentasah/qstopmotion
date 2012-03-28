@@ -21,6 +21,7 @@
  ******************************************************************************/
 
 #include "undoprojectnew.h"
+#include "frontends/qtfrontend/toolbar.h"
 
 
 UndoProjectNew::UndoProjectNew(DomainFacade *df,
@@ -28,7 +29,7 @@ UndoProjectNew::UndoProjectNew(DomainFacade *df,
     :UndoBase(df)
 {
     projectDescription.append(description);
-    setText(QString(QObject::tr("New project '%1'")).arg(projectDescription));
+    setText(QString(tr("New project '%1'")).arg(projectDescription));
 }
 
 
@@ -40,13 +41,32 @@ UndoProjectNew::~UndoProjectNew()
 
 void UndoProjectNew::undo()
 {
-    // TODO: Change handling for undo
-    // facade->newProjectUndo();
+    qDebug("UndoProjectNew::undo --> Start");
+
+    facade->writeHistoryEntry(QString("undoProjectNew|%1").arg(projectDescription));
+
+    qDebug("UndoProjectNew::undo --> End");
 }
 
 
 void UndoProjectNew::redo()
 {
-    facade->newProjectRedo(projectDescription);
+    qDebug("UndoProjectNew::redo --> Start");
+
+    AnimationProject *animationProject = facade->getAnimationProject();
+    Frontend *frontend = facade->getFrontend();
+
+    animationProject->newProject(projectDescription);
+    facade->setProjectSettingsToDefault();
+    facade->getView()->notifyNewProject();
+    frontend->setProjectID(facade->getProjectDescription().toAscii());
+    frontend->setSceneID("");
+    frontend->setTakeID("");
+    frontend->setToolBarState(ToolBar::toolBarCameraOff);
+
+    animationProject->setUnsavedChanges();
+
     facade->writeHistoryEntry(QString("redoProjectNew|%1").arg(projectDescription));
+
+    qDebug("UndoProjectNew::redo --> End");
 }

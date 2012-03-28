@@ -252,40 +252,21 @@ public:
     bool recoverProject();
 
     /**
+     * Set all settings to the actual default settings.
+     */
+    void setProjectSettingsToDefault();
+
+    /**
      * Add a new newProject object to the undo history.
      * @param projectDescription the description of the scene or a empty string.
      */
     void newProjectToUndo(const QString &projectDescription);
 
     /**
-     * Undo create a new project.
-     * @param projectDescription the description of the project or a empty string.
-     */
-    // bool newProjectUndo(const QString &projectDescription);
-
-    /**
-     * Creates a new project.
-     * @param projectDescription the description of the project or a empty string.
-     */
-    bool newProjectRedo(const QString &projectDescription);
-
-    /**
      * Add a new openProject object to the undo history.
      * @param projectPath the path to the project file.
      */
     void openProjectToUndo(const QString &projectPath);
-
-    /**
-     * Undo open project.
-     * @param projectPath the path to the project file.
-     */
-    // bool openProjectUndo(const QString &projectPath);
-
-    /**
-     * Open a project.
-     * @param projectPath the path to the project file.
-     */
-    bool openProjectRedo(const QString &projectPath);
 
     /**
      * Add a new saveProject object to the undo history.
@@ -295,32 +276,9 @@ public:
     void saveProjectToUndo(const QString &projectPath, bool saveAs);
 
     /**
-     * Undo save project.
-     * @param projectPath the path to the project file.
-     */
-    // bool saveProjectUndo(const QString &projectPath);
-
-    /**
-     * Save a project.
-     * @param projectPath the path to the project file.
-     * @param saveAs this is a save as operation.
-     */
-    bool saveProjectRedo(const QString &projectPath, bool saveAs);
-
-    /**
      * Add a new closeProject object to the undo history.
      */
     void closeProjectToUndo();
-
-    /**
-     * Undo close project.
-     */
-    // bool closeProjectUndo();
-
-    /**
-     * Close a project.
-     */
-    bool closeProjectRedo();
 
     /**************************************************************************
      * Scene functions
@@ -724,26 +682,6 @@ public:
                            bool           copy);
 
     /**
-     * Undo creates a new exposure and add it to the animation project.
-     * @param fileName the file name of the image file of the exposure.
-     * @param sceneIndex the index of the scene of the take the exposure to add
-     * @param takeIndex the index of the take the exposure to add
-     */
-    // void undoExposureAdd(const QString &fileName,
-    //                      int            sceneIndex,
-    //                      int            takeIndex);
-
-    /**
-     * Creates a new exposure and add it to the animation project.
-     * @param fileName the file name of the image file of the exposure.
-     * @param sceneIndex the index of the scene of the take the exposure to add
-     * @param takeIndex the index of the take the exposure to add
-     */
-    void redoExposureAdd(const QString &fileName,
-                         int            sceneIndex,
-                         int            takeIndex);
-
-    /**
      * Creates a new insertExposure object in the undo history.
      * @param filePath the file path of the image file of the exposure or a empty string.
      * @param sceneIndex the index of the scene of the take the exposure to add
@@ -758,31 +696,6 @@ public:
                               bool           copy);
 
     /**
-     * Undo creates a new exposure and insert it in the animation project.
-     * @param fileName the file name of the image file of the exposure or a empty string.
-     * @param sceneIndex the index of the scene of the take the exposure to add
-     * @param takeIndex the index of the take the exposure to add
-     * @param exposureIndex The index of the exposure where the new exposures are inserted bevor.
-     */
-    // void undoExposureInsert(const QString &fileName
-    //                         int            sceneIndex,
-    //                         int            takeIndex,
-    //                         int            exposureIndex);
-
-    /**
-     * Creates a new exposure and insert it in the animation project.
-     * @param sceneIndex the index of the scene of the take the exposure to add
-     * @param takeIndex the index of the take the exposure to add
-     * @param exposureIndex The index of the exposure where the new exposures are inserted bevor.
-     * @param after The new exposure is inserterd after the exposure index.
-     * @param filename the file name of the image file of the exposure or a empty string.
-     */
-    void redoExposureInsert(const QString &fileName,
-                            int            sceneIndex,
-                            int            takeIndex,
-                            int            exposureIndex);
-
-    /**
      * Add a new remove exposure object to the undo history.
      * @arg sceneIndex the index of the scene of the exposure to remove
      * @arg takeIndex the index of the take of the exposure to remove
@@ -791,26 +704,6 @@ public:
     void removeExposureToUndo(int sceneIndex,
                               int takeIndex,
                               int exposureIndex);
-
-    /**
-     * Removes the exposure with the given tree item from the animation.
-     * @arg sceneIndex the index of the scene of the exposure to remove
-     * @arg takeIndex the index of the take of the exposure to remove
-     * @arg exposureIndex the index of the exposure to remove
-     */
-    // void undoExposureRemove(int sceneIndex,
-    //                         int takeIndex,
-    //                         int exposureIndex);
-
-    /**
-     * Removes the exposure with the given tree item from the animation.
-     * @arg sceneIndex the index of the scene of the exposure to remove
-     * @arg takeIndex the index of the take of the exposure to remove
-     * @arg exposureIndex the index of the exposure to remove
-     */
-    Exposure *redoExposureRemove(int sceneIndex,
-                                 int takeIndex,
-                                 int exposureIndex);
 
     /**
      * Add a new move exposure object to the undo history.
@@ -829,38 +722,6 @@ public:
                             int toExposureIndex);
 
     /**
-     * Undo the move of the exposure from one position to a new position in the tree.
-     * @arg fromSceneIndex the from index of the scene of the take of the exposure to move
-     * @arg fromTakeIndex the from index of the take of the exposure to move
-     * @arg fromExposureIndex the from index of the exposure to move
-     * @arg toSceneIndex the to index of the scene of the take of the exposure to move
-     * @arg toTakeIndex the to index of the take of the exposure to move
-     * @arg toExposureIndex the to index of the exposure to move
-     */
-    // void undoExposureMove(int fromSceneIndex,
-    //                       int fromTakeIndex,
-    //                       int fromExposureIndex,
-    //                       int toSceneIndex,
-    //                       int toTakeIndex,
-    //                       int toExposureIndex);
-
-    /**
-     * Redo the move of the exposure from one position to a new position in the tree.
-     * @arg fromSceneIndex the from index of the scene of the take of the exposure to move
-     * @arg fromTakeIndex the from index of the take of the exposure to move
-     * @arg fromExposureIndex the from index of the exposure to move
-     * @arg toSceneIndex the to index of the scene of the take of the exposure to move
-     * @arg toTakeIndex the to index of the take of the exposure to move
-     * @arg toExposureIndex the to index of the exposure to move
-     */
-    Exposure *redoExposureMove(int fromSceneIndex,
-                               int fromTakeIndex,
-                               int fromExposureIndex,
-                               int toSceneIndex,
-                               int toTakeIndex,
-                               int toExposureIndex);
-
-    /**
      * Add a new select exposure object to the undo history.
      * @arg newSceneIndex the new index of the scene of the take of the exposure to select
      * @arg newTakeIndex the new index of the take of the exposure to select
@@ -869,38 +730,6 @@ public:
     void selectExposureToUndo(int newSceneIndex,
                               int newTakeIndex,
                               int newExposureIndex);
-
-    /**
-     * Undo the select of the exposure from old position to a new position in the tree.
-     * @arg oldSceneIndex the old index of the scene of the take of the exposure to select
-     * @arg oldTakeIndex the old index of the take of the exposure to select
-     * @arg oldExposureIndex the old index of the exposure to select
-     * @arg newSceneIndex the new index of the scene of the take of the exposure to select
-     * @arg newTakeIndex the new index of the take of the exposure to select
-     * @arg newExposureIndex the new index of the exposure to select
-     */
-    // void undoExposureSelect(int oldSceneIndex,
-    //                         int oldTakeIndex,
-    //                         int oldExposureIndex,
-    //                         int newSceneIndex,
-    //                         int newTakeIndex,
-    //                         int newExposureIndex);
-
-    /**
-     * Redo the select of the exposure from old position to a new position in the tree.
-     * @arg oldSceneIndex the old index of the scene of the take of the exposure to select
-     * @arg oldTakeIndex the old index of the take of the exposure to select
-     * @arg oldExposureIndex the old index of the exposure to select
-     * @arg newSceneIndex the new index of the scene of the take of the exposure to select
-     * @arg newTakeIndex the new index of the take of the exposure to select
-     * @arg newExposureIndex the new index of the exposure to select
-     */
-    void redoExposureSelect(int oldSceneIndex,
-                            int oldTakeIndex,
-                            int oldExposureIndex,
-                            int newSceneIndex,
-                            int newTakeIndex,
-                            int newExposureIndex);
 
     /**
      * Get the position of the modified exposure in the project.
@@ -979,11 +808,6 @@ private:
      * @return the file name of the new file.
      */
     const QString copyToTemp(const QString &fromImagePath);
-
-    /**
-     * Set all settings to the actual default settings.
-     */
-    void setProjectSettingsToDefault();
 
 };
 

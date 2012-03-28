@@ -28,6 +28,7 @@
  */
 class UndoTakeSelect : public UndoBase
 {
+    Q_OBJECT
 public:
 
     /**

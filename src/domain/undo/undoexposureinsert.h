@@ -30,6 +30,7 @@
  */
 class UndoExposureInsert : public UndoBase
 {
+    Q_OBJECT
 public:
 
     /**

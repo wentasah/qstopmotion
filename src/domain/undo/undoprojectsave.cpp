@@ -30,7 +30,7 @@ UndoProjectSave::UndoProjectSave(DomainFacade *df,
 {
     projectPath.append(path);
     saveAs = sa;
-    setText(QString(QObject::tr("Save project '%1'")).arg(projectPath));
+    setText(QString(tr("Save project '%1'")).arg(projectPath.mid(projectPath.lastIndexOf('/')+1)));
 }
 
 
@@ -42,13 +42,26 @@ UndoProjectSave::~UndoProjectSave()
 
 void UndoProjectSave::undo()
 {
-    // TODO: Change handling for undo
-    // facade->saveProjectUndo(projectPath, saveAs);
+    qDebug("UndoProjectSave::undo --> Start");
+
+    facade->writeHistoryEntry(QString("undoProjectSave|%1").arg(projectPath));
+
+    qDebug("UndoProjectSave::undo --> End");
 }
 
 
 void UndoProjectSave::redo()
 {
-    facade->saveProjectRedo(projectPath, saveAs);
+    qDebug("UndoProjectSave::redo --> Start");
+
+    bool ret;
+
+    ret = facade->getAnimationProject()->saveProject(projectPath, saveAs);
+    if (ret) {
+        facade->clearUndoStack();
+    }
+
     facade->writeHistoryEntry(QString("redoProjectSave|%1").arg(projectPath));
+
+    qDebug("UndoProjectSave::redo --> End");
 }

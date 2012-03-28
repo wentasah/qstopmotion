@@ -30,7 +30,7 @@ UndoSceneMove::UndoSceneMove(DomainFacade *df,
 {
     fromSceneIndex = fsi;
     toSceneIndex = tsi;
-    setText(QString(QObject::tr("Move scene (%1,%2)")).arg(fromSceneIndex).arg(toSceneIndex));
+    setText(QString(tr("Move scene (%1,%2)")).arg(fromSceneIndex).arg(toSceneIndex));
 }
 
 

@@ -30,6 +30,7 @@
  */
 class UndoExposureAdd : public UndoBase
 {
+    Q_OBJECT
 public:
 
     /**
@@ -65,10 +66,11 @@ private:
     /**
      * The model to perform the redo command on.
      */
-    int      sceneIndex;
-    int      takeIndex;
-    int      exposureIndex;
-    QString  fileName;
+    int       sceneIndex;
+    int       takeIndex;
+    int       exposureIndex;
+    QString   fileName;
+    Exposure *exposure;
 };
 
 #endif

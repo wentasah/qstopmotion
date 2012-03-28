@@ -33,7 +33,7 @@ UndoExposureSelect::UndoExposureSelect(DomainFacade *df,
     newSceneIndex = nsi;
     newTakeIndex = nti;
     newExposureIndex = nei;
-    setText(QString(QObject::tr("Select exposure (%1,%2,%3)")).arg(newSceneIndex).arg(newTakeIndex).arg(newExposureIndex));
+    setText(QString(tr("Select exposure (%1,%2,%3)")).arg(newSceneIndex).arg(newTakeIndex).arg(newExposureIndex));
 }
 
 
@@ -44,17 +44,36 @@ UndoExposureSelect::~UndoExposureSelect()
 
 void UndoExposureSelect::undo()
 {
-    /* TODO: Change handling for undo
-    facade->undoExposureSelect(oldSceneIndex, oldTakeIndex, oldExposureIndex,
-                               newSceneIndex, newTakeIndex, newExposureIndex);
-    */
+    qDebug("UndoExposureSelect::undo --> Start");
+
+    facade->writeHistoryEntry(QString("undoExposureSelect|%1|%2|%3|%4|%5|%6").arg(oldSceneIndex).arg(oldTakeIndex).arg(oldExposureIndex)
+                              .arg(newSceneIndex).arg(newTakeIndex).arg(newExposureIndex));
+
+    qDebug("UndoExposureSelect::undo --> End");
 }
 
 
 void UndoExposureSelect::redo()
 {
-    facade->redoExposureSelect(oldSceneIndex, oldTakeIndex, oldExposureIndex,
-                               newSceneIndex, newTakeIndex, newExposureIndex);
+    qDebug("UndoExposureSelect::redo --> Start");
+
+    AnimationProject *animationProject = facade->getAnimationProject();
+    Frontend *frontend = facade->getFrontend();
+
+    animationProject->setActiveExposureIndex(newExposureIndex);
+    if (0 <= newExposureIndex) {
+        Exposure *activeExposure = animationProject->getActiveExposure();
+        frontend->setExposureID(activeExposure->getId().toAscii());
+    }
+    else {
+        frontend->setExposureID("---");
+    }
+    facade->getView()->notifyActivateExposure();
+
+    animationProject->setUnsavedChanges();
+
     facade->writeHistoryEntry(QString("redoExposureSelect|%1|%2|%3|%4|%5|%6").arg(oldSceneIndex).arg(oldTakeIndex).arg(oldExposureIndex)
                               .arg(newSceneIndex).arg(newTakeIndex).arg(newExposureIndex));
+
+    qDebug("UndoExposureSelect::redo --> End");
 }

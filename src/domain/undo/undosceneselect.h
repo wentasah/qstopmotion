@@ -28,6 +28,7 @@
  */
 class UndoSceneSelect : public UndoBase
 {
+    Q_OBJECT
 public:
 
     /**

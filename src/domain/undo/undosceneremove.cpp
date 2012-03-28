@@ -29,7 +29,7 @@ UndoSceneRemove::UndoSceneRemove(DomainFacade *df,
 {
     sceneIndex = si;
     removedScene = NULL;
-    setText(QString(QObject::tr("Remove scene (%1)")).arg(sceneIndex));
+    setText(QString(tr("Remove scene (%1)")).arg(sceneIndex));
 }
 
 

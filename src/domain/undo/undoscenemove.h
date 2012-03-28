@@ -30,6 +30,7 @@
  */
 class UndoSceneMove : public UndoBase
 {
+    Q_OBJECT
 public:
 
     /**

@@ -30,6 +30,7 @@
  */
 class UndoProjectOpen : public UndoBase
 {
+    Q_OBJECT
 public:
 
     /**

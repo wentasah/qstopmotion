@@ -481,85 +481,29 @@ bool DomainFacade::recoverProject()
 }
 
 
+void DomainFacade::setProjectSettingsToDefault()
+{
+    PreferencesTool *pref = frontend->getPreferences();
+
+    setVideoSource(pref->getBasicPreference("defaultsource", 0));
+    setMixMode(pref->getBasicPreference("defaultmixingmode", 0));
+    setUnitMode(pref->getBasicPreference("defaultunitmode", 0));
+    setMixCount(pref->getBasicPreference("defaultmixcount", 0));
+    setPlaybackCount(pref->getBasicPreference("defaultplaybackcount", 0));
+    setFramesPerSecond(pref->getBasicPreference("defaultframespersecond", 0));
+}
+
+
 void DomainFacade::newProjectToUndo(const QString &projectDescription)
 {
     UndoProjectNew *u = new UndoProjectNew(this, projectDescription);
     getUndoStack()->push(u);
 }
 
-/*
-bool DomainFacade::newProjectUndo(const QString &projectDescription)
-{
-    qDebug("DomainFacade::newProjectUndo --> Start");
-
-    qDebug("DomainFacade::newProjectUndo --> End");
-    return true;
-}
-*/
-
-bool DomainFacade::newProjectRedo(const QString &projectDescription)
-{
-    qDebug("DomainFacade::newProjectRedo --> Start");
-
-    animationProject->newProject(projectDescription);
-    setProjectSettingsToDefault();
-    getView()->notifyNewProject();
-    frontend->setProjectID(getProjectDescription().toAscii());
-    frontend->setSceneID("");
-    frontend->setTakeID("");
-    frontend->setToolBarState(ToolBar::toolBarCameraOff);
-
-    animationProject->setUnsavedChanges();
-
-    qDebug("DomainFacade::newProjectRedo --> End");
-    return true;
-}
-
 void DomainFacade::openProjectToUndo(const QString &projectPath)
 {
     UndoProjectOpen *u = new UndoProjectOpen(this, projectPath);
     getUndoStack()->push(u);
-}
-
-/*
-bool DomainFacade::openProjectUndo(const QString &projectDescription)
-{
-    qDebug("DomainFacade::openProjectUndo --> Start");
-
-    qDebug("DomainFacade::openProjectUndo --> End");
-    return true;
-}
-*/
-
-bool DomainFacade::openProjectRedo(const QString &projectPath)
-{
-    qDebug("DomainFacade::openProjectRedo --> Start");
-
-    getView()->notifyNewProject();
-
-    if (animationProject->openProject(projectPath)) {
-        getView()->notifyDescriptionsUpdated();
-        frontend->setProjectID(getProjectDescription().toAscii());
-
-        Scene *scene = getActiveScene();
-        Q_ASSERT(NULL != scene);
-        getView()->notifyActivateScene();
-        frontend->setSceneID(scene->getDescription().toAscii());
-
-        Take *take = getActiveTake();
-        Q_ASSERT(NULL != take);
-        getView()->notifyActivateTake();
-        frontend->setTakeID(take->getDescription().toAscii());
-
-        Exposure *exposure = getActiveExposure();
-        if (NULL != exposure) {
-            getView()->notifyActivateExposure();
-            frontend->setExposureID(exposure->getId().toAscii());
-        }
-    }
-
-    qDebug("DomainFacade::openProjectRedo --> End");
-    return true;
 }
 
 
@@ -569,61 +513,11 @@ void DomainFacade::saveProjectToUndo(const QString &projectPath, bool saveAs)
     getUndoStack()->push(u);
 }
 
-/*
-bool DomainFacade::saveProjectUndo(const QString &projectDescription, bool saveAs)
-{
-    qDebug("DomainFacade::saveProjectUndo --> Start");
-
-    qDebug("DomainFacade::saveProjectUndo --> End");
-    return true;
-}
-*/
-
-bool DomainFacade::saveProjectRedo(const QString &projectPath, bool saveAs)
-{
-    qDebug("DomainFacade::saveProjectRedo --> Start");
-
-    bool ret;
-
-    ret = animationProject->saveProject(projectPath, saveAs);
-    if (ret) {
-        clearUndoStack();
-    }
-
-    qDebug("DomainFacade::saveProjectRedo --> End");
-    return ret;
-}
-
 
 void DomainFacade::closeProjectToUndo()
 {
     UndoProjectClose *u = new UndoProjectClose(this);
     getUndoStack()->push(u);
-}
-
-/*
-bool DomainFacade::closeProjectUndo()
-{
-    qDebug("DomainFacade::closeProjectUndo --> Start");
-
-    qDebug("DomainFacade::closeProjectUndo --> End");
-    return true;
-}
-*/
-
-bool DomainFacade::closeProjectRedo()
-{
-    qDebug("DomainFacade::closeProjectRedo --> Start");
-
-    getView()->notifyClear();
-    animationProject->clearProject();
-    clearUndoStack();
-
-    // neccessary??
-    frontend->removeApplicationFiles();
-
-    qDebug("DomainFacade::closeProjectRedo --> End");
-    return true;
 }
 
 /**************************************************************************
@@ -1074,28 +968,6 @@ void DomainFacade::addExposureToUndo(const QString &filePath,
     getUndoStack()->push(u);
 }
 
-/*
-void DomainFacade::undoExposureAdd(const QString &fileName,
-                                   int            sceneIndex,
-                                   int            takeIndex)
-{
-}
-*/
-
-void DomainFacade::redoExposureAdd(const QString &fileName,
-                                   int            sceneIndex,
-                                   int            takeIndex)
-{
-    qDebug("DomainFacade::redoExposureAdd --> Start");
-
-    Exposure *exposure = animationProject->addExposure(fileName, AnimationProject::InTempPath);
-    getView()->notifyAddExposure(sceneIndex, takeIndex, exposure->getIndex());
-
-    animationProject->setUnsavedChanges();
-
-    qDebug("DomainFacade::redoExposureAdd --> End");
-}
-
 
 void DomainFacade::insertExposureToUndo(const QString &filePath,
                                         int            sceneIndex,
@@ -1117,33 +989,6 @@ void DomainFacade::insertExposureToUndo(const QString &filePath,
     getUndoStack()->push(u);
 }
 
-/*
-void DomainFacade::undoExposureInsert(const QString &fileName,
-                                      int            sceneIndex,
-                                      int            takeIndex,
-                                      int            exposureIndex)
-{
-}
-*/
-
-void DomainFacade::redoExposureInsert(const QString &fileName,
-                                      int            sceneIndex,
-                                      int            takeIndex,
-                                      int            exposureIndex)
-{
-    qDebug("DomainFacade::redoExposureInsert --> Start");
-
-    Exposure *exposure = NULL;
-
-    exposure = animationProject->insertExposure(sceneIndex, takeIndex, exposureIndex,
-                                                fileName, AnimationProject::InTempPath);
-    getView()->notifyInsertExposure(sceneIndex, takeIndex, exposure->getIndex());
-
-    animationProject->setUnsavedChanges();
-
-    qDebug("DomainFacade::redoExposureInsert --> End");
-}
-
 
 void DomainFacade::removeExposureToUndo(int sceneIndex,
                                         int takeIndex,
@@ -1151,56 +996,6 @@ void DomainFacade::removeExposureToUndo(int sceneIndex,
 {
     UndoExposureRemove *u = new UndoExposureRemove(this, sceneIndex, takeIndex, exposureIndex);
     getUndoStack()->push(u);
-}
-
-/*
-void DomainFacade::undoExposureRemove(int sceneIndex,
-                                      int takeIndex,
-                                      int exposureIndex)
-{
-}
-*/
-
-Exposure *DomainFacade::redoExposureRemove(int sceneIndex,
-                                           int takeIndex,
-                                           int exposureIndex)
-{
-    qDebug("DomainFacade::redoExposureRemove --> Start");
-
-    Exposure* exposure = animationProject->removeExposure(sceneIndex, takeIndex, exposureIndex);
-    getView()->notifyRemoveExposure(sceneIndex, takeIndex, exposureIndex);
-
-    if (exposureIndex == animationProject->getActiveScene()->getActiveTake()->getExposureSize()) {
-        // The last Exposure are removed
-
-        // this->setActiveExposureIndex(exposureIndex - 1);
-        animationProject->setActiveExposureIndex(exposureIndex - 1);
-        if (0 <= (exposureIndex - 1)) {
-            Exposure *activeExposure = animationProject->getActiveExposure();
-            frontend->setExposureID(activeExposure->getId().toAscii());
-        }
-        else {
-            frontend->setExposureID("---");
-        }
-    }
-    else {
-        // Not the last Exposure are removed
-
-        animationProject->setActiveExposureIndex(exposureIndex);
-        if (0 <= exposureIndex) {
-            Exposure *activeExposure = animationProject->getActiveExposure();
-            frontend->setExposureID(activeExposure->getId().toAscii());
-        }
-        else {
-            frontend->setExposureID("---");
-        }
-    }
-
-    // getView()->notifyActivateExposure();
-    animationProject->setUnsavedChanges();
-
-    qDebug("DomainFacade::redoExposureRemove --> End");
-    return exposure;
 }
 
 
@@ -1216,46 +1011,6 @@ void DomainFacade::moveExposureToUndo(int fromSceneIndex,
     getUndoStack()->push(u);
 }
 
-/*
-void DomainFacade::undoExposureMove(int fromSceneIndex,
-                                    int fromTakeIndex,
-                                    int fromExposureIndex,
-                                    int toSceneIndex,
-                                    int toTakeIndex,
-                                    int toExposureIndex)
-{
-}
-*/
-
-Exposure *DomainFacade::redoExposureMove(int fromSceneIndex,
-                                         int fromTakeIndex,
-                                         int fromExposureIndex,
-                                         int toSceneIndex,
-                                         int toTakeIndex,
-                                         int toExposureIndex)
-{
-    /* TODO: Implementation of the redoExposureMove function
-
-    qDebug("DomainFacade::redoExposureMove --> Start");
-
-    Exposure* exposure = animationProject->removeExposure(sceneIndex, takeIndex, exposureIndex);
-    getView()->notifyRemoveExposure(sceneIndex, takeIndex, exposureIndex);
-
-    if (exposureIndex == animationProject->getActiveScene()->getActiveTake()->getExposureSize()) {
-        this->setActiveExposureIndex(exposureIndex - 1);
-    }
-    else {
-        this->setActiveExposureIndex(exposureIndex);
-    }
-
-    animationProject->setUnsavedChanges();
-
-    qDebug("DomainFacade::redoExposureMove --> End");
-    return exposure;
-    */
-    return NULL;
-}
-
 
 void DomainFacade::selectExposureToUndo(int newSceneIndex,
                                         int newTakeIndex,
@@ -1263,41 +1018,6 @@ void DomainFacade::selectExposureToUndo(int newSceneIndex,
 {
     UndoExposureSelect *u = new UndoExposureSelect(this, newSceneIndex, newTakeIndex, newExposureIndex);
     getUndoStack()->push(u);
-}
-
-/*
-void DomainFacade::undoExposureSelect(int oldSceneIndex,
-                                      int oldTakeIndex,
-                                      int oldExposureIndex,
-                                      int newSceneIndex,
-                                      int newTakeIndex,
-                                      int newExposureIndex)
-{
-}
-*/
-
-void DomainFacade::redoExposureSelect(int oldSceneIndex,
-                                      int oldTakeIndex,
-                                      int oldExposureIndex,
-                                      int newSceneIndex,
-                                      int newTakeIndex,
-                                      int newExposureIndex)
-{
-    qDebug("DomainFacade::redoExposureSelect --> Start");
-
-    animationProject->setActiveExposureIndex(newExposureIndex);
-    if (0 <= newExposureIndex) {
-        Exposure *activeExposure = animationProject->getActiveExposure();
-        frontend->setExposureID(activeExposure->getId().toAscii());
-    }
-    else {
-        frontend->setExposureID("---");
-    }
-    getView()->notifyActivateExposure();
-
-    animationProject->setUnsavedChanges();
-
-    qDebug("DomainFacade::redoExposureSelect --> End");
 }
 
 
@@ -1374,17 +1094,4 @@ const QString DomainFacade::copyToTemp(const QString &fromImagePath)
     Exposure::tempNum++;
 
     return toImageName;
-}
-
-
-void DomainFacade::setProjectSettingsToDefault()
-{
-    PreferencesTool *pref = frontend->getPreferences();
-
-    setVideoSource(pref->getBasicPreference("defaultsource", 0));
-    setMixMode(pref->getBasicPreference("defaultmixingmode", 0));
-    setUnitMode(pref->getBasicPreference("defaultunitmode", 0));
-    setMixCount(pref->getBasicPreference("defaultmixcount", 0));
-    setPlaybackCount(pref->getBasicPreference("defaultplaybackcount", 0));
-    setFramesPerSecond(pref->getBasicPreference("defaultframespersecond", 0));
 }

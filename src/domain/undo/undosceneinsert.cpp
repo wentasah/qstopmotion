@@ -30,7 +30,7 @@ UndoSceneInsert::UndoSceneInsert(DomainFacade  *df,
 {
     sceneIndex = scIndex;
     sceneDescription.append(description);
-    setText(QString(QObject::tr("Insert scene (%1) '%2'")).arg(sceneIndex).arg(sceneDescription));
+    setText(QString(tr("Insert scene (%1) '%2'")).arg(sceneIndex).arg(sceneDescription));
 }
 
 

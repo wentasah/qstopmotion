@@ -28,7 +28,7 @@ UndoProjectOpen::UndoProjectOpen(DomainFacade *df,
     :UndoBase(df)
 {
     projectPath.append(path);
-    setText(QString(QObject::tr("Open project '%1'")).arg(projectPath));
+    setText(QString(tr("Open project '%1'")).arg(projectPath.mid(projectPath.lastIndexOf('/')+1)));
 }
 
 
@@ -40,13 +40,46 @@ UndoProjectOpen::~UndoProjectOpen()
 
 void UndoProjectOpen::undo()
 {
-    // TODO: Change handling for undo
-    // facade->openProjectUndo(projectPath);
+    qDebug("UndoProjectOpen::undo --> Start");
+
+    facade->getView()->notifyClear();
+
+    facade->getAnimationProject()->clearProject();
+
+    facade->writeHistoryEntry(QString("undoProjectOpen|%1").arg(projectPath));
+
+    qDebug("UndoProjectOpen::undo --> End");
 }
 
 
 void UndoProjectOpen::redo()
 {
-    facade->openProjectRedo(projectPath);
+    qDebug("UndoProjectOpen::redo --> Start");
+
+    facade->getView()->notifyNewProject();
+
+    if (facade->getAnimationProject()->openProject(projectPath)) {
+        facade->getView()->notifyDescriptionsUpdated();
+        facade->getFrontend()->setProjectID(facade->getProjectDescription().toAscii());
+
+        Scene *scene = facade->getActiveScene();
+        Q_ASSERT(NULL != scene);
+        facade->getView()->notifyActivateScene();
+        facade->getFrontend()->setSceneID(scene->getDescription().toAscii());
+
+        Take *take = facade->getActiveTake();
+        Q_ASSERT(NULL != take);
+        facade->getView()->notifyActivateTake();
+        facade->getFrontend()->setTakeID(take->getDescription().toAscii());
+
+        Exposure *exposure = facade->getActiveExposure();
+        if (NULL != exposure) {
+            facade->getView()->notifyActivateExposure();
+            facade->getFrontend()->setExposureID(exposure->getId().toAscii());
+        }
+    }
+
     facade->writeHistoryEntry(QString("redoProjectOpen|%1").arg(projectPath));
+
+    qDebug("UndoProjectOpen::redo --> End");
 }

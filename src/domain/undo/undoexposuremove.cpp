@@ -38,7 +38,7 @@ UndoExposureMove::UndoExposureMove(DomainFacade *df,
     toSceneIndex = tsi;
     toTakeIndex = tti;
     toExposureIndex = tei;
-    setText(QString(QObject::tr("Move exposure (%1,%2,%3)")).arg(toSceneIndex).arg(toTakeIndex).arg(toExposureIndex));
+    setText(QString(tr("Move exposure (%1,%2,%3)")).arg(toSceneIndex).arg(toTakeIndex).arg(toExposureIndex));
 }
 
 
@@ -49,19 +49,40 @@ UndoExposureMove::~UndoExposureMove()
 
 void UndoExposureMove::undo()
 {
-    /* TODO: Change handling for undo
-    facade->undoExposureMove(fromSceneIndex, fromTakeIndex, fromExposureIndex,
-                             toSceneIndex, toTakeIndex, toExposureIndex);
+    /* TODO: Implementation of the redoExposureMove function
+
+    qDebug("UndoExposureMove::undo --> Start");
+
+
+    facade->writeHistoryEntry(QString("undoExposureMove|%1|%2|%3|%4|%5|%6").arg(fromSceneIndex).arg(fromTakeIndex)
+                              .arg(fromExposureIndex).arg(toSceneIndex).arg(toTakeIndex).arg(toExposureIndex));
+
+    qDebug("UndoExposureMove::undo --> End");
     */
 }
 
 
 void UndoExposureMove::redo()
 {
-    /* TODO: Change handling for redo
-    facade->redoExposureMove(fromSceneIndex, fromTakeIndex, fromExposureIndex,
-                             toSceneIndex, toTakeIndex, toExposureIndex);
+    /* TODO: Implementation of the redoExposureMove function
+
+    qDebug("UndoExposureMove::redo --> Start");
+
+    Exposure* exposure = animationProject->removeExposure(sceneIndex, takeIndex, exposureIndex);
+    getView()->notifyRemoveExposure(sceneIndex, takeIndex, exposureIndex);
+
+    if (exposureIndex == animationProject->getActiveScene()->getActiveTake()->getExposureSize()) {
+        this->setActiveExposureIndex(exposureIndex - 1);
+    }
+    else {
+        this->setActiveExposureIndex(exposureIndex);
+    }
+
+    animationProject->setUnsavedChanges();
+
     facade->writeHistoryEntry(QString("redoExposureMove|%1|%2|%3|%4|%5|%6").arg(fromSceneIndex).arg(fromTakeIndex)
                               .arg(fromExposureIndex).arg(toSceneIndex).arg(toTakeIndex).arg(toExposureIndex));
+
+    qDebug("UndoExposureMove::redo --> End");
     */
 }

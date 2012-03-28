@@ -26,7 +26,7 @@
 UndoProjectClose::UndoProjectClose(DomainFacade *df)
     :UndoBase(df)
 {
-    setText(QObject::tr("Close project"));
+    setText(tr("Close project"));
 }
 
 
@@ -38,12 +38,22 @@ UndoProjectClose::~UndoProjectClose()
 
 void UndoProjectClose::undo()
 {
-    // TODO: Change handling for undo
-    // facade->closeProjectUndo();
+    qDebug("UndoProjectClose::undo --> Start");
+
+    qDebug("UndoProjectClose::undo --> End");
 }
 
 
 void UndoProjectClose::redo()
 {
-    facade->closeProjectRedo();
+    qDebug("UndoProjectClose::redo --> Start");
+
+    facade->getView()->notifyClear();
+    facade->getAnimationProject()->clearProject();
+    facade->clearUndoStack();
+
+    // TODO: neccessary??
+    facade->getFrontend()->removeApplicationFiles();
+
+    qDebug("UndoProjectClose::redo --> End");
 }

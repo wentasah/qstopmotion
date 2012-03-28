@@ -30,6 +30,7 @@
  */
 class UndoTakeInsert : public UndoBase
 {
+    Q_OBJECT
 public:
 
     /**

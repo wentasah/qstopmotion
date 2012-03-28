@@ -1,7 +1,7 @@
 ###############################################################################
 # CMake file for the qStopMotion project                                      #
 # (c) Ralf Lange, longsoft.de                                                 #
-# Last update: 2012-03-22                                                     #
+# Last update: 2012-03-28                                                     #
 #                                                                             #
 # Usage:                                                                      #
 #   * Qt-Creator (Windows, Linux)                                             #
@@ -60,26 +60,6 @@ include(${QT_USE_FILE})
 
 # add all header files of the project to HEADERS
 set(HEADERS
-    src/domain/undo/undobase.h
-    src/domain/undo/undoexposureadd.h
-    src/domain/undo/undoexposureinsert.h
-    src/domain/undo/undoexposuremove.h
-    src/domain/undo/undoexposureremove.h
-    src/domain/undo/undoexposureselect.h
-    src/domain/undo/undoprojectclose.h
-    src/domain/undo/undoprojectnew.h
-    src/domain/undo/undoprojectopen.h
-    src/domain/undo/undoprojectsave.h
-    src/domain/undo/undosceneadd.h
-    src/domain/undo/undosceneinsert.h
-    src/domain/undo/undoscenemove.h
-    src/domain/undo/undosceneremove.h
-    src/domain/undo/undosceneselect.h
-    src/domain/undo/undotakeadd.h
-    src/domain/undo/undotakeinsert.h
-    src/domain/undo/undotakemove.h
-    src/domain/undo/undotakeremove.h
-    src/domain/undo/undotakeselect.h
     src/frontends/observer.h
     src/frontends/frontend.h
     src/frontends/viewfacade.h
@@ -104,6 +84,26 @@ set(MOC_HEADERS
     src/domain/animation/projectserializer.h
     src/domain/animation/scene.h
     src/domain/animation/take.h
+    src/domain/undo/undobase.h
+    src/domain/undo/undoexposureadd.h
+    src/domain/undo/undoexposureinsert.h
+    src/domain/undo/undoexposuremove.h
+    src/domain/undo/undoexposureremove.h
+    src/domain/undo/undoexposureselect.h
+    src/domain/undo/undoprojectclose.h
+    src/domain/undo/undoprojectnew.h
+    src/domain/undo/undoprojectopen.h
+    src/domain/undo/undoprojectsave.h
+    src/domain/undo/undosceneadd.h
+    src/domain/undo/undosceneinsert.h
+    src/domain/undo/undoscenemove.h
+    src/domain/undo/undosceneremove.h
+    src/domain/undo/undosceneselect.h
+    src/domain/undo/undotakeadd.h
+    src/domain/undo/undotakeinsert.h
+    src/domain/undo/undotakemove.h
+    src/domain/undo/undotakeremove.h
+    src/domain/undo/undotakeselect.h
     src/frontends/qtfrontend/mainwindowgui.h
     src/frontends/qtfrontend/menuframe.h
     src/frontends/qtfrontend/qtfrontend.h

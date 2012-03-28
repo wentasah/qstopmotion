@@ -32,7 +32,7 @@ UndoTakeMove::UndoTakeMove(DomainFacade *df,
     fromTakeIndex = fti;
     toSceneIndex = tsi;
     toTakeIndex = tti;
-    setText(QString(QObject::tr("Move take (%1,%2)")).arg(toSceneIndex).arg(toTakeIndex));
+    setText(QString(tr("Move take (%1,%2)")).arg(toSceneIndex).arg(toTakeIndex));
 }
 
 

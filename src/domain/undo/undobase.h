@@ -30,8 +30,9 @@
 /**
  * The UndoBase class for general undo functionality.
  */
-class UndoBase : public QUndoCommand
+class UndoBase : public QObject, public QUndoCommand
 {
+    Q_OBJECT
 protected:
 
     /**

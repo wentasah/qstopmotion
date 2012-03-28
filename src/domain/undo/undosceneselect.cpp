@@ -27,7 +27,7 @@ UndoSceneSelect::UndoSceneSelect(DomainFacade *df,
 {
     oldSceneIndex = facade->getActiveSceneIndex();
     newSceneIndex = nsi;
-    setText(QString(QObject::tr("Select scene (%1)")).arg(newSceneIndex));
+    setText(QString(tr("Select scene (%1)")).arg(newSceneIndex));
 }
 
 

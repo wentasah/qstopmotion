@@ -31,7 +31,7 @@ UndoTakeAdd::UndoTakeAdd(DomainFacade  *df,
     sceneIndex = scIndex;
     takeIndex = df->getScene(sceneIndex)->getTakeSize();
     takeDescription.append(description);
-    setText(QString(QObject::tr("Add take (%1,%2) '%3'")).arg(sceneIndex).arg(takeIndex).arg(takeDescription));
+    setText(QString(tr("Add take (%1,%2) '%3'")).arg(sceneIndex).arg(takeIndex).arg(takeDescription));
 }
 
 

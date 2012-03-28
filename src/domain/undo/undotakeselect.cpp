@@ -30,7 +30,7 @@ UndoTakeSelect::UndoTakeSelect(DomainFacade *df,
     oldTakeIndex = facade->getActiveTakeIndex();
     newSceneIndex = nsi;
     newTakeIndex = nti;
-    setText(QString(QObject::tr("Select take (%1,%2)")).arg(newSceneIndex).arg(newTakeIndex));
+    setText(QString(tr("Select take (%1,%2)")).arg(newSceneIndex).arg(newTakeIndex));
 }
 
 

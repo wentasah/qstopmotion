@@ -1129,34 +1129,55 @@ Exposure *AnimationProject::getActiveExposure()
 }
 
 
-Exposure *AnimationProject::addExposure(const QString &fileName,
-                                        int location)
+void AnimationProject::addExposure(const QString &fileName,
+                                   int location)
 {
     Q_ASSERT(activeSceneIndex > -1);
 
     Scene *activeScene = scenes[activeSceneIndex];
-    Take  *activeTake = activeScene->getTake(activeScene->getActiveTakeIndex());
+    Take  *activeTake = activeScene->getActiveTake();
 
-    Exposure *exposure = activeTake->addExposure(fileName, location);
-
-    return exposure;
+    activeTake->addExposure(fileName, location);
 }
 
 
-Exposure *AnimationProject::insertExposure(int sceneIndex,
-                                           int takeIndex,
-                                           int exposureIndex,
-                                           const QString &fileName,
-                                           int location)
+void AnimationProject::addExposure(Exposure *exposure)
+{
+    Q_ASSERT(activeSceneIndex > -1);
+
+    Scene *activeScene = scenes[activeSceneIndex];
+    Take  *activeTake = activeScene->getActiveTake();
+
+    activeTake->addExposure(exposure);
+}
+
+
+void AnimationProject::insertExposure(int sceneIndex,
+                                      int takeIndex,
+                                      int exposureIndex,
+                                      const QString &fileName,
+                                      int location)
 {
     Q_ASSERT(activeSceneIndex > -1);
 
     Scene *scene = scenes[sceneIndex];
     Take  *take = scene->getTake(takeIndex);
 
-    Exposure *exposure = take->insertExposure(fileName, location, exposureIndex);
+    take->insertExposure(exposureIndex, fileName, location);
+}
 
-    return exposure;
+
+void AnimationProject::insertExposure(int sceneIndex,
+                                      int takeIndex,
+                                      int exposureIndex,
+                                      Exposure *exposure)
+{
+    Q_ASSERT(activeSceneIndex > -1);
+
+    Scene *scene = scenes[sceneIndex];
+    Take  *take = scene->getTake(takeIndex);
+
+    take->insertExposure(exposureIndex, exposure);
 }
 
 

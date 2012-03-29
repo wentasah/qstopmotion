@@ -299,6 +299,8 @@ void Scene::setActiveTakeIndex(int takeIndex)
 
 Take *Scene::getActiveTake()
 {
+    Q_ASSERT(activeTakeIndex > -1);
+
     return takes[activeTakeIndex];
 }
 
@@ -506,15 +508,28 @@ void Scene::getExposures(QVector<Exposure*>& allExposures)
 }
 
 
-Exposure* Scene::addExposure(const QString &fileName, int location)
+void Scene::addExposure(const QString &fileName, int location)
 {
-    return takes[activeTakeIndex]->addExposure(fileName, location);
+    takes[activeTakeIndex]->addExposure(fileName, location);
 }
 
 
-Exposure* Scene::insertExposure(const QString &fileName, int location, int &index)
+void Scene::addExposure(Exposure *exposure)
 {
-    return takes[activeTakeIndex]->insertExposure(fileName, location, index);
+    takes[activeTakeIndex]->addExposure(exposure);
+}
+
+
+void Scene::insertExposure(int takeIndex, int exposureIndex,
+                           const QString &fileName, int location)
+{
+    return takes[takeIndex]->insertExposure(exposureIndex, fileName, location);
+}
+
+
+void Scene::insertExposure(int takeIndex, int exposureIndex, Exposure *exposure)
+{
+    return takes[takeIndex]->insertExposure(exposureIndex, exposure);
 }
 
 

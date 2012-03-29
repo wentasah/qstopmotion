@@ -43,13 +43,25 @@ UndoTakeMove::~UndoTakeMove()
 
 void UndoTakeMove::undo()
 {
-    // TODO: Change handling for undo
-    // facade->moveTakeUndo(toTakeIndex, fromTakeIndex);
+    qDebug("UndoTakeMove::undo --> Start");
+
+
+    facade->writeHistoryEntry(QString("undoTakeMove|%1|%2|%3|%4").arg(fromSceneIndex).arg(fromTakeIndex).arg(toSceneIndex).arg(toTakeIndex));
+
+    qDebug("UndoTakeMove::undo --> Start");
 }
 
 
 void UndoTakeMove::redo()
 {
-    facade->redoTakeMove(fromSceneIndex, fromTakeIndex, toSceneIndex, toTakeIndex);
+    qDebug("UndoTakeMove::redo --> Start");
+
+    AnimationProject *animationProject = facade->getAnimationProject();
+
+    animationProject->moveTake(fromSceneIndex, fromTakeIndex, toSceneIndex, toTakeIndex);
+    animationProject->setUnsavedChanges();
+
     facade->writeHistoryEntry(QString("redoTakeMove|%1|%2|%3|%4").arg(fromSceneIndex).arg(fromTakeIndex).arg(toSceneIndex).arg(toTakeIndex));
+
+    qDebug("UndoTakeMove::redo --> Start");
 }

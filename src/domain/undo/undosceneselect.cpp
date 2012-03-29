@@ -38,14 +38,35 @@ UndoSceneSelect::~UndoSceneSelect()
 
 void UndoSceneSelect::undo()
 {
-    /* TODO: Change handling for undo
-    facade->undoSceneSelect(oldSceneIndex, newSceneIndex);
-    */
+    qDebug("UndoSceneSelect::undo --> Start");
+
+
+    facade->writeHistoryEntry(QString("undoSceneSelect|%1|%2").arg(oldSceneIndex).arg(newSceneIndex));
+
+    qDebug("UndoSceneSelect::undo --> Start");
 }
 
 
 void UndoSceneSelect::redo()
 {
-    facade->redoSceneSelect(oldSceneIndex, newSceneIndex);
+    qDebug("UndoSceneSelect::redo --> Start");
+
+    AnimationProject *animationProject = facade->getAnimationProject();
+    Frontend *frontend = facade->getFrontend();
+
+    animationProject->setActiveSceneIndex(newSceneIndex);
+    if (0 <= newSceneIndex) {
+        Scene *activeScene = animationProject->getActiveScene();
+        frontend->setSceneID(activeScene->getDescription().toAscii());
+    }
+    else {
+        frontend->setSceneID("---");
+    }
+    facade->getView()->notifyActivateScene();
+
+    animationProject->setUnsavedChanges();
+
     facade->writeHistoryEntry(QString("redoSceneSelect|%1|%2").arg(oldSceneIndex).arg(newSceneIndex));
+
+    qDebug("UndoSceneSelect::redo --> Start");
 }

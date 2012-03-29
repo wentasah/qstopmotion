@@ -44,13 +44,27 @@ UndoTakeInsert::~UndoTakeInsert()
 
 void UndoTakeInsert::undo()
 {
-    // TODO: Change handling for undo
-    // facade->undoTakeInsert(sceneIndex, takeIndex);
+    qDebug("UndoTakeInsert::undo --> Start");
+
+
+    facade->writeHistoryEntry(QString("undoTakeInsert|%1|%2|%3").arg(sceneIndex).arg(takeIndex).arg(takeDescription));
+
+    qDebug("UndoTakeInsert::undo --> End");
 }
 
 
 void UndoTakeInsert::redo()
 {
-    facade->redoTakeInsert(takeDescription, sceneIndex, takeIndex);
+    qDebug("UndoTakeInsert::redo --> Start");
+
+    AnimationProject *animationProject = facade->getAnimationProject();
+
+    Take *take = animationProject->insertTake(sceneIndex, takeDescription);
+    facade->getView()->notifyInsertTake(sceneIndex, takeIndex);
+
+    animationProject->setUnsavedChanges();
+
     facade->writeHistoryEntry(QString("redoTakeInsert|%1|%2|%3").arg(sceneIndex).arg(takeIndex).arg(takeDescription));
+
+    qDebug("UndoTakeInsert::redo --> End");
 }

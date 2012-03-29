@@ -553,28 +553,45 @@ public:
     Exposure *getActiveExposure();
 
     /**
-     * Creare a new exposure and add it to the vector containing the exposures.
+     * Create a new exposure and add it to end of the vector containing
+     * the exposures.
      * @param fileName the name of the image file.
      * @param location the location of the picture
-     * @return the new exposure.
      */
-    Exposure *addExposure(const QString &fileName,
-                          int location);
+    void addExposure(const QString &fileName,
+                     int location);
 
     /**
-     * Creare a new exposure and insert it in the vector containing the exposures.
+     * Add a existing exposure in the vector containing the exposures.
+     * @arg exposure The existing exposure to add.
+     */
+    void addExposure(Exposure *exposure);
+
+    /**
+     * Create a new exposure and insert it in the vector containing the exposures.
      * @arg sceneIndex the index of the scene with the exposure to insert
      * @arg takeIndex the index of the take with the exposure to insert
      * @arg exposureIndex the index of the new exposure where inserted bevor.
      * @param fileName the name to the image file.
      * @param location the location of the picture
-     * @return the new exposure.
      */
-    Exposure *insertExposure(int sceneIndex,
-                             int takeIndex,
-                             int exposureIndex,
-                             const QString &fileName,
-                             int location);
+     void insertExposure(int sceneIndex,
+                         int takeIndex,
+                         int exposureIndex,
+                         const QString &fileName,
+                         int location);
+
+     /**
+      * Inser an existing exposure in the vector containing the exposures.
+      * @arg sceneIndex the index of the scene with the exposure to insert
+      * @arg takeIndex the index of the take with the exposure to insert
+      * @arg exposureIndex the index of the new exposure where inserted bevor.
+      * @param exposure The existing exposure.
+      */
+      void insertExposure(int sceneIndex,
+                          int takeIndex,
+                          int exposureIndex,
+                          Exposure *exposure);
 
     /**
      * Removes the active exposure from the animation.

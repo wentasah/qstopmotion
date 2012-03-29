@@ -506,10 +506,10 @@ private:
                      int exposureIndex);
 
     /**
-     *Adds the picture to the frame to the timeline at position index.
+     * Adds the picture to the frame to the timeline at position index.
      *
-     *@param frame the path of the frame to be added to the timeline.
-     *@param index the place to add the frame.
+     * @param frame the path of the frame to be added to the timeline.
+     * @param index the place to add the frame.
      */
     void addExposure(Exposure* frame, int index);
 

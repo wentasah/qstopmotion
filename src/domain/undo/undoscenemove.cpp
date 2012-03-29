@@ -41,13 +41,25 @@ UndoSceneMove::~UndoSceneMove()
 
 void UndoSceneMove::undo()
 {
-    // TODO: Change handling for undo
-    // facade->undoSceneMove(fromSceneIndex, toSceneIndex);
+    qDebug("UndoSceneMove::undo --> Start");
+
+
+    facade->writeHistoryEntry(QString("undoSceneMove|%1|%2").arg(fromSceneIndex).arg(toSceneIndex));
+
+    qDebug("UndoSceneMove::undo --> Start");
 }
 
 
 void UndoSceneMove::redo()
 {
-    facade->redoSceneMove(fromSceneIndex, toSceneIndex);
+    qDebug("UndoSceneMove::redo --> Start");
+
+    AnimationProject *animationProject = facade->getAnimationProject();
+
+    animationProject->moveScene(fromSceneIndex, toSceneIndex);
+    animationProject->setUnsavedChanges();
+
     facade->writeHistoryEntry(QString("redoSceneMove|%1|%2").arg(fromSceneIndex).arg(toSceneIndex));
+
+    qDebug("UndoSceneMove::redo --> Start");
 }

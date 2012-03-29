@@ -41,13 +41,27 @@ UndoSceneAdd::~UndoSceneAdd()
 
 void UndoSceneAdd::undo()
 {
-    // TODO: Change handling for undo
-    // facade->undoSceneAdd(sceneDescription);
+    qDebug("UndoSceneAdd::undo --> Start");
+
+
+    facade->writeHistoryEntry(QString("undoSceneAdd|%1|%2").arg(sceneIndex).arg(sceneDescription));
+
+    qDebug("UndoSceneAdd::undo --> End");
 }
 
 
 void UndoSceneAdd::redo()
 {
-    facade->redoSceneAdd(sceneDescription);
+    qDebug("UndoSceneAdd::redo --> Start");
+
+    AnimationProject *animationProject = facade->getAnimationProject();
+
+    Scene *scene = animationProject->addScene(sceneDescription);
+    facade->getView()->notifyAddScene(scene->getIndex());
+
+    animationProject->setUnsavedChanges();
+
     facade->writeHistoryEntry(QString("redoSceneAdd|%1|%2").arg(sceneIndex).arg(sceneDescription));
+
+    qDebug("UndoSceneAdd::redo --> End");
 }

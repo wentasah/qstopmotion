@@ -202,23 +202,34 @@ public:
     void getExposures(QVector<Exposure*>& allExposures);
 
     /**
-     * Creates a exposure with the picture at location exposureName and adds it at the
-     * end of the take.
+     * Creates a exposure with the picture at location exposureName and
+     * adds it at the end of the take.
      * @param fileName the name of the image file to the exposure to create.
      * @param location the location of the picture
-     * @return the new path to the picture file for the undo object.
      */
-    Exposure *addExposure(const QString &fileName, int location);
+    void addExposure(const QString &fileName, int location);
 
     /**
-     * Creates a exposure with the picture at location exposureName and adds it at position
-     * at position index in the take.
+     * Add an existing exposure at the end of the take.
+     * @param exposure The existing exposure.
+     */
+    void addExposure(Exposure *exposure);
+
+    /**
+     * Creates a exposure with the picture at location exposureName and adds it
+     * at position exposureIndex in the take.
+     * @param exposureIndex the place to create the exposure.
      * @param fileName the name of the image file of the exposure to create.
      * @param location the location of the picture
-     * @param index the place to create the exposure.
-     * @return the new path to the picture file for the undo object.
      */
-    Exposure *insertExposure(const QString &fileName, int location, int index);
+    void insertExposure(int exposureIndex, const QString &fileName, int location);
+
+    /**
+     * Insert an existing exposure at position exposureIndex in the take.
+     * @param exposureIndex the place to create the exposure.
+     * @param exposure The existing exposure.
+     */
+    void insertExposure(int exposureIndex, Exposure *exposure);
 
     /**
      * Moves the exposures at the positions from fromExposure to toExposure (inclusive)

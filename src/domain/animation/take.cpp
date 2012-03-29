@@ -349,9 +349,9 @@ Exposure* Take::getExposure(unsigned int exposureNumber)
 }
 
 
-Exposure* Take::addExposure(const QString &fileName, int location)
+void Take::addExposure(const QString &fileName, int location)
 {
-    qDebug("Take::addExposure --> Start");
+    qDebug("Take::addExposure(new) --> Start");
 
     Exposure *newExposure = new Exposure(this, fileName, location);
 
@@ -360,36 +360,62 @@ Exposure* Take::addExposure(const QString &fileName, int location)
 
     exposures.append(newExposure);
 
-    qDebug("Take::addExposure --> End");
-
-    return newExposure;
+    qDebug("Take::addExposure(new) --> End");
 }
 
 
-Exposure* Take::insertExposure(const QString &fileName, int location, int index)
+void Take::addExposure(Exposure *exposure)
 {
-    qDebug("Take::insertExposure --> Start");
+    qDebug("Take::addExposure(exist) --> Start");
+
+    exposures.append(exposure);
+
+    qDebug("Take::addExposure(exist) --> End");
+}
+
+
+void Take::insertExposure(int exposureIndex, const QString &fileName, int location)
+{
+    qDebug("Take::insertExposure(new) --> Start");
 
     Exposure *newExposure = new Exposure(this, fileName, location);
 
     newExposure->setId(QString("%1").arg(nextExposureIndex, 4, 10, QChar('0')));
     nextExposureIndex++;
 
-    if (index < 0) {
+    if (exposureIndex < 0) {
         exposures.append(newExposure);
     }
     else {
-        if (index >= exposures.size()) {
+        if (exposureIndex >= exposures.size()) {
             exposures.append(newExposure);
         }
         else {
-            exposures.insert(index, newExposure);
+            exposures.insert(exposureIndex, newExposure);
         }
     }
 
-    qDebug("Take::insertExposure --> End");
+    qDebug("Take::insertExposure(new) --> End");
+}
 
-    return newExposure;
+
+void Take::insertExposure(int exposureIndex, Exposure *exposure)
+{
+    qDebug("Take::insertExposure(exist) --> Start");
+
+    if (exposureIndex < 0) {
+        exposures.append(exposure);
+    }
+    else {
+        if (exposureIndex >= exposures.size()) {
+            exposures.append(exposure);
+        }
+        else {
+            exposures.insert(exposureIndex, exposure);
+        }
+    }
+
+    qDebug("Take::insertExposure(exist) --> End");
 }
 
 
@@ -496,16 +522,8 @@ Exposure* Take::removeExposure(unsigned int exposureIndex)
 
     exposure = exposures[exposureIndex];
     exposures.remove(exposureIndex);
-    if (exposureIndex == this->activeExposureIndex) {
-        if (exposureIndex == (exposureSize - 1)) {
-            // It is the last exposure in the vector
-            this->setActiveExposureIndex(exposureIndex - 1);
-        }
-        else {
-            // It is a exposure in the middle of the vector
-            // Selecting of the new exposure necessary
-            this->setActiveExposureIndex(exposureIndex);
-        }
+    if (exposureIndex <= activeExposureIndex) {
+        this->setActiveExposureIndex(activeExposureIndex - 1);
     }
 
     return exposure;

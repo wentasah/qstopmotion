@@ -37,14 +37,20 @@ UndoExposureInsert::UndoExposureInsert(DomainFacade  *df,
     sceneIndex = si;
     takeIndex = ti;
     exposureIndex = ei;
+    exposure = NULL;
     fileName.append(fn);
-    setText(QString(tr("Insert exposure (%1,%2,%3) '%4'")).arg(sceneIndex).arg(takeIndex).arg(exposureIndex)
+    setText(QString(tr("Insert exposure (%1,%2,%3) '%4'"))
+            .arg(sceneIndex).arg(takeIndex).arg(exposureIndex)
             .arg(fileName.mid(fileName.lastIndexOf('/')+1)));
 }
 
 
 UndoExposureInsert::~UndoExposureInsert()
 {
+    if (NULL != exposure) {
+        delete exposure;
+        exposure = NULL;
+    }
 }
 
 
@@ -52,8 +58,20 @@ void UndoExposureInsert::undo()
 {
     qDebug("UndoExposureInsert::undo --> Start");
 
+    Q_ASSERT(NULL == exposure);
 
-    facade->writeHistoryEntry(QString("undoExposureInsert|%1|%2|%3|%4").arg(sceneIndex).arg(takeIndex).arg(exposureIndex).arg(fileName));
+    AnimationProject *animationProject = facade->getAnimationProject();
+
+    exposure = animationProject->removeExposure(sceneIndex, takeIndex, exposureIndex);
+    exposure->moveToTrash();
+
+    facade->getView()->notifyRemoveExposure(sceneIndex, takeIndex, exposureIndex);
+
+    animationProject->setUnsavedChanges();
+
+    facade->writeHistoryEntry(QString("undoExposureInsert|%1|%2|%3|%4")
+                              .arg(sceneIndex).arg(takeIndex).arg(exposureIndex)
+                              .arg(fileName));
 
     qDebug("UndoExposureInsert::undo --> End");
 }
@@ -63,16 +81,28 @@ void UndoExposureInsert::redo()
 {
     qDebug("UndoExposureInsert::redo --> Start");
 
-    Exposure *exposure = NULL;
     AnimationProject *animationProject = facade->getAnimationProject();
 
-    exposure = animationProject->insertExposure(sceneIndex, takeIndex, exposureIndex,
-                                                fileName, AnimationProject::InTempPath);
-    facade->getView()->notifyInsertExposure(sceneIndex, takeIndex, exposure->getIndex());
+    if (NULL == exposure) {
+        // First call of the redo function after creation of the undo object
+        animationProject->insertExposure(sceneIndex, takeIndex, exposureIndex,
+                                         fileName, AnimationProject::InTempPath);
+    }
+    else {
+        // Call of the redo function after a undo call
+        exposure->moveToTemp();
+        animationProject->insertExposure(sceneIndex, takeIndex, exposureIndex,
+                                         exposure);
+        exposure = NULL;
+    }
+
+    facade->getView()->notifyInsertExposure(sceneIndex, takeIndex, exposureIndex);
 
     animationProject->setUnsavedChanges();
 
-    facade->writeHistoryEntry(QString("redoExposureInsert|%1|%2|%3|%4").arg(sceneIndex).arg(takeIndex).arg(exposureIndex).arg(fileName));
+    facade->writeHistoryEntry(QString("redoExposureInsert|%1|%2|%3|%4")
+                              .arg(sceneIndex).arg(takeIndex).arg(exposureIndex)
+                              .arg(fileName));
 
     qDebug("UndoExposureInsert::redo --> End");
 }

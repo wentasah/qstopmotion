@@ -33,7 +33,9 @@ UndoExposureSelect::UndoExposureSelect(DomainFacade *df,
     newSceneIndex = nsi;
     newTakeIndex = nti;
     newExposureIndex = nei;
-    setText(QString(tr("Select exposure (%1,%2,%3)")).arg(newSceneIndex).arg(newTakeIndex).arg(newExposureIndex));
+    setText(QString(tr("Select exposure (%1,%2,%3)-->(%4,%5,%6)"))
+            .arg(oldSceneIndex).arg(oldTakeIndex).arg(oldExposureIndex)
+            .arg(newSceneIndex).arg(newTakeIndex).arg(newExposureIndex));
 }
 
 
@@ -46,7 +48,23 @@ void UndoExposureSelect::undo()
 {
     qDebug("UndoExposureSelect::undo --> Start");
 
-    facade->writeHistoryEntry(QString("undoExposureSelect|%1|%2|%3|%4|%5|%6").arg(oldSceneIndex).arg(oldTakeIndex).arg(oldExposureIndex)
+    AnimationProject *animationProject = facade->getAnimationProject();
+    Frontend *frontend = facade->getFrontend();
+
+    animationProject->setActiveExposureIndex(oldExposureIndex);
+    if (0 <= oldExposureIndex) {
+        Exposure *activeExposure = animationProject->getActiveExposure();
+        frontend->setExposureID(activeExposure->getId().toAscii());
+    }
+    else {
+        frontend->setExposureID("---");
+    }
+    facade->getView()->notifyActivateExposure();
+
+    animationProject->setUnsavedChanges();
+
+    facade->writeHistoryEntry(QString("undoExposureSelect|%1|%2|%3|%4|%5|%6")
+                              .arg(oldSceneIndex).arg(oldTakeIndex).arg(oldExposureIndex)
                               .arg(newSceneIndex).arg(newTakeIndex).arg(newExposureIndex));
 
     qDebug("UndoExposureSelect::undo --> End");
@@ -72,7 +90,8 @@ void UndoExposureSelect::redo()
 
     animationProject->setUnsavedChanges();
 
-    facade->writeHistoryEntry(QString("redoExposureSelect|%1|%2|%3|%4|%5|%6").arg(oldSceneIndex).arg(oldTakeIndex).arg(oldExposureIndex)
+    facade->writeHistoryEntry(QString("redoExposureSelect|%1|%2|%3|%4|%5|%6")
+                              .arg(oldSceneIndex).arg(oldTakeIndex).arg(oldExposureIndex)
                               .arg(newSceneIndex).arg(newTakeIndex).arg(newExposureIndex));
 
     qDebug("UndoExposureSelect::redo --> End");

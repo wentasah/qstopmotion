@@ -766,7 +766,7 @@ void ProjectTab::updateInsertExposure(int sceneIndex,
 {
     qDebug("ProjectTab::updateInsertExposure --> Start");
 
-    Q_ASSERT(-1 < activeExposureIndex);
+    // Q_ASSERT(-1 < activeExposureIndex);
 
     Exposure *exposure = frontend->getProject()->getScene(sceneIndex)->getTake(takeIndex)->getExposure(exposureIndex);
 
@@ -802,22 +802,16 @@ void ProjectTab::updateRemoveExposure(int sceneIndex,
 {
     qDebug("ProjectTab::updateRemoveExposure --> Start");
 
-    this->unsetActiveItems();
+    unsetActiveItems();
     QTreeWidgetItem *activeSceneItem = this->projectTree->topLevelItem(0)->child(sceneIndex);
     QTreeWidgetItem *activeTakeItem = activeSceneItem->child(takeIndex);
     QTreeWidgetItem *activeExposureItem = activeTakeItem->child(exposureIndex);
     activeTakeItem->removeChild(activeExposureItem);
     delete activeExposureItem;
-
     if (exposureIndex < activeExposureIndex) {
         activeExposureIndex--;
     }
-    else {
-        if (exposureIndex == activeTakeItem->childCount()) {
-            activeExposureIndex--;
-        }
-    }
-    this->setActiveItems();
+    setActiveItems();
 
     qDebug("ProjectTab::updateRemoveExposure --> End");
 }
@@ -1238,8 +1232,20 @@ void ProjectTab::removeFramesSlot()
         return;
     }
 
+    DomainFacade *animationProject = frontend->getProject();
+    int removeExposureIndex = activeExposureIndex;  // The activeExposureIndex will be changed by the selectExposureToUndo call
+
+    if (removeExposureIndex == (animationProject->getTakeExposureSize(activeSceneIndex, activeTakeIndex)-1)) {
+        // Last exposure of the take selected
+        animationProject->selectExposureToUndo(activeSceneIndex, activeTakeIndex, removeExposureIndex-1);
+    }
+    else {
+        // Not the last exposure of the take selected
+        animationProject->selectExposureToUndo(activeSceneIndex, activeTakeIndex, removeExposureIndex+1);
+    }
+
     // TODO: Optinaly save the image to remove in a separate directory
-    frontend->getProject()->removeExposureToUndo(activeSceneIndex, activeTakeIndex, activeExposureIndex);
+    animationProject->removeExposureToUndo(activeSceneIndex, activeTakeIndex, removeExposureIndex);
 
     qDebug("ProjectTab::removeFramesSlot --> End");
 }

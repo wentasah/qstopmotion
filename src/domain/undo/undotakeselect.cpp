@@ -41,15 +41,38 @@ UndoTakeSelect::~UndoTakeSelect()
 
 void UndoTakeSelect::undo()
 {
-    /* TODO: Change handling for undo
-    facade->undoTakeSelect(oldSceneIndex, oldTakeIndex, newSceneIndex, newTakeIndex);
-    */
+    // TODO: Change handling for undo
+    qDebug("UndoTakeSelect::undo --> Start");
+
+
+    facade->writeHistoryEntry(QString("undoTakeSelect|%1|%2|%3|%4").arg(oldSceneIndex).arg(oldTakeIndex)
+                              .arg(newSceneIndex).arg(newTakeIndex));
+
+    qDebug("UndoTakeSelect::undo --> End");
 }
 
 
 void UndoTakeSelect::redo()
 {
-    facade->redoTakeSelect(oldSceneIndex, oldTakeIndex, newSceneIndex, newTakeIndex);
+    qDebug("UndoTakeSelect::redo --> Start");
+
+    AnimationProject *animationProject = facade->getAnimationProject();
+    Frontend *frontend = facade->getFrontend();
+
+    animationProject->setActiveTakeIndex(newTakeIndex);
+    if (0 <= newTakeIndex) {
+        Take *activeTake = animationProject->getActiveTake();
+        frontend->setTakeID(activeTake->getDescription().toAscii());
+    }
+    else {
+        frontend->setTakeID("---");
+    }
+    facade->getView()->notifyActivateTake();
+
+    animationProject->setUnsavedChanges();
+
     facade->writeHistoryEntry(QString("redoTakeSelect|%1|%2|%3|%4").arg(oldSceneIndex).arg(oldTakeIndex)
                               .arg(newSceneIndex).arg(newTakeIndex));
+
+    qDebug("UndoTakeSelect::redo --> End");
 }

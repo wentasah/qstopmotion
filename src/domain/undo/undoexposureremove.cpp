@@ -35,12 +35,17 @@ UndoExposureRemove::UndoExposureRemove(DomainFacade *df,
     takeIndex = ti;
     exposureIndex = ei;
     exposure = NULL;
-    setText(QString(tr("Remove exposure (%1,%2,%3)")).arg(sceneIndex).arg(takeIndex).arg(exposureIndex));
+    setText(QString(tr("Remove exposure (%1,%2,%3)"))
+            .arg(sceneIndex).arg(takeIndex).arg(exposureIndex));
 }
 
 
 UndoExposureRemove::~UndoExposureRemove()
 {
+    if (NULL != exposure) {
+        delete exposure;
+        exposure = NULL;
+    }
 }
 
 
@@ -48,7 +53,19 @@ void UndoExposureRemove::undo()
 {
     qDebug("UndoExposureRemove::undo --> Start");
 
-    facade->writeHistoryEntry(QString("undoExposureRemove|%1|%2|%3").arg(sceneIndex).arg(takeIndex).arg(exposureIndex));
+    AnimationProject *animationProject = facade->getAnimationProject();
+
+    exposure->moveToTemp();
+    animationProject->insertExposure(sceneIndex, takeIndex, exposureIndex,
+                                     exposure);
+    exposure = NULL;
+
+    facade->getView()->notifyInsertExposure(sceneIndex, takeIndex, exposureIndex);
+
+    animationProject->setUnsavedChanges();
+
+    facade->writeHistoryEntry(QString("undoExposureRemove|%1|%2|%3")
+                              .arg(sceneIndex).arg(takeIndex).arg(exposureIndex));
 
     qDebug("UndoExposureRemove::undo --> End");
 }
@@ -59,41 +76,16 @@ void UndoExposureRemove::redo()
     qDebug("UndoExposureRemove::redo --> Start");
 
     AnimationProject *animationProject = facade->getAnimationProject();
-    Frontend *frontend = facade->getFrontend();
 
     exposure = animationProject->removeExposure(sceneIndex, takeIndex, exposureIndex);
+    exposure->moveToTrash();
+
     facade->getView()->notifyRemoveExposure(sceneIndex, takeIndex, exposureIndex);
 
-    if (exposureIndex == animationProject->getActiveScene()->getActiveTake()->getExposureSize()) {
-        // The last Exposure are removed
-
-        // this->setActiveExposureIndex(exposureIndex - 1);
-        animationProject->setActiveExposureIndex(exposureIndex - 1);
-        if (0 <= (exposureIndex - 1)) {
-            Exposure *activeExposure = animationProject->getActiveExposure();
-            frontend->setExposureID(activeExposure->getId().toAscii());
-        }
-        else {
-            frontend->setExposureID("---");
-        }
-    }
-    else {
-        // Not the last Exposure are removed
-
-        animationProject->setActiveExposureIndex(exposureIndex);
-        if (0 <= exposureIndex) {
-            Exposure *activeExposure = animationProject->getActiveExposure();
-            frontend->setExposureID(activeExposure->getId().toAscii());
-        }
-        else {
-            frontend->setExposureID("---");
-        }
-    }
-
-    // getView()->notifyActivateExposure();
     animationProject->setUnsavedChanges();
 
-    facade->writeHistoryEntry(QString("redoExposureRemove|%1|%2|%3").arg(sceneIndex).arg(takeIndex).arg(exposureIndex));
+    facade->writeHistoryEntry(QString("redoExposureRemove|%1|%2|%3")
+                              .arg(sceneIndex).arg(takeIndex).arg(exposureIndex));
 
     qDebug("UndoExposureRemove::redo --> End");
 }

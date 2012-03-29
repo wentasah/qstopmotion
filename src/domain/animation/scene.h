@@ -266,23 +266,38 @@ public:
     void getExposures(QVector<Exposure*>& allExposures);
 
     /**
-     * Creates a exposure with the picture at location exposureName and adds it the
-     * end in the scene.
+     * Creates a exposure with the picture at location exposureName and
+     * adds it the end of the actual take of the scene.
      * @param fileName the name fo the image file to the exposure to create.
      * @param location the location of the picture
-     * @return the new path to the picture file for the undo object.
      */
-    Exposure* addExposure(const QString &fileName, int location);
+    void addExposure(const QString &fileName, int location);
 
     /**
-     * Creates a exposure with the picture at location exposureName and adds it at position
-     * at position index in the scene.
+     * Adds a existing exposure at the end of the actual take of the scene.
+     * @param exposure The existing exposure.
+     */
+    void addExposure(Exposure *exposure);
+
+    /**
+     * Creates a exposure with the picture at location exposureName and adds
+     * in the take.
+     * @param takeIndex The index of the take to create the exposure.
+     * @param exposureIndex the place to create the exposure.
      * @param fileName the name to the image file to the exposure to create.
      * @param location the location of the picture
-     * @param index the place to create the exposure.
-     * @return the new path to the picture file for the undo object.
      */
-    Exposure* insertExposure(const QString &fileName, int location, int &index);
+    void insertExposure(int takeIndex, int exposureIndex,
+                        const QString &fileName, int location);
+
+    /**
+     * Insert an existing exposure in the take.
+     * @param takeIndex The index of the take to create the exposure.
+     * @param exposureIndex the place to create the exposure.
+     * @param exposure The existing exposure.
+     */
+    void insertExposure(int takeIndex, int exposureIndex,
+                        Exposure *exposure);
 
     /**
      * Remove the exposures at the positions from fromExposure to toExposure (inclusive)

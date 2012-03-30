@@ -150,7 +150,7 @@ public:
 
     /**
      * Function for performing the redraw with the next frame of the animation.
-     * @arg exposureIndex Index of the next frame
+     * @param exposureIndex Index of the next frame
      */
     void nextAnimationFrame(int exposureIndex);
 

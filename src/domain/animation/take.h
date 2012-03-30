@@ -261,15 +261,15 @@ public:
 
     /**
      * Removes the exposure with the given index from the animation.
-     * @arg exposureIndex the index of the exposure to remove
+     * @param exposureIndex the index of the exposure to remove
      * @return The removed exposure or NULL if nothing is done
      */
-    Exposure* removeExposure(unsigned int exposureIndex);
+    Exposure* removeExposure(int exposureIndex);
 
     /**
      * Get the position of the modified exposure in the project.
-     * @arg filePath The path to the modified exposure.
-     * @arg modExposureIndex the index of the modified exposure.
+     * @param filePath The path to the modified exposure.
+     * @param modExposureIndex the index of the modified exposure.
      * @return True if the exposure is found and false else.
      */
     bool getModifyedExposure(const QString &filePath,

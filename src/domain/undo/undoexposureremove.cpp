@@ -56,11 +56,19 @@ void UndoExposureRemove::undo()
     AnimationProject *animationProject = facade->getAnimationProject();
 
     exposure->moveToTemp();
-    animationProject->insertExposure(sceneIndex, takeIndex, exposureIndex,
-                                     exposure);
-    exposure = NULL;
+    if (exposureIndex >= animationProject->getTakeExposureSize(sceneIndex, takeIndex)) {
+        animationProject->addExposure(sceneIndex, takeIndex,
+                                      exposure);
 
-    facade->getView()->notifyInsertExposure(sceneIndex, takeIndex, exposureIndex);
+        facade->getView()->notifyAddExposure(sceneIndex, takeIndex, exposureIndex);
+    }
+    else {
+        animationProject->insertExposure(sceneIndex, takeIndex, exposureIndex,
+                                         exposure);
+
+        facade->getView()->notifyInsertExposure(sceneIndex, takeIndex, exposureIndex);
+    }
+    exposure = NULL;
 
     animationProject->setUnsavedChanges();
 

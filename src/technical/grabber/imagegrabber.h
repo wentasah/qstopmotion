@@ -65,7 +65,7 @@ public:
 
     /**
      * Get one video devices.
-     * @arg deviceIndex The index of the device.
+     * @param deviceIndex The index of the device.
      * @return The video devices.
      */
     ImageGrabberDevice *getDevice(int deviceIndex);

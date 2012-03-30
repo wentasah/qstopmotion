@@ -548,6 +548,12 @@ Scene *DomainFacade::getScene(int sceneIndex)
 }
 
 
+int DomainFacade::getSceneTakeSize(int sceneIndex)
+{
+    return animationProject->getSceneTakeSize(sceneIndex);
+}
+
+
 int DomainFacade::getSceneExposureSize(int sceneIndex)
 {
     return animationProject->getSceneExposureSize(sceneIndex);

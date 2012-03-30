@@ -44,6 +44,20 @@ void UndoTakeSelect::undo()
     // TODO: Change handling for undo
     qDebug("UndoTakeSelect::undo --> Start");
 
+    AnimationProject *animationProject = facade->getAnimationProject();
+    Frontend *frontend = facade->getFrontend();
+
+    animationProject->setActiveTakeIndex(oldTakeIndex);
+    if (0 <= oldTakeIndex) {
+        Take *activeTake = animationProject->getActiveTake();
+        frontend->setTakeID(activeTake->getDescription().toAscii());
+    }
+    else {
+        frontend->setTakeID("---");
+    }
+    facade->getView()->notifyActivateTake();
+
+    animationProject->setUnsavedChanges();
 
     facade->writeHistoryEntry(QString("undoTakeSelect|%1|%2|%3|%4").arg(oldSceneIndex).arg(oldTakeIndex)
                               .arg(newSceneIndex).arg(newTakeIndex));

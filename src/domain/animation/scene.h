@@ -198,16 +198,28 @@ public:
     /**
      * Create a new take and add the take as the last to the scene.
      * @param takeDescription the description of the take or a empty string.
-     * @return the new take.
      */
-    Take *addTake(const QString &takeDescription);
+    void addTake(const QString &takeDescription);
 
     /**
-     * Createa new take and insert the take bevor the active scene.
-     * @param takeDescription the description of the take or a empty string.
-     * @return the new take.
+     * Add an existing take as the last to the scene.
+     * @param take The existing take object.
      */
-    Take *insertTake(const QString &takeDescription);
+    void addTake(Take *take);
+
+    /**
+     * Create a new take and insert the take bevor the active take.
+     * @param takeIndex The index of the take the new take inserted before.
+     * @param takeDescription the description of the take or a empty string.
+     */
+    void insertTake(int takeIndex, const QString &takeDescription);
+
+    /**
+     * Insert a existing take bevor the active take.
+     * @param takeIndex The index of the take the new take inserted before.
+     * @param take The existing take object.
+     */
+    void insertTake(int takeIndex, Take *take);
 
     /**
      * Moves the take at position takeIndex to the position movePosition.
@@ -268,16 +280,18 @@ public:
     /**
      * Creates a exposure with the picture at location exposureName and
      * adds it the end of the actual take of the scene.
+     * @param takeIndex The index of the take to create the exposure.
      * @param fileName the name fo the image file to the exposure to create.
      * @param location the location of the picture
      */
-    void addExposure(const QString &fileName, int location);
+    void addExposure(int takeIndex, const QString &fileName, int location);
 
     /**
      * Adds a existing exposure at the end of the actual take of the scene.
+     * @param takeIndex The index of the take to create the exposure.
      * @param exposure The existing exposure.
      */
-    void addExposure(Exposure *exposure);
+    void addExposure(int takeIndex, Exposure *exposure);
 
     /**
      * Creates a exposure with the picture at location exposureName and adds
@@ -312,8 +326,8 @@ public:
 
     /**
      * Removes the exposure with the given tree item from the animation.
-     * @arg takeIndex the index of the take with the exposure to remove
-     * @arg exposureIndex the index of the exposure to remove
+     * @param takeIndex the index of the take with the exposure to remove
+     * @param exposureIndex the index of the exposure to remove
      * @return The removed exposure or NULL if nothing is done
      */
     Exposure *removeExposure(unsigned int takeIndex,
@@ -331,9 +345,9 @@ public:
 
     /**
      * Get the position of the modified exposure in the project.
-     * @arg filePath The path to the modified exposure.
-     * @arg modTakeIndex the index of the take of the modified exposure.
-     * @arg modExposureIndex the index of the modified exposure.
+     * @param filePath The path to the modified exposure.
+     * @param modTakeIndex the index of the take of the modified exposure.
+     * @param modExposureIndex the index of the modified exposure.
      * @return True if the exposure is found and false else.
      */
     bool getModifyedExposure(const QString &filePath,

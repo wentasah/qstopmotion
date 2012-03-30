@@ -31,13 +31,17 @@ UndoTakeRemove::UndoTakeRemove(DomainFacade *df,
     sceneIndex = si;
     takeIndex = ti;
     removedTake = NULL;
-    setText(QString(tr("Remove take (%1,%2)")).arg(sceneIndex).arg(takeIndex));
+    setText(QString(tr("Remove take (%1,%2)"))
+            .arg(sceneIndex).arg(takeIndex));
 }
 
 
 UndoTakeRemove::~UndoTakeRemove()
 {
-
+    if (NULL != removedTake) {
+        delete removedTake;
+        removedTake = NULL;
+    }
 }
 
 
@@ -46,7 +50,24 @@ void UndoTakeRemove::undo()
     qDebug("UndoTakeRemove::undo --> Start");
 
 
-    facade->writeHistoryEntry(QString("undoTakeRemove|%1|%2").arg(sceneIndex).arg(takeIndex));
+    AnimationProject *animationProject = facade->getAnimationProject();
+
+    if (takeIndex >= animationProject->getSceneTakeSize(sceneIndex)) {
+        animationProject->addTake(sceneIndex, removedTake);
+
+        facade->getView()->notifyAddTake(sceneIndex, takeIndex);
+    }
+    else {
+        animationProject->insertTake(sceneIndex, takeIndex, removedTake);
+
+        facade->getView()->notifyInsertTake(sceneIndex, takeIndex);
+    }
+    removedTake = NULL;
+
+    animationProject->setUnsavedChanges();
+
+    facade->writeHistoryEntry(QString("undoTakeRemove|%1|%2")
+                              .arg(sceneIndex).arg(takeIndex));
 
     qDebug("UndoTakeRemove::undo --> End");
 }
@@ -58,12 +79,14 @@ void UndoTakeRemove::redo()
 
     AnimationProject *animationProject = facade->getAnimationProject();
 
-    Take *removedTake = animationProject->removeTake(sceneIndex, takeIndex);
+    removedTake = animationProject->removeTake(sceneIndex, takeIndex);
+
     animationProject->setUnsavedChanges();
 
     facade->getView()->notifyRemoveTake(sceneIndex, takeIndex);
 
-    facade->writeHistoryEntry(QString("redoTakeRemove|%1|%2").arg(sceneIndex).arg(takeIndex));
+    facade->writeHistoryEntry(QString("redoTakeRemove|%1|%2")
+                              .arg(sceneIndex).arg(takeIndex));
 
     qDebug("UndoTakeRemove::redo --> End");
 }

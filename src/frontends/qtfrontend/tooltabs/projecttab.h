@@ -364,7 +364,7 @@ private:
 
     /**
      * Start the gimp process.
-     * @arg exposureImagePath The path to the first image to edit.
+     * @param exposureImagePath The path to the first image to edit.
      */
     void startGimpProcess(const QString &exposureImagePath);
 

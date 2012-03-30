@@ -74,7 +74,7 @@ public:
 
     /**
      * Set an new state to the tool bar.
-     * @arg newState The new tool bar state.
+     * @param newState The new tool bar state.
      */
     void setActualState(int newState);
 

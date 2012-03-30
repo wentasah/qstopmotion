@@ -611,6 +611,12 @@ int AnimationProject::getSceneSize() const
 }
 
 
+int AnimationProject::getSceneTakeSize(int sceneIndex) const
+{
+    return scenes[sceneIndex]->getTakeSize();
+}
+
+
 int AnimationProject::getSceneExposureSize(int sceneIndex) const
 {
     return scenes[sceneIndex]->getExposureSize();
@@ -642,7 +648,7 @@ Scene *AnimationProject::addScene(const QString &sceneDescription)
     scenes.append(scene);
     if (activeSceneIndex == -1) {
         // Empty project
-        activeSceneIndex = 0;
+        setActiveSceneIndex(0);
     }
 
     qDebug("AnimationProject::addScene --> End");
@@ -655,6 +661,9 @@ Scene *AnimationProject::insertScene(int sceneIndex, const QString &sceneDescrip
 {
     qDebug("AnimationProject::insertScene --> Start");
 
+    Q_ASSERT(sceneIndex > -1);
+    Q_ASSERT(sceneIndex < getSceneSize());
+
     Scene *scene = new Scene(this);
 
     scene->setId(QString("%1").arg(nextSceneIndex, 3, 10, QChar('0')));
@@ -664,17 +673,9 @@ Scene *AnimationProject::insertScene(int sceneIndex, const QString &sceneDescrip
         scene->setDescription(sceneDescription);
     }
 
-    if (activeSceneIndex == -1) {
-        // Empty project
-        activeSceneIndex = 0;
-        scenes.append(scene);
-    }
-    else {
-        // Project has one or more scenes
-        scenes.insert(sceneIndex, scene);
-        if (sceneIndex <= activeSceneIndex) {
-            activeSceneIndex++;
-        }
+    scenes.insert(sceneIndex, scene);
+    if (sceneIndex <= activeSceneIndex) {
+        setActiveSceneIndex(activeSceneIndex+1);
     }
 
     qDebug("AnimationProject::insertScene --> End");
@@ -986,21 +987,31 @@ Take *AnimationProject::getActiveTake()
 }
 
 
-Take *AnimationProject::addTake(unsigned int sceneIndex, const QString &takeDescription)
+void AnimationProject::addTake(int sceneIndex, const QString &takeDescription)
 {
-    Scene *activeScene = scenes[sceneIndex];
-    Take *take = activeScene->addTake(takeDescription);
-
-    return take;
+    Scene *scene = getScene(sceneIndex);
+    scene->addTake(takeDescription);
 }
 
 
-Take *AnimationProject::insertTake(unsigned int sceneIndex, const QString &takeDescription)
+void AnimationProject::addTake(int sceneIndex, Take *take)
 {
-    Scene *activeScene = scenes[sceneIndex];
-    Take *take = activeScene->insertTake(takeDescription);
+    Scene *scene = getScene(sceneIndex);
+    scene->addTake(take);
+}
 
-    return take;
+
+void AnimationProject::insertTake(int sceneIndex, int takeIndex, const QString &takeDescription)
+{
+    Scene *scene = getScene(sceneIndex);
+    scene->insertTake(takeIndex, takeDescription);
+}
+
+
+void AnimationProject::insertTake(int sceneIndex, int takeIndex, Take *take)
+{
+    Scene *scene = getScene(sceneIndex);
+    scene->insertTake(takeIndex, take);
 }
 
 
@@ -1129,26 +1140,24 @@ Exposure *AnimationProject::getActiveExposure()
 }
 
 
-void AnimationProject::addExposure(const QString &fileName,
+void AnimationProject::addExposure(int sceneIndex,
+                                   int takeIndex,
+                                   const QString &fileName,
                                    int location)
 {
-    Q_ASSERT(activeSceneIndex > -1);
+    Take  *take = getTake(sceneIndex, takeIndex);
 
-    Scene *activeScene = scenes[activeSceneIndex];
-    Take  *activeTake = activeScene->getActiveTake();
-
-    activeTake->addExposure(fileName, location);
+    take->addExposure(fileName, location);
 }
 
 
-void AnimationProject::addExposure(Exposure *exposure)
+void AnimationProject::addExposure(int sceneIndex,
+                                   int takeIndex,
+                                   Exposure *exposure)
 {
-    Q_ASSERT(activeSceneIndex > -1);
+    Take  *take = getTake(sceneIndex, takeIndex);
 
-    Scene *activeScene = scenes[activeSceneIndex];
-    Take  *activeTake = activeScene->getActiveTake();
-
-    activeTake->addExposure(exposure);
+    take->addExposure(exposure);
 }
 
 
@@ -1158,10 +1167,7 @@ void AnimationProject::insertExposure(int sceneIndex,
                                       const QString &fileName,
                                       int location)
 {
-    Q_ASSERT(activeSceneIndex > -1);
-
-    Scene *scene = scenes[sceneIndex];
-    Take  *take = scene->getTake(takeIndex);
+    Take  *take = getTake(sceneIndex, takeIndex);
 
     take->insertExposure(exposureIndex, fileName, location);
 }
@@ -1172,10 +1178,7 @@ void AnimationProject::insertExposure(int sceneIndex,
                                       int exposureIndex,
                                       Exposure *exposure)
 {
-    Q_ASSERT(activeSceneIndex > -1);
-
-    Scene *scene = scenes[sceneIndex];
-    Take  *take = scene->getTake(takeIndex);
+    Take  *take = getTake(sceneIndex, takeIndex);
 
     take->insertExposure(exposureIndex, exposure);
 }

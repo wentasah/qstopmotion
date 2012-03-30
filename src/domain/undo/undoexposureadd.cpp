@@ -85,12 +85,12 @@ void UndoExposureAdd::redo()
 
     if (NULL == exposure) {
         // First call of the redo function after creation of the undo object
-        animationProject->addExposure(fileName, AnimationProject::InTempPath);
+        animationProject->addExposure(sceneIndex, takeIndex, fileName, AnimationProject::InTempPath);
     }
     else {
         // Call of the redo function after a undo call
         exposure->moveToTemp();
-        animationProject->addExposure(exposure);
+        animationProject->addExposure(sceneIndex, takeIndex, exposure);
         exposure = NULL;
     }
 

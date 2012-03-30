@@ -965,7 +965,7 @@ void TimeLine::removeExposure(int sceneIndex,
         activeExposureIndex--;
     }
     else {
-        if (exposureIndex == thumbViews.size()) {
+        if (activeExposureIndex == thumbViews.size()) {
             activeExposureIndex--;
         }
     }

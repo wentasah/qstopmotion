@@ -331,7 +331,7 @@ public:
 
     /**
      * Get one video devices.
-     * @arg deviceIndex The index of the device.
+     * @param deviceIndex The index of the device.
      * @return The video devices.
      */
     ImageGrabberDevice *getDevice(int deviceIndex);
@@ -350,7 +350,7 @@ public:
 
     /**
      * Function for performing the redraw with the next frame of the animation.
-     * @arg exposureIndex Index of the next frame
+     * @param exposureIndex Index of the next frame
      */
     void nextAnimationFrame(int exposureIndex);
 

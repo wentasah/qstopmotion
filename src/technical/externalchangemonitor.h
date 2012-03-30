@@ -109,13 +109,13 @@ private slots:
 
     /**
      * Callback function for when the QFileSystemWatcher send a directory changed event.
-     * @arg dir The changed directory.
+     * @param dir The changed directory.
      */
     void directoryChangedEvents(const QString &dir);
 
     /**
      * Callback function for when the QFileSystemWatcher send a file changed event.
-     * @arg file The changed file.
+     * @param file The changed file.
      */
     void fileChangedEvents(const QString &file);
 

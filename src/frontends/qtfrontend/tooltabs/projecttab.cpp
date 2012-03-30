@@ -582,17 +582,13 @@ void ProjectTab::updateRemoveScene(int sceneIndex)
     qDebug("ProjectTab::updateRemoveScene --> Start");
 
     this->unsetActiveItems();
+
     QTreeWidgetItem *topLevelItem = this->projectTree->topLevelItem(0);
     Q_ASSERT(sceneIndex < topLevelItem->childCount());
     this->removeScene(sceneIndex);
 
     if (sceneIndex < activeSceneIndex) {
         activeSceneIndex--;
-    }
-    else {
-        if (sceneIndex == topLevelItem->childCount()) {
-            activeSceneIndex--;
-        }
     }
     if (-1 == activeSceneIndex) {
         activeTakeIndex = -1;
@@ -607,6 +603,7 @@ void ProjectTab::updateRemoveScene(int sceneIndex)
             activeExposureIndex = frontend->getProject()->getActiveExposureIndex();
         }
     }
+
     this->setActiveItems();
 
     qDebug("ProjectTab::updateRemoveScene --> End");
@@ -708,6 +705,7 @@ void ProjectTab::updateRemoveTake(int sceneIndex,
     qDebug("ProjectTab::updateRemoveTake --> Start");
 
     this->unsetActiveItems();
+
     QTreeWidgetItem *topLevelItem = this->projectTree->topLevelItem(0);
     Q_ASSERT(sceneIndex < topLevelItem->childCount());
     QTreeWidgetItem *activeSceneItem = topLevelItem->child(sceneIndex);
@@ -716,17 +714,14 @@ void ProjectTab::updateRemoveTake(int sceneIndex,
     if (takeIndex < activeTakeIndex) {
         activeTakeIndex--;
     }
-    else {
-        if (takeIndex == activeSceneItem->childCount()) {
-            activeTakeIndex--;
-        }
-    }
+
     if (-1 == activeTakeIndex) {
         activeExposureIndex = -1;
     }
     else {
         activeExposureIndex = frontend->getProject()->getActiveExposureIndex();
     }
+
     this->setActiveItems();
 
     qDebug("ProjectTab::updateRemoveTake --> End");
@@ -803,6 +798,7 @@ void ProjectTab::updateRemoveExposure(int sceneIndex,
     qDebug("ProjectTab::updateRemoveExposure --> Start");
 
     unsetActiveItems();
+
     QTreeWidgetItem *activeSceneItem = this->projectTree->topLevelItem(0)->child(sceneIndex);
     QTreeWidgetItem *activeTakeItem = activeSceneItem->child(takeIndex);
     QTreeWidgetItem *activeExposureItem = activeTakeItem->child(exposureIndex);
@@ -811,6 +807,7 @@ void ProjectTab::updateRemoveExposure(int sceneIndex,
     if (exposureIndex < activeExposureIndex) {
         activeExposureIndex--;
     }
+
     setActiveItems();
 
     qDebug("ProjectTab::updateRemoveExposure --> End");
@@ -1109,7 +1106,19 @@ void ProjectTab::removeSceneSlot()
 {
     qDebug("ProjectTab::removeSceneSlot --> Start");
 
-    frontend->getProject()->removeSceneToUndo(activeSceneIndex);
+    DomainFacade *animationProject = frontend->getProject();
+    int removeSceneIndex = activeSceneIndex;  // The activeSceneIndex will be changed by the selectSceneToUndo call
+
+    if (removeSceneIndex == (animationProject->getSceneSize()-1)) {
+        // Last scene of the project selected
+        animationProject->selectSceneToUndo(removeSceneIndex-1);
+    }
+    else {
+        // Not the last scene of the project selected
+        animationProject->selectSceneToUndo(removeSceneIndex+1);
+    }
+
+    frontend->getProject()->removeSceneToUndo(removeSceneIndex);
 
     qDebug("ProjectTab::removeSceneSlot --> End");
 }
@@ -1174,7 +1183,19 @@ void ProjectTab::removeTakeSlot()
 {
     qDebug("ProjectTab::removeTakeSlot --> Start");
 
-    frontend->getProject()->removeTakeToUndo(activeSceneIndex, activeTakeIndex);
+    DomainFacade *animationProject = frontend->getProject();
+    int removeTakeIndex = activeTakeIndex;  // The activeTakeIndex will be changed by the selectTakeToUndo call
+
+    if (removeTakeIndex == (animationProject->getSceneTakeSize(activeSceneIndex)-1)) {
+        // Last take of the scene selected
+        animationProject->selectTakeToUndo(activeSceneIndex, removeTakeIndex-1);
+    }
+    else {
+        // Not the last take of the scene selected
+        animationProject->selectTakeToUndo(activeSceneIndex, removeTakeIndex+1);
+    }
+
+    frontend->getProject()->removeTakeToUndo(activeSceneIndex, removeTakeIndex);
 
     qDebug("ProjectTab::removeTakeSlot --> End");
 }

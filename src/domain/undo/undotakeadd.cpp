@@ -31,13 +31,20 @@ UndoTakeAdd::UndoTakeAdd(DomainFacade  *df,
     sceneIndex = scIndex;
     takeIndex = df->getScene(sceneIndex)->getTakeSize();
     takeDescription.append(description);
-    setText(QString(tr("Add take (%1,%2) '%3'")).arg(sceneIndex).arg(takeIndex).arg(takeDescription));
+    take = NULL;
+
+    setText(QString(tr("Add take (%1,%2) '%3'"))
+            .arg(sceneIndex).arg(takeIndex)
+            .arg(takeDescription));
 }
 
 
 UndoTakeAdd::~UndoTakeAdd()
 {
-
+    if (NULL != take) {
+        delete take;
+        take = NULL;
+    }
 }
 
 
@@ -45,8 +52,17 @@ void UndoTakeAdd::undo()
 {
     qDebug("UndoTakeAdd::undo --> Start");
 
+    AnimationProject *animationProject = facade->getAnimationProject();
 
-    facade->writeHistoryEntry(QString("undoTakeAdd|%1|%2|%3").arg(sceneIndex).arg(takeIndex).arg(takeDescription));
+    take = animationProject->removeTake(sceneIndex, takeIndex);
+
+    facade->getView()->notifyRemoveTake(sceneIndex, takeIndex);
+
+    animationProject->setUnsavedChanges();
+
+    facade->writeHistoryEntry(QString("undoTakeAdd|%1|%2|%3")
+                              .arg(sceneIndex).arg(takeIndex)
+                              .arg(takeDescription));
 
     qDebug("UndoTakeAdd::undo --> End");
 }
@@ -58,12 +74,23 @@ void UndoTakeAdd::redo()
 
     AnimationProject *animationProject = facade->getAnimationProject();
 
-    Take *take = animationProject->addTake(sceneIndex, takeDescription);
-    facade->getView()->notifyAddTake(sceneIndex, take->getIndex());
+    if (NULL == take) {
+        // First call of the redo function after creation of the undo object
+        animationProject->addTake(sceneIndex, takeDescription);
+    }
+    else {
+        // Call of the redo function after a undo call
+        animationProject->addTake(sceneIndex, take);
+        take = NULL;
+    }
+
+    facade->getView()->notifyAddTake(sceneIndex, takeIndex);
 
     animationProject->setUnsavedChanges();
 
-    facade->writeHistoryEntry(QString("redoTakeAdd|%1|%2|%3").arg(sceneIndex).arg(takeIndex).arg(takeDescription));
+    facade->writeHistoryEntry(QString("redoTakeAdd|%1|%2|%3")
+                              .arg(sceneIndex).arg(takeIndex)
+                              .arg(takeDescription));
 
     qDebug("UndoTakeAdd::redo --> End");
 }

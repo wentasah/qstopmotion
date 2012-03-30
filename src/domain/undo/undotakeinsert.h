@@ -69,6 +69,7 @@ private:
     QString  takeDescription;
     int      sceneIndex;
     int      takeIndex;
+    Take    *take;
 };
 
 #endif

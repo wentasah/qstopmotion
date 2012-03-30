@@ -344,6 +344,12 @@ public:
     int getSceneSize() const;
 
     /**
+     * Returns the take size of the scene.
+     * @return the take size of the scene.
+     */
+    int getSceneTakeSize(int sceneIndex) const;
+
+    /**
      * Returns the exposure size of the scene.
      * @return the exposure size of the scene.
      */
@@ -461,17 +467,37 @@ public:
      * Create a new take and add the take as the last to the scene.
      * @param sceneIndex Index of the scene the take is added to.
      * @param takeDescription the description of the take or a empty string.
-     * @return the new take.
      */
-    Take *addTake(unsigned int sceneIndex, const QString &takeDescription);
+    void addTake(int sceneIndex,
+                 const QString &takeDescription);
 
     /**
-     * Createa new take and insert the take bevor the active scene.
+     * Add an existing take as the last to the scene.
      * @param sceneIndex Index of the scene the take is added to.
-     * @param takeDescription the description of the take or a empty string.
-     * @return the new take.
+     * @param take The existing take object.
      */
-    Take *insertTake(unsigned int sceneIndex, const QString &takeDescription);
+    void addTake(int sceneIndex,
+                 Take *take);
+
+    /**
+     * Create a new take and insert the take bevor the active scene.
+     * @param sceneIndex Index of the scene the take is added to.
+     * @param takeIndex The index of the take to insert the new take before.
+     * @param takeDescription the description of the take or a empty string.
+     */
+    void insertTake(int sceneIndex,
+                    int takeIndex,
+                    const QString &takeDescription);
+
+    /**
+     * Insert an existing take and insert it bevor the active scene.
+     * @param sceneIndex Index of the scene the take is added to.
+     * @param takeIndex The index of the take to insert the new take before.
+     * @param take The existing take object.
+     */
+    void insertTake(int sceneIndex,
+                    int takeIndex,
+                    Take *take);
 
     /**
      * Moves the take at position takeIndex to the position movePosition.
@@ -480,7 +506,8 @@ public:
      * @param toSceneIndex the scene position to move the take to.
      * @param toTakeIndex the position to move the take to.
      */
-    void moveTake(int fromSceneIndex, int fromTakeIndex, int toSceneIndex, int toTakeIndex);
+    void moveTake(int fromSceneIndex, int fromTakeIndex,
+                  int toSceneIndex, int toTakeIndex);
 
     /**
      * Removes the active take from the animation.
@@ -555,23 +582,31 @@ public:
     /**
      * Create a new exposure and add it to end of the vector containing
      * the exposures.
+     * @param sceneIndex the index of the scene with the exposure to add
+     * @param takeIndex the index of the take with the exposure to add
      * @param fileName the name of the image file.
      * @param location the location of the picture
      */
-    void addExposure(const QString &fileName,
+    void addExposure(int sceneIndex,
+                     int takeIndex,
+                     const QString &fileName,
                      int location);
 
     /**
      * Add a existing exposure in the vector containing the exposures.
-     * @arg exposure The existing exposure to add.
+     * @param sceneIndex the index of the scene with the exposure to add
+     * @param takeIndex the index of the take with the exposure to add
+     * @param exposure The existing exposure to add.
      */
-    void addExposure(Exposure *exposure);
+    void addExposure(int sceneIndex,
+                     int takeIndex,
+                     Exposure *exposure);
 
     /**
      * Create a new exposure and insert it in the vector containing the exposures.
-     * @arg sceneIndex the index of the scene with the exposure to insert
-     * @arg takeIndex the index of the take with the exposure to insert
-     * @arg exposureIndex the index of the new exposure where inserted bevor.
+     * @param sceneIndex the index of the scene with the exposure to insert
+     * @param takeIndex the index of the take with the exposure to insert
+     * @param exposureIndex the index of the new exposure where inserted bevor.
      * @param fileName the name to the image file.
      * @param location the location of the picture
      */
@@ -583,9 +618,9 @@ public:
 
      /**
       * Inser an existing exposure in the vector containing the exposures.
-      * @arg sceneIndex the index of the scene with the exposure to insert
-      * @arg takeIndex the index of the take with the exposure to insert
-      * @arg exposureIndex the index of the new exposure where inserted bevor.
+      * @param sceneIndex the index of the scene with the exposure to insert
+      * @param takeIndex the index of the take with the exposure to insert
+      * @param exposureIndex the index of the new exposure where inserted bevor.
       * @param exposure The existing exposure.
       */
       void insertExposure(int sceneIndex,
@@ -601,9 +636,9 @@ public:
 
     /**
      * Removes the exposure with the given tree item from the animation.
-     * @arg sceneIndex the index of the scene with the exposure to remove
-     * @arg takeIndex the index of the take with the exposure to remove
-     * @arg exposureIndex the index of the exposure to remove
+     * @param sceneIndex the index of the scene with the exposure to remove
+     * @param takeIndex the index of the take with the exposure to remove
+     * @param exposureIndex the index of the exposure to remove
      * @return The removed exposure or NULL if nothing is done
      */
     Exposure *removeExposure(int sceneIndex,
@@ -618,10 +653,10 @@ public:
 
     /**
      * Get the position of the modified exposure in the project.
-     * @arg filePath The path to the modified exposure.
-     * @arg modSceneIndex the index of the scene of the take of the modified exposure.
-     * @arg modTakeIndex the index of the take of the modified exposure.
-     * @arg modExposureIndex the index of the modified exposure.
+     * @param filePath The path to the modified exposure.
+     * @param modSceneIndex the index of the scene of the take of the modified exposure.
+     * @param modTakeIndex the index of the take of the modified exposure.
+     * @param modExposureIndex the index of the modified exposure.
      * @return True if the exposure is found and false else.
      */
     bool getModifyedExposure(const QString &filePath,

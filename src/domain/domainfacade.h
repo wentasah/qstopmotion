@@ -310,6 +310,13 @@ public:
     Scene *getScene(int sceneIndex);
 
     /**
+     * Returns the take size of the scene.
+     * @param sceneIndex the index of the scene.
+     * @return the take size of the scene.
+     */
+    int getSceneTakeSize(int sceneIndex);
+
+    /**
      * Returns the exposure size of the scene.
      * @return the exposure size of the scene.
      */
@@ -521,9 +528,9 @@ public:
 
     /**
      * Add a new remove exposure object to the undo history.
-     * @arg sceneIndex the index of the scene of the exposure to remove
-     * @arg takeIndex the index of the take of the exposure to remove
-     * @arg exposureIndex the index of the exposure to remove
+     * @param sceneIndex the index of the scene of the exposure to remove
+     * @param takeIndex the index of the take of the exposure to remove
+     * @param exposureIndex the index of the exposure to remove
      */
     void removeExposureToUndo(int sceneIndex,
                               int takeIndex,
@@ -531,12 +538,12 @@ public:
 
     /**
      * Add a new move exposure object to the undo history.
-     * @arg fromSceneIndex the from index of the scene of the take of the exposure to move
-     * @arg fromTakeIndex the from index of the take of the exposure to move
-     * @arg fromExposureIndex the from index of the exposure to move
-     * @arg toSceneIndex the to index of the scene of the take of the exposure to move
-     * @arg toTakeIndex the to index of the take of the exposure to move
-     * @arg toExposureIndex the to index of the exposure to move
+     * @param fromSceneIndex the from index of the scene of the take of the exposure to move
+     * @param fromTakeIndex the from index of the take of the exposure to move
+     * @param fromExposureIndex the from index of the exposure to move
+     * @param toSceneIndex the to index of the scene of the take of the exposure to move
+     * @param toTakeIndex the to index of the take of the exposure to move
+     * @param toExposureIndex the to index of the exposure to move
      */
     void moveExposureToUndo(int fromSceneIndex,
                             int fromTakeIndex,
@@ -547,9 +554,9 @@ public:
 
     /**
      * Add a new select exposure object to the undo history.
-     * @arg newSceneIndex the new index of the scene of the take of the exposure to select
-     * @arg newTakeIndex the new index of the take of the exposure to select
-     * @arg newExposureIndex the new index of the exposure to select
+     * @param newSceneIndex the new index of the scene of the take of the exposure to select
+     * @param newTakeIndex the new index of the take of the exposure to select
+     * @param newExposureIndex the new index of the exposure to select
      */
     void selectExposureToUndo(int newSceneIndex,
                               int newTakeIndex,
@@ -557,10 +564,10 @@ public:
 
     /**
      * Get the position of the modified exposure in the project.
-     * @arg filePath The path to the modified exposure.
-     * @arg modSceneIndex the index of the scene of the take of the modified exposure.
-     * @arg modTakeIndex the index of the take of the modified exposure.
-     * @arg modExposureIndex the index of the modified exposure.
+     * @param filePath The path to the modified exposure.
+     * @param modSceneIndex the index of the scene of the take of the modified exposure.
+     * @param modTakeIndex the index of the take of the modified exposure.
+     * @param modExposureIndex the index of the modified exposure.
      * @return True if the exposure is found and false else.
      */
     bool getModifyedExposure(const QString &filePath,

@@ -345,9 +345,9 @@ Take* Scene::getTake(unsigned int takeNumber)
 }
 
 
-Take* Scene::addTake(const QString &takeDescription)
+void Scene::addTake(const QString &takeDescription)
 {
-    qDebug("Scene::addTake --> Start");
+    qDebug("Scene::addTake(new) --> Start");
 
     Take *take = new Take(this);
 
@@ -359,22 +359,27 @@ Take* Scene::addTake(const QString &takeDescription)
     }
     takes.append(take);
 
-    if (-1 == activeTakeIndex) {
-        activeTakeIndex = 0;
-        activeTakeId.append(take->getId());
-    }
-
-    qDebug("Scene::addTake --> End");
-
-    return take;
+    qDebug("Scene::addTake(new) --> End");
 }
 
 
-Take* Scene::insertTake(const QString &takeDescription)
+void Scene::addTake(Take *take)
 {
-    qDebug("Scene::insertTake --> Start");
+    qDebug("Scene::addTake(exist) --> Start");
 
-    int   newActiveTakeIndex;
+    takes.append(take);
+
+    qDebug("Scene::addTake(exist) --> End");
+}
+
+
+void Scene::insertTake(int takeIndex, const QString &takeDescription)
+{
+    qDebug("Scene::insertTake(new) --> Start");
+
+    Q_ASSERT(takeIndex > -1);
+    Q_ASSERT(takeIndex < getTakeSize());
+
     Take *take = new Take(this);
 
     take->setId(QString("%1").arg(nextTakeIndex, 2, 10, QChar('0')));
@@ -384,22 +389,28 @@ Take* Scene::insertTake(const QString &takeDescription)
         take->setDescription(takeDescription);
     }
 
-    if (activeTakeIndex == -1) {
-        // Empty project
-        newActiveTakeIndex = 0;
-        takes.append(take);
+    takes.insert(takeIndex, take);
+    if (takeIndex < activeTakeIndex) {
+        this->setActiveTakeIndex(activeTakeIndex+1);
     }
-    else {
-        // Project has one or more scenes
-        newActiveTakeIndex = activeTakeIndex + 1;
-        takes.insert(activeTakeIndex, take);
+
+    qDebug("Scene::insertTake(new) --> End");
+}
+
+
+void Scene::insertTake(int takeIndex, Take *take)
+{
+    qDebug("Scene::insertTake(exist) --> Start");
+
+    Q_ASSERT(takeIndex > -1);
+    Q_ASSERT(takeIndex < getTakeSize());
+
+    takes.insert(activeTakeIndex, take);
+    if (takeIndex < activeTakeIndex) {
+        this->setActiveTakeIndex(activeTakeIndex+1);
     }
-    // this->notifyNewTake(newActiveTakeIndex);
-    this->setActiveTakeIndex(newActiveTakeIndex);
 
-    qDebug("Scene::insertTake --> End");
-
-    return take;
+    qDebug("Scene::insertTake(exist) --> End");
 }
 
 
@@ -508,28 +519,28 @@ void Scene::getExposures(QVector<Exposure*>& allExposures)
 }
 
 
-void Scene::addExposure(const QString &fileName, int location)
+void Scene::addExposure(int takeIndex, const QString &fileName, int location)
 {
-    takes[activeTakeIndex]->addExposure(fileName, location);
+    getTake(takeIndex)->addExposure(fileName, location);
 }
 
 
-void Scene::addExposure(Exposure *exposure)
+void Scene::addExposure(int takeIndex, Exposure *exposure)
 {
-    takes[activeTakeIndex]->addExposure(exposure);
+    getTake(takeIndex)->addExposure(exposure);
 }
 
 
 void Scene::insertExposure(int takeIndex, int exposureIndex,
                            const QString &fileName, int location)
 {
-    return takes[takeIndex]->insertExposure(exposureIndex, fileName, location);
+    getTake(takeIndex)->insertExposure(exposureIndex, fileName, location);
 }
 
 
 void Scene::insertExposure(int takeIndex, int exposureIndex, Exposure *exposure)
 {
-    return takes[takeIndex]->insertExposure(exposureIndex, exposure);
+    getTake(takeIndex)->insertExposure(exposureIndex, exposure);
 }
 
 

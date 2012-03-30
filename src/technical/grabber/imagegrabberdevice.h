@@ -60,10 +60,10 @@ public:
 
     /**
      * Constructs and initializes the object.
-     * @arg id The id of the device.
-     * @arg name The name of the device.
-     * @arg source The source of the device.
-     * @arg cap The capability of the device.
+     * @param id The id of the device.
+     * @param name The name of the device.
+     * @param source The source of the device.
+     * @param cap The capability of the device.
      */
     ImageGrabberDevice(const QString id,
                        const QString name,

@@ -31,21 +31,21 @@ class Util
 public:
     /**
      * Check the existence of the command on the OS.
-     * @arg command The command to search for.
+     * @param command The command to search for.
      * @return The path to the command with Qt specific separators or an empty string.
      */
     static const QString checkCommand(const QString &command);
 
     /**
      * Converts Qt specific separators to the OS specific separator.
-     * @arg path The Qt specific path string.
+     * @param path The Qt specific path string.
      * @return The OS specific path string.
      */
     static const QString convertPathToOsSpecific(const QString &path);
 
     /**
      * Converts separators from the OS specific separator to Qt specific separator.
-     * @arg path The OS specific path string.
+     * @param path The OS specific path string.
      * @return The Qt specific path string.
      */
     static const QString convertPathFromOsSpecific(const QString &path);

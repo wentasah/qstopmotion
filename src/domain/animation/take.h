@@ -186,7 +186,7 @@ public:
      * Retrieves the size of exposures of the take.
      * @return the size of exposures in the take.
      */
-    unsigned int getExposureSize() const;
+    int getExposureSize() const;
 
     /**
      * Retrieves the exposure at position exposureIndex in the scene.

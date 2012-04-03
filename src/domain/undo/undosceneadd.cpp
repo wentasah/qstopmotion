@@ -29,13 +29,18 @@ UndoSceneAdd::UndoSceneAdd(DomainFacade  *df,
 {
     sceneIndex = df->getSceneSize();
     sceneDescription.append(description);
-    setText(QString(tr("Add scene (%1) '%2'")).arg(sceneIndex).arg(sceneDescription));
+    scene = NULL;
+    setText(QString(tr("Add scene (%1) '%2'"))
+            .arg(sceneIndex).arg(sceneDescription));
 }
 
 
 UndoSceneAdd::~UndoSceneAdd()
 {
-
+    if (NULL != scene) {
+        delete scene;
+        scene = NULL;
+    }
 }
 
 
@@ -43,8 +48,16 @@ void UndoSceneAdd::undo()
 {
     qDebug("UndoSceneAdd::undo --> Start");
 
+    AnimationProject *animationProject = facade->getAnimationProject();
 
-    facade->writeHistoryEntry(QString("undoSceneAdd|%1|%2").arg(sceneIndex).arg(sceneDescription));
+    scene = animationProject->removeScene(sceneIndex);
+
+    facade->getView()->notifyRemoveScene(sceneIndex);
+
+    animationProject->setUnsavedChanges();
+
+    facade->writeHistoryEntry(QString("undoSceneAdd|%1|%2")
+                              .arg(sceneIndex).arg(sceneDescription));
 
     qDebug("UndoSceneAdd::undo --> End");
 }
@@ -56,12 +69,22 @@ void UndoSceneAdd::redo()
 
     AnimationProject *animationProject = facade->getAnimationProject();
 
-    Scene *scene = animationProject->addScene(sceneDescription);
-    facade->getView()->notifyAddScene(scene->getIndex());
+    if (NULL == scene) {
+        // First call of the redo function after creation of the undo object
+        animationProject->addScene(sceneDescription);
+    }
+    else {
+        // Call of the redo function after a undo call
+        animationProject->addScene(scene);
+        scene = NULL;
+    }
+
+    facade->getView()->notifyAddScene(sceneIndex);
 
     animationProject->setUnsavedChanges();
 
-    facade->writeHistoryEntry(QString("redoSceneAdd|%1|%2").arg(sceneIndex).arg(sceneDescription));
+    facade->writeHistoryEntry(QString("redoSceneAdd|%1|%2")
+                              .arg(sceneIndex).arg(sceneDescription));
 
     qDebug("UndoSceneAdd::redo --> End");
 }

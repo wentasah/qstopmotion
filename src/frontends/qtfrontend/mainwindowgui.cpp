@@ -270,7 +270,12 @@ void MainWindowGUI::keyPressEvent(QKeyEvent *k)
 {
     DomainFacade *facade = frontend->getProject();
     int activeSceneIndex = facade->getActiveSceneIndex();
-    int activeTakeIndex = facade->getActiveTakeIndex();
+    int activeTakeIndex = -1;
+
+    if (-1 < activeSceneIndex) {
+        // If there is a active scene, there can be a active take
+        facade->getActiveTakeIndex();
+    }
 
     switch (k->key()) {
     case Key_Shift:
@@ -1151,9 +1156,10 @@ void MainWindowGUI::showUndoStack()
         undoView->setWindowTitle(tr("qStopMotion - Undo stack"));
         undoView->setAttribute(Qt::WA_QuitOnClose, false);
         undoView->setGeometry(geometry().x() + fGeo.width(), geometry().y(),
-                              200, height());
+                              220, height());
     }
     undoView->show();
+    this->activateWindow();
 }
 
 

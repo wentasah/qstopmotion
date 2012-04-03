@@ -30,7 +30,9 @@ UndoTakeSelect::UndoTakeSelect(DomainFacade *df,
     oldTakeIndex = facade->getActiveTakeIndex();
     newSceneIndex = nsi;
     newTakeIndex = nti;
-    setText(QString(tr("Select take (%1,%2)")).arg(newSceneIndex).arg(newTakeIndex));
+    setText(QString(tr("Select take (%1,%2)-->(%3,%4)"))
+            .arg(oldSceneIndex).arg(oldTakeIndex)
+            .arg(newSceneIndex).arg(newTakeIndex));
 }
 
 
@@ -59,7 +61,8 @@ void UndoTakeSelect::undo()
 
     animationProject->setUnsavedChanges();
 
-    facade->writeHistoryEntry(QString("undoTakeSelect|%1|%2|%3|%4").arg(oldSceneIndex).arg(oldTakeIndex)
+    facade->writeHistoryEntry(QString("undoTakeSelect|%1|%2|%3|%4")
+                              .arg(oldSceneIndex).arg(oldTakeIndex)
                               .arg(newSceneIndex).arg(newTakeIndex));
 
     qDebug("UndoTakeSelect::undo --> End");
@@ -85,7 +88,8 @@ void UndoTakeSelect::redo()
 
     animationProject->setUnsavedChanges();
 
-    facade->writeHistoryEntry(QString("redoTakeSelect|%1|%2|%3|%4").arg(oldSceneIndex).arg(oldTakeIndex)
+    facade->writeHistoryEntry(QString("redoTakeSelect|%1|%2|%3|%4")
+                              .arg(oldSceneIndex).arg(oldTakeIndex)
                               .arg(newSceneIndex).arg(newTakeIndex));
 
     qDebug("UndoTakeSelect::redo --> End");

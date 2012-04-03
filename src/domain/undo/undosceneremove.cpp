@@ -35,7 +35,10 @@ UndoSceneRemove::UndoSceneRemove(DomainFacade *df,
 
 UndoSceneRemove::~UndoSceneRemove()
 {
-
+    if (NULL != removedScene) {
+        delete removedScene;
+        removedScene = NULL;
+    }
 }
 
 

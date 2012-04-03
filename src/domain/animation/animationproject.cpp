@@ -632,7 +632,7 @@ Scene *AnimationProject::getScene(int sceneIndex)
 }
 
 
-Scene *AnimationProject::addScene(const QString &sceneDescription)
+void AnimationProject::addScene(const QString &sceneDescription)
 {
     qDebug("AnimationProject::addScene --> Start");
 
@@ -646,18 +646,22 @@ Scene *AnimationProject::addScene(const QString &sceneDescription)
     }
 
     scenes.append(scene);
-    if (activeSceneIndex == -1) {
-        // Empty project
-        setActiveSceneIndex(0);
-    }
 
     qDebug("AnimationProject::addScene --> End");
-
-    return scene;
 }
 
 
-Scene *AnimationProject::insertScene(int sceneIndex, const QString &sceneDescription)
+void AnimationProject::addScene(Scene *scene)
+{
+    qDebug("AnimationProject::addScene --> Start");
+
+    scenes.append(scene);
+
+    qDebug("AnimationProject::addScene --> End");
+}
+
+
+void AnimationProject::insertScene(int sceneIndex, const QString &sceneDescription)
 {
     qDebug("AnimationProject::insertScene --> Start");
 
@@ -674,13 +678,21 @@ Scene *AnimationProject::insertScene(int sceneIndex, const QString &sceneDescrip
     }
 
     scenes.insert(sceneIndex, scene);
-    if (sceneIndex <= activeSceneIndex) {
-        setActiveSceneIndex(activeSceneIndex+1);
-    }
 
     qDebug("AnimationProject::insertScene --> End");
+}
 
-    return scene;
+
+void AnimationProject::insertScene(int sceneIndex, Scene *scene)
+{
+    qDebug("AnimationProject::insertScene --> Start");
+
+    Q_ASSERT(sceneIndex > -1);
+    Q_ASSERT(sceneIndex < getSceneSize());
+
+    scenes.insert(sceneIndex, scene);
+
+    qDebug("AnimationProject::insertScene --> End");
 }
 
 

@@ -337,7 +337,7 @@ void Take::getExposures(QVector<Exposure*>& allExposures)
 }
 
 
-unsigned int Take::getExposureSize() const
+int Take::getExposureSize() const
 {
     return exposures.size();
 }

@@ -66,6 +66,7 @@ private:
      */
     QString  sceneDescription;
     int      sceneIndex;
+    Scene   *scene;
 };
 
 #endif

@@ -365,17 +365,28 @@ public:
     /**
      * Create a new scene and adds the scene to the end of the animation.
      * @param sceneDescription the description of the scene or a empty string.
-     * @return the new scene.
      */
-    Scene *addScene(const QString &sceneDescription);
+     void addScene(const QString &sceneDescription);
+
+     /**
+      * Add a existing scene to the end of the animation.
+      * @param scene The existing scene.
+      */
+      void addScene(Scene *scene);
 
     /**
      * Create a new scene and insert the scene bevor the active scene in the animation.
      * @param sceneIndex The index of the scene where the new scene is inserted bevor.
      * @param sceneDescription The description of the scene or a empty string.
-     * @return The new scene.
      */
-    Scene *insertScene(int sceneIndex, const QString &sceneDescription);
+    void insertScene(int sceneIndex, const QString &sceneDescription);
+
+    /**
+     * Insert a existing scene bevor the active scene in the animation.
+     * @param sceneIndex The index of the scene where the new scene is inserted bevor.
+     * @param scene The existing scene.
+     */
+    void insertScene(int sceneIndex, Scene *scene);
 
     /**
      * Moves the scene at position sceneIndex to the position movePosition.

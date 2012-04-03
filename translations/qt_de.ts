@@ -128,7 +128,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+630"/>
+        <location line="+643"/>
         <location line="+7"/>
         <source>Add Sound</source>
         <translation type="unfinished"></translation>
@@ -338,12 +338,12 @@ without sound if you choose to play.</source>
         <location filename="../src/domain/domainfacade.cpp" line="+128"/>
         <location line="+15"/>
         <location line="+151"/>
-        <location line="+1076"/>
+        <location line="+577"/>
         <source>Critical</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-1241"/>
+        <location line="-742"/>
         <source>Can&apos;t remove history file!</source>
         <translation type="unfinished"></translation>
     </message>
@@ -358,7 +358,7 @@ without sound if you choose to play.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+1076"/>
+        <location line="+577"/>
         <source>Can&apos;t copy image to temp directory!</source>
         <translation type="unfinished"></translation>
     </message>
@@ -658,24 +658,24 @@ your grabber settings in the preferences menu.</source>
     <name>MainWindowGUI</name>
     <message>
         <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="+155"/>
-        <location line="+388"/>
+        <location line="+393"/>
         <source>Select image grabber</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-387"/>
-        <location line="+388"/>
+        <location line="-392"/>
+        <location line="+393"/>
         <source>You have to define an image grabber to use.
 This can be set in the preferences menu.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-343"/>
+        <location line="-348"/>
         <source>Ready to rumble ;-)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+123"/>
+        <location line="+128"/>
         <source>&amp;New</source>
         <translation type="unfinished"></translation>
     </message>
@@ -782,12 +782,12 @@ This can be set in the preferences menu.</source>
     <message>
         <location line="+1"/>
         <location line="+52"/>
-        <location line="+1312"/>
+        <location line="+1313"/>
         <source>&amp;Help</source>
         <translation type="unfinished">&amp;Hilfe</translation>
     </message>
     <message>
-        <location line="-1363"/>
+        <location line="-1364"/>
         <source>&amp;About</source>
         <translation type="unfinished"></translation>
     </message>
@@ -813,36 +813,36 @@ This can be set in the preferences menu.</source>
     </message>
     <message>
         <location line="+10"/>
-        <location line="+1318"/>
+        <location line="+1319"/>
         <source>&amp;File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-1305"/>
-        <location line="+1306"/>
+        <location line="-1306"/>
+        <location line="+1307"/>
         <source>&amp;Export</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-1298"/>
-        <location line="+1301"/>
+        <location line="-1299"/>
+        <location line="+1302"/>
         <source>&amp;Edit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-1296"/>
-        <location line="+1316"/>
+        <location line="-1297"/>
+        <location line="+1317"/>
         <source>&amp;Settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-1311"/>
-        <location line="+1313"/>
+        <location line="-1312"/>
+        <location line="+1314"/>
         <source>&amp;View</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-1292"/>
+        <location line="-1293"/>
         <source>Cancel</source>
         <translation type="unfinished">Abbrechen</translation>
     </message>
@@ -943,7 +943,7 @@ Check your settings in the preferences menu!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+102"/>
+        <location line="+103"/>
         <source>English</source>
         <comment>This should be translated to the name of the language you are translating to, in that language. Example: English = Deutsch (Deutsch is &quot;German&quot; in German)</comment>
         <translation type="unfinished"></translation>
@@ -1658,36 +1658,36 @@ Bitte überprüfen Sie Ihre GStreamer-Installation und stellen Sie sicher, dass 
     <name>ProjectTab</name>
     <message>
         <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="+112"/>
-        <location line="+1197"/>
+        <location line="+1232"/>
         <source>Project Tree</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-1176"/>
-        <location line="+1178"/>
+        <location line="-1211"/>
+        <location line="+1213"/>
         <source>Scenes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-1138"/>
-        <location line="+1161"/>
+        <location line="-1173"/>
+        <location line="+1196"/>
         <source>Takes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-1119"/>
-        <location line="+1142"/>
+        <location line="-1154"/>
+        <location line="+1177"/>
         <source>Frames</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-1100"/>
-        <location line="+1123"/>
+        <location line="-1135"/>
+        <location line="+1158"/>
         <source>Edit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-325"/>
+        <location line="-361"/>
         <location line="+35"/>
         <source>Scene 000</source>
         <translation type="unfinished"></translation>
@@ -1695,13 +1695,13 @@ Bitte überprüfen Sie Ihre GStreamer-Installation und stellen Sie sicher, dass 
     <message>
         <location line="-34"/>
         <location line="+35"/>
-        <location line="+40"/>
+        <location line="+52"/>
         <location line="+30"/>
         <source>Take 00</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+93"/>
+        <location line="+117"/>
         <location line="+7"/>
         <location line="+304"/>
         <location line="+36"/>
@@ -4424,101 +4424,6 @@ Möchten Sie die Datei trotzdem löschen?</translation>
     <message>
         <source>No host name given</source>
         <translation type="obsolete">Es wurde kein Hostname angegeben</translation>
-    </message>
-    <message>
-        <location filename="../src/domain/undo/undoexposureadd.cpp" line="+40"/>
-        <source>Add exposure (%1,%2,%3) &apos;%4&apos;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/domain/undo/undoexposureinsert.cpp" line="+41"/>
-        <source>Insert exposure (%1,%2,%3) &apos;%4&apos;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/domain/undo/undoexposuremove.cpp" line="+41"/>
-        <source>Move exposure (%1,%2,%3)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/domain/undo/undoexposureremove.cpp" line="+38"/>
-        <source>Remove exposure (%1,%2,%3)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/domain/undo/undoexposureselect.cpp" line="+36"/>
-        <source>Select exposure (%1,%2,%3)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/domain/undo/undoprojectclose.cpp" line="+29"/>
-        <source>Close project</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/domain/undo/undoprojectnew.cpp" line="+31"/>
-        <source>New project &apos;%1&apos;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/domain/undo/undoprojectopen.cpp" line="+31"/>
-        <source>Open project &apos;%1&apos;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/domain/undo/undoprojectsave.cpp" line="+33"/>
-        <source>Save project &apos;%1&apos;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/domain/undo/undosceneadd.cpp" line="+32"/>
-        <source>Add scene (%1) &apos;%2&apos;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/domain/undo/undosceneinsert.cpp" line="+33"/>
-        <source>Insert scene (%1) &apos;%2&apos;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/domain/undo/undoscenemove.cpp" line="+33"/>
-        <source>Move scene (%1,%2)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/domain/undo/undosceneremove.cpp" line="+32"/>
-        <source>Remove scene (%1)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/domain/undo/undosceneselect.cpp" line="+30"/>
-        <source>Select scene (%1)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/domain/undo/undotakeadd.cpp" line="+34"/>
-        <source>Add take (%1,%2) &apos;%3&apos;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/domain/undo/undotakeinsert.cpp" line="+35"/>
-        <source>Insert take (%1,%2) &apos;%3&apos;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/domain/undo/undotakemove.cpp" line="+35"/>
-        <source>Move take (%1,%2)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/domain/undo/undotakeremove.cpp" line="+34"/>
-        <source>Remove take (%1,%2)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/domain/undo/undotakeselect.cpp" line="+33"/>
-        <source>Select take (%1,%2)</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -10104,7 +10009,7 @@ last time it was runned. Do you want to recover?</source>
 <context>
     <name>Scene</name>
     <message>
-        <location filename="../src/domain/animation/scene.cpp" line="+689"/>
+        <location filename="../src/domain/animation/scene.cpp" line="+715"/>
         <location line="+63"/>
         <source>Critical</source>
         <translation type="unfinished"></translation>
@@ -10207,6 +10112,158 @@ last time it was runned. Do you want to recover?</source>
     <message>
         <location line="+10"/>
         <source>&lt;h4&gt;Capture Frame (Space)&lt;/h4&gt; &lt;p&gt;Click on this button to &lt;em&gt;capture&lt;/em&gt; a frame from the camera an put it in the animation&lt;/p&gt; &lt;p&gt; This can also be done by pressing the &lt;b&gt;Space key&lt;/b&gt;&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>UndoExposureAdd</name>
+    <message>
+        <location filename="../src/domain/undo/undoexposureadd.cpp" line="+42"/>
+        <source>Add exposure (%1,%2,%3) &apos;%4&apos;</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>UndoExposureInsert</name>
+    <message>
+        <location filename="../src/domain/undo/undoexposureinsert.cpp" line="+42"/>
+        <source>Insert exposure (%1,%2,%3) &apos;%4&apos;</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>UndoExposureMove</name>
+    <message>
+        <location filename="../src/domain/undo/undoexposuremove.cpp" line="+41"/>
+        <source>Move exposure (%1,%2,%3)</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>UndoExposureRemove</name>
+    <message>
+        <location filename="../src/domain/undo/undoexposureremove.cpp" line="+38"/>
+        <source>Remove exposure (%1,%2,%3)</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>UndoExposureSelect</name>
+    <message>
+        <location filename="../src/domain/undo/undoexposureselect.cpp" line="+36"/>
+        <source>Select exposure (%1,%2,%3)--&gt;(%4,%5,%6)</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>UndoProjectClose</name>
+    <message>
+        <location filename="../src/domain/undo/undoprojectclose.cpp" line="+29"/>
+        <source>Close project</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>UndoProjectNew</name>
+    <message>
+        <location filename="../src/domain/undo/undoprojectnew.cpp" line="+32"/>
+        <source>New project &apos;%1&apos;</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>UndoProjectOpen</name>
+    <message>
+        <location filename="../src/domain/undo/undoprojectopen.cpp" line="+31"/>
+        <source>Open project &apos;%1&apos;</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>UndoProjectSave</name>
+    <message>
+        <location filename="../src/domain/undo/undoprojectsave.cpp" line="+33"/>
+        <source>Save project &apos;%1&apos;</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>UndoSceneAdd</name>
+    <message>
+        <location filename="../src/domain/undo/undosceneadd.cpp" line="+33"/>
+        <source>Add scene (%1) &apos;%2&apos;</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>UndoSceneInsert</name>
+    <message>
+        <location filename="../src/domain/undo/undosceneinsert.cpp" line="+34"/>
+        <source>Insert scene (%1) &apos;%2&apos;</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>UndoSceneMove</name>
+    <message>
+        <location filename="../src/domain/undo/undoscenemove.cpp" line="+33"/>
+        <source>Move scene (%1,%2)</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>UndoSceneRemove</name>
+    <message>
+        <location filename="../src/domain/undo/undosceneremove.cpp" line="+32"/>
+        <source>Remove scene (%1)</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>UndoSceneSelect</name>
+    <message>
+        <location filename="../src/domain/undo/undosceneselect.cpp" line="+30"/>
+        <source>Select scene (%1)--&gt;(%2)</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>UndoTakeAdd</name>
+    <message>
+        <location filename="../src/domain/undo/undotakeadd.cpp" line="+36"/>
+        <source>Add take (%1,%2) &apos;%3&apos;</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>UndoTakeInsert</name>
+    <message>
+        <location filename="../src/domain/undo/undotakeinsert.cpp" line="+37"/>
+        <source>Insert take (%1,%2) &apos;%3&apos;</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>UndoTakeMove</name>
+    <message>
+        <location filename="../src/domain/undo/undotakemove.cpp" line="+35"/>
+        <source>Move take (%1,%2)</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>UndoTakeRemove</name>
+    <message>
+        <location filename="../src/domain/undo/undotakeremove.cpp" line="+34"/>
+        <source>Remove take (%1,%2)</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>UndoTakeSelect</name>
+    <message>
+        <location filename="../src/domain/undo/undotakeselect.cpp" line="+33"/>
+        <source>Select take (%1,%2)--&gt;(%3,%4)</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

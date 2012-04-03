@@ -711,15 +711,18 @@ void ProjectTab::updateRemoveTake(int sceneIndex,
     QTreeWidgetItem *activeSceneItem = topLevelItem->child(sceneIndex);
     this->removeTake(activeSceneItem, takeIndex);
 
-    if (takeIndex < activeTakeIndex) {
-        activeTakeIndex--;
-    }
+    if (sceneIndex == activeSceneIndex) {
+        // One of the takes of the active scene are removed
+        if (takeIndex < activeTakeIndex) {
+            activeTakeIndex--;
+        }
 
-    if (-1 == activeTakeIndex) {
-        activeExposureIndex = -1;
-    }
-    else {
-        activeExposureIndex = frontend->getProject()->getActiveExposureIndex();
+        if (-1 == activeTakeIndex) {
+            activeExposureIndex = -1;
+        }
+        else {
+            activeExposureIndex = frontend->getProject()->getActiveExposureIndex();
+        }
     }
 
     this->setActiveItems();
@@ -804,8 +807,13 @@ void ProjectTab::updateRemoveExposure(int sceneIndex,
     QTreeWidgetItem *activeExposureItem = activeTakeItem->child(exposureIndex);
     activeTakeItem->removeChild(activeExposureItem);
     delete activeExposureItem;
-    if (exposureIndex < activeExposureIndex) {
-        activeExposureIndex--;
+
+    if (sceneIndex == activeSceneIndex) {
+        if (takeIndex == activeTakeIndex) {
+            if (exposureIndex < activeExposureIndex) {
+                activeExposureIndex--;
+            }
+        }
     }
 
     setActiveItems();

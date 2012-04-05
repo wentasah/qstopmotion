@@ -758,6 +758,7 @@ bool AnimationProject::readScenesFromProject(QDomElement &animationNode)
     qDebug("AnimationProject::readScenesFromProject --> Start");
 
     description.append(animationNode.attributeNode(QString("descr")).value());
+    frontend->getView()->notifyNewProject();
 
     QDomElement currElement = animationNode.firstChildElement();
 

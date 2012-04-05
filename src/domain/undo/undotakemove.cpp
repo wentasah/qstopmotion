@@ -32,7 +32,9 @@ UndoTakeMove::UndoTakeMove(DomainFacade *df,
     fromTakeIndex = fti;
     toSceneIndex = tsi;
     toTakeIndex = tti;
-    setText(QString(tr("Move take (%1,%2)")).arg(toSceneIndex).arg(toTakeIndex));
+    undoFlag = FALSE;
+    setText(QString(tr("Move take (%1,%2)"))
+            .arg(toSceneIndex).arg(toTakeIndex));
 }
 
 
@@ -46,7 +48,8 @@ void UndoTakeMove::undo()
     qDebug("UndoTakeMove::undo --> Start");
 
 
-    facade->writeHistoryEntry(QString("undoTakeMove|%1|%2|%3|%4").arg(fromSceneIndex).arg(fromTakeIndex).arg(toSceneIndex).arg(toTakeIndex));
+    facade->writeHistoryEntry(QString("undo"));
+    undoFlag = TRUE;
 
     qDebug("UndoTakeMove::undo --> Start");
 }
@@ -61,7 +64,15 @@ void UndoTakeMove::redo()
     animationProject->moveTake(fromSceneIndex, fromTakeIndex, toSceneIndex, toTakeIndex);
     animationProject->incAnimationChanges();
 
-    facade->writeHistoryEntry(QString("redoTakeMove|%1|%2|%3|%4").arg(fromSceneIndex).arg(fromTakeIndex).arg(toSceneIndex).arg(toTakeIndex));
+    if (undoFlag) {
+        facade->writeHistoryEntry(QString("redo"));
+        undoFlag = FALSE;
+    }
+    else {
+        facade->writeHistoryEntry(QString("redoTakeMove|%1|%2|%3|%4")
+                                  .arg(fromSceneIndex).arg(fromTakeIndex)
+                                  .arg(toSceneIndex).arg(toTakeIndex));
+    }
 
     qDebug("UndoTakeMove::redo --> Start");
 }

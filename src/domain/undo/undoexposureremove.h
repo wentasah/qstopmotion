@@ -66,10 +66,11 @@ private:
     /**
      * The model to perform the redo command on.
      */
-    int           sceneIndex;
-    int           takeIndex;
-    int           exposureIndex;
-    Exposure     *exposure;
+    int       sceneIndex;
+    int       takeIndex;
+    int       exposureIndex;
+    Exposure *exposure;
+    bool      undoFlag;
 };
 
 #endif

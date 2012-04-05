@@ -60,8 +60,9 @@ private:
     /**
      * The model to perform the redo command on.
      */
-    int  oldSceneIndex;
-    int  newSceneIndex;
+    int   oldSceneIndex;
+    int   newSceneIndex;
+    bool  undoFlag;
 };
 
 #endif

@@ -38,6 +38,7 @@ UndoExposureMove::UndoExposureMove(DomainFacade *df,
     toSceneIndex = tsi;
     toTakeIndex = tti;
     toExposureIndex = tei;
+    undoFlag = FALSE;
     setText(QString(tr("Move exposure (%1,%2,%3)")).arg(toSceneIndex).arg(toTakeIndex).arg(toExposureIndex));
 }
 
@@ -54,8 +55,8 @@ void UndoExposureMove::undo()
     qDebug("UndoExposureMove::undo --> Start");
 
 
-    facade->writeHistoryEntry(QString("undoExposureMove|%1|%2|%3|%4|%5|%6").arg(fromSceneIndex).arg(fromTakeIndex)
-                              .arg(fromExposureIndex).arg(toSceneIndex).arg(toTakeIndex).arg(toExposureIndex));
+    facade->writeHistoryEntry(QString("undo"));
+    undoFlag = TRUE;
 
     qDebug("UndoExposureMove::undo --> End");
     */
@@ -80,8 +81,14 @@ void UndoExposureMove::redo()
 
     animationProject->setUnsavedChanges();
 
-    facade->writeHistoryEntry(QString("redoExposureMove|%1|%2|%3|%4|%5|%6").arg(fromSceneIndex).arg(fromTakeIndex)
-                              .arg(fromExposureIndex).arg(toSceneIndex).arg(toTakeIndex).arg(toExposureIndex));
+    if (undoFlag) {
+        facade->writeHistoryEntry(QString("redo"));
+        undoFlag = FALSE;
+    }
+    else {
+        facade->writeHistoryEntry(QString("redoExposureMove|%1|%2|%3|%4|%5|%6").arg(fromSceneIndex).arg(fromTakeIndex)
+                                  .arg(fromExposureIndex).arg(toSceneIndex).arg(toTakeIndex).arg(toExposureIndex));
+    }
 
     qDebug("UndoExposureMove::redo --> End");
     */

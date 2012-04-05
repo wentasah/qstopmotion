@@ -131,12 +131,6 @@ QUndoStack* DomainFacade::getUndoStack()
 void DomainFacade::clearUndoStack()
 {
     undoStack->clear();
-
-    if (!historyFile->remove()) {
-        // Error
-        frontend->showCritical(tr("Critical"),
-                               tr("Can't remove history file!"));
-    }
 }
 
 
@@ -161,6 +155,16 @@ void DomainFacade::writeHistoryEntry(const QString &entry)
     historyFile->close();
 
     return;
+}
+
+
+void DomainFacade::removeHistoryFile()
+{
+    if (!historyFile->remove()) {
+        // Error
+        // frontend->showCritical(tr("Critical"),
+        //                        tr("Can't remove history file!"));
+    }
 }
 
 /**************************************************************************
@@ -328,39 +332,6 @@ bool DomainFacade::recoverProject()
         QString line = in.readLine();
         QStringList partStringList = line.split('|');
         //
-        // Project entries
-        //
-        if (0 == partStringList.at(0).compare("redoProjectNew")) {
-            // Create the new project
-            newProjectToUndo(partStringList.at(1));
-
-            recovered = true;
-
-            continue;
-        }
-        if (0 == partStringList.at(0).compare("redoProjectOpen")) {
-            // Open project
-            openProjectToUndo(partStringList.at(1));
-
-            recovered = true;
-
-            continue;
-        }
-        if (0 == partStringList.at(0).compare("redoProjectSave")) {
-            // Save project
-            openProjectToUndo(partStringList.at(1));
-
-            recovered = true;
-
-            continue;
-        }
-        if (0 == partStringList.at(0).compare("redoProjectClose")) {
-            // Close project --> Nothing to do
-            Q_ASSERT(1);
-
-            continue;
-        }
-        //
         // Exposure entries
         //
         if (0 == partStringList.at(0).compare("redoExposureAdd")) {
@@ -400,11 +371,14 @@ bool DomainFacade::recoverProject()
         }
         if (0 == partStringList.at(0).compare("redoExposureSelect")) {
             // Select a exposure
-            int sceneIndex = partStringList.at(1).toInt();
-            int takeIndex = partStringList.at(2).toInt();
-            int exposureIndex = partStringList.at(3).toInt();
+            // int oldSceneIndex = partStringList.at(1).toInt();
+            // int oldTakeIndex = partStringList.at(2).toInt();
+            // int oldExposureIndex = partStringList.at(3).toInt();
+            int newSceneIndex = partStringList.at(4).toInt();
+            int newTakeIndex = partStringList.at(5).toInt();
+            int newExposureIndex = partStringList.at(6).toInt();
 
-            selectExposureToUndo(sceneIndex, takeIndex, exposureIndex);
+            selectExposureToUndo(newSceneIndex, newTakeIndex, newExposureIndex);
 
             continue;
         }
@@ -445,10 +419,12 @@ bool DomainFacade::recoverProject()
         }
         if (0 == partStringList.at(0).compare("redoTakeSelect")) {
             // Select a take
-            int sceneIndex = partStringList.at(1).toInt();
-            int takeIndex = partStringList.at(2).toInt();
+            // int oldSceneIndex = partStringList.at(1).toInt();
+            // int oldTakeIndex = partStringList.at(2).toInt();
+            int newSceneIndex = partStringList.at(3).toInt();
+            int newTakeIndex = partStringList.at(4).toInt();
 
-            selectTakeToUndo(sceneIndex, takeIndex);
+            selectTakeToUndo(newSceneIndex, newTakeIndex);
 
             continue;
         }
@@ -485,9 +461,62 @@ bool DomainFacade::recoverProject()
         }
         if (0 == partStringList.at(0).compare("redoSceneSelect")) {
             // Select a scene
-            int sceneIndex = partStringList.at(1).toInt();
+            // int oldSceneIndex = partStringList.at(1).toInt();
+            int newSceneIndex = partStringList.at(2).toInt();
 
-            selectSceneToUndo(sceneIndex);
+            selectSceneToUndo(newSceneIndex);
+
+            continue;
+        }
+        //
+        // Project entries
+        //
+        if (0 == partStringList.at(0).compare("redoProjectNew")) {
+            // Create the new project
+            newProjectToUndo(partStringList.at(1));
+
+            recovered = true;
+
+            continue;
+        }
+        if (0 == partStringList.at(0).compare("redoProjectOpen")) {
+            // Open project
+            openProjectToUndo(partStringList.at(1));
+
+            recovered = true;
+
+            continue;
+        }
+        if (0 == partStringList.at(0).compare("redoProjectSave")) {
+            // Save project
+            openProjectToUndo(partStringList.at(1));
+
+            recovered = true;
+
+            continue;
+        }
+        if (0 == partStringList.at(0).compare("redoProjectClose")) {
+            // Close project --> Nothing to do
+            Q_ASSERT(1);
+
+            continue;
+        }
+        //
+        // Undo/redo entries
+        //
+        if (0 == partStringList.at(0).compare("undo")) {
+            // undo the last redo command
+            undoStack->undo();
+
+            recovered = true;
+
+            continue;
+        }
+        if (0 == partStringList.at(0).compare("redo")) {
+            // redo the last undo command
+            undoStack->redo();
+
+            recovered = true;
 
             continue;
         }
@@ -593,6 +622,7 @@ void DomainFacade::closeProject()
     animationProject = NULL;
 
     clearUndoStack();
+    removeHistoryFile();
 
     // TODO: neccessary??
     frontend->removeApplicationFiles();

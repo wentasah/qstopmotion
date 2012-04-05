@@ -60,9 +60,7 @@ void UndoTakeAdd::undo()
 
     animationProject->decAnimationChanges();
 
-    facade->writeHistoryEntry(QString("undoTakeAdd|%1|%2|%3")
-                              .arg(sceneIndex).arg(takeIndex)
-                              .arg(takeDescription));
+    facade->writeHistoryEntry(QString("undo"));
 
     qDebug("UndoTakeAdd::undo --> End");
 }
@@ -77,20 +75,22 @@ void UndoTakeAdd::redo()
     if (NULL == take) {
         // First call of the redo function after creation of the undo object
         animationProject->addTake(sceneIndex, takeDescription);
+
+        facade->writeHistoryEntry(QString("redoTakeAdd|%1|%2|%3")
+                                  .arg(sceneIndex).arg(takeIndex)
+                                  .arg(takeDescription));
     }
     else {
         // Call of the redo function after a undo call
         animationProject->addTake(sceneIndex, take);
         take = NULL;
+
+        facade->writeHistoryEntry(QString("redo"));
     }
 
     facade->getView()->notifyAddTake(sceneIndex, takeIndex);
 
     animationProject->incAnimationChanges();
-
-    facade->writeHistoryEntry(QString("redoTakeAdd|%1|%2|%3")
-                              .arg(sceneIndex).arg(takeIndex)
-                              .arg(takeDescription));
 
     qDebug("UndoTakeAdd::redo --> End");
 }

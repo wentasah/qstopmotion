@@ -35,6 +35,7 @@ UndoExposureRemove::UndoExposureRemove(DomainFacade *df,
     takeIndex = ti;
     exposureIndex = ei;
     exposure = NULL;
+    undoFlag = FALSE;
     setText(QString(tr("Remove exposure (%1,%2,%3)"))
             .arg(sceneIndex).arg(takeIndex).arg(exposureIndex));
 }
@@ -69,11 +70,11 @@ void UndoExposureRemove::undo()
         facade->getView()->notifyInsertExposure(sceneIndex, takeIndex, exposureIndex);
     }
     exposure = NULL;
+    undoFlag = TRUE;
 
     animationProject->decAnimationChanges();
 
-    facade->writeHistoryEntry(QString("undoExposureRemove|%1|%2|%3")
-                              .arg(sceneIndex).arg(takeIndex).arg(exposureIndex));
+    facade->writeHistoryEntry(QString("undo"));
 
     qDebug("UndoExposureRemove::undo --> End");
 }
@@ -92,8 +93,14 @@ void UndoExposureRemove::redo()
 
     animationProject->incAnimationChanges();
 
-    facade->writeHistoryEntry(QString("redoExposureRemove|%1|%2|%3")
-                              .arg(sceneIndex).arg(takeIndex).arg(exposureIndex));
+    if (undoFlag) {
+        facade->writeHistoryEntry(QString("redo"));
+        undoFlag = FALSE;
+    }
+    else {
+        facade->writeHistoryEntry(QString("redoExposureRemove|%1|%2|%3")
+                                  .arg(sceneIndex).arg(takeIndex).arg(exposureIndex));
+    }
 
     qDebug("UndoExposureRemove::redo --> End");
 }

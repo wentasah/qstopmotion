@@ -33,6 +33,7 @@ UndoExposureSelect::UndoExposureSelect(DomainFacade *df,
     newSceneIndex = nsi;
     newTakeIndex = nti;
     newExposureIndex = nei;
+    undoFlag = FALSE;
     setText(QString(tr("Select exposure (%1,%2,%3)-->(%4,%5,%6)"))
             .arg(oldSceneIndex).arg(oldTakeIndex).arg(oldExposureIndex)
             .arg(newSceneIndex).arg(newTakeIndex).arg(newExposureIndex));
@@ -63,9 +64,8 @@ void UndoExposureSelect::undo()
 
     animationProject->decAnimationChanges();
 
-    facade->writeHistoryEntry(QString("undoExposureSelect|%1|%2|%3|%4|%5|%6")
-                              .arg(oldSceneIndex).arg(oldTakeIndex).arg(oldExposureIndex)
-                              .arg(newSceneIndex).arg(newTakeIndex).arg(newExposureIndex));
+    facade->writeHistoryEntry(QString("undo"));
+    undoFlag = TRUE;
 
     qDebug("UndoExposureSelect::undo --> End");
 }
@@ -90,9 +90,15 @@ void UndoExposureSelect::redo()
 
     animationProject->incAnimationChanges();
 
-    facade->writeHistoryEntry(QString("redoExposureSelect|%1|%2|%3|%4|%5|%6")
-                              .arg(oldSceneIndex).arg(oldTakeIndex).arg(oldExposureIndex)
-                              .arg(newSceneIndex).arg(newTakeIndex).arg(newExposureIndex));
+    if (undoFlag) {
+        facade->writeHistoryEntry(QString("redo"));
+        undoFlag = FALSE;
+    }
+    else {
+        facade->writeHistoryEntry(QString("redoExposureSelect|%1|%2|%3|%4|%5|%6")
+                                  .arg(oldSceneIndex).arg(oldTakeIndex).arg(oldExposureIndex)
+                                  .arg(newSceneIndex).arg(newTakeIndex).arg(newExposureIndex));
+    }
 
     qDebug("UndoExposureSelect::redo --> End");
 }

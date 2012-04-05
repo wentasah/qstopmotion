@@ -69,9 +69,7 @@ void UndoExposureInsert::undo()
 
     animationProject->decAnimationChanges();
 
-    facade->writeHistoryEntry(QString("undoExposureInsert|%1|%2|%3|%4")
-                              .arg(sceneIndex).arg(takeIndex).arg(exposureIndex)
-                              .arg(fileName));
+    facade->writeHistoryEntry(QString("undo"));
 
     qDebug("UndoExposureInsert::undo --> End");
 }
@@ -87,6 +85,10 @@ void UndoExposureInsert::redo()
         // First call of the redo function after creation of the undo object
         animationProject->insertExposure(sceneIndex, takeIndex, exposureIndex,
                                          fileName, AnimationProject::InTempPath);
+
+        facade->writeHistoryEntry(QString("redoExposureInsert|%1|%2|%3|%4")
+                                  .arg(sceneIndex).arg(takeIndex).arg(exposureIndex)
+                                  .arg(fileName));
     }
     else {
         // Call of the redo function after a undo call
@@ -94,15 +96,13 @@ void UndoExposureInsert::redo()
         animationProject->insertExposure(sceneIndex, takeIndex, exposureIndex,
                                          exposure);
         exposure = NULL;
+
+        facade->writeHistoryEntry(QString("redo"));
     }
 
     facade->getView()->notifyInsertExposure(sceneIndex, takeIndex, exposureIndex);
 
     animationProject->incAnimationChanges();
-
-    facade->writeHistoryEntry(QString("redoExposureInsert|%1|%2|%3|%4")
-                              .arg(sceneIndex).arg(takeIndex).arg(exposureIndex)
-                              .arg(fileName));
 
     qDebug("UndoExposureInsert::redo --> End");
 }

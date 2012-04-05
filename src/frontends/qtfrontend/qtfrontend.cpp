@@ -752,6 +752,7 @@ void QtFrontend::removeApplicationFiles()
     Q_ASSERT(ret == true);
     ret = removeContentInDirectory(getPackerDirName());
     Q_ASSERT(ret == true);
+    getProject()->removeHistoryFile();
 }
 
 

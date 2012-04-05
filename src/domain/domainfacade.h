@@ -115,6 +115,12 @@ public:
      */
     void writeHistoryEntry(const QString &entry);
 
+    /**
+     * Remove the history file and all of its content.
+     * @return True if successful; otherwise fale.
+     */
+    void removeHistoryFile();
+
     /**************************************************************************
      * Animation functions
      **************************************************************************/

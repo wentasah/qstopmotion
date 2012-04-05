@@ -68,6 +68,7 @@ private:
     int   sceneIndex;
     int   takeIndex;
     Take *removedTake;
+    bool  undoFlag;
 };
 
 #endif

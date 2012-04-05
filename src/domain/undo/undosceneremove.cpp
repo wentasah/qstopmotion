@@ -29,6 +29,7 @@ UndoSceneRemove::UndoSceneRemove(DomainFacade *df,
 {
     sceneIndex = si;
     removedScene = NULL;
+    undoFlag = FALSE;
     setText(QString(tr("Remove scene (%1)")).arg(sceneIndex));
 }
 
@@ -62,7 +63,8 @@ void UndoSceneRemove::undo()
 
     animationProject->decAnimationChanges();
 
-    facade->writeHistoryEntry(QString("undoSceneRemove|%1").arg(sceneIndex));
+    facade->writeHistoryEntry(QString("undo"));
+    undoFlag = TRUE;
 
     qDebug("UndoSceneRemove::undo --> End");
 }
@@ -80,7 +82,13 @@ void UndoSceneRemove::redo()
 
     facade->getView()->notifyRemoveScene(sceneIndex);
 
-    facade->writeHistoryEntry(QString("redoSceneRemove|%1").arg(sceneIndex));
+    if (undoFlag) {
+        facade->writeHistoryEntry(QString("redo"));
+        undoFlag = FALSE;
+    }
+    else {
+        facade->writeHistoryEntry(QString("redoSceneRemove|%1").arg(sceneIndex));
+    }
 
     qDebug("UndoSceneRemove::redo --> End");
 }

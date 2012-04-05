@@ -31,6 +31,7 @@ UndoTakeRemove::UndoTakeRemove(DomainFacade *df,
     sceneIndex = si;
     takeIndex = ti;
     removedTake = NULL;
+    undoFlag = FALSE;
     setText(QString(tr("Remove take (%1,%2)"))
             .arg(sceneIndex).arg(takeIndex));
 }
@@ -66,8 +67,8 @@ void UndoTakeRemove::undo()
 
     animationProject->decAnimationChanges();
 
-    facade->writeHistoryEntry(QString("undoTakeRemove|%1|%2")
-                              .arg(sceneIndex).arg(takeIndex));
+    facade->writeHistoryEntry(QString("undo"));
+    undoFlag = TRUE;
 
     qDebug("UndoTakeRemove::undo --> End");
 }
@@ -85,8 +86,14 @@ void UndoTakeRemove::redo()
 
     facade->getView()->notifyRemoveTake(sceneIndex, takeIndex);
 
-    facade->writeHistoryEntry(QString("redoTakeRemove|%1|%2")
-                              .arg(sceneIndex).arg(takeIndex));
+    if (undoFlag) {
+        facade->writeHistoryEntry(QString("redo"));
+        undoFlag = FALSE;
+    }
+    else {
+        facade->writeHistoryEntry(QString("redoTakeRemove|%1|%2")
+                                  .arg(sceneIndex).arg(takeIndex));
+    }
 
     qDebug("UndoTakeRemove::redo --> End");
 }

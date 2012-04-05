@@ -27,6 +27,7 @@ UndoSceneSelect::UndoSceneSelect(DomainFacade *df,
 {
     oldSceneIndex = facade->getActiveSceneIndex();
     newSceneIndex = nsi;
+    undoFlag = FALSE;
     setText(QString(tr("Select scene (%1)-->(%2)"))
             .arg(oldSceneIndex).arg(newSceneIndex));
 }
@@ -56,8 +57,8 @@ void UndoSceneSelect::undo()
 
     animationProject->decAnimationChanges();
 
-    facade->writeHistoryEntry(QString("undoSceneSelect|%1|%2")
-                              .arg(oldSceneIndex).arg(newSceneIndex));
+    facade->writeHistoryEntry(QString("undo"));
+    undoFlag = TRUE;
 
     qDebug("UndoSceneSelect::undo --> Start");
 }
@@ -82,8 +83,14 @@ void UndoSceneSelect::redo()
 
     animationProject->incAnimationChanges();
 
-    facade->writeHistoryEntry(QString("redoSceneSelect|%1|%2")
-                              .arg(oldSceneIndex).arg(newSceneIndex));
+    if (undoFlag) {
+        facade->writeHistoryEntry(QString("redo"));
+        undoFlag = FALSE;
+    }
+    else {
+        facade->writeHistoryEntry(QString("redoSceneSelect|%1|%2")
+                                  .arg(oldSceneIndex).arg(newSceneIndex));
+    }
 
     qDebug("UndoSceneSelect::redo --> Start");
 }

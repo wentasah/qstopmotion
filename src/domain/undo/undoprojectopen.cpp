@@ -57,7 +57,7 @@ void UndoProjectOpen::undo()
     // TODO: Implement separate frontende changes
     // frontend->setFrontendChanges();
 
-    facade->writeHistoryEntry(QString("undoProjectOpen|%1").arg(projectPath));
+    facade->writeHistoryEntry(QString("undo"));
 
     qDebug("UndoProjectOpen::undo --> End");
 }
@@ -76,10 +76,14 @@ void UndoProjectOpen::redo()
     if (NULL == project) {
         // First call of the redo function after creation of the undo object
         projectOpen = facade->openProject(projectPath);
+
+        facade->writeHistoryEntry(QString("redoProjectOpen|%1").arg(projectPath));
     }
     else {
         // Call of the redo function after a undo call
         facade->openProject(project);
+
+        facade->writeHistoryEntry(QString("redo"));
     }
 
     if (projectOpen) {
@@ -102,8 +106,6 @@ void UndoProjectOpen::redo()
             frontend->setExposureID(exposure->getId().toAscii());
         }
     }
-
-    facade->writeHistoryEntry(QString("redoProjectOpen|%1").arg(projectPath));
 
     qDebug("UndoProjectOpen::redo --> End");
 }

@@ -56,7 +56,7 @@ void UndoProjectNew::undo()
     // TODO: Implement separate frontende changes
     // frontend->setFrontendChanges();
 
-    facade->writeHistoryEntry(QString("undoProjectNew|%1").arg(projectDescription));
+    facade->writeHistoryEntry(QString("undo"));
 
     qDebug("UndoProjectNew::undo --> End");
 }
@@ -66,17 +66,20 @@ void UndoProjectNew::redo()
 {
     qDebug("UndoProjectNew::redo --> Start");
 
-    AnimationProject *animationProject = facade->getAnimationProject();
     Frontend *frontend = facade->getFrontend();
 
     if (NULL == project) {
         // First call of the redo function after creation of the undo object
         facade->newProject(projectDescription);
         facade->setProjectSettingsToDefault();
+
+        facade->writeHistoryEntry(QString("redoProjectNew|%1").arg(projectDescription));
     }
     else {
         // Call of the redo function after a undo call
         facade->newProject(project);
+
+        facade->writeHistoryEntry(QString("redo"));
     }
 
     facade->getView()->notifyNewProject();
@@ -87,8 +90,6 @@ void UndoProjectNew::redo()
 
     // TODO: Implement separate frontende changes
     // frontend->setFrontendChanges();
-
-    facade->writeHistoryEntry(QString("redoProjectNew|%1").arg(projectDescription));
 
     qDebug("UndoProjectNew::redo --> End");
 }

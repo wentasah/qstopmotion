@@ -65,6 +65,7 @@ private:
      */
     int    sceneIndex;
     Scene *removedScene;
+    bool   undoFlag;
 };
 
 #endif

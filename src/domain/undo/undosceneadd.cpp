@@ -56,8 +56,7 @@ void UndoSceneAdd::undo()
 
     animationProject->decAnimationChanges();
 
-    facade->writeHistoryEntry(QString("undoSceneAdd|%1|%2")
-                              .arg(sceneIndex).arg(sceneDescription));
+    facade->writeHistoryEntry(QString("undo"));
 
     qDebug("UndoSceneAdd::undo --> End");
 }
@@ -72,19 +71,21 @@ void UndoSceneAdd::redo()
     if (NULL == scene) {
         // First call of the redo function after creation of the undo object
         animationProject->addScene(sceneDescription);
+
+        facade->writeHistoryEntry(QString("redoSceneAdd|%1|%2")
+                                  .arg(sceneIndex).arg(sceneDescription));
     }
     else {
         // Call of the redo function after a undo call
         animationProject->addScene(scene);
         scene = NULL;
+
+        facade->writeHistoryEntry(QString("redo"));
     }
 
     facade->getView()->notifyAddScene(sceneIndex);
 
     animationProject->incAnimationChanges();
-
-    facade->writeHistoryEntry(QString("redoSceneAdd|%1|%2")
-                              .arg(sceneIndex).arg(sceneDescription));
 
     qDebug("UndoSceneAdd::redo --> End");
 }

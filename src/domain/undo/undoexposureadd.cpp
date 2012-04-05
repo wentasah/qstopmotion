@@ -67,7 +67,7 @@ void UndoExposureAdd::undo()
 
     facade->getView()->notifyRemoveExposure(sceneIndex, takeIndex, exposureIndex);
 
-    animationProject->setUnsavedChanges();
+    animationProject->decAnimationChanges();
 
     facade->writeHistoryEntry(QString("undoExposureAdd|%1|%2|%3|%4")
                               .arg(sceneIndex).arg(takeIndex).arg(exposureIndex)
@@ -96,7 +96,7 @@ void UndoExposureAdd::redo()
 
     facade->getView()->notifyAddExposure(sceneIndex, takeIndex, exposureIndex);
 
-    animationProject->setUnsavedChanges();
+    animationProject->incAnimationChanges();
 
     facade->writeHistoryEntry(QString("redoExposureAdd|%1|%2|%3|%4")
                               .arg(sceneIndex).arg(takeIndex).arg(exposureIndex)

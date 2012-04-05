@@ -52,7 +52,9 @@
 DomainFacade::DomainFacade(Frontend *f)
 {
     frontend = f;
-    animationProject = new AnimationProject(frontend);
+    animationProject = NULL;
+
+    undoStack = new QUndoStack();
 
     historyFilePath.clear();
     historyFilePath.append(frontend->getUserDirName());
@@ -74,6 +76,11 @@ DomainFacade::~DomainFacade()
     }
 
     writeHistory = false;
+
+    if (undoStack != NULL) {
+        delete undoStack;
+        undoStack = NULL;
+    }
 
     if (historyFile != NULL) {
         delete historyFile;
@@ -116,13 +123,15 @@ void DomainFacade::shutdownAudioDevice()
 
 QUndoStack* DomainFacade::getUndoStack()
 {
-    return animationProject->getUndoStack();
+    return undoStack;
 }
 
 
+// TODO: Implement clearing of undo stack
 void DomainFacade::clearUndoStack()
 {
-    animationProject->clearUndoStack();
+    undoStack->clear();
+
     if (!historyFile->remove()) {
         // Error
         frontend->showCritical(tr("Critical"),
@@ -164,15 +173,30 @@ AnimationProject* DomainFacade::getAnimationProject()
 }
 
 
-bool DomainFacade::isUnsavedChanges()
+bool DomainFacade::isProjectSettingsChanges()
 {
-    return animationProject->isUnsavedChanges();
+    if (NULL == animationProject) {
+        return FALSE;
+    }
+    return animationProject->isSettingsChanges();
+}
+
+
+bool DomainFacade::isProjectAnimationChanges()
+{
+    if (NULL == animationProject) {
+        return FALSE;
+    }
+    return animationProject->isAnimationChanges();
 }
 
 
 bool DomainFacade::isActiveProject()
 {
-    return animationProject->isActiveProject();
+    if (NULL == animationProject) {
+        return FALSE;
+    }
+    return TRUE;
 }
 
 
@@ -500,10 +524,47 @@ void DomainFacade::newProjectToUndo(const QString &projectDescription)
     getUndoStack()->push(u);
 }
 
+
+void DomainFacade::newProject(const QString &projectDescription)
+{
+    Q_ASSERT(NULL == animationProject);
+
+    animationProject = new AnimationProject(frontend);
+
+    animationProject->newProject(projectDescription);
+}
+
+
+void DomainFacade::newProject(AnimationProject *project)
+{
+    Q_ASSERT(NULL == animationProject);
+
+    animationProject = project;
+}
+
+
 void DomainFacade::openProjectToUndo(const QString &projectPath)
 {
     UndoProjectOpen *u = new UndoProjectOpen(this, projectPath);
     getUndoStack()->push(u);
+}
+
+
+bool DomainFacade::openProject(const QString &projectPath)
+{
+    Q_ASSERT(NULL == animationProject);
+
+    animationProject = new AnimationProject(frontend);
+
+    return animationProject->openProject(projectPath);
+}
+
+
+void DomainFacade::openProject(AnimationProject *project)
+{
+    Q_ASSERT(NULL == animationProject);
+
+    animationProject = project;
 }
 
 
@@ -518,6 +579,37 @@ void DomainFacade::closeProjectToUndo()
 {
     UndoProjectClose *u = new UndoProjectClose(this);
     getUndoStack()->push(u);
+}
+
+
+void DomainFacade::closeProject()
+{
+    qDebug("DomainFacade::closeProject --> Start");
+
+    Q_ASSERT(NULL != animationProject);
+
+    animationProject->clearProject();
+    delete animationProject;
+    animationProject = NULL;
+
+    clearUndoStack();
+
+    // TODO: neccessary??
+    frontend->removeApplicationFiles();
+
+    qDebug("DomainFacade::closeProject --> End");
+}
+
+
+AnimationProject *DomainFacade::removeProject()
+{
+    Q_ASSERT(NULL != animationProject);
+
+    AnimationProject *oldProject = animationProject;
+
+    animationProject = NULL;
+
+    return oldProject;
 }
 
 /**************************************************************************
@@ -856,8 +948,10 @@ void DomainFacade::moveFrames(int fromFrame,
 const QString DomainFacade::copyToTemp(const QString &fromImagePath)
 {
     // creates a new image name
+    int beginSuffix = fromImagePath.lastIndexOf('.');
+    QString fileSuffix = fromImagePath.mid(beginSuffix);
     QString toImageName(QString("tmp_%1%2").arg(Exposure::tempNum)
-                        .arg(fromImagePath.mid(fromImagePath.lastIndexOf('.'))));
+                        .arg(fileSuffix.toLower()));
 
     // creates a new image path
     QString toImagePath;

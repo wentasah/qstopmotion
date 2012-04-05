@@ -87,13 +87,13 @@ void ViewFacade::detatch(Observer *o)
  * Animation notification functions
  **************************************************************************/
 
-void ViewFacade::notifyClear()
+void ViewFacade::notifyRemoveProject()
 {
     qDebug("ViewFacade::notifyClear --> Start");
 
     int numElem = observers.size();
     for (int i = 0; i < numElem; ++i) {
-        observers[i]->updateClear();
+        observers[i]->updateRemoveProject();
     }
 
     qDebug("ViewFacade::notifyClear --> End");

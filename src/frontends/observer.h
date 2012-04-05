@@ -55,7 +55,7 @@ public:
     /**
      * Abstract function for receiving notification when the model is erased.
      */
-    virtual void updateClear() = 0;
+    virtual void updateRemoveProject() = 0;
 
     /**
      * Abstract function for receiving notification when a new project are created.

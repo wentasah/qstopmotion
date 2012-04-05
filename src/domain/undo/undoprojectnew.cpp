@@ -29,19 +29,32 @@ UndoProjectNew::UndoProjectNew(DomainFacade *df,
     :UndoBase(df)
 {
     projectDescription.append(description);
+    project = NULL;
     setText(QString(tr("New project '%1'")).arg(projectDescription));
 }
 
 
 UndoProjectNew::~UndoProjectNew()
 {
-
+    if (NULL != project) {
+        delete project;
+        project = NULL;
+    }
 }
 
 
 void UndoProjectNew::undo()
 {
     qDebug("UndoProjectNew::undo --> Start");
+
+    Q_ASSERT(NULL == project);
+
+    project = facade->removeProject();
+
+    facade->getView()->notifyRemoveProject();
+
+    // TODO: Implement separate frontende changes
+    // frontend->setFrontendChanges();
 
     facade->writeHistoryEntry(QString("undoProjectNew|%1").arg(projectDescription));
 
@@ -56,15 +69,24 @@ void UndoProjectNew::redo()
     AnimationProject *animationProject = facade->getAnimationProject();
     Frontend *frontend = facade->getFrontend();
 
-    animationProject->newProject(projectDescription);
-    facade->setProjectSettingsToDefault();
+    if (NULL == project) {
+        // First call of the redo function after creation of the undo object
+        facade->newProject(projectDescription);
+        facade->setProjectSettingsToDefault();
+    }
+    else {
+        // Call of the redo function after a undo call
+        facade->newProject(project);
+    }
+
     facade->getView()->notifyNewProject();
     frontend->setProjectID(facade->getProjectDescription().toAscii());
     frontend->setSceneID("");
     frontend->setTakeID("");
     frontend->setToolBarState(ToolBar::toolBarCameraOff);
 
-    animationProject->setUnsavedChanges();
+    // TODO: Implement separate frontende changes
+    // frontend->setFrontendChanges();
 
     facade->writeHistoryEntry(QString("redoProjectNew|%1").arg(projectDescription));
 

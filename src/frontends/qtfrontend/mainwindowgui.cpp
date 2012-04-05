@@ -269,9 +269,12 @@ void MainWindowGUI::mousePressEvent(QMouseEvent *)
 void MainWindowGUI::keyPressEvent(QKeyEvent *k)
 {
     DomainFacade *facade = frontend->getProject();
-    int activeSceneIndex = facade->getActiveSceneIndex();
+    int activeSceneIndex = -1;
     int activeTakeIndex = -1;
 
+    if (facade->isActiveProject()) {
+        activeSceneIndex = facade->getActiveSceneIndex();
+    }
     if (-1 < activeSceneIndex) {
         // If there is a active scene, there can be a active take
         facade->getActiveTakeIndex();
@@ -1156,7 +1159,7 @@ void MainWindowGUI::showUndoStack()
         undoView->setWindowTitle(tr("qStopMotion - Undo stack"));
         undoView->setAttribute(Qt::WA_QuitOnClose, false);
         undoView->setGeometry(geometry().x() + fGeo.width(), geometry().y(),
-                              220, height());
+                              250, height());
     }
     undoView->show();
     this->activateWindow();
@@ -2195,7 +2198,8 @@ void MainWindowGUI::updateMostRecentMenu()
 void MainWindowGUI::checkSaved()
 {
     // Last changes saved?
-    bool b = frontend->getProject()->isUnsavedChanges();
+    // TODO: Handle save of project settungs and animation changes separatly
+    bool b = frontend->getProject()->isProjectAnimationChanges() || frontend->getProject()->isProjectSettingsChanges();
     if (b) {
         int save = frontend->askQuestion(tr("Unsaved changes"),
                                          tr("There are unsaved changes. Do you want to save?"));

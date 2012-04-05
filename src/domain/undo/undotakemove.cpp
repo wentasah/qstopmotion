@@ -59,7 +59,7 @@ void UndoTakeMove::redo()
     AnimationProject *animationProject = facade->getAnimationProject();
 
     animationProject->moveTake(fromSceneIndex, fromTakeIndex, toSceneIndex, toTakeIndex);
-    animationProject->setUnsavedChanges();
+    animationProject->incAnimationChanges();
 
     facade->writeHistoryEntry(QString("redoTakeMove|%1|%2|%3|%4").arg(fromSceneIndex).arg(fromTakeIndex).arg(toSceneIndex).arg(toTakeIndex));
 

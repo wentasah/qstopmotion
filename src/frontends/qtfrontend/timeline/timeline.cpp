@@ -208,13 +208,13 @@ void TimeLine::updateAnimationChanged()
 }
 */
 
-void TimeLine::updateClear()
+void TimeLine::updateRemoveProject()
 {
-    qDebug("TimeLine::updateClear --> Start");
+    qDebug("TimeLine::updateRemoveProject --> Start");
 
     clear();
 
-    qDebug("TimeLine::updateClear --> End");
+    qDebug("TimeLine::updateRemoveProject --> End");
 }
 
 

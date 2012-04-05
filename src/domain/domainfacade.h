@@ -126,10 +126,16 @@ public:
     AnimationProject* getAnimationProject();
 
     /**
-     * Checks if there are unsaved changes in the model.
+     * Checks if there are unsaved changes in the settings of the project.
      * @return true if there are unsaved changes, false otherwise.
      */
-    bool isUnsavedChanges();
+    bool isProjectSettingsChanges();
+
+    /**
+     * Checks if there are unsaved changes in the animation of the project.
+     * @return true if there are unsaved changes, false otherwise.
+     */
+    bool isProjectAnimationChanges();
 
     /**
      * Checks if there are a active project.
@@ -263,10 +269,35 @@ public:
     void newProjectToUndo(const QString &projectDescription);
 
     /**
+     * Create a new project.
+     * @param projectDescription the description of the scene or a empty string.
+     */
+    void newProject(const QString &projectDescription);
+
+    /**
+     * Create a existing project.
+     * @param project The existing project.
+     */
+    void newProject(AnimationProject *project);
+
+    /**
      * Add a new openProject object to the undo history.
      * @param projectPath the path to the project file.
      */
     void openProjectToUndo(const QString &projectPath);
+
+    /**
+     * Open an project.
+     * @param projectPath the path to the project file.
+     * @return true on success, false otherwise
+     */
+    bool openProject(const QString &projectPath);
+
+    /**
+     * Open an existing project.
+     * @param project The existing project.
+     */
+    void openProject(AnimationProject *project);
 
     /**
      * Add a new saveProject object to the undo history.
@@ -279,6 +310,16 @@ public:
      * Add a new closeProject object to the undo history.
      */
     void closeProjectToUndo();
+
+    /**
+     * Close the project.
+     */
+    void closeProject();
+
+    /**
+     * Remove the animation project from the facade.
+     */
+    AnimationProject *removeProject();
 
     /**************************************************************************
      * Scene functions
@@ -598,7 +639,22 @@ public:
                     int toFrame,
                     int movePosition);
 
-protected:
+    /**************************************************************************
+     * Private functions
+     **************************************************************************/
+
+private:
+
+    /**
+     * Copies the files belonging to this Exposure to a temporary directory.
+     * @param fromImagePath the path to the image to copy.
+     * @return the file name of the new file.
+     */
+    const QString copyToTemp(const QString &fromImagePath);
+
+    /**************************************************************************
+     * Private members
+     **************************************************************************/
 
 private:
 
@@ -627,18 +683,11 @@ private:
      */
     bool writeHistory;
 
-    /**************************************************************************
-     * Private functions
-     **************************************************************************/
-
-private:
-
     /**
-     * Copies the files belonging to this Exposure to a temporary directory.
-     * @param fromImagePath the path to the image to copy.
-     * @return the file name of the new file.
+     * Container where one can register and retrieve undo objects for undo and
+     * remove operations.
      */
-    const QString copyToTemp(const QString &fromImagePath);
+    QUndoStack *undoStack;
 
 };
 

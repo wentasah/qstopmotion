@@ -53,12 +53,10 @@ AnimationProject::AnimationProject(Frontend* f)
 
     unitMode          = 0;
 
-    unsavedChanges    = false;
-    activeProject     = false;
+    settingsChanges   = 0;
+    animationChanges  = 0;
 
     isAudioDriverInitialized = false;
-
-    undoStack = new QUndoStack();
 
     qDebug("AnimationProject::Constructor --> End");
 }
@@ -84,11 +82,6 @@ AnimationProject::~AnimationProject()
         audioDriver = NULL;
     }
 
-    if (undoStack != NULL) {
-        delete undoStack;
-        undoStack = NULL;
-    }
-
     frontend = NULL;
 
     qDebug("AnimationProject::Destructor --> End");
@@ -103,22 +96,9 @@ Frontend* AnimationProject::getFrontend()
 }
 
 
-QUndoStack* AnimationProject::getUndoStack()
-{
-    return undoStack;
-}
-
-
 ProjectSerializer* AnimationProject::getProjectSerializer()
 {
     return serializer;
-}
-
-// TODO: Implement clearing of undo stack
-void AnimationProject::clearUndoStack()
-{
-    undoStack->clear();
-    return;
 }
 
 
@@ -185,7 +165,7 @@ int AnimationProject::getVideoSource() const
 void AnimationProject::setVideoSource(int newVideoSource)
 {
     videoSource = newVideoSource;
-    setUnsavedChanges();
+    incSettingsChanges();
 }
 
 
@@ -198,7 +178,7 @@ int AnimationProject::getMixMode() const
 void AnimationProject::setMixMode(int newMixMode)
 {
     mixMode = newMixMode;
-    setUnsavedChanges();
+    incSettingsChanges();
 }
 
 
@@ -211,7 +191,7 @@ int AnimationProject::getUnitMode() const
 void AnimationProject::setUnitMode(int newUnitMode)
 {
     unitMode = newUnitMode;
-    setUnsavedChanges();
+    incSettingsChanges();
 }
 
 
@@ -224,7 +204,7 @@ int AnimationProject::getMixCount() const
 void AnimationProject::setMixCount(int newMixCount)
 {
     mixCount = newMixCount;
-    setUnsavedChanges();
+    incSettingsChanges();
 }
 
 
@@ -237,7 +217,7 @@ int AnimationProject::getPlaybackCount() const
 void AnimationProject::setPlaybackCount(int newPlaybackCount)
 {
     playbackCount = newPlaybackCount;
-    setUnsavedChanges();
+    incSettingsChanges();
 }
 
 
@@ -250,9 +230,12 @@ int AnimationProject::getFramesPerSecond() const
 void AnimationProject::setFramesPerSecond(int newFPS)
 {
     framesPerSecond = newFPS;
-    setUnsavedChanges();
+    incSettingsChanges();
 }
 
+/**************************************************************************
+ * Project functions
+ **************************************************************************/
 
 bool AnimationProject::openProject(const QString &filePath)
 {
@@ -274,8 +257,6 @@ bool AnimationProject::openProject(const QString &filePath)
         return false;
     }
 
-    activeProject = true;
-
     qDebug("AnimationProject::openProject --> End");
     return true;
 }
@@ -296,7 +277,9 @@ bool AnimationProject::saveProject(const QString &filePath, bool saveAs)
         frontend->hideProgress();
         return false;
     }
-    this->unsavedChanges = false;
+    // TODO: Differentiation in savig of settings and animation
+    settingsChanges = 0;
+    animationChanges = 0;
 
     frontend->hideProgress();
 
@@ -310,8 +293,6 @@ bool AnimationProject::newProject(const QString &projectDescription)
     qDebug("AnimationProject::newProject --> Start");
 
     description.append(projectDescription);
-
-    activeProject = true;
 
     qDebug("AnimationProject::newProject --> End");
     return true;
@@ -331,8 +312,8 @@ void AnimationProject::clearProject()
     scenes.clear();
     serializer->cleanup();
     activeSceneIndex = -1;
-    unsavedChanges = false;
-    activeProject = false;
+    settingsChanges = 0;
+    animationChanges = 0;
     Exposure::tempNum = 0;
     Exposure::trashNum = 0;
     description.clear();
@@ -341,21 +322,49 @@ void AnimationProject::clearProject()
 }
 
 
-bool AnimationProject::isUnsavedChanges() const
+bool AnimationProject::isSettingsChanges() const
 {
-    return unsavedChanges;
+    if (0 == settingsChanges) {
+        return FALSE;
+    }
+    return TRUE;
 }
 
 
-void AnimationProject::setUnsavedChanges()
+void AnimationProject::incSettingsChanges()
 {
-    unsavedChanges = true;
+    settingsChanges++;
 }
 
 
-bool AnimationProject::isActiveProject() const
+void AnimationProject::decSettingsChanges()
 {
-    return activeProject;
+    Q_ASSERT(0 < settingsChanges);
+
+    settingsChanges--;
+}
+
+
+bool AnimationProject::isAnimationChanges() const
+{
+    if (0 == animationChanges) {
+        return FALSE;
+    }
+    return TRUE;
+}
+
+
+void AnimationProject::incAnimationChanges()
+{
+    animationChanges++;
+}
+
+
+void AnimationProject::decAnimationChanges()
+{
+    Q_ASSERT(0 < animationChanges);
+
+    animationChanges--;
 }
 
 
@@ -945,7 +954,6 @@ int AnimationProject::addSoundToScene(unsigned int sceneIndex, const QString &so
             "without sound if you choose to play."));
         --numSounds;
     }
-    this->unsavedChanges = true;
 
     qDebug("AnimationProject::addSoundToScene --> End");
     return ret;
@@ -956,7 +964,6 @@ void AnimationProject::removeSoundFromScene(unsigned int sceneIndex, unsigned in
 {
     scenes[sceneIndex]->removeSound(soundNumber);
     --numSounds;
-    this->unsavedChanges = true;
 }
 
 

@@ -54,7 +54,7 @@ void UndoSceneAdd::undo()
 
     facade->getView()->notifyRemoveScene(sceneIndex);
 
-    animationProject->setUnsavedChanges();
+    animationProject->decAnimationChanges();
 
     facade->writeHistoryEntry(QString("undoSceneAdd|%1|%2")
                               .arg(sceneIndex).arg(sceneDescription));
@@ -81,7 +81,7 @@ void UndoSceneAdd::redo()
 
     facade->getView()->notifyAddScene(sceneIndex);
 
-    animationProject->setUnsavedChanges();
+    animationProject->incAnimationChanges();
 
     facade->writeHistoryEntry(QString("redoSceneAdd|%1|%2")
                               .arg(sceneIndex).arg(sceneDescription));

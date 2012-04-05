@@ -28,13 +28,17 @@ UndoProjectOpen::UndoProjectOpen(DomainFacade *df,
     :UndoBase(df)
 {
     projectPath.append(path);
+    project = NULL;
     setText(QString(tr("Open project '%1'")).arg(projectPath.mid(projectPath.lastIndexOf('/')+1)));
 }
 
 
 UndoProjectOpen::~UndoProjectOpen()
 {
-
+    if (NULL != project) {
+        delete project;
+        project = NULL;
+    }
 }
 
 
@@ -42,9 +46,16 @@ void UndoProjectOpen::undo()
 {
     qDebug("UndoProjectOpen::undo --> Start");
 
-    facade->getView()->notifyClear();
+    Q_ASSERT(NULL == project);
 
-    facade->getAnimationProject()->clearProject();
+    project = facade->removeProject();
+
+    facade->getView()->notifyRemoveProject();
+
+    // animationProject->clearProject();
+
+    // TODO: Implement separate frontende changes
+    // frontend->setFrontendChanges();
 
     facade->writeHistoryEntry(QString("undoProjectOpen|%1").arg(projectPath));
 
@@ -56,26 +67,39 @@ void UndoProjectOpen::redo()
 {
     qDebug("UndoProjectOpen::redo --> Start");
 
-    facade->getView()->notifyNewProject();
+    AnimationProject *animationProject = facade->getAnimationProject();
+    Frontend *frontend = facade->getFrontend();
+    bool projectOpen = TRUE;
 
-    if (facade->getAnimationProject()->openProject(projectPath)) {
+    // facade->getView()->notifyNewProject();
+
+    if (NULL == project) {
+        // First call of the redo function after creation of the undo object
+        projectOpen = facade->openProject(projectPath);
+    }
+    else {
+        // Call of the redo function after a undo call
+        facade->openProject(project);
+    }
+
+    if (projectOpen) {
         facade->getView()->notifyDescriptionsUpdated();
-        facade->getFrontend()->setProjectID(facade->getProjectDescription().toAscii());
+        frontend->setProjectID(facade->getProjectDescription().toAscii());
 
         Scene *scene = facade->getActiveScene();
         Q_ASSERT(NULL != scene);
         facade->getView()->notifyActivateScene();
-        facade->getFrontend()->setSceneID(scene->getDescription().toAscii());
+        frontend->setSceneID(scene->getDescription().toAscii());
 
         Take *take = facade->getActiveTake();
         Q_ASSERT(NULL != take);
         facade->getView()->notifyActivateTake();
-        facade->getFrontend()->setTakeID(take->getDescription().toAscii());
+        frontend->setTakeID(take->getDescription().toAscii());
 
         Exposure *exposure = facade->getActiveExposure();
         if (NULL != exposure) {
             facade->getView()->notifyActivateExposure();
-            facade->getFrontend()->setExposureID(exposure->getId().toAscii());
+            frontend->setExposureID(exposure->getId().toAscii());
         }
     }
 

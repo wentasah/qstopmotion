@@ -71,7 +71,7 @@ public:
     /**
      * Function to receive notification when the model is erased.
      */
-    void updateClear();
+    void updateRemoveProject();
 
     /**
      * Function to recieve notification when a sound of a scene is to be played.

@@ -89,7 +89,7 @@ public:
     /**
      * Notify the observers that the model has been cleared.
      */
-    void notifyClear();
+    void notifyRemoveProject();
 
     /**
      * Notify the observers that a new project is created.

@@ -78,14 +78,14 @@ void FrameViewImage::initCompleted()
  * Animation notification functions
  **************************************************************************/
 
-void FrameViewImage::updateClear()
+void FrameViewImage::updateRemoveProject()
 {
-    qDebug("FrameViewImage::updateClear --> Start");
+    qDebug("FrameViewImage::updateRemoveProject --> Start");
 
     showLogo();
     update();
 
-    qDebug("FrameViewImage::updateClear --> End");
+    qDebug("FrameViewImage::updateRemoveProject --> End");
 }
 
 

@@ -33,7 +33,6 @@
 #include <QtCore/QObject>
 #include <QtCore/QString>
 #include <QtCore/QVector>
-#include <QtGui/QUndoStack>
 
 class ProjectSerializer;
 // class Scene;
@@ -74,21 +73,10 @@ public:
     Frontend* getFrontend();
 
     /**
-     * Get the undo stack.
-     * @return the undo stack.
-     */
-    QUndoStack* getUndoStack();
-
-    /**
      * Get the project serializer.
      * @return the project serializer.
      */
     ProjectSerializer* getProjectSerializer();
-
-    /**
-     * Clear undo stack command from frontend.
-     */
-    void clearUndoStack();
 
     /**
      * Get the name ot the temp directory of the project
@@ -216,6 +204,10 @@ public:
      */
     void setFramesPerSecond(int newFPS);
 
+    /**************************************************************************
+     * Project functions
+     **************************************************************************/
+
     /**
      * Opens a project.
      * @param filePath the project file path of the project to open.
@@ -244,21 +236,36 @@ public:
     void clearProject();
 
     /**
-     * Checks if there are unsaved changes in the model.
+     * Checks if there are unsaved changes in the settings.
      * @return true if there are unsaved changes, false otherwise.
      */
-    bool isUnsavedChanges() const;
+    bool isSettingsChanges() const;
 
     /**
-     * Set the flag that there are unsaved changes in the model.
+     * Increment the number of unsaved changes in the settings.
      */
-    void setUnsavedChanges();
+    void incSettingsChanges();
 
     /**
-     * Checks if there are a active project.
-     * @return true if there are a active project, false otherwise.
+     * Decrement the number of unsaved changes in the settings.
      */
-    bool isActiveProject() const;
+    void decSettingsChanges();
+
+    /**
+     * Checks if there are unsaved changes in the animation.
+     * @return true if there are unsaved changes, false otherwise.
+     */
+    bool isAnimationChanges() const;
+
+    /**
+     * Increment the number of unsaved changes in the animation.
+     */
+    void incAnimationChanges();
+
+    /**
+     * Decrement the number of unsaved changes in the animation.
+     */
+    void decAnimationChanges();
 
     /**
      * Initializes the audio device so it is ready to play sounds.
@@ -777,14 +784,14 @@ private:
     int numSounds;
 
     /**
-     * Variable for checking if there is a active project.
+     * Number of unsaved changes in the settings
      */
-    bool activeProject;
+    int settingsChanges;
 
     /**
-     * Variable for checking if there are unsaved changes in the model
+     * Number of unsaved changes in the animation
      */
-    bool unsavedChanges;
+    int animationChanges;
 
     /**
      * Audio driver that can play sound.
@@ -796,28 +803,6 @@ private:
      */
     bool isAudioDriverInitialized;
 
-    /**
-     * Container where one can register and retrieve undo objects for undo and
-     * remove operations.
-     */
-    QUndoStack *undoStack;
-
-    /**************************************************************************
-     * Private functions
-     **************************************************************************/
-
-    /**
-     * Loads frames into the model. This acts excatly like the addframes
-     * function except that it does not moves the frames to a temporary directory.
-     * It also registers the frame to be a valid project frame.
-     */
-    // void loadSavedScenes();
-
-    /**
-     * Sets the scene at location sceneIndex as the active scene.
-     * @param sceneIndex the new active scene
-     */
-    // void activateScene();
 };
 
 #endif

@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2010-2011 by                                                *
+ *  Copyright (C) 2010-2012 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -96,7 +96,7 @@ public:
     /**
      * Function to receive notification when the model is erased.
      */
-    virtual void updateClear() = 0;
+    virtual void updateRemoveProject() = 0;
 
     /**
      * Function to receive notification when a new Project is created.

@@ -58,7 +58,7 @@ void UndoTakeAdd::undo()
 
     facade->getView()->notifyRemoveTake(sceneIndex, takeIndex);
 
-    animationProject->setUnsavedChanges();
+    animationProject->decAnimationChanges();
 
     facade->writeHistoryEntry(QString("undoTakeAdd|%1|%2|%3")
                               .arg(sceneIndex).arg(takeIndex)
@@ -86,7 +86,7 @@ void UndoTakeAdd::redo()
 
     facade->getView()->notifyAddTake(sceneIndex, takeIndex);
 
-    animationProject->setUnsavedChanges();
+    animationProject->incAnimationChanges();
 
     facade->writeHistoryEntry(QString("redoTakeAdd|%1|%2|%3")
                               .arg(sceneIndex).arg(takeIndex)

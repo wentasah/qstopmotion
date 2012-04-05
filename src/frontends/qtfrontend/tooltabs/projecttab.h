@@ -87,7 +87,7 @@ public:
     /**
      * Function to receive notification when the model is erased.
      */
-    void updateClear();
+    void updateRemoveProject();
 
     /**
      * Function to receive notification when a new project is created.

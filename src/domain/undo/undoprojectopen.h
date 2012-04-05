@@ -62,7 +62,8 @@ private:
     /**
      * The model to perform the redo command on.
      */
-    QString  projectPath;
+    QString           projectPath;
+    AnimationProject *project;
 };
 
 #endif

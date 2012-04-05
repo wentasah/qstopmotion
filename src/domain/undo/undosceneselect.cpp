@@ -54,7 +54,7 @@ void UndoSceneSelect::undo()
     }
     facade->getView()->notifyActivateScene();
 
-    animationProject->setUnsavedChanges();
+    animationProject->decAnimationChanges();
 
     facade->writeHistoryEntry(QString("undoSceneSelect|%1|%2")
                               .arg(oldSceneIndex).arg(newSceneIndex));
@@ -80,7 +80,7 @@ void UndoSceneSelect::redo()
     }
     facade->getView()->notifyActivateScene();
 
-    animationProject->setUnsavedChanges();
+    animationProject->incAnimationChanges();
 
     facade->writeHistoryEntry(QString("redoSceneSelect|%1|%2")
                               .arg(oldSceneIndex).arg(newSceneIndex));

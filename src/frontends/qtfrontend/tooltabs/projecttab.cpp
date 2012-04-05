@@ -422,16 +422,16 @@ void ProjectTab::apply()
  * Animation notification functions
  **************************************************************************/
 
-void ProjectTab::updateClear()
+void ProjectTab::updateRemoveProject()
 {
-    qDebug("ProjectTab::updateClear --> Start");
+    qDebug("ProjectTab::updateRemoveProject --> Start");
 
     projectTree->clear();
     activeSceneIndex = -1;
     activeTakeIndex = -1;
     activeExposureIndex = -1;
 
-    qDebug("ProjectTab::updateClear --> End");
+    qDebug("ProjectTab::updateRemoveProject --> End");
 }
 
 
@@ -1117,6 +1117,10 @@ void ProjectTab::removeSceneSlot()
     DomainFacade *animationProject = frontend->getProject();
     int removeSceneIndex = activeSceneIndex;  // The activeSceneIndex will be changed by the selectSceneToUndo call
 
+    while(-1 < activeTakeIndex) {
+        removeTakeSlot();
+    }
+
     if (removeSceneIndex == (animationProject->getSceneSize()-1)) {
         // Last scene of the project selected
         animationProject->selectSceneToUndo(removeSceneIndex-1);
@@ -1193,6 +1197,10 @@ void ProjectTab::removeTakeSlot()
 
     DomainFacade *animationProject = frontend->getProject();
     int removeTakeIndex = activeTakeIndex;  // The activeTakeIndex will be changed by the selectTakeToUndo call
+
+    while(-1 < activeExposureIndex) {
+        removeFramesSlot();
+    }
 
     if (removeTakeIndex == (animationProject->getSceneTakeSize(activeSceneIndex)-1)) {
         // Last take of the scene selected

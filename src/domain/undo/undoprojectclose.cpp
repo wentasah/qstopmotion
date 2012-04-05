@@ -48,12 +48,8 @@ void UndoProjectClose::redo()
 {
     qDebug("UndoProjectClose::redo --> Start");
 
-    facade->getView()->notifyClear();
-    facade->getAnimationProject()->clearProject();
-    facade->clearUndoStack();
-
-    // TODO: neccessary??
-    facade->getFrontend()->removeApplicationFiles();
+    facade->closeProject();
+    facade->getView()->notifyRemoveProject();
 
     qDebug("UndoProjectClose::redo --> End");
 }

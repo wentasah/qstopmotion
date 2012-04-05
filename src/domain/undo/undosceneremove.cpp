@@ -46,6 +46,21 @@ void UndoSceneRemove::undo()
 {
     qDebug("UndoSceneRemove::undo --> Start");
 
+    AnimationProject *animationProject = facade->getAnimationProject();
+
+    if (sceneIndex >= animationProject->getSceneSize()) {
+        animationProject->addScene(removedScene);
+
+        facade->getView()->notifyAddScene(sceneIndex);
+    }
+    else {
+        animationProject->insertScene(sceneIndex, removedScene);
+
+        facade->getView()->notifyInsertScene(sceneIndex);
+    }
+    removedScene = NULL;
+
+    animationProject->decAnimationChanges();
 
     facade->writeHistoryEntry(QString("undoSceneRemove|%1").arg(sceneIndex));
 
@@ -59,8 +74,9 @@ void UndoSceneRemove::redo()
 
     AnimationProject *animationProject = facade->getAnimationProject();
 
-    Scene *removedScene = animationProject->removeScene(sceneIndex);
-    animationProject->setUnsavedChanges();
+    removedScene = animationProject->removeScene(sceneIndex);
+
+    animationProject->incAnimationChanges();
 
     facade->getView()->notifyRemoveScene(sceneIndex);
 

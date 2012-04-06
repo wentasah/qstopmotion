@@ -52,8 +52,6 @@ void UndoProjectOpen::undo()
 
     facade->getView()->notifyRemoveProject();
 
-    // animationProject->clearProject();
-
     // TODO: Implement separate frontende changes
     // frontend->setFrontendChanges();
 

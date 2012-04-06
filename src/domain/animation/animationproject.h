@@ -231,11 +231,6 @@ public:
     bool newProject(const QString &projectDescription);
 
     /**
-     * Clears the project.
-     */
-    void clearProject();
-
-    /**
      * Checks if there are unsaved changes in the settings.
      * @return true if there are unsaved changes, false otherwise.
      */

@@ -330,6 +330,7 @@ void MainWindowGUI::retranslateStrings()
 
     //The actions caption texts
     newAct->setText(tr("&New"));
+    qDebug() << "MainWindowGUI::retranslateStrings --> new:" << newAct->text();
     openAct->setText(tr("&Open"));
     saveAct->setText(tr("&Save"));
     saveAsAct->setText(tr("Save &As"));
@@ -411,9 +412,13 @@ void MainWindowGUI::retranslateStrings()
     // The submenus
     toolBar->retranslateStrings();
     recordingTab->retranslateStrings();
+    sideBar->setTabText(0, QString(tr("Recording")));
     projectTab->retranslateStrings();
+    sideBar->setTabText(1, QString(tr("Project")));
     // viewTab->retranslateStrings();
+    // sideBar->setTabText(2, QString(tr("View")));
     // compositingTab->retranslateStrings();
+    // sideBar->setTabText(3, QString(tr("Compositing")));
 
     qDebug("MainWindowGUI::retranslateStrings --> End");
 }
@@ -609,6 +614,14 @@ void MainWindowGUI::openProject(const QString &filePath)
 {
     Q_ASSERT(filePath != NULL);
 
+    checkSaved();
+
+    if (frontend->getProject()->isActiveProject()) {
+        // Close the old project
+        // frontend->getProject()->closeProjectToUndo();
+        frontend->getProject()->closeProject();
+    }
+
     frontend->getProject()->openProjectToUndo(filePath);
     setMostRecentProject();
 
@@ -745,7 +758,8 @@ void MainWindowGUI::newProject()
 
     if (frontend->getProject()->isActiveProject()) {
         // Close the old project
-        frontend->getProject()->closeProjectToUndo();
+        // frontend->getProject()->closeProjectToUndo();
+        frontend->getProject()->closeProject();
     }
 
     // Create the new project
@@ -781,13 +795,6 @@ void MainWindowGUI::openProject()
                                    lastVisitedDir,
                                    QString(tr("Project (*.%1);;Archive (*.%2)")).arg(PreferencesTool::projectSuffix).arg(PreferencesTool::archiveSuffix));
     if (!openFile.isNull()) {
-        checkSaved();
-
-        if (frontend->getProject()->isActiveProject()) {
-            // Close the old project
-            frontend->getProject()->closeProjectToUndo();
-        }
-
         // Open the new project
         openProject(openFile);
     }
@@ -801,12 +808,6 @@ void MainWindowGUI::openMostRecent()
     const QString fileName = Util::convertPathFromOsSpecific(mostRecentAct->text());
 
     recordingTab->checkCameraOff();
-    checkSaved();
-
-    if (frontend->getProject()->isActiveProject()) {
-        // Close the old project
-        frontend->getProject()->closeProjectToUndo();
-    }
 
     // Open the new project
     openProject(fileName);
@@ -818,12 +819,6 @@ void MainWindowGUI::openSecondMostRecent()
     const QString fileName = Util::convertPathFromOsSpecific(secondMostRecentAct->text());
 
     recordingTab->checkCameraOff();
-    checkSaved();
-
-    if (frontend->getProject()->isActiveProject()) {
-        // Close the old project
-        frontend->getProject()->closeProjectToUndo();
-    }
 
     // Open the new project
     openProject(fileName);
@@ -837,12 +832,6 @@ void MainWindowGUI::openThirdMostRecent()
     const QString fileName = Util::convertPathFromOsSpecific(thirdMostRecentAct->text());
 
     recordingTab->checkCameraOff();
-    checkSaved();
-
-    if (frontend->getProject()->isActiveProject()) {
-        // Close the old project
-        frontend->getProject()->closeProjectToUndo();
-    }
 
     // Open the new project
     openProject(fileName);
@@ -855,12 +844,6 @@ void MainWindowGUI::openFourthMostRecent()
     const QString fileName = Util::convertPathFromOsSpecific(fourthMostRecentAct->text());
 
     recordingTab->checkCameraOff();
-    checkSaved();
-
-    if (frontend->getProject()->isActiveProject()) {
-        // Close the old project
-        frontend->getProject()->closeProjectToUndo();
-    }
 
     // Open the new project
     openProject(fileName);
@@ -1197,42 +1180,41 @@ void MainWindowGUI::createTranslator(const QString &newLocale)
 {
     qDebug("MainWindowGUI::createTranslator --> Start");
 
-    QString locale(newLocale);
-    QString translationFile;
+    QString appTranslationFile("qstopmotion_");
+    QString qtTranslationFile("qt_");
     QString qmPath(frontend->getTranslationsDirName());
-    const QString prefix = QLatin1String("qstopmotion_");
-    const QString languagePref = frontend->getPreferences()->getBasicPreference("language", locale);
+    QString languagePref = frontend->getPreferences()->getBasicPreference("language", newLocale);
 
-    if (languagePref.isEmpty()) {
-        if (locale.isEmpty()) {
+    if (newLocale.isEmpty()) {
+        if (languagePref.isEmpty()) {
             // Get system locale.
-            locale = QLocale::system().name().toLower();
-            if (locale == QLatin1String("nb_no"))
-                locale = QLatin1String("no_nb");
-            else if (locale == QLatin1String("nn_no"))
-                locale = QLatin1String("no_nn");
-            else if (locale == QLatin1String("se_no"))
-                locale = QLatin1String("no_se");
+            languagePref = QLocale::system().name().toLower();
+            if (languagePref == QLatin1String("nb_no"))
+                languagePref = QLatin1String("no_nb");
+            else if (languagePref == QLatin1String("nn_no"))
+                languagePref = QLatin1String("no_nn");
+            else if (languagePref == QLatin1String("se_no"))
+                languagePref = QLatin1String("no_se");
             else
-                locale.truncate(2);
+                languagePref.truncate(2);
         }
 
-        translationFile.append(prefix);
-        translationFile.append(locale);
+        appTranslationFile.append(languagePref);
+        qtTranslationFile.append(languagePref);
     }
     else {
-        translationFile.append(prefix);
-        translationFile.append(languagePref);
+        appTranslationFile.append(newLocale);
+        qtTranslationFile.append(newLocale);
     }
 
-    if (!translationFile.isEmpty()) {
-        qDebug() << "MainWindowGUI::createTranslator --> Loading translator:" << translationFile;
-        if (!appTranslator.load(translationFile, qmPath)) {
+    if (!appTranslationFile.isEmpty()) {
+        qDebug() << "MainWindowGUI::createTranslator --> Loading translator:" << appTranslationFile;
+        if (!appTranslator.load(appTranslationFile, qmPath)) {
             // Translation file not opend
             qDebug("MainWindowGUI::createTranslator --> qStopMotion translator not loaded!");
         }
-        qDebug() << "MainWindowGUI::createTranslator --> Loading translator:" << "qt_" << locale;
-        if (!qtTranslator.load("qt_" + locale, qmPath)) {
+        qDebug() << "MainWindowGUI::createTranslator --> Loading translator:" << qtTranslationFile;
+        if (!qtTranslator.load(qtTranslationFile, qmPath)) {
             // Translation file not opend
             qDebug("MainWindowGUI::createTranslator --> Qt translator not loaded!");
         }

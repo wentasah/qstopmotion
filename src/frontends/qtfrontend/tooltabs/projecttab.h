@@ -237,14 +237,6 @@ public:
                               int exposureIndex);
 
     /**
-     * Function to recieve notification when one or more frames are deleted.
-     * @param fromFrame the first frame in the selection
-     * @param toFrame the last frame in the selection
-     */
-    void updateRemoveExposures(int fromFrame,
-                               int toFrame);
-
-    /**
      * Function to recieve notification when one or more frames are moved.
      */
     void updateMoveExposures(int fromFrame,

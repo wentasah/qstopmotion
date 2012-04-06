@@ -220,14 +220,6 @@ public:
                                       int exposureIndex) = 0;
 
     /**
-     * Abstract function for recieving notification about frames removed from the model.
-     * @param fromFrame the first frame of those removed
-     * @param toFrame the last frame of those removed
-     */
-    virtual void updateRemoveExposures(int fromFrame,
-                                       int toFrame) = 0;
-
-    /**
      * Abstract function for recieving notification when frames are moved in the model.
      * @param fromFrame index of the first selected frame
      * @param toFrame index of the last selected frame

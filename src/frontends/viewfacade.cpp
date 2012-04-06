@@ -365,20 +365,6 @@ void ViewFacade::notifyRemoveExposure(int sceneIndex,
 }
 
 
-void ViewFacade::notifyRemoveExposures(int fromFrame,
-                                       int toFrame)
-{
-    qDebug("ViewFacade::notifyRemoveExposures --> Start");
-
-    int numElem = observers.size();
-    for (int i = 0; i < numElem; ++i) {
-        observers[i]->updateRemoveExposures(fromFrame, toFrame);
-    }
-
-    qDebug("ViewFacade::notifyRemoveExposures --> End");
-}
-
-
 void ViewFacade::notifyMoveExposures(int fromFrame,
                                      int toFrame,
                                      int movePosition)

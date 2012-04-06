@@ -244,13 +244,6 @@ public:
                               int exposureIndex);
 
     /**
-     * Function to recieve notification when one or more frames are deleted.
-     * @param fromFrame the first frame in the selection
-     * @param toFrame the last frame in the selection
-     */
-    void updateRemoveExposures(int fromFrame, int toFrame);
-
-    /**
      * Function to recieve notification when one or more frames are moved.
      */
     void updateMoveExposures(int fromFrame, int toFrame, int movePosition);
@@ -530,13 +523,6 @@ private:
     void removeExposure(int sceneIndex,
                         int takeIndex,
                         int exposureIndex);
-
-    /**
-     * Removes a selection of thumbviews from the timeline.
-     * @param fromFrame the first thumbview to remove.
-     * @param toFrame the last thumbview to remove.
-     */
-    void removeExposures(int fromFrame, int toFrame);
 
     /**
      * Removes all thumbviews from the timeline.

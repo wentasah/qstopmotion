@@ -234,14 +234,6 @@ public:
                               int exposureIndex);
 
     /**
-     * Notify the observers that a selection of frames are removed from the model.
-     * @param fromFrame the first frame in the selection.
-     * @param toFrame the last frame in the selection.
-     */
-    void notifyRemoveExposures(int fromFrame,
-                               int toFrame);
-
-    /**
      * Notify the observers that a frame in the model has changed location (moved).
      * @param fromFrame the first frame in the selection
      * @param toFrame the last frame in the selection

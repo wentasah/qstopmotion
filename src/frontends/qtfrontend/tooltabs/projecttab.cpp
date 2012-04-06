@@ -783,17 +783,6 @@ void ProjectTab::updateInsertExposure(int sceneIndex,
 }
 
 
-void ProjectTab::updateRemoveExposures(int fromFrame,
-                                       int toFrame)
-{
-    qDebug("ProjectTab::updateRemoveExposures --> Start");
-
-    // removeExposures(fromFrame, toFrame);
-
-    qDebug("ProjectTab::updateRemoveExposures --> End");
-}
-
-
 void ProjectTab::updateRemoveExposure(int sceneIndex,
                                       int takeIndex,
                                       int exposureIndex)

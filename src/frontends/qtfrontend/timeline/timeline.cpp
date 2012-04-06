@@ -410,16 +410,6 @@ void TimeLine::updateInsertExposure(int sceneIndex,
 }
 
 
-void TimeLine::updateRemoveExposures(int fromFrame, int toFrame)
-{
-    qDebug("TimeLine::updateRemoveExposures --> Start");
-
-    removeExposures(fromFrame, toFrame);
-
-    qDebug("TimeLine::updateRemoveExposures --> End");
-}
-
-
 void TimeLine::updateRemoveExposure(int sceneIndex,
                                     int takeIndex,
                                     int exposureIndex)
@@ -886,39 +876,6 @@ void TimeLine::addExposures(const QVector<Exposure*>& exposures, int index)
     }
 
     qDebug("TimeLine::addExposures --> End");
-}
-
-
-void TimeLine::removeExposures(int fromFrame, int toFrame)
-{
-    qDebug("TimeLine::removeExposures --> Start");
-
-    fromFrame += 1;
-    toFrame += 1;
-
-    int numFrames = thumbViews.size();
-
-    // The frames to be deleted are between other frames
-    if (toFrame < numFrames - 1) {
-
-        // Move all frames behind the deleted frames forward.
-        int stop = numFrames - frontend->getProject()->getSceneSize() + 1;
-        for (int k = toFrame + 1; k < numFrames; ++k) {
-            thumbViews[k]->move(thumbViews[k]->x() - (toFrame - fromFrame + 1) *(FRAME_WIDTH + SPACE), 0);
-            if (k < stop) {
-                thumbViews[k]->setThumbIndex(k - (toFrame - fromFrame + 2));
-            }
-        }
-    }
-
-    for (int i = fromFrame; i <= toFrame; ++i) {
-        delete thumbViews[fromFrame];
-        thumbViews.erase(thumbViews.begin() + fromFrame);
-    }
-
-    mainWidget->resize((FRAME_WIDTH + SPACE) * thumbViews.size(), FRAME_HEIGHT);
-
-    qDebug("TimeLine::removeExposures --> End");
 }
 
 

@@ -603,13 +603,13 @@ void DomainFacade::saveProjectToUndo(const QString &projectPath, bool saveAs)
     getUndoStack()->push(u);
 }
 
-
+/*
 void DomainFacade::closeProjectToUndo()
 {
     UndoProjectClose *u = new UndoProjectClose(this);
     getUndoStack()->push(u);
 }
-
+*/
 
 void DomainFacade::closeProject()
 {
@@ -617,15 +617,15 @@ void DomainFacade::closeProject()
 
     Q_ASSERT(NULL != animationProject);
 
-    animationProject->clearProject();
     delete animationProject;
     animationProject = NULL;
 
     clearUndoStack();
     removeHistoryFile();
 
-    // TODO: neccessary??
     frontend->removeApplicationFiles();
+
+    getView()->notifyRemoveProject();
 
     qDebug("DomainFacade::closeProject --> End");
 }

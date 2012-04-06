@@ -49,7 +49,6 @@ void UndoProjectClose::redo()
     qDebug("UndoProjectClose::redo --> Start");
 
     facade->closeProject();
-    facade->getView()->notifyRemoveProject();
 
     qDebug("UndoProjectClose::redo --> End");
 }

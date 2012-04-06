@@ -260,11 +260,6 @@ public:
                               int exposureIndex);
 
     /**
-     * Function to recieve notification when one or more frames are deleted.
-     */
-    void updateRemoveExposures(int, int);
-
-    /**
      * Function to recieve notification when one or more frames are moved.
      *
      */

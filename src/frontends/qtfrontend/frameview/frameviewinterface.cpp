@@ -232,9 +232,6 @@ void FrameViewInterface::updateActivateTake()
 void FrameViewInterface::updateRemoveExposure(int, int, int) {}
 
 
-void FrameViewInterface::updateRemoveExposures(int, int) {}
-
-
 void FrameViewInterface::updateMoveExposures(int, int, int) {}
 
 

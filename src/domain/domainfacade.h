@@ -315,7 +315,7 @@ public:
     /**
      * Add a new closeProject object to the undo history.
      */
-    void closeProjectToUndo();
+    // void closeProjectToUndo();
 
     /**
      * Close the project.

@@ -74,6 +74,7 @@ AnimationProject::~AnimationProject()
     scenes.clear();
 
     if (serializer != NULL) {
+        serializer->cleanup();
         delete serializer;
     }
 
@@ -82,6 +83,7 @@ AnimationProject::~AnimationProject()
         audioDriver = NULL;
     }
 
+    description.clear();
     frontend = NULL;
 
     qDebug("AnimationProject::Destructor --> End");
@@ -299,29 +301,6 @@ bool AnimationProject::newProject(const QString &projectDescription)
 }
 
 
-void AnimationProject::clearProject()
-{
-    qDebug("AnimationProject::clearProject --> Start");
-
-    unsigned int sceneSize = scenes.size();
-    for (unsigned int sceneIndex = 0; sceneIndex < sceneSize; ++sceneIndex) {
-        delete scenes[sceneIndex];
-        scenes[sceneIndex] = NULL;
-    }
-
-    scenes.clear();
-    serializer->cleanup();
-    activeSceneIndex = -1;
-    settingsChanges = 0;
-    animationChanges = 0;
-    Exposure::tempNum = 0;
-    Exposure::trashNum = 0;
-    description.clear();
-
-    qDebug("AnimationProject::clearProject --> End");
-}
-
-
 bool AnimationProject::isSettingsChanges() const
 {
     if (0 == settingsChanges) {
@@ -398,34 +377,6 @@ void AnimationProject::shutdownAudioDevice()
     qDebug("AnimationProject::shutdownAudioDevice --> End");
 }
 
-/*
-void AnimationProject::animationChanged(const QString &alteredFile)
-{
-    qDebug("AnimationProject::animationChanged --> Start");
-
-    Q_ASSERT(alteredFile != NULL);
-    if (activeSceneIndex == -1) {
-        return;
-    }
-
-    int exposureSize = scenes[activeSceneIndex]->getExposureSize();
-    int changedExposure = -1;
-    for (int exposureIndex = 0; exposureIndex < exposureSize; ++exposureIndex) {
-        Exposure *exposure = getExposure(activeSceneIndex, getActiveTakeIndex(), exposureIndex);
-        if (alteredFile.compare(exposure->getImagePath(), Qt::CaseInsensitive) == 0) {
-            changedExposure = exposureIndex;
-            break;
-        }
-    }
-
-    if (changedExposure >= 0) {
-        notifyRemoveExposures(changedExposure, changedExposure);
-        notifyNewExposure(changedExposure);
-    }
-
-    qDebug("AnimationProject::animationChanged --> End");
-}
-*/
 
 bool AnimationProject::exportToVideo(VideoEncoder * encoder)
 {

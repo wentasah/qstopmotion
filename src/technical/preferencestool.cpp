@@ -321,6 +321,7 @@ void PreferencesTool::setBasicPreferenceDefaults()
     setBasicPreference("defaultmixcount", 2);
     setBasicPreference("defaultframespersecond", 12);
     setBasicPreference("defaultplaybackcount", 5);
+    setBasicPreference("usedefaultoutputfile", 1);
 }
 
 

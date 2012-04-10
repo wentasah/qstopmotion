@@ -185,12 +185,13 @@ void MainWindowGUI::init()
 
     makeStatusBar();
 
-    //Initializes and sets up the menue system.
+    // Initializes and sets up the menue system.
     createAccelerators();
     createActions();
     createMenus();
 
-    //Mainwindow preferences.
+    // Mainwindow preferences.
+    setWindowTitle(tr("qStopMotion - No Animation Project"));
     QString iconFile(frontend->getIconsDirName());
     iconFile.append(QLatin1String("window.png"));
     setWindowIcon(QPixmap(iconFile));
@@ -203,16 +204,6 @@ void MainWindowGUI::init()
 
     // Sets all the text in the program.
     retranslateStrings();
-
-    /* Add another logo here
-    QLabel *l = new QLabel(this);
-    l->setMaximumSize(150, menuBar()->height() - 5);
-    l->setMinimumSize(150, menuBar()->height() - 5);
-    l->setScaledContents(true);
-    l->setPixmap(qstopmotion_logo);
-    l->move(this->width()-150, 0);
-    l->show();
-    */
 
     connect(this, SIGNAL(startNewProject()), this, SLOT(newProject()));
     connect(this, SIGNAL(startLastProject()), this, SLOT(openMostRecent()));
@@ -628,6 +619,9 @@ void MainWindowGUI::openProject(const QString &filePath)
     saveAsAct->setEnabled(true);
     saveAct->setEnabled(true);
     toolBar->setActualState(ToolBar::toolBarCameraOff);
+
+    QString fileName = filePath.mid(filePath.lastIndexOf("/")+1);
+    setWindowTitle("qStopMotion - " + fileName);
 }
 
 
@@ -779,6 +773,8 @@ void MainWindowGUI::newProject()
 
     delete(dialog);
 
+    setWindowTitle(tr("qStopMotion - New Animation Project"));
+
     qDebug("MainWindowGUI::newProject --> End");
 }
 
@@ -928,7 +924,7 @@ void MainWindowGUI::exportToVideo()
         return;
     }
 
-    if (pref->getBasicPreference("usedefaultoutputfile", 0) == 0) {
+    if (pref->getBasicPreference("usedefaultoutputfile", 0) == 1) {
         QString filter;
         QString exportSuffix;
         switch(pref->getBasicPreference("videoformat", VideoEncoder::noneFormat)) {
@@ -956,7 +952,26 @@ void MainWindowGUI::exportToVideo()
             enc->setOutputFile(outputFile);
         }
     } else {
-        enc->setOutputFile(pref->getBasicPreference("defaultoutputfilename", ""));
+        QString outputFileName = pref->getBasicPreference("defaultoutputfilename", "");
+        if (outputFileName.isEmpty()) {
+            frontend->showWarning(tr("Warning"),
+                                  tr("No default output file name defined.\n"
+                                     "Check your settings in the preferences menu!"));
+            return;
+        }
+        switch(pref->getBasicPreference("videoformat", VideoEncoder::noneFormat)) {
+        case VideoEncoder::aviFormat:
+            if (outputFileName.indexOf(".avi") == -1) {
+                outputFileName.append(".avi");
+            }
+            break;
+        case VideoEncoder::mp4Format:
+            if (outputFileName.indexOf(".mp4") == -1 ) {
+                outputFileName.append(".mp4");
+            }
+            break;
+        }
+        enc->setOutputFile(outputFileName);
     }
 
     // Remove an existing file

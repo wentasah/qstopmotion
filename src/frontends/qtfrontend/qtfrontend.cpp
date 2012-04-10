@@ -274,7 +274,6 @@ void QtFrontend::init()
 
     mw = new MainWindowGUI(stApp, this);
     mw->init();
-    mw->setWindowTitle(tr("qStopMotion"));
     mw->resize(751, 593);
     mw->move(80, 20);
 

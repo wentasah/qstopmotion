@@ -123,12 +123,12 @@
 <context>
     <name>AnimationProject</name>
     <message>
-        <location filename="../src/domain/animation/animationproject.cpp" line="+292"/>
+        <location filename="../src/domain/animation/animationproject.cpp" line="+275"/>
         <source>Saving scenes to disk ...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+643"/>
+        <location line="+621"/>
         <location line="+7"/>
         <source>Add Sound</source>
         <translation type="unfinished"></translation>
@@ -335,30 +335,24 @@ without sound if you choose to play.</source>
 <context>
     <name>DomainFacade</name>
     <message>
-        <location filename="../src/domain/domainfacade.cpp" line="+128"/>
-        <location line="+15"/>
-        <location line="+151"/>
-        <location line="+577"/>
+        <location filename="../src/domain/domainfacade.cpp" line="+146"/>
+        <location line="+176"/>
+        <location line="+673"/>
         <source>Critical</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-742"/>
-        <source>Can&apos;t remove history file!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+15"/>
+        <location line="-848"/>
         <source>Can&apos;t open history file to write entry!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+151"/>
+        <location line="+176"/>
         <source>Can&apos;t open history file to recover project!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+577"/>
+        <location line="+673"/>
         <source>Can&apos;t copy image to temp directory!</source>
         <translation type="unfinished"></translation>
     </message>
@@ -658,29 +652,34 @@ your grabber settings in the preferences menu.</source>
     <name>MainWindowGUI</name>
     <message>
         <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="+155"/>
-        <location line="+393"/>
+        <location line="+392"/>
         <source>Select image grabber</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-392"/>
-        <location line="+393"/>
+        <location line="-391"/>
+        <location line="+392"/>
         <source>You have to define an image grabber to use.
 This can be set in the preferences menu.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-348"/>
+        <location line="-354"/>
+        <source>qStopMotion - No Animation Project</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+8"/>
         <source>Ready to rumble ;-)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+128"/>
+        <location line="+121"/>
         <source>&amp;New</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="+2"/>
         <source>&amp;Open</source>
         <translation type="unfinished">&amp;Öffnen</translation>
     </message>
@@ -782,12 +781,12 @@ This can be set in the preferences menu.</source>
     <message>
         <location line="+1"/>
         <location line="+52"/>
-        <location line="+1313"/>
+        <location line="+1318"/>
         <source>&amp;Help</source>
         <translation type="unfinished">&amp;Hilfe</translation>
     </message>
     <message>
-        <location line="-1364"/>
+        <location line="-1369"/>
         <source>&amp;About</source>
         <translation type="unfinished"></translation>
     </message>
@@ -813,36 +812,36 @@ This can be set in the preferences menu.</source>
     </message>
     <message>
         <location line="+10"/>
-        <location line="+1319"/>
+        <location line="+1324"/>
         <source>&amp;File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-1306"/>
-        <location line="+1307"/>
+        <location line="-1311"/>
+        <location line="+1312"/>
         <source>&amp;Export</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-1299"/>
-        <location line="+1302"/>
+        <location line="-1304"/>
+        <location line="+1307"/>
         <source>&amp;Edit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-1297"/>
-        <location line="+1317"/>
+        <location line="-1302"/>
+        <location line="+1322"/>
         <source>&amp;Settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-1312"/>
-        <location line="+1314"/>
+        <location line="-1317"/>
+        <location line="+1319"/>
         <source>&amp;View</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-1293"/>
+        <location line="-1294"/>
         <source>Cancel</source>
         <translation type="unfinished">Abbrechen</translation>
     </message>
@@ -852,7 +851,7 @@ This can be set in the preferences menu.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+182"/>
+        <location line="+193"/>
         <source>The Project</source>
         <translation type="unfinished"></translation>
     </message>
@@ -867,13 +866,18 @@ This can be set in the preferences menu.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+49"/>
+        <location line="+38"/>
+        <source>qStopMotion - New Animation Project</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+14"/>
         <source>Choose project file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+2"/>
-        <location line="+111"/>
+        <location line="+80"/>
         <source>Project (*.%1);;Archive (*.%2)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -894,12 +898,13 @@ This can be set in the preferences menu.</source>
     </message>
     <message>
         <location line="+27"/>
-        <location line="+55"/>
+        <location line="+50"/>
+        <location line="+24"/>
         <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-54"/>
+        <location line="-73"/>
         <source>Cannot find any registered encoder to be used for video export.
 This can be setted in the preferences menu.
 Export to video will not be possible until you
@@ -922,7 +927,13 @@ have setted an encoder to use!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+21"/>
+        <location line="+16"/>
+        <source>No default output file name defined.
+Check your settings in the preferences menu!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+24"/>
         <source>The registered encoder is not valid.
 Check your settings in the preferences menu!</source>
         <translation type="unfinished"></translation>
@@ -943,7 +954,7 @@ Check your settings in the preferences menu!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+103"/>
+        <location line="+102"/>
         <source>English</source>
         <comment>This should be translated to the name of the language you are translating to, in that language. Example: English = Deutsch (Deutsch is &quot;German&quot; in German)</comment>
         <translation type="unfinished"></translation>
@@ -955,12 +966,14 @@ Check your settings in the preferences menu!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-410"/>
+        <location line="-1748"/>
+        <location line="+1338"/>
         <source>Recording</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+7"/>
+        <location line="-1336"/>
+        <location line="+1343"/>
         <source>Project</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1115,7 +1128,7 @@ Check your settings in the preferences menu!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+73"/>
+        <location line="+74"/>
         <source>Unsaved changes</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1564,7 +1577,7 @@ Bitte überprüfen Sie Ihre GStreamer-Installation und stellen Sie sicher, dass 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+306"/>
+        <location line="+307"/>
         <location line="+7"/>
         <source>Critical</source>
         <translation type="unfinished"></translation>
@@ -1658,36 +1671,36 @@ Bitte überprüfen Sie Ihre GStreamer-Installation und stellen Sie sicher, dass 
     <name>ProjectTab</name>
     <message>
         <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="+112"/>
-        <location line="+1232"/>
+        <location line="+1229"/>
         <source>Project Tree</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-1211"/>
-        <location line="+1213"/>
+        <location line="-1208"/>
+        <location line="+1210"/>
         <source>Scenes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-1173"/>
-        <location line="+1196"/>
+        <location line="-1170"/>
+        <location line="+1193"/>
         <source>Takes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-1154"/>
-        <location line="+1177"/>
+        <location line="-1151"/>
+        <location line="+1174"/>
         <source>Frames</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-1135"/>
-        <location line="+1158"/>
+        <location line="-1132"/>
+        <location line="+1155"/>
         <source>Edit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-361"/>
+        <location line="-369"/>
         <location line="+35"/>
         <source>Scene 000</source>
         <translation type="unfinished"></translation>
@@ -1695,13 +1708,13 @@ Bitte überprüfen Sie Ihre GStreamer-Installation und stellen Sie sicher, dass 
     <message>
         <location line="-34"/>
         <location line="+35"/>
-        <location line="+52"/>
+        <location line="+56"/>
         <location line="+30"/>
         <source>Take 00</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+117"/>
+        <location line="+121"/>
         <location line="+7"/>
         <location line="+304"/>
         <location line="+36"/>
@@ -8088,12 +8101,7 @@ You need permission to read, write and execute on ~/.qstopmotion</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+159"/>
-        <source>qStopMotion</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+277"/>
+        <location line="+435"/>
         <source>&amp;Yes</source>
         <translation type="unfinished">&amp;Ja</translation>
     </message>
@@ -8110,7 +8118,7 @@ You need permission to read, write and execute on ~/.qstopmotion</source>
         <translation type="unfinished">&amp;OK</translation>
     </message>
     <message>
-        <location line="+201"/>
+        <location line="+202"/>
         <source>Recovery</source>
         <translation type="unfinished"></translation>
     </message>
@@ -10071,7 +10079,7 @@ last time it was runned. Do you want to recover?</source>
 <context>
     <name>TimeLine</name>
     <message>
-        <location filename="../src/frontends/qtfrontend/timeline/timeline.cpp" line="+833"/>
+        <location filename="../src/frontends/qtfrontend/timeline/timeline.cpp" line="+823"/>
         <source>Load images to time line</source>
         <translation type="unfinished"></translation>
     </message>
@@ -10134,7 +10142,7 @@ last time it was runned. Do you want to recover?</source>
 <context>
     <name>UndoExposureMove</name>
     <message>
-        <location filename="../src/domain/undo/undoexposuremove.cpp" line="+41"/>
+        <location filename="../src/domain/undo/undoexposuremove.cpp" line="+42"/>
         <source>Move exposure (%1,%2,%3)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -10142,7 +10150,7 @@ last time it was runned. Do you want to recover?</source>
 <context>
     <name>UndoExposureRemove</name>
     <message>
-        <location filename="../src/domain/undo/undoexposureremove.cpp" line="+38"/>
+        <location filename="../src/domain/undo/undoexposureremove.cpp" line="+39"/>
         <source>Remove exposure (%1,%2,%3)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -10150,7 +10158,7 @@ last time it was runned. Do you want to recover?</source>
 <context>
     <name>UndoExposureSelect</name>
     <message>
-        <location filename="../src/domain/undo/undoexposureselect.cpp" line="+36"/>
+        <location filename="../src/domain/undo/undoexposureselect.cpp" line="+37"/>
         <source>Select exposure (%1,%2,%3)--&gt;(%4,%5,%6)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -10166,7 +10174,7 @@ last time it was runned. Do you want to recover?</source>
 <context>
     <name>UndoProjectNew</name>
     <message>
-        <location filename="../src/domain/undo/undoprojectnew.cpp" line="+32"/>
+        <location filename="../src/domain/undo/undoprojectnew.cpp" line="+33"/>
         <source>New project &apos;%1&apos;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -10174,7 +10182,7 @@ last time it was runned. Do you want to recover?</source>
 <context>
     <name>UndoProjectOpen</name>
     <message>
-        <location filename="../src/domain/undo/undoprojectopen.cpp" line="+31"/>
+        <location filename="../src/domain/undo/undoprojectopen.cpp" line="+32"/>
         <source>Open project &apos;%1&apos;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -10206,7 +10214,7 @@ last time it was runned. Do you want to recover?</source>
 <context>
     <name>UndoSceneMove</name>
     <message>
-        <location filename="../src/domain/undo/undoscenemove.cpp" line="+33"/>
+        <location filename="../src/domain/undo/undoscenemove.cpp" line="+34"/>
         <source>Move scene (%1,%2)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -10214,7 +10222,7 @@ last time it was runned. Do you want to recover?</source>
 <context>
     <name>UndoSceneRemove</name>
     <message>
-        <location filename="../src/domain/undo/undosceneremove.cpp" line="+32"/>
+        <location filename="../src/domain/undo/undosceneremove.cpp" line="+33"/>
         <source>Remove scene (%1)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -10222,7 +10230,7 @@ last time it was runned. Do you want to recover?</source>
 <context>
     <name>UndoSceneSelect</name>
     <message>
-        <location filename="../src/domain/undo/undosceneselect.cpp" line="+30"/>
+        <location filename="../src/domain/undo/undosceneselect.cpp" line="+31"/>
         <source>Select scene (%1)--&gt;(%2)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -10246,7 +10254,7 @@ last time it was runned. Do you want to recover?</source>
 <context>
     <name>UndoTakeMove</name>
     <message>
-        <location filename="../src/domain/undo/undotakemove.cpp" line="+35"/>
+        <location filename="../src/domain/undo/undotakemove.cpp" line="+36"/>
         <source>Move take (%1,%2)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -10254,7 +10262,7 @@ last time it was runned. Do you want to recover?</source>
 <context>
     <name>UndoTakeRemove</name>
     <message>
-        <location filename="../src/domain/undo/undotakeremove.cpp" line="+34"/>
+        <location filename="../src/domain/undo/undotakeremove.cpp" line="+35"/>
         <source>Remove take (%1,%2)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -10262,7 +10270,7 @@ last time it was runned. Do you want to recover?</source>
 <context>
     <name>UndoTakeSelect</name>
     <message>
-        <location filename="../src/domain/undo/undotakeselect.cpp" line="+33"/>
+        <location filename="../src/domain/undo/undotakeselect.cpp" line="+34"/>
         <source>Select take (%1,%2)--&gt;(%3,%4)</source>
         <translation type="unfinished"></translation>
     </message>

@@ -139,9 +139,6 @@ void MainWindowGUI::init()
 {
     lastVisitedDir.clear();
 
-    QDir homeDir = QDir::home();
-    lastVisitedDir.append(homeDir.absolutePath());
-
     this->initTranslations();
     PreferencesTool *pref = frontend->getPreferences();
     QString activeLocale = pref->getBasicPreference("language", QString());
@@ -620,7 +617,13 @@ void MainWindowGUI::openProject(const QString &filePath)
     saveAct->setEnabled(true);
     toolBar->setActualState(ToolBar::toolBarCameraOff);
 
-    QString fileName = filePath.mid(filePath.lastIndexOf("/")+1);
+    int lastSlash = filePath.lastIndexOf("/");
+    QString fileName = filePath.mid(lastSlash+1);
+    QString fileDirectory = filePath.left(lastSlash+1);
+
+    lastVisitedDir.clear();
+    lastVisitedDir.append(fileDirectory);
+
     setWindowTitle("qStopMotion - " + fileName);
 }
 
@@ -772,6 +775,10 @@ void MainWindowGUI::newProject()
     setToolBarState(ToolBar::toolBarCameraOff);
 
     delete(dialog);
+
+    QDir homeDir = QDir::home();
+    lastVisitedDir.clear();
+    lastVisitedDir.append(homeDir.absolutePath());
 
     setWindowTitle(tr("qStopMotion - New Animation Project"));
 

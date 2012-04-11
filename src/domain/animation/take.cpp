@@ -139,6 +139,8 @@ bool Take::readDataFromProject(QDomElement &takeNode)
 {
     qDebug("Take::readDataFromProject --> Start");
 
+    QString activeExposureId;
+
     id.append(takeNode.attributeNode(QString("id")).value());
     description.append(takeNode.attributeNode(QString("descr")).value());
 
@@ -194,17 +196,12 @@ bool Take::readDataFromProject(QDomElement &takeNode)
 }
 
 
-bool Take::saveDataToProject(QDomDocument &doc, QDomElement &takeNode,
-                             const QString &sceneId, int takeIndex)
+bool Take::saveDataToProject(QDomDocument &doc, QDomElement &takeNode)
 {
     qDebug("Take::saveDataFromProject --> Start");
 
     unsigned int exposureSize = exposures.size();
     unsigned int exposureIndex;
-
-    // Create a new id for the take
-    id.clear();
-    id.append(QString("%1").arg((takeIndex), 2, 10, QChar('0')));
 
     // Save take attributes
     takeNode.setAttribute("id", id);
@@ -215,7 +212,7 @@ bool Take::saveDataToProject(QDomDocument &doc, QDomElement &takeNode,
         getFrontend()->increaseProgress();
         QDomElement exposureElement = doc.createElement("exposure");
         takeNode.appendChild(exposureElement);
-        if (!exposures[exposureIndex]->saveDataToProject(doc, exposureElement, sceneId, id, exposureIndex)) {
+        if (!exposures[exposureIndex]->saveDataToProject(doc, exposureElement)) {
             qWarning("Take::saveDataFromProject --> Save exposure data failed");
             return false;
         }
@@ -302,8 +299,6 @@ void Take::setActiveExposure(Exposure *newExposure)
 
     if (exposureIndex != activeExposureIndex) {
         this->activeExposureIndex = exposureIndex;
-        this->activeExposureId.clear();
-        this->activeExposureId.append(this->getExposure(this->activeExposureIndex)->getId());
     }
 
     qDebug("Take::setActiveExposure --> End");
@@ -319,10 +314,6 @@ void Take::setActiveExposureIndex(int exposureIndex)
     // Q_ASSERT(exposureIndex != activeExposureIndex);
 
     this->activeExposureIndex = exposureIndex;
-    this->activeExposureId.clear();
-    if (0 <= exposureIndex) {
-        this->activeExposureId.append(this->getExposure(this->activeExposureIndex)->getId());
-    }
 
     qDebug("Take::setActiveExposureIndex --> End");
 }

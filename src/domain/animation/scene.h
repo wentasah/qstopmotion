@@ -133,7 +133,7 @@ public:
     /**
      * Set scene data to project file.
      */
-    bool saveDataToProject(QDomDocument &doc, QDomElement &sceneNode, int sceneIndex);
+    bool saveDataToProject(QDomDocument &doc, QDomElement &sceneNode);
 
     /**
      * Get the temp path of the project
@@ -509,11 +509,6 @@ private:
      * Current active Take of the scene
      */
     int activeTakeIndex;
-
-    /**
-     * Id of the active take. (Readed from the project file.)
-     */
-    QString activeTakeId;
 
     /**
      * next take index to use to create a dummy description string.

@@ -139,6 +139,8 @@ bool Scene::readDataFromProject(QDomElement &sceneNode)
 {
     qDebug("Scene::readDataFromProject --> Start");
 
+    QString activeTakeId;
+
     id.append(sceneNode.attributeNode(QString("id")).value());
     description.append(sceneNode.attributeNode(QString("descr")).value());
 
@@ -194,16 +196,12 @@ bool Scene::readDataFromProject(QDomElement &sceneNode)
 }
 
 
-bool Scene::saveDataToProject(QDomDocument &doc, QDomElement &sceneNode, int sceneIndex)
+bool Scene::saveDataToProject(QDomDocument &doc, QDomElement &sceneNode)
 {
     qDebug("Scene::saveDataToProject --> Start");
 
     unsigned int takeSize = takes.size();
     unsigned int takeIndex;
-
-    // Create a new id for the scene
-    id.clear();
-    id.append(QString("%1").arg((sceneIndex), 3, 10, QChar('0')));
 
     // Save scene attributes
     sceneNode.setAttribute("id", id);
@@ -213,7 +211,7 @@ bool Scene::saveDataToProject(QDomDocument &doc, QDomElement &sceneNode, int sce
     for (takeIndex = 0; takeIndex < takeSize; ++takeIndex) {
         QDomElement takeElement = doc.createElement("take");
         sceneNode.appendChild(takeElement);
-        if (!takes[takeIndex]->saveDataToProject(doc, takeElement, id, takeIndex)) {
+        if (!takes[takeIndex]->saveDataToProject(doc, takeElement)) {
             qWarning("Scene::saveDataToProject --> Save take data failed");
             return false;
         }
@@ -288,10 +286,6 @@ void Scene::setActiveTakeIndex(int takeIndex)
     // Q_ASSERT(takeIndex != activeTakeIndex);
 
     this->activeTakeIndex = takeIndex;
-    this->activeTakeId.clear();
-    if (0 <= takeIndex) {
-        this->activeTakeId.append(this->getTake(this->activeTakeIndex)->getId());
-    }
 
     qDebug("Scene::setActiveTakeIndex --> End");
 }

@@ -759,11 +759,6 @@ private:
     int activeSceneIndex;
 
     /**
-     * Id of the active scene. (Readed from the project file.)
-     */
-    QString activeSceneId;
-
-    /**
      * Next scene index to use to create a dummy description string.
      */
     unsigned int nextSceneIndex;

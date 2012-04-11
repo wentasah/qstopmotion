@@ -138,8 +138,7 @@ public:
     /**
      * Set take data to project file.
      */
-    bool saveDataToProject(QDomDocument &doc, QDomElement &takeNode,
-                           const QString &sceneId, int takeIndex);
+    bool saveDataToProject(QDomDocument &doc, QDomElement &takeNode);
 
     /**
      * Get the temp path of the project
@@ -360,11 +359,6 @@ private:
      * Current active exposure of the take
      */
     int activeExposureIndex;
-
-    /**
-     * Id of the active exposure. (Readed from the project file.)
-     */
-    QString activeExposureId;
 
     /**
      * Vector containing the exposures of the take.

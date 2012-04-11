@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2011 by                                                *
+ *  Copyright (C) 2005-2012 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -437,34 +437,11 @@ bool Exposure::readDataFromProject(QDomElement &exposureNode)
 }
 
 
-bool Exposure::saveDataToProject(QDomDocument &doc, QDomElement &exposureNode,
-                                 const QString &/*sceneId*/, const QString &/*takeId*/,
-                                 int exposureIndex)
+bool Exposure::saveDataToProject(QDomDocument &doc, QDomElement &exposureNode)
 {
     qDebug("Exposure::saveDataFromProject --> Start");
 
     QDomElement   theFrameElement;
-
-    // Create a new id for the Exposure
-    id.clear();
-    id.append(QString("%1").arg((exposureIndex), 4, 10, QChar('0')));
-
-    // Create a new file name for the frame
-
-    /* This version didn't work with ffmpeg encoder
-    QString newFrameName(sceneId);
-    newFrameName.append('_');
-    newFrameName.append(takeId);
-    newFrameName.append('_');
-    newFrameName.append(id);
-    newFrameName.append(theFrame.mid(theFrame.lastIndexOf('.')));
-    */
-    int newTotalExposureIndex = parent->getAnimationProject()->getNextTotalExposureIndex();
-    QString newFrameName(QString("%1").arg(newTotalExposureIndex, 6, 10, QLatin1Char('0')));
-    newFrameName.append(theFrame.mid(theFrame.lastIndexOf('.')));
-
-    // Move frame file to project directory
-    this->moveToProject(newFrameName);
 
     // Save exposure parameter
     exposureNode.setAttribute("id", id);

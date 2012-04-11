@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2011 by                                                *
+ *  Copyright (C) 2005-2012 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -188,9 +188,7 @@ public:
     /**
      * Set frame data to project file.
      */
-    bool saveDataToProject(QDomDocument &doc, QDomElement &exposureNode,
-                           const QString &sceneId, const QString &takeId,
-                           int exposureIndex);
+    bool saveDataToProject(QDomDocument &doc, QDomElement &exposureNode);
 
 private:
 

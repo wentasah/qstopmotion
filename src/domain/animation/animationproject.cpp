@@ -548,10 +548,6 @@ void AnimationProject::setActiveSceneIndex(int sceneIndex)
     // Q_ASSERT(sceneIndex != activeSceneIndex)
 
     this->activeSceneIndex = sceneIndex;
-    this->activeSceneId.clear();
-    if (0 <= sceneIndex) {
-        this->activeSceneId.append(this->getScene(this->activeSceneIndex)->getId());
-    }
 
     qDebug("AnimationProject::setActiveSceneIndex --> End");
 }
@@ -708,6 +704,8 @@ bool AnimationProject::readScenesFromProject(QDomElement &animationNode)
 {
     qDebug("AnimationProject::readScenesFromProject --> Start");
 
+    QString activeSceneId;
+
     description.append(animationNode.attributeNode(QString("descr")).value());
     frontend->getView()->notifyNewProject();
 
@@ -768,37 +766,85 @@ bool AnimationProject::saveScenesToProject(QDomDocument &doc, QDomElement &anima
     // Save project parameter
     animationNode.setAttribute("descr", description);
 
-    // Removes frames which already are saved. Had to do this to prevent
-    // frames to overwrite each other.
-    for (sceneIndex = 0; sceneIndex < sceneSize; ++sceneIndex) {
-        Scene *scene = scenes[sceneIndex];
-        unsigned int takeSize = scene->getTakeSize();
-        for (unsigned int takeIndex = 0; takeIndex < takeSize; ++takeIndex) {
-            Take *take = scene->getTake(takeIndex);
-            unsigned int exposureSize = take->getExposureSize();
-            for (unsigned int exposureIndex = 0; exposureIndex < exposureSize; ++exposureIndex) {
-                Exposure *exposure = take->getExposure(exposureIndex);
-                exposure->moveToTemp();
+    if (isAnimationChanges()) {
+        // The Animation is changed, rearrange the frames
+
+        // Removes frames which already are saved. Had to do this to prevent
+        // frames to overwrite each other.
+        for (sceneIndex = 0; sceneIndex < sceneSize; ++sceneIndex) {
+            Scene *scene = scenes[sceneIndex];
+            unsigned int takeSize = scene->getTakeSize();
+            for (unsigned int takeIndex = 0; takeIndex < takeSize; ++takeIndex) {
+                Take *take = scene->getTake(takeIndex);
+                unsigned int exposureSize = take->getExposureSize();
+                for (unsigned int exposureIndex = 0; exposureIndex < exposureSize; ++exposureIndex) {
+                    Exposure *exposure = take->getExposure(exposureIndex);
+                    exposure->moveToTemp();
+                }
+            }
+        }
+
+        // Delete all image file that stay in the image directory
+        // (All files that deleted from the project.)
+        QString     imagePath = this->getOldImagePath();
+        QDir        imageDir(imagePath);
+        QStringList fileNameList = imageDir.entryList(QDir::Files);
+        for (int fileIndex = 0 ; fileIndex < fileNameList.count() ; fileIndex++) {
+            imageDir.remove(fileNameList[fileIndex]);
+        }
+
+        nextTotalExposureIndex = 0;
+
+        // Move all frames to the project directory with a new indexed name
+        for (sceneIndex = 0; sceneIndex < sceneSize; ++sceneIndex) {
+            Scene *scene = scenes[sceneIndex];
+
+            // Create a new id for the scene
+            scene->setId(QString("%1").arg((sceneIndex), 3, 10, QChar('0')));
+
+            unsigned int takeSize = scene->getTakeSize();
+            for (unsigned int takeIndex = 0; takeIndex < takeSize; ++takeIndex) {
+                Take *take = scene->getTake(takeIndex);
+
+                // Create a new id for the take
+                take->setId(QString("%1").arg((takeIndex), 2, 10, QChar('0')));
+
+                unsigned int exposureSize = take->getExposureSize();
+                for (unsigned int exposureIndex = 0; exposureIndex < exposureSize; ++exposureIndex) {
+                    Exposure *exposure = take->getExposure(exposureIndex);
+
+                    // Create a new id for the Exposure
+                    exposure->setId(QString("%1").arg((exposureIndex), 4, 10, QChar('0')));
+
+                    // Create a new file name for the frame
+
+                    /* This version didn't work with ffmpeg encoder
+                    QString newFrameName(scene->getId());
+                    newFrameName.append('_');
+                    newFrameName.append(take->getId());
+                    newFrameName.append('_');
+                    newFrameName.append(exposure->getId());
+                    newFrameName.append(theFrame.mid(theFrame.lastIndexOf('.')));
+                    */
+
+                    QString oldFrameName = exposure->getImagePath();
+                    int newTotalExposureIndex = getNextTotalExposureIndex();
+                    QString newFrameName(QString("%1").arg(newTotalExposureIndex, 6, 10, QLatin1Char('0')));
+                    newFrameName.append(oldFrameName.mid(oldFrameName.lastIndexOf('.')));
+
+                    // Move frame file to project directory
+                    exposure->moveToProject(newFrameName);
+                }
             }
         }
     }
 
-    // Delete all image file that stay in the image directory
-    // (All files that deleted from the project.)
-    QString     imagePath = this->getOldImagePath();
-    QDir        imageDir(imagePath);
-    QStringList fileNameList = imageDir.entryList(QDir::Files);
-    for (int fileIndex = 0 ; fileIndex < fileNameList.count() ; fileIndex++) {
-        imageDir.remove(fileNameList[fileIndex]);
-    }
-
-    nextTotalExposureIndex = 0;
     for (sceneIndex = 0; sceneIndex < sceneSize; ++sceneIndex) {
         // Scenes
         sceneElement = doc.createElement("scene");
         animationNode.appendChild(sceneElement);
 
-        if (!scenes[sceneIndex]->saveDataToProject(doc, sceneElement, sceneIndex)) {
+        if (!scenes[sceneIndex]->saveDataToProject(doc, sceneElement)) {
             qDebug("AnimationProject::saveScenesToProject --> End (false)");
             return false;
         }
@@ -851,12 +897,56 @@ bool AnimationProject::saveAsScenesToProject(QDomDocument &doc, QDomElement &ani
     }
 
     nextTotalExposureIndex = 0;
+
+    // Move all frames to the new project directory with a new indexed name
+    for (sceneIndex = 0; sceneIndex < sceneSize; ++sceneIndex) {
+        Scene *scene = scenes[sceneIndex];
+
+        // Create a new id for the scene
+        scene->setId(QString("%1").arg((sceneIndex), 3, 10, QChar('0')));
+
+        unsigned int takeSize = scene->getTakeSize();
+        for (unsigned int takeIndex = 0; takeIndex < takeSize; ++takeIndex) {
+            Take *take = scene->getTake(takeIndex);
+
+            // Create a new id for the take
+            take->setId(QString("%1").arg((takeIndex), 2, 10, QChar('0')));
+
+            unsigned int exposureSize = take->getExposureSize();
+            for (unsigned int exposureIndex = 0; exposureIndex < exposureSize; ++exposureIndex) {
+                Exposure *exposure = take->getExposure(exposureIndex);
+
+                // Create a new id for the Exposure
+                exposure->setId(QString("%1").arg((exposureIndex), 4, 10, QChar('0')));
+
+                // Create a new file name for the frame
+
+                /* This version didn't work with ffmpeg encoder
+                QString newFrameName(scene->getId());
+                newFrameName.append('_');
+                newFrameName.append(take->getId());
+                newFrameName.append('_');
+                newFrameName.append(exposure->getId());
+                newFrameName.append(theFrame.mid(theFrame.lastIndexOf('.')));
+                */
+
+                QString oldFrameName = exposure->getImagePath();
+                int newTotalExposureIndex = getNextTotalExposureIndex();
+                QString newFrameName(QString("%1").arg(newTotalExposureIndex, 6, 10, QLatin1Char('0')));
+                newFrameName.append(oldFrameName.mid(oldFrameName.lastIndexOf('.')));
+
+                // Move frame file to project directory
+                exposure->moveToProject(newFrameName);
+            }
+        }
+    }
+
     for (sceneIndex = 0; sceneIndex < sceneSize; ++sceneIndex) {
         // Scenes
         sceneElement = doc.createElement("scene");
         animationNode.appendChild(sceneElement);
 
-        if (!scenes[sceneIndex]->saveDataToProject(doc, sceneElement, sceneIndex)) {
+        if (!scenes[sceneIndex]->saveDataToProject(doc, sceneElement)) {
             qDebug("AnimationProject::saveScenesToProject --> End (false)");
             return false;
         }

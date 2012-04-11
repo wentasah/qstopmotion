@@ -34,6 +34,7 @@ AboutDialog::AboutDialog(Frontend *f,
 {
     frontend = f;
 
+    QString version;
     QString iconFile(frontend->getGraphicsDirName());
     iconFile.append(QLatin1String("qstopmotion_logo_60.png"));
 
@@ -48,7 +49,67 @@ AboutDialog::AboutDialog(Frontend *f,
     layout->addWidget(new QLabel(
                           "<p>" + tr("This is the qStopMotion application for creating stop motion animations.") + "</p>"
                           "<p>" + tr("Version: ") + PreferencesTool::applicationVersion + "</p>"
-                          "<p> &copy; 2005-2012, Ralf Lange, Bjørn Erik Nilsen and Fredrik Berg Kjølstad </p>"));
+                          "<p>&copy; 2005-2012, Ralf Lange, Bjørn Erik Nilsen " + tr("and") + " Fredrik Berg Kjølstad </p>"
+                          "<hr />"));
+
+    // Add line contaning the Qt version number
+    layout->addWidget(new QLabel(tr("Qt runtime version: ") + qVersion()));
+
+    // Add line containing the OS version number
+    version.append(tr("Operating system name and version: "));
+#ifdef Q_WS_WIN
+    // Windows version
+    switch(QSysInfo::WindowsVersion) {
+    case QSysInfo::WV_NT:
+        version.append("Windows NT (4.0)");
+        break;
+    case QSysInfo::WV_2000:
+        version.append("Windows 2000 (5.0)");
+        break;
+    case QSysInfo::WV_XP:
+        version.append("Windows XP (5.1)");
+        break;
+    case QSysInfo::WV_2003:
+        version.append("Windows 2003 (5.2)");
+        break;
+    case QSysInfo::WV_VISTA:
+        version.append("Windows Vista (6.0)");
+        break;
+    case QSysInfo::WV_WINDOWS7:
+        version.append("Windows 7 (6.1)");
+        break;
+    }
+
+#endif
+#ifdef Q_WS_MAC
+    // Apple OS X version
+    switch(QSysInfo::MacintoshVersion) {
+    case QSysInfo::MV_10_3:
+        version.append("Mac OS X 10.3 (Panther)");
+        break;
+    case QSysInfo::MV_10_3:
+        version.append("Mac OS X 10.4 (Tiger)");
+        break;
+    case QSysInfo::MV_10_3:
+        version.append("Mac OS X 10.5 (Leopard)");
+        break;
+    case QSysInfo::MV_10_3:
+        version.append("Mac OS X 10.6 (Snowleopard)");
+        break;
+    }
+#endif
+#ifdef Q_WS_X11
+    // Linux version
+    QProcess uname;
+    uname.start("uname -ro");
+    if (uname.waitForStarted()) {
+        if (uname.waitForFinished()) {
+            version.append(uname.readAll());
+        }
+    }
+#endif
+    layout->addWidget(new QLabel(version));
+
     widget->setLayout(layout);
 
     tabWidget->addTab(widget, tr("&About"));

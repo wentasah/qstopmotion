@@ -4,7 +4,7 @@
 <context>
     <name>AboutDialog</name>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="+49"/>
+        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="+50"/>
         <source>This is the qStopMotion application for creating stop motion animations.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -14,7 +14,22 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+4"/>
+        <location line="+1"/>
+        <source>and</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Qt runtime version: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Operating system name and version: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+56"/>
         <source>&amp;About</source>
         <translation type="unfinished"></translation>
     </message>
@@ -128,7 +143,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+621"/>
+        <location line="+711"/>
         <location line="+7"/>
         <source>Add Sound</source>
         <translation type="unfinished"></translation>
@@ -708,7 +723,7 @@ your grabber settings in the preferences menu.</source>
 <context>
     <name>MainWindowGUI</name>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="+155"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="+152"/>
         <location line="+392"/>
         <source>Select image grabber</source>
         <translation type="unfinished"></translation>
@@ -838,12 +853,12 @@ This can be set in the preferences menu.</source>
     <message>
         <location line="+1"/>
         <location line="+52"/>
-        <location line="+1318"/>
+        <location line="+1328"/>
         <source>&amp;Help</source>
         <translation type="unfinished">&amp;Aide</translation>
     </message>
     <message>
-        <location line="-1369"/>
+        <location line="-1379"/>
         <source>&amp;About</source>
         <translation type="unfinished"></translation>
     </message>
@@ -869,36 +884,36 @@ This can be set in the preferences menu.</source>
     </message>
     <message>
         <location line="+10"/>
-        <location line="+1324"/>
+        <location line="+1334"/>
         <source>&amp;File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-1311"/>
-        <location line="+1312"/>
+        <location line="-1321"/>
+        <location line="+1322"/>
         <source>&amp;Export</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-1304"/>
-        <location line="+1307"/>
+        <location line="-1314"/>
+        <location line="+1317"/>
         <source>&amp;Edit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-1302"/>
-        <location line="+1322"/>
+        <location line="-1312"/>
+        <location line="+1332"/>
         <source>&amp;Settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-1317"/>
-        <location line="+1319"/>
+        <location line="-1327"/>
+        <location line="+1329"/>
         <source>&amp;View</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-1294"/>
+        <location line="-1304"/>
         <source>Cancel</source>
         <translation type="unfinished">Annuler</translation>
     </message>
@@ -908,7 +923,7 @@ This can be set in the preferences menu.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+193"/>
+        <location line="+199"/>
         <source>The Project</source>
         <translation type="unfinished"></translation>
     </message>
@@ -923,7 +938,7 @@ This can be set in the preferences menu.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+38"/>
+        <location line="+42"/>
         <source>qStopMotion - New Animation Project</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1023,14 +1038,14 @@ Check your settings in the preferences menu!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-1748"/>
-        <location line="+1338"/>
+        <location line="-1758"/>
+        <location line="+1348"/>
         <source>Recording</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-1336"/>
-        <location line="+1343"/>
+        <location line="-1346"/>
+        <location line="+1353"/>
         <source>Project</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7747,7 +7762,7 @@ last time it was runned. Do you want to recover?</source>
 <context>
     <name>Scene</name>
     <message>
-        <location filename="../src/domain/animation/scene.cpp" line="+715"/>
+        <location filename="../src/domain/animation/scene.cpp" line="+709"/>
         <location line="+63"/>
         <source>Critical</source>
         <translation type="unfinished"></translation>

@@ -4,133 +4,134 @@
 <context>
     <name>AboutDialog</name>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="114"/>
+        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="59"/>
         <source>&amp;About</source>
         <translation>A &amp;propos</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="117"/>
+        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="63"/>
+        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="65"/>
         <source>Main developers</source>
         <translation>Développeurs principaux</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="125"/>
+        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="75"/>
         <source>A&amp;uthors</source>
         <translation>A&amp;uteurs</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="129"/>
+        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="79"/>
         <source>Translation</source>
         <translation>Traduction</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="130"/>
         <source>Czech</source>
-        <translation>Tchèque</translation>
+        <translation type="obsolete">Tchèque</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="131"/>
         <source>Slovenian</source>
-        <translation>Slovève</translation>
+        <translation type="obsolete">Slovève</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="132"/>
+        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="80"/>
+        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="81"/>
         <source>French</source>
         <translation>Français</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="137"/>
         <source>Turkish</source>
-        <translation>Turc</translation>
+        <translation type="obsolete">Turc</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="138"/>
-        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="139"/>
         <source>Italian</source>
-        <translation>Italien</translation>
+        <translation type="obsolete">Italien</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="141"/>
         <source>Logo</source>
-        <translation>Logo</translation>
+        <translation type="obsolete">Logo</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="143"/>
         <source>Coordinating</source>
-        <translation>Coordination</translation>
+        <translation type="obsolete">Coordination</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="146"/>
         <source>Testing</source>
-        <translation>Tester</translation>
+        <translation type="obsolete">Tester</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="157"/>
+        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="110"/>
         <source>&amp;Thanks To</source>
         <translation>&amp;Remerciements à</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="162"/>
+        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="115"/>
         <source>&amp;Licence Agreement</source>
         <translation>Accord de &amp;licence</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="164"/>
+        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="178"/>
+        <source>&amp;System Info</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="180"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="177"/>
+        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="193"/>
         <source>About</source>
         <translation>A propos</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="50"/>
+        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="49"/>
         <source>This is the qStopMotion application for creating stop motion animations.</source>
         <translation>C&apos;est le programme qStopMotion pour créer des animations en volume.</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="51"/>
+        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="50"/>
+        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="56"/>
         <source>Version: </source>
         <translation>Version</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="52"/>
+        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="54"/>
+        <source>qStopMotion is a fork of stopmotion for linux.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="57"/>
         <source>and</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="55"/>
+        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="121"/>
         <source>Qt runtime version: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="58"/>
+        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="124"/>
         <source>Operating system name and version: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="133"/>
         <source>German</source>
-        <translation>Allemand</translation>
+        <translation type="obsolete">Allemand</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="134"/>
         <source>Portuguese</source>
-        <translation>Portugais</translation>
+        <translation type="obsolete">Portugais</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="135"/>
         <source>Spanish</source>
-        <translation>Español</translation>
+        <translation type="obsolete">Español</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="136"/>
         <source>Swedish</source>
-        <translation>Suède</translation>
+        <translation type="obsolete">Suède</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="121"/>
+        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="68"/>
         <source>Contributors</source>
         <translation>Participants</translation>
     </message>
@@ -1622,12 +1623,12 @@ paramètres de capture dans la fenêtre de préférences.</translation>
 <context>
     <name>QtFrontend</name>
     <message>
-        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="117"/>
+        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="128"/>
         <source>Check Permissions</source>
         <translation>Veuillez vérifier les droits d&apos;accès</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="118"/>
+        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="129"/>
         <source>You do not have the necessary permissions to run qStopMotion.
 You need permission to read, write and execute on ~/.qstopmotion</source>
         <translation>Vous n&apos;avez pas les droits d&apos;accès nécessaires pour utiliser qStopMotion.
@@ -1638,31 +1639,31 @@ Il vous faut des droits d&apos;accès pour lire, écrire et exécuter dans ~/.qs
         <translation type="obsolete">qStopMotion</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="806"/>
+        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="826"/>
         <source>Recovery</source>
         <translation>Restauration</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="807"/>
+        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="827"/>
         <source>Something caused qStopmotion to exit abnormally
 last time it was runned. Do you want to recover?</source>
         <translation>Probablement qStopMotion n&apos;a pas été correctement terminé lors de le dernière séance.
 Voulez-vous restaurer la dernière séance?</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="553"/>
+        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="573"/>
         <source>&amp;Yes</source>
         <translation>&amp;Oui</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="554"/>
+        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="574"/>
         <source>&amp;No</source>
         <translation>&amp;Non</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="574"/>
-        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="589"/>
-        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="604"/>
+        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="594"/>
+        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="609"/>
+        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="624"/>
         <source>&amp;OK</source>
         <translation>&amp;OK</translation>
     </message>

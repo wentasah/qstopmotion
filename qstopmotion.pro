@@ -1,7 +1,7 @@
 ###############################################################################
 # QtCreator file for the qStopMotion project                                  #
 # (c) Ralf Lange, longsoft.de                                                 #
-# Last update: 2012-03-26                                                     #
+# Last update: 2012-04-12                                                     #
 #                                                                             #
 # Please use CMake and the CMakeLists.txt file to build qStopMotion!          #
 ###############################################################################
@@ -138,8 +138,7 @@ SOURCES += src/main.cpp \
            src/technical/videoencoder/videoencoder.cpp \
            src/technical/videoencoder/videoencoderfactory.cpp
 
-TRANSLATIONS += translations/qstopmotion_de.ts \
-                translations/qstopmotion_fr.ts \
+TRANSLATIONS += translations/qstopmotion_fr.ts \
 #                translations/qstopmotion_br.ts \
 #                translations/qstopmotion_cz.ts \
 #                translations/qstopmotion_dk.ts \
@@ -156,8 +155,7 @@ TRANSLATIONS += translations/qstopmotion_de.ts \
 #                translations/qstopmotion_se.ts \
 #                translations/qstopmotion_sl.ts \
 #                translations/qstopmotion_tr.ts \
-                translations/qt_de.ts \
-                translations/qt_fr.ts
+                translations/qstopmotion_de.ts
 
 DEPENDPATH += src
 

@@ -29,6 +29,8 @@
 #include "technical/preferencestool.h"
 
 #include <QtCore/QDebug>
+#include <QtCore/QPoint>
+#include <QtCore/QSize>
 #include <QtGui/QtGui>
 
 #include <cstring>
@@ -59,6 +61,15 @@ QtFrontend::~QtFrontend()
 {
     qDebug("QtFrontend::Destructor --> Start");
 
+    // Save the size and position of the application
+    QSize appSize = mw->size();
+    QPoint appPos = mw->pos();
+    preferencesTool->setBasicPreference("applicationsizeheight", appSize.height());
+    preferencesTool->setBasicPreference("applicationsizewidth", appSize.width());
+    preferencesTool->setBasicPreference("applicationposx", appPos.x());
+    preferencesTool->setBasicPreference("applicationposy", appPos.y());
+
+    // Cleanup the memory
     delete mw;
     mw = NULL;
 
@@ -274,8 +285,17 @@ void QtFrontend::init()
 
     mw = new MainWindowGUI(stApp, this);
     mw->init();
-    mw->resize(751, 593);
-    mw->move(80, 20);
+
+    // Restore the size and position of the application
+    QSize appSize;
+    QPoint appPos;
+    appSize.setHeight(preferencesTool->getBasicPreference("applicationsizeheight", 593));
+    appSize.setWidth(preferencesTool->getBasicPreference("applicationsizewidth", 751));
+    appPos.setX(preferencesTool->getBasicPreference("applicationposx", 80));
+    appPos.setY(preferencesTool->getBasicPreference("applicationposy", 20));
+
+    mw->resize(appSize);
+    mw->move(appPos);
 
     // this->testMainWidget();
 

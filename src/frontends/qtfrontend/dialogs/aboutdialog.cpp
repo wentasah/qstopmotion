@@ -34,26 +34,91 @@ AboutDialog::AboutDialog(Frontend *f,
 {
     frontend = f;
 
-    QString version;
     QString iconFile(frontend->getGraphicsDirName());
     iconFile.append(QLatin1String("qstopmotion_logo_60.png"));
 
     tabWidget = new QTabWidget;
 
-    QWidget *widget = new QWidget;
-    QVBoxLayout *layout = new QVBoxLayout;
-    QLabel *label = new QLabel;
-    label->setPixmap(QPixmap(iconFile));
-    label->setScaledContents(true);
-    layout->addWidget(label);
-    layout->addWidget(new QLabel(
+    QWidget *aboutWidget = new QWidget;
+    QVBoxLayout *aboutLayout = new QVBoxLayout;
+    QLabel *logoLabel = new QLabel;
+    logoLabel->setPixmap(QPixmap(iconFile));
+    logoLabel->setScaledContents(true);
+    aboutLayout->addWidget(logoLabel);
+    aboutLayout->addWidget(new QLabel(
                           "<p>" + tr("This is the qStopMotion application for creating stop motion animations.") + "</p>"
                           "<p>" + tr("Version: ") + PreferencesTool::applicationVersion + "</p>"
-                          "<p>&copy; 2005-2012, Ralf Lange, Bjørn Erik Nilsen " + tr("and") + " Fredrik Berg Kjølstad </p>"
+                          "<p>&copy; 2010-2012, Ralf Lange, longsoft.de </p>"
                           "<hr />"));
+    aboutLayout->addWidget(new QLabel(
+                          "<p>" + tr("qStopMotion is a fork of stopmotion for linux.") + "</p>"
+                          "<p>http://developer.skolelinux.no/info/studentgrupper/2005-hig-stopmotion/index.php </p>"
+                          "<p>" + tr("Version: ") + "0.6.2 </p>"
+                          "<p>&copy; 2005-2008, Bjørn Erik Nilsen " + tr("and") + " Fredrik Berg Kjølstad </p>"));
+    aboutWidget->setLayout(aboutLayout);
+    tabWidget->addTab(aboutWidget, tr("&About"));
 
+    QTextEdit *autorsText = new QTextEdit;
+    autorsText->setHtml(
+                "<p><b>" + tr("Main developers") + " - qStopMotion</b><br>"
+                "Ralf Lange &lt;ralf.lange@longsoft.de&gt;<br>"
+                "<p><b>" + tr("Main developers") + " - stopmotion for Linux</b><br>"
+                "Bjørn Erik Nilsen &lt;bjoern.nilsen@bjoernen.com&gt;<br>"
+                "Fredrik Berg Kjølstad &lt;fredrikbk@hotmail.com&gt;<br>"
+                "<p><b>" + tr("Contributors") + " - stopmotion for Linux</b><br>"
+                "Eric Stolten &lt;stoltene2@gmail.com&gt;<br>"
+                "Josh Green &lt;josh@resonance.org&gt;<br>"
+                "</p>"
+                );
+    autorsText->setReadOnly(true);
+    autorsText->setBackgroundRole(backgroundRole());
+    tabWidget->addTab(autorsText, tr("A&uthors"));
+
+    QTextEdit *thanksText = new QTextEdit;
+    thanksText->setHtml(
+                "<p><b>" + tr("Translation") + "</b><br>"
+                "Norma Ludwig (" + tr("French") + " - qStopMotion)<br>"
+                "Guillaume B &lt;littletux@zarb.org&gt; (" + tr("French") + " - stopmotion for Linux)<br>"
+                /*
+                "George Helebrant &lt;helb@skatekralovice.com&gt; (" + tr("Czech") + ")<br>"
+                "Gorazd Bizjak and Matej Lavreni &lt;info@zapstudio.net&gt; (" + tr("Slovenian") + ")<br>"
+                "Martin Herweg &lt;m.herweg@gmx.de&gt; (" + tr("German") + ")<br>"
+                "José Jorge &lt;jjorge@free.fr&gt; (" + tr("Portuguese") + ")<br>"
+                "Manuel Quiñones &lt;manuel.por.aca@gmail.com&gt; (" + tr("Spanish") + ")<br>"
+                "David Hjelm &lt;dav.hjelm@spray.se&gt; (" + tr("Swedish") + ")<br>"
+                "Koray Löker &lt;loker@pardus.org.tr&gt; (" + tr("Turkish") + ")<br>"
+                "Diego Giordano &lt;fusion_machine@tin.it&gt; (" + tr("Italian") + ")<br>"
+                "Matteo Comisso &lt;teomatteo8.9@hotmail.it&gt; (" + tr("Italian") + ")<br>"
+                "</p>"
+                "<p><b>" + tr("Logo") + "</b><br>"
+                "Gorazd Bizjak &lt;gorazd@zapstudio.net&gt;<br>"
+                "<p><b>" + tr("Coordinating") + "</b><br>"
+                "Herman Robak &lt;herman@skolelinux.no&gt;<br>"
+                "Øyvind Kolås &lt;pippin@gimp.org&gt;</p>"
+                "<p><b>" + tr("Testing") + "</b><br>"
+                "Tore Sinding Bekkedal &lt;toresbe@ifi.uio.no&gt;<br>"
+                "Finn Arne Johansen &lt;faj@bzz.no&gt;<br>"
+                "Halvor Borgen &lt;halvor.borgen@hig.no&gt;<br>"
+                "Bjørn Are Hansen &lt;post@bahansen.net&gt;<br>"
+                "John Steinar Bildøy &lt;johnsbil@haldenfriskole.no&gt;<br>"
+                "Ole-Anders Andreassen &lt;ole-anders.andreassen@sunndal.kommune.no&gt;<br>"
+                */
+                "</p>"
+                );
+    thanksText->setReadOnly(true);
+    thanksText->setBackgroundRole(backgroundRole());
+    tabWidget->addTab(thanksText, tr("&Thanks To"));
+
+    QTextEdit *licenceText = new QTextEdit;
+    licenceText->setReadOnly(true);
+    licenceText->setPlainText(licence);
+    tabWidget->addTab(licenceText, tr("&Licence Agreement"));
+
+    QString version;
+    QWidget *systemWidget = new QWidget;
+    QVBoxLayout *systemLayout = new QVBoxLayout;
     // Add line contaning the Qt version number
-    layout->addWidget(new QLabel(tr("Qt runtime version: ") + qVersion()));
+    systemLayout->addWidget(new QLabel(tr("Qt runtime version: ") + qVersion()));
 
     // Add line containing the OS version number
     version.append(tr("Operating system name and version: "));
@@ -79,7 +144,6 @@ AboutDialog::AboutDialog(Frontend *f,
         version.append("Windows 7 (6.1)");
         break;
     }
-
 #endif
 #ifdef Q_WS_MAC
     // Apple OS X version
@@ -108,59 +172,10 @@ AboutDialog::AboutDialog(Frontend *f,
         }
     }
 #endif
-    layout->addWidget(new QLabel(version));
-
-    widget->setLayout(layout);
-
-    tabWidget->addTab(widget, tr("&About"));
-
-    tabWidget->addTab(new QLabel(
-                          "<p><b>" + tr("Main developers") + "</b><br>"
-                          "Ralf Lange &lt;ralf.lange@longsoft.de&gt;<br>"
-                          "Bjørn Erik Nilsen &lt;bjoern.nilsen@bjoernen.com&gt;<br>"
-                          "Fredrik Berg Kjølstad &lt;fredrikbk@hotmail.com&gt;<br>"
-                          "<p><b>" + tr("Contributors") + "</b><br>"
-                          "Eric Stolten &lt;stoltene2@gmail.com&gt;<br>"
-                          "Josh Green &lt;josh@resonance.org&gt;<br>"
-                          "</p>"),
-                      tr("A&uthors"));
-
-    QTextEdit *qte = new QTextEdit;
-    qte->setHtml(
-        "<p><b>" + tr("Translation") + "</b><br>"
-        "George Helebrant &lt;helb@skatekralovice.com&gt; (" + tr("Czech") + ")<br>"
-        "Gorazd Bizjak and Matej Lavreni &lt;info@zapstudio.net&gt; (" + tr("Slovenian") + ")<br>"
-        "Guillaume B &lt;littletux@zarb.org&gt; (" + tr("French") + ")<br>"
-        "Martin Herweg &lt;m.herweg@gmx.de&gt; (" + tr("German") + ")<br>"
-        "José Jorge &lt;jjorge@free.fr&gt; (" + tr("Portuguese") + ")<br>"
-        "Manuel Quiñones &lt;manuel.por.aca@gmail.com&gt; (" + tr("Spanish") + ")<br>"
-        "David Hjelm &lt;dav.hjelm@spray.se&gt; (" + tr("Swedish") + ")<br>"
-        "Koray Löker &lt;loker@pardus.org.tr&gt; (" + tr("Turkish") + ")<br>"
-        "Diego Giordano &lt;fusion_machine@tin.it&gt; (" + tr("Italian") + ")<br>"
-        "Matteo Comisso &lt;teomatteo8.9@hotmail.it&gt; (" + tr("Italian") + ")<br>"
-        "</p>"
-        "<p><b>" + tr("Logo") + "</b><br>"
-        "Gorazd Bizjak &lt;gorazd@zapstudio.net&gt;<br>"
-        "<p><b>" + tr("Coordinating") + "</b><br>"
-        "Herman Robak &lt;herman@skolelinux.no&gt;<br>"
-        "Øyvind Kolås &lt;pippin@gimp.org&gt;</p>"
-        "<p><b>" + tr("Testing") + "</b><br>"
-        "Tore Sinding Bekkedal &lt;toresbe@ifi.uio.no&gt;<br>"
-        "Finn Arne Johansen &lt;faj@bzz.no&gt;<br>"
-        "Halvor Borgen &lt;halvor.borgen@hig.no&gt;<br>"
-        "Bjørn Are Hansen &lt;post@bahansen.net&gt;<br>"
-        "John Steinar Bildøy &lt;johnsbil@haldenfriskole.no&gt;<br>"
-        "Ole-Anders Andreassen &lt;ole-anders.andreassen@sunndal.kommune.no&gt;<br>"
-        "</p>"
-    );
-    qte->setReadOnly(true);
-    qte->setBackgroundRole(backgroundRole());
-    tabWidget->addTab(qte, tr("&Thanks To"));
-
-    QTextEdit *licenceText = new QTextEdit;
-    licenceText->setReadOnly(true);
-    licenceText->setPlainText(licence);
-    tabWidget->addTab(licenceText, tr("&Licence Agreement"));
+    systemLayout->addWidget(new QLabel(version));
+    systemLayout->addStretch();
+    systemWidget->setLayout(systemLayout);
+    tabWidget->addTab(systemWidget, tr("&System Info"));
 
     QPushButton *okButton = new QPushButton(tr("OK"), this);
     connect(okButton, SIGNAL(clicked()), this, SLOT(close()));

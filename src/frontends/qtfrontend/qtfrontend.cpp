@@ -294,6 +294,14 @@ void QtFrontend::init()
     appPos.setX(preferencesTool->getBasicPreference("applicationposx", 80));
     appPos.setY(preferencesTool->getBasicPreference("applicationposy", 20));
 
+    // Was the last position on a not existing second screen?
+    if (appPos.x() > QApplication::desktop()->width()) {
+        appPos.setX(80);
+    }
+    if (appPos.y() > QApplication::desktop()->height()) {
+        appPos.setY(20);
+    }
+
     mw->resize(appSize);
     mw->move(appPos);
 

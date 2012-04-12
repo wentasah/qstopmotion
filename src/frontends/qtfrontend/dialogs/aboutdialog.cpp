@@ -109,10 +109,15 @@ AboutDialog::AboutDialog(Frontend *f,
     thanksText->setBackgroundRole(backgroundRole());
     tabWidget->addTab(thanksText, tr("&Thanks To"));
 
+    QWidget *licenceWidget = new QWidget;
+    QVBoxLayout *licenceLayout = new QVBoxLayout;
+    licenceLayout->addWidget(new QLabel(tr("This program is distributed under the terms of the GPL v2.")));
     QTextEdit *licenceText = new QTextEdit;
     licenceText->setReadOnly(true);
     licenceText->setPlainText(licence);
-    tabWidget->addTab(licenceText, tr("&Licence Agreement"));
+    licenceLayout->addWidget(licenceText);
+    licenceWidget->setLayout(licenceLayout);
+    tabWidget->addTab(licenceWidget, tr("&Licence Agreement"));
 
     QString version;
     QWidget *systemWidget = new QWidget;

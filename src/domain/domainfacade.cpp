@@ -231,6 +231,7 @@ int DomainFacade::getVideoSource()
 void DomainFacade::setVideoSource(int newVideoSource)
 {
     animationProject->setVideoSource(newVideoSource);
+    frontend->setVideoSource(newVideoSource);
 }
 
 
@@ -243,6 +244,7 @@ int DomainFacade::getMixMode()
 void DomainFacade::setMixMode(int newMixMode)
 {
     animationProject->setMixMode(newMixMode);
+    frontend->setMixMode(newMixMode);
 }
 
 
@@ -267,6 +269,7 @@ int DomainFacade::getMixCount()
 void DomainFacade::setMixCount(int newMixCount)
 {
     animationProject->setMixCount(newMixCount);
+    frontend->setMixCount(newMixCount);
 }
 
 

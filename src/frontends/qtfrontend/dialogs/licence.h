@@ -1,6 +1,4 @@
 QString licence =
-    "This program is distributed under the terms of the GPL v2.\n"
-    "\n"
     "		    GNU GENERAL PUBLIC LICENSE\n"
     "		       Version 2, June 1991\n"
     "\n"

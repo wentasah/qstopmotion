@@ -44,7 +44,6 @@ UndoTakeSelect::~UndoTakeSelect()
 
 void UndoTakeSelect::undo()
 {
-    // TODO: Change handling for undo
     qDebug("UndoTakeSelect::undo --> Start");
 
     AnimationProject *animationProject = facade->getAnimationProject();

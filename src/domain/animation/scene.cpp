@@ -631,9 +631,7 @@ void Scene::setSoundStartPosition(unsigned int newSoundStartPosition)
 }
 
 
-/**
- * @todo check audio type (ogg, mp3, wav ...)
- */
+// TODO: Check audio type (ogg, mp3, wav ...)
 int Scene::addSound(const QString & /*filename*/, const QString & /*soundname*/)
 {
     qDebug("Scene::addSound --> Start");

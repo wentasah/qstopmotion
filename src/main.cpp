@@ -25,8 +25,6 @@
 
 int main(int argc, char **argv)
 {
-    // TODO: What ist this???
-    // atexit(cleanup);
     int ret = 0;
     bool hasRecovered = false;
     bool hasProjectArg = false;
@@ -61,8 +59,6 @@ int main(int argc, char **argv)
 
     qtFrontend.setupDirectoryMonitoring();
 
-    // TODO: Repair Directory Monitoring
-    // qtFrontend.setupDirectoryMonitoring();
     ret = qtFrontend.run(argc, argv);
 
     qtFrontend.finalize();

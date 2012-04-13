@@ -223,14 +223,15 @@ void ExposureThumbView::setSelected(bool selected)
 }
 
 
-/**
- *@todo FIXME this doesn't work between applications of this type because of the
- *if-check (event->source() != 0).
- */
-void ExposureThumbView::contentsDropped(QDropEvent * event)
+// TODO: Implement ExposureThumbView::contentsDropped()
+// This doesn't work between applications of this type because of the if-check (event->source() != 0).
+void ExposureThumbView::contentsDropped(QDropEvent * /* event */)
 {
     qDebug("ExposureThumbView::contentsDropped --> Start");
 
+    timeLine->getFrontend()->showInformation("Not Implemented", QString("ExposureThumbView::contentsDropped not implemented."));
+
+    /*
     if ((event->source() != 0) && (timeLine->getMovingScene() == -1)) {
         qDebug("Moving picture");
         int selectionFrame = timeLine->getSelectionFrame();
@@ -261,6 +262,7 @@ void ExposureThumbView::contentsDropped(QDropEvent * event)
             // timeLine->getFrontend()->getProject()->addFrames(fNames);
         }
     }
+    */
 
     qDebug("ExposureThumbView::contentsDropped --> End");
 }

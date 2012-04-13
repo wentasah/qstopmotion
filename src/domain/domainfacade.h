@@ -623,29 +623,6 @@ public:
                              int &modExposureIndex);
 
     /**************************************************************************
-     * Old frames functions
-     **************************************************************************/
-
-    /**
-     * Removes the frame between (inclusive) fromFrame and toFrame from
-     * the animation model.
-     * @param fromFrame the first frame to remove.
-     * @param toFrame the last frame to remove.
-     */
-    void removeFrames(int fromFrame,
-                      int toFrame);
-
-    /**
-     * Moves the frames in the frameNumbers container to toPosition.
-     * @param fromFrame the first frame in the selection.
-     * @param toFrame the last frame in the selection.
-     * @param movePosition the position to move the selected frames
-     */
-    void moveFrames(int fromFrame,
-                    int toFrame,
-                    int movePosition);
-
-    /**************************************************************************
      * Private functions
      **************************************************************************/
 

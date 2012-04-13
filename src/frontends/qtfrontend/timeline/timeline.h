@@ -141,15 +141,6 @@ public:
     /**
      * Function which recieves notification when a scene is selected as the
      * active scene in the animationmodel.
-     * @param sceneIndex the new scene to be set as the active scene in the
-     * timeline.
-     * opening the new active scene.
-     */
-    // void updateSetNewActiveScene(int sceneIndex);
-
-    /**
-     * Function which recieves notification when a scene is selected as the
-     * active scene in the animationmodel.
      */
     void updateActivateScene();
 
@@ -247,11 +238,6 @@ public:
      * Function to recieve notification when one or more frames are moved.
      */
     void updateMoveExposures(int fromFrame, int toFrame, int movePosition);
-
-    /**
-     * Function to recieve notification when a new frame is selected.
-     */
-    // void updateSetNewActiveExposure(int exposureIndex);
 
     /**
      * Function to recieve notification when a new frame is selected.

@@ -109,14 +109,19 @@ bool QtFrontend::checkApplicationDirectory(char *binDirName)
     // Check if ~./qstopmotion directory exists, create it if not
     bool prefsFileExists = homeDir.exists(PreferencesTool::applicationDirectory);
     if (prefsFileExists == false) {
-        // TODO: mkdir(tmp, 0755);
         if (!homeDir.mkdir(PreferencesTool::applicationDirectory)) {
-            // TODO: Error! Can't create application directory
+            // Can't create application directory
+            showCritical(tr("Create directory"),
+                tr("You do not have the necessary permissions to run qStopMotion.\n"
+                "You need permission to create the .qstopmotion directory in your home directory."));
+
+            qDebug("QtFrontend::checkApplicationDirectory --> End (Error)");
+            return 1;
         }
     }
     homeDir.cd(PreferencesTool::applicationDirectory);
     if (homeDir.isReadable() == false) {
-        // TODO: W_OK | X_OK - Test necessary
+        // TODO: Writable and executable test necessary
         hasCorrectPermissions = false;
     }
     if (!hasCorrectPermissions) {
@@ -127,7 +132,7 @@ bool QtFrontend::checkApplicationDirectory(char *binDirName)
             // Set the permissions was not successful!
             showCritical(tr("Check Permissions"),
                 tr("You do not have the necessary permissions to run qStopMotion.\n"
-                "You need permission to read, write and execute on ~/.qstopmotion"));
+                "You need permission to read, write and execute on the .qstopmotion directory."));
 
             qDebug("QtFrontend::checkApplicationDirectory --> End (Error)");
             return 1;

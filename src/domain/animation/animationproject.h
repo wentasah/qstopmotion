@@ -677,30 +677,6 @@ public:
                              int &modTakeIndex,
                              int &modExposureIndex);
 
-    /**************************************************************************
-     * Old frame functions
-     **************************************************************************/
-
-    /**
-     * Removes the frames between (inclusive) fromFrame and toFrame from
-     * the animation.
-     * @param fromFrame the first frame to remove.
-     * @param toFrame the last frame to remove.
-     * @return a vector containing paths to the images in the given range,
-     * which are moved to a trash directory.
-     */
-    const QVector<Exposure*> removeFrames(unsigned int fromFrame,
-                                          unsigned int toFrame);
-
-    /**
-     * Move the frames from fromFrame (inclusive) to toFrame to toPosition.
-     * @param fromFrame the first frame to move.
-     * @param toFrame the last frame to move.
-     * @param movePosition the posititon to move the frames to.
-     */
-    void moveFrames(unsigned int fromFrame, unsigned int toFrame,
-                    unsigned int movePosition);
-
 private:
 
     /**

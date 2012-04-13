@@ -612,37 +612,6 @@ void TimeLine::moveScene(int sceneNumber, int movePosition)
     qDebug("TimeLine::moveScene --> End");
 }
 
-/*
-void TimeLine::setNewActiveScene(int sceneNumber)
-{
-    qDebug("TimeLine::setNewActiveScene --> Start");
-
-    if (activeSceneIndex >= 0) {
-        this->removeFrames(0, frontend->getProject()->getSceneExposureSize(activeSceneIndex) - 1);
-        thumbViews[activeSceneIndex]->setOpened(false);
-    }
-
-    this->activeSceneIndex = sceneNumber;
-
-    if (sceneNumber >= 0) {
-        thumbViews[activeSceneIndex]->setOpened(true);
-        Scene *scene = frontend->getProject()->getScene(sceneNumber);
-        if (scene->getExposureSize() > 0) {
-            QVector<Exposure*> allExposures;
-            scene->getExposures(allExposures);
-            this->addFrames(allExposures, 0);
-            setActiveFrame(0);
-        } else {
-            setActiveFrame(-1);
-        }
-    }
-
-    ensureVisible((FRAME_WIDTH + SPACE) * thumbViews.size() + FRAME_WIDTH, FRAME_HEIGHT);
-
-    qDebug("TimeLine::setNewActiveScene --> End");
-}
-*/
-
 void TimeLine::activateScene()
 {
     qDebug("TimeLine::activateScene --> Start");
@@ -752,9 +721,8 @@ void TimeLine::newExposure(int sceneIndex,
         return;
     }
 
-    // TODO: Response to new sceneIndex and takeIndex
-    Q_ASSERT(sceneIndex == activeSceneIndex);
-    Q_ASSERT(takeIndex == activeTakeIndex);
+    Q_ASSERT(sceneIndex == activeSceneIndex);    // Response to new sceneIndex not implemented
+    Q_ASSERT(takeIndex == activeTakeIndex);      // Response to new takeIndex not implemented
 
     ExposureThumbView *thumb = 0;
 
@@ -987,39 +955,6 @@ void TimeLine::moveExposures(int fromFrame, int toFrame, int movePosition)
     qDebug("TimeLine::moveExposures --> End");
 }
 
-/*
-void TimeLine::setNewActiveExposure(int exposureIndex)
-{
-    qDebug("TimeLine::setNewActiveExposure --> Start");
-
-    // If there is a frame to set as active
-    if (exposureIndex >= 0) {
-        qDebug("Setting new active frame in timeline");
-
-        int thumbNumber = exposureIndex + 1;
-        int from = activeFrame + 1;
-        int to = selectionFrame + 1;
-        int highend = (from < to) ? to : from;
-        int lowend = (from > to) ? to : from;
-
-        if (highend < static_cast<int>(thumbViews.size())) {
-            for (int i = lowend; i <= highend; ++i) {
-                thumbViews[i]->setSelected(false);
-            }
-        }
-
-        if (thumbNumber >= 0)
-            thumbViews[thumbNumber]->setSelected(true);
-        ensureVisible((exposureIndex + 1) *(FRAME_WIDTH + SPACE) + FRAME_WIDTH, FRAME_HEIGHT);
-    }
-
-    activeFrame = exposureIndex;
-    selectionFrame = exposureIndex;
-    this->selecting = false;
-
-    qDebug("TimeLine::setNewActiveExposure --> End");
-}
-*/
 
 void TimeLine::activateExposure()
 {
@@ -1102,7 +1037,6 @@ void TimeLine::setMovingScene(int movingScene)
 }
 
 
-// TODO: Check for other mime types as well
 void TimeLine::dragEnterEvent(QDragEnterEvent *event)
 {
     qDebug("TimeLine::dragEnterEvent --> Start");

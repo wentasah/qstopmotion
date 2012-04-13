@@ -251,9 +251,6 @@ void MainWindowGUI::mousePressEvent(QMouseEvent *)
 }
 
 
-/**
- * @TODO change so that CTRL+A instead of just A selects all the frames.
- */
 void MainWindowGUI::keyPressEvent(QKeyEvent *k)
 {
     DomainFacade *facade = frontend->getProject();
@@ -273,6 +270,7 @@ void MainWindowGUI::keyPressEvent(QKeyEvent *k)
         timeLine->setSelecting(true);
         break;
     case Key_A:
+        // TODO: change so that CTRL+A instead of just A selects all the frames.
         if (activeSceneIndex >= 0) {
             if (facade->getSceneExposureSize(activeSceneIndex) > 1) {
                 facade->selectExposureToUndo(activeSceneIndex, activeTakeIndex, 0);
@@ -1036,32 +1034,20 @@ void MainWindowGUI::closeApplication()
     exit(0);
 }
 
-
-void MainWindowGUI::undo()
-{
-    // TODO: Implement undo task!
-}
-
-
-void MainWindowGUI::redo()
-{
-    // TODO: Implement redo task!
-}
-
 // TODO: New implementation of copy necessary
 void MainWindowGUI::copy()
 {
     /*
     QList<QUrl> urls;
 
-    // TODO: return the scene, take and frame from the frame bar!!!!
+    // DO: return the scene, take and frame from the frame bar!!!!
     int selectionFrame = timeLine->getSelectionFrame();
     int activeFrame = 1; // frontend->getProject()->getActiveExposureIndex();
     int highend = (selectionFrame > activeFrame) ? selectionFrame : activeFrame;
     int lowend = (selectionFrame < activeFrame) ? selectionFrame : activeFrame;
 
     for (int i = lowend; i <= highend; ++i) {
-        // TODO: Get the filename from the frame bar
+        // DO: Get the filename from the frame bar
         Exposure* exposure = frontend->getProject()->getExposure(1, 1, i);
         urls.append(QUrl::fromLocalFile(exposure->getImagePath()));
     }
@@ -1520,7 +1506,6 @@ void MainWindowGUI::createActions()
     undoAct->setIcon(QIcon(iconFile));
     undoAct->setShortcut(ControlModifier + Key_Z);
     undoAct->setIconVisibleInMenu(true);
-    connect(undoAct, SIGNAL(triggered()), this, SLOT(undo()));
 
     redoAct = frontend->getProject()->getUndoStack()->createRedoAction(this);
     iconFile.clear();
@@ -1529,7 +1514,6 @@ void MainWindowGUI::createActions()
     redoAct->setIcon(QIcon(iconFile));
     redoAct->setShortcut(ControlModifier + ShiftModifier + Key_Z);
     redoAct->setIconVisibleInMenu(true);
-    connect(redoAct, SIGNAL(triggered()), this, SLOT(redo()));
 
     insertSceneAct = new QAction(this);
     iconFile.clear();
@@ -1879,10 +1863,11 @@ void MainWindowGUI::makeStatusBar()
 }
 
 
-void MainWindowGUI::dragEnterEvent(QDragEnterEvent * event)
+void MainWindowGUI::dragEnterEvent(QDragEnterEvent * /* event */)
 {
-    qDebug("MainWindowGUI::dragEnterEvent --> Start");
-
+    qDebug("MainWindowGUI::dragEnterEvent --> Start (Nothing)");
+    // TODO: New Implementation for Drag enter event
+/*
     if (event->mimeData()->hasUrls()) {
         event->accept();
     } else {
@@ -1890,13 +1875,14 @@ void MainWindowGUI::dragEnterEvent(QDragEnterEvent * event)
     }
 
     qDebug("MainWindowGUI::dragEnterEvent --> End");
+*/
 }
 
 
-// TODO: New Implementation for Drop event
-void MainWindowGUI::dropEvent(QDropEvent *event)
+void MainWindowGUI::dropEvent(QDropEvent * /* event */)
 {
     qDebug("MainWindowGUI::dropEvent --> Start (Nothing)");
+    // TODO: New Implementation for Drop event
 /*
     if (event->mimeData()->hasUrls()) {
         QStringList fileNames;
@@ -2202,7 +2188,6 @@ void MainWindowGUI::updateMostRecentMenu()
 void MainWindowGUI::checkSaved()
 {
     // Last changes saved?
-    // TODO: Handle save of project settungs and animation changes separatly
     bool b = frontend->getProject()->isProjectAnimationChanges() || frontend->getProject()->isProjectSettingsChanges();
     if (b) {
         int save = frontend->askQuestion(tr("Unsaved changes"),

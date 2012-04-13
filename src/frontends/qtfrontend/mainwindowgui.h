@@ -386,16 +386,6 @@ private slots:
     void closeApplication();
 
     /**
-     * Start a undo task.
-     */
-    void undo();
-
-    /**
-     * Start a redo task.
-     */
-    void redo();
-
-    /**
      * Copies a selection to the global clipboard.
      */
     void copy();

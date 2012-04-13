@@ -64,22 +64,22 @@
         <translation>&amp;Dank an</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="115"/>
+        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="120"/>
         <source>&amp;Licence Agreement</source>
         <translation>&amp;Lizenzabkommen</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="178"/>
+        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="183"/>
         <source>&amp;System Info</source>
         <translation>&amp;Systeminformation</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="180"/>
+        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="185"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="193"/>
+        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="198"/>
         <source>About</source>
         <translation>Info</translation>
     </message>
@@ -105,12 +105,17 @@
         <translation>und</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="121"/>
+        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="114"/>
+        <source>This program is distributed under the terms of the GPL v2.</source>
+        <translation>Dieses Programm wird unter den Bedingungen der GPL v2 bereitgestellt.</translation>
+    </message>
+    <message>
+        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="126"/>
         <source>Qt runtime version: </source>
         <translation>Version der Qt Laufzeitumgebung: </translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="124"/>
+        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="129"/>
         <source>Operating system name and version: </source>
         <translation>Name und Version des Betriebssystems: </translation>
     </message>
@@ -370,8 +375,8 @@ wenn Sie abspielen wählen.</translation>
     </message>
     <message>
         <location filename="../src/domain/domainfacade.cpp" line="146"/>
-        <location filename="../src/domain/domainfacade.cpp" line="322"/>
-        <location filename="../src/domain/domainfacade.cpp" line="995"/>
+        <location filename="../src/domain/domainfacade.cpp" line="325"/>
+        <location filename="../src/domain/domainfacade.cpp" line="998"/>
         <source>Critical</source>
         <translation>Kritisch</translation>
     </message>
@@ -385,12 +390,12 @@ wenn Sie abspielen wählen.</translation>
         <translation>Historie Datei kann nicht geöffnet werden um neuen Eintrag hinzuzufügen.</translation>
     </message>
     <message>
-        <location filename="../src/domain/domainfacade.cpp" line="323"/>
+        <location filename="../src/domain/domainfacade.cpp" line="326"/>
         <source>Can&apos;t open history file to recover project!</source>
         <translation>Historie Datei kann nicht geöffnet werden um Projekt wiederherzustellen.</translation>
     </message>
     <message>
-        <location filename="../src/domain/domainfacade.cpp" line="996"/>
+        <location filename="../src/domain/domainfacade.cpp" line="999"/>
         <source>Can&apos;t copy image to temp directory!</source>
         <translation>Bild kann nicht in das temporäre Verzeichnis kopiert werden!</translation>
     </message>
@@ -1555,12 +1560,12 @@ Sie benötigen Rechte zum lesen, schreiben und ausführen im Verzeichnis ~/.qsto
         <translation type="obsolete">qStopMotion</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="826"/>
+        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="834"/>
         <source>Recovery</source>
         <translation>Wiederherstellung</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="827"/>
+        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="835"/>
         <source>Something caused qStopmotion to exit abnormally
 last time it was runned. Do you want to recover?</source>
         <translation>Es sieht so aus, als wurde qStopmotion bei der letzten Nutzung nicht
@@ -1579,19 +1584,19 @@ ordentlich beendet. Möchten Sie die letzte Sitzung wiederherstellen?</translati
         <translation type="obsolete">Wiederherstellungsaufnahme</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="573"/>
+        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="581"/>
         <source>&amp;Yes</source>
         <translation>&amp;Ja</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="574"/>
+        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="582"/>
         <source>&amp;No</source>
         <translation>&amp;Nein</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="594"/>
-        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="609"/>
-        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="624"/>
+        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="602"/>
+        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="617"/>
+        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="632"/>
         <source>&amp;OK</source>
         <translation>&amp;OK</translation>
     </message>

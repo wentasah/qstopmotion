@@ -1300,60 +1300,6 @@ bool AnimationProject::getModifyedExposure(const QString &filePath,
     return false;
 }
 
-
-/**************************************************************************
- * Old frame functions
- **************************************************************************/
-
-const QVector<Exposure*> AnimationProject::removeFrames(unsigned int fromFrame, unsigned int toFrame)
-{
-    frontend->showInformation("Not Implemented", QString("AnimationProject::removeFrames not implemented.(%1,%2)").arg(fromFrame).arg(toFrame));
-/*
-    Q_ASSERT(fromFrame <= toFrame);
-
-    QVector<Exposure*> newImagePaths;
-
-    if (activeFrame >= 0) {
-        newImagePaths = scenes[activeScene].removeExposures(fromFrame, toFrame);
-
-        this->notifyRemove(fromFrame, toFrame);
-
-        if (toFrame < scenes[activeScene].getExposureNumber()) {
-            this->setActiveFrame(toFrame);
-        } else {
-            this->setActiveFrame(scenes[activeScene].getExposureNumber() - 1);
-        }
-        unsavedChanges = true;
-    }
-    this->unsavedChanges = true;
-
-    return newImagePaths;
-*/
-
-    return QVector<Exposure*>();
-}
-
-
-void AnimationProject::moveFrames(unsigned int fromFrame, unsigned int toFrame,
-                                  unsigned int movePosition)
-{
-    frontend->showInformation("Not Implemented", QString("AnimationProject::moveFrames not implemented.(%1,%2,%3)").arg(fromFrame).arg(toFrame).arg(movePosition));
-/*
-    unsigned int framesSize = scenes[activeScene].getExposureNumber();
-    if ((fromFrame < framesSize) && (toFrame < framesSize) && (movePosition < framesSize) &&
-            ((movePosition < fromFrame) || (movePosition > toFrame))) {
-
-        scenes[activeScene].moveExposures(fromFrame, toFrame, movePosition);
-
-        unsavedChanges = true;
-        this->notifyMove(fromFrame, toFrame, movePosition);
-        this->setActiveFrame(movePosition);
-    }
-    this->unsavedChanges = true;
-*/
-}
-
-
 /**************************************************************************
  * Private functions
  **************************************************************************/

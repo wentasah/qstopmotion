@@ -127,7 +127,6 @@ QUndoStack* DomainFacade::getUndoStack()
 }
 
 
-// TODO: Implement clearing of undo stack
 void DomainFacade::clearUndoStack()
 {
     undoStack->clear();
@@ -933,45 +932,6 @@ bool DomainFacade::getModifyedExposure(const QString &filePath,
                                        int &modExposureIndex)
 {
     return animationProject->getModifyedExposure(filePath, modSceneIndex, modTakeIndex, modExposureIndex);
-}
-
-
-/**************************************************************************
- * Old Frames functions
- **************************************************************************/
-
-void DomainFacade::removeFrames(int fromFrame,
-                                int toFrame)
-{
-    qDebug("Removing frames in the domainfacade");
-    QVector<Exposure*> trash = animationProject->removeFrames(fromFrame, toFrame);
-
-    int numElem = trash.size();
-    // there are no elements in the vector if the user has aborted the operation
-    if (numElem > 0) {
-        QVector<QString> frameNames;
-        for (int i = 0 ; i < numElem ; i++) {
-            frameNames.append(trash[i]->getImagePath());
-        }
-    }
-
-    // TODO: Implementation of removeFrames undo
-    // UndoExposureRemove *u = new UndoExposureRemove(frameNames, fromFrame,
-    //                               animationProject->getActiveSceneIndex());
-    // undoStack->push(u);
-}
-
-
-void DomainFacade::moveFrames(int fromFrame,
-                              int toFrame,
-                              int movePosition)
-{
-    animationProject->moveFrames(fromFrame, toFrame, movePosition);
-
-    // TODO: Implementation of moveFrames undo
-    // UndoExposureMove *u = new UndoExposureMove(fromFrame, toFrame, movePosition,
-    //                            animationProject->getActiveSceneIndex());
-    // undoStack->push(u);
 }
 
 /**************************************************************************

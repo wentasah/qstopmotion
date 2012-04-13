@@ -262,30 +262,27 @@ void FrameViewImage::nextPlayBack()
     Q_ASSERT(activeTakeIndex >= 0);
     Q_ASSERT(activeExposureIndex >= 0);
 
-    // TODO: remove activeSceneIndex-Test
-    if (activeSceneIndex >= 0) {
-        if ((int)i < mixCount && i < (int)activeExposureIndex + 1) {
+    if ((int)i < mixCount && i < (int)activeExposureIndex + 1) {
 
-            Exposure *exposure;
-            if (activeExposureIndex <= mixCount) {
-                exposure = frontend->getProject()->getExposure(activeSceneIndex, activeTakeIndex, i++);
-            } else {
-                exposure = frontend->getProject()->getExposure(activeSceneIndex, activeTakeIndex, activeExposureIndex - mixCount + i++);
-            }
-
-            if (!exposure->isEmpty()) {
-                actualImage.load(exposure->getImagePath());
-                QPainter widgetPainter(this);
-                widgetPainter.drawImage(0, 0, actualImage);
-            }
-
-            this->update();
-            //Exit from function/skip redraw(). This is better than having a bool which is
-            //set because this is a play function run "often".
-
-            qDebug("FrameViewImage::nextPlayBack --> End");
-            return;
+        Exposure *exposure;
+        if (activeExposureIndex <= mixCount) {
+            exposure = frontend->getProject()->getExposure(activeSceneIndex, activeTakeIndex, i++);
+        } else {
+            exposure = frontend->getProject()->getExposure(activeSceneIndex, activeTakeIndex, activeExposureIndex - mixCount + i++);
         }
+
+        if (!exposure->isEmpty()) {
+            actualImage.load(exposure->getImagePath());
+            QPainter widgetPainter(this);
+            widgetPainter.drawImage(0, 0, actualImage);
+        }
+
+        this->update();
+        //Exit from function/skip redraw(). This is better than having a bool which is
+        //set because this is a play function run "often".
+
+        qDebug("FrameViewImage::nextPlayBack --> End");
+        return;
     }
 
     // This code is run if one of the two above tests fail. Can't be an else because
@@ -398,7 +395,6 @@ void FrameViewImage::activateExposure()
 {
     qDebug("FrameViewImage::activateExposure --> Start");
 
-    // TODO: set frame from active scene, active take and active exposure
     Exposure *exposure = frontend->getProject()->getActiveExposure();
     if (exposure != NULL) {
         const QString fileName = exposure->getImagePath();

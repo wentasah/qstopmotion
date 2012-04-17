@@ -47,15 +47,18 @@ SET(FILES_TO_TRANSLATE )
 find_package(Qt4 REQUIRED)
 
 message("Qt Version: ${QT_VERSION_MAJOR}.${QT_VERSION_MINOR}.${QT_VERSION_PATCH}")
-message("QT_QTMAIN_LIBRARY: ${QT_QTMAIN_LIBRARY}")
-message("QT_QTXML_LIBRARIES: ${QT_QTXML_LIBRARIES}")
-message("QT_LIBRARIES: ${QT_LIBRARIES}")
 
 # Enable/disable Qt functionality
 set(QT_USE_QTXML TRUE)
 
 # include a cmake listfile
 include(${QT_USE_FILE})
+
+IF(CMAKE_BUILD_TYPE STREQUAL "Release")
+    message("No Qt debug and warning output!")
+    add_definitions(-DQT_NO_DEBUG_OUTPUT)
+    add_definitions(-DQT_NO_WARNING_OUTPUT)
+ENDIF(CMAKE_BUILD_TYPE STREQUAL "Release")
 
 ###############################################################################
 # File definitions
@@ -529,6 +532,7 @@ ENDIF(UNIX)
 
 # installation on DEBIAN systems
 IF(CPACK_GENERATOR STREQUAL "DEB")
+    message("Special task for Debian package!")
     # installation of the icon file
     install(
         FILES "debian/qstopmotion.xpm"

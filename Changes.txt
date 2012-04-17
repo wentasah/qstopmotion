@@ -1,6 +1,11 @@
 Last Changes in the sources on qStopMotion
 ===============================================================================
 
+qStopMotion (1.0.1), Bugfix release
+  * Fix Bugs
+  * Full implementation of undo and redo functionality.
+  * Call gimp works on all platforms.
+  * French localization.
 qStopMotion (1.0.0)
   * Fix Bugs
 qStopMotion (0.9.11, release candidat 3)
@@ -167,7 +172,7 @@ qStopMotion (0.7.0)
 ===============================================================================
 
 stopmotion (0.6.2)
-  * Last version of StopMotion4Linux
+  * Last version of stopmotion for Linux
   * Base of the qStopMotion fork
 
 ===============================================================================

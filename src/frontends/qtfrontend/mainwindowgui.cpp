@@ -823,8 +823,6 @@ void MainWindowGUI::openSecondMostRecent()
 
     // Open the new project
     openProject(fileName);
-
-    setMostRecentProject();
 }
 
 
@@ -836,7 +834,6 @@ void MainWindowGUI::openThirdMostRecent()
 
     // Open the new project
     openProject(fileName);
-    setMostRecentProject();
 }
 
 
@@ -848,7 +845,6 @@ void MainWindowGUI::openFourthMostRecent()
 
     // Open the new project
     openProject(fileName);
-    setMostRecentProject();
 }
 
 
@@ -887,10 +883,12 @@ void MainWindowGUI::saveProjectAs()
         }
         frontend->getProject()->saveProjectToUndo(file.toLocal8Bit(), true);
         QString path = frontend->getProject()->getNewProjectPath();
+
+        lastVisitedDir.clear();
+        lastVisitedDir.append(path);
+
         path.append("/");
         path.append(PreferencesTool::imageDirectory);
-        changeMonitor->addDirectory(path);
-        //fileMenu->setItemEnabled(SAVE, true);
         saveAct->setEnabled(true);
         setMostRecentProject();
     }
@@ -2138,6 +2136,8 @@ void MainWindowGUI::setMostRecentProject()
     pref->removeProject(newFirst);
     pref->addProject(newFirst);
     pref->flushPreferences();
+    // Update the most recent menu!
+    updateMostRecentMenu();
 }
 
 

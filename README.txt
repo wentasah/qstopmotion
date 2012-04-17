@@ -27,11 +27,12 @@ Install the following packages:
     - gstreamer development files
 Download the source tar ball and unpack it in a separate directory.
 Change to the source directory and call:
-    - cmake .
+    - cmake -DCMAKE_BUILD_TYPE=Release .
     - make
     - su
     - make install
     - exit
+
 
 WHO CAN USE IT
 --------------
@@ -46,7 +47,5 @@ graphics, code, +++
 
 Your help is very much appreciated.
 
-ralf.lange@longsoft.de
-2012-02-11
-
-
+ralf.lange@qstopmotion.org
+2012-04-13

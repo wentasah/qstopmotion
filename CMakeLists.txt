@@ -1,7 +1,7 @@
 ###############################################################################
 # CMake file for the qStopMotion project                                      #
 # (c) Ralf Lange, longsoft.de                                                 #
-# Last update: 2012-04-12                                                     #
+# Last update: 2012-04-17                                                     #
 #                                                                             #
 # Usage:                                                                      #
 #   * Qt-Creator (Windows, Linux)                                             #
@@ -47,6 +47,9 @@ SET(FILES_TO_TRANSLATE )
 find_package(Qt4 REQUIRED)
 
 message("Qt Version: ${QT_VERSION_MAJOR}.${QT_VERSION_MINOR}.${QT_VERSION_PATCH}")
+message("QT_QTMAIN_LIBRARY: ${QT_QTMAIN_LIBRARY}")
+message("QT_QTXML_LIBRARIES: ${QT_QTXML_LIBRARIES}")
+message("QT_LIBRARIES: ${QT_LIBRARIES}")
 
 # Enable/disable Qt functionality
 set(QT_USE_QTXML TRUE)
@@ -361,8 +364,8 @@ ELSEIF(WIN32)
 
     add_executable(
         qstopmotion
+        WIN32
         src/qstopmotion.rc
-#         WIN32
         ${SOURCES}
         ${MOC_SOURCES}
     )
@@ -373,6 +376,7 @@ ENDIF()
 target_link_libraries(
     qstopmotion
     ${QT_LIBRARIES}
+    ${QT_QTMAIN_LIBRARY}
     ${QT_QTXML_LIBRARIES}
     ${GSTREAMER_LIBRARIES}
 )

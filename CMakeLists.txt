@@ -531,7 +531,7 @@ IF(UNIX)
 ENDIF(UNIX)
 
 # installation on DEBIAN systems
-IF(CPACK_GENERATOR STREQUAL "DEB")
+IF(CPACK_BINARY_DEB)
     message("Special task for Debian package!")
     # installation of the icon file
     install(
@@ -544,7 +544,7 @@ IF(CPACK_GENERATOR STREQUAL "DEB")
         FILES "debian/qstopmotion.menu"
         DESTINATION ${QSTOPMOTION_MENUFILE_INSTALL_DIR}
     )
-ENDIF(CPACK_GENERATOR STREQUAL "DEB")
+ENDIF(CPACK_BINARY_DEB)
 
 # installation on Windows systems
 IF(WIN32)

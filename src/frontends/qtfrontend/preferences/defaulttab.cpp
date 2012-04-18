@@ -25,7 +25,6 @@
 #include "technical/preferencestool.h"
 
 #include <QtCore/QtDebug>
-#include <QtGui/QFileDialog>
 #include <QtGui/QGridLayout>
 #include <QtGui/QHeaderView>
 #include <QtGui/QInputDialog>

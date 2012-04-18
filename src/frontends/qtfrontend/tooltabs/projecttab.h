@@ -25,7 +25,6 @@
 #include "frontends/observer.h"
 
 #include <QtCore/QProcess>
-#include <QtGui/QFileDialog>
 #include <QtGui/QGroupBox>
 #include <QtGui/QPushButton>
 #include <QtGui/QTreeWidget>
@@ -414,7 +413,6 @@ private slots:
 
 private:
     Frontend            *frontend;
-    QFileDialog         *fileDialog;
     QString              lastVisitedDir;
     bool                 tabEnabled;
 

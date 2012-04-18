@@ -27,10 +27,11 @@
 #include <QtCore/QList>
 #include <QtCore/QProcess>
 #include <QtCore/QtDebug>
-#include <QtGui/QLabel>
-#include <QtGui/QInputDialog>
+#include <QtGui/QFileDialog>
 #include <QtGui/QHBoxLayout>
 #include <QtGui/QHeaderView>
+#include <QtGui/QInputDialog>
+#include <QtGui/QLabel>
 #include <QtGui/QTreeWidgetItem>
 #include <QtGui/QVBoxLayout>
 
@@ -47,7 +48,6 @@ ProjectTab::ProjectTab(Frontend *f,
       lastVisitedDir.append(lvd);
     }
 
-    fileDialog          = NULL;
     projectTree         = 0;
 
     scenesGroupBox      = 0;
@@ -960,8 +960,8 @@ void ProjectTab::itemClicked(QTreeWidgetItem * /*exposureItem*/,
 
     if (activeSceneIndex != newSceneIndex) {
         frontend->getProject()->selectSceneToUndo(newSceneIndex);
-        newTakeIndex = -1;
-        newExposureIndex = -1;
+        activeTakeIndex = -1;
+        activeExposureIndex = -1;
     }
 
     scene = frontend->getProject()->getScene(activeSceneIndex);
@@ -972,7 +972,7 @@ void ProjectTab::itemClicked(QTreeWidgetItem * /*exposureItem*/,
 
     if (activeTakeIndex != newTakeIndex) {
         frontend->getProject()->selectTakeToUndo(newSceneIndex, newTakeIndex);
-        newExposureIndex = -1;
+        activeExposureIndex = -1;
     }
 
     take = scene->getTake(newTakeIndex);
@@ -1220,7 +1220,12 @@ void ProjectTab::insertFramesSlot()
     int selectedFilesIndex;
     for (selectedFilesIndex = 0 ; selectedFilesIndex < selectedFilesCount ; selectedFilesIndex++) {
         // insert the selected files
-        frontend->getProject()->insertExposureToUndo(selectedFiles[selectedFilesIndex], activeSceneIndex, activeTakeIndex, activeExposureIndex, true);
+        if (-1 == activeExposureIndex) {
+            frontend->getProject()->addExposureToUndo(selectedFiles[selectedFilesIndex], activeSceneIndex, activeTakeIndex, true);
+        }
+        else {
+            frontend->getProject()->insertExposureToUndo(selectedFiles[selectedFilesIndex], activeSceneIndex, activeTakeIndex, activeExposureIndex, true);
+        }
     }
 
     qDebug("ProjectTab::insertFramesSlot --> End");
@@ -1541,7 +1546,7 @@ QStringList ProjectTab::selectFiles()
 {
     qDebug("ProjectTab::selectFiles --> Start");
 
-    fileDialog = new QFileDialog(this, tr("Choose frames to add"), lastVisitedDir);
+    QFileDialog fileDialog(this, tr("Choose frames to add"), lastVisitedDir);
     QStringList filters;
     filters << "Images (*.png *.jpg *.jpeg  *.gif *.PNG *.JPG *.JPEG *.GIF)"
             << "Joint Photographic Ex. Gr. (*.jpg *.jpeg *.JPG *.JPEG)"
@@ -1556,26 +1561,26 @@ QStringList ProjectTab::selectFiles()
             << "CompuServe Graph. Interch. Format (*.gif *.GIF)"
             << "Interleaved Bitmap (*.lbm *.iff *.LBM *.IFF)"
             << "All files (*)";
-    fileDialog->setFilters(filters);
-    fileDialog->setAcceptMode(QFileDialog::AcceptOpen);
-    fileDialog->setFileMode(QFileDialog::ExistingFiles);
+    fileDialog.setFilters(filters);
+    fileDialog.setAcceptMode(QFileDialog::AcceptOpen);
+    fileDialog.setFileMode(QFileDialog::ExistingFiles);
 
     //PicturePreview* p = new PicturePreview(fileDialog);
 
     // QObject::connect(fileDialog, SIGNAL(filesSelected(const QStringList &)),
     //                  this, SLOT(addFrames(const QStringList &)));
 
-    int ret = fileDialog->exec();
+    int ret = fileDialog.exec();
     if (ret == QDialog::Rejected) {
         // The user canceled the file dialog
         qDebug("ProjectTab::addFrameSlot --> End (dialog cancel)");
         return QStringList();
     }
 
-    lastVisitedDir.append(fileDialog->directory().path());
+    lastVisitedDir.append(fileDialog.directory().path());
 
     qDebug("ProjectTab::selectFiles --> End");
-    return fileDialog->selectedFiles();
+    return fileDialog.selectedFiles();
 }
 
 

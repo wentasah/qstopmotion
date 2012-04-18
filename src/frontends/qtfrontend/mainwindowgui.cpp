@@ -34,6 +34,7 @@
 #include "technical/videoencoder/ffmpegencoder.h"
 
 #include <QtCore/QtDebug>
+#include <QtGui/QFileDialog>
 
 using namespace Qt;
 
@@ -790,14 +791,19 @@ void MainWindowGUI::openProject()
 
     recordingTab->checkCameraOff();
 
-    QString openFile = QFileDialog::
-                   getOpenFileName(this,
-                                   tr("Choose project file"),
-                                   lastVisitedDir,
-                                   QString(tr("Project (*.%1);;Archive (*.%2)")).arg(PreferencesTool::projectSuffix).arg(PreferencesTool::archiveSuffix));
-    if (!openFile.isNull()) {
+    QFileDialog fileDialog(this, tr("Choose project file"), lastVisitedDir);
+    QStringList filters;
+    filters << QString(tr("Project (*.%1)")).arg(PreferencesTool::projectSuffix);
+    //         << QString(tr("Archive (*.%2)")).arg(PreferencesTool::archiveSuffix);
+    fileDialog.setFilters(filters);
+    fileDialog.setAcceptMode(QFileDialog::AcceptOpen);
+    fileDialog.setFileMode(QFileDialog::ExistingFiles);
+    int ret = fileDialog.exec();
+    if (ret == QDialog::Accepted) {
+        QStringList openFiles = fileDialog.selectedFiles();
+
         // Open the new project
-        openProject(openFile);
+        openProject(openFiles[0]);
     }
 
     qDebug("MainWindowGUI::openProject --> End");
@@ -864,15 +870,24 @@ void MainWindowGUI::saveProject()
 
 void MainWindowGUI::saveProjectAs()
 {
+    QString file;
+
     recordingTab->checkCameraOff();
 
-    QString file = QFileDialog::
-                   getSaveFileName(this,
-                                   tr("Save As"),
-                                   lastVisitedDir,
-                                   QString(tr("Project (*.%1);;Archive (*.%2)")).arg(PreferencesTool::projectSuffix).arg(PreferencesTool::archiveSuffix));
+    QFileDialog fileDialog(this, tr("Save As"), lastVisitedDir);
+    QStringList filters;
+    filters << QString(tr("Project (*.%1)")).arg(PreferencesTool::projectSuffix);
+    //         << QString(tr("Archive (*.%2)")).arg(PreferencesTool::archiveSuffix);
+    fileDialog.setFilters(filters);
+    fileDialog.setAcceptMode(QFileDialog::AcceptSave);
+    fileDialog.setFileMode(QFileDialog::AnyFile);
+    int ret = fileDialog.exec();
+    if (ret == QDialog::Accepted) {
+        QStringList openFiles = fileDialog.selectedFiles();
+        file.append(openFiles[0]);
+    }
 
-    if (!file.isNull()) {
+    if (!file.isEmpty()) {
         if (!file.endsWith(PreferencesTool::projectSuffix)) {
             file.append(".");
             file.append(PreferencesTool::projectSuffix);
@@ -928,21 +943,30 @@ void MainWindowGUI::exportToVideo()
     }
 
     if (pref->getBasicPreference("usedefaultoutputfile", 0) == 1) {
-        QString filter;
+        QStringList filters;
         QString exportSuffix;
+        QString outputFile;
+
         switch(pref->getBasicPreference("videoformat", VideoEncoder::noneFormat)) {
         case VideoEncoder::aviFormat:
-            filter.append(tr("AVI Videos (*.avi)"));
+            filters << tr("AVI Videos (*.avi)");
             exportSuffix.append("avi");
             break;
         case VideoEncoder::mp4Format:
-            filter.append(tr("MP4 Videos (*.mp4)"));
+            filters << tr("MP4 Videos (*.mp4)");
             exportSuffix.append("mp4");
             break;
         }
 
-        QString outputFile = QFileDialog::
-                       getSaveFileName(this, tr("Export to video file"), lastVisitedDir, filter);
+        QFileDialog fileDialog(this, tr("Export to video file"), lastVisitedDir);
+        fileDialog.setFilters(filters);
+        fileDialog.setAcceptMode(QFileDialog::AcceptSave);
+        fileDialog.setFileMode(QFileDialog::AnyFile);
+        int ret = fileDialog.exec();
+        if (ret == QDialog::Accepted) {
+            QStringList openFiles = fileDialog.selectedFiles();
+            outputFile.append(openFiles[0]);
+        }
         if (outputFile.isEmpty()) {
             delete enc;
             enc = NULL;
@@ -1003,10 +1027,21 @@ void MainWindowGUI::exportToVideo()
 
 void MainWindowGUI::exportToCinelerra()
 {
+    QString outputFile;
+
     recordingTab->checkCameraOff();
 
-    QString outputFile = QFileDialog::
-                   getSaveFileName(this, tr("Export to file"), lastVisitedDir, "Cinelerra (*.XML)");
+    QFileDialog fileDialog(this, tr("Export to file"), lastVisitedDir);
+    QStringList filters;
+    filters << "Cinelerra (*.XML)";
+    fileDialog.setFilters(filters);
+    fileDialog.setAcceptMode(QFileDialog::AcceptSave);
+    fileDialog.setFileMode(QFileDialog::AnyFile);
+    int ret = fileDialog.exec();
+    if (ret == QDialog::Accepted) {
+        QStringList openFiles = fileDialog.selectedFiles();
+        outputFile.append(openFiles[0]);
+    }
 
     if (!outputFile.isNull()) {
         frontend->getProject()->exportToCinelerra(outputFile);
@@ -1082,7 +1117,20 @@ void MainWindowGUI::paste()
 void MainWindowGUI::addSound()
 {
     /*
-    QString openFile = QFileDialog::getOpenFileName(0, tr("Choose sound file"), QString(homeDir), tr("Sounds (*.ogg)"));
+    QString openFile;
+
+    QFileDialog fileDialog(this, tr("Choose sound file"), lastVisitedDir);
+    QStringList filters;
+    filters << tr("Sounds (*.ogg)");
+    fileDialog.setFilters(filters);
+    fileDialog.setAcceptMode(QFileDialog::AcceptSave);
+    fileDialog.setFileMode(QFileDialog::AnyFile);
+    int ret = fileDialog.exec();
+    if (ret == QDialog::Accepted) {
+        QStringList openFiles = fileDialog.selectedFiles();
+        openFile.append(openFiles[0]);
+    }
+
     if (!openFile.isNull()) {
         DomainFacade *facade = frontend->getProject();
         bool ok = false;

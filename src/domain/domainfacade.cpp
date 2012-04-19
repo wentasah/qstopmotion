@@ -28,10 +28,8 @@
 #include "domain/undo/undoexposuremove.h"
 #include "domain/undo/undoexposureremove.h"
 #include "domain/undo/undoexposureselect.h"
-#include "domain/undo/undoprojectclose.h"
 #include "domain/undo/undoprojectnew.h"
 #include "domain/undo/undoprojectopen.h"
-#include "domain/undo/undoprojectsave.h"
 #include "domain/undo/undosceneadd.h"
 #include "domain/undo/undosceneinsert.h"
 #include "domain/undo/undoscenemove.h"
@@ -489,20 +487,6 @@ bool DomainFacade::recoverProject()
 
             continue;
         }
-        if (0 == partStringList.at(0).compare("redoProjectSave")) {
-            // Save project
-            openProjectToUndo(partStringList.at(1));
-
-            recovered = true;
-
-            continue;
-        }
-        if (0 == partStringList.at(0).compare("redoProjectClose")) {
-            // Close project --> Nothing to do
-            Q_ASSERT(1);
-
-            continue;
-        }
         //
         // Undo/redo entries
         //
@@ -599,19 +583,24 @@ void DomainFacade::openProject(AnimationProject *project)
 }
 
 
-void DomainFacade::saveProjectToUndo(const QString &projectPath, bool saveAs)
+void DomainFacade::saveProject(const QString &projectPath, bool saveAs)
 {
-    UndoProjectSave *u = new UndoProjectSave(this, projectPath, saveAs);
-    getUndoStack()->push(u);
+    qDebug("DomainFacade::saveProject --> Start");
+
+    Q_ASSERT(NULL != animationProject);
+
+    bool ret;
+
+    ret = animationProject->saveProject(projectPath, saveAs);
+    if (ret) {
+        clearUndoStack();
+        removeHistoryFile();
+        writeHistoryEntry(QString("redoProjectOpen|%1").arg(projectPath));
+    }
+
+    qDebug("DomainFacade::saveProject --> End");
 }
 
-/*
-void DomainFacade::closeProjectToUndo()
-{
-    UndoProjectClose *u = new UndoProjectClose(this);
-    getUndoStack()->push(u);
-}
-*/
 
 void DomainFacade::closeProject()
 {

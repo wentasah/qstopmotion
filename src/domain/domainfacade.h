@@ -306,16 +306,11 @@ public:
     void openProject(AnimationProject *project);
 
     /**
-     * Add a new saveProject object to the undo history.
+     * Save the project.
      * @param projectPath the path to the project file.
      * @param saveAs this is a save as operation.
      */
-    void saveProjectToUndo(const QString &projectPath, bool saveAs);
-
-    /**
-     * Add a new closeProject object to the undo history.
-     */
-    // void closeProjectToUndo();
+    void saveProject(const QString &projectPath, bool saveAs);
 
     /**
      * Close the project.

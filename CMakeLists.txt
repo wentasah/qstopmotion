@@ -1,7 +1,7 @@
 ###############################################################################
 # CMake file for the qStopMotion project                                      #
 # (c) Ralf Lange, longsoft.de                                                 #
-# Last update: 2012-04-17                                                     #
+# Last update: 2012-04-19                                                     #
 #                                                                             #
 # Usage:                                                                      #
 #   * Qt-Creator (Windows, Linux)                                             #
@@ -96,10 +96,8 @@ set(MOC_HEADERS
     src/domain/undo/undoexposuremove.h
     src/domain/undo/undoexposureremove.h
     src/domain/undo/undoexposureselect.h
-    src/domain/undo/undoprojectclose.h
     src/domain/undo/undoprojectnew.h
     src/domain/undo/undoprojectopen.h
-    src/domain/undo/undoprojectsave.h
     src/domain/undo/undosceneadd.h
     src/domain/undo/undosceneinsert.h
     src/domain/undo/undoscenemove.h
@@ -154,10 +152,8 @@ set(SOURCES
     src/domain/undo/undoexposuremove.cpp
     src/domain/undo/undoexposureremove.cpp
     src/domain/undo/undoexposureselect.cpp
-    src/domain/undo/undoprojectclose.cpp
     src/domain/undo/undoprojectnew.cpp
     src/domain/undo/undoprojectopen.cpp
-    src/domain/undo/undoprojectsave.cpp
     src/domain/undo/undosceneadd.cpp
     src/domain/undo/undosceneinsert.cpp
     src/domain/undo/undoscenemove.cpp

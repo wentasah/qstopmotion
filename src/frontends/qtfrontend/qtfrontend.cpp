@@ -845,6 +845,7 @@ bool QtFrontend::recoverProject()
         return false;
     }
 
+    mw->setWindowTitle(tr("qStopMotion - Recovered Project"));
     bool recovered = getProject()->recoverProject();
 
     qDebug("QtFrontend::recoverProject --> End");

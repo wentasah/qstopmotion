@@ -861,7 +861,7 @@ void MainWindowGUI::saveProject()
     recordingTab->checkCameraOff();
 
     if (!filePath.isEmpty()) {
-        frontend->getProject()->saveProjectToUndo(filePath, false);
+        frontend->getProject()->saveProject(filePath, false);
     } else {
         saveProjectAs();
     }
@@ -896,8 +896,9 @@ void MainWindowGUI::saveProjectAs()
             frontend->showInformation(tr("Information"), tr("The character '|' is not allowed in the project file name and will be removed."));
             file.remove('|');
         }
-        frontend->getProject()->saveProjectToUndo(file.toLocal8Bit(), true);
+        frontend->getProject()->saveProject(file.toLocal8Bit(), true);
         QString path = frontend->getProject()->getNewProjectPath();
+        QString fileName = file.mid(file.lastIndexOf("/")+1);
 
         lastVisitedDir.clear();
         lastVisitedDir.append(path);
@@ -906,6 +907,8 @@ void MainWindowGUI::saveProjectAs()
         path.append(PreferencesTool::imageDirectory);
         saveAct->setEnabled(true);
         setMostRecentProject();
+
+        setWindowTitle("qStopMotion - " + fileName);
     }
 }
 

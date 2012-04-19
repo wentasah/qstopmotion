@@ -975,10 +975,12 @@ void ProjectTab::itemClicked(QTreeWidgetItem * /*exposureItem*/,
         activeExposureIndex = -1;
     }
 
-    take = scene->getTake(newTakeIndex);
     if (-1 == newExposureIndex) {
-        // Take item selected
-        newExposureIndex = take->getActiveExposureIndex();
+        if (0 <= newTakeIndex) {
+            // Take item selected
+            take = scene->getTake(newTakeIndex);
+            newExposureIndex = take->getActiveExposureIndex();
+        }
     }
 
     if (activeExposureIndex != newExposureIndex) {

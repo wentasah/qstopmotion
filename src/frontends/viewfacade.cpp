@@ -113,16 +113,16 @@ void ViewFacade::notifyNewProject()
 }
 
 
-void ViewFacade::notifyDescriptionsUpdated()
+void ViewFacade::notifyOpenProject()
 {
-    qDebug("ViewFacade::notifyDescriptionsUpdated --> Start");
+    qDebug("ViewFacade::notifyOpenProject --> Start");
 
     int numElem = observers.size();
     for (int i = 0; i < numElem; ++i) {
-        observers[i]->updateDescriptionsUpdated();
+        observers[i]->updateOpenProject();
     }
 
-    qDebug("ViewFacade::notifyDescriptionsUpdated --> End");
+    qDebug("ViewFacade::notifyOpenProject --> End");
 }
 
 

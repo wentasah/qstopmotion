@@ -78,6 +78,7 @@ void UndoProjectNew::redo()
     else {
         // Call of the redo function after a undo call
         facade->newProject(project);
+        project = NULL;
 
         facade->writeHistoryEntry(QString("redo"));
     }

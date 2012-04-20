@@ -152,7 +152,6 @@ bool Take::readDataFromProject(QDomElement &takeNode)
             // This is a exposure data element
             Exposure *newExposure = new Exposure(this);
             exposures.append(newExposure);
-            getFrontend()->getView()->notifyAddExposure(newExposure->getSceneIndex(), newExposure->getTakeIndex(), newExposure->getIndex());
 
             if (!newExposure->readDataFromProject(currElement)) {
                 qWarning("Take::readDataFromProject --> Read exposure data failed");

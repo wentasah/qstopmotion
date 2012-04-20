@@ -448,44 +448,30 @@ void ProjectTab::updateNewProject()
 }
 
 
-void ProjectTab::updateDescriptionsUpdated()
+void ProjectTab::updateOpenProject()
 {
-    qDebug("ProjectTab::updateDescriptionsUpdated --> Start");
+    qDebug("ProjectTab::updateOpenProject --> Start");
 
-    QTreeWidgetItem *topLevelItem = projectTree->topLevelItem(0);
-    QTreeWidgetItem *sceneItem;
-    QTreeWidgetItem *takeItem;
-    QTreeWidgetItem *exposureItem;
-    int sceneCount = topLevelItem->childCount();
-    int sceneIndex;
-    Scene *scene;
-    int takeCount;
-    int takeIndex;
-    Take *take;
-    int exposureCount;
-    int exposureIndex;
-    Exposure *exposure;
+    QTreeWidgetItem *topLevelItem = new QTreeWidgetItem(projectTree);
+    int sceneCount = frontend->getProject()->getSceneSize();
 
-    topLevelItem->setText(0, this->frontend->getProject()->getProjectDescription());
-    for (sceneIndex = 0; sceneIndex < sceneCount ; sceneIndex++) {
-        sceneItem = topLevelItem->child(sceneIndex);
-        scene = this->frontend->getProject()->getScene(sceneIndex);
-        sceneItem->setText(0, scene->getDescription());
-        takeCount = sceneItem->childCount();
-        for (takeIndex = 0; takeIndex < takeCount ; takeIndex++) {
-            takeItem = sceneItem->child(takeIndex);
-            take = scene->getTake(takeIndex);
-            takeItem->setText(0, take->getDescription());
-            exposureCount = takeItem->childCount();
-            for (exposureIndex = 0; exposureIndex < exposureCount ; exposureIndex++) {
-                exposureItem = takeItem->child(exposureIndex);
-                exposure = take->getExposure(exposureIndex);
-                exposureItem->setText(0, exposure->getId());
+    topLevelItem->setText(0, frontend->getProject()->getProjectDescription());
+    topLevelItem->setFlags(Qt::ItemIsEnabled);
+    projectTree->insertTopLevelItem(0, topLevelItem);
+
+    for (int sceneIndex = 0; sceneIndex < sceneCount ; sceneIndex++) {
+        updateAddScene(sceneIndex);
+        int takeCount = frontend->getProject()->getSceneTakeSize(sceneIndex);
+        for (int takeIndex = 0; takeIndex < takeCount ; takeIndex++) {
+            updateAddTake(sceneIndex, takeIndex);
+            int exposureCount = frontend->getProject()->getSceneTakeExposureSize(sceneIndex, takeIndex);
+            for (int exposureIndex = 0; exposureIndex < exposureCount ; exposureIndex++) {
+                updateAddExposure(sceneIndex, takeIndex, exposureIndex);
             }
         }
     }
 
-    qDebug("ProjectTab::updateDescriptionsUpdated --> End");
+    qDebug("ProjectTab::updateOpenProject --> End");
 }
 
 
@@ -1108,9 +1094,7 @@ void ProjectTab::removeSceneSlot()
     DomainFacade *animationProject = frontend->getProject();
     int removeSceneIndex = activeSceneIndex;  // The activeSceneIndex will be changed by the selectSceneToUndo call
 
-    while(-1 < activeTakeIndex) {
-        removeTakeSlot();
-    }
+    removeSceneTakes(removeSceneIndex);
 
     if (removeSceneIndex == (animationProject->getSceneSize()-1)) {
         // Last scene of the project selected
@@ -1124,6 +1108,26 @@ void ProjectTab::removeSceneSlot()
     frontend->getProject()->removeSceneToUndo(removeSceneIndex);
 
     qDebug("ProjectTab::removeSceneSlot --> End");
+}
+
+
+void ProjectTab::removeSceneTakes(int removeSceneIndex)
+{
+    qDebug("ProjectTab::removeSceneTakes --> Start");
+
+    DomainFacade *animationProject = frontend->getProject();
+
+    // Remove selection of active take
+    if (-1 < activeTakeIndex) {
+        animationProject->selectTakeToUndo(removeSceneIndex, -1);
+    }
+    // Remove of all takes
+    for (int removeTakeIndex = animationProject->getSceneTakeSize(removeSceneIndex)-1 ; 0 <= removeTakeIndex ; removeTakeIndex--) {
+        removeTakeExposures(removeSceneIndex, removeTakeIndex);
+        animationProject->removeTakeToUndo(removeSceneIndex, removeTakeIndex);
+    }
+
+    qDebug("ProjectTab::removeSceneTakes --> End");
 }
 
 
@@ -1189,9 +1193,7 @@ void ProjectTab::removeTakeSlot()
     DomainFacade *animationProject = frontend->getProject();
     int removeTakeIndex = activeTakeIndex;  // The activeTakeIndex will be changed by the selectTakeToUndo call
 
-    while(-1 < activeExposureIndex) {
-        removeFramesSlot();
-    }
+    removeTakeExposures(activeSceneIndex, removeTakeIndex);
 
     if (removeTakeIndex == (animationProject->getSceneTakeSize(activeSceneIndex)-1)) {
         // Last take of the scene selected
@@ -1205,6 +1207,25 @@ void ProjectTab::removeTakeSlot()
     frontend->getProject()->removeTakeToUndo(activeSceneIndex, removeTakeIndex);
 
     qDebug("ProjectTab::removeTakeSlot --> End");
+}
+
+
+void ProjectTab::removeTakeExposures(int removeSceneIndex, int removeTakeIndex)
+{
+    qDebug("ProjectTab::removeTakeExposures --> Start");
+
+    DomainFacade *animationProject = frontend->getProject();
+
+    // Remove selection of active exposure
+    if (-1 < activeExposureIndex) {
+        animationProject->selectExposureToUndo(removeSceneIndex, removeTakeIndex, -1);
+    }
+    // Remove of all exposures
+    for (int removeExposureIndex = animationProject->getSceneTakeExposureSize(removeSceneIndex, removeTakeIndex)-1 ; 0 <= removeExposureIndex ; removeExposureIndex--) {
+        animationProject->removeExposureToUndo(removeSceneIndex, removeTakeIndex, removeExposureIndex);
+    }
+
+    qDebug("ProjectTab::removeTakeExposures --> End");
 }
 
 

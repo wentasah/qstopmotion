@@ -347,15 +347,25 @@ public:
 
     /**
      * Returns the take size of the scene.
+     * @arg sceneIndex index of the scene the take size to get.
      * @return the take size of the scene.
      */
     int getSceneTakeSize(int sceneIndex) const;
 
     /**
      * Returns the exposure size of the scene.
+     * @arg sceneIndex index of the scene the exposure size to get.
      * @return the exposure size of the scene.
      */
     int getSceneExposureSize(int sceneIndex) const;
+
+    /**
+     * Returns the exposure size of the take of the scene.
+     * @arg sceneIndex index of the scene of the take the exposure size to get.
+     * @arg takeIndex index of the take the exposure size to get.
+     * @return the exposure size of the take.
+     */
+    int getSceneTakeExposureSize(int sceneIndex, int takeIndex) const;
 
     /**
      * Retrieves the scene at index sceneIndex.

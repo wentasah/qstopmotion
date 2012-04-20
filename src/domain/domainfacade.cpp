@@ -673,6 +673,12 @@ int DomainFacade::getSceneExposureSize(int sceneIndex)
 }
 
 
+int DomainFacade::getSceneTakeExposureSize(int sceneIndex, int takeIndex)
+{
+    return animationProject->getSceneTakeExposureSize(sceneIndex, takeIndex);
+}
+
+
 void DomainFacade::addSceneToUndo(const QString &sceneDescription)
 {
     UndoSceneAdd *u = new UndoSceneAdd(this, sceneDescription);

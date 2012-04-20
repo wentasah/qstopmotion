@@ -63,10 +63,9 @@ public:
     virtual void updateNewProject() = 0;
 
     /**
-     * Abstract function for receiving notification when the descriptions of the
-     * objects are changed.
+     * Abstract function for receiving notification when a project is opened.
      */
-    virtual void updateDescriptionsUpdated() = 0;
+    virtual void updateOpenProject() = 0;
 
     /**
      * Abstract function for recieving notification when a scene is to be played.

@@ -65,8 +65,6 @@ void UndoProjectOpen::redo()
 {
     qDebug("UndoProjectOpen::redo --> Start");
 
-    AnimationProject *animationProject = facade->getAnimationProject();
-    Frontend *frontend = facade->getFrontend();
     bool projectOpen = TRUE;
 
     // facade->getView()->notifyNewProject();
@@ -80,12 +78,15 @@ void UndoProjectOpen::redo()
     else {
         // Call of the redo function after a undo call
         facade->openProject(project);
+        project = NULL;
 
         facade->writeHistoryEntry(QString("redo"));
     }
 
     if (projectOpen) {
-        facade->getView()->notifyDescriptionsUpdated();
+        Frontend *frontend = facade->getFrontend();
+
+        facade->getView()->notifyOpenProject();
         frontend->setProjectID(facade->getProjectDescription().toAscii());
 
         Scene *scene = facade->getActiveScene();

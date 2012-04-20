@@ -360,9 +360,18 @@ public:
 
     /**
      * Returns the exposure size of the scene.
+     * @arg sceneIndex index of the scene the exposure size to get.
      * @return the exposure size of the scene.
      */
     int getSceneExposureSize(int sceneIndex);
+
+    /**
+     * Returns the exposure size of the take of the scene.
+     * @arg sceneIndex index of the scene of the take the exposure size to get.
+     * @arg takeIndex index of the take the exposure size to get.
+     * @return the exposure size of the scene.
+     */
+    int getSceneTakeExposureSize(int sceneIndex, int takeIndex);
 
     /**
      * Add a new addScene object to the undo history.

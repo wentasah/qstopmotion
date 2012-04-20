@@ -228,13 +228,13 @@ void TimeLine::updateNewProject()
 }
 
 
-void TimeLine::updateDescriptionsUpdated()
+void TimeLine::updateOpenProject()
 {
-    qDebug("TimeLine::updateDescriptionsUpdated --> Start (Nothing)");
+    qDebug("TimeLine::updateOpenProject --> Start (Nothing)");
 
-    // newProject();
+    // openProject();
 
-    // qDebug("TimeLine::updateDescriptionsUpdated --> End");
+    // qDebug("TimeLine::updateOpenProject --> End");
 }
 
 

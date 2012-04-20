@@ -579,6 +579,12 @@ int AnimationProject::getSceneExposureSize(int sceneIndex) const
 }
 
 
+int AnimationProject::getSceneTakeExposureSize(int sceneIndex, int takeIndex) const
+{
+    return scenes[sceneIndex]->getTake(takeIndex)->getExposureSize();
+}
+
+
 Scene *AnimationProject::getScene(int sceneIndex)
 {
     if (sceneIndex > -1 && sceneIndex < scenes.size()) {
@@ -707,7 +713,6 @@ bool AnimationProject::readScenesFromProject(QDomElement &animationNode)
     QString activeSceneId;
 
     description.append(animationNode.attributeNode(QString("descr")).value());
-    frontend->getView()->notifyNewProject();
 
     QDomElement currElement = animationNode.firstChildElement();
 
@@ -718,7 +723,6 @@ bool AnimationProject::readScenesFromProject(QDomElement &animationNode)
         if (nodeName.compare("scene") == 0) {
             Scene *newScene = new Scene(this);
             scenes.append(newScene);
-            frontend->getView()->notifyAddScene(newScene->getIndex());
 
             if (!newScene->readDataFromProject(currElement)) {
                 qDebug("AnimationProject::readScenesFromProject --> End (false)");

@@ -152,7 +152,6 @@ bool Scene::readDataFromProject(QDomElement &sceneNode)
             // This is a take data element
             Take *newTake = new Take(this);
             takes.append(newTake);
-            getFrontend()->getView()->notifyAddTake(newTake->getSceneIndex(), newTake->getIndex());
 
             if (!newTake->readDataFromProject(currElement)) {
                 qWarning("Scene::readDataFromProject --> Read take data failed");

@@ -104,10 +104,9 @@ public:
     void updateNewProject();
 
     /**
-     * Function for receiving notification when the descriptions of the
-     * objects are changed.
+     * Function for receiving notification when a project is opened.
      */
-    virtual void updateDescriptionsUpdated();
+    virtual void updateOpenProject();
 
     /**
      * Function to recieve notification when a sound of a scene is to be played.

@@ -94,10 +94,9 @@ public:
     void updateNewProject();
 
     /**
-     * Function for receiving notification when the descriptions of the
-     * objects are changed.
+     * Function for receiving notification when a project is opened.
      */
-    virtual void updateDescriptionsUpdated();
+    virtual void updateOpenProject();
 
     /**
      * Function to recieve notification when a sound of a scene is to be played.
@@ -325,12 +324,25 @@ private:
     void removeScene(int sceneIndex);
 
     /**
+     * Remove all takes of the scene using the undo functions
+     * @param removeSceneIndex Index of the scene of the takes are to remove
+     */
+    void removeSceneTakes(int removeSceneIndex);
+
+    /**
      * Remove take with all exposures from scene item.
      * @param sceneItem The item of the scene to remove the take
      * @param takeIndex The index of the take to remove.
      */
     void removeTake(QTreeWidgetItem *sceneItem,
                     int takeIndex);
+
+    /**
+     * Remove all takes of the scene using the undo functions
+     * @param removeSceneIndex Index of the scene of the take of the exposures are to remove
+     * @param removeTakeIndex Index of the take the exposures are to remove
+     */
+    void removeTakeExposures(int removeSceneIndex, int removeTakeIndex);
 
     /**
      * Unset the active exposure in the project tree.

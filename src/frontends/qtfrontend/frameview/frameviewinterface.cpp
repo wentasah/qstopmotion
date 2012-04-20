@@ -132,13 +132,13 @@ void FrameViewInterface::updateNewProject()
 }
 
 
-void FrameViewInterface::updateDescriptionsUpdated()
+void FrameViewInterface::updateOpenProject()
 {
-    qDebug("FrameViewInterface::updateDescriptionsUpdated --> Nothing");
+    qDebug("FrameViewInterface::updateOpenProject --> Nothing");
 
-    // this->descriptionsUpdated();
+    // this->openProject();
 
-    // qDebug("FrameViewInterface::updateDescriptionsUpdated --> End");
+    // qDebug("FrameViewInterface::updateOpenProject --> End");
 }
 
 

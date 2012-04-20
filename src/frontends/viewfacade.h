@@ -97,10 +97,9 @@ public:
     void notifyNewProject();
 
     /**
-     * Notify the observers that the descriptions of the objects in the project
-     * has been changed.
+     * Notify the observers that a project is opened.
      */
-    void notifyDescriptionsUpdated();
+    void notifyOpenProject();
 
     /**
      * Notify the observers that a scene is to be played.

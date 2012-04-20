@@ -4,6 +4,7 @@ Last Changes in the sources on qStopMotion
 qStopMotion (1.0.1), Bugfix release
   * Fix Bugs
   * Full implementation of undo and redo functionality.
+  * Full implementation of the recovery functionality.
   * Call gimp works on all platforms.
   * French localization.
 qStopMotion (1.0.0)

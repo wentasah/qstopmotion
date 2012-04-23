@@ -407,6 +407,19 @@ void RecordingTab::cameraButtonClicked()
     qDebug("RecordingTab::cameraButtonClicked --> Start");
 
     if (cameraOn == false) {
+        int activeSceneIndex = frontend->getProject()->getActiveSceneIndex();
+        if (-1 == activeSceneIndex) {
+            // No scene selected
+            frontend->showInformation(tr("Information"), tr("No scene and no take selected. Please select a scene and a take on the project tab."));
+            return;
+        }
+        int activeTakeIndex = frontend->getProject()->getActiveTakeIndex();
+        if (-1 == activeTakeIndex) {
+            // No take selected
+            frontend->showInformation(tr("Information"), tr("No take selected. Please select a take on the project tab."));
+            return;
+        }
+
         qDebug("RecordingTab::cameraButtonClicked --> Start playing video from webcam");
 
         QString iconFile(frontend->getIconsDirName());

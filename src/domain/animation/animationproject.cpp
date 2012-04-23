@@ -1137,10 +1137,13 @@ Take *AnimationProject::getTake(int sceneIndex, int takeIndex)
 
 int AnimationProject::getActiveExposureIndex() const
 {
-    if (activeSceneIndex == -1) {
+    if (-1 == activeSceneIndex) {
         return -1;
     }
     Scene *activeScene = scenes[activeSceneIndex];
+    if (-1 == getActiveTakeIndex()) {
+        return -1;
+    }
     int activeExposureIndex = activeScene->getActiveExposureIndex();
     return activeExposureIndex;
 }

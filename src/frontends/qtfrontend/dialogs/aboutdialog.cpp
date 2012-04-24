@@ -178,6 +178,8 @@ AboutDialog::AboutDialog(Frontend *f,
     }
 #endif
     systemLayout->addWidget(new QLabel(version));
+    QString buildTime(QString(tr("Build time: %1 %2")).arg(__DATE__).arg(__TIME__));
+    systemLayout->addWidget(new QLabel(buildTime));
     systemLayout->addStretch();
     systemWidget->setLayout(systemLayout);
     tabWidget->addTab(systemWidget, tr("&System Info"));

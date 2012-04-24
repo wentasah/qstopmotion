@@ -499,6 +499,7 @@ private:
     QAction *configureAct;
     QAction *undoViewAct;
     QAction *whatsthisAct;
+    QAction *aboutQtAct;
     QAction *aboutAct;
     QAction *helpAct;
 

@@ -342,6 +342,7 @@ void MainWindowGUI::retranslateStrings()
     whatsthisAct->setText(tr("What's &This"));
     undoViewAct->setText(tr("&Undo stack"));
     helpAct->setText(tr("&Help"));
+    aboutQtAct->setText(tr("About &Qt"));
     aboutAct->setText(tr("&About"));
 
     // Status bar
@@ -1714,6 +1715,14 @@ void MainWindowGUI::createActions()
     helpAct->setIconVisibleInMenu(true);
     connect(helpAct, SIGNAL(triggered()), this, SLOT(showHelpDialog()));
 
+    aboutQtAct = new QAction(this);
+    iconFile.clear();
+    iconFile.append(frontend->getIconsDirName());
+    iconFile.append(QLatin1String("qtlogo.png"));
+    aboutQtAct->setIcon(QIcon(iconFile));
+    aboutQtAct->setIconVisibleInMenu(true);
+    connect(aboutQtAct, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
+
     aboutAct = new QAction(this);
     iconFile.clear();
     iconFile.append(frontend->getIconsDirName());
@@ -1759,6 +1768,7 @@ void MainWindowGUI::createMenus()
     helpMenu->addAction(whatsthisAct);
     helpMenu->addAction(helpAct);
     helpMenu->addSeparator();
+    helpMenu->addAction(aboutQtAct);
     helpMenu->addAction(aboutAct);
 }
 
@@ -2106,6 +2116,15 @@ void MainWindowGUI::retranslateHelpText()
     infoText =
         helpAct->toolTip().prepend(tr("Help"));
     helpAct->setToolTip(infoText);
+
+    infoText =
+        tr("<h4>About Qt</h4> "
+           "<p>This will display a small information box where you can read "
+           "general information about the Qt library.</p>");
+    aboutQtAct->setWhatsThis(infoText);
+    infoText =
+        aboutAct->toolTip().prepend(tr("About Qt"));
+    aboutQtAct->setToolTip(infoText);
 
     infoText =
         tr("<h4>About</h4> "

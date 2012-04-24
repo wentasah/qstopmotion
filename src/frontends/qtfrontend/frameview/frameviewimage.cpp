@@ -130,10 +130,16 @@ void FrameViewImage::updateRemoveScene(int)
 void FrameViewImage::updateRemoveTake(int,
                                       int)
 {
-    if (frontend->getProject()->getActiveTakeIndex() < 0) {
-        showLogo();
-        update();
+    int activeSceneIndex = frontend->getProject()->getActiveSceneIndex();
+    if (0 > activeSceneIndex) {
+        return;
     }
+    int activeTakeIndex = frontend->getProject()->getActiveTakeIndex();
+    if (0 > activeTakeIndex) {
+        return;
+    }
+    showLogo();
+    update();
 }
 
 

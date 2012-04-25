@@ -970,9 +970,12 @@ void ProjectTab::itemClicked(QTreeWidgetItem * /*exposureItem*/,
     }
 
     if (activeExposureIndex != newExposureIndex) {
-        frontend->getProject()->selectExposureToUndo(newSceneIndex, newTakeIndex, newExposureIndex);
-        qDebug("ProjectTab::itemClicked --> End (Scene, Take or exposure selected)");
-        return;
+        if (newExposureIndex != frontend->getProject()->getActiveExposureIndex()) {
+            frontend->getProject()->selectExposureToUndo(newSceneIndex, newTakeIndex, newExposureIndex);
+            qDebug("ProjectTab::itemClicked --> End (Scene, Take or exposure selected)");
+            return;
+        }
+        activeExposureIndex = newExposureIndex;
     }
 
     this->setActiveItems();
@@ -1135,6 +1138,12 @@ void ProjectTab::insertTakeSlot()
 {
     qDebug("ProjectTab::insertTakeSlot --> Start");
 
+    if (0 > activeSceneIndex) {
+        // No scene selected
+        frontend->showInformation(tr("Insert Take"), tr("No scene selected. Please select a scene in the project tree."));
+        return;
+    }
+
     DescriptionDialog *dialog = new DescriptionDialog(frontend, DescriptionDialog::TakeDescription);
     dialog->setProjectDescription(frontend->getProject()->getProjectDescription());
     dialog->setSceneDescription(frontend->getProject()->getActiveScene()->getDescription());
@@ -1164,6 +1173,12 @@ void ProjectTab::insertTakeSlot()
 void ProjectTab::addTakeSlot()
 {
     qDebug("ProjectTab::addTakeSlot --> Start");
+
+    if (0 > activeSceneIndex) {
+        // No scene selected
+        frontend->showInformation(tr("Add Take"), tr("No scene selected. Please select a scene in the project tree."));
+        return;
+    }
 
     DescriptionDialog *dialog = new DescriptionDialog(frontend, DescriptionDialog::TakeDescription);
     dialog->setProjectDescription(frontend->getProject()->getProjectDescription());
@@ -1233,6 +1248,17 @@ void ProjectTab::insertFramesSlot()
 {
     qDebug("ProjectTab::insertFramesSlot --> Start");
 
+    if (0 > activeSceneIndex) {
+        // No scene selected
+        frontend->showInformation(tr("Insert Frames"), tr("No scene selected. Please select a scene in the project tree."));
+        return;
+    }
+    if (0 > activeTakeIndex) {
+        // No scene selected
+        frontend->showInformation(tr("Insert Frames"), tr("No take selected. Please select a take in the project tree."));
+        return;
+    }
+
     QStringList selectedFiles = selectFiles();
     int selectedFilesCount = selectedFiles.count();
     if (0 == selectedFilesCount) {
@@ -1258,6 +1284,17 @@ void ProjectTab::insertFramesSlot()
 void ProjectTab::addFramesSlot()
 {
     qDebug("ProjectTab::addFramesSlot --> Start");
+
+    if (0 > activeSceneIndex) {
+        // No scene selected
+        frontend->showInformation(tr("Add Frames"), tr("No scene selected. Please select a scene in the project tree."));
+        return;
+    }
+    if (0 > activeTakeIndex) {
+        // No scene selected
+        frontend->showInformation(tr("Add Frames"), tr("No take selected. Please select a take in the project tree."));
+        return;
+    }
 
     QStringList selectedFiles = selectFiles();
     int selectedFilesCount = selectedFiles.count();

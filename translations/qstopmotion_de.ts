@@ -154,13 +154,13 @@
         <translation>Abspeichern der Szenen auf die Festplatte ...</translation>
     </message>
     <message>
-        <location filename="../src/domain/animation/animationproject.cpp" line="990"/>
-        <location filename="../src/domain/animation/animationproject.cpp" line="997"/>
+        <location filename="../src/domain/animation/animationproject.cpp" line="992"/>
+        <location filename="../src/domain/animation/animationproject.cpp" line="999"/>
         <source>Add Sound</source>
         <translation>Ton hinzufügen</translation>
     </message>
     <message>
-        <location filename="../src/domain/animation/animationproject.cpp" line="991"/>
+        <location filename="../src/domain/animation/animationproject.cpp" line="993"/>
         <source>Cannot open the selected audio file for reading.
 Check that you have the right permissions set.
 The animation will be runned without sound if you
@@ -171,7 +171,7 @@ Die Animation wird ohne Ton abgespielt wenn Sie
 abspielen wählen.</translation>
     </message>
     <message>
-        <location filename="../src/domain/animation/animationproject.cpp" line="998"/>
+        <location filename="../src/domain/animation/animationproject.cpp" line="1000"/>
         <source>The selected audio file is not valid within the
 given audio format. The animation will be runned
 without sound if you choose to play.</source>
@@ -1438,129 +1438,165 @@ Check your settings in the preferences menu!</source>
 <context>
     <name>ProjectTab</name>
     <message>
-        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1572"/>
+        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1609"/>
         <source>Choose frames to add</source>
         <translation>Wählen sie Bilder zum hinzufügen</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1314"/>
-        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1321"/>
-        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1625"/>
-        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1661"/>
+        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1351"/>
+        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1358"/>
+        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1662"/>
+        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1698"/>
         <source>Warning</source>
         <translation>Warnung</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="112"/>
-        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1369"/>
+        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1406"/>
         <source>Project Tree</source>
         <translation>Projektbaum</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="133"/>
-        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1371"/>
+        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1408"/>
         <source>Scenes</source>
         <translation>Szenen</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="173"/>
-        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1394"/>
+        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1431"/>
         <source>Takes</source>
         <translation>Aufnahmen</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="215"/>
-        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1417"/>
+        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1454"/>
         <source>Frames</source>
         <translation>Bilder</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="257"/>
-        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1440"/>
+        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1477"/>
         <source>Edit</source>
         <translation>Bearbeiten</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1031"/>
-        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1066"/>
+        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1034"/>
+        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1069"/>
         <source>Scene 000</source>
         <translation>Szene 000</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1032"/>
-        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1067"/>
-        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1141"/>
-        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1171"/>
+        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1035"/>
+        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1070"/>
+        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1150"/>
+        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1186"/>
         <source>Take 00</source>
         <translation>Aufnahme 00</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1626"/>
+        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1663"/>
         <source>You do not have Gimp installed on your system</source>
         <translation>Gimp ist auf Ihrem Computer nicht installiert</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1315"/>
+        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1352"/>
         <source>There is no active frame to open</source>
         <translation>Es ist kein Bild zum öffnen ausgewählt</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1322"/>
+        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1359"/>
         <source>The active frame is corrupt</source>
         <translation>Das ausgewählte Bild ist beschädigt</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1662"/>
+        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1699"/>
         <source>Failed to start Gimp!</source>
         <translation>Der Start von Gimp ist fehlgeschlagen!</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1374"/>
+        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1411"/>
         <source>&lt;h4&gt;Insert new Scene (CTRL+E)&lt;/h4&gt; &lt;p&gt;Click this button to create a new &lt;em&gt;scene&lt;/em&gt; and &lt;em&gt;insert&lt;/em&gt; it bevor the selected scene.&lt;/p&gt;</source>
         <translation>&lt;h4&gt;Einfügen einer neuen Szene (CTRL+E)&lt;/h4&gt; &lt;p&gt;Betätige diesen Knopf um eine neue &lt;em&gt;Szene&lt;/em&gt; zu erzeugen und vor der ausgewählten Szene &lt;em&gt;einzufügen&lt;/em&gt;.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1381"/>
+        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1143"/>
+        <source>Insert Take</source>
+        <translation>Aufnahme einfügen</translation>
+    </message>
+    <message>
+        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1143"/>
+        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1179"/>
+        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1253"/>
+        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1290"/>
+        <source>No scene selected. Please select a scene in the project tree.</source>
+        <translation>Keine Szene ausgewählt. Bitte eine Szene im Projektbaum auswählen.</translation>
+    </message>
+    <message>
+        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1179"/>
+        <source>Add Take</source>
+        <translation>Aufnahme hinzufügen</translation>
+    </message>
+    <message>
+        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1253"/>
+        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1258"/>
+        <source>Insert Frames</source>
+        <translation>Bilder einfügen</translation>
+    </message>
+    <message>
+        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1258"/>
+        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1295"/>
+        <source>No take selected. Please select a take in the project tree.</source>
+        <translation>Keine Aufnahme ausgewählt. Bitte eine Aufnahme im Projektbaum auswählen.</translation>
+    </message>
+    <message>
+        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1290"/>
+        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1295"/>
+        <source>Add Frames</source>
+        <translation>Bilder hinzufügen</translation>
+    </message>
+    <message>
+        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1418"/>
         <source>&lt;h4&gt;Append new Scene (CTRL+E)&lt;/h4&gt; &lt;p&gt;Click this button to create a new &lt;em&gt;scene&lt;/em&gt; and &lt;em&gt;append&lt;/em&gt; it at the end of the animation.&lt;/p&gt;</source>
         <translation>&lt;h4&gt;Einfügen einer neuen Szene (CTRL+E)&lt;/h4&gt; &lt;p&gt;Betätige diesen Knopf um eine neue &lt;em&gt;Szene&lt;/em&gt; zu erzeugen und am Ende der Animation &lt;em&gt;anzuhängen&lt;/em&gt;.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1388"/>
+        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1425"/>
         <source>&lt;h4&gt;Remove Scene (SHIFT+Delete)&lt;/h4&gt; &lt;p&gt;Click this button to &lt;em&gt;remove&lt;/em&gt; the selected &lt;em&gt;scene&lt;/em&gt; from the animation.&lt;/p&gt;</source>
         <translation>&lt;h4&gt;Lösche Scene (SHIFT+Delete)&lt;/h4&gt; &lt;p&gt;Betätige diesen Knopf um die ausgewählte &lt;em&gt;Szene&lt;/em&gt; zu &lt;em&gt;löschen&lt;/em&gt;.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1397"/>
+        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1434"/>
         <source>&lt;h4&gt;Insert new Take (CTRL+E)&lt;/h4&gt; &lt;p&gt;Click this button to create a new &lt;em&gt;take&lt;/em&gt; and &lt;em&gt;insert&lt;/em&gt; it bevor the selected take.&lt;/p&gt;</source>
         <translation>&lt;h4&gt;Einfügen einer neuen Aufnahme (CTRL+E)&lt;/h4&gt; &lt;p&gt;Betätige diesen Knopf um eine neue &lt;em&gt;Aufnahme&lt;/em&gt; zu erzeugen und vor der ausgewählten Aufnahme &lt;em&gt;einzufügen&lt;/em&gt;.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1404"/>
+        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1441"/>
         <source>&lt;h4&gt;Append new Take (CTRL+E)&lt;/h4&gt; &lt;p&gt;Click this button to create a new &lt;em&gt;take&lt;/em&gt; and &lt;em&gt;append&lt;/em&gt; it to the end of the scene.&lt;/p&gt;</source>
         <translation>&lt;h4&gt;Einfügen einer neuen Aufnahme (CTRL+E)&lt;/h4&gt; &lt;p&gt;Betätige diesen Knopf um eine neue &lt;em&gt;Aufnahme&lt;/em&gt; zu erzeugen und an das Ende der Szene &lt;em&gt;anzuhängen&lt;/em&gt;.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1411"/>
+        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1448"/>
         <source>&lt;h4&gt;Remove Take (SHIFT+Delete)&lt;/h4&gt; &lt;p&gt;Click this button to &lt;em&gt;remove&lt;/em&gt; the selected &lt;em&gt;take&lt;/em&gt; from the animation.&lt;/p&gt;</source>
         <translation>&lt;h4&gt;Lösche Aufnahme (SHIFT+Delete)&lt;/h4&gt; &lt;p&gt;Betätige diesen Knopf um die ausgewählte &lt;em&gt;Aufnahme&lt;/em&gt; zu &lt;em&gt;löschen&lt;/em&gt;.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1420"/>
+        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1457"/>
         <source>&lt;h4&gt;Insert Frames (CTRL+F)&lt;/h4&gt; &lt;p&gt;Click on this button to &lt;em&gt;insert frames&lt;/em&gt; bevor the selected frame.&lt;/p&gt;</source>
         <translation>&lt;h4&gt;Einfügen von Bildern (CTRL+F)&lt;/h4&gt; &lt;p&gt;Betätige diesen Knopf um neue &lt;em&gt;Bilder&lt;/em&gt; vor dem ausgewählten Bild &lt;em&gt;einzufügen&lt;/em&gt;.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1427"/>
+        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1464"/>
         <source>&lt;h4&gt;Append Frames (CTRL+F)&lt;/h4&gt; &lt;p&gt;Click on this button to &lt;em&gt;append frames&lt;/em&gt; at the end of the take.&lt;/p&gt;</source>
         <translation>&lt;h4&gt;Einfügen von Bildern (CTRL+F)&lt;/h4&gt; &lt;p&gt;Betätige diesen Knopf um neue &lt;em&gt;Bilder&lt;/em&gt; am Ende der Aufnahme &lt;em&gt;anzuhängen&lt;/em&gt;.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1434"/>
+        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1471"/>
         <source>&lt;h4&gt;Remove Frame (Delete)&lt;/h4&gt; &lt;p&gt;Click this button to &lt;em&gt;remove&lt;/em&gt; the selected &lt;em&gt;frame&lt;/em&gt; from the take.&lt;/p&gt;</source>
         <translation>&lt;h4&gt;Lösche Bild (SHIFT+Delete)&lt;/h4&gt; &lt;p&gt;Betätige diesen Knopf um das ausgewählte &lt;em&gt;Bild&lt;/em&gt; zu &lt;em&gt;löschen&lt;/em&gt;.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1443"/>
+        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1480"/>
         <source>&lt;h4&gt;Launch Photo Editor&lt;/h4&gt; &lt;p&gt;Click this button to open the active frame in the photo editor&lt;/p&gt; &lt;p&gt;Note that you can also drag images from the frame bar and drop them on the photo editor&lt;/p&gt;</source>
         <translation>&lt;h4&gt;Öffne Bildbearbeitungsprogramm&lt;/h4&gt; &lt;p&gt;Betätige diesen Knopf um das Bildbearbeitungsprogramm zu öffnen&lt;/p&gt; &lt;p&gt;Es ist auch möglich, Bilder von der Zeitleiste in das Bildbearbeitungsprogramm zu verschieben.&lt;/p&gt;</translation>
     </message>
@@ -1782,18 +1818,18 @@ Sie benötigen Rechte zum lesen, schreiben und ausführen im Verzeichnis .qstopm
         <translation type="obsolete">Datei(en)</translation>
     </message>
     <message>
-        <location filename="../src/domain/animation/scene.cpp" line="706"/>
-        <location filename="../src/domain/animation/scene.cpp" line="769"/>
+        <location filename="../src/domain/animation/scene.cpp" line="708"/>
+        <location filename="../src/domain/animation/scene.cpp" line="771"/>
         <source>Critical</source>
         <translation>Kritisch</translation>
     </message>
     <message>
-        <location filename="../src/domain/animation/scene.cpp" line="707"/>
+        <location filename="../src/domain/animation/scene.cpp" line="709"/>
         <source>Can&apos;t remove sound file!</source>
         <translation>Tondatei kann nicht gelöscht werden!</translation>
     </message>
     <message>
-        <location filename="../src/domain/animation/scene.cpp" line="770"/>
+        <location filename="../src/domain/animation/scene.cpp" line="772"/>
         <source>Can&apos;t move sound file!</source>
         <translation>Tondatei kann nicht verschoben werden!</translation>
     </message>

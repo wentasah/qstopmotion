@@ -50,14 +50,22 @@ void UndoTakeSelect::undo()
     Frontend *frontend = facade->getFrontend();
 
     animationProject->setActiveTakeIndex(oldTakeIndex);
+    facade->getView()->notifyActivateTake();
     if (0 <= oldTakeIndex) {
         Take *activeTake = animationProject->getActiveTake();
         frontend->setTakeID(activeTake->getDescription().toAscii());
+        int activeExposureIndex = activeTake->getActiveExposureIndex();
+        if (0 <= activeExposureIndex) {
+            facade->getView()->notifyActivateExposure();
+            frontend->setExposureID(activeTake->getExposure(activeExposureIndex)->getId().toAscii());
+        }
+        else {
+            frontend->setExposureID("---");
+        }
     }
     else {
         frontend->setTakeID("---");
     }
-    facade->getView()->notifyActivateTake();
 
     animationProject->decAnimationChanges();
 
@@ -76,14 +84,22 @@ void UndoTakeSelect::redo()
     Frontend *frontend = facade->getFrontend();
 
     animationProject->setActiveTakeIndex(newTakeIndex);
+    facade->getView()->notifyActivateTake();
     if (0 <= newTakeIndex) {
         Take *activeTake = animationProject->getActiveTake();
         frontend->setTakeID(activeTake->getDescription().toAscii());
+        int activeExposureIndex = activeTake->getActiveExposureIndex();
+        if (0 <= activeExposureIndex) {
+            facade->getView()->notifyActivateExposure();
+            frontend->setExposureID(activeTake->getExposure(activeExposureIndex)->getId().toAscii());
+        }
+        else {
+            frontend->setExposureID("---");
+        }
     }
     else {
         frontend->setTakeID("---");
     }
-    facade->getView()->notifyActivateTake();
 
     animationProject->incAnimationChanges();
 

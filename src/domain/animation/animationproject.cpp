@@ -694,9 +694,11 @@ Scene *AnimationProject::removeScene(unsigned int sceneIndex)
 {
     qDebug("AnimationProject::removeScene --> Start");
 
-    if (activeSceneIndex == (getSceneSize() - 1)) {
-        // Last scene is active and will be removed
-        activeSceneIndex--;
+    Q_ASSERT(sceneIndex != activeSceneIndex);
+
+    if (sceneIndex < activeSceneIndex) {
+        // Scene bevor the active scene will be removed
+        setActiveSceneIndex(activeSceneIndex-1);
     }
     Scene *removedScene = scenes[sceneIndex];
     scenes.remove(sceneIndex);

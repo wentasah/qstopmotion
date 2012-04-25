@@ -49,12 +49,16 @@ void UndoProjectNew::undo()
 
     Q_ASSERT(NULL == project);
 
+    Frontend *frontend = facade->getFrontend();
+
     project = facade->removeProject();
 
     facade->getView()->notifyRemoveProject();
-
-    // TODO: Implement separate frontende changes
-    // frontend->setFrontendChanges();
+    frontend->setProjectID("---");
+    frontend->setSceneID("---");
+    frontend->setTakeID("---");
+    frontend->setExposureID("---");
+    frontend->setToolBarState(ToolBar::toolBarCameraOff);
 
     facade->writeHistoryEntry(QString("undo"));
 
@@ -85,12 +89,10 @@ void UndoProjectNew::redo()
 
     facade->getView()->notifyNewProject();
     frontend->setProjectID(facade->getProjectDescription().toAscii());
-    frontend->setSceneID("");
-    frontend->setTakeID("");
+    frontend->setSceneID("---");
+    frontend->setTakeID("---");
+    frontend->setExposureID("---");
     frontend->setToolBarState(ToolBar::toolBarCameraOff);
-
-    // TODO: Implement separate frontende changes
-    // frontend->setFrontendChanges();
 
     qDebug("UndoProjectNew::redo --> End");
 }

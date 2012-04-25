@@ -499,13 +499,14 @@ Exposure* Take::removeActiveExposure()
 
 Exposure* Take::removeExposure(int exposureIndex)
 {
-    unsigned int  exposureSize = exposures.size();
     Exposure     *exposure;
+
+    Q_ASSERT(exposureIndex != activeExposureIndex);
 
     exposure = exposures[exposureIndex];
     exposures.remove(exposureIndex);
     if (exposureIndex <= activeExposureIndex) {
-        this->setActiveExposureIndex(activeExposureIndex - 1);
+        setActiveExposureIndex(activeExposureIndex - 1);
     }
 
     return exposure;

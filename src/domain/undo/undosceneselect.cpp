@@ -46,14 +46,31 @@ void UndoSceneSelect::undo()
     Frontend *frontend = facade->getFrontend();
 
     animationProject->setActiveSceneIndex(oldSceneIndex);
+    facade->getView()->notifyActivateScene();
     if (0 <= oldSceneIndex) {
         Scene *activeScene = animationProject->getActiveScene();
         frontend->setSceneID(activeScene->getDescription().toAscii());
+        int activeTakeIndex = activeScene->getActiveTakeIndex();
+        if (0 <= activeTakeIndex) {
+            facade->getView()->notifyActivateTake();
+            Take *activeTake = activeScene->getActiveTake();
+            frontend->setTakeID(activeTake->getDescription().toAscii());
+            int activeExposureIndex = activeTake->getActiveExposureIndex();
+            if (0 <= activeExposureIndex) {
+                facade->getView()->notifyActivateExposure();
+                frontend->setExposureID(activeTake->getExposure(activeExposureIndex)->getId().toAscii());
+            }
+            else {
+                frontend->setExposureID("---");
+            }
+        }
+        else {
+            frontend->setTakeID("---");
+        }
     }
     else {
         frontend->setSceneID("---");
     }
-    facade->getView()->notifyActivateScene();
 
     animationProject->decAnimationChanges();
 
@@ -72,14 +89,31 @@ void UndoSceneSelect::redo()
     Frontend *frontend = facade->getFrontend();
 
     animationProject->setActiveSceneIndex(newSceneIndex);
+    facade->getView()->notifyActivateScene();
     if (0 <= newSceneIndex) {
         Scene *activeScene = animationProject->getActiveScene();
         frontend->setSceneID(activeScene->getDescription().toAscii());
+        int activeTakeIndex = activeScene->getActiveTakeIndex();
+        if (0 <= activeTakeIndex) {
+            facade->getView()->notifyActivateTake();
+            Take *activeTake = activeScene->getActiveTake();
+            frontend->setTakeID(activeTake->getDescription().toAscii());
+            int activeExposureIndex = activeTake->getActiveExposureIndex();
+            if (0 <= activeExposureIndex) {
+                facade->getView()->notifyActivateExposure();
+                frontend->setExposureID(activeTake->getExposure(activeExposureIndex)->getId().toAscii());
+            }
+            else {
+                frontend->setExposureID("---");
+            }
+        }
+        else {
+            frontend->setTakeID("---");
+        }
     }
     else {
         frontend->setSceneID("---");
     }
-    facade->getView()->notifyActivateScene();
 
     animationProject->incAnimationChanges();
 

@@ -398,7 +398,7 @@ void Scene::insertTake(int takeIndex, Take *take)
     Q_ASSERT(takeIndex > -1);
     Q_ASSERT(takeIndex < getTakeSize());
 
-    takes.insert(activeTakeIndex, take);
+    takes.insert(takeIndex, take);
     if (takeIndex < activeTakeIndex) {
         this->setActiveTakeIndex(activeTakeIndex+1);
     }
@@ -443,9 +443,11 @@ Take *Scene::removeTake(unsigned int takeIndex)
 {
     qDebug("Scene::removeTake --> Start");
 
-    if (activeTakeIndex == (getTakeSize() - 1)) {
-        // Last take is active and will be removed
-        activeTakeIndex--;
+    Q_ASSERT(takeIndex != activeTakeIndex);
+
+    if (takeIndex < activeTakeIndex) {
+        // Take bevor the active take will be removed
+        setActiveTakeIndex(activeTakeIndex-1);
     }
     Take *removedTake = takes[takeIndex];
     takes.remove(takeIndex);

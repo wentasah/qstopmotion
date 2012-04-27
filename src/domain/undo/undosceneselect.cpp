@@ -126,5 +126,5 @@ void UndoSceneSelect::redo()
                                   .arg(oldSceneIndex).arg(newSceneIndex));
     }
 
-    qDebug("UndoSceneSelect::redo --> Start");
+    qDebug("UndoSceneSelect::redo --> End");
 }

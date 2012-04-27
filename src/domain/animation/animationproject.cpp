@@ -690,7 +690,7 @@ void AnimationProject::removeActiveScene()
 }
 */
 
-Scene *AnimationProject::removeScene(unsigned int sceneIndex)
+Scene *AnimationProject::removeScene(int sceneIndex)
 {
     qDebug("AnimationProject::removeScene --> Start");
 
@@ -699,6 +699,7 @@ Scene *AnimationProject::removeScene(unsigned int sceneIndex)
     if (sceneIndex < activeSceneIndex) {
         // Scene bevor the active scene will be removed
         setActiveSceneIndex(activeSceneIndex-1);
+        Q_ASSERT(-1 < activeSceneIndex);
     }
     Scene *removedScene = scenes[sceneIndex];
     scenes.remove(sceneIndex);
@@ -1108,7 +1109,7 @@ Take *AnimationProject::removeActiveTake()
 }
 */
 
-Take *AnimationProject::removeTake(unsigned int sceneIndex, unsigned int takeIndex)
+Take *AnimationProject::removeTake(int sceneIndex, int takeIndex)
 {
     Scene *scene = scenes[sceneIndex];
 

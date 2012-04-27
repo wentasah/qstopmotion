@@ -417,7 +417,7 @@ public:
      * @param sceneIndex The index of the scene to remove.
      * @return The removed scene.
      */
-    Scene *removeScene(unsigned int sceneIndex);
+    Scene *removeScene(int sceneIndex);
 
     /**
      * Get the data of the scenes from the project file
@@ -544,7 +544,7 @@ public:
      * @param takeIndex The index of the take to remove.
      * @return The removed take;
      */
-    Take *removeTake(unsigned int sceneIndex, unsigned int takeIndex);
+    Take *removeTake(int sceneIndex, int takeIndex);
 
     /**
      * Returns the exposure size of the take.

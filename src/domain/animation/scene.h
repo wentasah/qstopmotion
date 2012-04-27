@@ -238,7 +238,7 @@ public:
      * @param takeIndex The index of the take to remove.
      * @return The removed take.
      */
-    Take *removeTake(unsigned int takeIndex);
+    Take *removeTake(int takeIndex);
 
     /**************************************************************************
      * Exposure functions

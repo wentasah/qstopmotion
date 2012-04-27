@@ -290,21 +290,6 @@ public:
      */
     void setMovingScene(int movingScene);
 
-    /**
-     * Sets whether the scene is currently opening so that close requests
-     * can be ignored while it is processing.
-     *
-     * @param openingScene true if the scene is currently being opened. False
-     * if not.
-     */
-    void setOpeningScene(bool openingScene);
-
-    /**
-     * Returns true if a scene is currently being opened.
-     * @return true if a scene is currently being opened.
-     */
-    bool isOpeningScene() const;
-
     int getFrameWidth() const;
     int getFrameHeight() const;
     int getSpace() const;
@@ -385,11 +370,6 @@ private:
      * True if the user is currently holding down shift to select multiple frames
      */
     bool selecting;
-
-    /**
-     * ????
-     */
-    bool openingScene;
 
     QTimer *scrollTimer;
     QScrollBar *scrollBar;

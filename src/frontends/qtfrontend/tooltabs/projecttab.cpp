@@ -575,6 +575,7 @@ void ProjectTab::updateRemoveScene(int sceneIndex)
 
     if (sceneIndex < activeSceneIndex) {
         activeSceneIndex--;
+        Q_ASSERT(-1 < activeSceneIndex);
     }
     if (-1 == activeSceneIndex) {
         activeTakeIndex = -1;
@@ -701,6 +702,7 @@ void ProjectTab::updateRemoveTake(int sceneIndex,
         // One of the takes of the active scene are removed
         if (takeIndex < activeTakeIndex) {
             activeTakeIndex--;
+            Q_ASSERT(-1 < activeTakeIndex);
         }
 
         if (-1 == activeTakeIndex) {
@@ -957,7 +959,12 @@ void ProjectTab::itemClicked(QTreeWidgetItem * /*exposureItem*/,
     }
 
     if (activeTakeIndex != newTakeIndex) {
-        frontend->getProject()->selectTakeToUndo(newSceneIndex, newTakeIndex);
+        if (newTakeIndex != frontend->getProject()->getActiveTakeIndex()) {
+            frontend->getProject()->selectTakeToUndo(newSceneIndex, newTakeIndex);
+            qDebug("ProjectTab::itemClicked --> End (Scene or Take selected)");
+            return;
+        }
+        activeTakeIndex = newTakeIndex;
         activeExposureIndex = -1;
     }
 
@@ -1094,10 +1101,29 @@ void ProjectTab::removeSceneSlot()
 {
     qDebug("ProjectTab::removeSceneSlot --> Start");
 
-    DomainFacade *animationProject = frontend->getProject();
-    int removeSceneIndex = activeSceneIndex;  // The activeSceneIndex will be changed by the selectSceneToUndo call
+    if (-1 == activeSceneIndex) {
+        // No scene selected
+        qDebug("ProjectTab::removeSceneSlot --> End (Nothing)");
+        return;
+    }
 
-    removeSceneTakes(removeSceneIndex);
+    DomainFacade *animationProject = frontend->getProject();
+
+    if (-1 == animationProject->getActiveScene()->getActiveTakeIndex()) {
+        // There is no active take in this scene
+
+        removeSceneTakes(activeSceneIndex);
+    }
+    else {
+        // There is a active take in this scene
+
+        // Remove of all exposures using the remove frame slot
+        while (-1 < activeTakeIndex) {
+            removeTakeSlot();
+        }
+    }
+
+    int removeSceneIndex = activeSceneIndex;  // The activeSceneIndex will be changed by the selectSceneToUndo call
 
     if (removeSceneIndex == (animationProject->getSceneSize()-1)) {
         // Last scene of the project selected
@@ -1120,10 +1146,6 @@ void ProjectTab::removeSceneTakes(int removeSceneIndex)
 
     DomainFacade *animationProject = frontend->getProject();
 
-    // Remove selection of active take
-    if (-1 < activeTakeIndex) {
-        animationProject->selectTakeToUndo(removeSceneIndex, -1);
-    }
     // Remove of all takes
     for (int removeTakeIndex = animationProject->getSceneTakeSize(removeSceneIndex)-1 ; 0 <= removeTakeIndex ; removeTakeIndex--) {
         removeTakeExposures(removeSceneIndex, removeTakeIndex);
@@ -1205,10 +1227,29 @@ void ProjectTab::removeTakeSlot()
 {
     qDebug("ProjectTab::removeTakeSlot --> Start");
 
-    DomainFacade *animationProject = frontend->getProject();
-    int removeTakeIndex = activeTakeIndex;  // The activeTakeIndex will be changed by the selectTakeToUndo call
+    if (-1 == activeTakeIndex) {
+        // No take selected
+        qDebug("ProjectTab::removeTakeSlot --> End (Nothing)");
+        return;
+    }
 
-    removeTakeExposures(activeSceneIndex, removeTakeIndex);
+    DomainFacade *animationProject = frontend->getProject();
+
+    if (-1 == animationProject->getActiveTake()->getActiveExposureIndex()) {
+        // There is no active exposure in this take
+
+        removeTakeExposures(activeSceneIndex, activeTakeIndex);
+    }
+    else {
+        // There is a active exposure in this take
+
+        // Remove of all exposures using the remove frame slot
+        while (-1 < activeExposureIndex) {
+            removeFramesSlot();
+        }
+    }
+
+    int removeTakeIndex = activeTakeIndex;  // The activeTakeIndex will be changed by the selectTakeToUndo call
 
     if (removeTakeIndex == (animationProject->getSceneTakeSize(activeSceneIndex)-1)) {
         // Last take of the scene selected
@@ -1231,10 +1272,6 @@ void ProjectTab::removeTakeExposures(int removeSceneIndex, int removeTakeIndex)
 
     DomainFacade *animationProject = frontend->getProject();
 
-    // Remove selection of active exposure
-    if (-1 < activeExposureIndex) {
-        animationProject->selectExposureToUndo(removeSceneIndex, removeTakeIndex, -1);
-    }
     // Remove of all exposures
     for (int removeExposureIndex = animationProject->getSceneTakeExposureSize(removeSceneIndex, removeTakeIndex)-1 ; 0 <= removeExposureIndex ; removeExposureIndex--) {
         animationProject->removeExposureToUndo(removeSceneIndex, removeTakeIndex, removeExposureIndex);
@@ -1318,7 +1355,7 @@ void ProjectTab::removeFramesSlot()
     qDebug("ProjectTab::removeFramesSlot --> Start");
 
     if (-1 == activeExposureIndex) {
-        // Selected item is not a exposure item
+        // No exposure selected
         qDebug("ProjectTab::removeFramesSlot --> End (Nothing)");
         return;
     }

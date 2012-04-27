@@ -551,7 +551,7 @@ void TimeLine::newScene(int sceneIndex)
     qDebug("TimeLine::newScene --> Start");
 
     qDebug("TimeLine::newScene --> Adding new scene thumb to timeline");
-
+/*
     if (sceneIndex > 0)  {
         int from = sceneIndex + (frontend->getProject()->getSceneExposureSize(sceneIndex - 1));
         int numThumbs = thumbViews.size();
@@ -560,10 +560,14 @@ void TimeLine::newScene(int sceneIndex)
             thumbViews[i]->setThumbIndex(thumbViews[i]->getThumbIndex() + 1);
         }
     }
+*/
+    if (sceneIndex > activeSceneIndex) {
+        // New Scene is inserted after the active scene --> Nothing to do
+        qDebug("TimeLine::newScene --> End (Nothing)");
+        return;
+    }
 
-    setOpeningScene(false);
-
-    // activeSceneIndex = sceneIndex;
+    activeSceneIndex++;
 
     qDebug("TimeLine::newScene --> End");
 }
@@ -638,12 +642,23 @@ void TimeLine::activateScene()
  * Private take functions
  **************************************************************************/
 
-void TimeLine::newTake(int /*sceneIndex*/,
-                       int /*takeIndex*/)
+void TimeLine::newTake(int sceneIndex,
+                       int takeIndex)
 {
     qDebug("TimeLine::newTake --> Start");
 
-    // activeTakeIndex = takeIndex;
+    if (sceneIndex != activeSceneIndex) {
+        // Not the active scene --> Nothing to do
+        qDebug("TimeLine::newTake --> End (Nothing)");
+        return;
+    }
+    if (takeIndex > activeTakeIndex) {
+        // New take is inserted after the activ take --> Nothing to do
+        qDebug("TimeLine::newTake --> End (Nothing)");
+        return;
+    }
+
+    activeTakeIndex++;
 
     qDebug("TimeLine::newTake --> End");
 }
@@ -1133,18 +1148,6 @@ void TimeLine::scroll()
     } else if (scrollDirection == 1) {
         scrollBar->setSliderPosition(scrollBar->sliderPosition() + 15);
     }
-}
-
-
-void TimeLine::setOpeningScene(bool openingScene)
-{
-    this->openingScene = openingScene;
-}
-
-
-bool TimeLine::isOpeningScene() const
-{
-    return openingScene;
 }
 
 

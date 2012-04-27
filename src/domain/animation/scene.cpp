@@ -439,7 +439,7 @@ void Scene::removeActiveTake()
 }
 */
 
-Take *Scene::removeTake(unsigned int takeIndex)
+Take *Scene::removeTake(int takeIndex)
 {
     qDebug("Scene::removeTake --> Start");
 
@@ -448,6 +448,7 @@ Take *Scene::removeTake(unsigned int takeIndex)
     if (takeIndex < activeTakeIndex) {
         // Take bevor the active take will be removed
         setActiveTakeIndex(activeTakeIndex-1);
+        Q_ASSERT(-1 < activeTakeIndex);
     }
     Take *removedTake = takes[takeIndex];
     takes.remove(takeIndex);

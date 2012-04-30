@@ -407,6 +407,11 @@ void RecordingTab::cameraButtonClicked()
     qDebug("RecordingTab::cameraButtonClicked --> Start");
 
     if (cameraOn == false) {
+        if (!frontend->getProject()->isActiveProject()) {
+            // No active project
+            frontend->showInformation(tr("Information"), tr("No active project. Please create a new project or open an existing project."));
+            return;
+        }
         int activeSceneIndex = frontend->getProject()->getActiveSceneIndex();
         if (-1 == activeSceneIndex) {
             // No scene selected

@@ -640,6 +640,9 @@ void AnimationProject::insertScene(int sceneIndex, const QString &sceneDescripti
     }
 
     scenes.insert(sceneIndex, scene);
+    if (sceneIndex <= activeSceneIndex) {
+        setActiveSceneIndex(activeSceneIndex+1);
+    }
 
     qDebug("AnimationProject::insertScene --> End");
 }
@@ -653,6 +656,9 @@ void AnimationProject::insertScene(int sceneIndex, Scene *scene)
     Q_ASSERT(sceneIndex < getSceneSize());
 
     scenes.insert(sceneIndex, scene);
+    if (sceneIndex <= activeSceneIndex) {
+        setActiveSceneIndex(activeSceneIndex+1);
+    }
 
     qDebug("AnimationProject::insertScene --> End");
 }
@@ -786,7 +792,7 @@ bool AnimationProject::saveScenesToProject(QDomDocument &doc, QDomElement &anima
                 unsigned int exposureSize = take->getExposureSize();
                 for (unsigned int exposureIndex = 0; exposureIndex < exposureSize; ++exposureIndex) {
                     Exposure *exposure = take->getExposure(exposureIndex);
-                    exposure->moveToTemp();
+                    exposure->moveToTemp(false);
                 }
             }
         }

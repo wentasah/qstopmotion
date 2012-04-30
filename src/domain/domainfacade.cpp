@@ -61,7 +61,7 @@ DomainFacade::DomainFacade(Frontend *f)
 
     historyFile = new QFile(historyFilePath);
 
-    writeHistory = true;
+    recovering = false;
 }
 
 
@@ -73,7 +73,7 @@ DomainFacade::~DomainFacade()
         animationProject = NULL;
     }
 
-    writeHistory = false;
+    recovering = false;
 
     if (undoStack != NULL) {
         delete undoStack;
@@ -98,6 +98,12 @@ Frontend* DomainFacade::getFrontend()
 ViewFacade* DomainFacade::getView()
 {
     return frontend->getView();
+}
+
+
+bool DomainFacade::isRecovering()
+{
+    return recovering;
 }
 
 /**************************************************************************
@@ -133,8 +139,8 @@ void DomainFacade::clearUndoStack()
 
 void DomainFacade::writeHistoryEntry(const QString &entry)
 {
-    if (!writeHistory) {
-        // Write history functionality is off
+    if (recovering) {
+        // The project is in revovering mode --> no writing of history information
         return;
     }
 
@@ -325,7 +331,7 @@ bool DomainFacade::recoverProject()
     }
 
     // Switch the write history functionality off
-    writeHistory = false;
+    recovering = true;
 
     QTextStream in(historyFile);
     while (!in.atEnd()) {
@@ -511,7 +517,7 @@ bool DomainFacade::recoverProject()
     historyFile->close();
 
     // Switch the write history functionality on
-    writeHistory = true;
+    recovering = false;
 
     frontend->setToolBarState(ToolBar::toolBarCameraOff);
 
@@ -890,11 +896,12 @@ void DomainFacade::insertExposureToUndo(const QString &filePath,
 }
 
 
-void DomainFacade::removeExposureToUndo(int sceneIndex,
-                                        int takeIndex,
-                                        int exposureIndex)
+void DomainFacade::removeExposureToUndo(int  sceneIndex,
+                                        int  takeIndex,
+                                        int  exposureIndex)
 {
-    UndoExposureRemove *u = new UndoExposureRemove(this, sceneIndex, takeIndex, exposureIndex);
+    UndoExposureRemove *u = new UndoExposureRemove(this,
+                                                   sceneIndex, takeIndex, exposureIndex);
     getUndoStack()->push(u);
 }
 

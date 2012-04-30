@@ -159,8 +159,9 @@ public:
     /**
      * Moves the files belonging to this Exposure from the current directory
      * to the temporary directory.
+     * @param isRecovery The project is in the recovery mode.
      */
-    void moveToTemp();
+    void moveToTemp(bool isRecovery);
 
     /**
      * Copy the files belonging to this Exposure from the old directory
@@ -171,8 +172,9 @@ public:
     /**
      * Moves the files belonging to this Exposure from the current directory
      * to the trash directory.
+     * @param isRecovery The project is in the recovery mode.
      */
-    void moveToTrash();
+    void moveToTrash(bool isRecovery);
 
     /**
      * Moves the files belonging to this Exposure from the current directory

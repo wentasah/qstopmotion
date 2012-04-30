@@ -466,7 +466,7 @@ const QVector<Exposure*> Take::removeExposures(unsigned int fromExposure,
     if (toExposure < (unsigned int)exposures.size()) {
         for (unsigned int i = fromExposure; i <= toExposure; ++i) {
             Exposure *exposure = exposures[fromExposure];
-            exposure->moveToTrash();
+            exposure->moveToTrash(false);
             newExposures.append(exposure);
             exposures.remove(fromExposure);
         }

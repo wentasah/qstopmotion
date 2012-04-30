@@ -154,59 +154,6 @@ void TimeLine::setFrontend(Frontend* f)
 /**************************************************************************
  * Animation notification functions
  **************************************************************************/
-/*
-void TimeLine::updateAnimationChanged()
-{
-    qDebug("TimeLine::updateAnimationChanged --> Start");
-
-    int sceneIndex = frontend->getProject()->getActiveSceneIndex();
-    int takeIndex = frontend->getProject()->getActiveTakeIndex();
-    int exposureIndex = frontend->getProject()->getActiveExposureIndex();
-
-    Q_ASSERT(sceneIndex > -1);
-    Q_ASSERT(takeIndex > -1);
-
-    if (this->activeSceneIndex != sceneIndex) {
-        // Do somthing
-
-        this->activeTakeIndex = -1;
-        this->activeExposureIndex = -1;
-        this->activeSceneIndex = sceneIndex;
-    }
-
-    if (this->activeTakeIndex != takeIndex) {
-        // Remove all exposures from the timeline
-        this->clearTake();
-        this->activeTakeIndex = takeIndex;
-
-        // Load all exposures of the new take to the time line
-        int exposureSize = frontend->getProject()->getTakeExposureSize(this->activeSceneIndex, this->activeTakeIndex);
-        for (int exposureIndex = 0 ; exposureIndex < exposureSize ; exposureIndex++) {
-            this->newExposure(sceneIndex, takeIndex, exposureIndex);
-        }
-    }
-    if (exposureIndex > -1) {
-        // The changing of the exposure index is a expicitly necessary
-        if (activeExposureIndex == exposureIndex) {
-            qDebug("TimeLine::updateAnimationChanged --> End (activeExposureIndex == newExposure)");
-            return;
-        }
-
-        // Exposure *exposure = frontend->getProject()->getExposure(sceneIndex, takeIndex, exposureIndex);
-        // Q_ASSERT(!exposure->isEmpty());
-
-        // const QString path = exposure->getImagePath();
-        // thumbViews[exposureIndex]->setPixmap(QPixmap::fromImage(tryReadImage(path).scaled(FRAME_WIDTH, FRAME_HEIGHT)));
-        // thumbViews[exposureIndex]->update();
-
-        // this->activeExposureIndex = exposureIndex;
-
-        this->activateExposure();
-    }
-
-    qDebug("TimeLine::updateAnimationChanged --> End");
-}
-*/
 
 void TimeLine::updateRemoveProject()
 {
@@ -272,16 +219,6 @@ void TimeLine::updateInsertScene(int sceneIndex)
     qDebug("TimeLine::updateInsertScene --> End");
 }
 
-/*
-void TimeLine::updatSeteNewActiveScene(int sceneIndex)
-{
-    qDebug("TimeLine::updatSeteNewActiveScene --> Start");
-
-    this->setNewActiveScene(sceneIndex);
-
-    qDebug("TimeLine::updatSeteNewActiveScene --> End");
-}
-*/
 
 void TimeLine::updateActivateScene()
 {
@@ -297,13 +234,27 @@ void TimeLine::updateRemoveScene(int sceneIndex)
 {
     qDebug("TimeLine::updateRemoveScene --> Start");
 
-    if (activeSceneIndex != sceneIndex) {
+    if (sceneIndex > activeSceneIndex) {
         // Nothing to do
+        qDebug("TimeLine::updateRemoveScene --> End (Nothing)");
         return;
     }
-    this->removeScene(sceneIndex);
+    if (sceneIndex < activeSceneIndex) {
+        activeSceneIndex--;
 
-    qDebug("TimeLine::updateRemoveScene --> End");
+        Q_ASSERT(-1 < activeSceneIndex);
+
+        qDebug("TimeLine::updateRemoveScene --> End (Increment)");
+        return;
+    }
+
+    // Active scene removed
+    this->clear();
+    this->activateScene();
+    this->activateTake();
+    this->activateExposure();
+
+    qDebug("TimeLine::updateRemoveScene --> End (Delete)");
 }
 
 
@@ -342,16 +293,6 @@ void TimeLine::updateInsertTake(int sceneIndex,
     qDebug("TimeLine::updateNewTake --> End");
 }
 
-/*
-void TimeLine::updateSetNewActiveTake(int takeIndex)
-{
-    qDebug("TimeLine::updateSetNewActiveTake --> Start");
-
-    this->setSetNewActiveTake(takeIndex);
-
-    qDebug("TimeLine::updateSetNewActiveTake --> End");
-}
-*/
 
 void TimeLine::updateActivateTake()
 {
@@ -366,19 +307,34 @@ void TimeLine::updateActivateTake()
 void TimeLine::updateRemoveTake(int sceneIndex,
                                 int takeIndex)
 {
-    qDebug("TimeLine::updateRemoveTake --> Start (Nothing)");
+    qDebug("TimeLine::updateRemoveTake --> Start");
 
-    if (activeSceneIndex != sceneIndex) {
+    if (sceneIndex != activeSceneIndex) {
         // Nothing to do
+        qDebug("TimeLine::updateRemoveTake --> End (Nothing)");
         return;
     }
-    if (activeTakeIndex != takeIndex) {
-        // Nothing to do
+    if (takeIndex > activeTakeIndex) {
+        // Nothin to do
+        qDebug("TimeLine::updateRemoveTake --> End (Nothing)");
         return;
     }
-    this->removeTake(sceneIndex, takeIndex);
+    if (takeIndex < activeTakeIndex) {
+        activeTakeIndex--;
 
-    qDebug("TimeLine::updateRemoveTake --> End");
+        Q_ASSERT(-1 < activeTakeIndex);
+
+        qDebug("TimeLine::updateRemoveTake --> End (Increment)");
+        return;
+    }
+
+    // Remove actual take
+    this->clear();
+    this->activateScene();
+    this->activateTake();
+    this->activateExposure();
+
+    qDebug("TimeLine::updateRemoveTake --> End (Delete)");
 }
 
 
@@ -431,30 +387,6 @@ void TimeLine::updateMoveExposures(int fromFrame, int toFrame, int movePosition)
     qDebug("TimeLine::updateMoveExposures --> End");
 }
 
-/*
-void TimeLine::updateSetNewActiveExposure(int exposureIndex)
-{
-    qDebug("TimeLine::updateSetNewActiveExposure --> Start");
-
-    setActiveFrame(exposureIndex);
-
-    if (preferencesMenu->isVisible()) {
-        if (exposureIndex >= 0) {
-            showPreferencesMenu();
-        } else {
-            preferencesMenu->close();
-        }
-    }
-
-    // For writing the frame number in the frame number display
-    emit newActiveFrame(QString(tr("Exposure number: ")) + QString("%1").arg(exposureIndex + 1));
-
-    // For setting the value in the spinbox in the gotomenu
-    emit newActiveFrame(exposureIndex + 1);
-
-    qDebug("TimeLine::updateSetNewActiveExposure --> End");
-}
-*/
 
 void TimeLine::updateActivateExposure()
 {
@@ -551,16 +483,7 @@ void TimeLine::newScene(int sceneIndex)
     qDebug("TimeLine::newScene --> Start");
 
     qDebug("TimeLine::newScene --> Adding new scene thumb to timeline");
-/*
-    if (sceneIndex > 0)  {
-        int from = sceneIndex + (frontend->getProject()->getSceneExposureSize(sceneIndex - 1));
-        int numThumbs = thumbViews.size();
-        for (int i = from; i < numThumbs; i++) {
-            thumbViews[i]->move(thumbViews[i]->x() + (FRAME_WIDTH + SPACE), 0);
-            thumbViews[i]->setThumbIndex(thumbViews[i]->getThumbIndex() + 1);
-        }
-    }
-*/
+
     if (sceneIndex > activeSceneIndex) {
         // New Scene is inserted after the active scene --> Nothing to do
         qDebug("TimeLine::newScene --> End (Nothing)");
@@ -570,19 +493,6 @@ void TimeLine::newScene(int sceneIndex)
     activeSceneIndex++;
 
     qDebug("TimeLine::newScene --> End");
-}
-
-
-void TimeLine::removeScene(int sceneIndex)
-{
-    qDebug("TimeLine::removeScene --> Start");
-
-    this->clear();
-    this->activateScene();
-    this->activateTake();
-    this->activateExposure();
-
-    qDebug("TimeLine::removeScene --> End");
 }
 
 
@@ -701,20 +611,6 @@ void TimeLine::activateTake()
     ensureVisible((FRAME_WIDTH + SPACE) * thumbViews.size() + FRAME_WIDTH, FRAME_HEIGHT);
 
     qDebug("TimeLine::activateTake --> End");
-}
-
-
-void TimeLine::removeTake(int sceneIndex,
-                          int takeIndex)
-{
-    qDebug("TimeLine::removeTake --> Start");
-
-    this->clear();
-    this->activateScene();
-    this->activateTake();
-    this->activateExposure();
-
-    qDebug("TimeLine::removeTake --> End");
 }
 
 

@@ -206,7 +206,7 @@ void Exposure::moveToImageDir(const QString &directory, unsigned int imgNum)
 }
 */
 
-void Exposure::moveToTemp()
+void Exposure::moveToTemp(bool isRecovery)
 {
     QString fromImagePath;
     QString toImagePath;
@@ -234,15 +234,13 @@ void Exposure::moveToTemp()
     toImagePath.append(QLatin1String("/"));
     toImagePath.append(toImageName);
 
-    if (!QFile::rename(fromImagePath, toImagePath)) {
-        // Not successful
-        parent->getFrontend()->showCritical(tr("Critical"),
-                                            tr("Can't move image to temporary directory!"));
+    if (!isRecovery) {
+        if (!QFile::rename(fromImagePath, toImagePath)) {
+            // Not successful
+            parent->getFrontend()->showCritical(tr("Critical"),
+                                                tr("Can't move image to temporary directory!"));
+        }
     }
-
-    // if (exposureLocation == InTrashPath) {
-    //     Exposure::trashNum--;
-    // }
 
     theFrame.clear();
     theFrame.append(toImageName);
@@ -294,7 +292,7 @@ void Exposure::copyToTemp()
 }
 
 
-void Exposure::moveToTrash()
+void Exposure::moveToTrash(bool isRecovery)
 {
     QString fromImagePath;
     QString toImagePath;
@@ -314,7 +312,7 @@ void Exposure::moveToTrash()
     fromImagePath.append(theFrame);
 
     // creates a new image name
-    QString toImageName(QString("tmp_%1%2").arg(Exposure::trashNum)
+    QString toImageName(QString("trash_%1%2").arg(Exposure::trashNum)
                         .arg(fromImagePath.mid(fromImagePath.lastIndexOf('.'))));
     Exposure::trashNum++;
 
@@ -322,15 +320,13 @@ void Exposure::moveToTrash()
     toImagePath.append(QLatin1String("/"));
     toImagePath.append(toImageName);
 
-    if (!QFile::rename(fromImagePath, toImagePath)) {
-        // Not successful
-        parent->getFrontend()->showCritical(tr("Critical"),
-                                            tr("Can't move image to trash directory!"));
+    if (!isRecovery) {
+        if (!QFile::rename(fromImagePath, toImagePath)) {
+            // Not successful
+            parent->getFrontend()->showCritical(tr("Critical"),
+                                                tr("Can't move image to trash directory!"));
+        }
     }
-
-    // if (exposureLocation == InTempPath) {
-    //     Exposure::tempNum--;
-    // }
 
     theFrame.clear();
     theFrame.append(toImageName);

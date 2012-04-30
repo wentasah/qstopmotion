@@ -78,6 +78,11 @@ public:
      */
     ViewFacade* getView();
 
+    /**
+     * Is the project in recovering mode
+     */
+    bool isRecovering();
+
     /**************************************************************************
      * Audio functions
      **************************************************************************/
@@ -583,9 +588,9 @@ public:
      * @param takeIndex the index of the take of the exposure to remove
      * @param exposureIndex the index of the exposure to remove
      */
-    void removeExposureToUndo(int sceneIndex,
-                              int takeIndex,
-                              int exposureIndex);
+    void removeExposureToUndo(int  sceneIndex,
+                              int  takeIndex,
+                              int  exposureIndex);
 
     /**
      * Add a new move exposure object to the undo history.
@@ -666,9 +671,9 @@ private:
     QFile *historyFile;
 
     /**
-     * Flag to enable/disable history write function.
+     * Flag to indicate that recovery is running.
      */
-    bool writeHistory;
+    bool recovering;
 
     /**
      * Container where one can register and retrieve undo objects for undo and

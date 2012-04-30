@@ -229,11 +229,6 @@ public:
     void moveTake(int takeIndex, int movePosition);
 
     /**
-     * Removes the active take from the scene.
-     */
-    // void removeActiveTake();
-
-    /**
      * Removes a take from the scene.
      * @param takeIndex The index of the take to remove.
      * @return The removed take.

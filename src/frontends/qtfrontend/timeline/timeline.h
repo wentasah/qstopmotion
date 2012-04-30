@@ -76,11 +76,6 @@ public:
      **************************************************************************/
 
     /**
-     * Updates the timeline when the active scene, take or exposure are changed.
-     */
-    // void updateAnimationChanged();
-
-    /**
      * Function to receive notification when the model is erased.
      */
     void updateRemoveProject();
@@ -177,15 +172,6 @@ public:
      * @param takeIndex the index of the new take.
      */
     void updateInsertTake(int sceneIndex, int takeIndex);
-
-    /**
-     * Function which recieves notification when a take is selected as the
-     * active take in the animationmodel.
-     * @param takeIndex the new scene to be set as the active take in the
-     * timeline.
-     * opening the new active take.
-     */
-    // void updateSetNewActiveTake(int takeIndex);
 
     /**
      * Function which recieves notification when a take is selected as the
@@ -396,12 +382,6 @@ private:
     void newScene(int sceneIndex);
 
     /**
-     * Removes the scene with index sceneIndex from the timeline.
-     * @param sceneIndex The scene to be removed from the timeline.
-     */
-    void removeScene(int sceneIndex);
-
-    /**
      * Moves a scene in the timeline.
      * @param sceneNumber the scene that are moved.
      * @param movePosition the position the scene are moved to.
@@ -441,13 +421,6 @@ private:
      * Delete all thumviews of the take from the time line
      */
     void clearTake();
-
-    /**
-     * Removes the take with index takeIndex from the timeline.
-     * @param sceneIndex The scene of the take to be removed from the timeline.
-     * @param takeIndex The take to be removed from the timeline.
-     */
-    void removeTake(int sceneIndex, int takeIndex);
 
     /**************************************************************************
      * Private exposure functions

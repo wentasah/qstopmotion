@@ -383,8 +383,8 @@ void Scene::insertTake(int takeIndex, const QString &takeDescription)
     }
 
     takes.insert(takeIndex, take);
-    if (takeIndex < activeTakeIndex) {
-        this->setActiveTakeIndex(activeTakeIndex+1);
+    if (takeIndex <= activeTakeIndex) {
+        setActiveTakeIndex(activeTakeIndex+1);
     }
 
     qDebug("Scene::insertTake(new) --> End");
@@ -399,8 +399,8 @@ void Scene::insertTake(int takeIndex, Take *take)
     Q_ASSERT(takeIndex < getTakeSize());
 
     takes.insert(takeIndex, take);
-    if (takeIndex < activeTakeIndex) {
-        this->setActiveTakeIndex(activeTakeIndex+1);
+    if (takeIndex <= activeTakeIndex) {
+        setActiveTakeIndex(activeTakeIndex+1);
     }
 
     qDebug("Scene::insertTake(exist) --> End");
@@ -420,24 +420,6 @@ void Scene::moveTake(int takeIndex, int movePosition)
     }
 }
 
-/*
-void Scene::removeActiveTake()
-{
-    if (activeTakeIndex < 0) {
-        return;
-    }
-
-    int takeIndex = activeTakeIndex;
-
-    if (takeIndex < getTakeSize() - 1) {
-        activeTakeIndex = takeIndex + 1;
-    } else {
-        activeTakeIndex = takeIndex - 1;
-    }
-
-    takes.remove(takeIndex);
-}
-*/
 
 Take *Scene::removeTake(int takeIndex)
 {

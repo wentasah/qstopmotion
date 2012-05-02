@@ -1058,13 +1058,13 @@ void MainWindowGUI::closeApplication()
     // Switch off the camera
     recordingTab->checkCameraOff();
 
+    // Last changes saved?
+    checkSaved();
+
     // remove all temporary files and directories
     frontend->removeApplicationFiles();
     frontend->removeApplicationDirectories();
     frontend->removeCaptureFiles();
-
-    // Last changes saved?
-    checkSaved();
 
     // Exit the application with status success
     // TODO: This exit cancel the application without calling finalize of the QtFrontend class!!!

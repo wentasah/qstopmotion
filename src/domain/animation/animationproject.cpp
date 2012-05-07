@@ -110,12 +110,6 @@ const QString AnimationProject::getAppTempDirName() const
 }
 
 
-const QString AnimationProject::getAppTrashDirName() const
-{
-    return QString(this->frontend->getTrashDirName());
-}
-
-
 const QString AnimationProject::getNewProjectFilePath() const
 {
     return serializer->getNewProjectFilePath();
@@ -849,6 +843,15 @@ bool AnimationProject::saveScenesToProject(QDomDocument &doc, QDomElement &anima
                     exposure->moveToProject(newFrameName);
                 }
             }
+        }
+
+        // Delete all image file that stay in the temp directory
+        // (All files that deleted from the project.)
+        QString tempPath = this->getAppTempDirName();
+        QDir tempDir(tempPath);
+        fileNameList = tempDir.entryList(QDir::Files);
+        for (int fileIndex = 0 ; fileIndex < fileNameList.count() ; fileIndex++) {
+            tempDir.remove(fileNameList[fileIndex]);
         }
     }
 

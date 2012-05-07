@@ -86,18 +86,6 @@ public:
     virtual const char* getTempDirName() = 0;
 
     /**
-     * Abstract function for getting the trash directory
-     * @return the trash directory name string
-     */
-    virtual const char* getTrashDirName() = 0;
-
-    /**
-     * Abstract function for getting the packer directory
-     * @return the packer directory name string
-     */
-    virtual const char* getPackerDirName() = 0;
-
-    /**
      * Abstract function for getting the application directory
      * @return the application directory name string
      */

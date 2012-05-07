@@ -250,12 +250,6 @@ const QString Scene::getAppTempDirName() const
 }
 
 
-const QString Scene::getAppTrashDirName() const
-{
-    return parent->getAppTrashDirName();
-}
-
-
 /**************************************************************************
  * Take functions
  **************************************************************************/

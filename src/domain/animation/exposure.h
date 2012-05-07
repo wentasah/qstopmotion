@@ -54,11 +54,6 @@ public:
     static unsigned int tempNum;
 
     /**
-     * Number of files in the trash directory.
-     */
-    static unsigned int trashNum;
-
-    /**
      * Default constructor
      * @param take The parent of the exposure
      */
@@ -168,13 +163,6 @@ public:
      * to the temporary directory.
      */
     void copyToTemp();
-
-    /**
-     * Moves the files belonging to this Exposure from the current directory
-     * to the trash directory.
-     * @param isRecovery The project is in the recovery mode.
-     */
-    void moveToTrash(bool isRecovery);
 
     /**
      * Moves the files belonging to this Exposure from the current directory

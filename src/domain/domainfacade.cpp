@@ -942,6 +942,8 @@ bool DomainFacade::getModifyedExposure(const QString &filePath,
 
 const QString DomainFacade::copyToTemp(const QString &fromImagePath)
 {
+    qDebug("DomainFacade::copyToTemp --> Start");
+
     // creates a new image name
     int beginSuffix = fromImagePath.lastIndexOf('.');
     QString fileSuffix = fromImagePath.mid(beginSuffix);
@@ -955,13 +957,27 @@ const QString DomainFacade::copyToTemp(const QString &fromImagePath)
     toImagePath.append(toImageName);
 
     // Copy file to temp directory
-    if (!QFile::copy(fromImagePath, toImagePath)) {
+    QFile fromImage(fromImagePath);
+    int i;
+    for (i = 0 ; i < 10 ; i++) {
+        if (fromImage.copy(toImagePath)) {
+            // Successful
+            break;
+        }
+        else {
+            // Not successful
+            qDebug() << "DomainFacade::copyToTemp --> Error copy file to temp (" << fromImage.errorString() << ")";
+        }
+    }
+    if (10 == i) {
         // Not successful
         frontend->showCritical(tr("Critical"),
                                tr("Can't copy image to temp directory!"));
     }
 
     Exposure::tempNum++;
+
+    qDebug("DomainFacade::copyToTemp --> End");
 
     return toImageName;
 }

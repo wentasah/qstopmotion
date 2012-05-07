@@ -72,17 +72,7 @@ public:
     /**
      * Relative to application directory
      */
-    static const QString packerDirectory;
-
-    /**
-     * Relative to application directory
-     */
     static const QString tempDirectory;
-
-    /**
-     * Relative to application directory
-     */
-    static const QString trashDirectory;
 
     /**
      * Relative to manual directory

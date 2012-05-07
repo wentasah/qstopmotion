@@ -52,7 +52,6 @@ public:
         NoFile,
         InProjectPath,
         InTempPath,
-        InTrashPath
     };
 
     /**
@@ -83,12 +82,6 @@ public:
      * @return temp directory of the project
      */
     const QString getAppTempDirName() const;
-
-    /**
-     * Get the name of the trash directory of the project
-     * @return trash directory of the project
-     */
-    const QString getAppTrashDirName() const;
 
     /**
      * Retrieves the new project file name

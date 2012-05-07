@@ -122,18 +122,6 @@ public:
     const char* getTempDirName();
 
     /**
-     * Getting the trash directory
-     * @return the trash directory name string
-     */
-    const char* getTrashDirName();
-
-    /**
-     * Getting the packer directory
-     * @return the packer directory name string
-     */
-    const char* getPackerDirName();
-
-    /**
      * Function for getting the application directory
      * @return the application directory name string
      */
@@ -455,12 +443,12 @@ public:
     bool removeContentInDirectory(const QString &path);
 
     /**
-     * Create all temporary application directories (temp, trash, packer)
+     * Create all temporary application directories (temp)
      */
     void makeApplicationDirectories();
 
     /**
-     * Remove all temporary application directories (temp, trash, packer)
+     * Remove all temporary application directories (temp)
      */
     void removeApplicationDirectories();
 
@@ -501,8 +489,6 @@ private:
     PreferencesTool *preferencesTool;
     QByteArray       appUserDirName;
     QByteArray       appTempDirName;
-    QByteArray       appTrashDirName;
-    QByteArray       appPackerDirName;
     QByteArray       appApplicationDirName;
     QByteArray       appBinDirName;
     QByteArray       appManualDirName;

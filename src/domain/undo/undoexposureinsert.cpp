@@ -63,7 +63,6 @@ void UndoExposureInsert::undo()
     AnimationProject *animationProject = facade->getAnimationProject();
 
     exposure = animationProject->removeExposure(sceneIndex, takeIndex, exposureIndex);
-    exposure->moveToTrash(facade->isRecovering());
 
     facade->getView()->notifyRemoveExposure(sceneIndex, takeIndex, exposureIndex);
 
@@ -92,7 +91,6 @@ void UndoExposureInsert::redo()
     }
     else {
         // Call of the redo function after a undo call
-        exposure->moveToTemp(facade->isRecovering());
         animationProject->insertExposure(sceneIndex, takeIndex, exposureIndex,
                                          exposure);
         exposure = NULL;

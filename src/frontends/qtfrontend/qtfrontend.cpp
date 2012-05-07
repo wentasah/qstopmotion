@@ -148,16 +148,6 @@ bool QtFrontend::checkApplicationDirectory(char *binDirName)
     otherDirName.append(PreferencesTool::tempDirectory);
     appTempDirName.append(otherDirName.toLatin1());
 
-    otherDirName.clear();
-    otherDirName.append(userDirName);
-    otherDirName.append(PreferencesTool::trashDirectory);
-    appTrashDirName.append(otherDirName.toLatin1());
-
-    otherDirName.clear();
-    otherDirName.append(userDirName);
-    otherDirName.append(PreferencesTool::packerDirectory);
-    appPackerDirName.append(otherDirName.toLatin1());
-
     QString absoluteAppName = Util::convertPathFromOsSpecific(QString(binDirName));
     int pathLength = absoluteAppName.lastIndexOf("/bin/");
 
@@ -383,18 +373,6 @@ const char* QtFrontend::getUserDirName()
 const char* QtFrontend::getTempDirName()
 {
     return this->appTempDirName.constData();
-}
-
-
-const char* QtFrontend::getTrashDirName()
-{
-    return this->appTrashDirName.constData();
-}
-
-
-const char* QtFrontend::getPackerDirName()
-{
-    return this->appPackerDirName.constData();
 }
 
 
@@ -751,12 +729,6 @@ void QtFrontend::makeApplicationDirectories()
     Q_ASSERT(ret == true);
     // QFile appDir(homeDir.absolutePath() and temp subdirectory);
     // hasCorrectPermissions = appDir.setPermissions(QFile::ReadOwner | QFile::WriteOwner | QFile::ExeOwner);
-    ret = homeDir.mkpath(getTrashDirName());
-    Q_ASSERT(ret == true);
-    // setPermissions(...)
-    ret = homeDir.mkpath(getPackerDirName());
-    Q_ASSERT(ret == true);
-    // setPermissions(...)
 }
 
 
@@ -767,10 +739,6 @@ void QtFrontend::removeApplicationDirectories()
 
     ret = homeDir.rmdir(getTempDirName());
     Q_ASSERT(ret == true);
-    ret = homeDir.rmdir(getTrashDirName());
-    Q_ASSERT(ret == true);
-    ret = homeDir.rmdir(getPackerDirName());
-    Q_ASSERT(ret == true);
 }
 
 
@@ -779,10 +747,6 @@ void QtFrontend::removeApplicationFiles()
     bool ret;
 
     ret = removeContentInDirectory(getTempDirName());
-    Q_ASSERT(ret == true);
-    ret = removeContentInDirectory(getTrashDirName());
-    Q_ASSERT(ret == true);
-    ret = removeContentInDirectory(getPackerDirName());
     Q_ASSERT(ret == true);
     getProject()->removeHistoryFile();
 }
@@ -814,14 +778,6 @@ bool QtFrontend::isRecoveryMode()
     qDebug("QtFrontend::isRecoveryMode --> Start");
 
     if (QFile::exists(getTempDirName()) == false) {
-        qDebug("QtFrontend::isRecoveryMode --> End (False)");
-        return false;
-    }
-    if (QFile::exists(getTrashDirName()) == false) {
-        qDebug("QtFrontend::isRecoveryMode --> End (False)");
-        return false;
-    }
-    if (QFile::exists(getPackerDirName()) == false) {
         qDebug("QtFrontend::isRecoveryMode --> End (False)");
         return false;
     }

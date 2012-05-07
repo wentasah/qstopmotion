@@ -141,12 +141,6 @@ public:
      */
     const QString getAppTempDirName() const;
 
-    /**
-     * Get the trash path of the project
-     * @return trash path of the project
-     */
-    const QString getAppTrashDirName() const;
-
     /**************************************************************************
      * Take functions
      **************************************************************************/

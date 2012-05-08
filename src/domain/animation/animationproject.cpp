@@ -855,6 +855,9 @@ bool AnimationProject::saveScenesToProject(QDomDocument &doc, QDomElement &anima
         }
     }
 
+    // Reset the temp file index
+    Exposure::tempNum = 0;
+
     for (sceneIndex = 0; sceneIndex < sceneSize; ++sceneIndex) {
         // Scenes
         sceneElement = doc.createElement("scene");

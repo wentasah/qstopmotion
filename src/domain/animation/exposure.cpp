@@ -31,7 +31,7 @@
 #include <QtCore/QtDebug>
 
 
-unsigned int Exposure::tempNum  = 0;
+unsigned int Exposure::tempNum = 0;
 
 
 Exposure::Exposure(Take *take)
@@ -304,14 +304,6 @@ void Exposure::moveToProject(const QString newName)
         // Not successful
         parent->getFrontend()->showCritical(tr("Critical"),
                                             tr("Can't move image to project directory!"));
-    }
-
-    switch (exposureLocation) {
-    case AnimationProject::InTempPath:
-        Exposure::tempNum--;
-        break;
-    default:
-        break;
     }
 
     theFrame.clear();

@@ -53,8 +53,8 @@ FrameViewImage::~FrameViewImage()
         cameraOff();
     }
 /*
-    if (actualImage) {
-        delete(actualImage);
+    if (liveImage) {
+        delete(liveImage);
     }
 */
     clearImageBuffer();
@@ -217,9 +217,9 @@ void FrameViewImage::nextAnimationFrame(int exposureIndex)
     exposure = frontend->getProject()->getExposure(activeSceneIndex, activeTakeIndex, exposureIndex);
 
     if (!exposure->isEmpty()) {
-        actualImage.load(exposure->getImagePath());
+        liveImage.load(exposure->getImagePath());
         QPainter widgetPainter(this);
-        widgetPainter.drawImage(0, 0, actualImage);
+        widgetPainter.drawImage(0, 0, liveImage);
     }
 
     // Call the redraw function
@@ -241,7 +241,7 @@ void FrameViewImage::redraw()
 {
     // qDebug("FrameViewImage::redraw --> Start");
 
-    actualImage = frontend->getActualImage();
+    liveImage = frontend->getLiveImage();
 
     // qDebug("FrameViewImage::redraw --> Loading image finished");
 
@@ -278,9 +278,9 @@ void FrameViewImage::nextPlayBack()
         }
 
         if (!exposure->isEmpty()) {
-            actualImage.load(exposure->getImagePath());
+            liveImage.load(exposure->getImagePath());
             QPainter widgetPainter(this);
-            widgetPainter.drawImage(0, 0, actualImage);
+            widgetPainter.drawImage(0, 0, liveImage);
         }
 
         this->update();
@@ -312,7 +312,7 @@ void FrameViewImage::resizeEvent(QResizeEvent*)
     frameViewHeight = height();
     QString iconFile(frontend->getGraphicsDirName());
     iconFile.append(QLatin1String("qstopmotion_logo_60.png"));
-    actualImage.load(iconFile);
+    liveImage.load(iconFile);
 
     qDebug("FrameViewImage::resizeEvent --> End");
 }
@@ -324,16 +324,16 @@ void FrameViewImage::paintEvent(QPaintEvent *)
 
     QImage   outputImage;
 
-    double imageWidth = actualImage.width();
-    double imageHeight = actualImage.height();
+    double imageWidth = liveImage.width();
+    double imageHeight = liveImage.height();
     double widthScale = imageWidth / frameViewWidth;
     double heightScale = imageHeight / frameViewHeight;
 
     if (widthScale > heightScale) {
-        outputImage = actualImage.scaledToWidth(frameViewWidth);
+        outputImage = liveImage.scaledToWidth(frameViewWidth);
     }
     else {
-        outputImage = actualImage.scaledToHeight(frameViewHeight);
+        outputImage = liveImage.scaledToHeight(frameViewHeight);
     }
     int bufferWidth = outputImage.width();
     int bufferHeigth = outputImage.height();
@@ -345,7 +345,7 @@ void FrameViewImage::paintEvent(QPaintEvent *)
     int      x = (widgetRect.width() - outputImageSize.width()) / 2;
     int      y = (widgetRect.height() - outputImageSize.height()) / 2;
 
-    if (!actualImage.isNull()) {
+    if (!liveImage.isNull()) {
         if (isPlayingVideo) {
             // Playing live video
             int offset;
@@ -385,7 +385,7 @@ void FrameViewImage::paintEvent(QPaintEvent *)
         }
         // Flip the screen???
 
-    }  // End if actualImage
+    }  // End if liveImage
 
     widgetPainter.drawImage(x, y, outputImage);
 
@@ -404,7 +404,7 @@ void FrameViewImage::activateExposure()
     Exposure *exposure = frontend->getProject()->getActiveExposure();
     if (exposure != NULL) {
         const QString fileName = exposure->getImagePath();
-        actualImage.load(fileName);
+        liveImage.load(fileName);
     } else {
         this->clearImageBuffer();
         this->showLogo();
@@ -445,7 +445,7 @@ void FrameViewImage::modifyExposure(int modSceneIndex,
     Exposure *exposure = frontend->getProject()->getActiveExposure();
     if (exposure != NULL) {
         const QString fileName = exposure->getImagePath();
-        actualImage.load(fileName);
+        liveImage.load(fileName);
     } else {
         this->clearImageBuffer();
         this->showLogo();
@@ -576,11 +576,11 @@ void FrameViewImage::showLogo()
 {
     qDebug("FrameViewImage::showLogo --> Start");
 
-    // actualImage = new QImage(width(), height(), QImage::Format_ARGB32);
+    // liveImage = new QImage(width(), height(), QImage::Format_ARGB32);
     QString iconFile(frontend->getGraphicsDirName());
     iconFile.append(QLatin1String("qstopmotion_logo_60.png"));
 
-    actualImage.load(iconFile);
+    liveImage.load(iconFile);
 
     qDebug("FrameViewImage::showLogo --> End");
 }

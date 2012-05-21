@@ -36,14 +36,6 @@ ImageGrabber::ImageGrabber(Frontend *f)
 
     frontend = f;
 
-    QString rootDir;
-
-    rootDir.append(frontend->getUserDirName());
-    rootDir.append("/");
-    rootDir.append("capturedfile.jpg");
-
-    filePath.append(rootDir);
-
     qDebug("ImageGrabber::Constructor --> End");
 }
 
@@ -159,14 +151,6 @@ const QVector<QString> ImageGrabber::getDeviceNames()
     }
 
     return deviceNames;
-}
-
-
-const QImage ImageGrabber::getActualImage()
-{
-    actualImage.load(filePath);
-
-    return actualImage;
 }
 
 

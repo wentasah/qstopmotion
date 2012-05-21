@@ -342,7 +342,6 @@ void QtFrontend::finalize()
 {
     this->removeApplicationFiles();
     this->removeApplicationDirectories();
-    this->removeCaptureFiles();
 }
 
 
@@ -671,9 +670,15 @@ const QVector<QString> QtFrontend::getDeviceNames()
 }
 
 
-const QImage QtFrontend::getActualImage()
+const QImage QtFrontend::getLiveImage()
 {
-    return mw->getActualImage();
+    return mw->getLiveImage();
+}
+
+
+const QImage QtFrontend::getRawImage()
+{
+    return mw->getRawImage();
 }
 
 
@@ -749,27 +754,6 @@ void QtFrontend::removeApplicationFiles()
     ret = removeContentInDirectory(getTempDirName());
     Q_ASSERT(ret == true);
     getProject()->removeHistoryFile();
-}
-
-
-void QtFrontend::removeCaptureFiles()
-{
-    bool ret;
-
-    QDir homeDir(getUserDirName());
-    QStringList nameFilter;
-    QString fileName(PreferencesTool::capturedFileName);
-    fileName.append(".");
-    fileName.append(PreferencesTool::capturedFileSuffix);
-    nameFilter.append(fileName);
-
-    homeDir.setNameFilters(nameFilter);
-    homeDir.setFilter(QDir::Files);
-    QStringList fileNames = homeDir.entryList();
-    if (fileNames.count() > 0) {
-        ret = homeDir.remove(fileNames[0]);
-        Q_ASSERT(ret == true);
-    }
 }
 
 

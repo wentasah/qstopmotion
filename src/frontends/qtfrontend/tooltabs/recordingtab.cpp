@@ -62,12 +62,6 @@ RecordingTab::RecordingTab(Frontend *f,
     PreferencesTool *pref = frontend->getPreferences();
     captureFunction = (PreferencesTool::captureButtonFunction)pref->getBasicPreference("capturebutton", PreferencesTool::captureButtonAfter);
 
-    QString rootDir;
-    rootDir.append(frontend->getUserDirName());
-    rootDir.append(QLatin1String("/"));
-    rootDir.append(QLatin1String("capturedfile.jpg"));
-    captureFilePath.append(rootDir.toLatin1().constData());
-
     cameraTimer = new QTimer(this);
     cameraTimer->setSingleShot(true);
     QObject::connect(cameraTimer, SIGNAL(timeout()), this, SLOT(storeFrame()));
@@ -649,8 +643,8 @@ void RecordingTab::storeFrame()
 {
     qDebug("RecordingTab::storeFrame --> Start");
 
-    QImage i;
-    i.load(captureFilePath);
+    QImage i(frontend->getRawImage());
+
     if (!i.isNull()) {
         int activeSceneIndex = frontend->getProject()->getActiveSceneIndex();
         int activeTakeIndex = frontend->getProject()->getActiveTakeIndex();
@@ -661,11 +655,11 @@ void RecordingTab::storeFrame()
         switch (captureFunction) {
         case PreferencesTool::captureButtonBevor:
             if (-1 == newExposureIndex) {
-                frontend->getProject()->addExposureToUndo(captureFilePath, activeSceneIndex, activeTakeIndex, true);
+                frontend->getProject()->addExposureToUndo(i, activeSceneIndex, activeTakeIndex);
                 newExposureIndex++;
             }
             else {
-                frontend->getProject()->insertExposureToUndo(captureFilePath, activeSceneIndex, activeTakeIndex, activeExposureIndex, true);
+                frontend->getProject()->insertExposureToUndo(i, activeSceneIndex, activeTakeIndex, activeExposureIndex);
             }
             frontend->getProject()->selectExposureToUndo(activeSceneIndex, activeTakeIndex, newExposureIndex);
             break;
@@ -673,16 +667,16 @@ void RecordingTab::storeFrame()
             newExposureIndex++;
             if (newExposureIndex == exposureSize) {
                 // actual exposure index is the last in the take
-                frontend->getProject()->addExposureToUndo(captureFilePath, activeSceneIndex, activeTakeIndex, true);
+                frontend->getProject()->addExposureToUndo(i, activeSceneIndex, activeTakeIndex);
             }
             else {
                 // actual exposure index is not the last in the take
-                frontend->getProject()->insertExposureToUndo(captureFilePath, activeSceneIndex, activeTakeIndex, newExposureIndex, true);
+                frontend->getProject()->insertExposureToUndo(i, activeSceneIndex, activeTakeIndex, newExposureIndex);
             }
             frontend->getProject()->selectExposureToUndo(activeSceneIndex, activeTakeIndex, newExposureIndex);
             break;
         case PreferencesTool::captureButtonAppend:
-            frontend->getProject()->addExposureToUndo(captureFilePath, activeSceneIndex, activeTakeIndex, true);
+            frontend->getProject()->addExposureToUndo(i, activeSceneIndex, activeTakeIndex);
             frontend->getProject()->selectExposureToUndo(activeSceneIndex, activeTakeIndex, exposureSize);
             break;
         }

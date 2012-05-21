@@ -586,9 +586,15 @@ const QVector<QString> MainWindowGUI::getDeviceNames()
 }
 
 
-const QImage MainWindowGUI::getActualImage()
+const QImage MainWindowGUI::getLiveImage()
 {
-    return grabber->getActualImage();
+    return grabber->getLiveImage();
+}
+
+
+const QImage MainWindowGUI::getRawImage()
+{
+    return grabber->getRawImage();
 }
 
 
@@ -1064,7 +1070,6 @@ void MainWindowGUI::closeApplication()
     // remove all temporary files and directories
     frontend->removeApplicationFiles();
     frontend->removeApplicationDirectories();
-    frontend->removeCaptureFiles();
 
     // Exit the application with status success
     // TODO: This exit cancel the application without calling finalize of the QtFrontend class!!!

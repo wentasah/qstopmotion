@@ -22,6 +22,7 @@
 
 #include "technical/util.h"
 
+#include <QtCore/QDir>
 #include <QtCore/QtDebug>
 #include <QtCore/QtGlobal>
 #include <QtGui/QApplication>
@@ -29,6 +30,10 @@
 
 // GMainLoop *GstreamerGrabber::loop = 0;
 #include <gst/interfaces/propertyprobe.h>
+
+
+const QString GstreamerGrabber::capturedFileName = QLatin1String("capturedfile");
+const QString GstreamerGrabber::capturedFileSuffix = QLatin1String("jpg");
 
 
 GstreamerGrabber::GstreamerGrabber(Frontend *f)
@@ -52,6 +57,16 @@ GstreamerGrabber::GstreamerGrabber(Frontend *f)
 
     gst_init(0,0);
 
+    QString rootDir;
+
+    rootDir.append(frontend->getUserDirName());
+    rootDir.append("/");
+    rootDir.append(capturedFileName);
+    rootDir.append(".");
+    rootDir.append(capturedFileSuffix);
+
+    filePath.append(rootDir);
+
     qDebug("GstreamerGrabber::Constructor --> End");
 }
 
@@ -59,6 +74,8 @@ GstreamerGrabber::GstreamerGrabber(Frontend *f)
 GstreamerGrabber::~GstreamerGrabber()
 {
     qDebug("GstreamerGrabber::Destructor --> Start");
+
+    removeCaptureFiles();
 
     qDebug("GstreamerGrabber::Destructor --> End");
 }
@@ -819,6 +836,22 @@ bool GstreamerGrabber::grab()
 }
 
 
+const QImage GstreamerGrabber::getLiveImage()
+{
+    liveImage.load(filePath);
+
+    return liveImage;
+}
+
+
+const QImage GstreamerGrabber::getRawImage()
+{
+    rawImage.load(filePath);
+
+    return rawImage;
+}
+
+
 gboolean GstreamerGrabber::bus_callback(GstBus * /*bus*/, GstMessage *message, gpointer /*data*/)
 {
     qDebug() << "gstreamergrabber::event_loop --> Start";
@@ -936,6 +969,7 @@ void GstreamerGrabber::cb_typefound (GstElement *typefind,
     qDebug() << "gstreamergrabber::cb_typefound --> End";
 }
 
+
 gboolean GstreamerGrabber::link_elements_with_filter (GstElement *element1, GstElement *element2)
 {
     gboolean link_ok;
@@ -955,4 +989,25 @@ gboolean GstreamerGrabber::link_elements_with_filter (GstElement *element1, GstE
     qDebug() << "gstreamergrabber::link_elements_with_filter --> End";
 
     return link_ok;
+}
+
+
+void GstreamerGrabber::removeCaptureFiles()
+{
+    bool ret;
+
+    QDir homeDir(frontend->getUserDirName());
+    QStringList nameFilter;
+    QString fileName(capturedFileName);
+    fileName.append(".");
+    fileName.append(capturedFileSuffix);
+    nameFilter.append(fileName);
+
+    homeDir.setNameFilters(nameFilter);
+    homeDir.setFilter(QDir::Files);
+    QStringList fileNames = homeDir.entryList();
+    if (fileNames.count() > 0) {
+        ret = homeDir.remove(fileNames[0]);
+        Q_ASSERT(ret == true);
+    }
 }

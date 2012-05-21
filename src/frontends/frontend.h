@@ -295,10 +295,16 @@ public:
     virtual const QVector<QString> getDeviceNames() = 0;
 
     /**
-     * Abstract function to get the actual image from the image grabber.
-     * @return actual image.
+     * Abstract function to get the live image from the image grabber.
+     * @return live image.
      */
-    virtual const QImage getActualImage() = 0;
+    virtual const QImage getLiveImage() = 0;
+
+    /**
+     * Abstract function to get the raw image from the image grabber.
+     * @return raw image.
+     */
+    virtual const QImage getRawImage() = 0;
 
     /**
      * Function for performing the redraw with the next frame of the animation.
@@ -359,11 +365,6 @@ public:
      * Remove all temporary application files
      */
     virtual void removeApplicationFiles() = 0;
-
-    /**
-     * Remove all temporary files
-     */
-    virtual void removeCaptureFiles() = 0;
 
     /**
      * Set a new state to the tool bar.

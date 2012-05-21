@@ -41,6 +41,16 @@ class GstreamerGrabber : public ImageGrabber
 public:
 
     /**
+     * Name of the captured file
+     */
+    static const QString capturedFileName;
+
+    /**
+     * Suffix of the captured file
+     */
+    static const QString capturedFileSuffix;
+
+    /**
      * Initializes the member variables.
      * @param filePath path to the output file grabbed from a device
      */
@@ -72,6 +82,16 @@ public:
      * @return true on success, false otherwise
      */
     void initSubclass();
+
+    /**
+     * Get the live image from the camera
+     */
+    const QImage getLiveImage();
+
+    /**
+     * Get the raw image from the camera
+     */
+    const QImage getRawImage();
 
     /**
      * Grabs one picture from the device.
@@ -109,6 +129,12 @@ public:
                                                GstElement *element2);
 
 private:
+    /**
+     * Remove all capture files
+     */
+    void removeCaptureFiles();
+
+private:
     // QProcess process;
     ImageGrabberVideoSources activeSource;
     bool        isInitSuccess;
@@ -128,6 +154,9 @@ private:
     // GstBus     *bus;
     // GMainLoop  *loop;
 
+    QString filePath;
+    QImage liveImage;
+    QImage rawImage;
 };
 
 #endif

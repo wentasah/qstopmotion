@@ -77,9 +77,14 @@ public:
     const QVector<QString> getDeviceNames();
 
     /**
-     * Get the actual image
+     * Get the live image from the camera
      */
-    const QImage getActualImage();
+    virtual const QImage getLiveImage() = 0;
+
+    /**
+     * Get the raw image from the camera
+     */
+    virtual const QImage getRawImage() = 0;
 
     /**
      * Initialization of the Command line grabber
@@ -154,12 +159,10 @@ protected:
      */
     Frontend *frontend;
 
-    QString filePath;
     bool isInitialized;
     bool isInited;
     bool isProcess;
     QVector<ImageGrabberDevice*> devices;
-    QImage actualImage;
     ImageGrabberThread *grabberThread;
 
 };

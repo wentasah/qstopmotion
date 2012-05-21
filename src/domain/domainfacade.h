@@ -558,15 +558,24 @@ public:
 
     /**
      * Creates a new addExposure object in the undo history.
-     * @param filePath the file path ot the image file of the exposure.
+     * @param filePath the file path to the image file of the exposure.
      * @param sceneIndex the index of the scene of the take the exposure to add
      * @param takeIndex the index of the take the exposure to add
-     * @param copy the file has to copy to the temp dirctory
      */
     void addExposureToUndo(const QString &filePath,
                            int            sceneIndex,
-                           int            takeIndex,
-                           bool           copy);
+                           int            takeIndex);
+
+    /**
+     * Creates a new addExposure object in the undo history.
+     * Save the image to the temp path.
+     * @param rawImage the image of the exposure.
+     * @param sceneIndex the index of the scene of the take the exposure to add
+     * @param takeIndex the index of the take the exposure to add
+     */
+    void addExposureToUndo(const QImage &rawImage,
+                           int           sceneIndex,
+                           int           takeIndex);
 
     /**
      * Creates a new insertExposure object in the undo history.
@@ -574,13 +583,24 @@ public:
      * @param sceneIndex the index of the scene of the take the exposure to add
      * @param takeIndex the index of the take the exposure to add
      * @param exposureIndex The index of the exposure where the new exposures are inserted bevor.
-     * @param copy the file has to copy to the temp dirctory
      */
     void insertExposureToUndo(const QString &filePath,
                               int            sceneIndex,
                               int            takeIndex,
-                              int            exposureIndex,
-                              bool           copy);
+                              int            exposureIndex);
+
+    /**
+     * Creates a new insertExposure object in the undo history.
+     * Save the image to the temp path.
+     * @param rawImage the image of the exposure or a empty string.
+     * @param sceneIndex the index of the scene of the take the exposure to add
+     * @param takeIndex the index of the take the exposure to add
+     * @param exposureIndex The index of the exposure where the new exposures are inserted bevor.
+     */
+    void insertExposureToUndo(const QImage &rawImage,
+                              int           sceneIndex,
+                              int           takeIndex,
+                              int           exposureIndex);
 
     /**
      * Add a new remove exposure object to the undo history.
@@ -639,10 +659,10 @@ private:
 
     /**
      * Copies the files belonging to this Exposure to a temporary directory.
-     * @param fromImagePath the path to the image to copy.
+     * @param rawImage the image to copy.
      * @return the file name of the new file.
      */
-    const QString copyToTemp(const QString &fromImagePath);
+    const QString copyToTemp(const QImage &rawImage);
 
     /**************************************************************************
      * Private members

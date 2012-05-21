@@ -229,10 +229,16 @@ public:
     const QVector<QString> getDeviceNames();
 
     /**
-     * Get the actual image from the image grabber.
-     * @return actual image.
+     * Get the live image from the image grabber.
+     * @return live image.
      */
-    const QImage getActualImage();
+    const QImage getLiveImage();
+
+    /**
+     * Get the raw image from the image grabber.
+     * @return raw image.
+     */
+    const QImage getRawImage();
 
     /**
      * Function for performing the redraw with the next frame of the animation.

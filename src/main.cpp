@@ -55,8 +55,6 @@ int main(int argc, char **argv)
         }
     }
 
-    qtFrontend.removeCaptureFiles();
-
     qtFrontend.setupDirectoryMonitoring();
 
     ret = qtFrontend.run(argc, argv);

@@ -208,7 +208,6 @@ private:
     ToolBar     *toolBar;
     bool         cameraOn;
     QTimer      *cameraTimer;
-    QString      captureFilePath;
     PreferencesTool::captureButtonFunction captureFunction;
 
     QShortcut   *mixAccel;

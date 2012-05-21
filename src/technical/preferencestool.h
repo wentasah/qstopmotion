@@ -130,16 +130,6 @@ public:
     static const QString backupSuffix;
 
     /**
-     * Name of the captured file
-     */
-    static const QString capturedFileName;
-
-    /**
-     * Suffix of the captured file
-     */
-    static const QString capturedFileSuffix;
-
-    /**
      * Name of the history file
      */
     static const QString historyFileName;

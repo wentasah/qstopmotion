@@ -345,7 +345,7 @@ bool DomainFacade::recoverProject()
             int sceneIndex = partStringList.at(1).toInt();
             int takeIndex = partStringList.at(2).toInt();
 
-            addExposureToUndo(partStringList.at(4), sceneIndex, takeIndex, false);
+            addExposureToUndo(partStringList.at(4), sceneIndex, takeIndex);
 
             continue;
         }
@@ -355,7 +355,7 @@ bool DomainFacade::recoverProject()
             int takeIndex = partStringList.at(2).toInt();
             int exposureIndex = partStringList.at(3).toInt();
 
-            insertExposureToUndo(partStringList.at(4), sceneIndex, takeIndex, exposureIndex, false);
+            insertExposureToUndo(partStringList.at(4), sceneIndex, takeIndex, exposureIndex);
 
             continue;
         }
@@ -859,17 +859,22 @@ int DomainFacade::getTotalExposureSize()
 
 void DomainFacade::addExposureToUndo(const QString &filePath,
                                      int            sceneIndex,
-                                     int            takeIndex,
-                                     bool           copy)
+                                     int            takeIndex)
+{
+    Exposure::tempNum++;
+
+    UndoExposureAdd *u = new UndoExposureAdd(this, filePath, sceneIndex, takeIndex);
+    getUndoStack()->push(u);
+}
+
+
+void DomainFacade::addExposureToUndo(const QImage &rawImage,
+                                     int           sceneIndex,
+                                     int           takeIndex)
 {
     QString newFileName;
-    if (copy) {
-        newFileName = copyToTemp(filePath);
-    }
-    else {
-        newFileName = filePath;
-        Exposure::tempNum++;
-    }
+    newFileName = copyToTemp(rawImage);
+
     UndoExposureAdd *u = new UndoExposureAdd(this, newFileName, sceneIndex, takeIndex);
     getUndoStack()->push(u);
 }
@@ -878,18 +883,25 @@ void DomainFacade::addExposureToUndo(const QString &filePath,
 void DomainFacade::insertExposureToUndo(const QString &filePath,
                                         int            sceneIndex,
                                         int            takeIndex,
-                                        int            exposureIndex,
-                                        bool           copy)
+                                        int            exposureIndex)
+{
+    Exposure::tempNum++;
+
+    UndoExposureInsert *u = new UndoExposureInsert(this, filePath,
+                                                   sceneIndex, takeIndex, exposureIndex);
+    getUndoStack()->push(u);
+}
+
+
+void DomainFacade::insertExposureToUndo(const QImage &rawImage,
+                                        int           sceneIndex,
+                                        int           takeIndex,
+                                        int           exposureIndex)
 {
     QString newFileName;
 
-    if (copy) {
-        newFileName = copyToTemp(filePath);
-    }
-    else {
-        newFileName = filePath;
-        Exposure::tempNum++;
-    }
+    newFileName = copyToTemp(rawImage);
+
     UndoExposureInsert *u = new UndoExposureInsert(this, newFileName,
                                                    sceneIndex, takeIndex, exposureIndex);
     getUndoStack()->push(u);
@@ -940,15 +952,12 @@ bool DomainFacade::getModifyedExposure(const QString &filePath,
  * Private functions
  **************************************************************************/
 
-const QString DomainFacade::copyToTemp(const QString &fromImagePath)
+const QString DomainFacade::copyToTemp(const QImage &rawImage)
 {
     qDebug("DomainFacade::copyToTemp --> Start");
 
     // creates a new image name
-    int beginSuffix = fromImagePath.lastIndexOf('.');
-    QString fileSuffix = fromImagePath.mid(beginSuffix);
-    QString toImageName(QString("tmp_%1%2").arg(Exposure::tempNum)
-                        .arg(fileSuffix.toLower()));
+    QString toImageName(QString("tmp_%1.jpg").arg(Exposure::tempNum));
 
     // creates a new image path
     QString toImagePath;
@@ -957,19 +966,7 @@ const QString DomainFacade::copyToTemp(const QString &fromImagePath)
     toImagePath.append(toImageName);
 
     // Copy file to temp directory
-    QFile fromImage(fromImagePath);
-    int i;
-    for (i = 0 ; i < 10 ; i++) {
-        if (fromImage.copy(toImagePath)) {
-            // Successful
-            break;
-        }
-        else {
-            // Not successful
-            qDebug() << "DomainFacade::copyToTemp --> Error copy file to temp (" << fromImage.errorString() << ")";
-        }
-    }
-    if (10 == i) {
+    if (!rawImage.save(toImagePath, "JPG", 100)) {
         // Not successful
         frontend->showCritical(tr("Critical"),
                                tr("Can't copy image to temp directory!"));

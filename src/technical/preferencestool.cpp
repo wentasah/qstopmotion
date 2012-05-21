@@ -45,8 +45,6 @@ const QString PreferencesTool::translationsDirectory = QLatin1String("translatio
 const QString PreferencesTool::graphicsDirectory = QLatin1String("graphics");
 const QString PreferencesTool::iconsDirectory = QLatin1String("icons");
 const QString PreferencesTool::picturesDirectory = QLatin1String("pictures");
-const QString PreferencesTool::capturedFileName = QLatin1String("capturedfile");
-const QString PreferencesTool::capturedFileSuffix = QLatin1String("jpg");
 const QString PreferencesTool::historyFileName = QLatin1String(".history");
 
 

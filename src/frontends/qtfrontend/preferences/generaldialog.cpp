@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2011 by                                                *
+ *  Copyright (C) 2005-2012 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -20,7 +20,7 @@
  *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                 *
  ******************************************************************************/
 
-#include "preferencesdialog.h"
+#include "generaldialog.h"
 
 #include "technical/preferencestool.h"
 
@@ -29,10 +29,10 @@
 #include <QtGui/QVBoxLayout>
 
 
-PreferencesDialog::PreferencesDialog(Frontend *f, QWidget *parent)
+GeneralDialog::GeneralDialog(Frontend *f, QWidget *parent)
     : QDialog(parent, Qt::Dialog)
 {
-    qDebug("PreferencesDialog::Constructor --> Start");
+    qDebug("GeneralDialog::Constructor --> Start");
 
     frontend       = f;
     exportVideoTab = 0;
@@ -68,52 +68,52 @@ PreferencesDialog::PreferencesDialog(Frontend *f, QWidget *parent)
     makeVideoExportTab();
     makeDefaultValueTab();
 
-    qDebug("PreferencesDialog::Constructor --> End");
+    qDebug("GeneralDialog::Constructor --> End");
 }
 
 
-void PreferencesDialog::makeGeneralSettingsTab()
+void GeneralDialog::makeGeneralSettingsTab()
 {
-    qDebug("PreferencesDialog::makeGeneralSettingsTab --> Start");
+    qDebug("GeneralDialog::makeGeneralSettingsTab --> Start");
 
     generalSettingsTab = new GeneralTab(frontend);
     generalSettingsTab->initialize();
     // generalSettingsTab->setMinimumHeight(300);
     tabWidget->addTab(generalSettingsTab, tr("&General Settings"));
 
-    qDebug("PreferencesDialog::makeGeneralSettingsTab --> End");
+    qDebug("GeneralDialog::makeGeneralSettingsTab --> End");
 }
 
 
-void PreferencesDialog::makeVideoExportTab()
+void GeneralDialog::makeVideoExportTab()
 {
-    qDebug("PreferencesDialog::makeVideoExportTab --> Start");
+    qDebug("GeneralDialog::makeVideoExportTab --> Start");
 
     exportVideoTab = new ExportTab(frontend);
     exportVideoTab->initialize();
     // exportVideoTab->setMinimumHeight(300);
     tabWidget->addTab(exportVideoTab, tr("Video &Export"));
 
-    qDebug("PreferencesDialog::makeVideoExportTab --> End");
+    qDebug("GeneralDialog::makeVideoExportTab --> End");
 }
 
 
-void PreferencesDialog::makeDefaultValueTab()
+void GeneralDialog::makeDefaultValueTab()
 {
-    qDebug("PreferencesDialog::makeDefaultValueTab --> Start");
+    qDebug("GeneralDialog::makeDefaultValueTab --> Start");
 
     defaultValueTab = new DefaultTab(frontend);
     defaultValueTab->initialize();
     // exportVideoTab->setMinimumHeight(300);
     tabWidget->addTab(defaultValueTab, tr("&Default Values"));
 
-    qDebug("PreferencesDialog::makeDefaultValueTab --> End");
+    qDebug("GeneralDialog::makeDefaultValueTab --> End");
 }
 
 
-void PreferencesDialog::apply()
+void GeneralDialog::apply()
 {
-    qDebug("PreferencesDialog::apply --> Start");
+    qDebug("GeneralDialog::apply --> Start");
 
     setFocus();
     this->generalSettingsTab->apply();
@@ -123,13 +123,13 @@ void PreferencesDialog::apply()
     this->setResult(QDialog::Accepted);
     this->hide();
 
-    qDebug("PreferencesDialog::apply --> End");
+    qDebug("GeneralDialog::apply --> End");
 }
 
 
-void PreferencesDialog::close()
+void GeneralDialog::close()
 {
-    qDebug("PreferencesDialog::close --> Start");
+    qDebug("GeneralDialog::close --> Start");
 
     setFocus();
     this->generalSettingsTab->reset();
@@ -137,13 +137,13 @@ void PreferencesDialog::close()
     this->defaultValueTab->reset();
     this->hide();
 
-    qDebug("PreferencesDialog::close --> End");
+    qDebug("GeneralDialog::close --> End");
 }
 
 
-void PreferencesDialog::finish(int result)
+void GeneralDialog::finish(int result)
 {
-    qDebug("PreferencesDialog::finish --> Start");
+    qDebug("GeneralDialog::finish --> Start");
 
     setFocus();
     if (result == 0)
@@ -154,5 +154,5 @@ void PreferencesDialog::finish(int result)
     }
     this->hide();
 
-    qDebug("PreferencesDialog::finish --> End");
+    qDebug("GeneralDialog::finish --> End");
 }

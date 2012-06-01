@@ -124,8 +124,8 @@ set(MOC_HEADERS
     src/frontends/qtfrontend/frameview/frameviewinterface.h
     src/frontends/qtfrontend/preferences/defaulttab.h
     src/frontends/qtfrontend/preferences/exporttab.h
+    src/frontends/qtfrontend/preferences/generaldialog.h
     src/frontends/qtfrontend/preferences/generaltab.h
-    src/frontends/qtfrontend/preferences/preferencesdialog.h
     src/frontends/qtfrontend/timeline/timeline.h
     src/frontends/qtfrontend/tooltabs/compositingtab.h
     src/frontends/qtfrontend/tooltabs/projecttab.h
@@ -180,8 +180,8 @@ set(SOURCES
     src/frontends/qtfrontend/frameview/frameviewinterface.cpp
     src/frontends/qtfrontend/preferences/defaulttab.cpp
     src/frontends/qtfrontend/preferences/exporttab.cpp
+    src/frontends/qtfrontend/preferences/generaldialog.cpp
     src/frontends/qtfrontend/preferences/generaltab.cpp
-    src/frontends/qtfrontend/preferences/preferencesdialog.cpp
     src/frontends/qtfrontend/timeline/timeline.cpp
     src/frontends/qtfrontend/timeline/exposurethumbview.cpp
     src/frontends/qtfrontend/timeline/thumbview.cpp

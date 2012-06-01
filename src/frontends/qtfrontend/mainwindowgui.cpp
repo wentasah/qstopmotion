@@ -1181,17 +1181,17 @@ void MainWindowGUI::removeSound()
 }
 
 
-void MainWindowGUI::showPreferencesDialog()
+void MainWindowGUI::showGeneralDialog()
 {
-    PreferencesDialog *preferencesDialog;
+    GeneralDialog *generalDialog;
 
-    preferencesDialog = new PreferencesDialog(frontend);
-    int ret = preferencesDialog->exec();
+    generalDialog = new GeneralDialog(frontend);
+    int ret = generalDialog->exec();
     if (ret == QDialog::Rejected) {
         // The user canceled the input dialog
-        qDebug("MainWindowsGUI::showPreferencesDialog --> End (cancel)");
+        qDebug("MainWindowsGUI::showGeneralDialog --> End (cancel)");
     }
-    delete(preferencesDialog);
+    delete(generalDialog);
 }
 
 
@@ -1689,7 +1689,7 @@ void MainWindowGUI::createActions()
     configureAct->setIcon(QIcon(iconFile));
     configureAct->setShortcut(ControlModifier + Key_P);
     configureAct->setIconVisibleInMenu(true);
-    connect(configureAct, SIGNAL(triggered()), this, SLOT(showPreferencesDialog()));
+    connect(configureAct, SIGNAL(triggered()), this, SLOT(showGeneralDialog()));
 
     // View menu
     undoViewAct = new QAction(this);

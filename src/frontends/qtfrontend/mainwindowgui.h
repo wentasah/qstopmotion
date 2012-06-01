@@ -30,7 +30,7 @@
 #include "frontends/qtfrontend/dialogs/helpbrowser.h"
 #include "frontends/qtfrontend/elements/flexiblespinbox.h"
 #include "frontends/qtfrontend/frameview/frameviewinterface.h"
-#include "frontends/qtfrontend/preferences/preferencesdialog.h"
+#include "frontends/qtfrontend/preferences/generaldialog.h"
 #include "frontends/qtfrontend/timeline/timeline.h"
 // #include "frontends/qtfrontend/tooltabs/compositingtab.h"
 #include "frontends/qtfrontend/tooltabs/projecttab.h"
@@ -415,7 +415,7 @@ private slots:
      * Brings up a preferences dialog where the user can set preferences for the
      * application.
      */
-    void showPreferencesDialog();
+    void showGeneralDialog();
 
     /**
      * Show the undo view window.

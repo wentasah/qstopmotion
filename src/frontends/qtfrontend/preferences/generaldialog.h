@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2011 by                                                *
+ *  Copyright (C) 2005-2012 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -20,8 +20,8 @@
  *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                 *
  ******************************************************************************/
 
-#ifndef PREFERENCESDIALOG_H
-#define PREFERENCESDIALOG_H
+#ifndef GENERALDIALOG_H
+#define GENERALDIALOG_H
 
 #include "frontends/frontend.h"
 #include "frontends/qtfrontend/preferences/defaulttab.h"
@@ -38,7 +38,7 @@
  *
  * @author Bjoern Erik Nilsen & Fredrik Berg Kjoelstad
  */
-class PreferencesDialog : public QDialog
+class GeneralDialog : public QDialog
 {
     Q_OBJECT
 public:
@@ -47,7 +47,7 @@ public:
      * @param f frontend of the application.
      * @param parent the parent of the widget.
      */
-    PreferencesDialog(Frontend *f, QWidget *parent = 0);
+    GeneralDialog(Frontend *f, QWidget *parent = 0);
 
 private:
     Frontend    *frontend;

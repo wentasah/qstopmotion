@@ -30,7 +30,9 @@
 
 // GMainLoop *GstreamerGrabber::loop = 0;
 #include <gst/interfaces/propertyprobe.h>
+#include <gst/app/gstappsink.h>
 
+#define APP_SINK_MAX_BUFFERS 2
 
 const QString GstreamerGrabber::capturedFileName = QLatin1String("capturedfile");
 const QString GstreamerGrabber::capturedFileSuffix = QLatin1String("jpg");
@@ -42,6 +44,7 @@ GstreamerGrabber::GstreamerGrabber(Frontend *f)
     qDebug("GstreamerGrabber::Constructor --> Start");
 
     isInitSuccess = false;
+    firstImage = true;
     pipeline = 0;
     source = 0;
     filter1 = 0;
@@ -464,6 +467,7 @@ void GstreamerGrabber::initSubclass()
             qDebug() << "gstreamergrabber::init --> Fatal: Can't create the filter1.";
             return;
         }
+        /*
         filter2 = gst_element_factory_make("jpegenc", "filter2=jpegenc");
         if (!filter2) {
             qDebug() << "gstreamergrabber::init --> Fatal: Can't create the filter2.";
@@ -475,6 +479,28 @@ void GstreamerGrabber::initSubclass()
             return;
         }
         g_object_set(G_OBJECT (sink), "location", filePath.toLatin1().constData(), NULL);
+        */
+        sink = gst_element_factory_make("appsink", NULL);
+        if (!sink) {
+            qDebug() << "gstreamergrabber::init --> Fatal: Can't create the application sink.";
+            return;
+        }
+        gst_app_sink_set_max_buffers(GST_APP_SINK(sink), APP_SINK_MAX_BUFFERS);
+        g_object_set(G_OBJECT(sink), "sync", FALSE, NULL);
+
+        // Set default values for RGB.
+        gst_app_sink_set_caps(GST_APP_SINK(sink), gst_caps_new_simple("video/x-raw-rgb", NULL));
+        // The result on Windows is:
+        // video/x-raw-rgb, width=(int)320, height=(int)240, framerate=(fraction)30/1, bpp=(int)24, depth=(int)24,
+        // red_mask=(int)16711680, green_mask=(int)65280, blue_mask=(int)255, endianness=(int)4321
+
+        // Set special values for RGB
+        // #define SINK_CAPS "video/x-raw-rgb, width=(int)320, height=(int)300, framerate=(fraction)30/1, bpp=(int)24, depth=(int)24"
+        // gst_app_sink_set_caps((GstAppSink*)sink, gst_caps_from_string(SINK_CAPS));
+
+        // Set special values for YUV
+        // #define SINK_CAPS "video/x-raw-yuv, format=(fourcc)UYVY, width=(int)320, height=(int)300" //, framerate=(fraction)45/1"
+        // gst_app_sink_set_caps((GstAppSink*)sink, gst_caps_from_string(SINK_CAPS));
 
         // Add the elements to the bin
         if (!gst_bin_add(GST_BIN (pipeline), source)) {
@@ -485,29 +511,35 @@ void GstreamerGrabber::initSubclass()
             qDebug() << "gstreamergrabber::init --> Fatal: Can't add the filter1 to the bin.";
             return;
         }
+        /*
         if (!gst_bin_add(GST_BIN (pipeline), filter2)) {
             qDebug() << "gstreamergrabber::init --> Fatal: Can't add the filter2 to the bin.";
             return;
         }
+        */
         if (!gst_bin_add(GST_BIN (pipeline), sink)) {
             qDebug() << "gstreamergrabber::init --> Fatal: Can't add the sink to the bin.";
             return;
         }
-
         // Link the elements in the bin
         if (!gst_element_link(source, filter1)) {
             qDebug() << "gstreamergrabber::init --> Fatal: Can't link the filter1 to source.";
             return;
         }
+        /*
         if (!gst_element_link(filter1, filter2)) {
-            qDebug() << "gstreamergrabber::init --> Fatal: Can't link the filter2.";
+            qDebug() << "gstreamergrabber::init --> Fatal: Can't link the filter2 to filter1.";
             return;
         }
         if (!gst_element_link(filter2, sink)) {
-            qDebug() << "gstreamergrabber::init --> Fatal: Can't link the sink.";
+            qDebug() << "gstreamergrabber::init --> Fatal: Can't link the sink to filter2.";
             return;
         }
-
+*/
+        if (!gst_element_link(filter1, sink)) {
+            qDebug() << "gstreamergrabber::init --> Fatal: Can't link the sink to the filter1.";
+            return;
+        }
         break;
     case Video4LinuxSource:
         qDebug() << "gstreamergrabber::init --> Build the pipeline: v4l2src ! ffmpegcolorspace ! jpegenc ! multifilesink location=$IMAGEFILE";
@@ -526,6 +558,7 @@ void GstreamerGrabber::initSubclass()
             qDebug() << "gstreamergrabber::init --> Fatal: Can't create the filter1.";
             return;
         }
+        /*
         filter2 = gst_element_factory_make("jpegenc", "filter2=jpegenc");
         if (!filter2) {
             qDebug() << "gstreamergrabber::init --> Fatal: Can't create the filter2.";
@@ -537,6 +570,28 @@ void GstreamerGrabber::initSubclass()
             return;
         }
         g_object_set(G_OBJECT (sink), "location", filePath.toLatin1().constData(), NULL);
+        */
+        sink = gst_element_factory_make("appsink", NULL);
+        if (!sink) {
+            qDebug() << "gstreamergrabber::init --> Fatal: Can't create the application sink.";
+            return;
+        }
+        gst_app_sink_set_max_buffers(GST_APP_SINK(sink), APP_SINK_MAX_BUFFERS);
+        g_object_set(G_OBJECT(sink), "sync", FALSE, NULL);
+
+        // Set default values for RGB.
+        gst_app_sink_set_caps(GST_APP_SINK(sink), gst_caps_new_simple("video/x-raw-rgb", NULL));
+        // The result on Windows is:
+        // video/x-raw-rgb, width=(int)320, height=(int)240, framerate=(fraction)30/1, bpp=(int)24, depth=(int)24,
+        // red_mask=(int)16711680, green_mask=(int)65280, blue_mask=(int)255, endianness=(int)4321
+
+        // Set special values for RGB
+        // #define SINK_CAPS "video/x-raw-rgb, width=(int)320, height=(int)300, framerate=(fraction)30/1, bpp=(int)24, depth=(int)24"
+        // gst_app_sink_set_caps((GstAppSink*)sink, gst_caps_from_string(SINK_CAPS));
+
+        // Set special values for YUV
+        // #define SINK_CAPS "video/x-raw-yuv, format=(fourcc)UYVY, width=(int)320, height=(int)300" //, framerate=(fraction)45/1"
+        // gst_app_sink_set_caps((GstAppSink*)sink, gst_caps_from_string(SINK_CAPS));
 
         // Add the elements to the bin
         if (!gst_bin_add(GST_BIN (pipeline), source)) {
@@ -547,10 +602,12 @@ void GstreamerGrabber::initSubclass()
             qDebug() << "gstreamergrabber::init --> Fatal: Can't add the filter1 to the bin.";
             return;
         }
+        /*
         if (!gst_bin_add(GST_BIN (pipeline), filter2)) {
             qDebug() << "gstreamergrabber::init --> Fatal: Can't add the filter2 to the bin.";
             return;
         }
+        */
         if (!gst_bin_add(GST_BIN (pipeline), sink)) {
             qDebug() << "gstreamergrabber::init --> Fatal: Can't add the sink to the bin.";
             return;
@@ -561,12 +618,18 @@ void GstreamerGrabber::initSubclass()
             qDebug() << "gstreamergrabber::init --> Fatal: Can't link the filter1 to source.";
             return;
         }
+        /*
         if (!gst_element_link(filter1, filter2)) {
-            qDebug() << "gstreamergrabber::init --> Fatal: Can't link the filter2.";
+            qDebug() << "gstreamergrabber::init --> Fatal: Can't link the filter2 to filter1.";
             return;
         }
         if (!gst_element_link(filter2, sink)) {
-            qDebug() << "gstreamergrabber::init --> Fatal: Can't link the sink.";
+            qDebug() << "gstreamergrabber::init --> Fatal: Can't link the sink to filter2.";
+            return;
+        }
+        */
+        if (!gst_element_link(filter1, sink)) {
+            qDebug() << "gstreamergrabber::init --> Fatal: Can't link the sink to filter1.";
             return;
         }
 
@@ -610,18 +673,19 @@ void GstreamerGrabber::initSubclass()
             qDebug() << "gstreamergrabber::init --> Fatal: Can't create the queue1.";
             return;
         }
-/*
+        /*
         filter3 = gst_element_factory_make("ffdeinterlace", "filter3=ffdeinterlace");
         if (!filter3) {
             qDebug() << "gstreamergrabber::init --> Fatal: Can't create the filter3.";
             return;
         }
-*/
+        */
         filter4 = gst_element_factory_make("ffmpegcolorspace", "filter4=ffmpegcolorspace");
         if (!filter4) {
             qDebug() << "gstreamergrabber::init --> Fatal: Can't create the filter4.";
             return;
         }
+        /*
         filter5 = gst_element_factory_make("jpegenc", "filter5=jpegenc");
         if (!filter5) {
             qDebug() << "gstreamergrabber::init --> Fatal: Can't create the filter5.";
@@ -633,6 +697,28 @@ void GstreamerGrabber::initSubclass()
             return;
         }
         g_object_set(G_OBJECT (sink), "location", filePath.toLatin1().constData(), NULL);
+        */
+        sink = gst_element_factory_make("appsink", NULL);
+        if (!sink) {
+            qDebug() << "gstreamergrabber::init --> Fatal: Can't create the application sink.";
+            return;
+        }
+        gst_app_sink_set_max_buffers(GST_APP_SINK(sink), APP_SINK_MAX_BUFFERS);
+        g_object_set(G_OBJECT(sink), "sync", FALSE, NULL);
+
+        // Set default values for RGB.
+        gst_app_sink_set_caps(GST_APP_SINK(sink), gst_caps_new_simple("video/x-raw-rgb", NULL));
+        // The result on Windows is:
+        // video/x-raw-rgb, width=(int)320, height=(int)240, framerate=(fraction)30/1, bpp=(int)24, depth=(int)24,
+        // red_mask=(int)16711680, green_mask=(int)65280, blue_mask=(int)255, endianness=(int)4321
+
+        // Set special values for RGB
+        // #define SINK_CAPS "video/x-raw-rgb, width=(int)320, height=(int)300, framerate=(fraction)30/1, bpp=(int)24, depth=(int)24"
+        // gst_app_sink_set_caps((GstAppSink*)sink, gst_caps_from_string(SINK_CAPS));
+
+        // Set special values for YUV
+        // #define SINK_CAPS "video/x-raw-yuv, format=(fourcc)UYVY, width=(int)320, height=(int)300" //, framerate=(fraction)45/1"
+        // gst_app_sink_set_caps((GstAppSink*)sink, gst_caps_from_string(SINK_CAPS));
 
         // Add the elements to the bin
         if (!gst_bin_add(GST_BIN (pipeline), source)) {
@@ -659,10 +745,12 @@ void GstreamerGrabber::initSubclass()
             qDebug() << "gstreamergrabber::init --> Fatal: Can't add the filter1 to the bin.";
             return;
         }
+        /*
         if (!gst_bin_add(GST_BIN (pipeline), filter5)) {
             qDebug() << "gstreamergrabber::init --> Fatal: Can't add the filter2 to the bin.";
             return;
         }
+        */
         if (!gst_bin_add(GST_BIN (pipeline), sink)) {
             qDebug() << "gstreamergrabber::init --> Fatal: Can't add the sink to the bin.";
             return;
@@ -696,12 +784,18 @@ void GstreamerGrabber::initSubclass()
             qDebug() << "gstreamergrabber::init --> Fatal: Can't link the filter4.";
             return;
         }
+        /*
         if (!gst_element_link(filter4, filter5)) {
             qDebug() << "gstreamergrabber::init --> Fatal: Can't link the filter5.";
             return;
         }
         if (!gst_element_link(filter5, sink)) {
-            qDebug() << "gstreamergrabber::init --> Fatal: Can't link the sink.";
+            qDebug() << "gstreamergrabber::init --> Fatal: Can't link the sink to filter5.";
+            return;
+        }
+        */
+        if (!gst_element_link(filter4, sink)) {
+            qDebug() << "gstreamergrabber::init --> Fatal: Can't link the sink to filter4.";
             return;
         }
         // Connect filter1 and filter2 via a pad
@@ -712,14 +806,17 @@ void GstreamerGrabber::initSubclass()
     case DirectShowSource:
         qDebug() << "gstreamergrabber::init --> Build the pipeline: dshowvideosrc ! ffmpegcolorspace ! jpegenc ! multifilesink location=$IMAGEFILE";
 
-        // Examples:
-        // gst-launch dshowvideosrc ! video/x-dv ! ffdemux_dv ! ffdec_dvvideo ! ffmpegcolorspace ! jpegenc ! multifilesink location=$IMAGEFILE
-        // gst-launch ksvideosrc ! ...
+        // Examples Web-Cam:
         // gst-launch dshowvideosrc ! video/x-raw-rpg ! ffmpegcolorspace ! jpegenc ! multifilesink location=$IMAGEFILE
         // gst-launch dshowvideosrc ! video/x-raw-yuv ! ffmpegcolorspace ! jpegenc ! multifilesink location=$IMAGEFILE
 
+        // Examples FireWire:
+        // gst-launch dshowvideosrc ! video/x-dv ! ffdemux_dv ! ffdec_dvvideo ! ffmpegcolorspace ! jpegenc ! multifilesink location=$IMAGEFILE
         // R.L.: Direct Show Video Source didn't work with FireWire (IEE1394) devices.
         // The application hangs when linking dshowvideosrc and ffdemux_dv.
+
+        // Other Examples:
+        // gst-launch ksvideosrc ! ...
 
         // Create the elements
         source = gst_element_factory_make("dshowvideosrc", "source=dshowvideosrc");
@@ -734,6 +831,7 @@ void GstreamerGrabber::initSubclass()
             qDebug() << "gstreamergrabber::init --> Fatal: Can't create the filter1.";
             return;
         }
+        /*
         filter2 = gst_element_factory_make("jpegenc", "filter2=jpegenc");
         if (!filter2) {
             qDebug() << "gstreamergrabber::init --> Fatal: Can't create the filter2.";
@@ -745,6 +843,28 @@ void GstreamerGrabber::initSubclass()
             return;
         }
         g_object_set(G_OBJECT (sink), "location", filePath.toLatin1().constData(), NULL);
+        */
+        sink = gst_element_factory_make ("appsink", NULL);
+        if (!sink) {
+            qDebug() << "gstreamergrabber::init --> Fatal: Can't create the application sink.";
+            return;
+        }
+        gst_app_sink_set_max_buffers(GST_APP_SINK(sink), APP_SINK_MAX_BUFFERS);
+        g_object_set(G_OBJECT(sink), "sync", FALSE, NULL);
+
+        // Set default values for RGB.
+        gst_app_sink_set_caps(GST_APP_SINK(sink), gst_caps_new_simple("video/x-raw-rgb", NULL));
+        // The result on Windows is:
+        // video/x-raw-rgb, width=(int)320, height=(int)240, framerate=(fraction)30/1, bpp=(int)24, depth=(int)24,
+        // red_mask=(int)16711680, green_mask=(int)65280, blue_mask=(int)255, endianness=(int)4321
+
+        // Set special values for RGB
+        // #define SINK_CAPS "video/x-raw-rgb, width=(int)320, height=(int)300, framerate=(fraction)30/1, bpp=(int)24, depth=(int)24"
+        // gst_app_sink_set_caps((GstAppSink*)sink, gst_caps_from_string(SINK_CAPS));
+
+        // Set special values for YUV
+        // #define SINK_CAPS "video/x-raw-yuv, format=(fourcc)UYVY, width=(int)320, height=(int)300" //, framerate=(fraction)45/1"
+        // gst_app_sink_set_caps((GstAppSink*)sink, gst_caps_from_string(SINK_CAPS));
 
         // Add the elements to the bin
         if (!gst_bin_add(GST_BIN (pipeline), source)) {
@@ -755,10 +875,12 @@ void GstreamerGrabber::initSubclass()
             qDebug() << "gstreamergrabber::init --> Fatal: Can't add the filter1 to the bin.";
             return;
         }
+        /*
         if (!gst_bin_add(GST_BIN (pipeline), filter2)) {
             qDebug() << "gstreamergrabber::init --> Fatal: Can't add the filter2 to the bin.";
             return;
         }
+        */
         if (!gst_bin_add(GST_BIN (pipeline), sink)) {
             qDebug() << "gstreamergrabber::init --> Fatal: Can't add the sink to the bin.";
             return;
@@ -769,12 +891,18 @@ void GstreamerGrabber::initSubclass()
             qDebug() << "gstreamergrabber::init --> Fatal: Can't link the filter1 to source.";
             return;
         }
+        /*
         if (!gst_element_link(filter1, filter2)) {
-            qDebug() << "gstreamergrabber::init --> Fatal: Can't link the filter2.";
+            qDebug() << "gstreamergrabber::init --> Fatal: Can't link the filter2 to filter1.";
             return;
         }
         if (!gst_element_link(filter2, sink)) {
-            qDebug() << "gstreamergrabber::init --> Fatal: Can't link the sink.";
+            qDebug() << "gstreamergrabber::init --> Fatal: Can't link the sink to filter2.";
+            return;
+        }
+        */
+        if (!gst_element_link(filter1, sink)) {
+            qDebug() << "gstreamergrabber::init --> Fatal: Can't link the sink to filter1.";
             return;
         }
         break;
@@ -836,9 +964,124 @@ bool GstreamerGrabber::grab()
 }
 
 
+const QImage GstreamerGrabber::getImage()
+{
+    QImage image;
+
+    GstBuffer *buffer = gst_app_sink_pull_buffer(GST_APP_SINK(sink));
+    GstCaps *caps = gst_buffer_get_caps(buffer);
+
+    gint width, height;
+    GstStructure *st = gst_caps_get_structure(caps, 0); // index);
+    const gchar *imageType = gst_structure_get_name(st);
+
+    if (firstImage) {
+        const gchar *bufferCaps = gst_structure_to_string(st);
+        qDebug() << "gstreamergrabber::getImage --> buffer caps: " << bufferCaps;
+    }
+
+    gst_structure_get_int(st, "width", &width);
+    gst_structure_get_int(st, "height", &height);
+
+    if (0 == strcmp(imageType, "video/x-raw-rgb")) {
+        // video/x-raw-rgb, format=RGB3
+        // video/x-raw-rgb, format=BGR3
+
+        guchar *rgbData;
+        QImage::Format format = QImage::Format_Invalid;
+        gint bpp;
+        gst_structure_get_int(st, "bpp", &bpp);
+
+        if (bpp == 24)
+            format = QImage::Format_RGB888;
+        else if (bpp == 32)
+            format = QImage::Format_RGB32;
+
+        if (format != QImage::Format_Invalid) {
+            rgbData = GST_BUFFER_DATA (buffer); //image_data is a static unsigned char *
+            image = QImage((const uchar *)rgbData,
+                           width,
+                           height,
+                           format);
+            image.bits(); //detach
+        }
+    }
+    else {
+        if (0 == strcmp(imageType, "video/x-raw-yuv")) {
+            guchar *yuvData;
+            guint32 fourcc;
+            gst_structure_get_fourcc(st, "format", &fourcc);
+            if (fourcc == GST_STR_FOURCC("I420")) {
+                // YUV ... Planar
+                // Identical to IYUV
+                // Identical to YV12 expect that the U and V plane oder is reversed
+
+                yuvData = GST_BUFFER_DATA (buffer); //image_data is a static unsigned char *
+                // rgbData = new unsigned char[width*height*2];
+                // uyvy_to_rgb24(yuvData, rgbData, width, height);
+
+                image = QImage(width/2, height/2, QImage::Format_RGB32);
+
+                for (int y=0; y<height; y+=2) {
+                    const uchar *yLine = yuvData + y*width;
+                    const uchar *uLine = yuvData + width*height + y*width/4;
+                    const uchar *vLine = yuvData + width*height*5/4 + y*width/4;
+
+                    for (int x=0; x<width; x+=2) {
+                        const qreal Y = 1.164*(yLine[x]-16);
+                        const int U = uLine[x/2]-128;
+                        const int V = vLine[x/2]-128;
+
+                        int b = qBound(0, int(Y + 2.018*U), 255);
+                        int g = qBound(0, int(Y - 0.813*V - 0.391*U), 255);
+                        int r = qBound(0, int(Y + 1.596*V), 255);
+
+                        image.setPixel(x/2,y/2,qRgb(r,g,b));
+                    }
+                }
+            }
+            if (fourcc == GST_STR_FOURCC("YUY2")) {
+                // YUV 4:2:2 Packed
+                if (firstImage) {
+                    qDebug() << "gstreamergrabber::getImage --> format 'video/x-raw-yuv(YUY2)' not supported!!!";
+                }
+            }
+            if (fourcc == GST_STR_FOURCC("YV12")) {
+                // YUV 4:2:0 Planar, Uncompressed format commonly used im MPEG video processing.
+                if (firstImage) {
+                    qDebug() << "gstreamergrabber::getImage --> format 'video/x-raw-yuv(YV12)' not supported!!!";
+                }
+            }
+        }
+        else {
+            if (0 == strcmp(imageType, "image/jpeg")) {
+                if (firstImage) {
+                    qDebug() << "gstreamergrabber::getImage --> format 'image/jpeg' not supported!!!";
+                }
+            }
+            else {
+                if (firstImage) {
+                    qDebug() << "gstreamergrabber::getImage --> format '" << imageType << "' not supported!!!";
+                }
+            }
+        }
+    }
+
+    gst_caps_unref(caps);
+    gst_buffer_unref(buffer); //If I comment out this the application stops crashing, but fills up the memory
+
+    if (firstImage) {
+        firstImage = false;
+    }
+    return image;
+}
+
+
 const QImage GstreamerGrabber::getLiveImage()
 {
-    liveImage.load(filePath);
+    // liveImage.load(filePath);
+
+    liveImage = getImage();
 
     return liveImage;
 }
@@ -846,7 +1089,9 @@ const QImage GstreamerGrabber::getLiveImage()
 
 const QImage GstreamerGrabber::getRawImage()
 {
-    rawImage.load(filePath);
+    // rawImage.load(filePath);
+
+    rawImage = getImage();
 
     return rawImage;
 }

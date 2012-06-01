@@ -134,10 +134,13 @@ private:
      */
     void removeCaptureFiles();
 
+    const QImage getImage();
+
 private:
     // QProcess process;
     ImageGrabberVideoSources activeSource;
     bool        isInitSuccess;
+    bool        firstImage;
 
     GstElement *pipeline;
     GstElement *source;
@@ -157,6 +160,7 @@ private:
     QString filePath;
     QImage liveImage;
     QImage rawImage;
+
 };
 
 #endif

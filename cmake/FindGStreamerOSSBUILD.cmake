@@ -2,7 +2,7 @@
 # CMake file to find the GStreamer files on the Windows platform when the     #
 # OSSBuild fof GStreamer for Windows is used.                                 #
 # (c) Ralf Lange, longsoft.de                                                 #
-# Last update: 2011-03-24                                                     #
+# Last update: 2012-05-24                                                     #
 #                                                                             #
 ###############################################################################
 #
@@ -53,6 +53,14 @@ FIND_LIBRARY(
     NAMES gstinterfaces-0.10 gstinterfaces
     PATHS ${GSTREAMER_DIR}/lib ${GSTREAMER_DIR}/win32/lib
     ENV LIB DOC "gstinterfaces library to link with"
+    NO_SYSTEM_ENVIRONMENT_PATH
+)
+
+FIND_LIBRARY(
+    GSTREAMER_gstapp_LIBRARY
+    NAMES gstapp-0.10 gstapp
+    PATHS ${GSTREAMER_DIR}/lib ${GSTREAMER_DIR}/win32/lib
+    ENV LIB DOC "gstapp library to link with"
     NO_SYSTEM_ENVIRONMENT_PATH
 )
 
@@ -122,6 +130,7 @@ FIND_LIBRARY(
 
 IF(GSTREAMER_gst_INCLUDE_DIR AND GSTREAMER_gstconfig_INCLUDE_DIR AND
    GSTREAMER_gstreamer_LIBRARY AND GSTREAMER_gstinterfaces_LIBRARY AND
+   GSTREAMER_gstapp_LIBRARY AND
    GLIB_glib_2_INCLUDE_DIR AND GLIB_glibconfig_2_INCLUDE_DIR AND
    GLIB_glib_2_LIBRARY AND GLIB_gobject_2_LIBRARY AND
    LIBXML2_parser_INCLUDE_DIR AND LIBXML2_iconv_INCLUDE_DIR AND LIBXML2_xml_2_LIBRARY)
@@ -136,6 +145,7 @@ IF(GSTREAMER_gst_INCLUDE_DIR AND GSTREAMER_gstconfig_INCLUDE_DIR AND
     SET(
         GSTREAMER_LIBRARIES
         ${GSTREAMER_gstreamer_LIBRARY} ${GSTREAMER_gstinterfaces_LIBRARY}
+        ${GSTREAMER_gstapp_LIBRARY}
         ${GLIB_glib_2_LIBRARY} ${GLIB_gobject_2_LIBRARY}
         ${LIBXML2_xml_2_LIBRARY}
     )
@@ -144,6 +154,7 @@ IF(GSTREAMER_gst_INCLUDE_DIR AND GSTREAMER_gstconfig_INCLUDE_DIR AND
 
 ELSE(GSTREAMER_gst_INCLUDE_DIR AND GSTREAMER_gstconfig_INCLUDE_DIR AND
      GSTREAMER_gstreamer_LIBRARY AND GSTREAMER_gstinterfaces_LIBRARY AND
+     GSTREAMER_gstapp_LIBRARY AND
      GLIB_glib_2_INCLUDE_DIR AND GLIB_glibconfig_2_INCLUDE_DIR AND
      GLIB_glib_2_LIBRARY AND GLIB_gobject_2_LIBRARY AND
      LIBXML2_parser_INCLUDE_DIR AND LIBXML2_iconv_INCLUDE_DIR AND LIBXML2_xml_2_LIBRARY)
@@ -152,6 +163,7 @@ ELSE(GSTREAMER_gst_INCLUDE_DIR AND GSTREAMER_gstconfig_INCLUDE_DIR AND
 
 ENDIF(GSTREAMER_gst_INCLUDE_DIR AND GSTREAMER_gstconfig_INCLUDE_DIR AND
       GSTREAMER_gstreamer_LIBRARY AND GSTREAMER_gstinterfaces_LIBRARY AND
+      GSTREAMER_gstapp_LIBRARY AND
       GLIB_glib_2_INCLUDE_DIR AND GLIB_glibconfig_2_INCLUDE_DIR AND
       GLIB_glib_2_LIBRARY AND GLIB_gobject_2_LIBRARY AND
       LIBXML2_parser_INCLUDE_DIR AND LIBXML2_iconv_INCLUDE_DIR AND LIBXML2_xml_2_LIBRARY)

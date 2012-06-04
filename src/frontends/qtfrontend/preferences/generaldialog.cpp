@@ -89,7 +89,7 @@ void GeneralDialog::makeVideoExportTab()
 {
     qDebug("GeneralDialog::makeVideoExportTab --> Start");
 
-    exportVideoTab = new ExportTab(frontend);
+    exportVideoTab = new ExportTab(frontend, true);
     exportVideoTab->initialize();
     // exportVideoTab->setMinimumHeight(300);
     tabWidget->addTab(exportVideoTab, tr("Video &Export"));

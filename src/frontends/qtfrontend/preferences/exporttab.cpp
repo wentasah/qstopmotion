@@ -35,11 +35,12 @@
 #include <QtGui/QLabel>
 
 
-ExportTab::ExportTab(Frontend *f, QWidget *parent) : QWidget(parent)
+ExportTab::ExportTab(Frontend *f, bool type, QWidget *parent) : QWidget(parent)
 {
     qDebug("ExportTab::Constructor --> Start");
 
     frontend                 = f;
+    tabType                  = type;
 
     infoText                 = 0;
     encoderTable             = 0;
@@ -57,7 +58,7 @@ ExportTab::ExportTab(Frontend *f, QWidget *parent) : QWidget(parent)
     activeVideoSize          = VideoEncoder::defaultSize;
     videoFpsLabel            = 0;
     videoFpsChooser          = 0;
-    activeProjectFps         = 1;
+    activeFramesPerSecond    = 12;
 
     // Output file preferences
     outputPrefs              = 0;
@@ -67,8 +68,9 @@ ExportTab::ExportTab(Frontend *f, QWidget *parent) : QWidget(parent)
     activeEncoderApplication = 0;
     defaultOutputLabel       = 0;
     defaultOutputEdit        = 0;
-    defaultOutputfileName.clear();
+    activeDefaultOutputFileName.clear();
     browseOutputButton       = 0;
+    activeUseDefaultOutputFile = false;
 
     this->setObjectName("ExportTab");
 
@@ -104,17 +106,6 @@ void ExportTab::makeGUI()
     encoderApplicationCombo->setFocusPolicy(Qt::NoFocus);
     connect(encoderApplicationCombo, SIGNAL(activated(int)), this, SLOT(changeEncoderApplication(int)));
     encoderApplicationCombo->addItem(tr("ffmpeg"));
-    /*
-#ifdef Q_WS_X11
-    encoderApplicationCombo->addItem(tr("USB Source"));
-    encoderApplicationCombo->addItem(tr("FireWire Source"));
-#endif
-#ifdef Q_WS_WIN
-    encoderApplicationCombo->addItem(tr("DirectShow Source"));
-#endif
-#ifdef Q_WS_MAC
-#endif
-    */
 
     videoFormatLabel = new QLabel(tr("Video Format:"));
     videoFormatCombo = new QComboBox();
@@ -137,7 +128,7 @@ void ExportTab::makeGUI()
     videoSizeCombo->addItem(tr("HD Ready (1280x720)"));
     videoSizeCombo->addItem(tr("Full HD (1900x1080"));
 
-    videoFpsLabel = new QLabel(tr("Project Frames per Second:"));
+    videoFpsLabel = new QLabel(tr("Frames per Second:"));
     videoFpsChooser = new QSpinBox();
 
     QString whatsThis =
@@ -236,8 +227,21 @@ void ExportTab::initialize()
 
     PreferencesTool *pref = frontend->getPreferences();
 
-    // Encoder preferences
-    activeEncoderApplication = pref->getBasicPreference("encoderapplication", VideoEncoder::noneApplication);
+    // Read eEncoder preferences
+    if (tabType) {
+        // This is a general dialog tab
+        activeEncoderApplication = pref->getBasicPreference("encoderapplication", VideoEncoder::noneApplication);
+        activeVideoFormat = pref->getBasicPreference("videoformat", VideoEncoder::noneFormat);
+        activeVideoSize = pref->getBasicPreference("videosize", VideoEncoder::defaultSize);
+        activeFramesPerSecond = pref->getBasicPreference("framespersecond", 12);
+        activeUseDefaultOutputFile = pref->getBasicPreference("usedefaultoutputfile", false);
+        activeDefaultOutputFileName.append(pref->getBasicPreference("defaultoutputfilename", ""));
+    }
+    else {
+        // This is a project dialog tab
+        activeFramesPerSecond = frontend->getProject()->getFramesPerSecond();
+    }
+
     if (activeEncoderApplication == VideoEncoder::noneApplication)
     {
         encoderApplicationCombo->setCurrentIndex(0);
@@ -247,7 +251,6 @@ void ExportTab::initialize()
         encoderApplicationCombo->setCurrentIndex(activeEncoderApplication);
     }
 
-    activeVideoFormat = pref->getBasicPreference("videoformat", VideoEncoder::noneFormat);
     if (activeVideoFormat == VideoEncoder::noneFormat)
     {
         videoFormatCombo->setCurrentIndex(0);
@@ -257,7 +260,6 @@ void ExportTab::initialize()
         videoFormatCombo->setCurrentIndex(activeVideoFormat);
     }
 
-    activeVideoSize = pref->getBasicPreference("videosize", VideoEncoder::defaultSize);
     if (activeVideoSize == VideoEncoder::defaultSize)
     {
         videoSizeCombo->setCurrentIndex(0);
@@ -267,12 +269,10 @@ void ExportTab::initialize()
         videoSizeCombo->setCurrentIndex(activeVideoSize);
     }
 
-    activeProjectFps = frontend->getProject()->getFramesPerSecond();
-    this->videoFpsChooser->setValue(activeProjectFps);
+    this->videoFpsChooser->setValue(activeFramesPerSecond);
 
     // Output file preferences
-    useDefaultOutputFile = pref->getBasicPreference("usedefaultoutputfile", 0);
-    if (useDefaultOutputFile)
+    if (activeUseDefaultOutputFile)
     {
         setYesButtonOn();
     }
@@ -281,8 +281,7 @@ void ExportTab::initialize()
         setNoButtonOn();
     }
 
-    defaultOutputfileName.append(pref->getBasicPreference("defaultoutputfilename", ""));
-    defaultOutputEdit->setText(defaultOutputfileName);
+    defaultOutputEdit->setText(activeDefaultOutputFileName);
 
     qDebug("ExportTab::initialize --> End");
 }
@@ -304,32 +303,63 @@ void ExportTab::apply()
 
     PreferencesTool *pref = frontend->getPreferences();
     int index;
-    int newFps;
+    bool changings = false;
 
     index = encoderApplicationCombo->currentIndex();
     if (activeEncoderApplication != index)
     {
-        pref->setBasicPreference("encoderapplication", index);
         activeEncoderApplication = index;
+        changings = true;
     }
 
     index = videoFormatCombo->currentIndex();
     if (activeVideoFormat != index)
     {
-        pref->setBasicPreference("videoformat", index);
         activeVideoFormat = index;
+        changings = true;
     }
 
     index = videoSizeCombo->currentIndex();
     if (activeVideoSize != index)
     {
-        pref->setBasicPreference("videosize", index);
         activeVideoSize = index;
+        changings = true;
     }
 
-    newFps = videoFpsChooser->value();
-    if (activeProjectFps != newFps) {
-        frontend->getProject()->setFramesPerSecond(newFps);
+    index = videoFpsChooser->value();
+    if (activeFramesPerSecond != index) {
+        activeFramesPerSecond = index;
+        changings = true;
+    }
+
+    if (noButton->isChecked()) {
+        if (activeUseDefaultOutputFile) {
+            activeUseDefaultOutputFile = false;
+            changings = true;
+        }
+    }
+
+    if (activeDefaultOutputFileName.compare(defaultOutputEdit->text()) != 0)
+    {
+        activeDefaultOutputFileName.clear();
+        activeDefaultOutputFileName.append(defaultOutputEdit->text());
+        changings = true;
+    }
+
+    if (changings) {
+        if (tabType) {
+            // This is a general dialog tab
+            pref->setBasicPreference("encoderapplication", activeEncoderApplication);
+            pref->setBasicPreference("videoformat", activeVideoFormat);
+            pref->setBasicPreference("videosize", activeVideoSize);
+            pref->setBasicPreference("framespersecond", activeFramesPerSecond);
+            pref->setBasicPreference("usedefaultoutputfile", activeUseDefaultOutputFile);
+            pref->setBasicPreference("defaultoutputfilename", activeDefaultOutputFileName);
+        }
+        else {
+            // This is a project dialog tab
+            frontend->getProject()->setFramesPerSecond(activeFramesPerSecond);
+        }
     }
 
     qDebug("ExportTab::apply --> End");
@@ -379,16 +409,6 @@ void ExportTab::changeFps(int newFps)
 
 void ExportTab::setYesButtonOn()
 {
-    if (useDefaultOutputFile == 0)
-    {
-        // Selection changed
-        PreferencesTool *pref = frontend->getPreferences();
-
-        pref->setBasicPreference("usedefaultoutputfile", 1);
-
-        useDefaultOutputFile = 1;
-    }
-
     yesButton->setChecked(true);
     noButton->setChecked(false);
     defaultOutputEdit->setEnabled(false);
@@ -398,16 +418,6 @@ void ExportTab::setYesButtonOn()
 
 void ExportTab::setNoButtonOn()
 {
-    if (useDefaultOutputFile == 1)
-    {
-        // Selection changed
-        PreferencesTool *pref = frontend->getPreferences();
-
-        pref->setBasicPreference("usedefaultoutputfile", 0);
-
-        useDefaultOutputFile = 0;
-    }
-
     noButton->setChecked(true);
     yesButton->setChecked(false);
     defaultOutputEdit->setEnabled(true);
@@ -418,16 +428,6 @@ void ExportTab::setNoButtonOn()
 void ExportTab::changeDefaultOutput(const QString &fileName)
 {
     qDebug("ExportTab::setDefaultOutput --> Start");
-
-    if (defaultOutputfileName.compare(fileName) != 0)
-    {
-        PreferencesTool *pref = frontend->getPreferences();
-
-        pref->setBasicPreference("defaultoutputfilename", fileName);
-
-        defaultOutputfileName.clear();
-        defaultOutputfileName.append(fileName);
-    }
 
     qDebug("ExportTab::setDefaultOutput --> End");
 }

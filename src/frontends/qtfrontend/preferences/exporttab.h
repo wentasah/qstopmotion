@@ -52,7 +52,7 @@ public:
      * @param f frontend of the application
      * @param parent the parent of the this widget
      */
-    ExportTab(Frontend *f, QWidget *parent = 0);
+    ExportTab(Frontend *f, bool type, QWidget *parent = 0);
 
     /**
      * Applies the settings in the import tab.
@@ -130,6 +130,11 @@ private slots:
 private:
     Frontend     *frontend;
 
+    /**
+     * Type of the tab: true = general dialog tab, false = project dialog tab
+     */
+    bool          tabType;
+
     QTextEdit    *infoText;
 
     QTableWidget *encoderTable;
@@ -147,17 +152,17 @@ private:
     int           activeVideoSize;
     QLabel       *videoFpsLabel;
     QSpinBox     *videoFpsChooser;
-    int           activeProjectFps;
+    int           activeFramesPerSecond;
 
     // Output file preferences
     QGroupBox    *outputPrefs;
     QRadioButton *yesButton;
     QRadioButton *noButton;
-    int           useDefaultOutputFile;
+    bool          activeUseDefaultOutputFile;
     QLabel       *askForOutputLabel;
     QLabel       *defaultOutputLabel;
     QLineEdit    *defaultOutputEdit;
-    QString       defaultOutputfileName;
+    QString       activeDefaultOutputFileName;
     QPushButton  *browseOutputButton;
 
     void makeGUI();

@@ -20,7 +20,7 @@
  *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                 *
  ******************************************************************************/
 
-#include "exporttab.h"
+#include "exportwidget.h"
 
 #include "domain/domainfacade.h"
 #include "frontends/qtfrontend/elements/flexiblelineedit.h"
@@ -35,9 +35,9 @@
 #include <QtGui/QLabel>
 
 
-ExportTab::ExportTab(Frontend *f, bool type, QWidget *parent) : QWidget(parent)
+ExportWidget::ExportWidget(Frontend *f, bool type, QWidget *parent) : QWidget(parent)
 {
-    qDebug("ExportTab::Constructor --> Start");
+    qDebug("ExportWidget::Constructor --> Start");
 
     frontend                 = f;
     tabType                  = type;
@@ -72,17 +72,17 @@ ExportTab::ExportTab(Frontend *f, bool type, QWidget *parent) : QWidget(parent)
     browseOutputButton       = 0;
     activeUseDefaultOutputFile = false;
 
-    this->setObjectName("ExportTab");
+    this->setObjectName("ExportWidget");
 
     makeGUI();
 
-    qDebug("ExportTab::Constructor --> End");
+    qDebug("ExportWidget::Constructor --> End");
 }
 
 
-void ExportTab::makeGUI()
+void ExportWidget::makeGUI()
 {
-    qDebug("ExportTab::makeGUI --> Start");
+    qDebug("ExportWidget::makeGUI --> Start");
 
     infoText = new QTextEdit;
     infoText->setReadOnly(true);
@@ -217,13 +217,13 @@ void ExportTab::makeGUI()
     outputPrefsLayout->addLayout(hbLayout);
     outputPrefs->setLayout(outputPrefsLayout);
 
-    qDebug("ExportTab::makeGUI --> End");
+    qDebug("ExportWidget::makeGUI --> End");
 }
 
 
-void ExportTab::initialize()
+void ExportWidget::initialize()
 {
-    qDebug("ExportTab::initialize --> Start");
+    qDebug("ExportWidget::initialize --> Start");
 
     PreferencesTool *pref = frontend->getPreferences();
 
@@ -283,23 +283,23 @@ void ExportTab::initialize()
 
     defaultOutputEdit->setText(activeDefaultOutputFileName);
 
-    qDebug("ExportTab::initialize --> End");
+    qDebug("ExportWidget::initialize --> End");
 }
 
 /*
-void ExportTab::resizeEvent(QResizeEvent *event)
+void ExportWidget::resizeEvent(QResizeEvent *event)
 {
-    qDebug("ExportTab::resizeEvent --> Start");
+    qDebug("ExportWidget::resizeEvent --> Start");
 
     QWidget::resizeEvent(event);
 
-    qDebug("ExportTab::resizeEvent --> End");
+    qDebug("ExportWidget::resizeEvent --> End");
 }
 */
 
-void ExportTab::apply()
+void ExportWidget::apply()
 {
-    qDebug("ExportTab::apply --> Start");
+    qDebug("ExportWidget::apply --> Start");
 
     PreferencesTool *pref = frontend->getPreferences();
     int index;
@@ -362,52 +362,52 @@ void ExportTab::apply()
         }
     }
 
-    qDebug("ExportTab::apply --> End");
+    qDebug("ExportWidget::apply --> End");
 }
 
 
-void ExportTab::reset()
+void ExportWidget::reset()
 {
-    qDebug("ExportTab::reset --> Start");
+    qDebug("ExportWidget::reset --> Start");
 
     encoderApplicationCombo->setCurrentIndex(activeEncoderApplication);
     videoFormatCombo->setCurrentIndex(activeVideoFormat);
     videoSizeCombo->setCurrentIndex(activeVideoSize);
 
-    qDebug("ExportTab::reset --> End");
+    qDebug("ExportWidget::reset --> End");
 }
 
 
-void ExportTab::changeEncoderApplication(int /*index*/)
+void ExportWidget::changeEncoderApplication(int /*index*/)
 {
-    // qDebug() << "ExportTab::changeEncoderApplication --> Start";
+    // qDebug() << "ExportWidget::changeEncoderApplication --> Start";
 
-    // qDebug() << "ExportTab::changeEncoderApplication --> End";
+    // qDebug() << "ExportWidget::changeEncoderApplication --> End";
 }
 
 
-void ExportTab::changeVideoFormat(int /*index*/)
+void ExportWidget::changeVideoFormat(int /*index*/)
 {
-    // qDebug() << "ExportTab::changeVideoFormat --> Start";
+    // qDebug() << "ExportWidget::changeVideoFormat --> Start";
 
-    // qDebug() << "ExportTab::changeVideoFormat --> End";
+    // qDebug() << "ExportWidget::changeVideoFormat --> End";
 }
 
 
-void ExportTab::changeVideoSize(int /*index*/)
+void ExportWidget::changeVideoSize(int /*index*/)
 {
-    // qDebug() << "ExportTab::changeVideoSize --> Start";
+    // qDebug() << "ExportWidget::changeVideoSize --> Start";
 
-    // qDebug() << "ExportTab::changeVideoSize --> End";
+    // qDebug() << "ExportWidget::changeVideoSize --> End";
 }
 
 
-void ExportTab::changeFps(int newFps)
+void ExportWidget::changeFps(int newFps)
 {
 }
 
 
-void ExportTab::setYesButtonOn()
+void ExportWidget::setYesButtonOn()
 {
     yesButton->setChecked(true);
     noButton->setChecked(false);
@@ -416,7 +416,7 @@ void ExportTab::setYesButtonOn()
 }
 
 
-void ExportTab::setNoButtonOn()
+void ExportWidget::setNoButtonOn()
 {
     noButton->setChecked(true);
     yesButton->setChecked(false);
@@ -425,15 +425,15 @@ void ExportTab::setNoButtonOn()
 }
 
 
-void ExportTab::changeDefaultOutput(const QString &fileName)
+void ExportWidget::changeDefaultOutput(const QString &fileName)
 {
-    qDebug("ExportTab::setDefaultOutput --> Start");
+    qDebug("ExportWidget::setDefaultOutput --> Start");
 
-    qDebug("ExportTab::setDefaultOutput --> End");
+    qDebug("ExportWidget::setDefaultOutput --> End");
 }
 
 
-void ExportTab::browseOutputFiles()
+void ExportWidget::browseOutputFiles()
 {
     QDir homeDir = QDir::home();
 

@@ -83,7 +83,8 @@ MainWindowGUI::MainWindowGUI(QApplication *stApp, Frontend *f)
     cutAct               = 0;
     copyAct              = 0;
     pasteAct             = 0;
-    configureAct         = 0;
+    generalAct           = 0;
+    projectAct           = 0;
     whatsthisAct         = 0;
     undoViewAct          = 0;
     aboutAct             = 0;
@@ -338,7 +339,8 @@ void MainWindowGUI::retranslateStrings()
     // cutAct->setText(tr("Cu&t"));
     // copyAct->setText(tr("&Copy"));
     // pasteAct->setText(tr("&Paste"));
-    configureAct->setText(tr("&Configure qStopMotion"));
+    generalAct->setText(tr("&Configure Application"));
+    projectAct->setText(tr("&Configure Project"));
     whatsthisAct->setText(tr("What's &This"));
     undoViewAct->setText(tr("&Undo stack"));
     helpAct->setText(tr("&Help"));
@@ -386,7 +388,8 @@ void MainWindowGUI::retranslateStrings()
     // Settings menu
     settingsMenu->clear();
     settingsMenu->setTitle(tr("&Settings"));
-    settingsMenu->addAction(configureAct);
+    settingsMenu->addAction(generalAct);
+    settingsMenu->addAction(projectAct);
     menuBar()->addMenu(settingsMenu);
 
     // View menu
@@ -1195,6 +1198,20 @@ void MainWindowGUI::showGeneralDialog()
 }
 
 
+void MainWindowGUI::showProjectDialog()
+{
+    ProjectDialog *projectDialog;
+
+    projectDialog = new ProjectDialog(frontend);
+    int ret = projectDialog->exec();
+    if (ret == QDialog::Rejected) {
+        // The user canceled the input dialog
+        qDebug("MainWindowsGUI::showProjectDialog --> End (cancel)");
+    }
+    delete(projectDialog);
+}
+
+
 void MainWindowGUI::showUndoStack()
 {
     QRect fGeo = this->frameGeometry();
@@ -1682,14 +1699,23 @@ void MainWindowGUI::createActions()
     connect(pasteAct, SIGNAL(triggered()), this, SLOT(paste()));
 */
     // Preferences menu
-    configureAct = new QAction(this);
+    generalAct = new QAction(this);
     iconFile.clear();
     iconFile.append(frontend->getIconsDirName());
     iconFile.append(QLatin1String("configure.png"));
-    configureAct->setIcon(QIcon(iconFile));
-    configureAct->setShortcut(ControlModifier + Key_P);
-    configureAct->setIconVisibleInMenu(true);
-    connect(configureAct, SIGNAL(triggered()), this, SLOT(showGeneralDialog()));
+    generalAct->setIcon(QIcon(iconFile));
+    generalAct->setShortcut(ControlModifier + Key_P);
+    generalAct->setIconVisibleInMenu(true);
+    connect(generalAct, SIGNAL(triggered()), this, SLOT(showGeneralDialog()));
+
+    projectAct = new QAction(this);
+    iconFile.clear();
+    iconFile.append(frontend->getIconsDirName());
+    iconFile.append(QLatin1String("configure.png"));
+    projectAct->setIcon(QIcon(iconFile));
+    projectAct->setShortcut(ControlModifier + Key_P);
+    projectAct->setIconVisibleInMenu(true);
+    connect(projectAct, SIGNAL(triggered()), this, SLOT(showProjectDialog()));
 
     // View menu
     undoViewAct = new QAction(this);
@@ -2095,13 +2121,22 @@ void MainWindowGUI::retranslateHelpText()
     gotoFrameAct->setToolTip(infoText);
 */
     infoText =
-        tr("<h4>Configure qStopMotion</h4> "
+        tr("<h4>Configure Application</h4> "
            "<p>This will opens a window where you can <em>configure</em> "
-           "qStopMotion with various input and output devices.</p>");
-    configureAct->setWhatsThis(infoText);
+           "the application with various settings.</p>");
+    generalAct->setWhatsThis(infoText);
     infoText =
-        configureAct->toolTip().prepend(tr("Configure qStopMotion"));
-    configureAct->setToolTip(infoText);
+        generalAct->toolTip().prepend(tr("Configure qStopMotion"));
+    generalAct->setToolTip(infoText);
+
+    infoText =
+        tr("<h4>Configure Project</h4> "
+           "<p>This will opens a window where you can <em>configure</em> "
+           "the project with various settings.</p>");
+    projectAct->setWhatsThis(infoText);
+    infoText =
+        projectAct->toolTip().prepend(tr("Configure qStopMotion"));
+    projectAct->setToolTip(infoText);
 
 
     //Help menu

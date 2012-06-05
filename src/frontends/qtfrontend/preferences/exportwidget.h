@@ -20,8 +20,8 @@
  *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                 *
  ******************************************************************************/
 
-#ifndef EXPORTTAB_H
-#define EXPORTTAB_H
+#ifndef EXPORTWIDGET_H
+#define EXPORTWIDGET_H
 
 #include "frontends/frontend.h"
 
@@ -43,7 +43,7 @@
  * The export tab in the preferences menu
  * @author Bjoern Erik Nilsen & Fredrik Berg Kjoelstad
  */
-class ExportTab : public QWidget
+class ExportWidget : public QWidget
 {
     Q_OBJECT
 public:
@@ -52,7 +52,7 @@ public:
      * @param f frontend of the application
      * @param parent the parent of the this widget
      */
-    ExportTab(Frontend *f, bool type, QWidget *parent = 0);
+    ExportWidget(Frontend *f, bool type, QWidget *parent = 0);
 
     /**
      * Applies the settings in the import tab.

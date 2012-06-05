@@ -24,9 +24,9 @@
 #define GENERALDIALOG_H
 
 #include "frontends/frontend.h"
-#include "frontends/qtfrontend/preferences/defaulttab.h"
-#include "frontends/qtfrontend/preferences/exporttab.h"
-#include "frontends/qtfrontend/preferences/generaltab.h"
+#include "frontends/qtfrontend/preferences/projectwidget.h"
+#include "frontends/qtfrontend/preferences/exportwidget.h"
+#include "frontends/qtfrontend/preferences/generalwidget.h"
 
 #include <QtGui/QDialog>
 #include <QtGui/QPushButton>
@@ -34,7 +34,7 @@
 
 
 /**
- * The import and export preferences dialog.
+ * The general preferences dialog.
  *
  * @author Bjoern Erik Nilsen & Fredrik Berg Kjoelstad
  */
@@ -50,17 +50,17 @@ public:
     GeneralDialog(Frontend *f, QWidget *parent = 0);
 
 private:
-    Frontend    *frontend;
-    GeneralTab  *generalSettingsTab;
-    ExportTab   *exportVideoTab;
-    DefaultTab  *defaultValueTab;
-    QTabWidget  *tabWidget;
-    QPushButton *applyButton;
-    QPushButton *closeButton;
+    Frontend      *frontend;
+    GeneralWidget *generalSettingsTab;
+    ExportWidget  *exportVideoTab;
+    ProjectWidget *projectValueTab;
+    QTabWidget    *tabWidget;
+    QPushButton   *applyButton;
+    QPushButton   *closeButton;
 
     void makeGeneralSettingsTab();
     void makeVideoExportTab();
-    void makeDefaultValueTab();
+    void makeProjectValueTab();
 
 private slots:
     void apply();

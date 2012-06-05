@@ -31,6 +31,7 @@
 #include "frontends/qtfrontend/elements/flexiblespinbox.h"
 #include "frontends/qtfrontend/frameview/frameviewinterface.h"
 #include "frontends/qtfrontend/preferences/generaldialog.h"
+#include "frontends/qtfrontend/preferences/projectdialog.h"
 #include "frontends/qtfrontend/timeline/timeline.h"
 // #include "frontends/qtfrontend/tooltabs/compositingtab.h"
 #include "frontends/qtfrontend/tooltabs/projecttab.h"
@@ -412,10 +413,16 @@ private slots:
     void removeSound();
 
     /**
-     * Brings up a preferences dialog where the user can set preferences for the
-     * application.
+     * Brings up a general preferences dialog where the user can set
+     * preferences for the application.
      */
     void showGeneralDialog();
+
+    /**
+     * Brings up a project preferences dialog where the user can set
+     * preferences for the project.
+     */
+    void showProjectDialog();
 
     /**
      * Show the undo view window.
@@ -502,7 +509,8 @@ private:
     QAction *cutAct;
     QAction *copyAct;
     QAction *pasteAct;
-    QAction *configureAct;
+    QAction *generalAct;
+    QAction *projectAct;
     QAction *undoViewAct;
     QAction *whatsthisAct;
     QAction *aboutQtAct;

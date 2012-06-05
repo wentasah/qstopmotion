@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2010-2011 by                                                *
+ *  Copyright (C) 2010-2012 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -18,11 +18,12 @@
  *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                 *
  ******************************************************************************/
 
-#ifndef DEFAULTTAB_H
-#define DEFAULTTAB_H
+#ifndef GENERALWIDGET_H
+#define GENERALWIDGET_H
 
 #include "frontends/frontend.h"
 
+#include <QtCore/QTranslator>
 #include <QtGui/QComboBox>
 #include <QtGui/QGridLayout>
 #include <QtGui/QGroupBox>
@@ -41,7 +42,7 @@
  * The export tab in the preferences menu
  * @author Bjoern Erik Nilsen & Fredrik Berg Kjoelstad
  */
-class DefaultTab : public QWidget
+class GeneralWidget : public QWidget
 {
     Q_OBJECT
 public:
@@ -51,7 +52,7 @@ public:
      * @param f frontend of the application
      * @param parent the parent of the this widget
      */
-    DefaultTab(Frontend *f, QWidget *parent = 0);
+    GeneralWidget(Frontend *f, QWidget *parent = 0);
 
     /**
      * Applies the settings in the import tab.
@@ -79,70 +80,41 @@ protected:
 
 private slots:
     /**
-     * Slot for notified the default tab when the recording mode changes, so that widgets
-     * can be updated.
-     * @param index the new recording mode.
+     * Slot for notified the application when the language changes.
+     * @param index the new language.
      */
-    void changeRecordingMode(int index);
+    void changeLanguage(int index);
 
     /**
-     * Slot for notified the default tab when the grabber source changes, so that grabber
-     * can be updated.
-     * @param index the new viewing mode.
+     * Slot for notified the general tab when bevor button is selected, so that
+     * general preferences can be updaten.
      */
-    void changeVideoSource(int index);
+    void setBevorButtonOn();
 
     /**
-     * Slot for notified the default tab when the mix mode changes, so that widgets
-     * can be updated.
-     * @param index the new mix mode.
+     * Slot for notified the general tab when after button is selected, so that
+     * general preferences can be updaten.
      */
-    void changeMixMode(int index);
+    void setAfterButtonOn();
 
     /**
-     * Slot for updating the mix count slider value.
-     * @param value the new slider value.
+     * Slot for notified the general tab when append button is selected, so that
+     * general preferences can be updaten.
      */
-    void changeMixCount(int value);
-
-    /**
-     * Slot for notified the default tab when the unit mode changes.
-     * @param index the new unit mode.
-     */
-    // void changeUnitMode(int index);
-
-    /**
-     * Slot for updating the slider value when running in automatic mode.
-     * @param value the new slider value.
-     */
-    // void changeFpuCount(int value);
+    void setAppendButtonOn();
 
 private:
-    Frontend    *frontend;
+    Frontend     *frontend;
 
-    QGroupBox   *recordingGroupBox;
-    QComboBox   *recordingModeCombo;
+    QGroupBox    *languageGroupBox;
+    QComboBox    *languageCombo;
+    QGroupBox    *captureGroupBox;
+    QRadioButton *bevorButton;
+    QRadioButton *afterButton;
+    QRadioButton *appendButton;
 
-    QGroupBox   *cameraGroupBox;
-    QComboBox   *videoSourceCombo;
-
-    QGroupBox   *captureGroupBox;
-    QComboBox   *mixModeCombo;
-    QLabel      *mixCountSliderCaption;
-    QSlider     *mixCountSlider;
-    QLabel      *fpsChooserCaption;
-    QSpinBox    *fpsChooser;
-
-    // QGroupBox   *autoGroupBox;
-    // QComboBox   *unitModeCombo;
-
-    int          defaultRecordingMode;
-    int          defaultVideoSource;
-    int          defaultMixMode;
-    int          defaultMixCount;
-    int          defaultPlaybackCount;
-    int          defaultFps;
-    // int          defaultUnitMode;
+    int           actualLanguage;
+    PreferencesTool::captureButtonFunction actualButtonFunction;
 
 };
 

@@ -1,7 +1,7 @@
 ###############################################################################
 # QtCreator file for the qStopMotion project                                  #
 # (c) Ralf Lange, longsoft.de                                                 #
-# Last update: 2012-04-12                                                     #
+# Last update: 2012-06-05                                                     #
 #                                                                             #
 # Please use CMake and the CMakeLists.txt file to build qStopMotion!          #
 ###############################################################################
@@ -49,10 +49,11 @@ HEADERS += src/config.h \
            src/frontends/qtfrontend/elements/flexiblespinbox.h \
            src/frontends/qtfrontend/frameview/frameviewimage.h \
            src/frontends/qtfrontend/frameview/frameviewinterface.h \
-           src/frontends/qtfrontend/preferences/defaulttab.h \
-           src/frontends/qtfrontend/preferences/exporttab.h \
-           src/frontends/qtfrontend/preferences/generaltab.h \
-           src/frontends/qtfrontend/preferences/preferencesdialog.h \
+           src/frontends/qtfrontend/preferences/exportwidget.h \
+           src/frontends/qtfrontend/preferences/generaldialog.h \
+           src/frontends/qtfrontend/preferences/generalwidget.h \
+           src/frontends/qtfrontend/preferences/projectdialog.h \
+           src/frontends/qtfrontend/preferences/projectwidget.h \
            src/frontends/qtfrontend/timeline/timeline.h \
            src/frontends/qtfrontend/timeline/exposurethumbview.h \
            src/frontends/qtfrontend/timeline/thumbview.h \
@@ -112,10 +113,11 @@ SOURCES += src/main.cpp \
            src/frontends/qtfrontend/elements/flexiblespinbox.cpp \
            src/frontends/qtfrontend/frameview/frameviewimage.cpp \
            src/frontends/qtfrontend/frameview/frameviewinterface.cpp \
-           src/frontends/qtfrontend/preferences/defaulttab.cpp \
-           src/frontends/qtfrontend/preferences/exporttab.cpp \
-           src/frontends/qtfrontend/preferences/generaltab.cpp \
-           src/frontends/qtfrontend/preferences/preferencesdialog.cpp \
+           src/frontends/qtfrontend/preferences/exportwidget.cpp \
+           src/frontends/qtfrontend/preferences/generaldialog.cpp \
+           src/frontends/qtfrontend/preferences/generalwidget.cpp \
+           src/frontends/qtfrontend/preferences/projectdialog.cpp \
+           src/frontends/qtfrontend/preferences/projectwidget.cpp \
            src/frontends/qtfrontend/timeline/timeline.cpp \
            src/frontends/qtfrontend/timeline/exposurethumbview.cpp \
            src/frontends/qtfrontend/timeline/thumbview.cpp \

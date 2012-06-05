@@ -58,15 +58,15 @@ GeneralDialog::GeneralDialog(Frontend *f, QWidget *parent)
     mainLayout->addLayout(buttonLayout);
 
     setLayout(mainLayout);
-    setWindowTitle(tr("Preferences Menu"));
+    setWindowTitle(tr("General Preferences"));
     // setMaximumWidth(600);
     setMinimumWidth(500);
     setMinimumHeight(200);
     setModal(false);
 
     makeGeneralSettingsTab();
+    makeProjectValueTab();
     makeVideoExportTab();
-    makeDefaultValueTab();
 
     qDebug("GeneralDialog::Constructor --> End");
 }
@@ -76,7 +76,7 @@ void GeneralDialog::makeGeneralSettingsTab()
 {
     qDebug("GeneralDialog::makeGeneralSettingsTab --> Start");
 
-    generalSettingsTab = new GeneralTab(frontend);
+    generalSettingsTab = new GeneralWidget(frontend);
     generalSettingsTab->initialize();
     // generalSettingsTab->setMinimumHeight(300);
     tabWidget->addTab(generalSettingsTab, tr("&General Settings"));
@@ -89,7 +89,7 @@ void GeneralDialog::makeVideoExportTab()
 {
     qDebug("GeneralDialog::makeVideoExportTab --> Start");
 
-    exportVideoTab = new ExportTab(frontend, true);
+    exportVideoTab = new ExportWidget(frontend, true);
     exportVideoTab->initialize();
     // exportVideoTab->setMinimumHeight(300);
     tabWidget->addTab(exportVideoTab, tr("Video &Export"));
@@ -98,16 +98,16 @@ void GeneralDialog::makeVideoExportTab()
 }
 
 
-void GeneralDialog::makeDefaultValueTab()
+void GeneralDialog::makeProjectValueTab()
 {
-    qDebug("GeneralDialog::makeDefaultValueTab --> Start");
+    qDebug("GeneralDialog::makeProjectValueTab --> Start");
 
-    defaultValueTab = new DefaultTab(frontend);
-    defaultValueTab->initialize();
-    // exportVideoTab->setMinimumHeight(300);
-    tabWidget->addTab(defaultValueTab, tr("&Default Values"));
+    projectValueTab = new ProjectWidget(frontend);
+    projectValueTab->initialize();
+    // projectValueTab->setMinimumHeight(300);
+    tabWidget->addTab(projectValueTab, tr("&New Project Values"));
 
-    qDebug("GeneralDialog::makeDefaultValueTab --> End");
+    qDebug("GeneralDialog::makeProjectValueTab --> End");
 }
 
 
@@ -118,7 +118,7 @@ void GeneralDialog::apply()
     setFocus();
     this->generalSettingsTab->apply();
     this->exportVideoTab->apply();
-    this->defaultValueTab->apply();
+    this->projectValueTab->apply();
     frontend->getPreferences()->flushPreferences();
     this->setResult(QDialog::Accepted);
     this->hide();
@@ -134,7 +134,7 @@ void GeneralDialog::close()
     setFocus();
     this->generalSettingsTab->reset();
     this->exportVideoTab->reset();
-    this->defaultValueTab->reset();
+    this->projectValueTab->reset();
     this->hide();
 
     qDebug("GeneralDialog::close --> End");
@@ -150,7 +150,7 @@ void GeneralDialog::finish(int result)
     {
         generalSettingsTab->reset();
         exportVideoTab->reset();
-        defaultValueTab->reset();
+        projectValueTab->reset();
     }
     this->hide();
 

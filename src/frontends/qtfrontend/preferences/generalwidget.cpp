@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2011 by                                                *
+ *  Copyright (C) 2005-2012 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -18,7 +18,7 @@
  *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                 *
  ******************************************************************************/
 
-#include "generaltab.h"
+#include "generalwidget.h"
 
 #include "domain/domainfacade.h"
 #include "frontends/qtfrontend/elements/flexiblelineedit.h"
@@ -32,10 +32,10 @@
 #include <QtGui/QLabel>
 
 
-GeneralTab::GeneralTab(Frontend *f, QWidget *parent)
+GeneralWidget::GeneralWidget(Frontend *f, QWidget *parent)
     : QWidget(parent)
 {
-    qDebug("GeneralTab::Constructor --> Start");
+    qDebug("GeneralWidget::Constructor --> Start");
 
     frontend         = f;
 
@@ -49,15 +49,15 @@ GeneralTab::GeneralTab(Frontend *f, QWidget *parent)
     appendButton     = 0;
     actualButtonFunction = PreferencesTool::captureButtonAfter;
 
-    this->setObjectName("GeneralTab");
+    this->setObjectName("GeneralWidget");
 
     makeGUI();
 
-    qDebug("GeneralTab::Constructor --> End");
+    qDebug("GeneralWidget::Constructor --> End");
 }
 
 
-void GeneralTab::makeGUI()
+void GeneralWidget::makeGUI()
 {
     // QString iconPath(qstopmotion::graphicsDirectory);
     // iconPath.append(QLatin1String("/icons/"));
@@ -123,13 +123,13 @@ void GeneralTab::makeGUI()
 
     setLayout(tabLayout);
 
-    qDebug("GeneralTab::makeGUI --> End");
+    qDebug("GeneralWidget::makeGUI --> End");
 }
 
 
-void GeneralTab::initialize()
+void GeneralWidget::initialize()
 {
-    qDebug("GeneralTab::initialize --> Start");
+    qDebug("GeneralWidget::initialize --> Start");
 
     PreferencesTool *pref = frontend->getPreferences();
 
@@ -155,23 +155,23 @@ void GeneralTab::initialize()
         break;
     }
 
-    qDebug("GeneralTab::initialize --> End");
+    qDebug("GeneralWidget::initialize --> End");
 }
 
 /*
-void GeneralTab::resizeEvent(QResizeEvent *event)
+void GeneralWidget::resizeEvent(QResizeEvent *event)
 {
-    qDebug("GeneralTab::resizeEvent --> Start");
+    qDebug("GeneralWidget::resizeEvent --> Start");
 
     QWidget::resizeEvent(event);
 
-    qDebug("GeneralTab::resizeEvent --> End");
+    qDebug("GeneralWidget::resizeEvent --> End");
 }
 */
 
-void GeneralTab::apply()
+void GeneralWidget::apply()
 {
-    qDebug("GeneralTab::apply --> Start");
+    qDebug("GeneralWidget::apply --> Start");
 
     PreferencesTool *pref = frontend->getPreferences();
 
@@ -201,13 +201,13 @@ void GeneralTab::apply()
         actualButtonFunction = newButtonFunction;
     }
 
-    qDebug("GeneralTab::apply --> End");
+    qDebug("GeneralWidget::apply --> End");
 }
 
 
-void GeneralTab::reset()
+void GeneralWidget::reset()
 {
-    qDebug("GeneralTab::reset --> Start");
+    qDebug("GeneralWidget::reset --> Start");
 
     changeLanguage(actualLanguage);
     frontend->changeCaptureButtonFunction(actualButtonFunction);
@@ -223,17 +223,17 @@ void GeneralTab::reset()
         break;
     }
 
-    qDebug("GeneralTab::reset --> End");
+    qDebug("GeneralWidget::reset --> End");
 }
 
 
-void GeneralTab::changeLanguage(int index)
+void GeneralWidget::changeLanguage(int index)
 {
     frontend->changeLanguage(index);
 }
 
 
-void GeneralTab::setBevorButtonOn()
+void GeneralWidget::setBevorButtonOn()
 {
     bevorButton->setChecked(true);
     afterButton->setChecked(false);
@@ -241,7 +241,7 @@ void GeneralTab::setBevorButtonOn()
 }
 
 
-void GeneralTab::setAfterButtonOn()
+void GeneralWidget::setAfterButtonOn()
 {
     bevorButton->setChecked(false);
     afterButton->setChecked(true);
@@ -249,7 +249,7 @@ void GeneralTab::setAfterButtonOn()
 }
 
 
-void GeneralTab::setAppendButtonOn()
+void GeneralWidget::setAppendButtonOn()
 {
     bevorButton->setChecked(false);
     afterButton->setChecked(false);

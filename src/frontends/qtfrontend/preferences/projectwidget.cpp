@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2011 by                                                *
+ *  Copyright (C) 2005-2012 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -18,7 +18,7 @@
  *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                 *
  ******************************************************************************/
 
-#include "defaulttab.h"
+#include "projectwidget.h"
 
 #include "domain/domainfacade.h"
 #include "frontends/qtfrontend/elements/flexiblelineedit.h"
@@ -31,10 +31,10 @@
 #include <QtGui/QLabel>
 
 
-DefaultTab::DefaultTab(Frontend *f, QWidget *parent)
+ProjectWidget::ProjectWidget(Frontend *f, QWidget *parent)
     : QWidget(parent)
 {
-    qDebug("DefaultTab::Constructor --> Start");
+    qDebug("ProjectWidget::Constructor --> Start");
 
     frontend               = f;
 
@@ -60,15 +60,15 @@ DefaultTab::DefaultTab(Frontend *f, QWidget *parent)
     // unitModeCombo          = 0;
     // defaultUnitMode        = 0;
 
-    this->setObjectName("DefaultTab");
+    this->setObjectName("ProjectWidget");
 
     makeGUI();
 
-    qDebug("DefaultTab::Constructor --> End");
+    qDebug("ProjectWidget::Constructor --> End");
 }
 
 
-void DefaultTab::makeGUI()
+void ProjectWidget::makeGUI()
 {
     QString iconFile(frontend->getIconsDirName());
 
@@ -202,13 +202,13 @@ void DefaultTab::makeGUI()
 
     setLayout(tabLayout);
 
-    qDebug("DefaultTab::makeGUI --> End");
+    qDebug("ProjectWidget::makeGUI --> End");
 }
 
 
-void DefaultTab::initialize()
+void ProjectWidget::initialize()
 {
-    qDebug("DefaultTab::initialize --> Start");
+    qDebug("ProjectWidget::initialize --> Start");
 
     PreferencesTool *pref = frontend->getPreferences();
 
@@ -247,23 +247,23 @@ void DefaultTab::initialize()
         changeUnitMode(defaultUnitMode);
     */
 
-    qDebug("DefaultTab::initialize --> End");
+    qDebug("ProjectWidget::initialize --> End");
 }
 
 /*
-void DefaultTab::resizeEvent(QResizeEvent *event)
+void ProjectWidget::resizeEvent(QResizeEvent *event)
 {
-    qDebug("DefaultTab::resizeEvent --> Start");
+    qDebug("ProjectWidget::resizeEvent --> Start");
 
     QWidget::resizeEvent(event);
 
-    qDebug("DefaultTab::resizeEvent --> End");
+    qDebug("ProjectWidget::resizeEvent --> End");
 }
 */
 
-void DefaultTab::apply()
+void ProjectWidget::apply()
 {
-    qDebug("DefaultTab::apply --> Start");
+    qDebug("ProjectWidget::apply --> Start");
 
     PreferencesTool *pref = frontend->getPreferences();
 
@@ -321,13 +321,13 @@ void DefaultTab::apply()
         defaultUnitMode = newUnitMode;
     }
 */
-    qDebug("DefaultTab::apply --> End");
+    qDebug("ProjectWidget::apply --> End");
 }
 
 
-void DefaultTab::reset()
+void ProjectWidget::reset()
 {
-    qDebug("DefaultTab::reset --> Start");
+    qDebug("ProjectWidget::reset --> Start");
 
     changeRecordingMode(defaultRecordingMode);
     changeVideoSource(defaultVideoSource);
@@ -337,23 +337,23 @@ void DefaultTab::reset()
 /*
     changeUnitMode(defaultUnitMode);
 */
-    qDebug("DefaultTab::reset --> End");
+    qDebug("ProjectWidget::reset --> End");
 }
 
 
-void DefaultTab::changeRecordingMode(int index)
+void ProjectWidget::changeRecordingMode(int index)
 {
     this->recordingModeCombo->setCurrentIndex(index);
 }
 
 
-void DefaultTab::changeVideoSource(int index)
+void ProjectWidget::changeVideoSource(int index)
 {
     this->videoSourceCombo->setCurrentIndex(index);
 }
 
 
-void DefaultTab::changeMixMode(int index)
+void ProjectWidget::changeMixMode(int index)
 {
     switch (index) {
     case 0:
@@ -380,12 +380,12 @@ void DefaultTab::changeMixMode(int index)
 }
 
 
-void DefaultTab::changeMixCount(int /*sliderValue*/)
+void ProjectWidget::changeMixCount(int /*sliderValue*/)
 {
 }
 
 /*
-void DefaultTab::changeUnitMode(int index)
+void ProjectWidget::changeUnitMode(int index)
 {
     int sliderValue = mixCountSlider->value();
     if (sliderValue == 0 || index == 0) {
@@ -409,7 +409,7 @@ void DefaultTab::changeUnitMode(int index)
 }
 
 
-void DefaultTab::updateSliderValue(int sliderValue)
+void ProjectWidget::updateSliderValue(int sliderValue)
 {
     if (sliderValue != 0) {
         int factor = 0;

@@ -210,11 +210,13 @@ void ExportWidget::makeGUI()
     hbLayout->addWidget(noButton);
     hbLayout->addStretch(1);
     outputPrefsLayout->addLayout(hbLayout);
-    outputPrefsLayout->addWidget(defaultOutputLabel);
-    hbLayout = new QHBoxLayout;
-    hbLayout->addWidget(defaultOutputEdit);
-    hbLayout->addWidget(browseOutputButton);
-    outputPrefsLayout->addLayout(hbLayout);
+    if (!tabType) {
+        outputPrefsLayout->addWidget(defaultOutputLabel);
+        hbLayout = new QHBoxLayout;
+        hbLayout->addWidget(defaultOutputEdit);
+        hbLayout->addWidget(browseOutputButton);
+        outputPrefsLayout->addLayout(hbLayout);
+    }
     outputPrefs->setLayout(outputPrefsLayout);
 
     qDebug("ExportWidget::makeGUI --> End");
@@ -235,7 +237,6 @@ void ExportWidget::initialize()
         activeVideoSize = pref->getBasicPreference("videosize", VideoEncoder::defaultSize);
         activeFramesPerSecond = pref->getBasicPreference("framespersecond", 12);
         activeUseDefaultOutputFile = pref->getBasicPreference("usedefaultoutputfile", false);
-        activeDefaultOutputFileName.append(pref->getBasicPreference("defaultoutputfilename", ""));
     }
     else {
         // This is a project dialog tab
@@ -354,7 +355,6 @@ void ExportWidget::apply()
             pref->setBasicPreference("videosize", activeVideoSize);
             pref->setBasicPreference("framespersecond", activeFramesPerSecond);
             pref->setBasicPreference("usedefaultoutputfile", activeUseDefaultOutputFile);
-            pref->setBasicPreference("defaultoutputfilename", activeDefaultOutputFileName);
         }
         else {
             // This is a project dialog tab
@@ -411,8 +411,10 @@ void ExportWidget::setYesButtonOn()
 {
     yesButton->setChecked(true);
     noButton->setChecked(false);
-    defaultOutputEdit->setEnabled(false);
-    browseOutputButton->setEnabled(false);
+    if (!tabType) {
+        defaultOutputEdit->setEnabled(false);
+        browseOutputButton->setEnabled(false);
+    }
 }
 
 
@@ -420,8 +422,10 @@ void ExportWidget::setNoButtonOn()
 {
     noButton->setChecked(true);
     yesButton->setChecked(false);
-    defaultOutputEdit->setEnabled(true);
-    browseOutputButton->setEnabled(true);
+    if (!tabType) {
+        defaultOutputEdit->setEnabled(true);
+        browseOutputButton->setEnabled(true);
+    }
 }
 
 

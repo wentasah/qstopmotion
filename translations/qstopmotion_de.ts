@@ -574,7 +574,7 @@ wenn Sie abspielen wählen.</translation>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/generaldialog.cpp" line="108"/>
         <source>&amp;New Project Values</source>
-        <translation>&amp;Standardeinstellungen</translation>
+        <translation>&amp;Einstellungen neues Projekt</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/generaldialog.cpp" line="95"/>
@@ -1309,7 +1309,7 @@ Check your settings in the preferences menu!</source>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/projectdialog.cpp" line="108"/>
         <source>&amp;Project Values</source>
-        <translation>&amp;Standardeinstellungen</translation>
+        <translation>&amp;Projekteinstellungen</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/projectdialog.cpp" line="95"/>

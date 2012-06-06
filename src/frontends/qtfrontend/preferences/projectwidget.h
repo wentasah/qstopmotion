@@ -51,7 +51,7 @@ public:
      * @param f frontend of the application
      * @param parent the parent of the this widget
      */
-    ProjectWidget(Frontend *f, QWidget *parent = 0);
+    ProjectWidget(Frontend *f, bool type, QWidget *parent = 0);
 
     /**
      * Applies the settings in the import tab.
@@ -119,6 +119,11 @@ private slots:
 
 private:
     Frontend    *frontend;
+
+    /**
+     * Type of the tab: true = general dialog tab, false = project dialog tab
+     */
+    bool         tabType;
 
     QGroupBox   *recordingGroupBox;
     QComboBox   *recordingModeCombo;

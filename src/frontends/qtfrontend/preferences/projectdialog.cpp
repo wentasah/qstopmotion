@@ -20,7 +20,7 @@
  *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                 *
  ******************************************************************************/
 
-#include "generaldialog.h"
+#include "projectdialog.h"
 
 #include "technical/preferencestool.h"
 
@@ -29,10 +29,10 @@
 #include <QtGui/QVBoxLayout>
 
 
-GeneralDialog::GeneralDialog(Frontend *f, QWidget *parent)
+ProjectDialog::ProjectDialog(Frontend *f, QWidget *parent)
     : QDialog(parent, Qt::Dialog)
 {
-    qDebug("GeneralDialog::Constructor --> Start");
+    qDebug("ProjectDialog::Constructor --> Start");
 
     frontend       = f;
     exportVideoTab = 0;
@@ -58,101 +58,101 @@ GeneralDialog::GeneralDialog(Frontend *f, QWidget *parent)
     mainLayout->addLayout(buttonLayout);
 
     setLayout(mainLayout);
-    setWindowTitle(tr("General Preferences"));
+    setWindowTitle(tr("Project Preferences"));
     // setMaximumWidth(600);
     setMinimumWidth(500);
     setMinimumHeight(200);
     setModal(false);
 
-    makeGeneralSettingsTab();
+    // makeGeneralSettingsTab();
     makeProjectValueTab();
     makeVideoExportTab();
 
-    qDebug("GeneralDialog::Constructor --> End");
+    qDebug("ProjectDialog::Constructor --> End");
 }
 
-
-void GeneralDialog::makeGeneralSettingsTab()
+/*
+void ProjectDialog::makeGeneralSettingsTab()
 {
-    qDebug("GeneralDialog::makeGeneralSettingsTab --> Start");
+    qDebug("ProjectDialog::makeGeneralSettingsTab --> Start");
 
     generalSettingsTab = new GeneralWidget(frontend);
     generalSettingsTab->initialize();
     // generalSettingsTab->setMinimumHeight(300);
     tabWidget->addTab(generalSettingsTab, tr("&General Settings"));
 
-    qDebug("GeneralDialog::makeGeneralSettingsTab --> End");
+    qDebug("ProjectDialog::makeGeneralSettingsTab --> End");
 }
+*/
 
-
-void GeneralDialog::makeVideoExportTab()
+void ProjectDialog::makeVideoExportTab()
 {
-    qDebug("GeneralDialog::makeVideoExportTab --> Start");
+    qDebug("ProjectDialog::makeVideoExportTab --> Start");
 
-    exportVideoTab = new ExportWidget(frontend, true);
+    exportVideoTab = new ExportWidget(frontend, false);
     exportVideoTab->initialize();
     // exportVideoTab->setMinimumHeight(300);
     tabWidget->addTab(exportVideoTab, tr("Video &Export"));
 
-    qDebug("GeneralDialog::makeVideoExportTab --> End");
+    qDebug("ProjectDialog::makeVideoExportTab --> End");
 }
 
 
-void GeneralDialog::makeProjectValueTab()
+void ProjectDialog::makeProjectValueTab()
 {
-    qDebug("GeneralDialog::makeProjectValueTab --> Start");
+    qDebug("ProjectDialog::makeDefaultValueTab --> Start");
 
-    projectValueTab = new ProjectWidget(frontend, true);
+    projectValueTab = new ProjectWidget(frontend, false);
     projectValueTab->initialize();
     // projectValueTab->setMinimumHeight(300);
-    tabWidget->addTab(projectValueTab, tr("&New Project Values"));
+    tabWidget->addTab(projectValueTab, tr("&Project Values"));
 
-    qDebug("GeneralDialog::makeProjectValueTab --> End");
+    qDebug("ProjectDialog::makeDefaultValueTab --> End");
 }
 
 
-void GeneralDialog::apply()
+void ProjectDialog::apply()
 {
-    qDebug("GeneralDialog::apply --> Start");
+    qDebug("ProjectDialog::apply --> Start");
 
     setFocus();
-    this->generalSettingsTab->apply();
+    // this->generalSettingsTab->apply();
     this->exportVideoTab->apply();
     this->projectValueTab->apply();
     frontend->getPreferences()->flushPreferences();
     this->setResult(QDialog::Accepted);
     this->hide();
 
-    qDebug("GeneralDialog::apply --> End");
+    qDebug("ProjectDialog::apply --> End");
 }
 
 
-void GeneralDialog::close()
+void ProjectDialog::close()
 {
-    qDebug("GeneralDialog::close --> Start");
+    qDebug("ProjectDialog::close --> Start");
 
     setFocus();
-    this->generalSettingsTab->reset();
+    // this->generalSettingsTab->reset();
     this->exportVideoTab->reset();
     this->projectValueTab->reset();
     this->hide();
 
-    qDebug("GeneralDialog::close --> End");
+    qDebug("ProjectDialog::close --> End");
 }
 
 
-void GeneralDialog::finish(int result)
+void ProjectDialog::finish(int result)
 {
-    qDebug("GeneralDialog::finish --> Start");
+    qDebug("ProjectDialog::finish --> Start");
 
     setFocus();
     if (result == 0)
     {
-        generalSettingsTab->reset();
+        // generalSettingsTab->reset();
         exportVideoTab->reset();
         projectValueTab->reset();
     }
     this->hide();
 
-    qDebug("GeneralDialog::finish --> End");
+    qDebug("ProjectDialog::finish --> End");
 }

@@ -86,14 +86,23 @@ void ExportWidget::makeGUI()
 
     infoText = new QTextEdit;
     infoText->setReadOnly(true);
-    infoText->setHtml(
-        "<p>" +
-        tr("Below you can set which program/process qStopMotion should use "
-           "for encoding the currently active project to a video file.") +
-        "</p>");
+    if (tabType) {
+        infoText->setHtml(
+            "<p>" +
+            tr("Below you can set which program should be used "
+               "for encoding a new project to a video file.") +
+            "</p>");
+    }
+    else {
+        infoText->setHtml(
+            "<p>" +
+            tr("Below you can set which program should be used "
+               "for encoding the currently active project to a video file.") +
+            "</p>");
+    }
 
     infoText->setMinimumWidth(440);
-    infoText->setMaximumHeight(50);
+    infoText->setMaximumHeight(52);
     infoText->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 
     // Encoder preferences
@@ -232,15 +241,20 @@ void ExportWidget::initialize()
     // Read eEncoder preferences
     if (tabType) {
         // This is a general dialog tab
-        activeEncoderApplication = pref->getBasicPreference("encoderapplication", VideoEncoder::noneApplication);
-        activeVideoFormat = pref->getBasicPreference("videoformat", VideoEncoder::noneFormat);
-        activeVideoSize = pref->getBasicPreference("videosize", VideoEncoder::defaultSize);
-        activeFramesPerSecond = pref->getBasicPreference("framespersecond", 12);
-        activeUseDefaultOutputFile = pref->getBasicPreference("usedefaultoutputfile", false);
+        activeEncoderApplication = pref->getBasicPreference("defaultencoderapplication", VideoEncoder::noneApplication);
+        activeVideoFormat = pref->getBasicPreference("defaultvideoformat", VideoEncoder::noneFormat);
+        activeVideoSize = pref->getBasicPreference("defaultvideosize", VideoEncoder::defaultSize);
+        activeFramesPerSecond = pref->getBasicPreference("defaultframespersecond", 12);
+        activeUseDefaultOutputFile = pref->getBasicPreference("defaultusedefaultoutputfile", false);
     }
     else {
         // This is a project dialog tab
+        activeEncoderApplication = frontend->getProject()->getEncoderApplication();
+        activeVideoFormat = frontend->getProject()->getVideoFormat();
+        activeVideoSize = frontend->getProject()->getVideoSize();
         activeFramesPerSecond = frontend->getProject()->getFramesPerSecond();
+        activeUseDefaultOutputFile = frontend->getProject()->getUseDefaultOutputFile();
+        activeDefaultOutputFileName = frontend->getProject()->getDefaultOutputFileName();
     }
 
     if (activeEncoderApplication == VideoEncoder::noneApplication)
@@ -350,15 +364,20 @@ void ExportWidget::apply()
     if (changings) {
         if (tabType) {
             // This is a general dialog tab
-            pref->setBasicPreference("encoderapplication", activeEncoderApplication);
-            pref->setBasicPreference("videoformat", activeVideoFormat);
-            pref->setBasicPreference("videosize", activeVideoSize);
-            pref->setBasicPreference("framespersecond", activeFramesPerSecond);
-            pref->setBasicPreference("usedefaultoutputfile", activeUseDefaultOutputFile);
+            pref->setBasicPreference("defaultencoderapplication", activeEncoderApplication);
+            pref->setBasicPreference("defaultvideoformat", activeVideoFormat);
+            pref->setBasicPreference("defaultvideosize", activeVideoSize);
+            pref->setBasicPreference("defaultframespersecond", activeFramesPerSecond);
+            pref->setBasicPreference("defaultusedefaultoutputfile", activeUseDefaultOutputFile);
         }
         else {
             // This is a project dialog tab
+            frontend->getProject()->setEncoderApplication(activeEncoderApplication);
+            frontend->getProject()->setVideoFormat(activeVideoFormat);
+            frontend->getProject()->setVideoSize(activeVideoSize);
             frontend->getProject()->setFramesPerSecond(activeFramesPerSecond);
+            frontend->getProject()->setUseDefaultOutputFile(activeUseDefaultOutputFile);
+            frontend->getProject()->setDefaultOutputFileName(activeDefaultOutputFileName);
         }
     }
 
@@ -373,6 +392,16 @@ void ExportWidget::reset()
     encoderApplicationCombo->setCurrentIndex(activeEncoderApplication);
     videoFormatCombo->setCurrentIndex(activeVideoFormat);
     videoSizeCombo->setCurrentIndex(activeVideoSize);
+    videoFpsChooser->setValue(activeFramesPerSecond);
+    if (activeUseDefaultOutputFile)
+    {
+        setYesButtonOn();
+    }
+    else
+    {
+        setNoButtonOn();
+    }
+    defaultOutputEdit->setText(activeDefaultOutputFileName);
 
     qDebug("ExportWidget::reset --> End");
 }

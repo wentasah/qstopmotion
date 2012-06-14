@@ -427,7 +427,7 @@ without sound if you choose to play.</source>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="91"/>
-        <source>Below you can set which program/process qStopMotion should use for encoding the currently active project to a video file.</source>
+        <source>Below you can set which program should be used for encoding the currently active project to a video file.</source>
         <translation>Vous pouvez sélectionner ci-dessous quel programme / processus qStopMotion doit utiliser pour encoder le projet en cours en un fichier vidéo.</translation>
     </message>
 </context>

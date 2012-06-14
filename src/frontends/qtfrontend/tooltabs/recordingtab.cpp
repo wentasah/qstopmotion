@@ -87,6 +87,21 @@ void RecordingTab::checkCameraOff()
 }
 
 
+int RecordingTab::getRecordingMode()
+{
+    return recordingModeCombo->currentIndex();
+}
+
+
+void RecordingTab::setRecordingMode(int mode)
+{
+    Q_ASSERT(mode >= 0);
+    Q_ASSERT(mode < 1);
+
+    recordingModeCombo->setCurrentIndex(mode);
+}
+
+
 int RecordingTab::getVideoSource()
 {
     return videoSourceCombo->currentIndex();
@@ -123,12 +138,38 @@ void RecordingTab::setMixMode(int mode)
 
 int RecordingTab::getMixCount()
 {
-    return mixCountSlider->value();
+    if (mixModeCombo->currentIndex() == 0) {
+        return mixCountSlider->value();
+    }
+    else {
+        return frontend->getProject()->getMixCount();
+    }
 }
 
 
 void RecordingTab::setMixCount(int count)
 {
+    Q_ASSERT(mixModeCombo->currentIndex() == 0);
+
+    mixCountSlider->setValue(count);
+}
+
+
+int RecordingTab::getPlaybackCount()
+{
+    if (mixModeCombo->currentIndex() == 2) {
+        return mixCountSlider->value();
+    }
+    else {
+        return frontend->getProject()->getPlaybackCount();
+    }
+}
+
+
+void RecordingTab::setPlaybackCount(int count)
+{
+    Q_ASSERT(mixModeCombo->currentIndex() == 2);
+
     mixCountSlider->setValue(count);
 }
 

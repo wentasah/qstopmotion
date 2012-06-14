@@ -29,6 +29,7 @@
 #include <QtGui/QHeaderView>
 #include <QtGui/QInputDialog>
 #include <QtGui/QLabel>
+#include <QtGui/QVBoxLayout>
 
 
 ProjectWidget::ProjectWidget(Frontend *f, bool type, QWidget *parent)
@@ -53,9 +54,6 @@ ProjectWidget::ProjectWidget(Frontend *f, bool type, QWidget *parent)
     mixCountSlider         = 0;
     defaultMixCount        = 0;
     defaultPlaybackCount   = 0;
-    fpsChooserCaption      = 0;
-    fpsChooser             = 0;
-    defaultFps             = 0;
 
     // autoGroupBox           = 0;
     // unitModeCombo          = 0;
@@ -71,8 +69,6 @@ ProjectWidget::ProjectWidget(Frontend *f, bool type, QWidget *parent)
 
 void ProjectWidget::makeGUI()
 {
-    QString iconFile(frontend->getIconsDirName());
-
     QVBoxLayout *tabLayout = new QVBoxLayout;
 
     tabLayout->setMargin(0);
@@ -155,30 +151,10 @@ void ProjectWidget::makeGUI()
     connect(mixCountSlider, SIGNAL(valueChanged(int)), this, SLOT(changeMixCount(int)));
     mixCountSlider->setWhatsThis(infoText);
 
-    fpsChooserCaption = new QLabel(tr("FPS chooser"));
-    infoText =
-        tr("<h4>FPS chooser</h4> "
-           "<p>By changing the value in this "
-           "chooser you set which speed the "
-           "animation in the <b>FrameView</b> "
-           "should run at.</p> "
-           "<p>To start an animation press the "
-           "<b>Run Animation</b> button.</p>");
-    fpsChooserCaption->setWhatsThis(infoText);
-
-    fpsChooser = new QSpinBox();
-    fpsChooser->setMinimum(1);
-    fpsChooser->setMaximum(30);
-    fpsChooser->setValue(1);
-    fpsChooser->setFocusPolicy(Qt::NoFocus);
-    fpsChooser->setWhatsThis(infoText);
-
     QVBoxLayout *captureLayout = new QVBoxLayout;
     captureLayout->addWidget(mixModeCombo);
     captureLayout->addWidget(mixCountSliderCaption);
     captureLayout->addWidget(mixCountSlider);
-    captureLayout->addWidget(fpsChooserCaption);
-    captureLayout->addWidget(fpsChooser);
     captureLayout->addStretch(10);
     captureGroupBox->setLayout(captureLayout);
     tabLayout->addWidget(captureGroupBox);
@@ -221,13 +197,16 @@ void ProjectWidget::initialize()
         defaultRecordingMode = pref->getBasicPreference("defaultrecordingmode", 0);
         defaultVideoSource = pref->getBasicPreference("defaultvideosource", 0);
         defaultMixMode = pref->getBasicPreference("defaultmixmode", 0);
-        defaultMixCount = frontend->getPreferences()->getBasicPreference("defaultmixcount", 2);
-        defaultPlaybackCount = frontend->getPreferences()->getBasicPreference("defaultplaybackcount", 5);
-        defaultFps = pref->getBasicPreference("defaultframespersecond", 10);
+        defaultMixCount = pref->getBasicPreference("defaultmixcount", 2);
+        defaultPlaybackCount = pref->getBasicPreference("defaultplaybackcount", 2);
         // defaultUnitMode = pref->getBasicPreference("defaultunitmode", 0);
     }
     else {
         // The tab is used in project dialog
+        defaultRecordingMode = frontend->getRecordingMode();
+        defaultMixMode = frontend->getMixMode();
+        defaultMixCount = frontend->getMixCount();
+        defaultPlaybackCount = frontend->getPlaybackCount();
     }
 
     recordingModeCombo->setCurrentIndex(defaultRecordingMode);
@@ -251,8 +230,6 @@ void ProjectWidget::initialize()
         mixCountSlider->setValue(defaultPlaybackCount);
         break;
     }
-
-    fpsChooser->setValue(defaultFps);
 
     /*
         unitModeCombo->setCurrentIndex(defaultUnitMode);
@@ -278,51 +255,43 @@ void ProjectWidget::apply()
     qDebug("ProjectWidget::apply --> Start");
 
     int newRecordingMode = recordingModeCombo->currentIndex();
-    if (defaultRecordingMode != newRecordingMode)
-    {
+    if (defaultRecordingMode != newRecordingMode) {
         defaultRecordingMode = newRecordingMode;
     }
 
-    int newVideoSource = videoSourceCombo->currentIndex();
-    if (defaultVideoSource != newVideoSource)
-    {
-        defaultVideoSource = newVideoSource;
+    if (tabType) {
+        int newVideoSource = videoSourceCombo->currentIndex();
+        if (defaultVideoSource != newVideoSource)
+        {
+            defaultVideoSource = newVideoSource;
+        }
     }
 
     int newMixMode = mixModeCombo->currentIndex();
-    if (defaultMixMode != newMixMode)
-    {
+    if (defaultMixMode != newMixMode) {
         defaultMixMode = newMixMode;
     }
 
     int newMixCount = mixCountSlider->value();
-    if (defaultMixCount != newMixCount)
-    {
-        switch (newMixMode) {
-        case 0:
-            // pref->setBasicPreference("defaultmixcount", newMixCount);
-            break;
-        case 1:
-            break;
-        case 2:
-            // pref->setBasicPreference("defaultplaybackcount", newMixCount);
-            break;
-        case 3:
-            break;
+    switch (newMixMode) {
+    case 0:
+        if (defaultMixCount != newMixCount) {
+            defaultMixCount = newMixCount;
         }
-
-        defaultMixCount = newMixCount;
-    }
-
-    int newFps = fpsChooser->value();
-    if (defaultFps != newFps)
-    {
-        defaultFps = newFps;
+        break;
+    case 1:
+        break;
+    case 2:
+        if (defaultPlaybackCount != newMixCount) {
+            defaultPlaybackCount = newMixCount;
+        }
+        break;
+    case 3:
+        break;
     }
 /*
     int newUnitMode = unitModeChooseCombo->currentIndex();
-    if (defaultUnitMode != newUnitMode)
-    {
+    if (defaultUnitMode != newUnitMode) {
         defaultUnitMode = newUnitMode;
     }
 */
@@ -331,16 +300,21 @@ void ProjectWidget::apply()
 
         PreferencesTool *pref = frontend->getPreferences();
 
-        pref->setBasicPreference("defaultrecordingmode", newRecordingMode);
-        pref->setBasicPreference("defaultvideosource", newVideoSource);
-        pref->setBasicPreference("defaultmixmode", newMixMode);
-        pref->setBasicPreference("defaultmixcount", newMixCount);
-        pref->setBasicPreference("defaultplaybackcount", newMixCount);
-        pref->setBasicPreference("defaultframespersecond", newFps);
-        // pref->setBasicPreference("defaultunitmode", newUnitMode);
+        pref->setBasicPreference("defaultrecordingmode", defaultRecordingMode);
+        pref->setBasicPreference("defaultvideosource", defaultVideoSource);
+        pref->setBasicPreference("defaultmixmode", defaultMixMode);
+        pref->setBasicPreference("defaultmixcount", defaultMixCount);
+        pref->setBasicPreference("defaultplaybackcount", defaultPlaybackCount);
+        // pref->setBasicPreference("defaultunitmode", defaultUnitMode);
     }
     else {
         // The tab is used in project dialog
+
+        frontend->setRecordingMode(defaultRecordingMode);
+        frontend->setMixMode(defaultMixMode);
+        frontend->setMixCount(defaultMixCount);
+        frontend->setPlaybackCount(defaultPlaybackCount);
+        // frontend->setUnitMode(defaultUnitMode);
     }
 
     qDebug("ProjectWidget::apply --> End");
@@ -352,12 +326,23 @@ void ProjectWidget::reset()
     qDebug("ProjectWidget::reset --> Start");
 
     changeRecordingMode(defaultRecordingMode);
+
     if (tabType) {
         changeVideoSource(defaultVideoSource);
     }
+
     changeMixMode(defaultMixMode);
-    this->mixCountSlider->setValue(defaultMixCount);
-    this->fpsChooser->setValue(defaultFps);
+
+    switch (defaultMixMode) {
+    case 0:
+        mixCountSlider->setValue(defaultMixCount);
+        break;
+    case 1:
+        break;
+    case 2:
+        mixCountSlider->setValue(defaultPlaybackCount);
+        break;
+    }
 /*
     changeUnitMode(defaultUnitMode);
 */

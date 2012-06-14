@@ -813,6 +813,18 @@ void QtFrontend::setToolBarState(int newState)
 }
 
 
+int QtFrontend::getRecordingMode()
+{
+    return mw->getRecordingMode();
+}
+
+
+void QtFrontend::setRecordingMode(int mode)
+{
+    mw->setRecordingMode(mode);
+}
+
+
 int QtFrontend::getVideoSource()
 {
     return mw->getVideoSource();
@@ -846,6 +858,18 @@ int QtFrontend::getMixCount()
 void QtFrontend::setMixCount(int count)
 {
     mw->setMixCount(count);
+}
+
+
+int QtFrontend::getPlaybackCount()
+{
+    return mw->getPlaybackCount();
+}
+
+
+void QtFrontend::setPlaybackCount(int count)
+{
+    mw->setPlaybackCount(count);
 }
 
 

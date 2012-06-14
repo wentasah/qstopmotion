@@ -433,8 +433,13 @@ wenn Sie abspielen wählen.</translation>
         <translation>Wählen sie die Ausgabe-Datei</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="91"/>
-        <source>Below you can set which program/process qStopMotion should use for encoding the currently active project to a video file.</source>
+        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="92"/>
+        <source>Below you can set which program should be used for encoding a new project to a video file.</source>
+        <translation>Unten können sie auswählen, welches Programm benutzt werden soll, um ein neues Projekt zu einer Videodatei zu encodieren.</translation>
+    </message>
+    <message>
+        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="99"/>
+        <source>Below you can set which program should be used for encoding the currently active project to a video file.</source>
         <translation>Unten können sie auswählen, welches Programm benutzt werden soll, um das aktuelle Projekt zu einer Videodatei zu encodieren.</translation>
     </message>
 </context>

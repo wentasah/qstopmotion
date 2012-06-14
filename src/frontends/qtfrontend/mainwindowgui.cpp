@@ -647,6 +647,18 @@ void MainWindowGUI::setToolBarState(int newState)
 }
 
 
+int MainWindowGUI::getRecordingMode()
+{
+    return recordingTab->getRecordingMode();
+}
+
+
+void MainWindowGUI::setRecordingMode(int mode)
+{
+    recordingTab->setRecordingMode(mode);
+}
+
+
 int MainWindowGUI::getVideoSource()
 {
     return recordingTab->getVideoSource();
@@ -680,6 +692,18 @@ int MainWindowGUI::getMixCount()
 void MainWindowGUI::setMixCount(int count)
 {
     recordingTab->setMixCount(count);
+}
+
+
+int MainWindowGUI::getPlaybackCount()
+{
+    return recordingTab->getPlaybackCount();
+}
+
+
+void MainWindowGUI::setPlaybackCount(int count)
+{
+    recordingTab->setPlaybackCount(count);
 }
 
 

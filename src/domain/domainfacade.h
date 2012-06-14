@@ -233,6 +233,42 @@ public:
     void setPlaybackCount(int newPlaybackCount);
 
     /**
+     * Get the encoder application of the project.
+     * @return Encoder application.
+     */
+    int getEncoderApplication();
+
+    /**
+     * Set the encoder application of the project.
+     * @param newEA The new encoder application.
+     */
+    void setEncoderApplication(int newEA);
+
+    /**
+     * Get the video format of the project.
+     * @return Video format.
+     */
+    int getVideoFormat();
+
+    /**
+     * Set the video format of the project.
+     * @param newVF The new video format.
+     */
+    void setVideoFormat(int newVF);
+
+    /**
+     * Get the video size of the project.
+     * @return Video size.
+     */
+    int getVideoSize();
+
+    /**
+     * Set the video size of the project.
+     * @param newVS The new video size.
+     */
+    void setVideoSize(int newVS);
+
+    /**
      * Get the number of frames per second of the project.
      * @return number of frames per second.
      */
@@ -243,6 +279,30 @@ public:
      * @param newFPS The new number of frames per second.
      */
     void setFramesPerSecond(int newFPS);
+
+    /**
+     * Get the use default output file flag of the project.
+     * @return Use default output file flag.
+     */
+    bool getUseDefaultOutputFile();
+
+    /**
+     * Set the use default output file flag of the project.
+     * @param newUDOF The new use default output file flag.
+     */
+    void setUseDefaultOutputFile(bool newUDOF);
+
+    /**
+     * Get the default output file name of the project.
+     * @return Default output file name.
+     */
+    const QString getDefaultOutputFileName();
+
+    /**
+     * Set the default output file name of the project.
+     * @param newDOFN The new default output file name.
+     */
+    void setDefaultOutputFileName(const QString newDOFN);
 
     /**
      * Exports the current project to a video file as specified by the video encoder.

@@ -22,6 +22,8 @@
 
 #include "preferencestool.h"
 
+#include "technical/videoencoder/videoencoder.h"
+
 #include <QtCore/QFile>
 #include <QtCore/QtGlobal>
 #include <QtCore/QTextStream>
@@ -315,9 +317,12 @@ void PreferencesTool::setBasicPreferenceDefaults()
     setBasicPreference("defaultvideosource", 0);
     setBasicPreference("defaultmixmode", 0);
     setBasicPreference("defaultmixcount", 2);
-    setBasicPreference("defaultframespersecond", 12);
     setBasicPreference("defaultplaybackcount", 5);
-    setBasicPreference("usedefaultoutputfile", 1);
+    setBasicPreference("defaultencoderapplication", VideoEncoder::noneApplication);
+    setBasicPreference("defaultvideoformat", VideoEncoder::noneFormat);
+    setBasicPreference("defaultvideosize", VideoEncoder::defaultSize);
+    setBasicPreference("defaultframespersecond", 12);
+    setBasicPreference("defaultusedefaultoutputfile", false);
 }
 
 

@@ -260,6 +260,18 @@ public:
     void setToolBarState(int newState);
 
     /**
+     * Get the recording mode.
+     * @return The recording mode.
+     */
+    int getRecordingMode();
+
+    /**
+     * Set the recording mode.
+     * @param mode The new recording mode.
+     */
+    void setRecordingMode(int mode);
+
+    /**
      * Get the video source index.
      * @return video source index
      */
@@ -295,6 +307,18 @@ public:
      * @param count The new mix count.
      */
     void setMixCount(int count);
+
+    /**
+     * Get the playback count.
+     * @return The playback count.
+     */
+    int getPlaybackCount();
+
+    /**
+     * Set the playback count.
+     * @param count The new playback count.
+     */
+    void setPlaybackCount(int count);
 
     /**
      * Sets up the ExternalChangeMonitor to monitor the project directories

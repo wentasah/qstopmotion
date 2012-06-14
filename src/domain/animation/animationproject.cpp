@@ -217,6 +217,45 @@ void AnimationProject::setPlaybackCount(int newPlaybackCount)
 }
 
 
+int AnimationProject::getEncoderApplication() const
+{
+    return encoderApplication;
+}
+
+
+void AnimationProject::setEncoderApplication(int newEA)
+{
+    encoderApplication = newEA;
+    incSettingsChanges();
+}
+
+
+int AnimationProject::getVideoFormat() const
+{
+    return videoFormat;
+}
+
+
+void AnimationProject::setVideoFormat(int newVF)
+{
+    videoFormat = newVF;
+    incSettingsChanges();
+}
+
+
+int AnimationProject::getVideoSize() const
+{
+    return videoSize;
+}
+
+
+void AnimationProject::setVideoSize(int newVS)
+{
+    videoSize = newVS;
+    incSettingsChanges();
+}
+
+
 int AnimationProject::getFramesPerSecond() const
 {
     return framesPerSecond;
@@ -226,6 +265,32 @@ int AnimationProject::getFramesPerSecond() const
 void AnimationProject::setFramesPerSecond(int newFPS)
 {
     framesPerSecond = newFPS;
+    incSettingsChanges();
+}
+
+
+bool AnimationProject::getUseDefaultOutputFile() const
+{
+    return useDefaultOutputFile;
+}
+
+
+void AnimationProject::setUseDefaultOutputFile(bool newUDOF)
+{
+    useDefaultOutputFile = newUDOF;
+    incSettingsChanges();
+}
+
+
+const QString AnimationProject::getDefaultOutputFileName()
+{
+    return defaultOutputFileName;
+}
+
+
+void AnimationProject::setDefaultOutputFileName(const QString newDOFN)
+{
+    defaultOutputFileName = newDOFN;
     incSettingsChanges();
 }
 
@@ -425,9 +490,30 @@ bool AnimationProject::readSettingsFromProject(QDomElement &settingsNode)
             QString tmp = currElement.text();
             playbackCount = tmp.toInt();
         }
+        else if (nodeName.compare("encoderapplication") == 0) {
+            QString tmp = currElement.text();
+            encoderApplication = tmp.toInt();
+        }
+        else if (nodeName.compare("videoformat") == 0) {
+            QString tmp = currElement.text();
+            videoFormat = tmp.toInt();
+        }
+        else if (nodeName.compare("videosize") == 0) {
+            QString tmp = currElement.text();
+            videoSize = tmp.toInt();
+        }
         else if (nodeName.compare("framespersecond") == 0) {
             QString tmp = currElement.text();
             framesPerSecond = tmp.toInt();
+        }
+        else if (nodeName.compare("usedefaultoutputfile") == 0) {
+            QString tmp = currElement.text();
+            useDefaultOutputFile = tmp.toInt();
+        }
+        else if (nodeName.compare("defaultoutputfilename") == 0) {
+            QString tmp = currElement.text();
+            defaultOutputFileName.clear();
+            defaultOutputFileName.append(tmp);
         }
         else if (nodeName.compare("unitmode") == 0) {
             QString tmp = currElement.text();
@@ -472,11 +558,41 @@ bool AnimationProject::saveSettingsToProject(QDomDocument &doc, QDomElement &set
     playbackCountElement.appendChild(playbackCountText);
     settingsNode.appendChild(playbackCountElement);
 
+    // Save encoderApplication parameter
+    QDomElement eaElement = doc.createElement("encoderapplication");
+    QDomText eaText = doc.createTextNode(QString("%1").arg(encoderApplication));
+    eaElement.appendChild(eaText);
+    settingsNode.appendChild(eaElement);
+
+    // Save videoFormat parameter
+    QDomElement vfElement = doc.createElement("videoformat");
+    QDomText vfText = doc.createTextNode(QString("%1").arg(videoFormat));
+    vfElement.appendChild(vfText);
+    settingsNode.appendChild(vfElement);
+
+    // Save videoSize parameter
+    QDomElement vsElement = doc.createElement("videosize");
+    QDomText vsText = doc.createTextNode(QString("%1").arg(videoSize));
+    vsElement.appendChild(vsText);
+    settingsNode.appendChild(vsElement);
+
     // Save framesPerSecond parameter
     QDomElement fpsElement = doc.createElement("framespersecond");
     QDomText fpsText = doc.createTextNode(QString("%1").arg(framesPerSecond));
     fpsElement.appendChild(fpsText);
     settingsNode.appendChild(fpsElement);
+
+    // Save useDefaultOutputFile parameter
+    QDomElement udofElement = doc.createElement("usedefaultoutputfile");
+    QDomText udofText = doc.createTextNode(QString("%1").arg((int)useDefaultOutputFile));
+    udofElement.appendChild(udofText);
+    settingsNode.appendChild(udofElement);
+
+    // Save defaultOutputFileName parameter
+    QDomElement dofnElement = doc.createElement("defaultoutputfilename");
+    QDomText dofnText = doc.createTextNode(defaultOutputFileName);
+    dofnElement.appendChild(dofnText);
+    settingsNode.appendChild(dofnElement);
 
     // Save unit mode parameter
     QDomElement unitModeElement = doc.createElement("unitmode");

@@ -41,6 +41,7 @@
 #include "domain/undo/undotakeremove.h"
 #include "domain/undo/undotakeselect.h"
 #include "frontends/qtfrontend/toolbar.h"
+#include "technical/videoencoder/videoencoder.h"
 
 #include <QtCore/QDir>
 #include <QtCore/QFile>
@@ -288,6 +289,42 @@ void DomainFacade::setPlaybackCount(int newPlaybackCount)
 }
 
 
+int DomainFacade::getEncoderApplication()
+{
+    return animationProject->getEncoderApplication();
+}
+
+
+void DomainFacade::setEncoderApplication(int newEA)
+{
+    animationProject->setEncoderApplication(newEA);
+}
+
+
+int DomainFacade::getVideoFormat()
+{
+    return animationProject->getVideoFormat();
+}
+
+
+void DomainFacade::setVideoFormat(int newVF)
+{
+    animationProject->setVideoFormat(newVF);
+}
+
+
+int DomainFacade::getVideoSize()
+{
+    return animationProject->getVideoSize();
+}
+
+
+void DomainFacade::setVideoSize(int newVS)
+{
+    animationProject->setVideoSize(newVS);
+}
+
+
 int DomainFacade::getFramesPerSecond()
 {
     return animationProject->getFramesPerSecond();
@@ -298,6 +335,30 @@ void DomainFacade::setFramesPerSecond(int newFps)
 {
     animationProject->setFramesPerSecond(newFps);
     getView()->notifyNewFramesPerSecond(newFps);
+}
+
+
+bool DomainFacade::getUseDefaultOutputFile()
+{
+    return animationProject->getUseDefaultOutputFile();
+}
+
+
+void DomainFacade::setUseDefaultOutputFile(bool newUDOF)
+{
+    animationProject->setUseDefaultOutputFile(newUDOF);
+}
+
+
+const QString DomainFacade::getDefaultOutputFileName()
+{
+    return animationProject->getDefaultOutputFileName();
+}
+
+
+void DomainFacade::setDefaultOutputFileName(const QString newDOFN)
+{
+    animationProject->setDefaultOutputFileName(newDOFN);
 }
 
 
@@ -535,7 +596,11 @@ void DomainFacade::setProjectSettingsToDefault()
     setUnitMode(pref->getBasicPreference("defaultunitmode", 0));
     setMixCount(pref->getBasicPreference("defaultmixcount", 0));
     setPlaybackCount(pref->getBasicPreference("defaultplaybackcount", 0));
-    setFramesPerSecond(pref->getBasicPreference("defaultframespersecond", 0));
+    setEncoderApplication(pref->getBasicPreference("encoderapplication", VideoEncoder::noneApplication));
+    setVideoFormat(pref->getBasicPreference("videoformat", VideoEncoder::noneFormat));
+    setVideoSize(pref->getBasicPreference("videosize", VideoEncoder::defaultSize));
+    setFramesPerSecond(pref->getBasicPreference("framespersecond", 12));
+    setUseDefaultOutputFile(pref->getBasicPreference("usedefaultoutputfile", false));
 }
 
 

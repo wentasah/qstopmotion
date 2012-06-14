@@ -24,16 +24,9 @@
 #include "frontends/frontend.h"
 
 #include <QtGui/QComboBox>
-#include <QtGui/QGridLayout>
 #include <QtGui/QGroupBox>
 #include <QtGui/QLabel>
-#include <QtGui/QLineEdit>
-#include <QtGui/QPushButton>
-#include <QtGui/QRadioButton>
-#include <QtGui/QSpinBox>
-#include <QtGui/QTableWidget>
-#include <QtGui/QTextEdit>
-#include <QtGui/QToolBox>
+#include <QtGui/QSlider>
 #include <QtGui/QWidget>
 
 
@@ -111,12 +104,6 @@ private slots:
      */
     // void changeUnitMode(int index);
 
-    /**
-     * Slot for updating the slider value when running in automatic mode.
-     * @param value the new slider value.
-     */
-    // void changeFpuCount(int value);
-
 private:
     Frontend    *frontend;
 
@@ -135,8 +122,6 @@ private:
     QComboBox   *mixModeCombo;
     QLabel      *mixCountSliderCaption;
     QSlider     *mixCountSlider;
-    QLabel      *fpsChooserCaption;
-    QSpinBox    *fpsChooser;
 
     // QGroupBox   *autoGroupBox;
     // QComboBox   *unitModeCombo;
@@ -146,9 +131,7 @@ private:
     int          defaultMixMode;
     int          defaultMixCount;
     int          defaultPlaybackCount;
-    int          defaultFps;
     // int          defaultUnitMode;
-
 };
 
 #endif

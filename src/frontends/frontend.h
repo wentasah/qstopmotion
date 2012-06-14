@@ -373,6 +373,18 @@ public:
     virtual void setToolBarState(int newState) = 0;
 
     /**
+     * Get the recording mode.
+     * @return The recording mode.
+     */
+    virtual int getRecordingMode() = 0;
+
+    /**
+     * Set the recording mode.
+     * @param mode The new recording mode.
+     */
+    virtual void setRecordingMode(int mode) = 0;
+
+    /**
      * Get the video source index.
      * @return video source index
      */
@@ -393,7 +405,7 @@ public:
 
     /**
      * Set the mix mode.
-     * @param mode The new mix mode
+     * @param mode The new mix mode.
      */
     virtual void setMixMode(int mode) = 0;
 
@@ -408,6 +420,18 @@ public:
      * @param count The new mix count.
      */
     virtual void setMixCount(int count) = 0;
+
+    /**
+     * Get the playback count.
+     * @return The playback count.
+     */
+    virtual int getPlaybackCount() = 0;
+
+    /**
+     * Set the playback count.
+     * @param count The new playback count.
+     */
+    virtual void setPlaybackCount(int count) = 0;
 
     /**
      * Test function for debugging purposes

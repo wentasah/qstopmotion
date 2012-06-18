@@ -24,9 +24,10 @@
 #define GENERALDIALOG_H
 
 #include "frontends/frontend.h"
-#include "frontends/qtfrontend/preferences/projectwidget.h"
 #include "frontends/qtfrontend/preferences/exportwidget.h"
 #include "frontends/qtfrontend/preferences/generalwidget.h"
+#include "frontends/qtfrontend/preferences/importwidget.h"
+#include "frontends/qtfrontend/preferences/projectwidget.h"
 
 #include <QtGui/QDialog>
 #include <QtGui/QPushButton>
@@ -52,8 +53,9 @@ public:
 private:
     Frontend      *frontend;
     GeneralWidget *generalSettingsTab;
-    ExportWidget  *exportVideoTab;
     ProjectWidget *projectValueTab;
+    ImportWidget  *imageImportTab;
+    ExportWidget  *videoExportTab;
     QTabWidget    *tabWidget;
     QPushButton   *applyButton;
     QPushButton   *closeButton;
@@ -61,6 +63,7 @@ private:
     void makeGeneralSettingsTab();
     void makeVideoExportTab();
     void makeProjectValueTab();
+    void makeImageImportTab();
 
 private slots:
     void apply();

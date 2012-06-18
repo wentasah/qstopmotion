@@ -34,8 +34,11 @@ ProjectDialog::ProjectDialog(Frontend *f, QWidget *parent)
 {
     qDebug("ProjectDialog::Constructor --> Start");
 
-    frontend       = f;
-    exportVideoTab = 0;
+    frontend           = f;
+    // generalSettingsTab = 0;
+    projectValueTab    = 0;
+    imageImportTab     = 0;
+    videoExportTab     = 0;
 
     tabWidget = new QTabWidget;
 
@@ -66,6 +69,7 @@ ProjectDialog::ProjectDialog(Frontend *f, QWidget *parent)
 
     // makeGeneralSettingsTab();
     makeProjectValueTab();
+    makeImageImportTab();
     makeVideoExportTab();
 
     qDebug("ProjectDialog::Constructor --> End");
@@ -85,19 +89,6 @@ void ProjectDialog::makeGeneralSettingsTab()
 }
 */
 
-void ProjectDialog::makeVideoExportTab()
-{
-    qDebug("ProjectDialog::makeVideoExportTab --> Start");
-
-    exportVideoTab = new ExportWidget(frontend, false);
-    exportVideoTab->initialize();
-    // exportVideoTab->setMinimumHeight(300);
-    tabWidget->addTab(exportVideoTab, tr("Video &Export"));
-
-    qDebug("ProjectDialog::makeVideoExportTab --> End");
-}
-
-
 void ProjectDialog::makeProjectValueTab()
 {
     qDebug("ProjectDialog::makeDefaultValueTab --> Start");
@@ -111,14 +102,41 @@ void ProjectDialog::makeProjectValueTab()
 }
 
 
+void ProjectDialog::makeImageImportTab()
+{
+    qDebug("ProjectDialog::makeImageImportTab --> Start");
+
+    imageImportTab = new ImportWidget(frontend, false);
+    imageImportTab->initialize();
+    // imageImportTab->setMinimumHeight(300);
+    tabWidget->addTab(imageImportTab, tr("&Image Import"));
+
+    qDebug("ProjectDialog::makeImageImportTab --> End");
+}
+
+
+void ProjectDialog::makeVideoExportTab()
+{
+    qDebug("ProjectDialog::makeVideoExportTab --> Start");
+
+    videoExportTab = new ExportWidget(frontend, false);
+    videoExportTab->initialize();
+    // videoExportTab->setMinimumHeight(300);
+    tabWidget->addTab(videoExportTab, tr("Video &Export"));
+
+    qDebug("ProjectDialog::makeVideoExportTab --> End");
+}
+
+
 void ProjectDialog::apply()
 {
     qDebug("ProjectDialog::apply --> Start");
 
     setFocus();
     // this->generalSettingsTab->apply();
-    this->exportVideoTab->apply();
     this->projectValueTab->apply();
+    this->imageImportTab->apply();
+    this->videoExportTab->apply();
     frontend->getPreferences()->flushPreferences();
     this->setResult(QDialog::Accepted);
     this->hide();
@@ -133,8 +151,9 @@ void ProjectDialog::close()
 
     setFocus();
     // this->generalSettingsTab->reset();
-    this->exportVideoTab->reset();
     this->projectValueTab->reset();
+    this->imageImportTab->reset();
+    this->videoExportTab->reset();
     this->hide();
 
     qDebug("ProjectDialog::close --> End");
@@ -149,8 +168,9 @@ void ProjectDialog::finish(int result)
     if (result == 0)
     {
         // generalSettingsTab->reset();
-        exportVideoTab->reset();
         projectValueTab->reset();
+        imageImportTab->reset();
+        videoExportTab->reset();
     }
     this->hide();
 

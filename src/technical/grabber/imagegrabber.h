@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2011 by                                                *
+ *  Copyright (C) 2005-2012 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -45,6 +45,44 @@ class ImageGrabber : public QObject
 {
     Q_OBJECT
 public:
+
+    /**
+     * Enum with all possible image output formats
+     */
+    enum imageFormat {
+        jpegFormat,            // JPEG format
+        tiffFormat,            // TIFF format
+        bmpFormat,             // BMP format
+        noneFormat
+    };
+
+    /**
+     * Enum with all possible image sizes
+     */
+    enum imageSize {
+        defaultSize,          // Source size
+        qvgaSize,             // 320x240 (QVGA)
+        vgaSize,              // 640x480 (VGA)
+        svgaSize,             // 800x600 (SVGA)
+        paldSize,             // 704x576 (PAL D)
+        hdreadySize,          // 1280x720 (HD Ready)
+        fullhdSize            // 1900x1080 (Full HD)
+    };
+
+    /**
+     * Enum with all possible image adjustments
+     */
+    enum imageAdjustment {
+        leftUp,               // Left up corner
+        centerUp,             // Center up
+        rightUp,              // Right up corner
+        leftMiddle,           // Left middle
+        centerMiddle,         // Center middle
+        rightMiddle,          // Right middle
+        leftDown,             // Left down corner
+        centerDown,           // Center down
+        rightDown,            // Right down corner
+    };
 
     /**
      * Constructs and initializes the object.

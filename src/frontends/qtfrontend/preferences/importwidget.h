@@ -93,10 +93,22 @@ private slots:
      */
     void changeImageSize(int index);
 
-    // Output file preferences
+    // Transformation preferences
     /**
-     * Slot for notified the export tab when yes button is selected, so that
-     * encoder preferences can be updaten.
+     * Slot for notified the import tab when scale button is selected, so that
+     * import preferences can be updated.
+     */
+    void setScaleButtonOn();
+
+    /**
+     * Slot for notified the import tab when clip button is selected, so that
+     * import preferences can be updated.
+     */
+    void setClipButtonOn();
+
+    /**
+     * Slot for notified the import tab when adjustment is changed, so that
+     * import preferences can be updated.
      */
     void setAdjustment(int newAdjustment);
 
@@ -127,7 +139,13 @@ private:
     QComboBox    *imageSizeCombo;
     int           activeImageSize;
 
-    // Adjustment preferences
+    // Transformation preferences
+    QGroupBox    *transformPrefs;
+    QTextEdit    *transformText;
+    QRadioButton *scaleButton;
+    QRadioButton *clipButton;
+    bool          activeTransform;
+
     QGroupBox    *adjustmentPrefs;
     QRadioButton *leftUpButton;
     QRadioButton *centerUpButton;

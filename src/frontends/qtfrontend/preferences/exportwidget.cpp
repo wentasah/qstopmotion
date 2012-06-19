@@ -191,6 +191,7 @@ void ExportWidget::makeGUI()
     mainLayout->addWidget(infoText);
     mainLayout->addWidget(encoderPrefs);
     mainLayout->addWidget(outputPrefs);
+    mainLayout->addStretch(1);
     setLayout(mainLayout);
 
     // Encoder preferences
@@ -207,14 +208,9 @@ void ExportWidget::makeGUI()
 
     // Output file preferences
     QVBoxLayout *outputPrefsLayout = new QVBoxLayout;
-    QHBoxLayout *hbLayout = new QHBoxLayout;
-    hbLayout->setMargin(0);
-    hbLayout->setSpacing(0);
-    hbLayout->addStretch(1);
-
-    outputPrefsLayout->addLayout(hbLayout);
     outputPrefsLayout->addWidget(askForOutputLabel);
-    hbLayout = new QHBoxLayout;
+
+    QHBoxLayout *hbLayout = new QHBoxLayout;
     hbLayout->addWidget(yesButton);
     hbLayout->addWidget(noButton);
     hbLayout->addStretch(1);

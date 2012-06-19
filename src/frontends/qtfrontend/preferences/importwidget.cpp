@@ -43,12 +43,13 @@ ImportWidget::ImportWidget(Frontend *f, bool type, QWidget *parent) : QWidget(pa
     infoText                 = 0;
     encoderTable             = 0;
 
-    // Encoder preferences
+    // Grabber preferences
     grabberPrefs             = 0;
     grabberSourceLabel       = 0;
     grabberSourceCombo       = 0;
     activeGrabberSource      = 0; // ImageEncoder::noneApplication;
 
+    // Image preferences
     imagePrefs               = 0;
     imageFormatLabel         = 0;
     imageFormatCombo         = 0;
@@ -57,7 +58,12 @@ ImportWidget::ImportWidget(Frontend *f, bool type, QWidget *parent) : QWidget(pa
     imageSizeCombo           = 0;
     activeImageSize          = ImageGrabber::defaultSize;
 
-    // Output file preferences
+    // Transformation preferences
+    transformPrefs           = 0;
+    transformText            = 0;
+    scaleButton              = 0;
+    clipButton               = 0;
+
     adjustmentPrefs          = 0;
     leftUpButton             = 0;
     centerUpButton           = 0;
@@ -141,9 +147,51 @@ void ImportWidget::makeGUI()
     imageSizeCombo->addItem(tr("HD Ready (1280x720)"));
     imageSizeCombo->addItem(tr("Full HD (1900x1080"));
 
-    // Output file preferences
+    // Transformation preferences
+    transformPrefs = new QGroupBox;
+    transformPrefs->setTitle(tr("Transformation settings"));
+
+    transformText = new QTextEdit;
+    transformText->setReadOnly(true);
+    if (tabType) {
+        transformText->setHtml(
+            "<p>" +
+            tr("Below you can set which image sources should be used "
+               "for importing images to a new project.") +
+            "</p>");
+    }
+    else {
+        transformText->setHtml(
+            "<p>" +
+            tr("Below you can set which image sources should be used "
+               "for importing images to the currently active project.") +
+            "</p>");
+    }
+
+    transformText->setMinimumWidth(440);
+    transformText->setMaximumHeight(52);
+    transformText->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+
+    scaleButton = new QRadioButton(tr("Scale the whole image"));
+    scaleButton->setChecked(true);
+    scaleButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    connect(scaleButton, SIGNAL(clicked()), this, SLOT(setScaleButtonOn()));
+
+    clipButton = new QRadioButton(tr("Clip a part of the image"));
+    clipButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    clipButton->setChecked(false);
+    connect(clipButton, SIGNAL(clicked()), this, SLOT(setClipButtonOn()));
+
     adjustmentPrefs = new QGroupBox;
-    adjustmentPrefs->setTitle(tr("Adjustment settings"));
+    adjustmentPrefs->setMinimumSize(200, 100);
+    // adjustmentPrefs->setStyleSheet("border-width = 2px");
+    // adjustmentPrefs->setStyleSheet("border-color = black");
+    // adjustmentPrefs->setStyleSheet("border = 2px solid black");
+    // adjustmentPrefs->setStyle("plastique");
+    // QPalette p = adjustmentPrefs->palette();
+    // p.setColor(adjustmentPrefs->backgroundRole(), QColor(0, 255, 255));
+    // adjustmentPrefs->setPalette(p);
+    // adjustmentPrefs->setTitle(tr("Adjustment settings"));
 
     leftUpButton = new QRadioButton();
     leftUpButton->setChecked(false);
@@ -190,11 +238,41 @@ void ImportWidget::makeGUI()
     rightDownButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     connect(rightDownButton, SIGNAL(clicked()), this, SLOT(setAdjustment(ImageGrabber::rightDown)));
 
+    QVBoxLayout *adjustmentPrefsLayout = new QVBoxLayout;
+    QHBoxLayout *hbLayout = new QHBoxLayout;
+    hbLayout->addWidget(leftUpButton);
+    hbLayout->addStretch(1);
+    hbLayout->addWidget(centerUpButton);
+    hbLayout->addStretch(1);
+    hbLayout->addWidget(rightUpButton);
+    adjustmentPrefsLayout->addLayout(hbLayout);
+    adjustmentPrefsLayout->addStretch(1);
+
+    hbLayout = new QHBoxLayout;
+    hbLayout->addWidget(leftMiddleButton);
+    hbLayout->addStretch(1);
+    hbLayout->addWidget(centerMiddleButton);
+    hbLayout->addStretch(1);
+    hbLayout->addWidget(rightMiddleButton);
+    adjustmentPrefsLayout->addLayout(hbLayout);
+    adjustmentPrefsLayout->addStretch(1);
+
+    hbLayout = new QHBoxLayout;
+    hbLayout->addWidget(leftDownButton);
+    hbLayout->addStretch(1);
+    hbLayout->addWidget(centerDownButton);
+    hbLayout->addStretch(1);
+    hbLayout->addWidget(rightDownButton);
+    adjustmentPrefsLayout->addLayout(hbLayout);
+
+    adjustmentPrefs->setLayout(adjustmentPrefsLayout);
+
+    // Widget layout
     QVBoxLayout *mainLayout = new QVBoxLayout;
     mainLayout->addWidget(infoText);
     mainLayout->addWidget(grabberPrefs);
     mainLayout->addWidget(imagePrefs);
-    mainLayout->addWidget(adjustmentPrefs);
+    mainLayout->addWidget(transformPrefs);
     setLayout(mainLayout);
 
     // Grabber preferences
@@ -211,40 +289,28 @@ void ImportWidget::makeGUI()
     imagePrefsLayout->addWidget(imageSizeCombo, 2, 1);
     imagePrefs->setLayout(imagePrefsLayout);
 
-    // Adjustment file preferences
-    QVBoxLayout *adjustmentPrefsLayout = new QVBoxLayout;
-    QHBoxLayout *hbLayout = new QHBoxLayout;
+    // Transform preferences
+    QVBoxLayout *transformPrefsLayout = new QVBoxLayout;
+    hbLayout = new QHBoxLayout;
     hbLayout->setMargin(0);
     hbLayout->setSpacing(0);
     hbLayout->addStretch(1);
 
-    adjustmentPrefsLayout->addLayout(hbLayout);
-
+    transformPrefsLayout->addLayout(hbLayout);
+    transformPrefsLayout->addWidget(transformText);
     hbLayout = new QHBoxLayout;
-    hbLayout->addWidget(leftUpButton);
     hbLayout->addStretch(1);
-    hbLayout->addWidget(centerUpButton);
+    hbLayout->addWidget(scaleButton);
     hbLayout->addStretch(1);
-    hbLayout->addWidget(rightUpButton);
-    adjustmentPrefsLayout->addLayout(hbLayout);
-
+    hbLayout->addWidget(clipButton);
+    hbLayout->addStretch(1);
+    transformPrefsLayout->addLayout(hbLayout);
     hbLayout = new QHBoxLayout;
-    hbLayout->addWidget(leftMiddleButton);
     hbLayout->addStretch(1);
-    hbLayout->addWidget(centerMiddleButton);
+    hbLayout->addWidget(adjustmentPrefs);
     hbLayout->addStretch(1);
-    hbLayout->addWidget(rightMiddleButton);
-    adjustmentPrefsLayout->addLayout(hbLayout);
-
-    hbLayout = new QHBoxLayout;
-    hbLayout->addWidget(leftDownButton);
-    hbLayout->addStretch(1);
-    hbLayout->addWidget(centerDownButton);
-    hbLayout->addStretch(1);
-    hbLayout->addWidget(rightDownButton);
-    adjustmentPrefsLayout->addLayout(hbLayout);
-
-    adjustmentPrefs->setLayout(adjustmentPrefsLayout);
+    transformPrefsLayout->addLayout(hbLayout);
+    transformPrefs->setLayout(transformPrefsLayout);
 
     qDebug("ImportWidget::makeGUI --> End");
 }
@@ -262,6 +328,7 @@ void ImportWidget::initialize()
         activeGrabberSource = pref->getBasicPreference("defaultgrabbersource", 0 /*ImageEncoder::noneApplication*/);
         activeImageFormat = pref->getBasicPreference("defaultimageformat", ImageGrabber::noneFormat);
         activeImageSize = pref->getBasicPreference("defaultimagesize", ImageGrabber::defaultSize);
+        activeTransform = pref->getBasicPreference("defaulttransformation", false);
         activeImageAdjustment = pref->getBasicPreference("defaultimageadjustment", ImageGrabber::centerDown);
     }
     else {
@@ -270,6 +337,7 @@ void ImportWidget::initialize()
         activeGrabberSource = frontend->getProject()->getGrabberSource();
         activeImageFormat = frontend->getProject()->getImageFormat();
         activeImageSize = frontend->getProject()->getImageSize();
+        activeTransformation = frontend->getProject()->getTransformation();
         activeImageAdjustment = frontend->getProject()->getImageAdjustment();
         */
     }
@@ -301,7 +369,16 @@ void ImportWidget::initialize()
         imageSizeCombo->setCurrentIndex(activeImageSize);
     }
 
-    // Adjustment preferences
+    // Transformation preferences
+    if (activeTransform)
+    {
+        setScaleButtonOn();
+    }
+    else
+    {
+        setClipButtonOn();
+    }
+
     setAdjustment(activeImageAdjustment);
 
     qDebug("ImportWidget::initialize --> End");
@@ -347,14 +424,12 @@ void ImportWidget::apply()
         changings = true;
     }
 
-    /*
-    if (noButton->isChecked()) {
-        if (activeUseDefaultOutputFile) {
-            activeUseDefaultOutputFile = false;
+    if (clipButton->isChecked()) {
+        if (activeTransform) {
+            activeTransform = false;
             changings = true;
         }
     }
-    */
 
     if (changings) {
         if (tabType) {
@@ -362,6 +437,7 @@ void ImportWidget::apply()
             pref->setBasicPreference("defaultgrabbersource", activeGrabberSource);
             pref->setBasicPreference("defaultimageformat", activeImageFormat);
             pref->setBasicPreference("defaultimagesize", activeImageSize);
+            pref->setBasicPreference("defaulttransformation", activeTransform);
             pref->setBasicPreference("defaultimageadjustment", activeImageAdjustment);
         }
         else {
@@ -370,6 +446,7 @@ void ImportWidget::apply()
             frontend->getProject()->setGrabberSource(activeGrabberSource);
             frontend->getProject()->setImageFormat(activeImageFormat);
             frontend->getProject()->setImageSize(activeImageSize);
+            frontend->getProject()->setTransformation(activeTransformation);
             frontend->getProject()->setImageAdjustment(activeImageAdjustment);
             */
         }
@@ -386,6 +463,14 @@ void ImportWidget::reset()
     grabberSourceCombo->setCurrentIndex(activeGrabberSource);
     imageFormatCombo->setCurrentIndex(activeImageFormat);
     imageSizeCombo->setCurrentIndex(activeImageSize);
+    if (activeTransform)
+    {
+        setScaleButtonOn();
+    }
+    else
+    {
+        setClipButtonOn();
+    }
     setAdjustment(activeImageAdjustment);
 
     qDebug("ImportWidget::reset --> End");
@@ -413,6 +498,24 @@ void ImportWidget::changeImageSize(int /*index*/)
     // qDebug() << "ImportWidget::changeImageSize --> Start";
 
     // qDebug() << "ImportWidget::changeImageSize --> End";
+}
+
+
+void ImportWidget::setScaleButtonOn()
+{
+    scaleButton->setChecked(true);
+    clipButton->setChecked(false);
+    // defaultOutputEdit->setEnabled(false);
+    // browseOutputButton->setEnabled(false);
+}
+
+
+void ImportWidget::setClipButtonOn()
+{
+    clipButton->setChecked(true);
+    scaleButton->setChecked(false);
+    // defaultOutputEdit->setEnabled(true);
+    // browseOutputButton->setEnabled(true);
 }
 
 

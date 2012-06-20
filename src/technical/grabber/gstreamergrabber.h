@@ -138,7 +138,7 @@ private:
 
 private:
     // QProcess process;
-    ImageGrabberVideoSources activeSource;
+    ImageGrabberDevice::imageGrabberVideoSources activeSource;
     bool        isInitSuccess;
     bool        firstImage;
 

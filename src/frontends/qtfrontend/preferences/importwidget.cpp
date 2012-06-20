@@ -119,8 +119,11 @@ void ImportWidget::makeGUI()
     grabberSourceCombo->setFocusPolicy(Qt::NoFocus);
     connect(grabberSourceCombo, SIGNAL(activated(int)), this, SLOT(changeEncoderApplication(int)));
     grabberSourceCombo->addItem(tr("Test Source"));
-    grabberSourceCombo->addItem(tr("Video for Linux 2 (USB)"));
-    grabberSourceCombo->addItem(tr("IEEE 1392 (FireWire)"));
+    grabberSourceCombo->addItem(tr("Video 4 Linux (USB WebCam)"));
+    grabberSourceCombo->addItem(tr("IEEE 1394 (FireWire DigiCam)"));
+    grabberSourceCombo->addItem(tr("Direct Show (USB WebCam)"));
+    grabberSourceCombo->addItem(tr("Direct Show (FireWire DigiCam)"));
+    grabberSourceCombo->addItem(tr("gphoto (USB Compact Camera)"));
 
     imagePrefs = new QGroupBox;
     imagePrefs->setTitle(tr("Image import settings"));
@@ -145,7 +148,7 @@ void ImportWidget::makeGUI()
     imageSizeCombo->addItem(tr("SVGQ (800x600)"));
     imageSizeCombo->addItem(tr("PAL D (704x576)"));
     imageSizeCombo->addItem(tr("HD Ready (1280x720)"));
-    imageSizeCombo->addItem(tr("Full HD (1900x1080"));
+    imageSizeCombo->addItem(tr("Full HD (1900x1080)"));
 
     // Transformation preferences
     transformPrefs = new QGroupBox;
@@ -156,15 +159,17 @@ void ImportWidget::makeGUI()
     if (tabType) {
         transformText->setHtml(
             "<p>" +
-            tr("Below you can set which image sources should be used "
-               "for importing images to a new project.") +
+            tr("Below you can set which image transformation should be used for "
+               "importing images to a new project. If you select "
+               "clip a part of the image set also the adjustment for cliping.") +
             "</p>");
     }
     else {
         transformText->setHtml(
             "<p>" +
-            tr("Below you can set which image sources should be used "
-               "for importing images to the currently active project.") +
+            tr("Below you can set which image transformation should be used for "
+               "importing images to the currently active project. If you select "
+               "clip a part of the image set also the adjustment for cliping.") +
             "</p>");
     }
 

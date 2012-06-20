@@ -135,7 +135,7 @@ void ExportWidget::makeGUI()
     videoSizeCombo->addItem(tr("SVGQ (800x600)"));
     videoSizeCombo->addItem(tr("PAL D (704x576)"));
     videoSizeCombo->addItem(tr("HD Ready (1280x720)"));
-    videoSizeCombo->addItem(tr("Full HD (1900x1080"));
+    videoSizeCombo->addItem(tr("Full HD (1900x1080)"));
 
     videoFpsLabel = new QLabel(tr("Frames per Second:"));
     videoFpsChooser = new QSpinBox();

@@ -19,6 +19,7 @@
  ******************************************************************************/
 
 #include "gstreamergrabber.h"
+#include "technical/grabber/imagegrabberdevice.h"
 
 #include "technical/util.h"
 
@@ -109,8 +110,8 @@ void GstreamerGrabber::initializationSubclass()
     device_size = devices.size();
     device = new ImageGrabberDevice("",
                                     QApplication::translate("GstreamerGrabber", "Video test device"),
-                                    TestSource,
-                                    video_x_none);
+                                    ImageGrabberDevice::testSource,
+                                    ImageGrabberDevice::video_x_none);
     devices.append(device);
 
 #ifdef Q_WS_X11
@@ -185,15 +186,15 @@ void GstreamerGrabber::initializationSubclass()
                     }
                     device = new ImageGrabberDevice((const char*)g_value_get_string(&value_id_string),
                                                     (const char*)g_value_get_string(&value_name_string),
-                                                    Video4LinuxSource,
-                                                    video_x_none);
+                                                    ImageGrabberDevice::video4LinuxSource,
+                                                    ImageGrabberDevice::video_x_none);
                 }
                 else {
                     // No device name
                     device = new ImageGrabberDevice((const char*)g_value_get_string(&value_id_string),
                                                     QString(QApplication::translate("GstreamerGrabber", "Device %1")).arg(device_size),
-                                                    Video4LinuxSource,
-                                                    video_x_none);
+                                                    ImageGrabberDevice::video4LinuxSource,
+                                                    ImageGrabberDevice::video_x_none);
                  }
                 // Add the device to the device list
                 devices.append(device);
@@ -291,15 +292,15 @@ void GstreamerGrabber::initializationSubclass()
                     }
                     device = new ImageGrabberDevice((const char*)g_value_get_string(&value_id_string),
                                                     (const char*)g_value_get_string(&value_name_string),
-                                                    Iee1394Source,
-                                                    video_x_none);
+                                                    ImageGrabberDevice::iee1394Source,
+                                                    ImageGrabberDevice::video_x_none);
                 }
                 else {
                     // No device name
                     device = new ImageGrabberDevice((const char*)g_value_get_string(&value_id_string),
                                                     QString(QApplication::translate("GstreamerGrabber", "Device %1")).arg(device_size),
-                                                    Iee1394Source,
-                                                    video_x_none);
+                                                    ImageGrabberDevice::iee1394Source,
+                                                    ImageGrabberDevice::video_x_none);
                 }
                 // Add the device to the device list
                 devices.append(device);
@@ -390,15 +391,15 @@ void GstreamerGrabber::initializationSubclass()
                     }
                     device = new ImageGrabberDevice(g_value_get_string(&value_id_string),
                                                     g_value_get_string(&value_name_string),
-                                                    DirectShowSource,
-                                                    video_x_none);
+                                                    ImageGrabberDevice::directShowUsbSource,
+                                                    ImageGrabberDevice::video_x_none);
                 }
                 else {
                     // No device id
                     device = new ImageGrabberDevice(g_value_get_string(&value_name_string),
                                                     g_value_get_string(&value_name_string),
-                                                    DirectShowSource,
-                                                    video_x_none);
+                                                    ImageGrabberDevice::directShow1394Source,
+                                                    ImageGrabberDevice::video_x_none);
                 }
                 // Add the device to the device list
                 devices.append(device);
@@ -454,7 +455,7 @@ void GstreamerGrabber::initSubclass()
     gst_object_unref(bus);
 
     switch (videoDevice->getDeviceSource()) {
-    case TestSource:
+    case ImageGrabberDevice::testSource:
         qDebug() << "gstreamergrabber::init --> Build the pipeline: videotestsrc ! ffmpegcolorspace ! jpegenc ! multifilesink location=$IMAGEFILE";
 
         source = gst_element_factory_make("videotestsrc", "source=videotestsrc");
@@ -541,7 +542,7 @@ void GstreamerGrabber::initSubclass()
             return;
         }
         break;
-    case Video4LinuxSource:
+    case ImageGrabberDevice::video4LinuxSource:
         qDebug() << "gstreamergrabber::init --> Build the pipeline: v4l2src ! ffmpegcolorspace ! jpegenc ! multifilesink location=$IMAGEFILE";
 
         // Create the elements
@@ -634,7 +635,7 @@ void GstreamerGrabber::initSubclass()
         }
 
         break;
-    case Iee1394Source:
+    case ImageGrabberDevice::iee1394Source:
         qDebug() << "gstreamergrabber::init --> Build the pipeline: dv1394src ! queue ! dvdemux ! queue ! dvdec ! ffmpegcolorspace ! jpegenc ! multifilesink location=$IMAGEFILE";
 
         // Examples:
@@ -803,7 +804,7 @@ void GstreamerGrabber::initSubclass()
         g_signal_connect(filter1,"pad-added",G_CALLBACK(on_pad_added),filter2);
 
         break;
-    case DirectShowSource:
+    case ImageGrabberDevice::directShowUsbSource:
         qDebug() << "gstreamergrabber::init --> Build the pipeline: dshowvideosrc ! ffmpegcolorspace ! jpegenc ! multifilesink location=$IMAGEFILE";
 
         // Examples Web-Cam:

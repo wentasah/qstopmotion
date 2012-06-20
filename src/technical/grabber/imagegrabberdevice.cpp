@@ -24,8 +24,8 @@
 
 ImageGrabberDevice::ImageGrabberDevice(const QString id,
                                  const QString name,
-                                 ImageGrabberVideoSources source,
-                                 ImageGrabberDeviceCapabilities cap)
+                                 imageGrabberVideoSources source,
+                                 imageGrabberDeviceCapabilities cap)
 {
     qDebug("ImageGrabberDevice::Constructor --> Start");
 
@@ -58,13 +58,13 @@ const QString ImageGrabberDevice::getDeviceName()
 }
 
 
-ImageGrabberVideoSources ImageGrabberDevice::getDeviceSource()
+ImageGrabberDevice::imageGrabberVideoSources ImageGrabberDevice::getDeviceSource()
 {
     return deviceSource;
 }
 
 
-ImageGrabberDeviceCapabilities ImageGrabberDevice::getDeviceCapability()
+ImageGrabberDevice::imageGrabberDeviceCapabilities ImageGrabberDevice::getDeviceCapability()
 {
     return deviceCap;
 }

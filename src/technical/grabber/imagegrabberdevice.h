@@ -30,26 +30,6 @@
 
 
 /**
- * All possible video sources.
- */
-enum ImageGrabberVideoSources {
-    TestSource,
-    Video4LinuxSource,
-    Iee1394Source,
-    DirectShowSource
-};
-
-/**
- * Video device capabilities
- */
-enum ImageGrabberDeviceCapabilities {
-    video_x_none,
-    video_x_raw_rgb,
-    video_x_raw_yuv,
-    video_x_dv
-};
-
-/**
  * Class containing all the informations of a device.
  *
  * @author Ralf Lange
@@ -57,6 +37,29 @@ enum ImageGrabberDeviceCapabilities {
 class ImageGrabberDevice
 {
 public:
+
+    /**
+     * All possible video sources.
+     */
+    enum imageGrabberVideoSources {
+        testSource,
+        video4LinuxSource,
+        iee1394Source,
+        directShowUsbSource,
+        directShow1394Source,
+        gphoto2Source,
+        noneSource
+    };
+
+    /**
+     * Video device capabilities
+     */
+    enum imageGrabberDeviceCapabilities {
+        video_x_none,
+        video_x_raw_rgb,
+        video_x_raw_yuv,
+        video_x_dv
+    };
 
     /**
      * Constructs and initializes the object.
@@ -67,8 +70,8 @@ public:
      */
     ImageGrabberDevice(const QString id,
                        const QString name,
-                       ImageGrabberVideoSources source,
-                       ImageGrabberDeviceCapabilities cap);
+                       imageGrabberVideoSources source,
+                       imageGrabberDeviceCapabilities cap);
 
     /**
      * Destructor
@@ -91,20 +94,20 @@ public:
      * Get the source of the device.
      * @return The source of the device.
      */
-    ImageGrabberVideoSources getDeviceSource();
+    imageGrabberVideoSources getDeviceSource();
 
     /**
      * Get the capability of the device.
      * @return The capability of the device.
      */
-    ImageGrabberDeviceCapabilities getDeviceCapability();
+    imageGrabberDeviceCapabilities getDeviceCapability();
 
 private:
     QString   deviceId;
     // GSTValue *deviceIdValue;
     QString   deviceName;
-    ImageGrabberVideoSources deviceSource;
-    ImageGrabberDeviceCapabilities deviceCap;
+    imageGrabberVideoSources deviceSource;
+    imageGrabberDeviceCapabilities deviceCap;
 };
 
 #endif

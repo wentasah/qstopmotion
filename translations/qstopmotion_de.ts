@@ -356,12 +356,12 @@ wenn Sie abspielen wählen.</translation>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="133"/>
         <source>QVGA (320x240)</source>
-        <translation>320x240</translation>
+        <translation>QVGA (320x240)</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="134"/>
         <source>VGA (640x480)</source>
-        <translation>640x480</translation>
+        <translation>VGA (640x480)</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="135"/>

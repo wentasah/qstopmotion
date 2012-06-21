@@ -70,6 +70,19 @@ public:
 protected:
     // void resizeEvent(QResizeEvent *event);
 
+private:
+    /**
+     * Set the image grabber source in the combo box
+     * @param newSource The new image grabber source
+     */
+    void setImageGrabberSource(int newSource);
+
+    /**
+     * Set the adjustment in the adjustment box
+     * @param newAdjustment The new adjustment
+     */
+    void setAdjustment(int newAdjustment);
+
 private slots:
     // image import preferences
     /**
@@ -105,12 +118,6 @@ private slots:
      * import preferences can be updated.
      */
     void setClipButtonOn();
-
-    /**
-     * Slot for notified the import tab when adjustment is changed, so that
-     * import preferences can be updated.
-     */
-    void setAdjustment(int newAdjustment);
 
 private:
     Frontend     *frontend;

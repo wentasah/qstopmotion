@@ -47,13 +47,13 @@ ImportWidget::ImportWidget(Frontend *f, bool type, QWidget *parent) : QWidget(pa
     grabberPrefs             = 0;
     grabberSourceLabel       = 0;
     grabberSourceCombo       = 0;
-    activeGrabberSource      = 0; // ImageEncoder::noneApplication;
+    activeGrabberSource      = ImageGrabberDevice::testSource;
 
     // Image preferences
     imagePrefs               = 0;
     imageFormatLabel         = 0;
     imageFormatCombo         = 0;
-    activeImageFormat        = ImageGrabber::noneFormat;
+    activeImageFormat        = ImageGrabber::jpegFormat;
     imageSizeLabel           = 0;
     imageSizeCombo           = 0;
     activeImageSize          = ImageGrabber::defaultSize;
@@ -117,13 +117,20 @@ void ImportWidget::makeGUI()
     grabberSourceCombo = new QComboBox();
     grabberSourceLabel->setBuddy(grabberSourceCombo);
     grabberSourceCombo->setFocusPolicy(Qt::NoFocus);
-    connect(grabberSourceCombo, SIGNAL(activated(int)), this, SLOT(changeEncoderApplication(int)));
+    connect(grabberSourceCombo, SIGNAL(activated(int)), this, SLOT(changeImageGrabberSources(int)));
+
     grabberSourceCombo->addItem(tr("Test Source"));
+
+#ifdef Q_WS_X11
     grabberSourceCombo->addItem(tr("Video 4 Linux (USB WebCam)"));
     grabberSourceCombo->addItem(tr("IEEE 1394 (FireWire DigiCam)"));
+    grabberSourceCombo->addItem(tr("gphoto (USB Compact Camera)"));
+#endif
+
+#ifdef Q_WS_WIN
     grabberSourceCombo->addItem(tr("Direct Show (USB WebCam)"));
     grabberSourceCombo->addItem(tr("Direct Show (FireWire DigiCam)"));
-    grabberSourceCombo->addItem(tr("gphoto (USB Compact Camera)"));
+#endif
 
     imagePrefs = new QGroupBox;
     imagePrefs->setTitle(tr("Image import settings"));
@@ -201,47 +208,38 @@ void ImportWidget::makeGUI()
     leftUpButton = new QRadioButton();
     leftUpButton->setChecked(false);
     leftUpButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-    connect(leftUpButton, SIGNAL(clicked()), this, SLOT(setAdjustment(ImageGrabber::leftUp)));
 
     centerUpButton = new QRadioButton();
     centerUpButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     centerUpButton->setChecked(false);
-    connect(centerUpButton, SIGNAL(clicked()), this, SLOT(setAdjustment(ImageGrabber::centerUp)));
 
     rightUpButton = new QRadioButton();
     rightUpButton->setChecked(false);
     rightUpButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-    connect(rightUpButton, SIGNAL(clicked()), this, SLOT(setAdjustment(ImageGrabber::rightUp)));
 
     leftMiddleButton = new QRadioButton();
     leftMiddleButton->setChecked(false);
     leftMiddleButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-    connect(leftMiddleButton, SIGNAL(clicked()), this, SLOT(setAdjustment(ImageGrabber::leftMiddle)));
 
     centerMiddleButton = new QRadioButton();
     centerMiddleButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     centerMiddleButton->setChecked(false);
-    connect(centerMiddleButton, SIGNAL(clicked()), this, SLOT(setAdjustment(ImageGrabber::centerMiddle)));
 
     rightMiddleButton = new QRadioButton();
     rightMiddleButton->setChecked(false);
     rightMiddleButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-    connect(rightMiddleButton, SIGNAL(clicked()), this, SLOT(setAdjustment(ImageGrabber::rightMiddle)));
 
     leftDownButton = new QRadioButton();
     leftDownButton->setChecked(false);
     leftDownButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-    connect(leftDownButton, SIGNAL(clicked()), this, SLOT(setAdjustment(ImageGrabber::leftDown)));
 
     centerDownButton = new QRadioButton();
     centerDownButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     centerDownButton->setChecked(false);
-    connect(centerDownButton, SIGNAL(clicked()), this, SLOT(setAdjustment(ImageGrabber::centerDown)));
 
     rightDownButton = new QRadioButton();
     rightDownButton->setChecked(false);
     rightDownButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-    connect(rightDownButton, SIGNAL(clicked()), this, SLOT(setAdjustment(ImageGrabber::rightDown)));
 
     QVBoxLayout *adjustmentPrefsLayout = new QVBoxLayout;
     QHBoxLayout *hbLayout = new QHBoxLayout;
@@ -330,7 +328,7 @@ void ImportWidget::initialize()
     // Read eEncoder preferences
     if (tabType) {
         // This is a general dialog tab
-        activeGrabberSource = pref->getBasicPreference("defaultgrabbersource", 0 /*ImageEncoder::noneApplication*/);
+        activeGrabberSource = pref->getBasicPreference("defaultgrabbersource", ImageGrabberDevice::testSource);
         activeImageFormat = pref->getBasicPreference("defaultimageformat", ImageGrabber::noneFormat);
         activeImageSize = pref->getBasicPreference("defaultimagesize", ImageGrabber::defaultSize);
         activeTransform = pref->getBasicPreference("defaulttransformation", false);
@@ -347,14 +345,7 @@ void ImportWidget::initialize()
         */
     }
 
-    if (activeGrabberSource == 0)
-    {
-        grabberSourceCombo->setCurrentIndex(0);
-    }
-    else
-    {
-        grabberSourceCombo->setCurrentIndex(activeGrabberSource);
-    }
+    setImageGrabberSource(activeGrabberSource);
 
     if (activeImageFormat == VideoEncoder::noneFormat)
     {
@@ -408,7 +399,32 @@ void ImportWidget::apply()
     int index;
     bool changings = false;
 
-    index = grabberSourceCombo->currentIndex();
+    switch (grabberSourceCombo->currentIndex()) {
+    case 0:
+        index = ImageGrabberDevice::testSource;
+        break;
+    case 1:
+#ifdef Q_WS_X11
+        index = ImageGrabberDevice::video4LinuxSource;
+#endif
+#ifdef Q_WS_WIN
+        index = ImageGrabberDevice::directShowUsbSource;
+#endif
+        break;
+    case 2:
+#ifdef Q_WS_X11
+        index = ImageGrabberDevice::iee1394Source;
+#endif
+#ifdef Q_WS_WIN
+        index = ImageGrabberDevice::directShow1394Source;
+#endif
+        break;
+    case 3:
+#ifdef Q_WS_X11
+        index = ImageGrabberDevice::gphoto2Source;
+#endif
+        break;
+    }
     if (activeGrabberSource != index)
     {
         activeGrabberSource = index;
@@ -434,6 +450,45 @@ void ImportWidget::apply()
             activeTransform = false;
             changings = true;
         }
+    }
+    else {
+        if (!activeTransform) {
+            activeTransform = true;
+            changings = true;
+        }
+    }
+
+    if (leftUpButton->isChecked()) {
+        index = ImageGrabber::leftUp;
+    }
+    if (centerUpButton->isChecked()) {
+        index = ImageGrabber::centerUp;
+    }
+    if (rightUpButton->isChecked()) {
+        index = ImageGrabber::rightUp;
+    }
+    if (leftMiddleButton->isChecked()) {
+        index = ImageGrabber::leftMiddle;
+    }
+    if (centerMiddleButton->isChecked()) {
+        index = ImageGrabber::centerMiddle;
+    }
+    if (rightMiddleButton->isChecked()) {
+        index = ImageGrabber::rightMiddle;
+    }
+    if (leftDownButton->isChecked()) {
+        index = ImageGrabber::leftDown;
+    }
+    if (centerDownButton->isChecked()) {
+        index = ImageGrabber::centerDown;
+    }
+    if (rightDownButton->isChecked()) {
+        index = ImageGrabber::rightDown;
+    }
+    if (activeImageAdjustment != index)
+    {
+        activeImageAdjustment = index;
+        changings = true;
     }
 
     if (changings) {
@@ -465,7 +520,7 @@ void ImportWidget::reset()
 {
     qDebug("ImportWidget::reset --> Start");
 
-    grabberSourceCombo->setCurrentIndex(activeGrabberSource);
+    setImageGrabberSource(activeGrabberSource);
     imageFormatCombo->setCurrentIndex(activeImageFormat);
     imageSizeCombo->setCurrentIndex(activeImageSize);
     if (activeTransform)
@@ -479,6 +534,73 @@ void ImportWidget::reset()
     setAdjustment(activeImageAdjustment);
 
     qDebug("ImportWidget::reset --> End");
+}
+
+
+void ImportWidget::setImageGrabberSource(int newSource)
+{
+    qDebug() << "ImportWidget::setImageGrabberSource --> Start";
+
+    switch (newSource) {
+    case ImageGrabberDevice::testSource:
+        grabberSourceCombo->setCurrentIndex(0);
+        break;
+    case ImageGrabberDevice::video4LinuxSource:
+        grabberSourceCombo->setCurrentIndex(1);
+        break;
+    case ImageGrabberDevice::iee1394Source:
+        grabberSourceCombo->setCurrentIndex(2);
+        break;
+    case ImageGrabberDevice::gphoto2Source:
+        grabberSourceCombo->setCurrentIndex(3);
+        break;
+    case ImageGrabberDevice::directShowUsbSource:
+        grabberSourceCombo->setCurrentIndex(1);
+        break;
+    case ImageGrabberDevice::directShow1394Source:
+        grabberSourceCombo->setCurrentIndex(2);
+        break;
+    }
+
+    qDebug() << "ImportWidget::setImageGrabberSource --> End";
+}
+
+
+void ImportWidget::setAdjustment(int newAdjustment)
+{
+    qDebug() << "ImportWidget::setAdjustment --> Start";
+
+    switch (newAdjustment) {
+    case ImageGrabber::leftUp:
+        leftUpButton->setChecked(true);
+        break;
+    case ImageGrabber::centerUp:
+        centerUpButton->setChecked(true);
+        break;
+    case ImageGrabber::rightUp:
+        rightUpButton->setChecked(true);
+        break;
+    case ImageGrabber::leftMiddle:
+        leftMiddleButton->setChecked(true);
+        break;
+    case ImageGrabber::centerMiddle:
+        centerMiddleButton->setChecked(true);
+        break;
+    case ImageGrabber::rightMiddle:
+        rightMiddleButton->setChecked(true);
+        break;
+    case ImageGrabber::leftDown:
+        leftDownButton->setChecked(true);
+        break;
+    case ImageGrabber::centerDown:
+        centerDownButton->setChecked(true);
+        break;
+    case ImageGrabber::rightDown:
+        rightDownButton->setChecked(true);
+        break;
+    }
+
+    qDebug() << "ImportWidget::setAdjustment --> End";
 }
 
 
@@ -510,8 +632,18 @@ void ImportWidget::setScaleButtonOn()
 {
     scaleButton->setChecked(true);
     clipButton->setChecked(false);
-    // defaultOutputEdit->setEnabled(false);
-    // browseOutputButton->setEnabled(false);
+
+    adjustmentPrefs->setEnabled(false);
+
+    leftUpButton->setEnabled(false);
+    centerUpButton->setEnabled(false);
+    rightUpButton->setEnabled(false);
+    leftMiddleButton->setEnabled(false);
+    centerMiddleButton->setEnabled(false);
+    rightMiddleButton->setEnabled(false);
+    leftDownButton->setEnabled(false);
+    centerDownButton->setEnabled(false);
+    rightDownButton->setEnabled(false);
 }
 
 
@@ -519,46 +651,16 @@ void ImportWidget::setClipButtonOn()
 {
     clipButton->setChecked(true);
     scaleButton->setChecked(false);
-    // defaultOutputEdit->setEnabled(true);
-    // browseOutputButton->setEnabled(true);
-}
 
+    adjustmentPrefs->setEnabled(true);
 
-void ImportWidget::setAdjustment(int newAdjustment)
-{
-    activeImageAdjustment = newAdjustment;
-
-    leftUpButton->setChecked(false);
-    centerUpButton->setChecked(false);
-    rightUpButton->setChecked(false);
-
-    switch (newAdjustment) {
-    case ImageGrabber::leftUp:
-        leftUpButton->setChecked(true);
-        break;
-    case ImageGrabber::centerUp:
-        centerUpButton->setChecked(true);
-        break;
-    case ImageGrabber::rightUp:
-        rightUpButton->setChecked(true);
-        break;
-    case ImageGrabber::leftMiddle:
-        leftMiddleButton->setChecked(true);
-        break;
-    case ImageGrabber::centerMiddle:
-        centerMiddleButton->setChecked(true);
-        break;
-    case ImageGrabber::rightMiddle:
-        rightMiddleButton->setChecked(true);
-        break;
-    case ImageGrabber::leftDown:
-        leftDownButton->setChecked(true);
-        break;
-    case ImageGrabber::centerDown:
-        centerDownButton->setChecked(true);
-        break;
-    case ImageGrabber::rightDown:
-        rightDownButton->setChecked(true);
-        break;
-    }
+    leftUpButton->setEnabled(true);
+    centerUpButton->setEnabled(true);
+    rightUpButton->setEnabled(true);
+    leftMiddleButton->setEnabled(true);
+    centerMiddleButton->setEnabled(true);
+    rightMiddleButton->setEnabled(true);
+    leftDownButton->setEnabled(true);
+    centerDownButton->setEnabled(true);
+    rightDownButton->setEnabled(true);
 }

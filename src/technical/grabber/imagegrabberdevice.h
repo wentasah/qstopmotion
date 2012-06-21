@@ -42,13 +42,12 @@ public:
      * All possible video sources.
      */
     enum imageGrabberVideoSources {
-        testSource,
-        video4LinuxSource,
-        iee1394Source,
-        directShowUsbSource,
-        directShow1394Source,
-        gphoto2Source,
-        noneSource
+        testSource,                    // 0
+        video4LinuxSource,             // 1
+        iee1394Source,                 // 2
+        directShowUsbSource,           // 3
+        directShow1394Source,          // 4
+        gphoto2Source,                 // 5
     };
 
     /**

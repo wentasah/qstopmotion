@@ -311,15 +311,24 @@ QDomElement PreferencesTool::findPreferencesNode(const QString &key)
 
 void PreferencesTool::setBasicPreferenceDefaults()
 {
+    // General defaults
     setBasicPreference("language", "en");
     setBasicPreference("capturebutton", captureButtonAfter);
+    // Project defaults
     setBasicPreference("defaultrecordingmode", 0);
     setBasicPreference("defaultvideosource", 0);
     setBasicPreference("defaultmixmode", 0);
     setBasicPreference("defaultmixcount", 2);
     setBasicPreference("defaultplaybackcount", 5);
+    // Image import defaults
+    setBasicPreference("defaultgrabbersource", ImageGrabberDevice::testSource);
+    setBasicPreference("defaultimageformat", ImageGrabber::jpegFormat);
+    setBasicPreference("defaultimagesize", ImageGrabber::defaultSize);
+    setBasicPreference("defaulttransformation", false);
+    setBasicPreference("defaultimageadjustment", ImageGrabber::centerDown);
+    // Video export defaults
     setBasicPreference("defaultencoderapplication", VideoEncoder::noneApplication);
-    setBasicPreference("defaultvideoformat", VideoEncoder::noneFormat);
+    setBasicPreference("defaultvideoformat", VideoEncoder::mp4Format);
     setBasicPreference("defaultvideosize", VideoEncoder::defaultSize);
     setBasicPreference("defaultframespersecond", 12);
     setBasicPreference("defaultusedefaultoutputfile", false);

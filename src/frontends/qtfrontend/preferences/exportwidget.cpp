@@ -52,7 +52,7 @@ ExportWidget::ExportWidget(Frontend *f, bool type, QWidget *parent) : QWidget(pa
     activeEncoderApplication = VideoEncoder::noneApplication;
     videoFormatLabel         = 0;
     videoFormatCombo         = 0;
-    activeVideoFormat        = VideoEncoder::noneFormat;
+    activeVideoFormat        = VideoEncoder::mp4Format;
     videoSizeLabel           = 0;
     videoSizeCombo           = 0;
     activeVideoSize          = VideoEncoder::defaultSize;
@@ -238,7 +238,7 @@ void ExportWidget::initialize()
     if (tabType) {
         // This is a general dialog tab
         activeEncoderApplication = pref->getBasicPreference("defaultencoderapplication", VideoEncoder::noneApplication);
-        activeVideoFormat = pref->getBasicPreference("defaultvideoformat", VideoEncoder::noneFormat);
+        activeVideoFormat = pref->getBasicPreference("defaultvideoformat", VideoEncoder::mp4Format);
         activeVideoSize = pref->getBasicPreference("defaultvideosize", VideoEncoder::defaultSize);
         activeFramesPerSecond = pref->getBasicPreference("defaultframespersecond", 12);
         activeUseDefaultOutputFile = pref->getBasicPreference("defaultusedefaultoutputfile", false);

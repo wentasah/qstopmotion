@@ -152,6 +152,10 @@ const QString AnimationProject::getOldSoundPath() const
 }
 
 
+/**************************************************************************
+ * Project preferences
+ **************************************************************************/
+
 int AnimationProject::getVideoSource() const
 {
     return videoSource;
@@ -174,19 +178,6 @@ int AnimationProject::getMixMode() const
 void AnimationProject::setMixMode(int newMixMode)
 {
     mixMode = newMixMode;
-    incSettingsChanges();
-}
-
-
-int AnimationProject::getUnitMode() const
-{
-    return unitMode;
-}
-
-
-void AnimationProject::setUnitMode(int newUnitMode)
-{
-    unitMode = newUnitMode;
     incSettingsChanges();
 }
 
@@ -216,6 +207,90 @@ void AnimationProject::setPlaybackCount(int newPlaybackCount)
     incSettingsChanges();
 }
 
+
+int AnimationProject::getUnitMode() const
+{
+    return unitMode;
+}
+
+
+void AnimationProject::setUnitMode(int newUnitMode)
+{
+    unitMode = newUnitMode;
+    incSettingsChanges();
+}
+
+/**************************************************************************
+ * Image import preferences
+ **************************************************************************/
+
+int AnimationProject::getGrabberSource()
+{
+    return grabberSource;
+}
+
+
+void AnimationProject::setGrabberSource(int newGrabberSource)
+{
+    grabberSource = newGrabberSource;
+    incSettingsChanges();
+}
+
+
+int AnimationProject::getImageFormat()
+{
+    return imageFormat;
+}
+
+
+void AnimationProject::setImageFormat(int newIF)
+{
+    imageFormat = newIF;
+    incSettingsChanges();
+}
+
+
+int AnimationProject::getImageSize()
+{
+    return imageSize;
+}
+
+
+void AnimationProject::setImageSize(int newIS)
+{
+    imageSize = newIS;
+    incSettingsChanges();
+}
+
+
+bool AnimationProject::getImageTransformation()
+{
+    return imageTransformation;
+}
+
+
+void AnimationProject::setImageTransformation(bool newTransform)
+{
+    imageTransformation = newTransform;
+    incSettingsChanges();
+}
+
+
+int AnimationProject::getImageAdjustment()
+{
+    return imageAdjustment;
+}
+
+
+void AnimationProject::setImageAdjustment(int newA)
+{
+    imageAdjustment = newA;
+    incSettingsChanges();
+}
+
+/**************************************************************************
+ * Video export preferences
+ **************************************************************************/
 
 int AnimationProject::getEncoderApplication() const
 {
@@ -466,7 +541,8 @@ bool AnimationProject::readSettingsFromProject(QDomElement &settingsNode)
     while (!currElement.isNull()) {
         QString nodeName = currElement.nodeName();
 
-        // The node is a source node
+        // Save project parameter
+
         if (nodeName.compare("videosource") == 0) {
             QString tmp = currElement.text();
             if (frontend->setVideoSource(tmp.toInt())) {
@@ -490,6 +566,32 @@ bool AnimationProject::readSettingsFromProject(QDomElement &settingsNode)
             QString tmp = currElement.text();
             playbackCount = tmp.toInt();
         }
+        else if (nodeName.compare("unitmode") == 0) {
+            QString tmp = currElement.text();
+            unitMode = tmp.toInt();
+        }
+        // Save image import parameter
+        else if (nodeName.compare("grabbersource") == 0) {
+            QString tmp = currElement.text();
+            grabberSource = tmp.toInt();
+        }
+        else if (nodeName.compare("imageformat") == 0) {
+            QString tmp = currElement.text();
+            imageFormat = tmp.toInt();
+        }
+        else if (nodeName.compare("imagesize") == 0) {
+            QString tmp = currElement.text();
+            imageSize = tmp.toInt();
+        }
+        else if (nodeName.compare("imagetransformation") == 0) {
+            QString tmp = currElement.text();
+            imageTransformation = tmp.toInt();
+        }
+        else if (nodeName.compare("imageadjustment") == 0) {
+            QString tmp = currElement.text();
+            imageAdjustment = tmp.toInt();
+        }
+        // Save video export parameter
         else if (nodeName.compare("encoderapplication") == 0) {
             QString tmp = currElement.text();
             encoderApplication = tmp.toInt();
@@ -514,10 +616,6 @@ bool AnimationProject::readSettingsFromProject(QDomElement &settingsNode)
             QString tmp = currElement.text();
             defaultOutputFileName.clear();
             defaultOutputFileName.append(tmp);
-        }
-        else if (nodeName.compare("unitmode") == 0) {
-            QString tmp = currElement.text();
-            unitMode = tmp.toInt();
         }
 
         currElement = currElement.nextSiblingElement();
@@ -558,6 +656,46 @@ bool AnimationProject::saveSettingsToProject(QDomDocument &doc, QDomElement &set
     playbackCountElement.appendChild(playbackCountText);
     settingsNode.appendChild(playbackCountElement);
 
+    // Save unit mode parameter
+    QDomElement unitModeElement = doc.createElement("unitmode");
+    QDomText unitModeText = doc.createTextNode(QString("%1").arg(unitMode));
+    unitModeElement.appendChild(unitModeText);
+    settingsNode.appendChild(unitModeElement);
+
+    // Save image import preferences
+
+    // Save grabberSource parameter
+    QDomElement gsElement = doc.createElement("grabbersource");
+    QDomText gsText = doc.createTextNode(QString("%1").arg(grabberSource));
+    gsElement.appendChild(gsText);
+    settingsNode.appendChild(gsElement);
+
+    // Save imageFormat parameter
+    QDomElement ifElement = doc.createElement("imageformat");
+    QDomText ifText = doc.createTextNode(QString("%1").arg(imageFormat));
+    ifElement.appendChild(ifText);
+    settingsNode.appendChild(ifElement);
+
+    // Save imageSize parameter
+    QDomElement isElement = doc.createElement("imagesize");
+    QDomText isText = doc.createTextNode(QString("%1").arg(imageSize));
+    isElement.appendChild(isText);
+    settingsNode.appendChild(isElement);
+
+    // Save imageTransformation parameter
+    QDomElement itElement = doc.createElement("imagetransformation");
+    QDomText itText = doc.createTextNode(QString("%1").arg((int)imageTransformation));
+    itElement.appendChild(itText);
+    settingsNode.appendChild(itElement);
+
+    // Save imageAdjustment parameter
+    QDomElement iaElement = doc.createElement("imageadjustment");
+    QDomText iaText = doc.createTextNode(QString("%1").arg(imageAdjustment));
+    iaElement.appendChild(iaText);
+    settingsNode.appendChild(iaElement);
+
+    // Save video export preferences
+
     // Save encoderApplication parameter
     QDomElement eaElement = doc.createElement("encoderapplication");
     QDomText eaText = doc.createTextNode(QString("%1").arg(encoderApplication));
@@ -593,12 +731,6 @@ bool AnimationProject::saveSettingsToProject(QDomDocument &doc, QDomElement &set
     QDomText dofnText = doc.createTextNode(defaultOutputFileName);
     dofnElement.appendChild(dofnText);
     settingsNode.appendChild(dofnElement);
-
-    // Save unit mode parameter
-    QDomElement unitModeElement = doc.createElement("unitmode");
-    QDomText unitModeText = doc.createTextNode(QString("%1").arg(unitMode));
-    unitModeElement.appendChild(unitModeText);
-    settingsNode.appendChild(unitModeElement);
 
     qDebug("AnimationProject::saveSettingsToProject --> End");
     return true;

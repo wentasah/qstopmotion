@@ -53,7 +53,6 @@ public:
         jpegFormat,            // JPEG format
         tiffFormat,            // TIFF format
         bmpFormat,             // BMP format
-        noneFormat
     };
 
     /**

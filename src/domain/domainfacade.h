@@ -172,6 +172,10 @@ public:
      */
     const QString getProjectDescription();
 
+    /**************************************************************************
+     * Project preferences
+     **************************************************************************/
+
     /**
      * Get the active source of the project.
      * @return active source.
@@ -197,18 +201,6 @@ public:
     void setMixMode(int newMixMode);
 
     /**
-     * Get the active unit of the project.
-     * @return active unit mode.
-     */
-    int getUnitMode();
-
-    /**
-     * Set the active unit mode of the project.
-     * @param newUnitMode the new unit mode.
-     */
-    void setUnitMode(int newUnitMode);
-
-    /**
      * Get the active mix count of the project.
      * @return active mix count.
      */
@@ -231,6 +223,86 @@ public:
      * @param newPlaybackCount the new playback count source.
      */
     void setPlaybackCount(int newPlaybackCount);
+
+    /**
+     * Get the active unit of the project.
+     * @return active unit mode.
+     */
+    int getUnitMode();
+
+    /**
+     * Set the active unit mode of the project.
+     * @param newUnitMode the new unit mode.
+     */
+    void setUnitMode(int newUnitMode);
+
+    /**************************************************************************
+     * Image import preferences
+     **************************************************************************/
+
+    /**
+     * Get the image grabber source index.
+     * @return image grabber source index
+     */
+    int getGrabberSource();
+
+    /**
+     * Set the image grabber source index.
+     * @param index Index of the new image grabber source
+     */
+    void setGrabberSource(int index);
+
+    /**
+     * Get the image format of the project.
+     * @return image format.
+     */
+    int getImageFormat();
+
+    /**
+     * Set the image format of the project.
+     * @param newVF The new image format.
+     */
+    void setImageFormat(int newVF);
+
+    /**
+     * Get the image size of the project.
+     * @return image size.
+     */
+    int getImageSize();
+
+    /**
+     * Set the image size of the project.
+     * @param newVS The new image size.
+     */
+    void setImageSize(int newVS);
+
+    /**
+     * Get the transformation flag of the project.
+     * @return Transformation flag.
+     */
+    bool getImageTransformation();
+
+    /**
+     * Set the transformation flag of the project.
+     * @param newTransform The new transformation flag.
+     */
+    void setImageTransformation(bool newTransform);
+
+    /**
+     * Get the image adjustment of the project.
+     * @return Image adjustment.
+     */
+    int getImageAdjustment();
+
+    /**
+     * Set the image adjustment of the project.
+     * @param newIA The new image adjustment.
+     */
+    void setImageAdjustment(int newIA);
+
+    /**************************************************************************
+     * Video export preferences
+     **************************************************************************/
 
     /**
      * Get the encoder application of the project.

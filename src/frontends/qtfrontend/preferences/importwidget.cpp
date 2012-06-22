@@ -329,41 +329,25 @@ void ImportWidget::initialize()
     if (tabType) {
         // This is a general dialog tab
         activeGrabberSource = pref->getBasicPreference("defaultgrabbersource", ImageGrabberDevice::testSource);
-        activeImageFormat = pref->getBasicPreference("defaultimageformat", ImageGrabber::noneFormat);
+        activeImageFormat = pref->getBasicPreference("defaultimageformat", ImageGrabber::jpegFormat);
         activeImageSize = pref->getBasicPreference("defaultimagesize", ImageGrabber::defaultSize);
         activeTransform = pref->getBasicPreference("defaulttransformation", false);
         activeImageAdjustment = pref->getBasicPreference("defaultimageadjustment", ImageGrabber::centerDown);
     }
     else {
         // This is a project dialog tab
-        /*
         activeGrabberSource = frontend->getProject()->getGrabberSource();
         activeImageFormat = frontend->getProject()->getImageFormat();
         activeImageSize = frontend->getProject()->getImageSize();
-        activeTransformation = frontend->getProject()->getTransformation();
+        activeTransform = frontend->getProject()->getImageTransformation();
         activeImageAdjustment = frontend->getProject()->getImageAdjustment();
-        */
     }
 
     setImageGrabberSource(activeGrabberSource);
 
-    if (activeImageFormat == VideoEncoder::noneFormat)
-    {
-        imageFormatCombo->setCurrentIndex(0);
-    }
-    else
-    {
-        imageFormatCombo->setCurrentIndex(activeImageFormat);
-    }
+    imageFormatCombo->setCurrentIndex(activeImageFormat);
 
-    if (activeImageSize == VideoEncoder::defaultSize)
-    {
-        imageSizeCombo->setCurrentIndex(0);
-    }
-    else
-    {
-        imageSizeCombo->setCurrentIndex(activeImageSize);
-    }
+    imageSizeCombo->setCurrentIndex(activeImageSize);
 
     // Transformation preferences
     if (activeTransform)
@@ -502,13 +486,11 @@ void ImportWidget::apply()
         }
         else {
             // This is a project dialog tab
-            /*
             frontend->getProject()->setGrabberSource(activeGrabberSource);
             frontend->getProject()->setImageFormat(activeImageFormat);
             frontend->getProject()->setImageSize(activeImageSize);
-            frontend->getProject()->setTransformation(activeTransformation);
+            frontend->getProject()->setImageTransformation(activeTransform);
             frontend->getProject()->setImageAdjustment(activeImageAdjustment);
-            */
         }
     }
 

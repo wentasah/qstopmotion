@@ -312,8 +312,12 @@ void ProjectWidget::apply()
 
         frontend->setRecordingMode(defaultRecordingMode);
         frontend->setMixMode(defaultMixMode);
-        frontend->setMixCount(defaultMixCount);
-        frontend->setPlaybackCount(defaultPlaybackCount);
+        if (0 == defaultMixMode) {
+            frontend->setMixCount(defaultMixCount);
+        }
+        if (2 == defaultMixMode) {
+            frontend->setPlaybackCount(defaultPlaybackCount);
+        }
         // frontend->setUnitMode(defaultUnitMode);
     }
 

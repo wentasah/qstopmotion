@@ -226,6 +226,10 @@ const QString DomainFacade::getProjectDescription()
 }
 
 
+/**************************************************************************
+ * Project preferences
+ **************************************************************************/
+
 int DomainFacade::getVideoSource()
 {
     return animationProject->getVideoSource();
@@ -249,18 +253,6 @@ void DomainFacade::setMixMode(int newMixMode)
 {
     animationProject->setMixMode(newMixMode);
     frontend->setMixMode(newMixMode);
-}
-
-
-int DomainFacade::getUnitMode()
-{
-    return animationProject->getUnitMode();
-}
-
-
-void DomainFacade::setUnitMode(int newUnitMode)
-{
-    animationProject->setUnitMode(newUnitMode);
 }
 
 
@@ -288,6 +280,85 @@ void DomainFacade::setPlaybackCount(int newPlaybackCount)
     animationProject->setPlaybackCount(newPlaybackCount);
 }
 
+
+int DomainFacade::getUnitMode()
+{
+    return animationProject->getUnitMode();
+}
+
+
+void DomainFacade::setUnitMode(int newUnitMode)
+{
+    animationProject->setUnitMode(newUnitMode);
+}
+
+/**************************************************************************
+ * Image import preferences
+ **************************************************************************/
+
+int DomainFacade::getGrabberSource()
+{
+    return animationProject->getGrabberSource();
+}
+
+
+void DomainFacade::setGrabberSource(int newGrabberSource)
+{
+    animationProject->setGrabberSource(newGrabberSource);
+    // frontend->setGrabberSource(newGrabberSource);
+}
+
+
+int DomainFacade::getImageFormat()
+{
+    return animationProject->getImageFormat();
+}
+
+
+void DomainFacade::setImageFormat(int newIF)
+{
+    animationProject->setImageFormat(newIF);
+}
+
+
+int DomainFacade::getImageSize()
+{
+    return animationProject->getImageSize();
+}
+
+
+void DomainFacade::setImageSize(int newIS)
+{
+    animationProject->setImageSize(newIS);
+}
+
+
+bool DomainFacade::getImageTransformation()
+{
+    return animationProject->getImageTransformation();
+}
+
+
+void DomainFacade::setImageTransformation(bool newTransform)
+{
+    animationProject->setImageTransformation(newTransform);
+}
+
+
+int DomainFacade::getImageAdjustment()
+{
+    return animationProject->getImageAdjustment();
+}
+
+
+void DomainFacade::setImageAdjustment(int newA)
+{
+    animationProject->setImageAdjustment(newA);
+}
+
+/**************************************************************************
+ * Video export preferences
+ **************************************************************************/
 
 int DomainFacade::getEncoderApplication()
 {
@@ -591,16 +662,24 @@ void DomainFacade::setProjectSettingsToDefault()
 {
     PreferencesTool *pref = frontend->getPreferences();
 
+    // Project preferences
     setVideoSource(pref->getBasicPreference("defaultsource", 0));
     setMixMode(pref->getBasicPreference("defaultmixingmode", 0));
-    setUnitMode(pref->getBasicPreference("defaultunitmode", 0));
     setMixCount(pref->getBasicPreference("defaultmixcount", 0));
     setPlaybackCount(pref->getBasicPreference("defaultplaybackcount", 0));
-    setEncoderApplication(pref->getBasicPreference("encoderapplication", VideoEncoder::noneApplication));
-    setVideoFormat(pref->getBasicPreference("videoformat", VideoEncoder::noneFormat));
-    setVideoSize(pref->getBasicPreference("videosize", VideoEncoder::defaultSize));
-    setFramesPerSecond(pref->getBasicPreference("framespersecond", 12));
-    setUseDefaultOutputFile(pref->getBasicPreference("usedefaultoutputfile", false));
+    setUnitMode(pref->getBasicPreference("defaultunitmode", 0));
+    // Image import preferences
+    setGrabberSource(pref->getBasicPreference("defaultgrabbersource", ImageGrabberDevice::testSource));
+    setImageFormat(pref->getBasicPreference("defaultimageformat", ImageGrabber::jpegFormat));
+    setImageSize(pref->getBasicPreference("defaultimagesize", ImageGrabber::defaultSize));
+    setImageTransformation(pref->getBasicPreference("defaulttransformation", false));
+    setImageAdjustment(pref->getBasicPreference("defaultimageadjustment", ImageGrabber::centerDown));
+    // Video export preferences
+    setEncoderApplication(pref->getBasicPreference("defaultencoderapplication", VideoEncoder::noneApplication));
+    setVideoFormat(pref->getBasicPreference("defaultvideoformat", VideoEncoder::noneFormat));
+    setVideoSize(pref->getBasicPreference("defaultvideosize", VideoEncoder::defaultSize));
+    setFramesPerSecond(pref->getBasicPreference("defaultframespersecond", 12));
+    setUseDefaultOutputFile(pref->getBasicPreference("defaultusedefaultoutputfile", false));
 }
 
 

@@ -372,6 +372,10 @@ public:
      */
     virtual void setToolBarState(int newState) = 0;
 
+    /**************************************************************************
+     * Project preferences
+     **************************************************************************/
+
     /**
      * Get the recording mode.
      * @return The recording mode.
@@ -432,6 +436,10 @@ public:
      * @param count The new playback count.
      */
     virtual void setPlaybackCount(int count) = 0;
+
+    /**************************************************************************
+     * Other
+     **************************************************************************/
 
     /**
      * Test function for debugging purposes

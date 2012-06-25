@@ -49,6 +49,10 @@ const QString PreferencesTool::iconsDirectory = QLatin1String("icons");
 const QString PreferencesTool::picturesDirectory = QLatin1String("pictures");
 const QString PreferencesTool::historyFileName = QLatin1String(".history");
 
+const QString PreferencesTool::jpegSuffix = QLatin1String("jpg");
+const QString PreferencesTool::tiffSuffix = QLatin1String("tif");
+const QString PreferencesTool::bmpSuffix = QLatin1String("bmp");
+
 
 PreferencesTool::PreferencesTool(Frontend *f)
 {

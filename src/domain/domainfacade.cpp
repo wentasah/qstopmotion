@@ -1098,10 +1098,23 @@ bool DomainFacade::getModifyedExposure(const QString &filePath,
 
 const QString DomainFacade::copyToTemp(const QImage &rawImage)
 {
+    bool ret;
+
     qDebug("DomainFacade::copyToTemp --> Start");
 
     // creates a new image name
-    QString toImageName(QString("tmp_%1.jpg").arg(Exposure::tempNum));
+    QString toImageName(QString("tmp_%1.").arg(Exposure::tempNum));
+    switch (animationProject->getImageFormat()) {
+    case ImageGrabber::jpegFormat:
+        toImageName.append(PreferencesTool::jpegSuffix);
+        break;
+    case ImageGrabber::tiffFormat:
+        toImageName.append(PreferencesTool::tiffSuffix);
+        break;
+    case ImageGrabber::bmpFormat:
+        toImageName.append(PreferencesTool::bmpSuffix);
+        break;
+    }
 
     // creates a new image path
     QString toImagePath;
@@ -1110,7 +1123,18 @@ const QString DomainFacade::copyToTemp(const QImage &rawImage)
     toImagePath.append(toImageName);
 
     // Copy file to temp directory
-    if (!rawImage.save(toImagePath, "JPG", 100)) {
+    switch (animationProject->getImageFormat()) {
+    case ImageGrabber::jpegFormat:
+        ret = rawImage.save(toImagePath, "JPEG", 100);
+        break;
+    case ImageGrabber::tiffFormat:
+        ret = rawImage.save(toImagePath, "TIFF", 100);
+        break;
+    case ImageGrabber::bmpFormat:
+        ret = rawImage.save(toImagePath, "BMP", 100);
+        break;
+    }
+    if (!ret) {
         // Not successful
         frontend->showCritical(tr("Critical"),
                                tr("Can't copy image to temp directory!"));

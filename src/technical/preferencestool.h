@@ -135,6 +135,21 @@ public:
     static const QString historyFileName;
 
     /**
+     * Suffix of the jpeg image file
+     */
+    static const QString jpegSuffix;
+
+    /**
+     * Suffix of the tiff image file
+     */
+    static const QString tiffSuffix;
+
+    /**
+     * Suffix of the bmp image file
+     */
+    static const QString bmpSuffix;
+
+    /**
      * Protected constructor to deny external instanciation of the singleton.
      */
     PreferencesTool(Frontend *f);

@@ -1647,18 +1647,16 @@ QStringList ProjectTab::selectFiles()
 
     QFileDialog fileDialog(this, tr("Choose frames to add"), lastVisitedDir);
     QStringList filters;
-    filters << "Images (*.png *.jpg *.jpeg  *.gif *.PNG *.JPG *.JPEG *.GIF)"
-            << "Joint Photographic Ex. Gr. (*.jpg *.jpeg *.JPG *.JPEG)"
-            << "Portable Network Graphics (*.png *.PNG)"
-            << "GIMP native (*.xcf *.XCF)"
-            << "Tagged Image File Format (*.tif *.TIF)"
+    filters << "Images (*.bmp *.png *.jpg *.tif *.gif *.BMP *.PNG *.JPG *.TIF *.GIF)"
             << "Windows Bitmap (*.bmp *.BMP)"
-            << "TrueVision Targa (*.tga *.TGA)"
-            << "Portable Anymap (*.pnm *.PNM)"
+            << "Graphic Interchange Format (*.gif *.GIF)"
+            << "Joint Photographic Experts Group (*.jpg *.jpeg *.JPG *.JPEG)"
+            << "Portable Network Graphics (*.png *.PNG)"
+            << "Portable Bitmap (*.pbm *.PBM)"
+            << "Portable Pixmap (*.ppm *.PPM)"
+            << "Tagged Image File Format (*.tif *.tiff *.TIF *.TIFF)"
+            << "X11 Bitmap (*.xbm *.XBM)"
             << "X11 Pixmap (*.xpm *.XPM)"
-            << "ZSoft IBM PC Paintbrush (*.pcx *.PCX)"
-            << "CompuServe Graph. Interch. Format (*.gif *.GIF)"
-            << "Interleaved Bitmap (*.lbm *.iff *.LBM *.IFF)"
             << "All files (*)";
     fileDialog.setFilters(filters);
     fileDialog.setAcceptMode(QFileDialog::AcceptOpen);

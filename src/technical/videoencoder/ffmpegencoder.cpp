@@ -117,7 +117,18 @@ const QString FfmpegEncoder::getStartCommand() const
         startCommand.append("\"");
         startCommand.append(imagePath);
         startCommand.append("/");
-        startCommand.append("%6d.jpg");
+        startCommand.append("%6d.");
+        switch (animationProject->getImageFormat()) {
+        case ImageGrabber::jpegFormat:
+            startCommand.append(PreferencesTool::jpegSuffix);
+            break;
+        case ImageGrabber::tiffFormat:
+            startCommand.append(PreferencesTool::tiffSuffix);
+            break;
+        case ImageGrabber::bmpFormat:
+            startCommand.append(PreferencesTool::bmpSuffix);
+            break;
+        }
         startCommand.append("\"");
     }
     else

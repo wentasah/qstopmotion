@@ -156,6 +156,13 @@ private:
      */
     void createAccelerators();
 
+    /**
+     * Clip and scale the raw image to the project image size
+     * @param image The image to clip and scale
+     * @return The cliped and scaled image
+     */
+    QImage clipAndScale(QImage image);
+
 protected:
     // void resizeEvent(QResizeEvent *event);
 

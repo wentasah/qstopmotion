@@ -178,8 +178,6 @@ private:
     QTimer           grabTimer;
     QTimer           playbackTimer;
     ImageGrabThread *grabThread;
-    int              frameViewWidth;
-    int              frameViewHeight;
 
     /**
      * Loads the new frames picture into the frameview.

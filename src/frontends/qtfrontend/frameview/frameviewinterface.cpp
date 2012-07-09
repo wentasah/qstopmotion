@@ -51,6 +51,8 @@ FrameViewInterface::FrameViewInterface(Frontend *f, QWidget *parent, int fps)
 
     widthConst  = 4;
     heightConst = 3;
+    frameViewWidth = 0;
+    frameViewHeight = 0;
     mixCount = 2;
     mixMode = 0;
 
@@ -312,7 +314,7 @@ void FrameViewInterface::setFps(int fps)
 }
 
 /**************************************************************************
- * Private functions
+ * Protected functions
  **************************************************************************/
 
 void FrameViewInterface::activateScene()
@@ -324,6 +326,7 @@ void FrameViewInterface::activateScene()
     qDebug("FrameViewInterface::activateScene --> End");
 }
 
+
 void FrameViewInterface::activateTake()
 {
     qDebug("FrameViewInterface::activateTake --> Start");
@@ -331,4 +334,115 @@ void FrameViewInterface::activateTake()
     // activateExposure();
 
     qDebug("FrameViewInterface::activateTake --> End");
+}
+
+
+QImage FrameViewInterface::clipAndScale(QImage image)
+{
+    qDebug("FrameViewInterface::clipAndScale --> Start");
+
+    QImage   outputImage;
+
+    double destWidth = 0;
+    double destHeight = 0;
+    double imageWidth = image.width();
+    double imageHeight = image.height();
+    double widthScale = imageWidth / frameViewWidth;
+    double heightScale = imageHeight / frameViewHeight;
+    int    x = 0;
+    int    y = 0;
+
+    if (frontend->getProject()->getImageTransformation()) {
+        // Scale the image to the output size
+
+        if (widthScale > heightScale) {
+            outputImage = image.scaledToWidth(frameViewWidth);
+        }
+        else {
+            outputImage = image.scaledToHeight(frameViewHeight);
+        }
+
+        qDebug("FrameViewInterface::clipAndScale --> End (scaled)");
+
+        return outputImage;
+    }
+
+    // Clip the image to the output size
+    switch (frontend->getProject()->getImageSize()) {
+    case ImageGrabber::defaultSize: // Camera image size
+        break;
+    case ImageGrabber::qvgaSize:    // QVGA
+        destWidth = 320;
+        destHeight = 240;
+        break;
+    case ImageGrabber::vgaSize:     // VGA
+        destWidth = 640;
+        destHeight = 480;
+        break;
+    case ImageGrabber::svgaSize:    // SVGA
+        destWidth = 800;
+        destHeight = 600;
+        break;
+    case ImageGrabber::paldSize:    // PAL D
+        destWidth = 704;
+        destHeight = 576;
+        break;
+    case ImageGrabber::hdreadySize: // HD Ready
+        destWidth = 1280;
+        destHeight = 720;
+        break;
+    case ImageGrabber::fullhdSize:  // Full HD
+        destWidth = 1900;
+        destHeight = 1080;
+        break;
+    }
+
+    switch (frontend->getProject()->getImageAdjustment()) {
+    case ImageGrabber::leftUp:
+    case ImageGrabber::leftMiddle:
+    case ImageGrabber::leftDown:
+        x = 0;
+        break;
+    case ImageGrabber::centerUp:
+    case ImageGrabber::centerMiddle:
+    case ImageGrabber::centerDown:
+        x = (int)((imageWidth-destWidth)/2);
+        break;
+    case ImageGrabber::rightUp:
+    case ImageGrabber::rightMiddle:
+    case ImageGrabber::rightDown:
+        x = (int)(imageWidth-destWidth);
+        break;
+    }
+
+    switch (frontend->getProject()->getImageAdjustment()) {
+    case ImageGrabber::leftUp:
+    case ImageGrabber::centerUp:
+    case ImageGrabber::rightUp:
+        y = 0;
+        break;
+    case ImageGrabber::leftMiddle:
+    case ImageGrabber::centerMiddle:
+    case ImageGrabber::rightMiddle:
+        y = (int)((imageHeight-destHeight)/2);
+        break;
+    case ImageGrabber::leftDown:
+    case ImageGrabber::centerDown:
+    case ImageGrabber::rightDown:
+        y = (int)(imageHeight-destHeight);
+        break;
+    }
+
+    QImage clipImage = image.copy(x, y, destWidth, destHeight);
+
+    if (widthScale > heightScale) {
+        outputImage = clipImage.scaledToWidth(frameViewWidth);
+    }
+    else {
+        outputImage = clipImage.scaledToHeight(frameViewHeight);
+    }
+
+    qDebug("FrameViewInterface::clipAndScale --> End (cliped)");
+
+    return outputImage;
 }

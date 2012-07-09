@@ -331,7 +331,7 @@ void ImportWidget::initialize()
         activeGrabberSource = pref->getBasicPreference("defaultgrabbersource", ImageGrabberDevice::testSource);
         activeImageFormat = pref->getBasicPreference("defaultimageformat", ImageGrabber::jpegFormat);
         activeImageSize = pref->getBasicPreference("defaultimagesize", ImageGrabber::defaultSize);
-        activeTransform = pref->getBasicPreference("defaulttransformation", false);
+        activeTransform = pref->getBasicPreference("defaulttransformation", true);
         activeImageAdjustment = pref->getBasicPreference("defaultimageadjustment", ImageGrabber::centerDown);
     }
     else {

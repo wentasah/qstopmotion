@@ -335,6 +335,10 @@ void DomainFacade::setImageSize(int newIS)
 
 bool DomainFacade::getImageTransformation()
 {
+    if (animationProject == NULL) {
+        // If no project is active use scale
+        return true;
+    }
     return animationProject->getImageTransformation();
 }
 

@@ -33,9 +33,6 @@ FrameViewImage::FrameViewImage(Frontend *f, QWidget *parent, int pS)
 {
     qDebug("FrameViewImage::Constructor --> Start");
 
-    frameViewWidth = 0;
-    frameViewHeight = 0;
-
     this->setObjectName("FrameViewImage");
 
     this->showLogo();
@@ -241,7 +238,7 @@ void FrameViewImage::redraw()
 {
     // qDebug("FrameViewImage::redraw --> Start");
 
-    liveImage = frontend->getLiveImage();
+    liveImage = clipAndScale(frontend->getLiveImage());
 
     // qDebug("FrameViewImage::redraw --> Loading image finished");
 
@@ -310,9 +307,9 @@ void FrameViewImage::resizeEvent(QResizeEvent*)
 
     frameViewWidth = width();
     frameViewHeight = height();
-    QString iconFile(frontend->getGraphicsDirName());
-    iconFile.append(QLatin1String("qstopmotion_logo_60.png"));
-    liveImage.load(iconFile);
+    if (liveImage.isNull()) {
+        showLogo();
+    }
 
     qDebug("FrameViewImage::resizeEvent --> End");
 }
@@ -322,21 +319,7 @@ void FrameViewImage::paintEvent(QPaintEvent *)
 {
     // qDebug("FrameViewImage::paintEvent --> Start");
 
-    QImage   outputImage;
-
-    double imageWidth = liveImage.width();
-    double imageHeight = liveImage.height();
-    double widthScale = imageWidth / frameViewWidth;
-    double heightScale = imageHeight / frameViewHeight;
-
-    if (widthScale > heightScale) {
-        outputImage = liveImage.scaledToWidth(frameViewWidth);
-    }
-    else {
-        outputImage = liveImage.scaledToHeight(frameViewHeight);
-    }
-    int bufferWidth = outputImage.width();
-    int bufferHeigth = outputImage.height();
+    QImage   outputImage = liveImage;
 
     QPainter imagePainter(&outputImage);
     QPainter widgetPainter(this);
@@ -460,26 +443,7 @@ void FrameViewImage::addToImageBuffer(QImage const image)
 {
     qDebug("FrameViewImage::addToImageBuffer --> Start");
 
-    double imageWidth = image.width();
-    double imageHeight = image.height();
-    double widthScale = imageWidth / frameViewWidth;
-    double heightScale = imageHeight / frameViewHeight;
-
-    while (imageBuffer.count() >= this->mixCount) {
-        imageBuffer.removeFirst();
-    }
-
-    if (widthScale > heightScale) {
-        imageBuffer.append(image.scaledToWidth(frameViewWidth));
-    }
-    else {
-        imageBuffer.append(image.scaledToHeight(frameViewHeight));
-    }
-    int bufferWidth = imageBuffer.last().width();
-    int bufferHeigth = imageBuffer.last().height();
-
-    int widgetWidth = width();
-    int widgetHeigth = height();
+    imageBuffer.append(clipAndScale(image));
 
     qDebug("FrameViewImage::addToImageBuffer --> End");
 }
@@ -576,11 +540,10 @@ void FrameViewImage::showLogo()
 {
     qDebug("FrameViewImage::showLogo --> Start");
 
-    // liveImage = new QImage(width(), height(), QImage::Format_ARGB32);
     QString iconFile(frontend->getGraphicsDirName());
     iconFile.append(QLatin1String("qstopmotion_logo_60.png"));
 
-    liveImage.load(iconFile);
+    liveImage = clipAndScale(QImage(iconFile));
 
     qDebug("FrameViewImage::showLogo --> End");
 }

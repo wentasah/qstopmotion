@@ -352,6 +352,13 @@ protected:
     virtual void clearImageBuffer() = 0;
 
     /**
+     * Clip and scale the image to the frame view size
+     * @param image The image to clip and scale
+     * @return The cliped and scaled image
+     */
+    QImage clipAndScale(QImage image);
+
+    /**
      * Frontend of the application
      */
     Frontend *frontend;
@@ -385,6 +392,16 @@ protected:
      *
      */
     int heightConst;
+
+    /**
+     *
+     */
+    int frameViewWidth;
+
+    /**
+     *
+     */
+    int frameViewHeight;
 
     /**
      * Number of images to display in mix mode.

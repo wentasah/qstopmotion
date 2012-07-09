@@ -684,9 +684,9 @@ void RecordingTab::storeFrame()
 {
     qDebug("RecordingTab::storeFrame --> Start");
 
-    QImage i(frontend->getRawImage());
+    QImage newImage = clipAndScale(frontend->getRawImage());
 
-    if (!i.isNull()) {
+    if (!newImage.isNull()) {
         int activeSceneIndex = frontend->getProject()->getActiveSceneIndex();
         int activeTakeIndex = frontend->getProject()->getActiveTakeIndex();
         int activeExposureIndex = frontend->getProject()->getActiveExposureIndex();
@@ -696,11 +696,11 @@ void RecordingTab::storeFrame()
         switch (captureFunction) {
         case PreferencesTool::captureButtonBevor:
             if (-1 == newExposureIndex) {
-                frontend->getProject()->addExposureToUndo(i, activeSceneIndex, activeTakeIndex);
+                frontend->getProject()->addExposureToUndo(newImage, activeSceneIndex, activeTakeIndex);
                 newExposureIndex++;
             }
             else {
-                frontend->getProject()->insertExposureToUndo(i, activeSceneIndex, activeTakeIndex, activeExposureIndex);
+                frontend->getProject()->insertExposureToUndo(newImage, activeSceneIndex, activeTakeIndex, activeExposureIndex);
             }
             frontend->getProject()->selectExposureToUndo(activeSceneIndex, activeTakeIndex, newExposureIndex);
             break;
@@ -708,16 +708,16 @@ void RecordingTab::storeFrame()
             newExposureIndex++;
             if (newExposureIndex == exposureSize) {
                 // actual exposure index is the last in the take
-                frontend->getProject()->addExposureToUndo(i, activeSceneIndex, activeTakeIndex);
+                frontend->getProject()->addExposureToUndo(newImage, activeSceneIndex, activeTakeIndex);
             }
             else {
                 // actual exposure index is not the last in the take
-                frontend->getProject()->insertExposureToUndo(i, activeSceneIndex, activeTakeIndex, newExposureIndex);
+                frontend->getProject()->insertExposureToUndo(newImage, activeSceneIndex, activeTakeIndex, newExposureIndex);
             }
             frontend->getProject()->selectExposureToUndo(activeSceneIndex, activeTakeIndex, newExposureIndex);
             break;
         case PreferencesTool::captureButtonAppend:
-            frontend->getProject()->addExposureToUndo(i, activeSceneIndex, activeTakeIndex);
+            frontend->getProject()->addExposureToUndo(newImage, activeSceneIndex, activeTakeIndex);
             frontend->getProject()->selectExposureToUndo(activeSceneIndex, activeTakeIndex, exposureSize);
             break;
         }
@@ -726,4 +726,109 @@ void RecordingTab::storeFrame()
     }
 
     qDebug("RecordingTab::storeFrame --> End");
+}
+
+
+QImage RecordingTab::clipAndScale(QImage image)
+{
+    qDebug("RecordingTab::clipAndScale --> Start");
+
+    QImage   outputImage;
+
+    double destWidth = 0;
+    double destHeight = 0;
+    double imageWidth = image.width();
+    double imageHeight = image.height();
+    int    x = 0;
+    int    y = 0;
+
+    switch (frontend->getProject()->getImageSize()) {
+    case ImageGrabber::defaultSize: // Camera image size
+        break;
+    case ImageGrabber::qvgaSize:    // QVGA
+        destWidth = 320;
+        destHeight = 240;
+        break;
+    case ImageGrabber::vgaSize:     // VGA
+        destWidth = 640;
+        destHeight = 480;
+        break;
+    case ImageGrabber::svgaSize:    // SVGA
+        destWidth = 800;
+        destHeight = 600;
+        break;
+    case ImageGrabber::paldSize:    // PAL D
+        destWidth = 704;
+        destHeight = 576;
+        break;
+    case ImageGrabber::hdreadySize: // HD Ready
+        destWidth = 1280;
+        destHeight = 720;
+        break;
+    case ImageGrabber::fullhdSize:  // Full HD
+        destWidth = 1900;
+        destHeight = 1080;
+        break;
+    }
+
+    if (frontend->getProject()->getImageTransformation()) {
+        // Scale the image to the output size
+
+        double widthScale = imageWidth / destWidth;
+        double heightScale = imageHeight / destHeight;
+
+        if (widthScale > heightScale) {
+            outputImage = image.scaledToWidth(destWidth);
+        }
+        else {
+            outputImage = image.scaledToHeight(destHeight);
+        }
+
+        qDebug("RecordingTab::clipAndScale --> End (scaled)");
+
+        return outputImage;
+    }
+
+    // Clip the image to the output size
+    switch (frontend->getProject()->getImageAdjustment()) {
+    case ImageGrabber::leftUp:
+    case ImageGrabber::leftMiddle:
+    case ImageGrabber::leftDown:
+        x = 0;
+        break;
+    case ImageGrabber::centerUp:
+    case ImageGrabber::centerMiddle:
+    case ImageGrabber::centerDown:
+        x = (int)((imageWidth-destWidth)/2);
+        break;
+    case ImageGrabber::rightUp:
+    case ImageGrabber::rightMiddle:
+    case ImageGrabber::rightDown:
+        x = (int)(imageWidth-destWidth);
+        break;
+    }
+
+    switch (frontend->getProject()->getImageAdjustment()) {
+    case ImageGrabber::leftUp:
+    case ImageGrabber::centerUp:
+    case ImageGrabber::rightUp:
+        y = 0;
+        break;
+    case ImageGrabber::leftMiddle:
+    case ImageGrabber::centerMiddle:
+    case ImageGrabber::rightMiddle:
+        y = (int)((imageHeight-destHeight)/2);
+        break;
+    case ImageGrabber::leftDown:
+    case ImageGrabber::centerDown:
+    case ImageGrabber::rightDown:
+        y = (int)(imageHeight-destHeight);
+        break;
+    }
+
+    outputImage = image.copy(x, y, destWidth, destHeight);
+
+    qDebug("RecordingTab::clipAndScale --> End (cliped)");
+
+    return outputImage;
 }

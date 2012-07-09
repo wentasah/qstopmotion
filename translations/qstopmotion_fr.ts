@@ -71,12 +71,12 @@
     <message>
         <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="181"/>
         <source>Build time: %1 %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Moment de la création: %1 %2</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="185"/>
         <source>&amp;System Info</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Information du système</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="187"/>
@@ -97,7 +97,7 @@
         <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="50"/>
         <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="56"/>
         <source>Version: </source>
-        <translation>Version</translation>
+        <translation>Version: </translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="54"/>
@@ -107,7 +107,7 @@
     <message>
         <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="57"/>
         <source>and</source>
-        <translation type="unfinished"></translation>
+        <translation>et</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="114"/>
@@ -122,7 +122,7 @@
     <message>
         <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="129"/>
         <source>Operating system name and version: </source>
-        <translation type="unfinished"></translation>
+        <translation>nom et version du système d&apos;exploitation:</translation>
     </message>
     <message>
         <source>German</source>
@@ -151,7 +151,7 @@
     <message>
         <location filename="../src/domain/animation/animationproject.cpp" line="334"/>
         <source>Saving scenes to disk ...</source>
-        <translation>Enregistrer les scènes sur le disque dur</translation>
+        <translation>Enregistrer les scènes sur le disque dur...</translation>
     </message>
     <message>
         <location filename="../src/domain/animation/animationproject.cpp" line="1121"/>
@@ -167,14 +167,15 @@ The animation will be runned without sound if you
 choose to play.</source>
         <translation>Il n&apos;est pas possible d&apos;ouvrir le fichier audio pour le lire.
 Veuillez vérifier si vous avez mis les bons droits d&apos;accès.
-L&apos;animation se joue sans son si vous choisissez de le passer.</translation>
+L&apos;animation est visualisée sans son si vous choisissez de le lire.</translation>
     </message>
     <message>
         <location filename="../src/domain/animation/animationproject.cpp" line="1129"/>
         <source>The selected audio file is not valid within the
 given audio format. The animation will be runned
 without sound if you choose to play.</source>
-        <translation type="unfinished"></translation>
+        <translation>Le fichier audio choisi n&apos;a pas de format audio valide.
+L&apos;animation est visualisée sans son si vous choisissez de le lire.</translation>
     </message>
 </context>
 <context>
@@ -215,17 +216,17 @@ without sound if you choose to play.</source>
     <message>
         <location filename="../src/frontends/qtfrontend/dialogs/descriptiondialog.cpp" line="34"/>
         <source>&amp;Project Description:</source>
-        <translation>&amp;Description du projet</translation>
+        <translation>&amp;Description du projet:</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/dialogs/descriptiondialog.cpp" line="37"/>
         <source>&amp;Scene Description:</source>
-        <translation>&amp;Description de la scène</translation>
+        <translation>&amp;Description de la scène:</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/dialogs/descriptiondialog.cpp" line="40"/>
         <source>&amp;Take Description:</source>
-        <translation>&amp;Description de l&apos;enregistrement</translation>
+        <translation>&amp;Description de l&apos;enregistrement:</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/dialogs/descriptiondialog.cpp" line="44"/>
@@ -291,12 +292,12 @@ without sound if you choose to play.</source>
     <message>
         <location filename="../src/domain/domainfacade.cpp" line="151"/>
         <source>Can&apos;t open history file to write entry!</source>
-        <translation>Le fichier histoire ne peut pas être ouvert pour ajouter une nouvelle entrée.</translation>
+        <translation>Le fichier histoire ne peut pas être ouvert pour ajouter une nouvelle entrée!</translation>
     </message>
     <message>
         <location filename="../src/domain/domainfacade.cpp" line="390"/>
         <source>Can&apos;t open history file to recover project!</source>
-        <translation>Le fichier histoire ne peut pas être ouvert pour récupérer le projet.</translation>
+        <translation>Le fichier histoire ne peut pas être ouvert pour récupérer le projet!</translation>
     </message>
     <message>
         <location filename="../src/domain/domainfacade.cpp" line="1037"/>
@@ -329,7 +330,7 @@ without sound if you choose to play.</source>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="127"/>
         <source>Video Size:</source>
-        <translation>Taille du fichier vidéo</translation>
+        <translation>Taille du fichier vidéo:</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="124"/>
@@ -339,7 +340,7 @@ without sound if you choose to play.</source>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="92"/>
         <source>Below you can set which program should be used for encoding a new project to a video file.</source>
-        <translation type="unfinished"></translation>
+        <translation>En dessous vous pouvez choisir quel programme doit être utilisé pour encoder un nouveau projet en un fichier vidéo.</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="125"/>
@@ -388,7 +389,7 @@ without sound if you choose to play.</source>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="140"/>
         <source>Frames per Second:</source>
-        <translation type="unfinished"></translation>
+        <translation>Images par seconde:</translation>
     </message>
     <message>
         <source>Project Frames per Second:</source>
@@ -595,7 +596,7 @@ Ceci peut être fait dans la fenêtre de préférences.</translation>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/generaldialog.cpp" line="125"/>
         <source>&amp;Image Import</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Importation d&apos;une image</translation>
     </message>
 </context>
 <context>
@@ -674,7 +675,7 @@ Ceci peut être fait dans la fenêtre de préférences.</translation>
         <location filename="../src/technical/grabber/imagegrabber.cpp" line="87"/>
         <location filename="../src/technical/grabber/imagegrabber.cpp" line="101"/>
         <source>Check image grabber</source>
-        <translation>Vérifie la prise de vue</translation>
+        <translation>Vérifier le périphérique</translation>
     </message>
     <message>
         <location filename="../src/technical/grabber/imagegrabber.cpp" line="88"/>
@@ -692,22 +693,22 @@ paramètres de capture dans la fenêtre de préférences.</translation>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="96"/>
         <source>Below you can set which image sources should be used for importing images to a new project.</source>
-        <translation type="unfinished"></translation>
+        <translation>En dessous vous pouvez choisir quel périphérique doit être utilisé pour importer des images dans un nouveau projet.</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="103"/>
         <source>Below you can set which image sources should be used for importing images to the currently active project.</source>
-        <translation type="unfinished"></translation>
+        <translation>En dessous vous pouvez choisir quel périphérique doit être utilisé pour importer des images dans le projet activé.</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="114"/>
         <source>Image grabber settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Réglages du périphérique</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="116"/>
         <source>Image Grabber:</source>
-        <translation type="unfinished"></translation>
+        <translation>Périphérique:</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="121"/>
@@ -717,62 +718,62 @@ paramètres de capture dans la fenêtre de préférences.</translation>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="122"/>
         <source>Video 4 Linux (USB WebCam)</source>
-        <translation type="unfinished"></translation>
+        <translation>Video 4 Linux (USB WebCam)</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="123"/>
         <source>IEEE 1394 (FireWire DigiCam)</source>
-        <translation type="unfinished"></translation>
+        <translation>IEEE 1394 (FireWire DigiCam)</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="124"/>
         <source>Direct Show (USB WebCam)</source>
-        <translation type="unfinished"></translation>
+        <translation>Direct Show (USB WebCam)</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="125"/>
         <source>Direct Show (FireWire DigiCam)</source>
-        <translation type="unfinished"></translation>
+        <translation>Direct Show (FireWire DigiCam)</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="126"/>
         <source>gphoto (USB Compact Camera)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">gphoto (USB Compact Camera)</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="129"/>
         <source>Image import settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Réglages de l&apos;importation d&apos;une image</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="131"/>
         <source>Image Format:</source>
-        <translation type="unfinished"></translation>
+        <translation>Format d&apos;image:</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="136"/>
         <source>JPEG</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">JPEG</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="137"/>
         <source>TIFF</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">TIFF</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="138"/>
         <source>BMP</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">BMP</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="140"/>
         <source>Image Size:</source>
-        <translation type="unfinished"></translation>
+        <translation>Grandeur d&apos;image:</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="145"/>
         <source>Default Grabber Size</source>
-        <translation type="unfinished"></translation>
+        <translation>Grandeur du périphérique</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="146"/>
@@ -811,17 +812,17 @@ paramètres de capture dans la fenêtre de préférences.</translation>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="155"/>
         <source>Transformation settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Réglages d&apos;une conversion d&apos;image</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="162"/>
         <source>Below you can set which image transformation should be used for importing images to a new project. If you select clip a part of the image set also the adjustment for cliping.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">En dessous vous pouvez choisir quel conversion d&apos;image doit être utilisé pour importer une image dans un nouveau projet. Si vous </translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="170"/>
         <source>Below you can set which image transformation should be used for importing images to the currently active project. If you select clip a part of the image set also the adjustment for cliping.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">En dessous vous pouvez choisir quel conversion d&apos;image doit être utilisé pour importer une image dans le projet activé. Si vous </translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="180"/>

@@ -328,7 +328,7 @@ void PreferencesTool::setBasicPreferenceDefaults()
     setBasicPreference("defaultgrabbersource", ImageGrabberDevice::testSource);
     setBasicPreference("defaultimageformat", ImageGrabber::jpegFormat);
     setBasicPreference("defaultimagesize", ImageGrabber::defaultSize);
-    setBasicPreference("defaulttransformation", false);
+    setBasicPreference("defaulttransformation", true);
     setBasicPreference("defaultimageadjustment", ImageGrabber::centerDown);
     // Video export defaults
     setBasicPreference("defaultencoderapplication", VideoEncoder::noneApplication);

@@ -857,7 +857,13 @@ private:
     int grabberSource;
     int imageFormat;
     int imageSize;
+
+    /**
+     * true = scale the image to the output size
+     * false = clip the image to the output size according to the adjustment setting
+     */
     bool imageTransformation;
+
     int imageAdjustment;
 
     /**

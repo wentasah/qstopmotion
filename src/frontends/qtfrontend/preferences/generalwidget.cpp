@@ -49,6 +49,16 @@ GeneralWidget::GeneralWidget(Frontend *f, QWidget *parent)
     appendButton     = 0;
     actualButtonFunction = PreferencesTool::captureButtonAfter;
 
+    gridGroupBox          = 0;
+    verticalGridCheck     = 0;
+    actualVerticalGrid    = false;
+    verticalGridSpin      = 0;
+    actualVerticalSpin    = 10;
+    horizontalGridCheck   = 0;
+    actualHorizontalGrid  = false;
+    horizontalGridSpin    = 0;
+    actualHorizontalSpin  = 10;
+
     this->setObjectName("GeneralWidget");
 
     makeGUI();
@@ -114,11 +124,44 @@ void GeneralWidget::makeGUI()
     captureLayout->addStretch(10);
     captureGroupBox->setLayout(captureLayout);
 
+    gridGroupBox = new QGroupBox;
+    gridGroupBox->setTitle(tr("Grid Functionality"));
+
+    verticalGridCheck = new QCheckBox(tr("Vertical Lines"));
+    verticalGridCheck->setChecked(false);
+    connect(verticalGridCheck, SIGNAL(stateChanged(int)), this, SLOT(setVerticalGridOn(int)));
+
+    verticalGridSpin = new QSpinBox();
+    verticalGridSpin->setMinimum(1);
+    verticalGridSpin->setMaximum(30);
+    verticalGridSpin->setValue(5);
+    verticalGridSpin->setFocusPolicy(Qt::NoFocus);
+    verticalGridSpin->setEnabled(false);
+
+    horizontalGridCheck = new QCheckBox(tr("Horizontal Lines"));
+    horizontalGridCheck->setChecked(false);
+    connect(horizontalGridCheck, SIGNAL(stateChanged(int)), this, SLOT(setHorizontalGridOn(int)));
+
+    horizontalGridSpin = new QSpinBox();
+    horizontalGridSpin->setMinimum(1);
+    horizontalGridSpin->setMaximum(30);
+    horizontalGridSpin->setValue(5);
+    horizontalGridSpin->setFocusPolicy(Qt::NoFocus);
+    horizontalGridSpin->setEnabled(false);
+
+    QGridLayout *gridLayout = new QGridLayout;
+    gridLayout->addWidget(verticalGridCheck, 0, 0);
+    gridLayout->addWidget(verticalGridSpin, 0, 1);
+    gridLayout->addWidget(horizontalGridCheck, 1, 0);
+    gridLayout->addWidget(horizontalGridSpin, 1, 1);
+    gridGroupBox->setLayout(gridLayout);
+
     tabLayout->setMargin(0);
     tabLayout->setSpacing(2);
     // tabLayout->addStretch(1);
     tabLayout->addWidget(languageGroupBox);
     tabLayout->addWidget(captureGroupBox);
+    tabLayout->addWidget(gridGroupBox);
     tabLayout->addStretch(1);
 
     setLayout(tabLayout);
@@ -154,6 +197,16 @@ void GeneralWidget::initialize()
         setAppendButtonOn();
         break;
     }
+
+    actualVerticalGrid = pref->getBasicPreference("verticalgrid", false);
+    verticalGridCheck->setChecked(actualVerticalGrid);
+    actualVerticalSpin = pref->getBasicPreference("verticalspin", 5);
+    verticalGridSpin->setValue(actualVerticalSpin);
+
+    actualHorizontalGrid = pref->getBasicPreference("horizontalgrid", false);
+    horizontalGridCheck->setChecked(actualHorizontalGrid);
+    actualHorizontalSpin = pref->getBasicPreference("horizontalspin", 5);
+    horizontalGridSpin->setValue(actualHorizontalSpin);
 
     qDebug("GeneralWidget::initialize --> End");
 }
@@ -201,6 +254,34 @@ void GeneralWidget::apply()
         actualButtonFunction = newButtonFunction;
     }
 
+    bool newVerticalGrid = verticalGridCheck->isChecked();
+    if (newVerticalGrid != actualVerticalGrid) {
+        // Vertical grid changed
+        pref->setBasicPreference("verticalgrid", newVerticalGrid);
+        actualVerticalGrid = newVerticalGrid;
+    }
+
+    int newVerticalSpin = verticalGridSpin->value();
+    if (newVerticalSpin != actualVerticalSpin) {
+        // Vertical spin changed
+        pref->setBasicPreference("verticalspin", newVerticalSpin);
+        actualVerticalSpin = newVerticalSpin;
+    }
+
+    bool newHorizontalGrid = horizontalGridCheck->isChecked();
+    if (newHorizontalGrid != actualHorizontalGrid) {
+        // Horizontal grid changed
+        pref->setBasicPreference("horizontalgrid", newHorizontalGrid);
+        actualHorizontalGrid = newHorizontalGrid;
+    }
+
+    int newHorizontalSpin = horizontalGridSpin->value();
+    if (newHorizontalSpin != actualHorizontalSpin) {
+        // Horizontal spin changed
+        pref->setBasicPreference("horizontalspin", newHorizontalSpin);
+        actualHorizontalSpin = newHorizontalSpin;
+    }
+
     qDebug("GeneralWidget::apply --> End");
 }
 
@@ -222,6 +303,10 @@ void GeneralWidget::reset()
         setAppendButtonOn();
         break;
     }
+    verticalGridCheck->setChecked(actualVerticalGrid);
+    verticalGridSpin->setValue(actualVerticalSpin);
+    horizontalGridCheck->setChecked(actualHorizontalGrid);
+    horizontalGridSpin->setValue(actualHorizontalSpin);
 
     qDebug("GeneralWidget::reset --> End");
 }
@@ -254,4 +339,26 @@ void GeneralWidget::setAppendButtonOn()
     bevorButton->setChecked(false);
     afterButton->setChecked(false);
     appendButton->setChecked(true);
+}
+
+
+void GeneralWidget::setVerticalGridOn(int newState)
+{
+    if (newState) {
+        verticalGridSpin->setEnabled(true);
+    }
+    else {
+        verticalGridSpin->setEnabled(false);
+    }
+}
+
+
+void GeneralWidget::setHorizontalGridOn(int newState)
+{
+    if (newState) {
+        horizontalGridSpin->setEnabled(true);
+    }
+    else {
+        horizontalGridSpin->setEnabled(false);
+    }
 }

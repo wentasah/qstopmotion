@@ -152,7 +152,7 @@ void ImportWidget::makeGUI()
     imageSizeCombo->addItem(tr("Default Grabber Size"));
     imageSizeCombo->addItem(tr("QVGA (320x240)"));
     imageSizeCombo->addItem(tr("VGA (640x480)"));
-    imageSizeCombo->addItem(tr("SVGQ (800x600)"));
+    imageSizeCombo->addItem(tr("SVGA (800x600)"));
     imageSizeCombo->addItem(tr("PAL D (704x576)"));
     imageSizeCombo->addItem(tr("HD Ready (1280x720)"));
     imageSizeCombo->addItem(tr("Full HD (1900x1080)"));

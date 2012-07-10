@@ -36,7 +36,7 @@ ProjectDialog::ProjectDialog(Frontend *f, QWidget *parent)
 
     frontend           = f;
     // generalSettingsTab = 0;
-    projectValueTab    = 0;
+    // projectValueTab    = 0;
     imageImportTab     = 0;
     videoExportTab     = 0;
 
@@ -68,7 +68,7 @@ ProjectDialog::ProjectDialog(Frontend *f, QWidget *parent)
     setModal(false);
 
     // makeGeneralSettingsTab();
-    makeProjectValueTab();
+    // makeProjectValueTab();
     makeImageImportTab();
     makeVideoExportTab();
 
@@ -87,7 +87,7 @@ void ProjectDialog::makeGeneralSettingsTab()
 
     qDebug("ProjectDialog::makeGeneralSettingsTab --> End");
 }
-*/
+
 
 void ProjectDialog::makeProjectValueTab()
 {
@@ -100,7 +100,7 @@ void ProjectDialog::makeProjectValueTab()
 
     qDebug("ProjectDialog::makeDefaultValueTab --> End");
 }
-
+*/
 
 void ProjectDialog::makeImageImportTab()
 {
@@ -134,7 +134,7 @@ void ProjectDialog::apply()
 
     setFocus();
     // this->generalSettingsTab->apply();
-    this->projectValueTab->apply();
+    // this->projectValueTab->apply();
     this->imageImportTab->apply();
     this->videoExportTab->apply();
     frontend->getPreferences()->flushPreferences();
@@ -151,7 +151,7 @@ void ProjectDialog::close()
 
     setFocus();
     // this->generalSettingsTab->reset();
-    this->projectValueTab->reset();
+    // this->projectValueTab->reset();
     this->imageImportTab->reset();
     this->videoExportTab->reset();
     this->hide();
@@ -168,7 +168,7 @@ void ProjectDialog::finish(int result)
     if (result == 0)
     {
         // generalSettingsTab->reset();
-        projectValueTab->reset();
+        // projectValueTab->reset();
         imageImportTab->reset();
         videoExportTab->reset();
     }

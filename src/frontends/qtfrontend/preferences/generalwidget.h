@@ -24,6 +24,7 @@
 #include "frontends/frontend.h"
 
 #include <QtCore/QTranslator>
+#include <QtGui/QCheckBox>
 #include <QtGui/QComboBox>
 #include <QtGui/QGridLayout>
 #include <QtGui/QGroupBox>
@@ -103,6 +104,20 @@ private slots:
      */
     void setAppendButtonOn();
 
+    /**
+     * Slot for notified the general tab when vertical grid is selected, so that
+     * general preferences can be updaten.
+     * @param newStateb The new state of the check box
+     */
+    void setVerticalGridOn(int newState);
+
+    /**
+     * Slot for notified the general tab when horizontal grid is selected, so that
+     * general preferences can be updaten.
+     * @param newStateb The new state of the check box
+     */
+    void setHorizontalGridOn(int newState);
+
 private:
     Frontend     *frontend;
 
@@ -112,10 +127,18 @@ private:
     QRadioButton *bevorButton;
     QRadioButton *afterButton;
     QRadioButton *appendButton;
+    QGroupBox    *gridGroupBox;
+    QCheckBox    *verticalGridCheck;
+    QSpinBox     *verticalGridSpin;
+    QCheckBox    *horizontalGridCheck;
+    QSpinBox     *horizontalGridSpin;
 
     int           actualLanguage;
     PreferencesTool::captureButtonFunction actualButtonFunction;
-
+    bool          actualVerticalGrid;
+    int           actualVerticalSpin;
+    bool          actualHorizontalGrid;
+    int           actualHorizontalSpin;
 };
 
 #endif

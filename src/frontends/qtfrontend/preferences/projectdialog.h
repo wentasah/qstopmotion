@@ -53,7 +53,7 @@ public:
 private:
     Frontend      *frontend;
     // GeneralWidget *generalSettingsTab;
-    ProjectWidget *projectValueTab;
+    // ProjectWidget *projectValueTab;
     ImportWidget  *imageImportTab;
     ExportWidget  *videoExportTab;
     QTabWidget    *tabWidget;
@@ -61,7 +61,7 @@ private:
     QPushButton   *closeButton;
 
     // void makeGeneralSettingsTab();
-    void makeProjectValueTab();
+    // void makeProjectValueTab();
     void makeImageImportTab();
     void makeVideoExportTab();
 

@@ -149,18 +149,18 @@
 <context>
     <name>AnimationProject</name>
     <message>
-        <location filename="../src/domain/animation/animationproject.cpp" line="334"/>
+        <location filename="../src/domain/animation/animationproject.cpp" line="409"/>
         <source>Saving scenes to disk ...</source>
         <translation>Abspeichern der Szenen auf die Festplatte ...</translation>
     </message>
     <message>
-        <location filename="../src/domain/animation/animationproject.cpp" line="1121"/>
-        <location filename="../src/domain/animation/animationproject.cpp" line="1128"/>
+        <location filename="../src/domain/animation/animationproject.cpp" line="1253"/>
+        <location filename="../src/domain/animation/animationproject.cpp" line="1260"/>
         <source>Add Sound</source>
         <translation>Ton hinzufügen</translation>
     </message>
     <message>
-        <location filename="../src/domain/animation/animationproject.cpp" line="1122"/>
+        <location filename="../src/domain/animation/animationproject.cpp" line="1254"/>
         <source>Cannot open the selected audio file for reading.
 Check that you have the right permissions set.
 The animation will be runned without sound if you
@@ -171,7 +171,7 @@ Die Animation wird ohne Ton abgespielt wenn Sie
 abspielen wählen.</translation>
     </message>
     <message>
-        <location filename="../src/domain/animation/animationproject.cpp" line="1129"/>
+        <location filename="../src/domain/animation/animationproject.cpp" line="1261"/>
         <source>The selected audio file is not valid within the
 given audio format. The animation will be runned
 without sound if you choose to play.</source>
@@ -286,8 +286,8 @@ wenn Sie abspielen wählen.</translation>
     </message>
     <message>
         <location filename="../src/domain/domainfacade.cpp" line="150"/>
-        <location filename="../src/domain/domainfacade.cpp" line="389"/>
-        <location filename="../src/domain/domainfacade.cpp" line="1036"/>
+        <location filename="../src/domain/domainfacade.cpp" line="464"/>
+        <location filename="../src/domain/domainfacade.cpp" line="1143"/>
         <source>Critical</source>
         <translation>Kritisch</translation>
     </message>
@@ -301,12 +301,12 @@ wenn Sie abspielen wählen.</translation>
         <translation>Historie Datei kann nicht geöffnet werden um neuen Eintrag hinzuzufügen.</translation>
     </message>
     <message>
-        <location filename="../src/domain/domainfacade.cpp" line="390"/>
+        <location filename="../src/domain/domainfacade.cpp" line="465"/>
         <source>Can&apos;t open history file to recover project!</source>
         <translation>Historie Datei kann nicht geöffnet werden um Projekt wiederherzustellen.</translation>
     </message>
     <message>
-        <location filename="../src/domain/domainfacade.cpp" line="1037"/>
+        <location filename="../src/domain/domainfacade.cpp" line="1144"/>
         <source>Can&apos;t copy image to temp directory!</source>
         <translation>Bild kann nicht in das temporäre Verzeichnis kopiert werden!</translation>
     </message>
@@ -365,8 +365,8 @@ wenn Sie abspielen wählen.</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="135"/>
-        <source>SVGQ (800x600)</source>
-        <translation>SVGQ (800x600)</translation>
+        <source>SVGA (800x600)</source>
+        <translation>SVGA (800x600)</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="136"/>
@@ -623,13 +623,13 @@ wenn Sie abspielen wählen.</translation>
 <context>
     <name>GstreamerGrabber</name>
     <message>
-        <location filename="../src/technical/grabber/gstreamergrabber.cpp" line="111"/>
+        <location filename="../src/technical/grabber/gstreamergrabber.cpp" line="112"/>
         <source>Video test device</source>
         <translation>Video-Test-Gerät</translation>
     </message>
     <message>
-        <location filename="../src/technical/grabber/gstreamergrabber.cpp" line="194"/>
-        <location filename="../src/technical/grabber/gstreamergrabber.cpp" line="300"/>
+        <location filename="../src/technical/grabber/gstreamergrabber.cpp" line="199"/>
+        <location filename="../src/technical/grabber/gstreamergrabber.cpp" line="309"/>
         <source>Device %1</source>
         <translation>Gerät %1</translation>
     </message>
@@ -704,122 +704,122 @@ im Einstellungen-Menü.</translation>
         <translation>Bildquelle:</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="121"/>
+        <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="122"/>
         <source>Test Source</source>
         <translation>Test Quelle</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="122"/>
+        <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="125"/>
         <source>Video 4 Linux (USB WebCam)</source>
         <translation>Video 4 Linux (USB WebCam)</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="123"/>
+        <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="126"/>
         <source>IEEE 1394 (FireWire DigiCam)</source>
         <translation>IEEE 1394 (FireWire DigiCam)</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="124"/>
+        <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="131"/>
         <source>Direct Show (USB WebCam)</source>
         <translation>Direct Show (USB WebCam)</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="125"/>
+        <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="132"/>
         <source>Direct Show (FireWire DigiCam)</source>
         <translation>Direct Show (FireWire DigiCam)</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="126"/>
+        <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="127"/>
         <source>gphoto (USB Compact Camera)</source>
         <translation>gphoto (USB Kompaktkamera)</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="129"/>
+        <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="136"/>
         <source>Image import settings</source>
         <translation>Einstellungen Bildimport</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="131"/>
+        <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="138"/>
         <source>Image Format:</source>
         <translation>Bildformat:</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="136"/>
+        <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="143"/>
         <source>JPEG</source>
         <translation>JPEG</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="137"/>
+        <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="144"/>
         <source>TIFF</source>
         <translation>TIFF</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="138"/>
+        <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="145"/>
         <source>BMP</source>
         <translation>BMP</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="140"/>
+        <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="147"/>
         <source>Image Size:</source>
         <translation>Bildgröße:</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="145"/>
+        <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="152"/>
         <source>Default Grabber Size</source>
         <translation>Größe der Bildquelle</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="146"/>
+        <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="153"/>
         <source>QVGA (320x240)</source>
         <translation>QVGA (320x240)</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="147"/>
+        <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="154"/>
         <source>VGA (640x480)</source>
         <translation>VGA (640x480)</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="148"/>
-        <source>SVGQ (800x600)</source>
-        <translation>SVGQ (800x600)</translation>
+        <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="155"/>
+        <source>SVGA (800x600)</source>
+        <translation>SVGA (800x600)</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="149"/>
+        <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="156"/>
         <source>PAL D (704x576)</source>
         <translation>PAL D (704x576)</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="150"/>
+        <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="157"/>
         <source>HD Ready (1280x720)</source>
         <translation>HD Ready (1280x720)</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="151"/>
+        <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="158"/>
         <source>Full HD (1900x1080)</source>
         <translation>Full HD (1900x1080)</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="155"/>
+        <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="162"/>
         <source>Transformation settings</source>
         <translation>Einstellungen Bildumwandlung</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="162"/>
+        <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="169"/>
         <source>Below you can set which image transformation should be used for importing images to a new project. If you select clip a part of the image set also the adjustment for cliping.</source>
         <translation>Unten können sie auswählen, welche Bilderumwandlung verwendet werden soll, um Bilder eines neues Projektes umzuwandeln. Wenn sie ausschneiden auswählen müssen sie auch die Ausrichtung einstellen.</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="170"/>
+        <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="177"/>
         <source>Below you can set which image transformation should be used for importing images to the currently active project. If you select clip a part of the image set also the adjustment for cliping.</source>
         <translation>Unten können sie auswählen, welche Bilderumwandlung verwendet werden soll, um Bilder des aktuellen Projektes umzuwandeln. Wenn sie ausschneiden auswählen müssen sie auch die Ausrichtung einstellen.</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="180"/>
+        <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="187"/>
         <source>Scale the whole image</source>
         <translation>Gesamtes Bild skalieren</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="185"/>
+        <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="192"/>
         <source>Clip a part of the image</source>
         <translation>Ausschneiden eines Teiles des Kamerabildes</translation>
     </message>
@@ -1400,20 +1400,20 @@ Check your settings in the preferences menu!</source>
 <context>
     <name>PreferencesTool</name>
     <message>
-        <location filename="../src/technical/preferencestool.cpp" line="100"/>
         <location filename="../src/technical/preferencestool.cpp" line="104"/>
+        <location filename="../src/technical/preferencestool.cpp" line="108"/>
         <source>DOM Parser</source>
         <translation>DOM Parser</translation>
     </message>
     <message>
-        <location filename="../src/technical/preferencestool.cpp" line="101"/>
+        <location filename="../src/technical/preferencestool.cpp" line="105"/>
         <source>Couldn&apos;t open XML file:
 %1</source>
         <translation>XML Datei kann nicht geöffnet werden:
 %1</translation>
     </message>
     <message>
-        <location filename="../src/technical/preferencestool.cpp" line="105"/>
+        <location filename="../src/technical/preferencestool.cpp" line="109"/>
         <source>Parse error at line %1, column %2:
 %3
 %4</source>
@@ -1422,18 +1422,18 @@ Check your settings in the preferences menu!</source>
 %4</translation>
     </message>
     <message>
-        <location filename="../src/technical/preferencestool.cpp" line="415"/>
-        <location filename="../src/technical/preferencestool.cpp" line="422"/>
+        <location filename="../src/technical/preferencestool.cpp" line="428"/>
+        <location filename="../src/technical/preferencestool.cpp" line="435"/>
         <source>Critical</source>
         <translation>Kritisch</translation>
     </message>
     <message>
-        <location filename="../src/technical/preferencestool.cpp" line="416"/>
+        <location filename="../src/technical/preferencestool.cpp" line="429"/>
         <source>Can&apos;t remove preferences backup file!</source>
         <translation>Sicherheitskopie der Einstellungsdatei kann nicht gelöscht werden!</translation>
     </message>
     <message>
-        <location filename="../src/technical/preferencestool.cpp" line="423"/>
+        <location filename="../src/technical/preferencestool.cpp" line="436"/>
         <source>Can&apos;t copy preferences file to backup file!</source>
         <translation>Einstellungsdatei kann nicht in Sicherungskopie kopiert werden!</translation>
     </message>
@@ -1562,8 +1562,8 @@ Check your settings in the preferences menu!</source>
     <message>
         <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1390"/>
         <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1397"/>
-        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1701"/>
-        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1737"/>
+        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1699"/>
+        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1735"/>
         <source>Warning</source>
         <translation>Warnung</translation>
     </message>
@@ -1612,7 +1612,7 @@ Check your settings in the preferences menu!</source>
         <translation>Aufnahme 00</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1702"/>
+        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1700"/>
         <source>You do not have Gimp installed on your system</source>
         <translation>Gimp ist auf Ihrem Computer nicht installiert</translation>
     </message>
@@ -1627,7 +1627,7 @@ Check your settings in the preferences menu!</source>
         <translation>Das ausgewählte Bild ist beschädigt</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1738"/>
+        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1736"/>
         <source>Failed to start Gimp!</source>
         <translation>Der Start von Gimp ist fehlgeschlagen!</translation>
     </message>

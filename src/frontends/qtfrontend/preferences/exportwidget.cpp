@@ -132,7 +132,7 @@ void ExportWidget::makeGUI()
     videoSizeCombo->addItem(tr("Frame Size"));
     videoSizeCombo->addItem(tr("QVGA (320x240)"));
     videoSizeCombo->addItem(tr("VGA (640x480)"));
-    videoSizeCombo->addItem(tr("SVGQ (800x600)"));
+    videoSizeCombo->addItem(tr("SVGA (800x600)"));
     videoSizeCombo->addItem(tr("PAL D (704x576)"));
     videoSizeCombo->addItem(tr("HD Ready (1280x720)"));
     videoSizeCombo->addItem(tr("Full HD (1900x1080)"));

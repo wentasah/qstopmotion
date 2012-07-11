@@ -116,6 +116,54 @@ public:
     void changeCaptureButtonFunction(PreferencesTool::captureButtonFunction newFunction);
 
     /**
+     * Get the status of the vertical lines of the grid.
+     * @return The new state of the grid.
+     */
+    bool getVerticalGrid();
+
+    /**
+     * Set the status of the vertical lines of the grid.
+     * @param newState The new state of the grid.
+     */
+    void setVerticalGrid(bool newState);
+
+    /**
+     * Get the number of vertical lines of the grid.
+     * @return The new number of lines.
+     */
+    int getVerticalSpin();
+
+    /**
+     * Set the number of vertical lines of the grid.
+     * @param newSpin The new number of lines.
+     */
+    void setVerticalSpin(int newSpin);
+
+    /**
+     * Get the status of the horizontal lines of the grid.
+     * @return The new state of the grid.
+     */
+    bool getHorizontalGrid();
+
+    /**
+     * Set the status of the horizontal lines of the grid.
+     * @param newState The new state of the grid.
+     */
+    void setHorizontalGrid(bool newState);
+
+    /**
+     * Get the number of horizontal lines of the grid.
+     * @return The new number of lines.
+     */
+    int getHorizontalSpin();
+
+    /**
+     * Set the number of horizontal lines of the grid.
+     * @param newSpin The new number of lines.
+     */
+    void setHorizontalSpin(int newSpin);
+
+    /**
      * Retranslates the strings.
      *
      * This function is called after a new translator has been installed so that
@@ -594,6 +642,10 @@ private:
     // Others
     QString           lastVisitedDir;
     ImageGrabber     *grabber;
+    bool              verticalGrid;
+    int               verticalSpin;
+    bool              horizontalGrid;
+    int               horizontalSpin;
 
     /**************************************************************************
      * Private functions

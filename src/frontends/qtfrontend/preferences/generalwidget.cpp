@@ -257,6 +257,7 @@ void GeneralWidget::apply()
     bool newVerticalGrid = verticalGridCheck->isChecked();
     if (newVerticalGrid != actualVerticalGrid) {
         // Vertical grid changed
+        frontend->setVerticalGrid(newVerticalGrid);
         pref->setBasicPreference("verticalgrid", newVerticalGrid);
         actualVerticalGrid = newVerticalGrid;
     }
@@ -264,6 +265,7 @@ void GeneralWidget::apply()
     int newVerticalSpin = verticalGridSpin->value();
     if (newVerticalSpin != actualVerticalSpin) {
         // Vertical spin changed
+        frontend->setVerticalSpin(newVerticalSpin);
         pref->setBasicPreference("verticalspin", newVerticalSpin);
         actualVerticalSpin = newVerticalSpin;
     }
@@ -271,6 +273,7 @@ void GeneralWidget::apply()
     bool newHorizontalGrid = horizontalGridCheck->isChecked();
     if (newHorizontalGrid != actualHorizontalGrid) {
         // Horizontal grid changed
+        frontend->setHorizontalGrid(newHorizontalGrid);
         pref->setBasicPreference("horizontalgrid", newHorizontalGrid);
         actualHorizontalGrid = newHorizontalGrid;
     }
@@ -278,6 +281,7 @@ void GeneralWidget::apply()
     int newHorizontalSpin = horizontalGridSpin->value();
     if (newHorizontalSpin != actualHorizontalSpin) {
         // Horizontal spin changed
+        frontend->setHorizontalSpin(newHorizontalSpin);
         pref->setBasicPreference("horizontalspin", newHorizontalSpin);
         actualHorizontalSpin = newHorizontalSpin;
     }

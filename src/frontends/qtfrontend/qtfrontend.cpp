@@ -441,6 +441,54 @@ void QtFrontend::changeCaptureButtonFunction(int newFunction)
 }
 
 
+bool QtFrontend::getVerticalGrid()
+{
+    return mw->getVerticalGrid();
+}
+
+
+void QtFrontend::setVerticalGrid(bool newState)
+{
+    mw->setVerticalGrid(newState);
+}
+
+
+int QtFrontend::getVerticalSpin()
+{
+    return mw->getVerticalSpin();
+}
+
+
+void QtFrontend::setVerticalSpin(int newSpin)
+{
+    mw->setVerticalSpin(newSpin);
+}
+
+
+bool QtFrontend::getHorizontalGrid()
+{
+    return mw->getHorizontalGrid();
+}
+
+
+void QtFrontend::setHorizontalGrid(bool newState)
+{
+    mw->setHorizontalGrid(newState);
+}
+
+
+int QtFrontend::getHorizontalSpin()
+{
+    return mw->getHorizontalSpin();
+}
+
+
+void QtFrontend::setHorizontalSpin(int newSpin)
+{
+    mw->setHorizontalSpin(newSpin);
+}
+
+
 void QtFrontend::showProgress(const QString &operation, unsigned int numOperations)
 {
     mw->showProgress(operation, numOperations);

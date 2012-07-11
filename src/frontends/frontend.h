@@ -152,6 +152,54 @@ public:
     virtual void changeCaptureButtonFunction(int newFunction) = 0;
 
     /**
+     * Get the status of the vertical lines of the grid.
+     * @return The new state of the grid.
+     */
+    virtual bool getVerticalGrid() = 0;
+
+    /**
+     * Set the status of the vertical lines of the grid.
+     * @param newState The new state of the grid.
+     */
+    virtual void setVerticalGrid(bool newState) = 0;
+
+    /**
+     * Get the number of vertical lines of the grid.
+     * @return The new number of lines.
+     */
+    virtual int getVerticalSpin() = 0;
+
+    /**
+     * Set the number of vertical lines of the grid.
+     * @param newSpin The new number of lines.
+     */
+    virtual void setVerticalSpin(int newSpin) = 0;
+
+    /**
+     * Get the status of the horizontal lines of the grid.
+     * @return The new state of the grid.
+     */
+    virtual bool getHorizontalGrid() = 0;
+
+    /**
+     * Set the status of the horizontal lines of the grid.
+     * @param newState The new state of the grid.
+     */
+    virtual void setHorizontalGrid(bool newState) = 0;
+
+    /**
+     * Get the number of horizontal lines of the grid.
+     * @return The new number of lines.
+     */
+    virtual int getHorizontalSpin() = 0;
+
+    /**
+     * Set the number of horizontal lines of the grid.
+     * @param newSpin The new number of lines.
+     */
+    virtual void setHorizontalSpin(int newSpin) = 0;
+
+    /**
      * Abstract function for displaying progress on timeconsuming operations.
      * @param infoText the text to display to the user
      * @param numOperations the number of calculated operations to do

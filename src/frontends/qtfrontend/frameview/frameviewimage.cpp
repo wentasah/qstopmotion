@@ -372,6 +372,40 @@ void FrameViewImage::paintEvent(QPaintEvent *)
 
     widgetPainter.drawImage(x, y, outputImage);
 
+    if (frontend->getVerticalGrid()) {
+        // Draw a vertical grid on top of the image
+
+        int verticalLines = frontend->getVerticalSpin();
+        int vericalDistance = widgetRect.width() / (verticalLines + 1);
+        int x1, y1, x2, y2;
+
+        x1 = y1 = 0;
+        y2 = widgetRect.height();
+
+        for (int v = 0 ; v < verticalLines ; v++) {
+            x1 += vericalDistance;
+            x2 = x1;
+            widgetPainter.drawLine(x1, y1, x2, y2);
+        }
+    }
+
+    if (frontend->getHorizontalGrid()) {
+        // Draw a horizontal grid on top of the image
+
+        int horizontalLines = frontend->getHorizontalSpin();
+        int horizontalDistance = widgetRect.height() / (horizontalLines + 1);
+        int x1, y1, x2, y2;
+
+        x1 = y1 = 0;
+        x2 = widgetRect.width();
+
+        for (int h = 0 ; h < horizontalLines ; h++) {
+            y1 += horizontalDistance;
+            y2 = y1;
+            widgetPainter.drawLine(x1, y1, x2, y2);
+        }
+    }
+
     // qDebug("FrameViewImage::paintEvent --> End");
 }
 

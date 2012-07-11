@@ -130,6 +130,11 @@ MainWindowGUI::MainWindowGUI(QApplication *stApp, Frontend *f)
 
     grabber              = 0;
 
+    verticalGrid         = false;
+    verticalSpin         = 5;
+    horizontalGrid       = false;
+    horizontalSpin       = 5;
+
     this->setObjectName("MainWindowGUI");
     stApp->installTranslator(&appTranslator);
     stApp->installTranslator(&qtTranslator);
@@ -208,6 +213,11 @@ void MainWindowGUI::init()
     connect(this, SIGNAL(startLastProject()), this, SLOT(openMostRecent()));
     connect(this, SIGNAL(startOpenProject()), this, SLOT(openProject()));
     connect(this, SIGNAL(startExit()),  this, SLOT(closeApplication()));
+
+    verticalGrid = pref->getBasicPreference("verticalgrid", false);
+    verticalSpin = pref->getBasicPreference("verticalspin", 5);
+    horizontalGrid = pref->getBasicPreference("horizontalgrid", false);
+    horizontalSpin = pref->getBasicPreference("horizontalspin", 5);
 
     qDebug("MainWindowGUI::Constructor --> End");
 }
@@ -309,6 +319,54 @@ void MainWindowGUI::changeLanguage(int newIndex)
 void MainWindowGUI::changeCaptureButtonFunction(PreferencesTool::captureButtonFunction newFunction)
 {
     recordingTab->changeCaptureButtonFunction(newFunction);
+}
+
+
+bool MainWindowGUI::getVerticalGrid()
+{
+    return verticalGrid;
+}
+
+
+void MainWindowGUI::setVerticalGrid(bool newState)
+{
+    verticalGrid = newState;
+}
+
+
+int MainWindowGUI::getVerticalSpin()
+{
+    return verticalSpin;
+}
+
+
+void MainWindowGUI::setVerticalSpin(int newSpin)
+{
+    verticalSpin = newSpin;
+}
+
+
+bool MainWindowGUI::getHorizontalGrid()
+{
+    return horizontalGrid;
+}
+
+
+void MainWindowGUI::setHorizontalGrid(bool newState)
+{
+    horizontalGrid = newState;
+}
+
+
+int MainWindowGUI::getHorizontalSpin()
+{
+    return horizontalSpin;
+}
+
+
+void MainWindowGUI::setHorizontalSpin(int newSpin)
+{
+    horizontalSpin = newSpin;
 }
 
 

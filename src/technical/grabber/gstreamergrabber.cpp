@@ -481,6 +481,7 @@ void GstreamerGrabber::initSubclass()
             qDebug() << "gstreamergrabber::init --> Fatal: Can't create the source.";
             return;
         }
+        // g_object_set(source, "pattern", 18, NULL);
         filter1 = gst_element_factory_make("ffmpegcolorspace", "filter1=ffmpegcolorspace");
         if (!filter1) {
             qDebug() << "gstreamergrabber::init --> Fatal: Can't create the filter1.";

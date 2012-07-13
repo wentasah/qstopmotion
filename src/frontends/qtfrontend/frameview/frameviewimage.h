@@ -172,7 +172,7 @@ protected:
 private:
     static const int alphaLut[5];
 
-    QImage           liveImage;
+    QImage           activeImage;
     QQueue<QImage>   imageBuffer;
 
     QTimer           grabTimer;

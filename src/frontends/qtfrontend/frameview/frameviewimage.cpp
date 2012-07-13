@@ -46,14 +46,10 @@ FrameViewImage::~FrameViewImage()
     qDebug("FrameViewImage::Destructor --> Start");
 
     // Turn off camera if it's on
-    if (isPlayingVideo) {
+    if (displayMode == liveImageMode) {
         cameraOff();
     }
-/*
-    if (liveImage) {
-        delete(liveImage);
-    }
-*/
+
     clearImageBuffer();
 
     qDebug("FrameViewImage::Destructor --> End");
@@ -150,7 +146,7 @@ void FrameViewImage::updateAddExposure(int sceneIndex,
 {
     // qDebug("FrameViewImage::updateAddExposure --> Start");
 
-    if (isPlayingVideo) {
+    if (displayMode == liveImageMode) {
         Exposure *exposure = frontend->getProject()->getExposure(sceneIndex, takeIndex, exposureIndex);
         addToImageBuffer(QImage(exposure->getImagePath()));
     }
@@ -165,7 +161,7 @@ void FrameViewImage::updateInsertExposure(int sceneIndex,
 {
     qDebug("FrameViewImage::updateInsertExposure --> Start");
 
-    if (isPlayingVideo) {
+    if (displayMode == liveImageMode) {
         Exposure *exposure = frontend->getProject()->getExposure(sceneIndex, takeIndex, exposureIndex);
         addToImageBuffer(QImage(exposure->getImagePath()));
     }
@@ -214,9 +210,9 @@ void FrameViewImage::nextAnimationFrame(int exposureIndex)
     exposure = frontend->getProject()->getExposure(activeSceneIndex, activeTakeIndex, exposureIndex);
 
     if (!exposure->isEmpty()) {
-        liveImage.load(exposure->getImagePath());
+        activeImage.load(exposure->getImagePath());
         QPainter widgetPainter(this);
-        widgetPainter.drawImage(0, 0, liveImage);
+        widgetPainter.drawImage(0, 0, activeImage);
     }
 
     // Call the redraw function
@@ -236,15 +232,9 @@ void FrameViewImage::nextAnimationFrame(int exposureIndex)
 
 void FrameViewImage::redraw()
 {
-    // qDebug("FrameViewImage::redraw --> Start");
-
-    liveImage = clipAndScale(frontend->getLiveImage());
-
-    // qDebug("FrameViewImage::redraw --> Loading image finished");
+    activeImage = clipAndScale(frontend->getLiveImage());
 
     this->update();
-
-    // qDebug("FrameViewImage::redraw --> End");
 }
 
 
@@ -275,9 +265,9 @@ void FrameViewImage::nextPlayBack()
         }
 
         if (!exposure->isEmpty()) {
-            liveImage.load(exposure->getImagePath());
+            activeImage.load(exposure->getImagePath());
             QPainter widgetPainter(this);
-            widgetPainter.drawImage(0, 0, liveImage);
+            widgetPainter.drawImage(0, 0, activeImage);
         }
 
         this->update();
@@ -307,7 +297,7 @@ void FrameViewImage::resizeEvent(QResizeEvent*)
 
     frameViewWidth = width();
     frameViewHeight = height();
-    if (liveImage.isNull()) {
+    if (activeImage.isNull()) {
         showLogo();
     }
 
@@ -319,7 +309,7 @@ void FrameViewImage::paintEvent(QPaintEvent *)
 {
     // qDebug("FrameViewImage::paintEvent --> Start");
 
-    QImage   outputImage = liveImage;
+    QImage   outputImage = activeImage;
 
     QPainter imagePainter(&outputImage);
     QPainter widgetPainter(this);
@@ -328,82 +318,96 @@ void FrameViewImage::paintEvent(QPaintEvent *)
     int      x = (widgetRect.width() - outputImageSize.width()) / 2;
     int      y = (widgetRect.height() - outputImageSize.height()) / 2;
 
-    if (!liveImage.isNull()) {
-        if (isPlayingVideo) {
-            // Playing live video
-            int offset;
-            switch (mixMode) {
-            case 0:
-                // Image mixing
+    switch (displayMode) {
+    case logoMode:
+        // Playing still image
 
-                // Set the composite mode for the images in the buffer
-                imagePainter.setCompositionMode(QPainter::CompositionMode_Overlay);
+        widgetPainter.fillRect(widgetRect, QColor(225, 225, 225, 255));
+        break;
+    case stillImageMode:
+        // Playing still image
 
-                offset = imageBuffer.count() - 1;
-                for (int i = 0; i < imageBuffer.count() && i < mixCount; ++i) {
-                    QImage image(imageBuffer[offset - i]);
-                    QImage alphaImage(this->createAlphaImage(image, alphaLut[i]));
-                    imagePainter.drawImage(0, 0, alphaImage);
-                }
-                break;
-            case 1:
-                // Image differentiating
+        widgetPainter.fillRect(widgetRect, QColor(225, 225, 225, 255));
+        break;
+    case liveImageMode:
+        // Playing live video
 
-                if (imageBuffer.count() > 0) {
-                    QImage image(imageBuffer.last());
-                    QImage diffImage(this->createDifferentiatedImage(outputImage, image));
-                    imagePainter.eraseRect(outputImage.rect());
-                    imagePainter.drawImage(0, 0, diffImage);
-                }
-                break;
-            case 2:
-                // Image Playback mode
+        int offset;
 
-                break;
+        switch (mixMode) {
+        case 0:
+            // Image mixing
+
+            // Set the composite mode for the images in the buffer
+            imagePainter.setCompositionMode(QPainter::CompositionMode_Overlay);
+
+            offset = imageBuffer.count() - 1;
+            for (int i = 0; i < imageBuffer.count() && i < mixCount; ++i) {
+                QImage image(imageBuffer[offset - i]);
+                QImage alphaImage(this->createAlphaImage(image, alphaLut[i]));
+                imagePainter.drawImage(0, 0, alphaImage);
             }
-        }
-        else {
-            // Playing still image
-            widgetPainter.fillRect(widgetRect, QColor(225, 225, 225, 255));
-        }
-        // Flip the screen???
+            break;
+        case 1:
+            // Image differentiating
 
-    }  // End if liveImage
+            if (imageBuffer.count() > 0) {
+                QImage image(imageBuffer.last());
+                QImage diffImage(this->createDifferentiatedImage(outputImage, image));
+                imagePainter.eraseRect(outputImage.rect());
+                imagePainter.drawImage(0, 0, diffImage);
+            }
+            break;
+        case 2:
+            // Image Playback mode
+
+            break;
+        }
+        break;
+    case playbackMode:
+        break;
+    }
 
     widgetPainter.drawImage(x, y, outputImage);
 
-    if (frontend->getVerticalGrid()) {
-        // Draw a vertical grid on top of the image
+    switch (displayMode) {
+    case liveImageMode:
+    case playbackMode:
+        if (frontend->getVerticalGrid()) {
+            // Draw a vertical grid on top of the image
 
-        int verticalLines = frontend->getVerticalSpin();
-        int vericalDistance = widgetRect.width() / (verticalLines + 1);
-        int x1, y1, x2, y2;
+            int verticalLines = frontend->getVerticalSpin();
+            int vericalDistance = widgetRect.width() / (verticalLines + 1);
+            int x1, y1, x2, y2;
 
-        x1 = y1 = 0;
-        y2 = widgetRect.height();
+            x1 = y1 = 0;
+            y2 = widgetRect.height();
 
-        for (int v = 0 ; v < verticalLines ; v++) {
-            x1 += vericalDistance;
-            x2 = x1;
-            widgetPainter.drawLine(x1, y1, x2, y2);
+            for (int v = 0 ; v < verticalLines ; v++) {
+                x1 += vericalDistance;
+                x2 = x1;
+                widgetPainter.drawLine(x1, y1, x2, y2);
+            }
         }
-    }
 
-    if (frontend->getHorizontalGrid()) {
-        // Draw a horizontal grid on top of the image
+        if (frontend->getHorizontalGrid()) {
+            // Draw a horizontal grid on top of the image
 
-        int horizontalLines = frontend->getHorizontalSpin();
-        int horizontalDistance = widgetRect.height() / (horizontalLines + 1);
-        int x1, y1, x2, y2;
+            int horizontalLines = frontend->getHorizontalSpin();
+            int horizontalDistance = widgetRect.height() / (horizontalLines + 1);
+            int x1, y1, x2, y2;
 
-        x1 = y1 = 0;
-        x2 = widgetRect.width();
+            x1 = y1 = 0;
+            x2 = widgetRect.width();
 
-        for (int h = 0 ; h < horizontalLines ; h++) {
-            y1 += horizontalDistance;
-            y2 = y1;
-            widgetPainter.drawLine(x1, y1, x2, y2);
+            for (int h = 0 ; h < horizontalLines ; h++) {
+                y1 += horizontalDistance;
+                y2 = y1;
+                widgetPainter.drawLine(x1, y1, x2, y2);
+            }
         }
+
+        break;
     }
 
     // qDebug("FrameViewImage::paintEvent --> End");
@@ -418,15 +422,30 @@ void FrameViewImage::activateExposure()
 {
     qDebug("FrameViewImage::activateExposure --> Start");
 
-    Exposure *exposure = frontend->getProject()->getActiveExposure();
-    if (exposure != NULL) {
-        const QString fileName = exposure->getImagePath();
-        liveImage.load(fileName);
-    } else {
-        this->clearImageBuffer();
-        this->showLogo();
+    Exposure *exposure = NULL;
+
+    switch (displayMode) {
+    case logoMode:
+        displayMode = stillImageMode;
+    case stillImageMode:
+        exposure = frontend->getProject()->getActiveExposure();
+
+        Q_ASSERT(exposure != NULL);
+
+        if (exposure != NULL) {
+            const QString fileName = exposure->getImagePath();
+            activeImage.load(fileName);
+        } else {
+            showLogo();
+        }
+        update();
+        break;
+    case liveImageMode:
+        break;
+    case playbackMode:
+        break;
     }
-    this->update();
+
 
     qDebug("FrameViewImage::activateExposure --> End");
 }
@@ -462,7 +481,7 @@ void FrameViewImage::modifyExposure(int modSceneIndex,
     Exposure *exposure = frontend->getProject()->getActiveExposure();
     if (exposure != NULL) {
         const QString fileName = exposure->getImagePath();
-        liveImage.load(fileName);
+        activeImage.load(fileName);
     } else {
         this->clearImageBuffer();
         this->showLogo();
@@ -577,7 +596,10 @@ void FrameViewImage::showLogo()
     QString iconFile(frontend->getGraphicsDirName());
     iconFile.append(QLatin1String("qstopmotion_logo_60.png"));
 
-    liveImage = clipAndScale(QImage(iconFile));
+    // activeImage = clipAndScale(QImage(iconFile));
+    activeImage = QImage(iconFile);
+
+    displayMode = logoMode;
 
     qDebug("FrameViewImage::showLogo --> End");
 }

@@ -52,7 +52,7 @@ public:
     enum imageFormat {
         jpegFormat,            // JPEG format
         tiffFormat,            // TIFF format
-        bmpFormat,             // BMP format
+        bmpFormat              // BMP format
     };
 
     /**
@@ -80,7 +80,7 @@ public:
         rightMiddle,          // Right middle
         leftDown,             // Left down corner
         centerDown,           // Center down
-        rightDown,            // Right down corner
+        rightDown             // Right down corner
     };
 
     /**

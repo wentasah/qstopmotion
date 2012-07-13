@@ -47,7 +47,7 @@ FrameViewInterface::FrameViewInterface(Frontend *f, QWidget *parent, int fps)
 
     this->framesPerSecond = fps;
 
-    isPlayingVideo = false;
+    displayMode = logoMode;
 
     widthConst  = 4;
     heightConst = 3;
@@ -245,9 +245,9 @@ bool FrameViewInterface::cameraOn()
 {
     qDebug("FrameViewInterface::cameraOn --> Start");
 
-    this->initCompleted();
+    initCompleted();
 
-    this->isPlayingVideo = true;
+    displayMode = liveImageMode;
     grabTimer.start(150);
 
     qDebug("FrameViewInterface::cameraOn --> End");
@@ -264,7 +264,13 @@ void FrameViewInterface::cameraOff()
 
     clearImageBuffer();
 
-    this->isPlayingVideo = false;
+    if (0 == frontend->getProject()->getTotalExposureSize()) {
+        showLogo();
+    }
+    else {
+        displayMode = stillImageMode;
+        activateExposure();
+    }
     this->update();
 
     qDebug("FrameViewInterface::cameraOff --> End");
@@ -339,8 +345,6 @@ void FrameViewInterface::activateTake()
 
 QImage FrameViewInterface::clipAndScale(QImage image)
 {
-    qDebug("FrameViewInterface::clipAndScale --> Start");
-
     QImage   outputImage;
 
     double destWidth = 0;
@@ -361,8 +365,6 @@ QImage FrameViewInterface::clipAndScale(QImage image)
         else {
             outputImage = image.scaledToHeight(frameViewHeight);
         }
-
-        qDebug("FrameViewInterface::clipAndScale --> End (scaled)");
 
         return outputImage;
     }
@@ -441,8 +443,6 @@ QImage FrameViewInterface::clipAndScale(QImage image)
     else {
         outputImage = clipImage.scaledToHeight(frameViewHeight);
     }
-
-    qDebug("FrameViewInterface::clipAndScale --> End (cliped)");
 
     return outputImage;
 }

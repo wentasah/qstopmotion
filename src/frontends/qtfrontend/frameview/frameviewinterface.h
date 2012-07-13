@@ -49,6 +49,16 @@ class FrameViewInterface : public QWidget, public Observer
 	Q_OBJECT
 public:
     /**
+     * Enum with all possible image output formats
+     */
+    enum frameViewDisplayMode {
+        logoMode,            // Display the logo
+        stillImageMode,      // Display the actual image of the project
+        liveImageMode,       // Display the live image
+        playbackMode         // Display all images of the project
+    };
+
+    /**
      * Creates and initializes the frameview.
      * @param f the frontend of the applikaction.
      * @param parent the parent widget.
@@ -352,6 +362,11 @@ protected:
     virtual void clearImageBuffer() = 0;
 
     /**
+     * Show the logo as active image
+     */
+    virtual void showLogo() = 0;
+
+    /**
      * Clip and scale the image to the frame view size
      * @param image The image to clip and scale
      * @return The cliped and scaled image
@@ -376,12 +391,12 @@ protected:
     /**
      *
      */
-    int framesPerSecond;
+    int displayMode;
 
     /**
      *
      */
-    bool isPlayingVideo;
+    int framesPerSecond;
 
     /**
      *

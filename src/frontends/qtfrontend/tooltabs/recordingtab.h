@@ -54,6 +54,11 @@ public:
                  QWidget  *parent = 0);
 
     /**
+     * Destructor
+     */
+    ~RecordingTab();
+
+    /**
      * Is the camera switched on.
      * @return true if the camera is on.
      */

@@ -34,6 +34,7 @@ RecordingTab::RecordingTab(Frontend *f,
     frontend               = f;
     toolBar                = tb;
     cameraOn               = false;
+    cameraTimer            = NULL;
 
     recordingGroupBox      = 0;
     recordingModeCombo     = 0;
@@ -54,9 +55,6 @@ RecordingTab::RecordingTab(Frontend *f,
     diffAccel              = 0;
     playbackAccel          = 0;
 
-    // captureTimer = new QTimer(this);
-    // connect(captureTimer, SIGNAL(timeout()), cameraHandler, SLOT(captureFrame()));
-
     this->setObjectName("RecordingTab");
 
     PreferencesTool *pref = frontend->getPreferences();
@@ -69,6 +67,14 @@ RecordingTab::RecordingTab(Frontend *f,
     makeGUI();
 
     createAccelerators();
+}
+
+
+RecordingTab::~RecordingTab()
+{
+    if (cameraTimer != NULL) {
+        delete cameraTimer;
+    }
 }
 
 
@@ -672,7 +678,8 @@ void RecordingTab::captureFrame()
 
     toolBar->setActualState(ToolBar::toolBarNothing);
 
-    cameraTimer->start(60);
+    // cameraTimer->start(60);
+    storeFrame();
 
     toolBar->setActualState(ToolBar::toolBarCameraOn);
 
@@ -721,9 +728,9 @@ void RecordingTab::storeFrame()
             frontend->getProject()->selectExposureToUndo(activeSceneIndex, activeTakeIndex, exposureSize);
             break;
         }
-    } else {
-        cameraTimer->start(60);
-    }
+    }// else {
+    //    cameraTimer->start(60);
+    // }
 
     qDebug("RecordingTab::storeFrame --> End");
 }
@@ -731,8 +738,6 @@ void RecordingTab::storeFrame()
 
 QImage RecordingTab::clipAndScale(QImage image)
 {
-    qDebug("RecordingTab::clipAndScale --> Start");
-
     QImage   outputImage;
 
     double destWidth = 0;
@@ -743,8 +748,6 @@ QImage RecordingTab::clipAndScale(QImage image)
     int    y = 0;
 
     switch (frontend->getProject()->getImageSize()) {
-    case ImageGrabber::defaultSize: // Camera image size
-        break;
     case ImageGrabber::qvgaSize:    // QVGA
         destWidth = 320;
         destHeight = 240;
@@ -769,6 +772,10 @@ QImage RecordingTab::clipAndScale(QImage image)
         destWidth = 1900;
         destHeight = 1080;
         break;
+    default: // Camera image size
+        destWidth = imageWidth;
+        destHeight = imageHeight;
+        break;
     }
 
     if (frontend->getProject()->getImageTransformation()) {
@@ -783,8 +790,6 @@ QImage RecordingTab::clipAndScale(QImage image)
         else {
             outputImage = image.scaledToHeight(destHeight);
         }
-
-        qDebug("RecordingTab::clipAndScale --> End (scaled)");
 
         return outputImage;
     }
@@ -827,8 +832,6 @@ QImage RecordingTab::clipAndScale(QImage image)
     }
 
     outputImage = image.copy(x, y, destWidth, destHeight);
-
-    qDebug("RecordingTab::clipAndScale --> End (cliped)");
 
     return outputImage;
 }

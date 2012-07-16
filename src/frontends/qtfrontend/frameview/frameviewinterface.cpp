@@ -371,8 +371,6 @@ QImage FrameViewInterface::clipAndScale(QImage image)
 
     // Clip the image to the output size
     switch (frontend->getProject()->getImageSize()) {
-    case ImageGrabber::defaultSize: // Camera image size
-        break;
     case ImageGrabber::qvgaSize:    // QVGA
         destWidth = 320;
         destHeight = 240;
@@ -396,6 +394,10 @@ QImage FrameViewInterface::clipAndScale(QImage image)
     case ImageGrabber::fullhdSize:  // Full HD
         destWidth = 1900;
         destHeight = 1080;
+        break;
+    default: // Camera image size
+        destWidth = imageWidth;
+        destHeight = imageHeight;
         break;
     }
 

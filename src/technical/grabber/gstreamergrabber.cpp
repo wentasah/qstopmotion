@@ -1141,6 +1141,9 @@ const QImage GstreamerGrabber::getImage()
     if (firstImage) {
         firstImage = false;
     }
+
+    Q_ASSERT(image.isNull() == false);
+
     return image;
 }
 

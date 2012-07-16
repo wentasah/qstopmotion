@@ -434,7 +434,7 @@ void FrameViewImage::activateExposure()
 
         if (exposure != NULL) {
             const QString fileName = exposure->getImagePath();
-            activeImage.load(fileName);
+            activeImage = clipAndScale(QImage(fileName));
         } else {
             showLogo();
         }

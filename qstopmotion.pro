@@ -69,6 +69,7 @@ HEADERS += src/config.h \
            src/technical/audio/audioformat.h \
            src/technical/grabber/grabbercontroller.h \
            src/technical/grabber/gstreamergrabber.h \
+           src/technical/grabber/gstreamervideotestgrabber.h \
            src/technical/grabber/imagegrabber.h \
            src/technical/grabber/imagegrabberdevice.h \
            src/technical/grabber/imagegrabberthread.h \
@@ -133,6 +134,7 @@ SOURCES += src/main.cpp \
            src/technical/util.cpp \
            src/technical/grabber/grabbercontroller.cpp \
            src/technical/grabber/gstreamergrabber.cpp \
+           src/technical/grabber/gstreamervideotestgrabber.cpp \
            src/technical/grabber/imagegrabber.cpp \
            src/technical/grabber/imagegrabberdevice.cpp \
            src/technical/grabber/imagegrabberthread.cpp \

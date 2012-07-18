@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2011-2012 by                                                *
+ *  Copyright (C) 2012-2012 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -18,53 +18,37 @@
  *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                 *
  ******************************************************************************/
 
-#include "imagegrabberdevice.h"
+#include "grabbercontroller.h"
 
 #include <QtCore/QtDebug>
 
-ImageGrabberDevice::ImageGrabberDevice(const QString id,
-                                 const QString name,
-                                 imageGrabberVideoSources source,
-                                 imageGrabberDeviceCapabilities cap)
+GrabberController::GrabberController(ImageGrabberDevice *d,
+                                     int                 cap)
 {
-    qDebug("ImageGrabberDevice::Constructor --> Start");
+    qDebug("GrabberController::Constructor --> Start");
 
-    deviceId.append(id);
-    deviceName.append(name);
-    deviceSource = source;
-    deviceCap = cap;
+    device = d;
+    controllerCap = cap;
 
-    qDebug("ImageGrabberDevice::Constructor --> End");
+    qDebug("GrabberController::Constructor --> End");
 }
 
 
-ImageGrabberDevice::~ImageGrabberDevice()
+GrabberController::~GrabberController()
 {
-    qDebug("ImageGrabberDevice::Destructor --> Start");
+    qDebug("GrabberController::Destructor --> Start");
 
-    qDebug("ImageGrabberDevice::Destructor --> End");
+    qDebug("GrabberController::Destructor --> End");
 }
 
 
-const QString ImageGrabberDevice::getDeviceId()
+ImageGrabberDevice* GrabberController::getDevice()
 {
-    return deviceId;
+    return device;
 }
 
 
-const QString ImageGrabberDevice::getDeviceName()
+int GrabberController::getControllerCapabilities()
 {
-    return deviceName;
-}
-
-
-ImageGrabberDevice::imageGrabberVideoSources ImageGrabberDevice::getDeviceSource()
-{
-    return deviceSource;
-}
-
-
-ImageGrabberDevice::imageGrabberDeviceCapabilities ImageGrabberDevice::getDeviceCapability()
-{
-    return deviceCap;
+    return controllerCap;
 }

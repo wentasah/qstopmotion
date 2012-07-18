@@ -28,13 +28,15 @@ ImageGrabber::ImageGrabber(Frontend *f)
 {
     qDebug("ImageGrabber::Constructor --> Start");
 
-    grabberThread = 0;
+    frontend = f;
+
+    grabberThread = NULL;
 
     isInitialized = false;
     isInited = false;
     isProcess = false;
 
-    frontend = f;
+    controller = NULL;
 
     qDebug("ImageGrabber::Constructor --> End");
 }
@@ -171,3 +173,18 @@ bool ImageGrabber::isGrabberProcess() const
     return isProcess;
 }
 
+
+bool ImageGrabber::isController() const
+{
+    if (controller != NULL) {
+        return true;
+    }
+
+    return false;
+}
+
+
+GrabberController* ImageGrabber::getController()
+{
+    return controller;
+}

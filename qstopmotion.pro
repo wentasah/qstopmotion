@@ -67,6 +67,7 @@ HEADERS += src/config.h \
            src/technical/util.h \
            src/technical/audio/audiodriver.h \
            src/technical/audio/audioformat.h \
+           src/technical/grabber/grabbercontroller.h \
            src/technical/grabber/gstreamergrabber.h \
            src/technical/grabber/imagegrabber.h \
            src/technical/grabber/imagegrabberdevice.h \
@@ -130,6 +131,7 @@ SOURCES += src/main.cpp \
            src/technical/externalchangemonitor.cpp \
            src/technical/preferencestool.cpp \
            src/technical/util.cpp \
+           src/technical/grabber/grabbercontroller.cpp \
            src/technical/grabber/gstreamergrabber.cpp \
            src/technical/grabber/imagegrabber.cpp \
            src/technical/grabber/imagegrabberdevice.cpp \

@@ -24,6 +24,7 @@
 #define IMAGEGRABBER_H
 
 #include "frontends/frontend.h"
+#include "technical/grabber/grabbercontroller.h"
 #include "technical/grabber/imagegrabberdevice.h"
 #include "technical/grabber/imagegrabberthread.h"
 
@@ -32,6 +33,7 @@
 #include <QtCore/QVector>
 #include <QtGui/QImage>
 
+class GrabberController;
 class ImageGrabberDevice;
 class ImageGrabberThread;
 
@@ -114,17 +116,37 @@ public:
     const QVector<QString> getDeviceNames();
 
     /**
-     * Get the live image from the camera
+     * Checks if the grabber is initialized.
+     * @return true if it is initialized, false otherwise
      */
-    virtual const QImage getLiveImage() = 0;
+    bool isGrabberInitialized() const;
 
     /**
-     * Get the raw image from the camera
+     * Checks if the grabber is inited.
+     * @return true if it is inited, false otherwise
      */
-    virtual const QImage getRawImage() = 0;
+    bool isGrabberInited() const;
 
     /**
-     * Initialization of the Command line grabber
+     * Checks if the process is running in deamon mode.
+     * @return true if it runs in deamon mode, false otherwise
+     */
+    bool isGrabberProcess() const;
+
+    /**
+     * Has the grabber a controller interface?
+     * @return True if there is a controller interface.
+     */
+    bool isController() const;
+
+    /**
+     * Get the controller of the grabber.
+     * @return The controller of the grabber.
+     */
+    GrabberController *getController();
+
+    /**
+     * Initialization of the grabber.
      */
     void initialization();
 
@@ -153,22 +175,16 @@ public:
     virtual bool grab() = 0;
 
     /**
-     * Checks if the grabber is initialized.
-     * @return true if it is initialized, false otherwise
+     * Abstract function to get the live image from the camera
+     * @return The live image.
      */
-    bool isGrabberInitialized() const;
+    virtual const QImage getLiveImage() = 0;
 
     /**
-     * Checks if the grabber is inited.
-     * @return true if it is inited, false otherwise
+     * Abstract function to get the raw image from the camera
+     * @return The raw image.
      */
-    bool isGrabberInited() const;
-
-    /**
-     * Checks if the process is running in deamon mode.
-     * @return true if it runs in deamon mode, false otherwise
-     */
-    bool isGrabberProcess() const;
+    virtual const QImage getRawImage() = 0;
 
 protected:
 
@@ -201,6 +217,8 @@ protected:
     bool isProcess;
     QVector<ImageGrabberDevice*> devices;
     ImageGrabberThread *grabberThread;
+
+    GrabberController *controller;
 
 };
 

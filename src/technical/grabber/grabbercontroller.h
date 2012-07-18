@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2011-2012 by                                                *
+ *  Copyright (C) 2012-2012 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -18,53 +18,63 @@
  *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                 *
  ******************************************************************************/
 
-#include "imagegrabberdevice.h"
+#ifndef GRABBERCONTROLLER_H
+#define GRABBERCONTROLLER_H
 
-#include <QtCore/QtDebug>
+#include "technical/grabber/imagegrabberdevice.h"
 
-ImageGrabberDevice::ImageGrabberDevice(const QString id,
-                                 const QString name,
-                                 imageGrabberVideoSources source,
-                                 imageGrabberDeviceCapabilities cap)
+#include <QtCore/QString>
+#include <QtCore/QVector>
+
+class ImageGrabberDevice;
+
+/**
+ * Interface to the controller of a device.
+ *
+ * @author Ralf Lange
+ */
+class GrabberController
 {
-    qDebug("ImageGrabberDevice::Constructor --> Start");
+public:
 
-    deviceId.append(id);
-    deviceName.append(name);
-    deviceSource = source;
-    deviceCap = cap;
+    /**
+     * Device controller capabilities
+     */
+    enum grabberControllerCapabilities {
+        controller_none,
+        controller_1,
+        controller_2,
+        controller_3
+    };
 
-    qDebug("ImageGrabberDevice::Constructor --> End");
-}
+    /**
+     * Constructs and initializes the object.
+     * @param d The image grabber device of the controller.
+     * @param caps The grabber controller capabilities.
+     */
+    GrabberController(ImageGrabberDevice *d,
+                      int                 caps);
 
+    /**
+     * Destructor
+     */
+    ~GrabberController();
 
-ImageGrabberDevice::~ImageGrabberDevice()
-{
-    qDebug("ImageGrabberDevice::Destructor --> Start");
+    /**
+     * Get the device of the controller.
+     * @return The device of the controller.
+     */
+    ImageGrabberDevice* getDevice();
 
-    qDebug("ImageGrabberDevice::Destructor --> End");
-}
+    /**
+     * Get the capabilities of the controller.
+     * @return The capabilities of the controller.
+     */
+    int getControllerCapabilities();
 
+private:
+    ImageGrabberDevice *device;
+    int                 controllerCap;
+};
 
-const QString ImageGrabberDevice::getDeviceId()
-{
-    return deviceId;
-}
-
-
-const QString ImageGrabberDevice::getDeviceName()
-{
-    return deviceName;
-}
-
-
-ImageGrabberDevice::imageGrabberVideoSources ImageGrabberDevice::getDeviceSource()
-{
-    return deviceSource;
-}
-
-
-ImageGrabberDevice::imageGrabberDeviceCapabilities ImageGrabberDevice::getDeviceCapability()
-{
-    return deviceCap;
-}
+#endif

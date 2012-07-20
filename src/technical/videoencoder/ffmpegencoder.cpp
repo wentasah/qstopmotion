@@ -24,6 +24,7 @@
 
 #include "domain/animation/projectserializer.h"
 #include "frontends/frontend.h"
+#include "technical/grabber/imagegrabber.h"
 
 #include <QtCore/QDir>
 #include <QtCore/QString>

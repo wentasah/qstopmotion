@@ -20,6 +20,8 @@
 
 #include "frameviewinterface.h"
 
+#include "technical/grabber/imagegrabber.h"
+
 #include <QtCore/QDir>
 #include <QtCore/QRect>
 #include <QtCore/QSize>

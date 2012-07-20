@@ -19,7 +19,6 @@
  ******************************************************************************/
 
 #include "gstreamervideotestgrabber.h"
-#include "technical/grabber/imagegrabberdevice.h"
 
 #include "technical/util.h"
 
@@ -28,7 +27,7 @@
 #include <QtCore/QtGlobal>
 #include <QtGui/QApplication>
 
-
+// Include files of the gstreamer library
 #include <gst/interfaces/propertyprobe.h>
 #include <gst/app/gstappsink.h>
 
@@ -61,7 +60,7 @@ GstreamerVideoTestGrabber::~GstreamerVideoTestGrabber()
 }
 
 
-void GstreamerVideoTestGrabber::initializationSubclass()
+bool GstreamerVideoTestGrabber::initializationSubclass(QVector<ImageGrabberDevice*> &devices)
 {
     qDebug("GstreamerVideoTestGrabber::initialization --> Start");
 
@@ -75,18 +74,15 @@ void GstreamerVideoTestGrabber::initializationSubclass()
                                     ImageGrabberDevice::video_x_none);
     devices.append(device);
 
-    isInitialized = true;
-    isProcess = true;
-
     qDebug() << "GstreamerVideoTestGrabber::initialization --> device count: " << devices.size();
 
     qDebug("GstreamerVideoTestGrabber::initialization --> End (true)");
 
-    return;
+    return true;
 }
 
 
-void GstreamerVideoTestGrabber::initSubclass()
+bool GstreamerVideoTestGrabber::initSubclass()
 {
     qDebug() << "GstreamerVideoTestGrabber::init --> Start";
 
@@ -115,18 +111,18 @@ void GstreamerVideoTestGrabber::initSubclass()
         source = gst_element_factory_make("videotestsrc", "source=videotestsrc");
         if (!source) {
             qDebug() << "GstreamerVideoTestGrabber::init --> Fatal: Can't create the source.";
-            return;
+            return false;
         }
         // g_object_set(source, "pattern", 18, NULL);
         filter1 = gst_element_factory_make("ffmpegcolorspace", "filter1=ffmpegcolorspace");
         if (!filter1) {
             qDebug() << "GstreamerVideoTestGrabber::init --> Fatal: Can't create the filter1.";
-            return;
+            return false;
         }
         sink = gst_element_factory_make("appsink", NULL);
         if (!sink) {
             qDebug() << "GstreamerVideoTestGrabber::init --> Fatal: Can't create the application sink.";
-            return;
+            return false;
         }
         gst_app_sink_set_max_buffers(GST_APP_SINK(sink), APP_SINK_MAX_BUFFERS);
         g_object_set(G_OBJECT(sink), "sync", FALSE, NULL);
@@ -151,15 +147,15 @@ void GstreamerVideoTestGrabber::initSubclass()
 
         if (!gst_bin_add(GST_BIN (pipeline), source)) {
             qDebug() << "GstreamerVideoTestGrabber::init --> Fatal: Can't add the source to the bin.";
-            return;
+            return false;
         }
         if (!gst_bin_add(GST_BIN (pipeline), filter1)) {
             qDebug() << "GstreamerVideoTestGrabber::init --> Fatal: Can't add the filter1 to the bin.";
-            return;
+            return false;
         }
         if (!gst_bin_add(GST_BIN (pipeline), sink)) {
             qDebug() << "GstreamerVideoTestGrabber::init --> Fatal: Can't add the sink to the bin.";
-            return;
+            return false;
         }
 
         //---------------------------------------------------------------------
@@ -179,31 +175,29 @@ void GstreamerVideoTestGrabber::initSubclass()
         // if (!gst_element_link(source, filter1)) {
         if (!gst_element_link_filtered (source, filter1, src_filter)) {
             qDebug() << "GstreamerVideoTestGrabber::init --> Fatal: Can't link the filter1 to source.";
-            return;
+            return false;
         }
 
         gst_caps_unref (src_filter);
 
         if (!gst_element_link(filter1, sink)) {
             qDebug() << "GstreamerVideoTestGrabber::init --> Fatal: Can't link the sink to the filter1.";
-            return;
+            return false;
         }
         break;
     default:
         qDebug() << "GstreamerVideoTestGrabber::init --> Unknown source";
 
-        return;
+        return false;
     }
 
     qDebug() << "GstreamerVideoTestGrabber::init --> Start playing";
 
     gst_element_set_state(pipeline, GST_STATE_PLAYING);
 
-    isInited = TRUE;
-
     qDebug() << "GstreamerVideoTestGrabber::init --> End";
 
-    return;
+    return true;
 }
 
 

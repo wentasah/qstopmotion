@@ -72,6 +72,7 @@ HEADERS += src/config.h \
            src/technical/grabber/gstreamervideotestgrabber.h \
            src/technical/grabber/imagegrabber.h \
            src/technical/grabber/imagegrabberdevice.h \
+           src/technical/grabber/imagegrabberfacade.h \
            src/technical/grabber/imagegrabberthread.h \
            src/technical/videoencoder/ffmpegencoder.h \
            src/technical/videoencoder/videoencoder.h \
@@ -137,6 +138,7 @@ SOURCES += src/main.cpp \
            src/technical/grabber/gstreamervideotestgrabber.cpp \
            src/technical/grabber/imagegrabber.cpp \
            src/technical/grabber/imagegrabberdevice.cpp \
+           src/technical/grabber/imagegrabberfacade.cpp \
            src/technical/grabber/imagegrabberthread.cpp \
            src/technical/videoencoder/ffmpegencoder.cpp \
            src/technical/videoencoder/videoencoder.cpp \

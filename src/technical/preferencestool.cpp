@@ -22,6 +22,7 @@
 
 #include "preferencestool.h"
 
+#include "technical/grabber/imagegrabber.h"
 #include "technical/videoencoder/videoencoder.h"
 
 #include <QtCore/QFile>

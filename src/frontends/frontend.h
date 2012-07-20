@@ -26,7 +26,6 @@
 #include "domain/domainfacade.h"
 #include "frontends/viewfacade.h"
 #include "technical/preferencestool.h"
-#include "technical/grabber/imagegrabber.h"
 #include "technical/grabber/imagegrabberdevice.h"
 
 #include <QtCore/QString>
@@ -36,6 +35,7 @@
 class PreferencesTool;
 class DomainFacade;
 class ViewFacade;
+class ImageGrabberDevice;
 
 /**
  * The frontend interface to be used by the implemented frontend.

@@ -21,9 +21,8 @@
 #ifndef GSTREAMERVIDEOTESTGRABBER_H
 #define GSTREAMERVIDEOTESTGRABBER_H
 
-#include "imagegrabber.h"
-
-#include <QtCore/QProcess>
+#include "technical/grabber/imagegrabber.h"
+#include "technical/grabber/imagegrabberdevice.h"
 
 // Include files of the gstreamer library
 #include <gst/gst.h>
@@ -59,7 +58,7 @@ public:
     /**
      * Initialization of the Command line grabber
      */
-    void initializationSubclass();
+    bool initializationSubclass(QVector<ImageGrabberDevice*> &devices);
 
     /**
      * Starts the grabber if it is marked to be runned in deamon mode.
@@ -71,7 +70,7 @@ public:
      * Starts the grabber if it is marked to be runned in deamon mode.
      * @return true on success, false otherwise
      */
-    void initSubclass();
+    bool initSubclass();
 
     /**
      * Get the live image from the camera
@@ -122,8 +121,7 @@ private:
     const QImage getImage();
 
 private:
-    // QProcess process;
-    ImageGrabberDevice::imageGrabberVideoSources activeSource;
+    // ImageGrabberDevice::imageGrabberVideoSources activeSource;
     bool        isInitSuccess;
     bool        firstImage;
 

@@ -41,6 +41,7 @@
 #include "domain/undo/undotakeremove.h"
 #include "domain/undo/undotakeselect.h"
 #include "frontends/qtfrontend/toolbar.h"
+#include "technical/grabber/imagegrabber.h"
 #include "technical/videoencoder/videoencoder.h"
 
 #include <QtCore/QDir>

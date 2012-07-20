@@ -20,17 +20,24 @@
  *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                 *
  ******************************************************************************/
 
-#ifndef IMAGEGRABBER_H
-#define IMAGEGRABBER_H
+#ifndef IMAGEGRABBERFACADE_H
+#define IMAGEGRABBERFACADE_H
 
 #include "frontends/frontend.h"
 #include "technical/grabber/grabbercontroller.h"
+#include "technical/grabber/gstreamergrabber.h"
+#include "technical/grabber/gstreamervideotestgrabber.h"
 #include "technical/grabber/imagegrabberdevice.h"
+#include "technical/grabber/imagegrabberthread.h"
 
 #include <QtCore/QObject>
 #include <QtCore/QString>
 #include <QtCore/QVector>
 #include <QtGui/QImage>
+
+// class GrabberController;
+// class ImageGrabberDevice;
+// class ImageGrabberThread;
 
 
 /**
@@ -39,7 +46,7 @@
  *
  * @author Bjoern Erik Nilsen, Fredrik Berg Kjoelstad, Ralf Lange
  */
-class ImageGrabber : public QObject
+class ImageGrabberFacade : public QObject
 {
     Q_OBJECT
 public:
@@ -85,12 +92,49 @@ public:
      * Constructs and initializes the object.
      * @param filePath path to the output file grabbed from a device
      */
-    ImageGrabber(Frontend *f);
+    ImageGrabberFacade(Frontend *f);
 
     /**
      * Destructor
      */
-    ~ImageGrabber();
+    ~ImageGrabberFacade();
+
+    /**
+     * Get the possible video devices.
+     * @return Vector with the devices.
+     */
+    const QVector<ImageGrabberDevice*> getDevices();
+
+    /**
+     * Get one video devices.
+     * @param deviceIndex The index of the device.
+     * @return The video devices.
+     */
+    ImageGrabberDevice *getDevice(int deviceIndex);
+
+    /**
+     * Get the possible video devices.
+     * @return Vector with the device names.
+     */
+    const QVector<QString> getDeviceNames();
+
+    /**
+     * Checks if the grabber is initialized.
+     * @return true if it is initialized, false otherwise
+     */
+    bool isGrabberInitialized() const;
+
+    /**
+     * Checks if the grabber is inited.
+     * @return true if it is inited, false otherwise
+     */
+    bool isGrabberInited() const;
+
+    /**
+     * Checks if the process is running in deamon mode.
+     * @return true if it runs in deamon mode, false otherwise
+     */
+    bool isGrabberProcess() const;
 
     /**
      * Has the grabber a controller interface?
@@ -110,51 +154,35 @@ public:
     void initialization();
 
     /**
-     * Abstract function for initializing the grabber.
+     * Initializing the grabber.
      * @return true on success, false otherwise
      */
     void init();
 
     /**
-     * Abstract function for initializing the grabber.
+     * Finalizing the grabber.
      * @return true on success, false otherwise
      */
     void finalize();
 
     /**
-     * Abstract function for shutting down the grabber.
-     * @return true on success, false otherwise
-     */
-    virtual bool tearDown() = 0;
-
-    /**
-     * Abstract function for grabbing an image.
-     * @return true on success, false otherwise
-     */
-    virtual bool grab() = 0;
-
-    /**
-     * Abstract function to get the live image from the camera
+     * Get the live image from the camera
      * @return The live image.
      */
-    virtual const QImage getLiveImage() = 0;
+    const QImage getLiveImage();
 
     /**
-     * Abstract function to get the raw image from the camera
+     * Get the raw image from the camera
      * @return The raw image.
      */
-    virtual const QImage getRawImage() = 0;
+    const QImage getRawImage();
+
+private:
 
     /**
-     * Initialization of the Command line grabber
+     * Clear the device list
      */
-    virtual bool initializationSubclass(QVector<ImageGrabberDevice*> &devices) = 0;
-
-    /**
-     * Abstract function for initializing the grabber.
-     * @return true on success, false otherwise
-     */
-    virtual bool initSubclass() = 0;
+    void clearDevices();
 
 protected:
     /**
@@ -162,7 +190,14 @@ protected:
      */
     Frontend *frontend;
 
-    GrabberController *controller;
+    bool isInitialized;
+    bool isInited;
+    bool isProcess;
+    QVector<ImageGrabberDevice*> devices;
+    ImageGrabberThread *grabberThread;
+
+    ImageGrabber *gstreamerVideoTestGrabber;
+    ImageGrabber *gstreamerGrabber;
 
 };
 

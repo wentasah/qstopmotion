@@ -22,7 +22,6 @@
 #define IMAGEGRABBERDEVICE_H
 
 #include "frontends/frontend.h"
-#include "technical/grabber/imagegrabberthread.h"
 
 #include <QtCore/QString>
 #include <QtCore/QVector>

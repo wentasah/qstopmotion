@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2010-2011 by                                                *
+ *  Copyright (C) 2010-2012 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -19,6 +19,8 @@
  ******************************************************************************/
 
 #include "recordingtab.h"
+
+#include "technical/grabber/imagegrabber.h"
 
 #include <QtCore/QtDebug>
 #include <QtGui/QHeaderView>

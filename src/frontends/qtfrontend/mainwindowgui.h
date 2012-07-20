@@ -38,7 +38,7 @@
 #include "frontends/qtfrontend/tooltabs/recordingtab.h"
 // #include "frontends/qtfrontend/tooltabs/viewtab.h"
 #include "technical/externalchangemonitor.h"
-#include "technical/grabber/imagegrabber.h"
+#include "technical/grabber/imagegrabberfacade.h"
 
 #include <QtGui/QProgressBar>
 #include <QtGui/QProgressDialog>
@@ -626,26 +626,26 @@ private:
     QLabel          *exposureID;
 
     // Other widgets
-    QUndoView       *undoView;
-    HelpBrowser     *helpBrowser;
+    QUndoView             *undoView;
+    HelpBrowser           *helpBrowser;
 
     // Handlers
     ExternalChangeMonitor *changeMonitor;
 
     // Translation handling
-    QTranslator       appTranslator;
-    QTranslator       qtTranslator;
-    QString           translationsPath;
-    QVector<QString>  translationsLanguages;
-    QVector<QString>  translationsLocales;
+    QTranslator            appTranslator;
+    QTranslator            qtTranslator;
+    QString                translationsPath;
+    QVector<QString>       translationsLanguages;
+    QVector<QString>       translationsLocales;
 
     // Others
-    QString           lastVisitedDir;
-    ImageGrabber     *grabber;
-    bool              verticalGrid;
-    int               verticalSpin;
-    bool              horizontalGrid;
-    int               horizontalSpin;
+    QString                lastVisitedDir;
+    ImageGrabberFacade    *grabber;
+    bool                   verticalGrid;
+    int                    verticalSpin;
+    bool                   horizontalGrid;
+    int                    horizontalSpin;
 
     /**************************************************************************
      * Private functions

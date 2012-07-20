@@ -27,7 +27,7 @@ GrabberController::GrabberController(ImageGrabberDevice *d,
 {
     qDebug("GrabberController::Constructor --> Start");
 
-    device = d;
+    // device = d;
     controllerCap = cap;
 
     qDebug("GrabberController::Constructor --> End");

@@ -26,7 +26,6 @@
 #include <QtCore/QString>
 #include <QtCore/QVector>
 
-class ImageGrabberDevice;
 
 /**
  * Interface to the controller of a device.

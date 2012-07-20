@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2011 by                                                *
+ *  Copyright (C) 2005-2012 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -28,8 +28,6 @@
 #include <QtCore/QThread>
 
 
-class ImageGrabber;
-
 /**
  * Thread used for polling an external program to update the camera. Only
  * used for polling, not for when the camera is running in deamon mode.
@@ -42,9 +40,9 @@ public:
     /**
      * Constructs and initializes the object.
      * @param frameView the frame view to be used for displaying images
-     * @param grabber the grabber to use be used for grabbing images
+     * @param g the grabber to use be used for grabbing images
      */
-    ImageGrabberThread(ImageGrabber *grabber);
+    ImageGrabberThread(ImageGrabber *g);
 
     /**
      * Displays the images grabbed with the registered grabber. These

@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2011 by                                                *
+ *  Copyright (C) 2005-2012 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -23,9 +23,9 @@
 #include "imagegrabberthread.h"
 
 
-ImageGrabberThread::ImageGrabberThread(ImageGrabber *grabber)
-    : grabber(grabber)
+ImageGrabberThread::ImageGrabberThread(ImageGrabber *g)
 {
+    grabber = g;
     wasGrabSuccess = true;
 }
 

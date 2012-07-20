@@ -151,7 +151,7 @@ void MainWindowGUI::init()
     QString activeLocale = pref->getBasicPreference("language", QString());
     createTranslator(activeLocale);
 
-    grabber = new GstreamerGrabber(frontend);
+    grabber = new ImageGrabberFacade(frontend);
 
     grabber->initialization();
     if (!grabber->isGrabberInitialized()) {

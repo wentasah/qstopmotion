@@ -1,7 +1,7 @@
 ###############################################################################
 # CMake file for the qStopMotion project                                      #
 # (c) Ralf Lange, longsoft.de                                                 #
-# Last update: 2012-07-20                                                     #
+# Last update: 2012-07-21                                                     #
 #                                                                             #
 # Usage:                                                                      #
 #   * Qt-Creator (Windows, Linux)                                             #
@@ -138,6 +138,7 @@ set(MOC_HEADERS
     src/technical/preferencestool.h
     src/technical/grabber/gstreamerdirectshowusbgrabber.h
     src/technical/grabber/gstreamergrabber.h
+    src/technical/grabber/gstreamerv4l2grabber.h
     src/technical/grabber/gstreamervideotestgrabber.h
     src/technical/grabber/imagegrabber.h
     src/technical/grabber/imagegrabberfacade.h
@@ -203,6 +204,7 @@ set(SOURCES
     src/technical/grabber/grabbercontroller.cpp
     src/technical/grabber/gstreamerdirectshowusbgrabber.cpp
     src/technical/grabber/gstreamergrabber.cpp
+    src/technical/grabber/gstreamerv4l2grabber.cpp
     src/technical/grabber/gstreamervideotestgrabber.cpp
     src/technical/grabber/imagegrabber.cpp
     src/technical/grabber/imagegrabberdevice.cpp

@@ -27,6 +27,7 @@
 #include "technical/grabber/grabbercontroller.h"
 #include "technical/grabber/gstreamerdirectshowusbgrabber.h"
 #include "technical/grabber/gstreamergrabber.h"
+#include "technical/grabber/gstreamerv4l2grabber.h"
 #include "technical/grabber/gstreamervideotestgrabber.h"
 #include "technical/grabber/imagegrabberdevice.h"
 #include "technical/grabber/imagegrabberthread.h"
@@ -194,6 +195,7 @@ protected:
     ImageGrabberThread *grabberThread;
 
     ImageGrabber *gstreamerVideoTestGrabber;
+    ImageGrabber *gstreamerV4L2Grabber;
     ImageGrabber *gstreamerDirectShowUsbGrabber;
     ImageGrabber *gstreamerGrabber;
 

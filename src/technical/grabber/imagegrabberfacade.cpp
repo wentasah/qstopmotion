@@ -38,6 +38,7 @@ ImageGrabberFacade::ImageGrabberFacade(Frontend *f)
     isProcess = false;
 
     gstreamerVideoTestGrabber = NULL;
+    gstreamerV4L2Grabber = NULL;
     gstreamerDirectShowUsbGrabber = NULL;
     gstreamerGrabber = NULL;
 
@@ -54,6 +55,10 @@ ImageGrabberFacade::~ImageGrabberFacade()
     if (gstreamerVideoTestGrabber != NULL) {
         delete gstreamerVideoTestGrabber;
         gstreamerVideoTestGrabber = NULL;
+    }
+    if (gstreamerV4L2Grabber != NULL) {
+        delete gstreamerV4L2Grabber;
+        gstreamerV4L2Grabber = NULL;
     }
     if (gstreamerDirectShowUsbGrabber != NULL) {
         delete gstreamerDirectShowUsbGrabber;
@@ -90,10 +95,14 @@ void ImageGrabberFacade::initialization()
     clearDevices();
 
     gstreamerVideoTestGrabber = new GstreamerVideoTestGrabber(frontend);
+    gstreamerV4L2Grabber = new GstreamerV4L2Grabber(frontend);
     gstreamerDirectShowUsbGrabber = new GstreamerDirectShowUsbGrabber(frontend);
     gstreamerGrabber = new GstreamerGrabber(frontend);
 
     if (gstreamerVideoTestGrabber->initializationSubclass(devices)) {
+        isInitialized = true;
+    }
+    if (gstreamerV4L2Grabber->initializationSubclass(devices)) {
         isInitialized = true;
     }
     if (gstreamerDirectShowUsbGrabber->initializationSubclass(devices)) {
@@ -119,6 +128,18 @@ void ImageGrabberFacade::init()
     switch (videoDevice->getDeviceSource()) {
     case ImageGrabberDevice::testSource:
         isInited = gstreamerVideoTestGrabber->initSubclass();
+
+        if (!isGrabberInited()) {
+            frontend->showWarning(tr("Check image grabber"),
+                                  tr("Grabbing failed. This may happen if you try\n"
+                                     "to grab from an invalid device. Please check\n"
+                                     "your grabber settings in the preferences menu."));
+            return;
+        }
+
+        break;
+    case ImageGrabberDevice::video4LinuxSource:
+        isInited = gstreamerV4L2Grabber->initSubclass();
 
         if (!isGrabberInited()) {
             frontend->showWarning(tr("Check image grabber"),
@@ -204,6 +225,9 @@ void ImageGrabberFacade::finalize()
     switch (videoDevice->getDeviceSource()) {
     case ImageGrabberDevice::testSource:
         gstreamerVideoTestGrabber->tearDown();
+        break;
+    case ImageGrabberDevice::video4LinuxSource:
+        gstreamerV4L2Grabber->tearDown();
         break;
     case ImageGrabberDevice::directShowUsbSource:
     case ImageGrabberDevice::directShow1394Source:
@@ -297,6 +321,9 @@ const QImage ImageGrabberFacade::getLiveImage()
     case ImageGrabberDevice::testSource:
         liveImage = gstreamerVideoTestGrabber->getLiveImage();
         break;
+    case ImageGrabberDevice::video4LinuxSource:
+        liveImage = gstreamerV4L2Grabber->getLiveImage();
+        break;
     case ImageGrabberDevice::directShowUsbSource:
     case ImageGrabberDevice::directShow1394Source:
         liveImage = gstreamerDirectShowUsbGrabber->getLiveImage();
@@ -320,6 +347,9 @@ const QImage ImageGrabberFacade::getRawImage()
     switch (videoDevice->getDeviceSource()) {
     case ImageGrabberDevice::testSource:
         rawImage = gstreamerVideoTestGrabber->getRawImage();
+        break;
+    case ImageGrabberDevice::video4LinuxSource:
+        rawImage = gstreamerV4L2Grabber->getRawImage();
         break;
     case ImageGrabberDevice::directShowUsbSource:
     case ImageGrabberDevice::directShow1394Source:

@@ -1,7 +1,7 @@
 ###############################################################################
 # QtCreator file for the qStopMotion project                                  #
 # (c) Ralf Lange, longsoft.de                                                 #
-# Last update: 2012-06-20                                                     #
+# Last update: 2012-06-21                                                     #
 #                                                                             #
 # Please use CMake and the CMakeLists.txt file to build qStopMotion!          #
 ###############################################################################
@@ -70,6 +70,7 @@ HEADERS += src/config.h \
            src/technical/grabber/grabbercontroller.h \
            src/technical/grabber/gstreamerdirectshowusbgrabber.h \
            src/technical/grabber/gstreamergrabber.h \
+           src/technical/grabber/gstreamerv4l2grabber.h \
            src/technical/grabber/gstreamervideotestgrabber.h \
            src/technical/grabber/imagegrabber.h \
            src/technical/grabber/imagegrabberdevice.h \
@@ -137,6 +138,7 @@ SOURCES += src/main.cpp \
            src/technical/grabber/grabbercontroller.cpp \
            src/technical/grabber/gstreamerdirectshowusbgrabber.cpp \
            src/technical/grabber/gstreamergrabber.cpp \
+           src/technical/grabber/gstreamerv4l2grabber.cpp \
            src/technical/grabber/gstreamervideotestgrabber.cpp \
            src/technical/grabber/imagegrabber.cpp \
            src/technical/grabber/imagegrabberdevice.cpp \

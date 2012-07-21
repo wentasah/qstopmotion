@@ -25,6 +25,7 @@
 
 #include "frontends/frontend.h"
 #include "technical/grabber/grabbercontroller.h"
+#include "technical/grabber/gstreamerdirectshowusbgrabber.h"
 #include "technical/grabber/gstreamergrabber.h"
 #include "technical/grabber/gstreamervideotestgrabber.h"
 #include "technical/grabber/imagegrabberdevice.h"
@@ -34,10 +35,6 @@
 #include <QtCore/QString>
 #include <QtCore/QVector>
 #include <QtGui/QImage>
-
-// class GrabberController;
-// class ImageGrabberDevice;
-// class ImageGrabberThread;
 
 
 /**
@@ -197,6 +194,7 @@ protected:
     ImageGrabberThread *grabberThread;
 
     ImageGrabber *gstreamerVideoTestGrabber;
+    ImageGrabber *gstreamerDirectShowUsbGrabber;
     ImageGrabber *gstreamerGrabber;
 
 };

@@ -43,7 +43,7 @@ public:
     enum imageGrabberVideoSources {
         testSource,                    // 0
         video4LinuxSource,             // 1
-        iee1394Source,                 // 2
+        ieee1394Source,                // 2
         directShowUsbSource,           // 3
         directShow1394Source,          // 4
         gphoto2Source,                 // 5

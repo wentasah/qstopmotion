@@ -331,7 +331,7 @@ bool GstreamerV4L2Grabber::initSubclass()
         }
 
         break;
-    case ImageGrabberDevice::iee1394Source:
+    case ImageGrabberDevice::ieee1394Source:
         qDebug() << "GstreamerV4L2Grabber::init --> iee1394 source not supported";
 
         break;

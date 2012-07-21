@@ -397,7 +397,7 @@ void ImportWidget::apply()
         break;
     case 2:
 #ifdef Q_WS_X11
-        index = ImageGrabberDevice::iee1394Source;
+        index = ImageGrabberDevice::ieee1394Source;
 #endif
 #ifdef Q_WS_WIN
         index = ImageGrabberDevice::directShow1394Source;
@@ -530,7 +530,7 @@ void ImportWidget::setImageGrabberSource(int newSource)
     case ImageGrabberDevice::video4LinuxSource:
         grabberSourceCombo->setCurrentIndex(1);
         break;
-    case ImageGrabberDevice::iee1394Source:
+    case ImageGrabberDevice::ieee1394Source:
         grabberSourceCombo->setCurrentIndex(2);
         break;
     case ImageGrabberDevice::gphoto2Source:

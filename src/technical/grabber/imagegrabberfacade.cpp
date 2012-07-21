@@ -39,8 +39,8 @@ ImageGrabberFacade::ImageGrabberFacade(Frontend *f)
 
     gstreamerVideoTestGrabber = NULL;
     gstreamerV4L2Grabber = NULL;
+    gstreamerDv1394Grabber = NULL;
     gstreamerDirectShowUsbGrabber = NULL;
-    gstreamerGrabber = NULL;
 
     qDebug("ImageGrabberFacade::Constructor --> End");
 }
@@ -60,13 +60,13 @@ ImageGrabberFacade::~ImageGrabberFacade()
         delete gstreamerV4L2Grabber;
         gstreamerV4L2Grabber = NULL;
     }
+    if (gstreamerDv1394Grabber != NULL) {
+        delete gstreamerDv1394Grabber;
+        gstreamerDv1394Grabber = NULL;
+    }
     if (gstreamerDirectShowUsbGrabber != NULL) {
         delete gstreamerDirectShowUsbGrabber;
         gstreamerDirectShowUsbGrabber = NULL;
-    }
-    if (gstreamerGrabber != NULL) {
-        delete gstreamerGrabber;
-        gstreamerGrabber = NULL;
     }
 
     qDebug("ImageGrabberFacade::Destructor --> End");
@@ -96,8 +96,8 @@ void ImageGrabberFacade::initialization()
 
     gstreamerVideoTestGrabber = new GstreamerVideoTestGrabber(frontend);
     gstreamerV4L2Grabber = new GstreamerV4L2Grabber(frontend);
+    gstreamerDv1394Grabber = new GstreamerDv1394Grabber(frontend);
     gstreamerDirectShowUsbGrabber = new GstreamerDirectShowUsbGrabber(frontend);
-    gstreamerGrabber = new GstreamerGrabber(frontend);
 
     if (gstreamerVideoTestGrabber->initializationSubclass(devices)) {
         isInitialized = true;
@@ -105,10 +105,10 @@ void ImageGrabberFacade::initialization()
     if (gstreamerV4L2Grabber->initializationSubclass(devices)) {
         isInitialized = true;
     }
-    if (gstreamerDirectShowUsbGrabber->initializationSubclass(devices)) {
+    if (gstreamerDv1394Grabber->initializationSubclass(devices)) {
         isInitialized = true;
     }
-    if (gstreamerGrabber->initializationSubclass(devices)) {
+    if (gstreamerDirectShowUsbGrabber->initializationSubclass(devices)) {
         isInitialized = true;
     }
 
@@ -150,6 +150,18 @@ void ImageGrabberFacade::init()
         }
 
         break;
+    case ImageGrabberDevice::ieee1394Source:
+        isInited = gstreamerDv1394Grabber->initSubclass();
+
+        if (!isGrabberInited()) {
+            frontend->showWarning(tr("Check image grabber"),
+                                  tr("Grabbing failed. This may happen if you try\n"
+                                     "to grab from an invalid device. Please check\n"
+                                     "your grabber settings in the preferences menu."));
+            return;
+        }
+
+        break;
     case ImageGrabberDevice::directShowUsbSource:
     case ImageGrabberDevice::directShow1394Source:
         isInited = gstreamerDirectShowUsbGrabber->initSubclass();
@@ -164,15 +176,6 @@ void ImageGrabberFacade::init()
 
         break;
     default:
-        isInited = gstreamerGrabber->initSubclass();
-
-        if (!isGrabberInited()) {
-            frontend->showWarning(tr("Check image grabber"),
-                                  tr("Grabbing failed. This may happen if you try\n"
-                                     "to grab from an invalid device. Please check\n"
-                                     "your grabber settings in the preferences menu."));
-            return;
-        }
 
         break;
     }
@@ -229,12 +232,14 @@ void ImageGrabberFacade::finalize()
     case ImageGrabberDevice::video4LinuxSource:
         gstreamerV4L2Grabber->tearDown();
         break;
+    case ImageGrabberDevice::ieee1394Source:
+        gstreamerDv1394Grabber->tearDown();
+        break;
     case ImageGrabberDevice::directShowUsbSource:
     case ImageGrabberDevice::directShow1394Source:
         gstreamerDirectShowUsbGrabber->tearDown();
         break;
     default:
-        gstreamerGrabber->tearDown();
         break;
     }
 
@@ -324,12 +329,14 @@ const QImage ImageGrabberFacade::getLiveImage()
     case ImageGrabberDevice::video4LinuxSource:
         liveImage = gstreamerV4L2Grabber->getLiveImage();
         break;
+    case ImageGrabberDevice::ieee1394Source:
+        liveImage = gstreamerDv1394Grabber->getLiveImage();
+        break;
     case ImageGrabberDevice::directShowUsbSource:
     case ImageGrabberDevice::directShow1394Source:
         liveImage = gstreamerDirectShowUsbGrabber->getLiveImage();
         break;
     default:
-        liveImage = gstreamerGrabber->getLiveImage();
         break;
     }
 
@@ -351,12 +358,14 @@ const QImage ImageGrabberFacade::getRawImage()
     case ImageGrabberDevice::video4LinuxSource:
         rawImage = gstreamerV4L2Grabber->getRawImage();
         break;
+    case ImageGrabberDevice::ieee1394Source:
+        rawImage = gstreamerDv1394Grabber->getRawImage();
+        break;
     case ImageGrabberDevice::directShowUsbSource:
     case ImageGrabberDevice::directShow1394Source:
         rawImage = gstreamerDirectShowUsbGrabber->getRawImage();
         break;
     default:
-        rawImage = gstreamerGrabber->getRawImage();
         break;
     }
 

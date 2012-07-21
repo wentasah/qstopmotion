@@ -137,6 +137,7 @@ set(MOC_HEADERS
     src/technical/externalchangemonitor.h
     src/technical/preferencestool.h
     src/technical/grabber/gstreamerdirectshowusbgrabber.h
+    src/technical/grabber/gstreamerdv1394grabber.h
     src/technical/grabber/gstreamergrabber.h
     src/technical/grabber/gstreamerv4l2grabber.h
     src/technical/grabber/gstreamervideotestgrabber.h
@@ -203,6 +204,7 @@ set(SOURCES
     src/technical/util.cpp
     src/technical/grabber/grabbercontroller.cpp
     src/technical/grabber/gstreamerdirectshowusbgrabber.cpp
+    src/technical/grabber/gstreamerdv1394grabber.cpp
     src/technical/grabber/gstreamergrabber.cpp
     src/technical/grabber/gstreamerv4l2grabber.cpp
     src/technical/grabber/gstreamervideotestgrabber.cpp

@@ -179,14 +179,14 @@ bool GstreamerGrabber::initializationSubclass(QVector<ImageGrabberDevice*> &devi
                     }
                     device = new ImageGrabberDevice((const char*)g_value_get_string(&value_id_string),
                                                     (const char*)g_value_get_string(&value_name_string),
-                                                    ImageGrabberDevice::iee1394Source,
+                                                    ImageGrabberDevice::ieee1394Source,
                                                     ImageGrabberDevice::video_x_none);
                 }
                 else {
                     // No device name
                     device = new ImageGrabberDevice((const char*)g_value_get_string(&value_id_string),
                                                     QString(QApplication::translate("GstreamerGrabber", "Device %1")).arg(device_size),
-                                                    ImageGrabberDevice::iee1394Source,
+                                                    ImageGrabberDevice::ieee1394Source,
                                                     ImageGrabberDevice::video_x_none);
                 }
                 // Add the device to the device list
@@ -247,7 +247,7 @@ bool GstreamerGrabber::initSubclass()
         qDebug() << "GstreamerGrabber::init --> Video4Linux2 source not supported";
 
         break;
-    case ImageGrabberDevice::iee1394Source:
+    case ImageGrabberDevice::ieee1394Source:
         qDebug() << "GstreamerGrabber::init --> Build the pipeline: dv1394src ! queue ! dvdemux ! queue ! dvdec ! ffmpegcolorspace ! jpegenc ! multifilesink location=$IMAGEFILE";
 
         // Examples:

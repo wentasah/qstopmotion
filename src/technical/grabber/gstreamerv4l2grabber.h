@@ -21,7 +21,8 @@
 #ifndef GSTREAMERV4L2GRABBER_H
 #define GSTREAMERV4L2GRABBER_H
 
-#include "technical/grabber/imagegrabber.h"
+#include "technical/grabber/imagegrabberdevice.h"
+#include "technical/grabber/gstreamergrabber.h"
 
 // Include files of the gstreamer library
 #include <gst/gst.h>
@@ -33,7 +34,7 @@
  *
  * @author Bjoern Erik Nilsen & Fredrik Berg Kjoelstad
  */
-class GstreamerV4L2Grabber : public ImageGrabber
+class GstreamerV4L2Grabber : public GstreamerGrabber
 {
     Q_OBJECT
 public:
@@ -63,55 +64,13 @@ public:
     bool initSubclass();
 
     /**
-     * Get the live image from the camera
-     */
-    const QImage getLiveImage();
-
-    /**
-     * Get the raw image from the camera
-     */
-    const QImage getRawImage();
-
-    /**
-     * Grabs one picture from the device.
-     * @return true on success, false otherwise
-     */
-    bool grab();
-
-    /**
      * Shut downs the grabber process either if it is runned in deamon
      * mode or "single grab" mode.
      * @return true on success, false otherwise
      */
     bool tearDown();
 
-    /**
-     * Call back function for the message loop of gstreamer.
-     */
-    static gboolean bus_callback(GstBus     *bus,
-                                 GstMessage *message,
-                                 gpointer    data);
-
 private:
-    /**
-     * Get the image from the gstreamer application interface.
-     */
-    const QImage getImage();
-
-private:
-    int         activeSource;
-    bool        isInitSuccess;
-    bool        firstImage;
-
-    GstElement *pipeline;
-    GstElement *source;
-    GstElement *filter1;
-    GstElement *sink;
-    // GstBus     *bus;
-    // GMainLoop  *loop;
-
-    QImage liveImage;
-    QImage rawImage;
 
 };
 

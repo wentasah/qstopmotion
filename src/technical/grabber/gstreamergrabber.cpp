@@ -710,7 +710,6 @@ void GstreamerGrabber::on_pad_added (GstElement *element,
 
     qDebug() << "GstreamerGrabber::on_pad_added --> Start";
 
-    /* We can now link this pad with the vorbis-decoder sink pad */
     g_print ("Dynamic pad created, linking demuxer/decoder\n");
     sinkpad = gst_element_get_static_pad (decoder, "sink");
     gst_pad_link (pad, sinkpad);

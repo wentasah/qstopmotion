@@ -47,12 +47,8 @@ GstreamerDv1394Grabber::GstreamerDv1394Grabber(Frontend *f)
     filter1 = 0;
     filter2 = 0;
     filter3 = 0;
-    filter4 = 0;
-    filter5 = 0;
     queue1 = 0;
     queue2 = 0;
-    queue3 = 0;
-    queue4 = 0;
     sink = 0;
 
     gst_init(0,0);
@@ -274,31 +270,11 @@ bool GstreamerDv1394Grabber::initSubclass()
             qDebug() << "GstreamerDv1394Grabber::init --> Fatal: Can't create the queue1.";
             return false;
         }
-        /*
-        filter3 = gst_element_factory_make("ffdeinterlace", "filter3=ffdeinterlace");
+        filter3 = gst_element_factory_make("ffmpegcolorspace", "filter4=ffmpegcolorspace");
         if (!filter3) {
             qDebug() << "GstreamerDv1394Grabber::init --> Fatal: Can't create the filter3.";
             return false;
         }
-        */
-        filter4 = gst_element_factory_make("ffmpegcolorspace", "filter4=ffmpegcolorspace");
-        if (!filter4) {
-            qDebug() << "GstreamerDv1394Grabber::init --> Fatal: Can't create the filter4.";
-            return false;
-        }
-        /*
-        filter5 = gst_element_factory_make("jpegenc", "filter5=jpegenc");
-        if (!filter5) {
-            qDebug() << "GstreamerDv1394Grabber::init --> Fatal: Can't create the filter5.";
-            return false;
-        }
-        sink = gst_element_factory_make("multifilesink", "sink=multifilesink");
-        if (!sink) {
-            qDebug() << "GstreamerDv1394Grabber::init --> Fatal: Can't create the sink.";
-            return false;
-        }
-        g_object_set(G_OBJECT (sink), "location", filePath.toLatin1().constData(), NULL);
-        */
         sink = gst_element_factory_make("appsink", NULL);
         if (!sink) {
             qDebug() << "GstreamerDv1394Grabber::init --> Fatal: Can't create the application sink.";
@@ -342,19 +318,13 @@ bool GstreamerDv1394Grabber::initSubclass()
             return false;
         }
         if (!gst_bin_add(GST_BIN (pipeline), queue2)) {
-            qDebug() << "GstreamerDv1394Grabber::init --> Fatal: Can't add the queue1 to the bin.";
+            qDebug() << "GstreamerDv1394Grabber::init --> Fatal: Can't add the queue2 to the bin.";
             return false;
         }
-        if (!gst_bin_add(GST_BIN (pipeline), filter4)) {
-            qDebug() << "GstreamerDv1394Grabber::init --> Fatal: Can't add the filter1 to the bin.";
+        if (!gst_bin_add(GST_BIN (pipeline), filter3)) {
+            qDebug() << "GstreamerDv1394Grabber::init --> Fatal: Can't add the filter3 to the bin.";
             return false;
         }
-        /*
-        if (!gst_bin_add(GST_BIN (pipeline), filter5)) {
-            qDebug() << "GstreamerDv1394Grabber::init --> Fatal: Can't add the filter2 to the bin.";
-            return false;
-        }
-        */
         if (!gst_bin_add(GST_BIN (pipeline), sink)) {
             qDebug() << "GstreamerDv1394Grabber::init --> Fatal: Can't add the sink to the bin.";
             return false;
@@ -368,41 +338,12 @@ bool GstreamerDv1394Grabber::initSubclass()
             qDebug() << "GstreamerDv1394Grabber::init --> Fatal: Can't link the filter1 to source.";
             return false;
         }
-        /*
-        if (!gst_element_link(filter1, queue1)) {
-            qDebug() << "GstreamerDv1394Grabber::init --> Fatal: Can't link the queue1.";
-            return false;
-        }
-
-        if (!gst_element_link(queue1, filter2)) {
-            qDebug() << "GstreamerDv1394Grabber::init --> Fatal: Can't link the filter2.";
-            return false;
-        }
         if (!gst_element_link(filter2, filter3)) {
             qDebug() << "GstreamerDv1394Grabber::init --> Fatal: Can't link the filter3.";
             return false;
         }
-        if (!gst_element_link(filter2, queue2)) {
-            qDebug() << "GstreamerDv1394Grabber::init --> Fatal: Can't link the queue1.";
-            return false;
-        }
-        */
-        if (!gst_element_link(filter2, filter4)) {
-            qDebug() << "GstreamerDv1394Grabber::init --> Fatal: Can't link the filter4.";
-            return false;
-        }
-        /*
-        if (!gst_element_link(filter4, filter5)) {
-            qDebug() << "GstreamerDv1394Grabber::init --> Fatal: Can't link the filter5.";
-            return false;
-        }
-        if (!gst_element_link(filter5, sink)) {
-            qDebug() << "GstreamerDv1394Grabber::init --> Fatal: Can't link the sink to filter5.";
-            return false;
-        }
-        */
-        if (!gst_element_link(filter4, sink)) {
-            qDebug() << "GstreamerDv1394Grabber::init --> Fatal: Can't link the sink to filter4.";
+        if (!gst_element_link(filter3, sink)) {
+            qDebug() << "GstreamerDv1394Grabber::init --> Fatal: Can't link the sink to filter3.";
             return false;
         }
         // Connect filter1 and filter2 via a pad
@@ -695,7 +636,6 @@ void GstreamerDv1394Grabber::on_pad_added (GstElement *element,
 
     qDebug() << "GstreamerDv1394Grabber::on_pad_added --> Start";
 
-    /* We can now link this pad with the vorbis-decoder sink pad */
     g_print ("Dynamic pad created, linking demuxer/decoder\n");
     sinkpad = gst_element_get_static_pad (decoder, "sink");
     gst_pad_link (pad, sinkpad);
@@ -724,26 +664,4 @@ void GstreamerDv1394Grabber::cb_typefound (GstElement *typefind,
     // g_idle_add (idle_exit_loop, loop);
 
     qDebug() << "GstreamerDv1394Grabber::cb_typefound --> End";
-}
-
-
-gboolean GstreamerDv1394Grabber::link_elements_with_filter (GstElement *element1, GstElement *element2)
-{
-    gboolean link_ok;
-    GstCaps *caps;
-
-    qDebug() << "GstreamerDv1394Grabber::link_elements_with_filter --> Start";
-
-    caps = gst_caps_new_simple("video/x-dv",
-                               "systemstream", G_TYPE_BOOLEAN, TRUE,
-                               NULL);
-    link_ok = gst_element_link_filtered (element1, element2, caps);
-    gst_caps_unref (caps);
-    if (!link_ok) {
-        qDebug() << "GstreamerDv1394Grabber::link_elements_with_filter --> Failed to link element1 and element2!";
-    }
-
-    qDebug() << "GstreamerDv1394Grabber::link_elements_with_filter --> End";
-
-    return link_ok;
 }

@@ -86,13 +86,8 @@ bool GstreamerVideoTestGrabber::initSubclass()
 {
     qDebug() << "GstreamerVideoTestGrabber::init --> Start";
 
-    GstBus *bus;
-    int videoSource = frontend->getProject()->getVideoSource();
-    ImageGrabberDevice *videoDevice = frontend->getDevice(videoSource);
-
+    GstBus  *bus;
     GstCaps *src_filter = 0;
-
-    // gst_init(0,0);
 
     pipeline = gst_pipeline_new("video_pipeline");
 
@@ -100,94 +95,86 @@ bool GstreamerVideoTestGrabber::initSubclass()
     gst_bus_add_watch(bus, bus_callback, NULL);
     gst_object_unref(bus);
 
-    switch (videoDevice->getDeviceSource()) {
-    case ImageGrabberDevice::testSource:
-        qDebug() << "GstreamerVideoTestGrabber::init --> Build the pipeline: videotestsrc ! ffmpegcolorspace ! jpegenc ! multifilesink location=$IMAGEFILE";
+    qDebug() << "GstreamerVideoTestGrabber::init --> Build the pipeline: videotestsrc ! ffmpegcolorspace ! jpegenc ! multifilesink location=$IMAGEFILE";
 
-        //---------------------------------------------------------------------
-        // Create the elements
-        //---------------------------------------------------------------------
+    //---------------------------------------------------------------------
+    // Create the elements
+    //---------------------------------------------------------------------
 
-        source = gst_element_factory_make("videotestsrc", "source=videotestsrc");
-        if (!source) {
-            qDebug() << "GstreamerVideoTestGrabber::init --> Fatal: Can't create the source.";
-            return false;
-        }
-        // g_object_set(source, "pattern", 18, NULL);
-        filter1 = gst_element_factory_make("ffmpegcolorspace", "filter1=ffmpegcolorspace");
-        if (!filter1) {
-            qDebug() << "GstreamerVideoTestGrabber::init --> Fatal: Can't create the filter1.";
-            return false;
-        }
-        sink = gst_element_factory_make("appsink", NULL);
-        if (!sink) {
-            qDebug() << "GstreamerVideoTestGrabber::init --> Fatal: Can't create the application sink.";
-            return false;
-        }
-        gst_app_sink_set_max_buffers(GST_APP_SINK(sink), APP_SINK_MAX_BUFFERS);
-        g_object_set(G_OBJECT(sink), "sync", FALSE, NULL);
+    source = gst_element_factory_make("videotestsrc", "source=videotestsrc");
+    if (!source) {
+        qDebug() << "GstreamerVideoTestGrabber::init --> Fatal: Can't create the source.";
+        return false;
+    }
+    // g_object_set(source, "pattern", 18, NULL);
+    filter1 = gst_element_factory_make("ffmpegcolorspace", "filter1=ffmpegcolorspace");
+    if (!filter1) {
+        qDebug() << "GstreamerVideoTestGrabber::init --> Fatal: Can't create the filter1.";
+        return false;
+    }
+    sink = gst_element_factory_make("appsink", NULL);
+    if (!sink) {
+        qDebug() << "GstreamerVideoTestGrabber::init --> Fatal: Can't create the application sink.";
+        return false;
+    }
+    gst_app_sink_set_max_buffers(GST_APP_SINK(sink), APP_SINK_MAX_BUFFERS);
+    g_object_set(G_OBJECT(sink), "sync", FALSE, NULL);
 
-        // Set default values for RGB.
-        gst_app_sink_set_caps(GST_APP_SINK(sink), gst_caps_new_simple("video/x-raw-rgb", NULL));
-        // The result on Windows is:
-        // video/x-raw-rgb, width=(int)320, height=(int)240, framerate=(fraction)30/1, bpp=(int)24, depth=(int)24,
-        // red_mask=(int)16711680, green_mask=(int)65280, blue_mask=(int)255, endianness=(int)4321
+    // Set default values for RGB.
+    gst_app_sink_set_caps(GST_APP_SINK(sink), gst_caps_new_simple("video/x-raw-rgb", NULL));
+    // The result on Windows is:
+    // video/x-raw-rgb, width=(int)320, height=(int)240, framerate=(fraction)30/1, bpp=(int)24, depth=(int)24,
+    // red_mask=(int)16711680, green_mask=(int)65280, blue_mask=(int)255, endianness=(int)4321
 
-        // Set special values for RGB
-        // #define SINK_CAPS "video/x-raw-rgb, width=(int)320, height=(int)300, framerate=(fraction)30/1, bpp=(int)24, depth=(int)24"
-        // gst_app_sink_set_caps((GstAppSink*)sink, gst_caps_from_string(SINK_CAPS));
+    // Set special values for RGB
+    // #define SINK_CAPS "video/x-raw-rgb, width=(int)320, height=(int)300, framerate=(fraction)30/1, bpp=(int)24, depth=(int)24"
+    // gst_app_sink_set_caps((GstAppSink*)sink, gst_caps_from_string(SINK_CAPS));
 
-        // Set special values for YUV
-        // #define SINK_CAPS "video/x-raw-yuv, format=(fourcc)UYVY, width=(int)320, height=(int)300" //, framerate=(fraction)45/1"
-        // gst_app_sink_set_caps((GstAppSink*)sink, gst_caps_from_string(SINK_CAPS));
+    // Set special values for YUV
+    // #define SINK_CAPS "video/x-raw-yuv, format=(fourcc)UYVY, width=(int)320, height=(int)300" //, framerate=(fraction)45/1"
+    // gst_app_sink_set_caps((GstAppSink*)sink, gst_caps_from_string(SINK_CAPS));
 
-        //---------------------------------------------------------------------
-        // Add the elements to the bin
-        //---------------------------------------------------------------------
+    //---------------------------------------------------------------------
+    // Add the elements to the bin
+    //---------------------------------------------------------------------
 
-        if (!gst_bin_add(GST_BIN (pipeline), source)) {
-            qDebug() << "GstreamerVideoTestGrabber::init --> Fatal: Can't add the source to the bin.";
-            return false;
-        }
-        if (!gst_bin_add(GST_BIN (pipeline), filter1)) {
-            qDebug() << "GstreamerVideoTestGrabber::init --> Fatal: Can't add the filter1 to the bin.";
-            return false;
-        }
-        if (!gst_bin_add(GST_BIN (pipeline), sink)) {
-            qDebug() << "GstreamerVideoTestGrabber::init --> Fatal: Can't add the sink to the bin.";
-            return false;
-        }
+    if (!gst_bin_add(GST_BIN (pipeline), source)) {
+        qDebug() << "GstreamerVideoTestGrabber::init --> Fatal: Can't add the source to the bin.";
+        return false;
+    }
+    if (!gst_bin_add(GST_BIN (pipeline), filter1)) {
+        qDebug() << "GstreamerVideoTestGrabber::init --> Fatal: Can't add the filter1 to the bin.";
+        return false;
+    }
+    if (!gst_bin_add(GST_BIN (pipeline), sink)) {
+        qDebug() << "GstreamerVideoTestGrabber::init --> Fatal: Can't add the sink to the bin.";
+        return false;
+    }
 
-        //---------------------------------------------------------------------
-        // Link the elements in the bin
-        //---------------------------------------------------------------------
+    //---------------------------------------------------------------------
+    // Link the elements in the bin
+    //---------------------------------------------------------------------
 
-        src_filter = gst_caps_new_simple ("video/x-raw-yuv",
-                                          // "width", G_TYPE_INT, 800,       // SVGA width
-                                          // "height", G_TYPE_INT, 600,      // SVGA height
-                                          "width", G_TYPE_INT, 640,       // VGA width
-                                          "height", G_TYPE_INT, 480,      // VGA height
-                                          // "width", G_TYPE_INT, 320,       // QVGA width
-                                          // "height", G_TYPE_INT, 240,      // QVGA height
-                                          "framerate", GST_TYPE_FRACTION, 15,
-                                          1, NULL);
+    src_filter = gst_caps_new_simple ("video/x-raw-yuv",
+                                      // "width", G_TYPE_INT, 800,       // SVGA width
+                                      // "height", G_TYPE_INT, 600,      // SVGA height
+                                      "width", G_TYPE_INT, 640,       // VGA width
+                                      "height", G_TYPE_INT, 480,      // VGA height
+                                      // "width", G_TYPE_INT, 320,       // QVGA width
+                                      // "height", G_TYPE_INT, 240,      // QVGA height
+                                      "framerate", GST_TYPE_FRACTION, 15,
+                                      1, NULL);
 
-        // if (!gst_element_link(source, filter1)) {
-        if (!gst_element_link_filtered (source, filter1, src_filter)) {
-            qDebug() << "GstreamerVideoTestGrabber::init --> Fatal: Can't link the filter1 to source.";
-            return false;
-        }
+    // if (!gst_element_link(source, filter1)) {
+    if (!gst_element_link_filtered (source, filter1, src_filter)) {
+        qDebug() << "GstreamerVideoTestGrabber::init --> Fatal: Can't link the filter1 to source.";
+        return false;
+    }
 
-        gst_caps_unref (src_filter);
+    gst_caps_unref (src_filter);
 
-        if (!gst_element_link(filter1, sink)) {
-            qDebug() << "GstreamerVideoTestGrabber::init --> Fatal: Can't link the sink to the filter1.";
-            return false;
-        }
-        break;
-    default:
-        qDebug() << "GstreamerVideoTestGrabber::init --> Unknown source";
-
+    if (!gst_element_link(filter1, sink)) {
+        qDebug() << "GstreamerVideoTestGrabber::init --> Fatal: Can't link the sink to the filter1.";
         return false;
     }
 
@@ -454,66 +441,4 @@ gboolean GstreamerVideoTestGrabber::bus_callback(GstBus * /*bus*/, GstMessage *m
 
     qDebug() << "GstreamerVideoTestGrabber::bus_callback --> End";
     return true;
-}
-
-void GstreamerVideoTestGrabber::on_pad_added (GstElement *element,
-                                     GstPad     *pad,
-                                     gpointer    data)
-{
-    GstPad *sinkpad;
-    GstElement *decoder = (GstElement *) data;
-
-    qDebug() << "GstreamerVideoTestGrabber::on_pad_added --> Start";
-
-    /* We can now link this pad with the vorbis-decoder sink pad */
-    g_print ("Dynamic pad created, linking demuxer/decoder\n");
-    sinkpad = gst_element_get_static_pad (decoder, "sink");
-    gst_pad_link (pad, sinkpad);
-    gst_object_unref (sinkpad);
-
-    qDebug() << "GstreamerVideoTestGrabber::on_pad_added --> Start";
-}
-
-void GstreamerVideoTestGrabber::cb_typefound (GstElement *typefind,
-                                     guint       probability,
-                                     GstCaps    *caps,
-                                     gpointer    data)
-{
-    // GMainLoop *loop = data;
-    gchar *type;
-
-    qDebug() << "GstreamerVideoTestGrabber::cb_typefound --> Start";
-
-    type = gst_caps_to_string (caps);
-    qDebug() << "Media type " << type << "found, probability " << probability;
-    g_free (type);
-
-    // since we connect to a signal in the pipeline thread context, we need
-    // to set an idle handler to exit the main loop in the mainloop context.
-    // Normally, your app should not need to worry about such things. */
-    // g_idle_add (idle_exit_loop, loop);
-
-    qDebug() << "GstreamerVideoTestGrabber::cb_typefound --> End";
-}
-
-
-gboolean GstreamerVideoTestGrabber::link_elements_with_filter (GstElement *element1, GstElement *element2)
-{
-    gboolean link_ok;
-    GstCaps *caps;
-
-    qDebug() << "GstreamerVideoTestGrabber::link_elements_with_filter --> Start";
-
-    caps = gst_caps_new_simple("video/x-dv",
-                               "systemstream", G_TYPE_BOOLEAN, TRUE,
-                               NULL);
-    link_ok = gst_element_link_filtered (element1, element2, caps);
-    gst_caps_unref (caps);
-    if (!link_ok) {
-        qDebug() << "GstreamerVideoTestGrabber::link_elements_with_filter --> Failed to link element1 and element2!";
-    }
-
-    qDebug() << "GstreamerVideoTestGrabber::link_elements_with_filter --> End";
-
-    return link_ok;
 }

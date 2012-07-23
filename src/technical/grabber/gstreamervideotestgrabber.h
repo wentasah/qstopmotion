@@ -102,21 +102,6 @@ public:
                                  GstMessage *message,
                                  gpointer    data);
 
-    /**
-     * Pad to select the video stream from the demux to the decoder
-     */
-    static void on_pad_added (GstElement *element,
-                              GstPad     *pad,
-                              gpointer    data);
-
-    static void cb_typefound (GstElement *typefind,
-                              guint       probability,
-                              GstCaps    *caps,
-                              gpointer    data);
-
-    static gboolean link_elements_with_filter (GstElement *element1,
-                                               GstElement *element2);
-
 private:
     const QImage getImage();
 

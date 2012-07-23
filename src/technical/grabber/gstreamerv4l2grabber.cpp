@@ -45,14 +45,6 @@ GstreamerV4L2Grabber::GstreamerV4L2Grabber(Frontend *f)
     pipeline = 0;
     source = 0;
     filter1 = 0;
-    filter2 = 0;
-    filter3 = 0;
-    filter4 = 0;
-    filter5 = 0;
-    queue1 = 0;
-    queue2 = 0;
-    queue3 = 0;
-    queue4 = 0;
     sink = 0;
 
     gst_init(0,0);
@@ -249,19 +241,6 @@ bool GstreamerV4L2Grabber::initSubclass()
             qDebug() << "GstreamerV4L2Grabber::init --> Fatal: Can't create the filter1.";
             return false;
         }
-        /*
-        filter2 = gst_element_factory_make("jpegenc", "filter2=jpegenc");
-        if (!filter2) {
-            qDebug() << "GstreamerV4L2Grabber::init --> Fatal: Can't create the filter2.";
-            return false;
-        }
-        sink = gst_element_factory_make("multifilesink", "sink=multifilesink");
-        if (!sink) {
-            qDebug() << "GstreamerV4L2Grabber::init --> Fatal: Can't create the sink.";
-            return false;
-        }
-        g_object_set(G_OBJECT (sink), "location", filePath.toLatin1().constData(), NULL);
-        */
         sink = gst_element_factory_make("appsink", NULL);
         if (!sink) {
             qDebug() << "GstreamerV4L2Grabber::init --> Fatal: Can't create the application sink.";
@@ -296,12 +275,6 @@ bool GstreamerV4L2Grabber::initSubclass()
             qDebug() << "GstreamerV4L2Grabber::init --> Fatal: Can't add the filter1 to the bin.";
             return false;
         }
-        /*
-        if (!gst_bin_add(GST_BIN (pipeline), filter2)) {
-            qDebug() << "GstreamerV4L2Grabber::init --> Fatal: Can't add the filter2 to the bin.";
-            return false;
-        }
-        */
         if (!gst_bin_add(GST_BIN (pipeline), sink)) {
             qDebug() << "GstreamerV4L2Grabber::init --> Fatal: Can't add the sink to the bin.";
             return false;
@@ -315,16 +288,6 @@ bool GstreamerV4L2Grabber::initSubclass()
             qDebug() << "GstreamerV4L2Grabber::init --> Fatal: Can't link the filter1 to source.";
             return false;
         }
-        /*
-        if (!gst_element_link(filter1, filter2)) {
-            qDebug() << "GstreamerV4L2Grabber::init --> Fatal: Can't link the filter2 to filter1.";
-            return false;
-        }
-        if (!gst_element_link(filter2, sink)) {
-            qDebug() << "GstreamerV4L2Grabber::init --> Fatal: Can't link the sink to filter2.";
-            return false;
-        }
-        */
         if (!gst_element_link(filter1, sink)) {
             qDebug() << "GstreamerV4L2Grabber::init --> Fatal: Can't link the sink to filter1.";
             return false;
@@ -609,66 +572,4 @@ gboolean GstreamerV4L2Grabber::bus_callback(GstBus * /*bus*/, GstMessage *messag
 
     qDebug() << "GstreamerV4L2Grabber::bus_callback --> End";
     return true;
-}
-
-void GstreamerV4L2Grabber::on_pad_added (GstElement *element,
-                                         GstPad     *pad,
-                                         gpointer    data)
-{
-    GstPad *sinkpad;
-    GstElement *decoder = (GstElement *) data;
-
-    qDebug() << "GstreamerV4L2Grabber::on_pad_added --> Start";
-
-    /* We can now link this pad with the vorbis-decoder sink pad */
-    g_print ("Dynamic pad created, linking demuxer/decoder\n");
-    sinkpad = gst_element_get_static_pad (decoder, "sink");
-    gst_pad_link (pad, sinkpad);
-    gst_object_unref (sinkpad);
-
-    qDebug() << "GstreamerV4L2Grabber::on_pad_added --> Start";
-}
-
-void GstreamerV4L2Grabber::cb_typefound (GstElement *typefind,
-                                     guint       probability,
-                                     GstCaps    *caps,
-                                     gpointer    data)
-{
-    // GMainLoop *loop = data;
-    gchar *type;
-
-    qDebug() << "GstreamerV4L2Grabber::cb_typefound --> Start";
-
-    type = gst_caps_to_string (caps);
-    qDebug() << "Media type " << type << "found, probability " << probability;
-    g_free (type);
-
-    // since we connect to a signal in the pipeline thread context, we need
-    // to set an idle handler to exit the main loop in the mainloop context.
-    // Normally, your app should not need to worry about such things. */
-    // g_idle_add (idle_exit_loop, loop);
-
-    qDebug() << "GstreamerV4L2Grabber::cb_typefound --> End";
-}
-
-
-gboolean GstreamerV4L2Grabber::link_elements_with_filter (GstElement *element1, GstElement *element2)
-{
-    gboolean link_ok;
-    GstCaps *caps;
-
-    qDebug() << "GstreamerV4L2Grabber::link_elements_with_filter --> Start";
-
-    caps = gst_caps_new_simple("video/x-dv",
-                               "systemstream", G_TYPE_BOOLEAN, TRUE,
-                               NULL);
-    link_ok = gst_element_link_filtered (element1, element2, caps);
-    gst_caps_unref (caps);
-    if (!link_ok) {
-        qDebug() << "GstreamerV4L2Grabber::link_elements_with_filter --> Failed to link element1 and element2!";
-    }
-
-    qDebug() << "GstreamerV4L2Grabber::link_elements_with_filter --> End";
-
-    return link_ok;
 }

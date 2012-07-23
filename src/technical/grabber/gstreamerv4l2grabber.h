@@ -101,21 +101,6 @@ public:
                                  GstMessage *message,
                                  gpointer    data);
 
-    /**
-     * Pad to select the video stream from the demux to the decoder
-     */
-    static void on_pad_added (GstElement *element,
-                              GstPad     *pad,
-                              gpointer    data);
-
-    static void cb_typefound (GstElement *typefind,
-                              guint       probability,
-                              GstCaps    *caps,
-                              gpointer    data);
-
-    static gboolean link_elements_with_filter (GstElement *element1,
-                                               GstElement *element2);
-
 private:
     /**
      * Get the image from the gstreamer application interface.
@@ -130,14 +115,6 @@ private:
     GstElement *pipeline;
     GstElement *source;
     GstElement *filter1;
-    GstElement *filter2;
-    GstElement *filter3;
-    GstElement *filter4;
-    GstElement *filter5;
-    GstElement *queue1;
-    GstElement *queue2;
-    GstElement *queue3;
-    GstElement *queue4;
     GstElement *sink;
     // GstBus     *bus;
     // GMainLoop  *loop;

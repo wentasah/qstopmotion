@@ -18,21 +18,23 @@
  *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                 *
  ******************************************************************************/
 
-#ifndef GSTREAMERGRABBER_H
-#define GSTREAMERGRABBER_H
+#ifndef GSTREAMERDIRECTSHOW1394GRABBER_H
+#define GSTREAMERDIRECTSHOW1394GRABBER_H
 
-#include "technical/grabber/imagegrabber.h"
+#include "technical/grabber/imagegrabberdevice.h"
+#include "technical/grabber/gstreamergrabber.h"
 
 // Include files of the gstreamer library
 #include <gst/gst.h>
 
 
 /**
- * Base class for the different gstreamer grabbers.
+ * Abstract class for the different video grabbers used by the VideoView
+ * widgets.
  *
- * @author Ralf Lange
+ * @author Bjoern Erik Nilsen & Fredrik Berg Kjoelstad
  */
-class GstreamerGrabber : public ImageGrabber
+class GstreamerDirectShow1394Grabber : public GstreamerGrabber
 {
     Q_OBJECT
 public:
@@ -41,77 +43,51 @@ public:
      * Initializes the member variables.
      * @param filePath path to the output file grabbed from a device
      */
-    GstreamerGrabber(Frontend *f);
+    GstreamerDirectShow1394Grabber(Frontend *f);
 
     /**
      * Destructor
      */
-    ~GstreamerGrabber();
+    ~GstreamerDirectShow1394Grabber();
 
     /**
-     * Initialization of the Command line grabber.
+     * Initialization of the Command line grabber
      * @param devices The vector of initialized devices.
-     * @return true on success, false otherwise.
+     * @return true on success, false otherwise
      */
-    virtual bool initializationSubclass(QVector<ImageGrabberDevice*> &devices) = 0;
+    bool initializationSubclass(QVector<ImageGrabberDevice*> &devices);
 
     /**
      * Starts the grabber if it is marked to be runned in deamon mode.
      * @return true on success, false otherwise
      */
-    virtual bool initSubclass() = 0;
-
-    /**
-     * Get the live image from the camera
-     */
-    const QImage getLiveImage();
-
-    /**
-     * Get the raw image from the camera
-     */
-    const QImage getRawImage();
-
-    /**
-     * Grabs one picture from the device.
-     * @return true on success, false otherwise
-     */
-    bool grab();
+    bool initSubclass();
 
     /**
      * Shut downs the grabber process either if it is runned in deamon
      * mode or "single grab" mode.
      * @return true on success, false otherwise
      */
-    virtual bool tearDown() = 0;
-
-protected:
-    /**
-     * Call back function for the message loop of gstreamer.
-     */
-    static gboolean bus_callback(GstBus     *bus,
-                                 GstMessage *message,
-                                 gpointer    data);
+    bool tearDown();
 
 private:
     /**
-     * Get the actual image from the gstreamer application interface.
+     * Pad to select the video stream from the demux to the decoder
      */
-    const QImage getImage();
+    static void on_pad_added (GstElement *element,
+                              GstPad     *pad,
+                              gpointer    data);
 
-protected:
-    GstElement *pipeline;
-    GstElement *source;
-    GstElement *filter1;
-    GstElement *filter2;
-    GstElement *sink;
+    static void cb_typefound (GstElement *typefind,
+                              guint       probability,
+                              GstCaps    *caps,
+                              gpointer    data);
+
+    static gboolean link_elements_with_filter (GstElement *element1,
+                                               GstElement *element2);
 
 private:
-    int         activeSource;
-    bool        isInitSuccess;
-    bool        firstImage;
 
-    QImage liveImage;
-    QImage rawImage;
 };
 
 #endif

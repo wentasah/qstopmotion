@@ -35,7 +35,6 @@ ImageGrabberFacade::ImageGrabberFacade(Frontend *f)
 
     isInitialized = false;
     isInited = false;
-    isProcess = false;
 
     gstreamerVideoTestGrabber = NULL;
     gstreamerV4L2Grabber = NULL;
@@ -95,24 +94,27 @@ void ImageGrabberFacade::initialization()
     clearDevices();
 
     gstreamerVideoTestGrabber = new GstreamerVideoTestGrabber(frontend);
-    gstreamerV4L2Grabber = new GstreamerV4L2Grabber(frontend);
-    gstreamerDv1394Grabber = new GstreamerDv1394Grabber(frontend);
-    gstreamerDirectShowUsbGrabber = new GstreamerDirectShowUsbGrabber(frontend);
-
     if (gstreamerVideoTestGrabber->initializationSubclass(devices)) {
         isInitialized = true;
     }
+
+#ifdef Q_WS_X11
+    gstreamerV4L2Grabber = new GstreamerV4L2Grabber(frontend);
     if (gstreamerV4L2Grabber->initializationSubclass(devices)) {
         isInitialized = true;
     }
+    gstreamerDv1394Grabber = new GstreamerDv1394Grabber(frontend);
     if (gstreamerDv1394Grabber->initializationSubclass(devices)) {
         isInitialized = true;
     }
+#endif
+
+#ifdef Q_WS_WIN
+    gstreamerDirectShowUsbGrabber = new GstreamerDirectShowUsbGrabber(frontend);
     if (gstreamerDirectShowUsbGrabber->initializationSubclass(devices)) {
         isInitialized = true;
     }
-
-    isProcess = true;
+#endif
 
     qDebug("ImageGrabberFacade::initialization --> End");
 }
@@ -223,7 +225,6 @@ void ImageGrabberFacade::finalize()
 
     isInitialized = false;
     isInited = false;
-    isProcess = false;
 
     switch (videoDevice->getDeviceSource()) {
     case ImageGrabberDevice::testSource:
@@ -294,12 +295,6 @@ bool ImageGrabberFacade::isGrabberInitialized() const
 bool ImageGrabberFacade::isGrabberInited() const
 {
     return isInited;
-}
-
-
-bool ImageGrabberFacade::isGrabberProcess() const
-{
-    return isProcess;
 }
 
 

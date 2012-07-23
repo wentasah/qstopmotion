@@ -129,12 +129,6 @@ public:
     bool isGrabberInited() const;
 
     /**
-     * Checks if the process is running in deamon mode.
-     * @return true if it runs in deamon mode, false otherwise
-     */
-    bool isGrabberProcess() const;
-
-    /**
      * Has the grabber a controller interface?
      * @return True if there is a controller interface.
      */
@@ -190,7 +184,6 @@ protected:
 
     bool isInitialized;
     bool isInited;
-    bool isProcess;
     QVector<ImageGrabberDevice*> devices;
     ImageGrabberThread *grabberThread;
 

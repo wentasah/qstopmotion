@@ -51,20 +51,11 @@ public:
 
     /**
      * Initialization of the Command line grabber
-     *
-    void initialization();
-*/
-    /**
-     * Initialization of the Command line grabber
+     * @param devices The vector of initialized devices.
+     * @return true on success, false otherwise
      */
     bool initializationSubclass(QVector<ImageGrabberDevice*> &devices);
 
-    /**
-     * Starts the grabber if it is marked to be runned in deamon mode.
-     * @return true on success, false otherwise
-     *
-    void init();
-*/
     /**
      * Starts the grabber if it is marked to be runned in deamon mode.
      * @return true on success, false otherwise

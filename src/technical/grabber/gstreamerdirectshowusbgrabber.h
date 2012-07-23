@@ -21,7 +21,8 @@
 #ifndef GSTREAMERDIRECTSHOWUSBGRABBER_H
 #define GSTREAMERDIRECTSHOWUSBGRABBER_H
 
-#include "technical/grabber/imagegrabber.h"
+#include "technical/grabber/imagegrabberdevice.h"
+#include "technical/grabber/gstreamergrabber.h"
 
 // Include files of the gstreamer library
 #include <gst/gst.h>
@@ -33,7 +34,7 @@
  *
  * @author Bjoern Erik Nilsen & Fredrik Berg Kjoelstad
  */
-class GstreamerDirectShowUsbGrabber : public ImageGrabber
+class GstreamerDirectShowUsbGrabber : public GstreamerGrabber
 {
     Q_OBJECT
 public:
@@ -51,41 +52,16 @@ public:
 
     /**
      * Initialization of the Command line grabber
-     *
-    void initialization();
-*/
-    /**
-     * Initialization of the Command line grabber
+     * @param devices The vector of initialized devices.
+     * @return true on success, false otherwise
      */
     bool initializationSubclass(QVector<ImageGrabberDevice*> &devices);
 
     /**
      * Starts the grabber if it is marked to be runned in deamon mode.
      * @return true on success, false otherwise
-     *
-    void init();
-*/
-    /**
-     * Starts the grabber if it is marked to be runned in deamon mode.
-     * @return true on success, false otherwise
      */
     bool initSubclass();
-
-    /**
-     * Get the live image from the camera
-     */
-    const QImage getLiveImage();
-
-    /**
-     * Get the raw image from the camera
-     */
-    const QImage getRawImage();
-
-    /**
-     * Grabs one picture from the device.
-     * @return true on success, false otherwise
-     */
-    bool grab();
 
     /**
      * Shut downs the grabber process either if it is runned in deamon
@@ -94,13 +70,7 @@ public:
      */
     bool tearDown();
 
-    /**
-     * Call back function for the message loop of gstreamer.
-     */
-    static gboolean bus_callback(GstBus     *bus,
-                                 GstMessage *message,
-                                 gpointer    data);
-
+private:
     /**
      * Pad to select the video stream from the demux to the decoder
      */
@@ -117,26 +87,6 @@ public:
                                                GstElement *element2);
 
 private:
-    /**
-     * Get the image from the gstreamer application sink.
-     */
-    const QImage getImage();
-
-private:
-    int         activeSource;
-    bool        isInitSuccess;
-    bool        firstImage;
-
-    GstElement *pipeline;
-    GstElement *source;
-    GstElement *filter1;
-    GstElement *filter2;
-    GstElement *sink;
-    // GstBus     *bus;
-    // GMainLoop  *loop;
-
-    QImage liveImage;
-    QImage rawImage;
 
 };
 

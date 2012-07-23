@@ -18,8 +18,8 @@
  *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                 *
  ******************************************************************************/
 
-#ifndef GSTREAMERGRABBER_H
-#define GSTREAMERGRABBER_H
+#ifndef GSTREAMERDEVICEGRABBER_H
+#define GSTREAMERDEVICEGRABBER_H
 
 #include "technical/grabber/imagegrabber.h"
 
@@ -28,11 +28,12 @@
 
 
 /**
- * Base class for the different gstreamer grabbers.
+ * Abstract class for the different video grabbers used by the VideoView
+ * widgets.
  *
- * @author Ralf Lange
+ * @author Bjoern Erik Nilsen & Fredrik Berg Kjoelstad
  */
-class GstreamerGrabber : public ImageGrabber
+class GstreamerDeviceGrabber : public ImageGrabber
 {
     Q_OBJECT
 public:
@@ -41,25 +42,25 @@ public:
      * Initializes the member variables.
      * @param filePath path to the output file grabbed from a device
      */
-    GstreamerGrabber(Frontend *f);
+    GstreamerDeviceGrabber(Frontend *f);
 
     /**
      * Destructor
      */
-    ~GstreamerGrabber();
+    ~GstreamerDeviceGrabber();
 
     /**
-     * Initialization of the Command line grabber.
+     * Initialization of the Command line grabber
      * @param devices The vector of initialized devices.
-     * @return true on success, false otherwise.
+     * @return true on success, false otherwise
      */
-    virtual bool initializationSubclass(QVector<ImageGrabberDevice*> &devices) = 0;
+    bool initializationSubclass(QVector<ImageGrabberDevice*> &devices);
 
     /**
      * Starts the grabber if it is marked to be runned in deamon mode.
      * @return true on success, false otherwise
      */
-    virtual bool initSubclass() = 0;
+    bool initSubclass();
 
     /**
      * Get the live image from the camera
@@ -82,9 +83,8 @@ public:
      * mode or "single grab" mode.
      * @return true on success, false otherwise
      */
-    virtual bool tearDown() = 0;
+    bool tearDown();
 
-protected:
     /**
      * Call back function for the message loop of gstreamer.
      */
@@ -92,26 +92,51 @@ protected:
                                  GstMessage *message,
                                  gpointer    data);
 
+    /**
+     * Pad to select the video stream from the demux to the decoder
+     */
+    static void on_pad_added (GstElement *element,
+                              GstPad     *pad,
+                              gpointer    data);
+
+    static void cb_typefound (GstElement *typefind,
+                              guint       probability,
+                              GstCaps    *caps,
+                              gpointer    data);
+
+    static gboolean link_elements_with_filter (GstElement *element1,
+                                               GstElement *element2);
+
 private:
     /**
-     * Get the actual image from the gstreamer application interface.
+     * Get the actual image from the gstreamer application interface
      */
     const QImage getImage();
-
-protected:
-    GstElement *pipeline;
-    GstElement *source;
-    GstElement *filter1;
-    GstElement *filter2;
-    GstElement *sink;
 
 private:
     int         activeSource;
     bool        isInitSuccess;
     bool        firstImage;
 
+    GstElement *pipeline;
+    GstElement *source;
+    GstElement *filter1;
+    GstElement *filter2;
+    GstElement *filter3;
+    GstElement *filter4;
+    GstElement *filter5;
+    GstElement *queue1;
+    GstElement *queue2;
+    GstElement *queue3;
+    GstElement *queue4;
+    GstElement *sink;
+    // GstBus     *bus;
+    // GMainLoop  *loop;
+
+    QString filePath;
     QImage liveImage;
     QImage rawImage;
+
 };
 
 #endif

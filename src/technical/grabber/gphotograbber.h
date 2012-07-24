@@ -18,22 +18,24 @@
  *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                 *
  ******************************************************************************/
 
-#ifndef GSTREAMERGRABBER_H
-#define GSTREAMERGRABBER_H
+#ifndef GPHOTOGRABBER_H
+#define GPHOTOGRABBER_H
 
 #include "technical/grabber/imagegrabber.h"
-#include "technical/grabber/imagegrabberdevice.h"
 
-// Include files of the gstreamer library
-#include <gst/gst.h>
+// gPhoto2 is only available on X11 systems!!
+#ifdef Q_WS_X11
+
+// Include files of the gphoto library
+#include <gphoto2/gphoto2.h>
 
 
 /**
- * Base class for the different gstreamer grabbers.
+ * Base class for the different gphoto grabbers.
  *
  * @author Ralf Lange
  */
-class GstreamerGrabber : public ImageGrabber
+class GphotoGrabber : public ImageGrabber
 {
     Q_OBJECT
 public:
@@ -42,25 +44,25 @@ public:
      * Initializes the member variables.
      * @param filePath path to the output file grabbed from a device
      */
-    GstreamerGrabber(Frontend *f);
+    GphotoGrabber(Frontend *f);
 
     /**
      * Destructor
      */
-    ~GstreamerGrabber();
+    ~GphotoGrabber();
 
     /**
      * Initialization of the Command line grabber.
      * @param devices The vector of initialized devices.
      * @return true on success, false otherwise.
      */
-    virtual bool initializationSubclass(QVector<ImageGrabberDevice*> &devices) = 0;
+    virtual bool initializationSubclass(QVector<ImageGrabberDevice*> &devices);
 
     /**
      * Starts the grabber if it is marked to be runned in deamon mode.
      * @return true on success, false otherwise
      */
-    virtual bool initSubclass() = 0;
+    virtual bool initSubclass();
 
     /**
      * Get the live image from the camera
@@ -83,28 +85,24 @@ public:
      * mode or "single grab" mode.
      * @return true on success, false otherwise
      */
-    virtual bool tearDown() = 0;
+    virtual bool tearDown();
 
 protected:
-    /**
-     * Call back function for the message loop of gstreamer.
-     */
-    static gboolean bus_callback(GstBus     *bus,
-                                 GstMessage *message,
-                                 gpointer    data);
+    static int lookup_widget(CameraWidget *widget,
+                             const char *key,
+                             CameraWidget **child);
 
+    static void errordumper(GPLogLevel level,
+                            const char *domain,
+                            const char *format,
+                            va_list args,
+                            void *data);
 private:
-    /**
-     * Get the actual image from the gstreamer application interface.
-     */
-    const QImage getImage();
+    QString filePath;
 
 protected:
-    GstElement *pipeline;
-    GstElement *source;
-    GstElement *filter1;
-    GstElement *filter2;
-    GstElement *sink;
+    Camera *gphotoCamera;
+    GPContext *gphotoContext;
 
 private:
     int         activeSource;
@@ -114,5 +112,7 @@ private:
     QImage liveImage;
     QImage rawImage;
 };
+
+#endif    // X11
 
 #endif

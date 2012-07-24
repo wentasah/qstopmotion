@@ -1,7 +1,7 @@
 ###############################################################################
 # CMake file for the qStopMotion project                                      #
 # (c) Ralf Lange, longsoft.de                                                 #
-# Last update: 2012-07-23                                                     #
+# Last update: 2012-07-24                                                     #
 #                                                                             #
 # Usage:                                                                      #
 #   * Qt-Creator (Windows, Linux)                                             #
@@ -136,6 +136,7 @@ set(MOC_HEADERS
     src/frontends/qtfrontend/tooltabs/viewtab.h
     src/technical/externalchangemonitor.h
     src/technical/preferencestool.h
+    src/technical/grabber/gphotograbber.h
     src/technical/grabber/gstreamerdevicegrabber.h
     src/technical/grabber/gstreamerdirectshow1394grabber.h
     src/technical/grabber/gstreamerdirectshowusbgrabber.h
@@ -204,6 +205,7 @@ set(SOURCES
     src/technical/externalchangemonitor.cpp
     src/technical/preferencestool.cpp
     src/technical/util.cpp
+    src/technical/grabber/gphotograbber.cpp
     src/technical/grabber/grabbercontroller.cpp
     src/technical/grabber/gstreamerdevicegrabber.cpp
     src/technical/grabber/gstreamerdirectshow1394grabber.cpp
@@ -293,6 +295,25 @@ ELSE(WIN32)
 ENDIF(WIN32)
 
 ###############################################################################
+# gPhoto2 support
+#
+# used libraries: libgphoto2
+###############################################################################
+
+IF(UNIX)
+
+    include(${CMAKE_SOURCE_DIR}/cmake/FindGPhoto2PkgConfig.cmake)
+    message("GPHOTO2_INCLUDE_DIR: ${GPHOTO2_INCLUDE_DIR}")
+    message("GPHOTO2_LIBRARIES: ${GPHOTO2_LIBRARIES}")
+
+ELSE(UNIX)
+
+    SET(GPHOTO2_INCLUDE_DIR)
+    SET(GPHOTO2_LIBRARIES)
+
+ENDIF(UNIX)
+
+###############################################################################
 # Directory definitions
 ###############################################################################
 
@@ -302,6 +323,7 @@ include_directories(
     ${QT_INCLUDE_DIR}
     ${QT_QTXML_INCLUDE_DIR}
     ${GSTREAMER_INCLUDE_DIR}
+    ${GPHOTO2_INCLUDE_DIR}
 )
 
 ###############################################################################
@@ -398,6 +420,7 @@ target_link_libraries(
     ${QT_QTMAIN_LIBRARY}
     ${QT_QTXML_LIBRARIES}
     ${GSTREAMER_LIBRARIES}
+    ${GPHOTO2_LIBRARIES}
 )
 
 add_definitions(${QT_DEFINITIONS})

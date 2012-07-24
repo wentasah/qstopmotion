@@ -20,7 +20,6 @@
 
 #include "gstreamergrabber.h"
 
-#include "technical/grabber/imagegrabberdevice.h"
 #include "technical/util.h"
 
 #include <QtCore/QDir>

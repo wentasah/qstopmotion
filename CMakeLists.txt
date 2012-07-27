@@ -1,7 +1,7 @@
 ###############################################################################
 # CMake file for the qStopMotion project                                      #
 # (c) Ralf Lange, longsoft.de                                                 #
-# Last update: 2012-07-24                                                     #
+# Last update: 2012-07-26                                                     #
 #                                                                             #
 # Usage:                                                                      #
 #   * Qt-Creator (Windows, Linux)                                             #
@@ -114,6 +114,7 @@ set(MOC_HEADERS
     src/frontends/qtfrontend/qtfrontend.h
     src/frontends/qtfrontend/toolbar.h
     src/frontends/qtfrontend/dialogs/aboutdialog.h
+    src/frontends/qtfrontend/dialogs/cameracontrollerdialog.h
     src/frontends/qtfrontend/dialogs/descriptiondialog.h
     src/frontends/qtfrontend/dialogs/externalcommanddialog.h
     src/frontends/qtfrontend/dialogs/helpbrowser.h
@@ -181,6 +182,7 @@ set(SOURCES
     src/frontends/qtfrontend/qtfrontend.cpp
     src/frontends/qtfrontend/toolbar.cpp
     src/frontends/qtfrontend/dialogs/aboutdialog.cpp
+    src/frontends/qtfrontend/dialogs/cameracontrollerdialog.cpp
     src/frontends/qtfrontend/dialogs/descriptiondialog.cpp
     src/frontends/qtfrontend/dialogs/externalcommanddialog.cpp
     src/frontends/qtfrontend/dialogs/helpbrowser.cpp

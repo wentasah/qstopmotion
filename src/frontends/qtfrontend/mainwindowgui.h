@@ -28,6 +28,7 @@
 #include "frontends/qtfrontend/toolbar.h"
 #include "frontends/qtfrontend/dialogs/descriptiondialog.h"
 #include "frontends/qtfrontend/dialogs/helpbrowser.h"
+#include "frontends/qtfrontend/dialogs/cameracontrollerdialog.h"
 #include "frontends/qtfrontend/elements/flexiblespinbox.h"
 #include "frontends/qtfrontend/frameview/frameviewinterface.h"
 #include "frontends/qtfrontend/preferences/generaldialog.h"
@@ -502,6 +503,11 @@ private slots:
     void showUndoStack();
 
     /**
+     * Brings up an help dialog with the qstopmotion user manua.
+     */
+    void showCameraControllerDialog();
+
+    /**
      *
      */
     void whatsThis();
@@ -584,6 +590,7 @@ private:
     QAction *generalAct;
     QAction *projectAct;
     QAction *undoViewAct;
+    QAction *cameraControllerAct;
     QAction *whatsthisAct;
     QAction *aboutQtAct;
     QAction *aboutAct;
@@ -626,8 +633,9 @@ private:
     QLabel          *exposureID;
 
     // Other widgets
-    QUndoView             *undoView;
-    HelpBrowser           *helpBrowser;
+    QUndoView              *undoView;
+    CameraControllerDialog *cameraControllerDialog;
+    HelpBrowser            *helpBrowser;
 
     // Handlers
     ExternalChangeMonitor *changeMonitor;

@@ -87,6 +87,7 @@ MainWindowGUI::MainWindowGUI(QApplication *stApp, Frontend *f)
     projectAct           = 0;
     whatsthisAct         = 0;
     undoViewAct          = 0;
+    cameraControllerAct  = 0;
     aboutAct             = 0;
     helpAct              = 0;
 
@@ -123,8 +124,9 @@ MainWindowGUI::MainWindowGUI(QApplication *stApp, Frontend *f)
     exposureID           = 0;
 
     // Other widgets
-    undoView             = 0;
-    helpBrowser          = 0;
+    undoView               = 0;
+    cameraControllerDialog = 0;
+    helpBrowser            = 0;
 
     changeMonitor        = 0;
 
@@ -401,6 +403,7 @@ void MainWindowGUI::retranslateStrings()
     projectAct->setText(tr("&Configure Project"));
     whatsthisAct->setText(tr("What's &This"));
     undoViewAct->setText(tr("&Undo stack"));
+    cameraControllerAct->setText(tr("&Camera Controller"));
     helpAct->setText(tr("&Help"));
     aboutQtAct->setText(tr("About &Qt"));
     aboutAct->setText(tr("&About"));
@@ -1311,6 +1314,19 @@ void MainWindowGUI::showUndoStack()
 }
 
 
+void MainWindowGUI::showCameraControllerDialog()
+{
+    QRect fGeo = this->frameGeometry();
+
+    if (cameraControllerDialog == 0) {
+        cameraControllerDialog = new CameraControllerDialog(frontend, this);
+        cameraControllerDialog->setGeometry(geometry().x() + fGeo.width(), geometry().y(),
+                                            200, height());
+    }
+    cameraControllerDialog->show();
+}
+
+
 void MainWindowGUI::whatsThis()
 {
     QWhatsThis::enterWhatsThisMode();
@@ -1809,6 +1825,15 @@ void MainWindowGUI::createActions()
     undoViewAct->setIconVisibleInMenu(true);
     connect(undoViewAct, SIGNAL(triggered()), this, SLOT(showUndoStack()));
 
+    cameraControllerAct = new QAction(this);
+    iconFile.clear();
+    iconFile.append(frontend->getIconsDirName());
+    iconFile.append(QLatin1String("undoview.png"));
+    cameraControllerAct->setIcon(QIcon(iconFile));
+    cameraControllerAct->setShortcut(ControlModifier + Key_C);
+    cameraControllerAct->setIconVisibleInMenu(true);
+    connect(cameraControllerAct, SIGNAL(triggered()), this, SLOT(showCameraControllerDialog()));
+
     // Help menu
     whatsthisAct = new QAction(this);
     iconFile.clear();
@@ -1876,6 +1901,7 @@ void MainWindowGUI::createMenus()
 
     viewMenu = menuBar()->addMenu(tr("&View"));
     viewMenu->addAction(undoViewAct);
+    viewMenu->addAction(cameraControllerAct);
 
     helpMenu = menuBar()->addMenu(tr("&Help"));
     helpMenu->addAction(whatsthisAct);

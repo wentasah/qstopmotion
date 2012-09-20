@@ -29,12 +29,14 @@
 
 
 CameraControllerDialog::CameraControllerDialog(Frontend *f,
+                                               GrabberController *controller,
                                                QWidget *parent)
     : QDialog(parent)
 {
     qDebug("CameraControllerDialog::Constructor --> Start");
 
     frontend = f;
+    grabberController = controller;
 
     this->setWindowTitle(tr("qStopMotion Camera Controller"));
     this->setMinimumSize(200, 500);
@@ -170,6 +172,19 @@ CameraControllerDialog::CameraControllerDialog(Frontend *f,
     this->setLayout(mainLayout);
 
     qDebug("CameraControllerDialog::Constructor --> End");
+}
+
+
+void CameraControllerDialog::init()
+{
+    qDebug() << "CameraControllerDialog::init --> Start";
+
+    if (!grabberController->isBrightness()) {
+        brightnessLabel->hide();
+        brightnessComboBox->hide();
+    }
+
+    qDebug() << "CameraControllerDialog::init --> End";
 }
 
 

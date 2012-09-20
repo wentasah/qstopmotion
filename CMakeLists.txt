@@ -1,7 +1,7 @@
 ###############################################################################
 # CMake file for the qStopMotion project                                      #
 # (c) Ralf Lange, longsoft.de                                                 #
-# Last update: 2012-07-26                                                     #
+# Last update: 2012-09-19                                                     #
 #                                                                             #
 # Usage:                                                                      #
 #   * Qt-Creator (Windows, Linux)                                             #
@@ -693,16 +693,35 @@ SET(CPACK_NSIS_MENU_LINKS
 
 # Additional installation command
 # Install the GStreamer OSS Build
+#
+# If the OSS environment string is set nothing is to do.
+# If the GStreamer installer is in the same directory as the qStopMotion installer
+# this one is used (CD installation).
+# Otherwise the GStreamer installer is downloaded from the OSS Build homepage.
 SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "
+    ClearErrors
+    ReadEnvStr $R0 'OSSBUILD_GSTREAMER_DIR'
+    IfErrors 0 found
+    IfFileExists $EXEDIR\\\\GStreamer-WinBuilds-GPL-x86.msi 0 download
+    CopyFiles $EXEDIR\\\\GStreamer-WinBuilds-GPL-x86.msi $INSTDIR\\\\GStreamer-WinBuilds-GPL-x86.msi
+    Goto install
+    download:
     NSISdl::download http://ossbuild.googlecode.com/files/GStreamer-WinBuilds-GPL-x86.msi $INSTDIR\\\\GStreamer-WinBuilds-GPL-x86.msi
+    install:
     ExecWait 'msiexec /i \\\"$INSTDIR\\\\GStreamer-WinBuilds-GPL-x86.msi\\\" '
+    found:
 ")
 
 # Additional uninstallation command
 # Uninstall the GStreamer OSS Build
+#
+# If the installer package is in the installation directory than the package was
+# installed by the qStopMotion installer. Than uninstall the package.
 SET(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "
+    IfFileExists $INSTDIR\\\\GStreamer-WinBuilds-GPL-x86.msi 0 keep
     ExecWait 'msiexec /x \\\"$INSTDIR\\\\GStreamer-WinBuilds-GPL-x86.msi\\\" '
     Delete \\\"$INSTDIR\\\\GStreamer-WinBuilds-GPL-x86.msi\\\"
+    keep:
 ")
 
 # SET(CPACK_NSIS_INSTALLED_ICON_NAME "qstopmotion.exe")

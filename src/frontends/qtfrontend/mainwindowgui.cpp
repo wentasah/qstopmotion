@@ -1318,8 +1318,13 @@ void MainWindowGUI::showCameraControllerDialog()
 {
     QRect fGeo = this->frameGeometry();
 
+    // Q_ASSERT(grabber->getController() != NULL);
+
     if (cameraControllerDialog == 0) {
-        cameraControllerDialog = new CameraControllerDialog(frontend, this);
+        cameraControllerDialog = new CameraControllerDialog(frontend,
+                                                            new GrabberController(NULL, 0), // grabber->getController(),
+                                                            this);
+        cameraControllerDialog->init();
         cameraControllerDialog->setGeometry(geometry().x() + fGeo.width(), geometry().y(),
                                             200, height());
     }

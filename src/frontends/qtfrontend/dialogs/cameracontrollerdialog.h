@@ -24,6 +24,7 @@
 #define CAMERACONTROLLERDIALOG_H
 
 #include "frontends/frontend.h"
+#include "technical/grabber/grabbercontroller.h"
 
 #include <QtGui/QCheckBox>
 #include <QtGui/QComboBox>
@@ -36,7 +37,15 @@ class CameraControllerDialog : public QDialog
 {
     Q_OBJECT
 public:
-    CameraControllerDialog(Frontend *f, QWidget *parent = 0);
+    /**
+     * Constructor
+     */
+    CameraControllerDialog(Frontend *f, GrabberController *controller, QWidget *parent = 0);
+
+    /**
+     * Initialize the dialog
+     */
+    void init();
 
 private slots:
     /**
@@ -146,6 +155,8 @@ private slots:
 
 private:
     Frontend     *frontend;
+
+    GrabberController *grabberController;
 
     QLabel       *brightnessLabel;
     QComboBox    *brightnessComboBox;

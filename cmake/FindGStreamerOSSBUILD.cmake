@@ -2,7 +2,7 @@
 # CMake file to find the GStreamer files on the Windows platform when the     #
 # OSSBuild fof GStreamer for Windows is used.                                 #
 # (c) Ralf Lange, longsoft.de                                                 #
-# Last update: 2012-05-24                                                     #
+# Last update: 2012-10-11                                                     #
 #                                                                             #
 ###############################################################################
 #
@@ -12,6 +12,29 @@
 #  GSTREAMER_INCLUDE_DIR - the GStreamer include directory
 #  GSTREAMER_LIBRARIES - the libraries needed to use GStreamer
 #
+###############################################################################
+
+###############################################################################
+# Unset variables
+###############################################################################
+
+unset(GSTREAMER_gst_INCLUDE_DIR CACHE)
+unset(GSTREAMER_gstconfig_INCLUDE_DIR CACHE)
+unset(GSTREAMER_gstreamer_LIBRARY CACHE)
+unset(GSTREAMER_gstinterfaces_LIBRARY CACHE)
+unset(GSTREAMER_gstapp_LIBRARY CACHE)
+
+unset(GLIB_glib_2_INCLUDE_DIR CACHE)
+unset(GLIB_glibconfig_2_INCLUDE_DIR CACHE)
+unset(GLIB_glib_2_LIBRARY CACHE)
+unset(GLIB_gobject_2_LIBRARY CACHE)
+
+unset(LIBXML2_parser_INCLUDE_DIR CACHE)
+unset(LIBXML2_iconv_INCLUDE_DIR CACHE)
+unset(LIBXML2_xml_2_LIBRARY CACHE)
+
+###############################################################################
+# Read environment variables
 ###############################################################################
 
 FILE(TO_CMAKE_PATH "$ENV{OSSBUILD_GSTREAMER_SDK_DIR}" TRY1_DIR)

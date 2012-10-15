@@ -32,6 +32,7 @@
 #include <QtGui/QApplication>
 
 // Include files of the gphoto library
+#include <unistd.h>
 #include <gst/interfaces/propertyprobe.h>
 #include <gst/app/gstappsink.h>
 
@@ -218,11 +219,12 @@ const QImage GphotoGrabber::getLiveImage()
     gp_file_unref(file);
 
     /* When the file name is constant, unlink first... */
-    unlink(output_file);
+    unlink(output_file);   // Delete the name from the file system (#include <unistd.h>)
 
     /* Always doing this */
-    link(temp_file, output_file);
-    unlink(temp_file);
+    link(temp_file, output_file);  // Create a new link to the existing file (#include <unistd.h>)
+    unlink(temp_file);   // Delete the name from the file system (#include <unistd.h>)
+
 
     liveImage.load(filePath);
 

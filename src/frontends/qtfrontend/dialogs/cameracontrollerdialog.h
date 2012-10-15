@@ -154,42 +154,65 @@ private slots:
     void changeFocus(int index);
 
 private:
+    /**
+     * Fill the combobox with the values.
+     * @param comboBox The combo box to fill.
+     * @param maxValue The maximum value for the combo box.
+     * @return The step lengt for the values of the combo box.
+     */
+    int fillComboBox(QComboBox *comboBox, int maxValue);
+
     Frontend     *frontend;
 
     GrabberController *grabberController;
 
     QLabel       *brightnessLabel;
     QComboBox    *brightnessComboBox;
+    int           stepBrightness;
 
     QLabel       *contrastLabel;
     QComboBox    *contrastComboBox;
+    int           stepContrast;
 
     QLabel       *saturationLabel;
     QComboBox    *saturationComboBox;
+    int           stepSaturation;
 
     QLabel       *hueLabel;
     QComboBox    *hueComboBox;
+    int           stepHue;
 
     QLabel       *gammaLabel;
     QComboBox    *gammaComboBox;
+    int           stepGamma;
 
     QLabel       *sharpnessLabel;
     QComboBox    *sharpnessComboBox;
+    int           stepSharpness;
 
     QLabel       *backlightLabel;
     QComboBox    *backlightComboBox;
+    int           stepBacklight;
 
     QCheckBox    *exposureCheckBox;
+    QLabel       *exposureLabel;
     QComboBox    *exposureComboBox;
+    int           stepExposure;
 
     QCheckBox    *whiteCheckBox;
+    QLabel       *whiteLabel;
     QComboBox    *whiteComboBox;
+    int           stepWhite;
 
     QCheckBox    *zoomCheckBox;
+    QLabel       *zoomLabel;
     QComboBox    *zoomComboBox;
+    int           stepZoom;
 
     QCheckBox    *focusCheckBox;
+    QLabel       *focusLabel;
     QComboBox    *focusComboBox;
+    int           stepFocus;
 
     QPushButton  *closeButton;
 };

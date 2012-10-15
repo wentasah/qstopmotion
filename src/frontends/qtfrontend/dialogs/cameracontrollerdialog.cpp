@@ -37,6 +37,17 @@ CameraControllerDialog::CameraControllerDialog(Frontend *f,
 
     frontend = f;
     grabberController = controller;
+    stepBrightness = -1;
+    stepContrast = -1;
+    stepSaturation = -1;
+    stepHue = -1;
+    stepGamma = -1;
+    stepSharpness = -1;
+    stepBacklight = -1;
+    stepExposure = -1;
+    stepWhite = -1;
+    stepZoom = -1;
+    stepFocus = -1;
 
     this->setWindowTitle(tr("qStopMotion Camera Controller"));
     this->setMinimumSize(200, 500);
@@ -45,95 +56,62 @@ CameraControllerDialog::CameraControllerDialog(Frontend *f,
 
     brightnessLabel = new QLabel(tr("Brightness:"));
     brightnessComboBox = new QComboBox();
-    for (int i = 0 ; i <= 127 ; i+=8) {
-        brightnessComboBox->addItem(QString("%1").arg(i));
-    }
-    brightnessComboBox->addItem(QString("%1").arg(127));
     connect(brightnessComboBox, SIGNAL(activated(int)), this, SLOT(changeBrightness(int)));
 
     contrastLabel = new QLabel(tr("Contrast:"));
     contrastComboBox = new QComboBox();
-    for (int i = 0 ; i <= 127 ; i+=8) {
-        contrastComboBox->addItem(QString("%1").arg(i));
-    }
-    contrastComboBox->addItem(QString("%1").arg(127));
     connect(contrastComboBox, SIGNAL(activated(int)), this, SLOT(changeContrast(int)));
 
     saturationLabel = new QLabel(tr("Saturation:"));
     saturationComboBox = new QComboBox();
-    for (int i = 0 ; i <= 127 ; i+=8) {
-        saturationComboBox->addItem(QString("%1").arg(i));
-    }
-    saturationComboBox->addItem(QString("%1").arg(127));
     connect(saturationComboBox, SIGNAL(activated(int)), this, SLOT(changeSaturation(int)));
 
     hueLabel = new QLabel(tr("Hue:"));
     hueComboBox = new QComboBox();
-    for (int i = 0 ; i <= 180 ; i+=18) {
-        hueComboBox->addItem(QString("%1").arg(i));
-    }
     connect(hueComboBox, SIGNAL(activated(int)), this, SLOT(changeHue(int)));
 
     gammaLabel = new QLabel(tr("Gamma:"));
     gammaComboBox = new QComboBox();
-    for (int i = 0 ; i <= 277 ; i+=17) {
-        gammaComboBox->addItem(QString("%1").arg(i));
-    }
-    gammaComboBox->addItem(QString("%1").arg(277));
     connect(gammaComboBox, SIGNAL(activated(int)), this, SLOT(changeGamma(int)));
 
     sharpnessLabel = new QLabel(tr("Sharpness:"));
     sharpnessComboBox = new QComboBox();
-    for (int i = 0 ; i <= 11 ; i++) {
-        sharpnessComboBox->addItem(QString("%1").arg(i));
-    }
     connect(sharpnessComboBox, SIGNAL(activated(int)), this, SLOT(changeSharpness(int)));
 
     backlightLabel = new QLabel(tr("Backlight Compensation:"));
     backlightComboBox = new QComboBox();
-    for (int i = 0 ; i <= 2 ; i++) {
-        backlightComboBox->addItem(QString("%1").arg(i));
-    }
     connect(backlightComboBox, SIGNAL(activated(int)), this, SLOT(changeBacklight(int)));
 
     exposureCheckBox = new QCheckBox(tr("Automatic Exposure"));
     exposureCheckBox->setChecked(false);
     connect(exposureCheckBox, SIGNAL(stateChanged(int)), this, SLOT(changeAutoExposure(int)));
 
+    exposureLabel = new QLabel(tr("Exposure:"));
     exposureComboBox = new QComboBox();
-    for (int i = 0 ; i <= 10 ; i++) {
-        exposureComboBox->addItem(QString("%1").arg(i));
-    }
     connect(exposureComboBox, SIGNAL(activated(int)), this, SLOT(changeExposure(int)));
 
     whiteCheckBox = new QCheckBox(tr("Automatic White Balance"));
     whiteCheckBox->setChecked(false);
     connect(whiteCheckBox, SIGNAL(stateChanged(int)), this, SLOT(changeAutoWhite(int)));
 
+    whiteLabel = new QLabel(tr("White Balance:"));
     whiteComboBox = new QComboBox();
-    for (int i = 0 ; i <= 10 ; i++) {
-        whiteComboBox->addItem(QString("%1").arg(i));
-    }
     connect(whiteComboBox, SIGNAL(activated(int)), this, SLOT(changeWhite(int)));
 
     zoomCheckBox = new QCheckBox(tr("Automatic Zoom"));
     zoomCheckBox->setChecked(false);
     connect(zoomCheckBox, SIGNAL(stateChanged(int)), this, SLOT(changeAutoZoom(int)));
 
+    zoomLabel = new QLabel(tr("Zoom:"));
     zoomComboBox = new QComboBox();
-    for (int i = 0 ; i <= 10 ; i++) {
-        zoomComboBox->addItem(QString("%1").arg(i));
-    }
     connect(zoomComboBox, SIGNAL(activated(int)), this, SLOT(changeZoom(int)));
 
     focusCheckBox = new QCheckBox(tr("Automatic Focus"));
     focusCheckBox->setChecked(false);
     connect(focusCheckBox, SIGNAL(stateChanged(int)), this, SLOT(changeAutoFocus(int)));
 
+    focusLabel = new QLabel(tr("Focus:"));
     focusComboBox = new QComboBox();
-    for (int i = 0 ; i <= 10 ; i++) {
-        focusComboBox->addItem(QString("%1").arg(i));
-    }
     connect(focusComboBox, SIGNAL(activated(int)), this, SLOT(changeFocus(int)));
 
     closeButton = new QPushButton(tr("&Close"));
@@ -160,12 +138,16 @@ CameraControllerDialog::CameraControllerDialog(Frontend *f,
     mainLayout->addWidget(backlightLabel);
     mainLayout->addWidget(backlightComboBox);
     mainLayout->addWidget(exposureCheckBox);
+    mainLayout->addWidget(exposureLabel);
     mainLayout->addWidget(exposureComboBox);
     mainLayout->addWidget(whiteCheckBox);
+    mainLayout->addWidget(whiteLabel);
     mainLayout->addWidget(whiteComboBox);
     mainLayout->addWidget(zoomCheckBox);
+    mainLayout->addWidget(zoomLabel);
     mainLayout->addWidget(zoomComboBox);
     mainLayout->addWidget(focusCheckBox);
+    mainLayout->addWidget(focusLabel);
     mainLayout->addWidget(focusComboBox);
     mainLayout->addStretch();
     mainLayout->addLayout(bottomLayout);
@@ -179,68 +161,231 @@ void CameraControllerDialog::init()
 {
     qDebug() << "CameraControllerDialog::init --> Start";
 
-    if (!grabberController->isBrightness()) {
+    if (grabberController->isBrightness()) {
+        stepBrightness = fillComboBox(brightnessComboBox, grabberController->getMaximumBrightness());
+    }
+    else {
         brightnessLabel->hide();
         brightnessComboBox->hide();
+    }
+
+    if (grabberController->isContrast()) {
+        stepContrast = fillComboBox(contrastComboBox, grabberController->getMaximumContrast());
+    }
+    else {
+        contrastLabel->hide();
+        contrastComboBox->hide();
+    }
+
+    if (grabberController->isSaturation()) {
+        stepSaturation = fillComboBox(saturationComboBox, grabberController->getMaximumSaturation());
+    }
+    else {
+        saturationLabel->hide();
+        saturationComboBox->hide();
+    }
+
+    if (grabberController->isHue()) {
+        stepHue = fillComboBox(hueComboBox, grabberController->getMaximumHue());
+    }
+    else {
+        hueLabel->hide();
+        hueComboBox->hide();
+    }
+
+    if (grabberController->isGamma()) {
+        stepGamma = fillComboBox(gammaComboBox, grabberController->getMaximumGamma());
+    }
+    else {
+        gammaLabel->hide();
+        gammaComboBox->hide();
+    }
+
+    if (grabberController->isSharpness()) {
+        stepSharpness = fillComboBox(sharpnessComboBox, grabberController->getMaximumSharpness());
+    }
+    else {
+        sharpnessLabel->hide();
+        sharpnessComboBox->hide();
+    }
+
+    if (grabberController->isBacklight()) {
+        stepBacklight = fillComboBox(backlightComboBox, grabberController->getMaximumSharpness());
+    }
+    else {
+        backlightLabel->hide();
+        backlightComboBox->hide();
+    }
+
+    if (grabberController->isAutomaticExposure()) {
+        exposureLabel->hide();
+    }
+    else {
+        exposureCheckBox->hide();
+    }
+    if (grabberController->isExposure()) {
+        stepExposure = fillComboBox(exposureComboBox, grabberController->getMaximumExposure());
+    }
+    else {
+        exposureLabel->hide();
+        exposureComboBox->hide();
+    }
+
+    if (grabberController->isAutomaticWhite()) {
+        whiteLabel->hide();
+    }
+    else {
+        whiteCheckBox->hide();
+    }
+    if (grabberController->isWhite()) {
+        stepWhite = fillComboBox(whiteComboBox, grabberController->getMaximumWhite());
+    }
+    else {
+        whiteLabel->hide();
+        whiteComboBox->hide();
+    }
+
+    if (grabberController->isAutomaticZoom()) {
+        zoomLabel->hide();
+    }
+    else {
+        zoomCheckBox->hide();
+    }
+    if (grabberController->isZoom()) {
+        stepZoom = fillComboBox(zoomComboBox, grabberController->getMaximumZoom());
+    }
+    else {
+        zoomLabel->hide();
+        zoomComboBox->hide();
+    }
+
+    if (grabberController->isAutomaticFocus()) {
+        focusLabel->hide();
+    }
+    else {
+        focusCheckBox->hide();
+    }
+    if (grabberController->isFocus()) {
+        stepFocus = fillComboBox(focusComboBox, grabberController->getMaximumFocus());
+    }
+    else {
+        focusLabel->hide();
+        focusComboBox->hide();
     }
 
     qDebug() << "CameraControllerDialog::init --> End";
 }
 
 
-void CameraControllerDialog::changeBrightness(int /*index*/)
+void CameraControllerDialog::changeBrightness(int index)
 {
-    qDebug() << "CameraControllerDialog::changeBrightness --> Start (Empty)";
+    qDebug() << "CameraControllerDialog::changeBrightness --> Start";
 
-    // qDebug() << "CameraControllerDialog::changeBrightness --> End";
+    int value = index * stepBrightness;
+    int maxValue = grabberController->getMaximumBrightness();
+
+    if (value > maxValue) {
+        value = maxValue;
+    }
+    grabberController->setBrightness(value);
+
+    qDebug() << "CameraControllerDialog::changeBrightness --> End";
 }
 
 
-void CameraControllerDialog::changeContrast(int /*index*/)
+void CameraControllerDialog::changeContrast(int index)
 {
-    qDebug() << "CameraControllerDialog::changeContrast --> Start (Empty)";
+    qDebug() << "CameraControllerDialog::changeContrast --> Start";
 
-    // qDebug() << "CameraControllerDialog::changeContrast --> End";
+    int value = index * stepContrast;
+    int maxValue = grabberController->getMaximumContrast();
+
+    if (value > maxValue) {
+        value = maxValue;
+    }
+    grabberController->setContrast(value);
+
+    qDebug() << "CameraControllerDialog::changeContrast --> End";
 }
 
 
-void CameraControllerDialog::changeSaturation(int /*index*/)
+void CameraControllerDialog::changeSaturation(int index)
 {
-    qDebug() << "CameraControllerDialog::changeSaturation --> Start (Empty)";
+    qDebug() << "CameraControllerDialog::changeSaturation --> Start";
 
-    // qDebug() << "CameraControllerDialog::changeSaturation --> End";
+    int value = index * stepSaturation;
+    int maxValue = grabberController->getMaximumSaturation();
+
+    if (value > maxValue) {
+        value = maxValue;
+    }
+    grabberController->setSaturation(value);
+
+    qDebug() << "CameraControllerDialog::changeSaturation --> End";
 }
 
 
-void CameraControllerDialog::changeHue(int /*index*/)
+void CameraControllerDialog::changeHue(int index)
 {
-    qDebug() << "CameraControllerDialog::changeHue --> Start (Empty)";
+    qDebug() << "CameraControllerDialog::changeHue --> Start";
 
-    // qDebug() << "CameraControllerDialog::changeHue --> End";
+    int value = index * stepHue;
+    int maxValue = grabberController->getMaximumHue();
+
+    if (value > maxValue) {
+        value = maxValue;
+    }
+    grabberController->setHue(value);
+
+    qDebug() << "CameraControllerDialog::changeHue --> End";
 }
 
 
-void CameraControllerDialog::changeGamma(int /*index*/)
+void CameraControllerDialog::changeGamma(int index)
 {
-    qDebug() << "CameraControllerDialog::changeGamma --> Start (Empty)";
+    qDebug() << "CameraControllerDialog::changeGamma --> Start";
 
-    // qDebug() << "CameraControllerDialog::changeGamma --> End";
+    int value = index * stepGamma;
+    int maxValue = grabberController->getMaximumGamma();
+
+    if (value > maxValue) {
+        value = maxValue;
+    }
+    grabberController->setGamma(value);
+
+    qDebug() << "CameraControllerDialog::changeGamma --> End";
 }
 
 
-void CameraControllerDialog::changeSharpness(int /*index*/)
+void CameraControllerDialog::changeSharpness(int index)
 {
-    qDebug() << "CameraControllerDialog::changeSharpness --> Start (Empty)";
+    qDebug() << "CameraControllerDialog::changeSharpness --> Start";
 
-    // qDebug() << "CameraControllerDialog::changeSharpness --> End";
+    int value = index * stepSharpness;
+    int maxValue = grabberController->getMaximumSharpness();
+
+    if (value > maxValue) {
+        value = maxValue;
+    }
+    grabberController->setSharpness(value);
+
+    qDebug() << "CameraControllerDialog::changeSharpness --> End";
 }
 
 
-void CameraControllerDialog::changeBacklight(int /*index*/)
+void CameraControllerDialog::changeBacklight(int index)
 {
-    qDebug() << "CameraControllerDialog::changeBacklight --> Start (Empty)";
+    qDebug() << "CameraControllerDialog::changeBacklight --> Start";
 
-    // qDebug() << "CameraControllerDialog::changeBacklight --> End";
+    int value = index * stepBacklight;
+    int maxValue = grabberController->getMaximumBacklight();
+
+    if (value > maxValue) {
+        value = maxValue;
+    }
+    grabberController->setBacklight(value);
+
+    qDebug() << "CameraControllerDialog::changeBacklight --> End";
 }
 
 
@@ -250,22 +395,30 @@ void CameraControllerDialog::changeAutoExposure(int newState)
 
     if (newState) {
         exposureComboBox->setEnabled(false);
-        // controller->setAutoExposure(true);
+        grabberController->setAutomaticExposure(true);
     }
     else {
         exposureComboBox->setEnabled(true);
-        // controller->setAutoExposure(false);
+        grabberController->setAutomaticExposure(false);
     }
 
     qDebug() << "CameraControllerDialog::changeAutoExposure --> End";
 }
 
 
-void CameraControllerDialog::changeExposure(int /*index*/)
+void CameraControllerDialog::changeExposure(int index)
 {
-    qDebug() << "CameraControllerDialog::changeExposure --> Start (Empty)";
+    qDebug() << "CameraControllerDialog::changeExposure --> Start";
 
-    // qDebug() << "CameraControllerDialog::changeExposure --> End";
+    int value = index * stepExposure;
+    int maxValue = grabberController->getMaximumExposure();
+
+    if (value > maxValue) {
+        value = maxValue;
+    }
+    grabberController->setExposure(value);
+
+    qDebug() << "CameraControllerDialog::changeExposure --> End";
 }
 
 
@@ -275,22 +428,30 @@ void CameraControllerDialog::changeAutoWhite(int newState)
 
     if (newState) {
         whiteComboBox->setEnabled(false);
-        // controller->setAutoWhite(true);
+        grabberController->setAutomaticWhite(true);
     }
     else {
         whiteComboBox->setEnabled(true);
-        // controller->setAutoWhite(false);
+        grabberController->setAutomaticWhite(false);
     }
 
     qDebug() << "CameraControllerDialog::changeAutoWhite --> End";
 }
 
 
-void CameraControllerDialog::changeWhite(int /*index*/)
+void CameraControllerDialog::changeWhite(int index)
 {
-    qDebug() << "CameraControllerDialog::changeWhite --> Start (Empty)";
+    qDebug() << "CameraControllerDialog::changeWhite --> Start";
 
-    // qDebug() << "CameraControllerDialog::changeWhite --> End";
+    int value = index * stepWhite;
+    int maxValue = grabberController->getMaximumWhite();
+
+    if (value > maxValue) {
+        value = maxValue;
+    }
+    grabberController->setWhite(value);
+
+    qDebug() << "CameraControllerDialog::changeWhite --> End";
 }
 
 
@@ -300,22 +461,30 @@ void CameraControllerDialog::changeAutoZoom(int newState)
 
     if (newState) {
         zoomComboBox->setEnabled(false);
-        // controller->setAutoZoom(true);
+        grabberController->setAutomaticZoom(true);
     }
     else {
         zoomComboBox->setEnabled(true);
-        // controller->setAutoZoom(false);
+        grabberController->setAutomaticZoom(false);
     }
 
     qDebug() << "CameraControllerDialog::changeAutoZoo --> End";
 }
 
 
-void CameraControllerDialog::changeZoom(int /*index*/)
+void CameraControllerDialog::changeZoom(int index)
 {
-    qDebug() << "CameraControllerDialog::changeZoo --> Start (Empty)";
+    qDebug() << "CameraControllerDialog::changeZoo --> Start";
 
-    // qDebug() << "CameraControllerDialog::changeZoo --> End";
+    int value = index * stepZoom;
+    int maxValue = grabberController->getMaximumZoom();
+
+    if (value > maxValue) {
+        value = maxValue;
+    }
+    grabberController->setZoom(value);
+
+    qDebug() << "CameraControllerDialog::changeZoo --> End";
 }
 
 
@@ -325,20 +494,48 @@ void CameraControllerDialog::changeAutoFocus(int newState)
 
     if (newState) {
         focusComboBox->setEnabled(false);
-        // controller->setAutoFocus(true);
+        grabberController->setAutomaticFocus(true);
     }
     else {
         focusComboBox->setEnabled(true);
-        // controller->setAutoFocus(false);
+        grabberController->setAutomaticFocus(false);
     }
 
     qDebug() << "CameraControllerDialog::changeAutoFocus --> End";
 }
 
 
-void CameraControllerDialog::changeFocus(int /*index*/)
+void CameraControllerDialog::changeFocus(int index)
 {
-    qDebug() << "CameraControllerDialog::changeFocus --> Start (Empty)";
+    qDebug() << "CameraControllerDialog::changeFocus --> Start";
 
-    // qDebug() << "CameraControllerDialog::changeFocus --> End";
+    int value = index * stepFocus;
+    int maxValue = grabberController->getMaximumFocus();
+
+    if (value > maxValue) {
+        value = maxValue;
+    }
+    grabberController->setFocus(value);
+
+    qDebug() << "CameraControllerDialog::changeFocus --> End";
+}
+
+
+int CameraControllerDialog::fillComboBox(QComboBox *comboBox, int maxValue)
+{
+    int step;
+    int value;
+
+    step = maxValue / 10;
+    if (step < 1) {
+        step = 1;
+    }
+    for (value = 0 ; value <= maxValue ; value += step) {
+        comboBox->addItem(QString("%1").arg(value));
+    }
+    if (value < maxValue) {
+        comboBox->addItem(QString("%1").arg(maxValue));
+    }
+
+    return step;
 }

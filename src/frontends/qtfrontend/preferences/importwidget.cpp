@@ -328,11 +328,11 @@ void ImportWidget::initialize()
     // Read eEncoder preferences
     if (tabType) {
         // This is a general dialog tab
-        activeGrabberSource = pref->getBasicPreference("defaultgrabbersource", ImageGrabberDevice::testSource);
-        activeImageFormat = pref->getBasicPreference("defaultimageformat", ImageGrabber::jpegFormat);
-        activeImageSize = pref->getBasicPreference("defaultimagesize", ImageGrabber::defaultSize);
-        activeTransform = pref->getBasicPreference("defaulttransformation", true);
-        activeImageAdjustment = pref->getBasicPreference("defaultimageadjustment", ImageGrabber::centerDown);
+        activeGrabberSource = pref->getIntegerPreference("preferences", "defaultgrabbersource", ImageGrabberDevice::testSource);
+        activeImageFormat = pref->getIntegerPreference("preferences", "defaultimageformat", ImageGrabber::jpegFormat);
+        activeImageSize = pref->getIntegerPreference("preferences", "defaultimagesize", ImageGrabber::defaultSize);
+        activeTransform = pref->getIntegerPreference("preferences", "defaulttransformation", true);
+        activeImageAdjustment = pref->getIntegerPreference("preferences", "defaultimageadjustment", ImageGrabber::centerDown);
     }
     else {
         // This is a project dialog tab
@@ -478,11 +478,11 @@ void ImportWidget::apply()
     if (changings) {
         if (tabType) {
             // This is a general dialog tab
-            pref->setBasicPreference("defaultgrabbersource", activeGrabberSource);
-            pref->setBasicPreference("defaultimageformat", activeImageFormat);
-            pref->setBasicPreference("defaultimagesize", activeImageSize);
-            pref->setBasicPreference("defaulttransformation", activeTransform);
-            pref->setBasicPreference("defaultimageadjustment", activeImageAdjustment);
+            pref->setIntegerPreference("preferences", "defaultgrabbersource", activeGrabberSource);
+            pref->setIntegerPreference("preferences", "defaultimageformat", activeImageFormat);
+            pref->setIntegerPreference("preferences", "defaultimagesize", activeImageSize);
+            pref->setIntegerPreference("preferences", "defaulttransformation", activeTransform);
+            pref->setIntegerPreference("preferences", "defaultimageadjustment", activeImageAdjustment);
         }
         else {
             // This is a project dialog tab

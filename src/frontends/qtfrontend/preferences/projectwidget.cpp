@@ -194,12 +194,12 @@ void ProjectWidget::initialize()
         // The tab is used in gerneral dialog
         PreferencesTool *pref = frontend->getPreferences();
 
-        defaultRecordingMode = pref->getBasicPreference("defaultrecordingmode", 0);
-        defaultVideoSource = pref->getBasicPreference("defaultvideosource", 0);
-        defaultMixMode = pref->getBasicPreference("defaultmixmode", 0);
-        defaultMixCount = pref->getBasicPreference("defaultmixcount", 2);
-        defaultPlaybackCount = pref->getBasicPreference("defaultplaybackcount", 2);
-        // defaultUnitMode = pref->getBasicPreference("defaultunitmode", 0);
+        defaultRecordingMode = pref->getIntegerPreference("preferences", "defaultrecordingmode", 0);
+        defaultVideoSource = pref->getIntegerPreference("preferences", "defaultvideosource", 0);
+        defaultMixMode = pref->getIntegerPreference("preferences", "defaultmixmode", 0);
+        defaultMixCount = pref->getIntegerPreference("preferences", "defaultmixcount", 2);
+        defaultPlaybackCount = pref->getIntegerPreference("preferences", "defaultplaybackcount", 2);
+        // defaultUnitMode = pref->getIntegerPreference("preferences", "defaultunitmode", 0);
     }
     else {
         // The tab is used in project dialog
@@ -300,12 +300,12 @@ void ProjectWidget::apply()
 
         PreferencesTool *pref = frontend->getPreferences();
 
-        pref->setBasicPreference("defaultrecordingmode", defaultRecordingMode);
-        pref->setBasicPreference("defaultvideosource", defaultVideoSource);
-        pref->setBasicPreference("defaultmixmode", defaultMixMode);
-        pref->setBasicPreference("defaultmixcount", defaultMixCount);
-        pref->setBasicPreference("defaultplaybackcount", defaultPlaybackCount);
-        // pref->setBasicPreference("defaultunitmode", defaultUnitMode);
+        pref->setIntegerPreference("preferences", "defaultrecordingmode", defaultRecordingMode);
+        pref->setIntegerPreference("preferences", "defaultvideosource", defaultVideoSource);
+        pref->setIntegerPreference("preferences", "defaultmixmode", defaultMixMode);
+        pref->setIntegerPreference("preferences", "defaultmixcount", defaultMixCount);
+        pref->setIntegerPreference("preferences", "defaultplaybackcount", defaultPlaybackCount);
+        // pref->setIntegerPreference("preferences", "defaultunitmode", defaultUnitMode);
     }
     else {
         // The tab is used in project dialog

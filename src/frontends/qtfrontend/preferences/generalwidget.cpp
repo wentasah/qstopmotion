@@ -176,7 +176,7 @@ void GeneralWidget::initialize()
 
     PreferencesTool *pref = frontend->getPreferences();
 
-    QString actualLocale = pref->getBasicPreference("language", QString());
+    QString actualLocale = pref->getStringPreference("preferences", "language", QString());
     QVector<QString> locales = frontend->getLocales();
     for (int index = 0; index < locales.count(); index++) {
         if (actualLocale.compare(locales[index]) == 0) {
@@ -185,7 +185,7 @@ void GeneralWidget::initialize()
     }
     languageCombo->setCurrentIndex(actualLanguage);
 
-    actualButtonFunction = (PreferencesTool::captureButtonFunction)pref->getBasicPreference("capturebutton", PreferencesTool::captureButtonAfter);
+    actualButtonFunction = (PreferencesTool::captureButtonFunction)pref->getIntegerPreference("preferences", "capturebutton", PreferencesTool::captureButtonAfter);
     switch (actualButtonFunction) {
     case PreferencesTool::captureButtonBevor:
         setBevorButtonOn();
@@ -198,14 +198,14 @@ void GeneralWidget::initialize()
         break;
     }
 
-    actualVerticalGrid = pref->getBasicPreference("verticalgrid", false);
+    actualVerticalGrid = pref->getIntegerPreference("preferences", "verticalgrid", false);
     verticalGridCheck->setChecked(actualVerticalGrid);
-    actualVerticalSpin = pref->getBasicPreference("verticalspin", 5);
+    actualVerticalSpin = pref->getIntegerPreference("preferences", "verticalspin", 5);
     verticalGridSpin->setValue(actualVerticalSpin);
 
-    actualHorizontalGrid = pref->getBasicPreference("horizontalgrid", false);
+    actualHorizontalGrid = pref->getIntegerPreference("preferences", "horizontalgrid", false);
     horizontalGridCheck->setChecked(actualHorizontalGrid);
-    actualHorizontalSpin = pref->getBasicPreference("horizontalspin", 5);
+    actualHorizontalSpin = pref->getIntegerPreference("preferences", "horizontalspin", 5);
     horizontalGridSpin->setValue(actualHorizontalSpin);
 
     qDebug("GeneralWidget::initialize --> End");
@@ -232,7 +232,7 @@ void GeneralWidget::apply()
     if (actualLanguage != newLanguage)
     {
         QVector<QString> locales = frontend->getLocales();
-        pref->setBasicPreference("language", locales[newLanguage]);
+        pref->setStringPreference("preferences", "language", locales[newLanguage]);
         actualLanguage = newLanguage;
     }
 
@@ -250,7 +250,7 @@ void GeneralWidget::apply()
     {
         // Selection changed
         frontend->changeCaptureButtonFunction(newButtonFunction);
-        pref->setBasicPreference("capturebutton", newButtonFunction);
+        pref->setIntegerPreference("preferences", "capturebutton", newButtonFunction);
         actualButtonFunction = newButtonFunction;
     }
 
@@ -258,7 +258,7 @@ void GeneralWidget::apply()
     if (newVerticalGrid != actualVerticalGrid) {
         // Vertical grid changed
         frontend->setVerticalGrid(newVerticalGrid);
-        pref->setBasicPreference("verticalgrid", newVerticalGrid);
+        pref->setIntegerPreference("preferences", "verticalgrid", newVerticalGrid);
         actualVerticalGrid = newVerticalGrid;
     }
 
@@ -266,7 +266,7 @@ void GeneralWidget::apply()
     if (newVerticalSpin != actualVerticalSpin) {
         // Vertical spin changed
         frontend->setVerticalSpin(newVerticalSpin);
-        pref->setBasicPreference("verticalspin", newVerticalSpin);
+        pref->setIntegerPreference("preferences", "verticalspin", newVerticalSpin);
         actualVerticalSpin = newVerticalSpin;
     }
 
@@ -274,7 +274,7 @@ void GeneralWidget::apply()
     if (newHorizontalGrid != actualHorizontalGrid) {
         // Horizontal grid changed
         frontend->setHorizontalGrid(newHorizontalGrid);
-        pref->setBasicPreference("horizontalgrid", newHorizontalGrid);
+        pref->setIntegerPreference("preferences", "horizontalgrid", newHorizontalGrid);
         actualHorizontalGrid = newHorizontalGrid;
     }
 
@@ -282,7 +282,7 @@ void GeneralWidget::apply()
     if (newHorizontalSpin != actualHorizontalSpin) {
         // Horizontal spin changed
         frontend->setHorizontalSpin(newHorizontalSpin);
-        pref->setBasicPreference("horizontalspin", newHorizontalSpin);
+        pref->setIntegerPreference("preferences", "horizontalspin", newHorizontalSpin);
         actualHorizontalSpin = newHorizontalSpin;
     }
 

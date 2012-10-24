@@ -71,19 +71,26 @@ PreferencesTool::PreferencesTool(Frontend *f)
 
 PreferencesTool::~PreferencesTool()
 {
+    PreferencesElement *element;
+
     cleanTree();
     if (doc != NULL) {
         delete(doc);
         doc = NULL;
     }
+    for (int elementIndex = 0 ; elementIndex < elements.count() ; elementIndex++) {
+        element = elements[elementIndex];
+        delete(element);
+        elements[elementIndex] = NULL;
+    }
 }
 
-bool PreferencesTool::setPreferencesFile(const QString &filePath, const QString &version)
+bool PreferencesTool::setPreferencesFile(const QString &filePath, const QString &newVersion)
 {
     qDebug("PreferencesTool::setPreferencesFile --> Start");
 
-    QDomElement  rootElement;
     QDomElement  element;
+    PreferencesElement *prefElement;
     QString      currentVersion;
     QString      errorStr;
     int          errorLine;
@@ -122,15 +129,13 @@ bool PreferencesTool::setPreferencesFile(const QString &filePath, const QString 
         if (element.nodeName().compare("version") == 0) {
             versionElement = element;
         }
-        if (element.nodeName().compare("preferences") == 0) {
-            preferencesElement = element;
-        }
-        if (element.nodeName().compare("encoders") == 0) {
-            encodersElement = element;
-        }
         if (element.nodeName().compare("projects") == 0) {
             projectsElement = element;
         }
+        // No special element, add to preferences element vector
+        prefElement = new PreferencesElement(element.nodeName(), element);
+        elements.append(prefElement);
+
         element = element.nextSiblingElement();
     }
     if (versionElement.isNull()) {
@@ -146,14 +151,14 @@ bool PreferencesTool::setPreferencesFile(const QString &filePath, const QString 
         goto FileCorrupt;
     }
 
-    if (currentVersion.compare(version) != 0) {
+    if (currentVersion.compare(newVersion) != 0) {
         //The version in the file is wrong
-        oldVersion.clear();;
-        oldVersion.append(currentVersion);
+        version.clear();
+        version.append(currentVersion);
         goto FileCorrupt;
     }
 
-    if (preferencesElement.isNull()) {
+    if (findPreferencesElement("preferences") == NULL) {
         qWarning("PreferencesTool::setPreferencesFile --> Error while parsing preferences file");
         goto FileCorrupt;
     }
@@ -178,10 +183,8 @@ FileCorrupt:
     // versionElement.setAttribute("version", version);
     QDomText versionText = doc->createTextNode(version);
     versionElement.appendChild(versionText);
-    preferencesElement = doc->createElement("preferences");
-    rootElement.appendChild(preferencesElement);
-    encodersElement = doc->createElement("encoders");
-    rootElement.appendChild(encodersElement);
+    // preferencesElement = doc->createElement("preferences");
+    // rootElement.appendChild(preferencesElement);
     projectsElement = doc->createElement("projects");
     rootElement.appendChild(projectsElement);
 
@@ -204,139 +207,135 @@ void PreferencesTool::setVersion(const QString &version)
 }
 
 
-const QString PreferencesTool::getOldVersion()
+const QString PreferencesTool::getVersion()
 {
-    return oldVersion;
+    return version;
 }
 
 
-bool PreferencesTool::setBasicPreference(const QString &key, const QString &attribute, bool flushLater)
+bool PreferencesTool::setStringPreference(const QString &name, const QString &key, const QString &attribute, bool flushLater)
 {
     checkInitialized();
-    QDomElement element = findPreferencesNode(key);
+    PreferencesElement *element = findPreferencesElement(name);
 
-    if (element.isNull()) {
-        element = doc->createElement(key);
-        preferencesElement.appendChild(element);
-    } else {
-        // Remove all existing text nodes
-        QDomNode node = element.firstChild();
-        while (!node.isNull()) {
-            if (node.isText())
-                element.removeChild(node);
-            node = node.nextSibling();
-        }
+    if (element == NULL) {
+        QDomElement elementDom = doc->createElement(name);
+        rootElement.appendChild(elementDom);
+        element = new PreferencesElement(name, elementDom);
+        elements.append(element);
+    }
+    else {
+        element->setStringPreference(key, attribute);
     }
 
-    QDomText newText = doc->createTextNode(attribute);
-    element.appendChild(newText);
-
-    if (!flushLater)
+    if (!flushLater) {
         flushPreferences();
+    }
+
     return true;
 }
 
 
-bool PreferencesTool::setBasicPreference(const QString &key, const int attribute, bool flushLater)
+const QString PreferencesTool::getStringPreference(const QString &name, const QString &key, const QString &defaultValue)
 {
     checkInitialized();
-    QDomElement element = findPreferencesNode(key);
+    PreferencesElement *element = findPreferencesElement(name);
 
-    if (element.isNull()) {
-        element = doc->createElement(key);
-        preferencesElement.appendChild(element);
-    } else {
-        // Remove all existing text nodes
-        QDomNode node = element.firstChild();
-        while (!node.isNull()) {
-            if (node.isText())
-                element.removeChild(node);
-            node = node.nextSibling();
-        }
+    if (element != NULL) {
+        return element->getStringPreference(key, defaultValue);
     }
 
-    QDomText newText = doc->createTextNode(QString("%1").arg(attribute));
-    element.appendChild(newText);
+    return defaultValue;
+}
 
-    if (!flushLater)
+
+bool PreferencesTool::setIntegerPreference(const QString &name, const QString &key, const int attribute, bool flushLater)
+{
+    checkInitialized();
+    PreferencesElement *element = findPreferencesElement(name);
+
+    if (element == NULL) {
+        QDomElement elementDom = doc->createElement(name);
+        rootElement.appendChild(elementDom);
+        element = new PreferencesElement(name, elementDom);
+        elements.append(element);
+    }
+    else {
+        element->setIntegerPreference(key, attribute);
+    }
+
+    if (!flushLater) {
         flushPreferences();
+    }
+
     return true;
 }
 
 
-const QString PreferencesTool::getBasicPreference(const QString &key, const QString &defaultValue)
+int PreferencesTool::getIntegerPreference(const QString &name, const QString &key, const int defaultValue)
 {
     checkInitialized();
-    QDomElement node = findPreferencesNode(key);
-    if (!node.isNull()) {
-        return node.text();
+    PreferencesElement *element = findPreferencesElement(name);
+
+    if (element != NULL) {
+        return element->getIntegerPreference(key, defaultValue);
     }
+
     return defaultValue;
 }
 
 
-int PreferencesTool::getBasicPreference(const QString &key, const int defaultValue)
+void PreferencesTool::removePreference(const QString &name, const QString &key)
 {
     checkInitialized();
-    QDomElement node = findPreferencesNode(key);
-    if (!node.isNull()) {
-        QString tmp = node.text();
-        return tmp.toInt();
-    }
-    return defaultValue;
-}
+    PreferencesElement *element = findPreferencesElement(name);
 
-
-void PreferencesTool::removeBasicPreference(const QString &key)
-{
-    checkInitialized();
-    QDomElement keyNode = findPreferencesNode(key);
-    if (!keyNode.isNull()) {
-        QDomElement parent = keyNode.parentNode().toElement();
-        parent.removeChild(keyNode);
+    if (element != NULL) {
+        element->removePreference(key);
         flushPreferences();
     }
 }
 
 
-QDomElement PreferencesTool::findPreferencesNode(const QString &key)
+PreferencesElement* PreferencesTool::findPreferencesElement(const QString &name)
 {
-    //Search through the preferences for the element with a key which
-    //equals the key parameter.
-    QDomElement element = preferencesElement.firstChildElement();
-    while (!element.isNull()) {
-        QString elementName = element.nodeName();
-        if (elementName.compare(key) == 0)
-            break;
-        element = element.nextSiblingElement();
+    // Search through the preference elements for the element with name which
+    // equals the name parameter.
+    PreferencesElement* element;
+
+    for (int elementIndex = 0 ; elementIndex < elements.count() ; elementIndex++) {
+        element = elements[elementIndex];
+        if (element->getName().compare(name) == 0) {
+            return element;
+        }
     }
-    return element;
+    return NULL;
 }
 
 
 void PreferencesTool::setBasicPreferenceDefaults()
 {
     // General defaults
-    setBasicPreference("language", "en");
-    setBasicPreference("capturebutton", captureButtonAfter);
+    setStringPreference("preferences", "language", "en");
+    setIntegerPreference("preferences", "capturebutton", captureButtonAfter);
     // Project defaults
-    setBasicPreference("defaultrecordingmode", 0);
-    setBasicPreference("defaultvideosource", 0);
-    setBasicPreference("defaultmixmode", 0);
-    setBasicPreference("defaultmixcount", 2);
-    setBasicPreference("defaultplaybackcount", 5);
+    setIntegerPreference("preferences", "defaultrecordingmode", 0);
+    setIntegerPreference("preferences", "defaultvideosource", 0);
+    setIntegerPreference("preferences", "defaultmixmode", 0);
+    setIntegerPreference("preferences", "defaultmixcount", 2);
+    setIntegerPreference("preferences", "defaultplaybackcount", 5);
     // Image import defaults
-    setBasicPreference("defaultgrabbersource", ImageGrabberDevice::testSource);
-    setBasicPreference("defaultimageformat", ImageGrabber::jpegFormat);
-    setBasicPreference("defaultimagesize", ImageGrabber::defaultSize);
-    setBasicPreference("defaulttransformation", true);
-    setBasicPreference("defaultimageadjustment", ImageGrabber::centerDown);
+    setIntegerPreference("preferences", "defaultgrabbersource", ImageGrabberDevice::testSource);
+    setIntegerPreference("preferences", "defaultimageformat", ImageGrabber::jpegFormat);
+    setIntegerPreference("preferences", "defaultimagesize", ImageGrabber::defaultSize);
+    setIntegerPreference("preferences", "defaulttransformation", true);
+    setIntegerPreference("preferences", "defaultimageadjustment", ImageGrabber::centerDown);
     // Video export defaults
-    setBasicPreference("defaultencoderapplication", VideoEncoder::noneApplication);
-    setBasicPreference("defaultvideoformat", VideoEncoder::mp4Format);
-    setBasicPreference("defaultvideosize", VideoEncoder::defaultSize);
-    setBasicPreference("defaultframespersecond", 12);
-    setBasicPreference("defaultusedefaultoutputfile", false);
+    setIntegerPreference("preferences", "defaultencoderapplication", VideoEncoder::noneApplication);
+    setIntegerPreference("preferences", "defaultvideoformat", VideoEncoder::mp4Format);
+    setIntegerPreference("preferences", "defaultvideosize", VideoEncoder::defaultSize);
+    setIntegerPreference("preferences", "defaultframespersecond", 12);
+    setIntegerPreference("preferences", "defaultusedefaultoutputfile", false);
 }
 
 
@@ -358,7 +357,6 @@ void PreferencesTool::addProject(const QString &filename)
 
     // Insert the new project as first project in the list
     projectsElement.insertBefore(newProject, projectsElement.firstChild());
-
 }
 
 

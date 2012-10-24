@@ -668,23 +668,23 @@ void DomainFacade::setProjectSettingsToDefault()
     PreferencesTool *pref = frontend->getPreferences();
 
     // Project preferences
-    setVideoSource(pref->getBasicPreference("defaultsource", 0));
-    setMixMode(pref->getBasicPreference("defaultmixingmode", 0));
-    setMixCount(pref->getBasicPreference("defaultmixcount", 0));
-    setPlaybackCount(pref->getBasicPreference("defaultplaybackcount", 0));
-    setUnitMode(pref->getBasicPreference("defaultunitmode", 0));
+    setVideoSource(pref->getIntegerPreference("preferences", "defaultsource", 0));
+    setMixMode(pref->getIntegerPreference("preferences", "defaultmixingmode", 0));
+    setMixCount(pref->getIntegerPreference("preferences", "defaultmixcount", 0));
+    setPlaybackCount(pref->getIntegerPreference("preferences", "defaultplaybackcount", 0));
+    setUnitMode(pref->getIntegerPreference("preferences", "defaultunitmode", 0));
     // Image import preferences
-    setGrabberSource(pref->getBasicPreference("defaultgrabbersource", ImageGrabberDevice::testSource));
-    setImageFormat(pref->getBasicPreference("defaultimageformat", ImageGrabber::jpegFormat));
-    setImageSize(pref->getBasicPreference("defaultimagesize", ImageGrabber::defaultSize));
-    setImageTransformation(pref->getBasicPreference("defaulttransformation", false));
-    setImageAdjustment(pref->getBasicPreference("defaultimageadjustment", ImageGrabber::centerDown));
+    setGrabberSource(pref->getIntegerPreference("preferences", "defaultgrabbersource", ImageGrabberDevice::testSource));
+    setImageFormat(pref->getIntegerPreference("preferences", "defaultimageformat", ImageGrabber::jpegFormat));
+    setImageSize(pref->getIntegerPreference("preferences", "defaultimagesize", ImageGrabber::defaultSize));
+    setImageTransformation(pref->getIntegerPreference("preferences", "defaulttransformation", false));
+    setImageAdjustment(pref->getIntegerPreference("preferences", "defaultimageadjustment", ImageGrabber::centerDown));
     // Video export preferences
-    setEncoderApplication(pref->getBasicPreference("defaultencoderapplication", VideoEncoder::noneApplication));
-    setVideoFormat(pref->getBasicPreference("defaultvideoformat", VideoEncoder::noneFormat));
-    setVideoSize(pref->getBasicPreference("defaultvideosize", VideoEncoder::defaultSize));
-    setFramesPerSecond(pref->getBasicPreference("defaultframespersecond", 12));
-    setUseDefaultOutputFile(pref->getBasicPreference("defaultusedefaultoutputfile", false));
+    setEncoderApplication(pref->getIntegerPreference("preferences", "defaultencoderapplication", VideoEncoder::noneApplication));
+    setVideoFormat(pref->getIntegerPreference("preferences", "defaultvideoformat", VideoEncoder::noneFormat));
+    setVideoSize(pref->getIntegerPreference("preferences", "defaultvideosize", VideoEncoder::defaultSize));
+    setFramesPerSecond(pref->getIntegerPreference("preferences", "defaultframespersecond", 12));
+    setUseDefaultOutputFile(pref->getIntegerPreference("preferences", "defaultusedefaultoutputfile", false));
 }
 
 

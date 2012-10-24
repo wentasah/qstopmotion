@@ -153,7 +153,7 @@ const QString FfmpegEncoder::getStartCommand() const
     startCommand.append(QString(" -r 25"));
 
     // Video size (default = Input size)
-    switch(pref->getBasicPreference("videosize", VideoEncoder::defaultSize)) {
+    switch(pref->getIntegerPreference("preferences", "videosize", VideoEncoder::defaultSize)) {
     case VideoEncoder::qvgaSize:
         startCommand.append(" -s qvga");
         break;
@@ -175,7 +175,7 @@ const QString FfmpegEncoder::getStartCommand() const
     }
 
     // Video format
-    switch(pref->getBasicPreference("videoformat", VideoEncoder::noneFormat)) {
+    switch(pref->getIntegerPreference("preferences", "videoformat", VideoEncoder::noneFormat)) {
     case VideoEncoder::aviFormat:
         startCommand.append(" -f avi");
         break;

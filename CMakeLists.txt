@@ -1,7 +1,7 @@
 ###############################################################################
 # CMake file for the qStopMotion project                                      #
 # (c) Ralf Lange, longsoft.de                                                 #
-# Last update: 2012-10-11                                                     #
+# Last update: 2012-10-22                                                     #
 #                                                                             #
 # Usage:                                                                      #
 #   * Qt-Creator (Windows, Linux)                                             #
@@ -136,6 +136,7 @@ set(MOC_HEADERS
     src/frontends/qtfrontend/tooltabs/recordingtab.h
     src/frontends/qtfrontend/tooltabs/viewtab.h
     src/technical/externalchangemonitor.h
+    src/technical/preferenceselement.h
     src/technical/preferencestool.h
     src/technical/grabber/gphotograbber.h
     src/technical/grabber/gstreamerdevicegrabber.h
@@ -205,6 +206,7 @@ set(SOURCES
     src/frontends/qtfrontend/tooltabs/recordingtab.cpp
     src/frontends/qtfrontend/tooltabs/viewtab.cpp
     src/technical/externalchangemonitor.cpp
+    src/technical/preferenceselement.cpp
     src/technical/preferencestool.cpp
     src/technical/util.cpp
     src/technical/grabber/gphotograbber.cpp

@@ -64,10 +64,10 @@ QtFrontend::~QtFrontend()
     // Save the size and position of the application
     QSize appSize = mw->size();
     QPoint appPos = mw->pos();
-    preferencesTool->setBasicPreference("applicationsizeheight", appSize.height());
-    preferencesTool->setBasicPreference("applicationsizewidth", appSize.width());
-    preferencesTool->setBasicPreference("applicationposx", appPos.x());
-    preferencesTool->setBasicPreference("applicationposy", appPos.y());
+    preferencesTool->setIntegerPreference("preferences", "applicationsizeheight", appSize.height());
+    preferencesTool->setIntegerPreference("preferences", "applicationsizewidth", appSize.width());
+    preferencesTool->setIntegerPreference("preferences", "applicationposx", appPos.x());
+    preferencesTool->setIntegerPreference("preferences", "applicationposy", appPos.y());
 
     // Cleanup the memory
     delete mw;
@@ -284,10 +284,10 @@ void QtFrontend::init()
     // Restore the size and position of the application
     QSize appSize;
     QPoint appPos;
-    appSize.setHeight(preferencesTool->getBasicPreference("applicationsizeheight", 593));
-    appSize.setWidth(preferencesTool->getBasicPreference("applicationsizewidth", 751));
-    appPos.setX(preferencesTool->getBasicPreference("applicationposx", 80));
-    appPos.setY(preferencesTool->getBasicPreference("applicationposy", 20));
+    appSize.setHeight(preferencesTool->getIntegerPreference("preferences", "applicationsizeheight", 593));
+    appSize.setWidth(preferencesTool->getIntegerPreference("preferences", "applicationsizewidth", 751));
+    appPos.setX(preferencesTool->getIntegerPreference("preferences", "applicationposx", 80));
+    appPos.setY(preferencesTool->getIntegerPreference("preferences", "applicationposy", 20));
 
     // Was the last position on a not existing second screen?
     if (appPos.x() > QApplication::desktop()->width()) {

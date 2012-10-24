@@ -237,11 +237,11 @@ void ExportWidget::initialize()
     // Read eEncoder preferences
     if (tabType) {
         // This is a general dialog tab
-        activeEncoderApplication = pref->getBasicPreference("defaultencoderapplication", VideoEncoder::noneApplication);
-        activeVideoFormat = pref->getBasicPreference("defaultvideoformat", VideoEncoder::mp4Format);
-        activeVideoSize = pref->getBasicPreference("defaultvideosize", VideoEncoder::defaultSize);
-        activeFramesPerSecond = pref->getBasicPreference("defaultframespersecond", 12);
-        activeUseDefaultOutputFile = pref->getBasicPreference("defaultusedefaultoutputfile", false);
+        activeEncoderApplication = pref->getIntegerPreference("preferences", "defaultencoderapplication", VideoEncoder::noneApplication);
+        activeVideoFormat = pref->getIntegerPreference("preferences", "defaultvideoformat", VideoEncoder::mp4Format);
+        activeVideoSize = pref->getIntegerPreference("preferences", "defaultvideosize", VideoEncoder::defaultSize);
+        activeFramesPerSecond = pref->getIntegerPreference("preferences", "defaultframespersecond", 12);
+        activeUseDefaultOutputFile = pref->getIntegerPreference("preferences", "defaultusedefaultoutputfile", false);
     }
     else {
         // This is a project dialog tab
@@ -360,11 +360,11 @@ void ExportWidget::apply()
     if (changings) {
         if (tabType) {
             // This is a general dialog tab
-            pref->setBasicPreference("defaultencoderapplication", activeEncoderApplication);
-            pref->setBasicPreference("defaultvideoformat", activeVideoFormat);
-            pref->setBasicPreference("defaultvideosize", activeVideoSize);
-            pref->setBasicPreference("defaultframespersecond", activeFramesPerSecond);
-            pref->setBasicPreference("defaultusedefaultoutputfile", activeUseDefaultOutputFile);
+            pref->setIntegerPreference("preferences", "defaultencoderapplication", activeEncoderApplication);
+            pref->setIntegerPreference("preferences", "defaultvideoformat", activeVideoFormat);
+            pref->setIntegerPreference("preferences", "defaultvideosize", activeVideoSize);
+            pref->setIntegerPreference("preferences", "defaultframespersecond", activeFramesPerSecond);
+            pref->setIntegerPreference("preferences", "defaultusedefaultoutputfile", activeUseDefaultOutputFile);
         }
         else {
             // This is a project dialog tab

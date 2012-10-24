@@ -24,9 +24,11 @@
 #define PREFERENCESTOOL_H
 
 #include <frontends/frontend.h>
+#include <technical/preferenceselement.h>
 
 #include <QtCore/QObject>
 #include <QtCore/QString>
+#include <QtCore/QVector>
 #include <QtXml/QDomDocument>
 #include <QtXml/QDomElement>
 
@@ -181,16 +183,16 @@ public:
      * @return the version number of the preference file or 0 if
      * there are no version tag.
      */
-    const QString getOldVersion();
+    const QString getVersion();
 
     /**
      * Flushes the preferences to the file specified with setPreferencesFile(..).
-     * @return true if the preferences were succesfully saved.
      */
     void flushPreferences();
 
     /**
      * Adds a string preference.
+     * @param name The element name for the key for retrieving the preference.
      * @param key the key for retrieving the preference.
      * @param attribute the attribute for the preference.
      * @param flushLater true if you don't want the preferencesTool to flush
@@ -201,48 +203,44 @@ public:
      * @return true if the preference was succesfully saved. If flushLater is
      * set to true this function will return true automaticaly.
      */
-    bool setBasicPreference(const QString &key, const QString &attribute, bool flushLater = false);
-
-    /**
-     * Adds an int preference.
-     * @param key the key for retrieving the preference.
-     * @param attribute the attribute for the preference.
-     * @param flushLater true if you don't want the preferencesTool to flush
-     * the preferences to disk at once. This is given for to allow
-     * optimalization when several preferences ar saved at the same time.
-     * flushPreferences() should be called at once after the preferences are
-     * set to store them to disk.
-     * @return true if the preference was succesfully saved. If flushLater is
-     * set to true this function will return true automaticaly.
-     */
-    bool setBasicPreference(const QString &key, const int attribute, bool flushLater = false);
+    bool setStringPreference(const QString &name, const QString &key, const QString &attribute, bool flushLater = false);
 
     /**
      * Retrieves a string preference.
+     * @param name The element name for the key for retrieving the preference.
      * @param key the key of the preference to retrieve.
      * @param defaultValue a default value for preferences which aren't set
      * by the user yet.
      * @return the attribute for the given key or "defaultValue" if the key
      * wasn't found.
      */
-    const QString getBasicPreference(const QString &key, const QString &defaultValue);
+    const QString getStringPreference(const QString &name, const QString &key, const QString &defaultValue);
+
+    /**
+     * Adds an int preference.
+     * @param name The element name for the key for retrieving the preference.
+     * @param key the key for retrieving the preference.
+     * @param attribute the attribute for the preference.
+     * @param flushLater true if you don't want the preferencesTool to flush
+     * the preferences to disk at once. This is given for to allow
+     * optimalization when several preferences ar saved at the same time.
+     * flushPreferences() should be called at once after the preferences are
+     * set to store them to disk.
+     * @return true if the preference was succesfully saved. If flushLater is
+     * set to true this function will return true automaticaly.
+     */
+    bool setIntegerPreference(const QString &name, const QString &key, const int attribute, bool flushLater = false);
 
     /**
      * Retrieves an int preference.
+     * @param name The element name for the key for retrieving the preference.
      * @param key the key of the preference to retrieve.
      * @param defaultValue a default value for preferences which aren't set
      * by the user yet.
      * @return the attribute for the given key or "defaultValue" if the key
      * wasn't found.
      */
-    int getBasicPreference(const QString &key, const int defaultValue);
-
-    /**
-     * Removes the preference with the key "key". (Which, in practice, means
-     * setting it to default).
-     * @param key the key of the preference to remove.
-     */
-    void removeBasicPreference(const QString &key);
+    int getIntegerPreference(const QString &name, const QString &key, const int defaultValue);
 
     /**
      * Set the default preferences
@@ -276,30 +274,57 @@ private:
     /**
      * The frontend of the application.
      */
-    Frontend     *frontend;
+    Frontend *frontend;
 
+    /**
+     * The path to the preferences file.
+     */
+    QString preferencesFile;
+
+    /**
+     * Version of the preferences.
+     */
+    QString version;
+
+    /**
+     * The DOM document for the preferences file.
+     */
     QDomDocument *doc;
-    QDomElement   preferencesElement;
-    QDomElement   versionElement;
-    QDomElement   encodersElement;
-    QDomElement   projectsElement;
-
-    QString       preferencesFile;
-    QString       oldVersion;
 
     /**
-     * Retrieves the node with key "key".
-     * @param key the key of the node to retrieve.
-     * @return the node with the given key.
+     * The root element of the DOM document.
      */
-    QDomElement findPreferencesNode(const QString &key);
+    QDomElement rootElement;
 
     /**
-     * Retrieves the encoder node with key "key".
-     * @param key the key of the node to retrieve.
-     * @return the node with the given key.
+     * The version element of the DOM document.
      */
-    QDomElement findEncodersNode(const QString &key);
+    QDomElement versionElement;
+
+    /**
+     * The project element of the DOM document.
+     */
+    QDomElement projectsElement;
+
+    /**
+     * The vector for all other elements of the DOM document.
+     */
+    QVector<PreferencesElement*> elements;
+
+    /**
+     * Removes the preference with the key "key". (Which, in practice, means
+     * setting it to default).
+     * @param name The element name for the key for retrieving the preference.
+     * @param key the key of the preference to remove.
+     */
+    void removePreference(const QString &name, const QString &key);
+
+    /**
+     * Retrieves the preferences element with name "name".
+     * @param name The element name for the preferences element for retrieving.
+     * @return the preferences element with the given name.
+     */
+    PreferencesElement *findPreferencesElement(const QString &name);
 
     /**
      * Retrieves the project node with key "key".

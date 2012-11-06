@@ -21,6 +21,7 @@
  ******************************************************************************/
 
 #include "cameracontrollerdialog.h"
+#include "technical/preferencestool.h"
 
 #include <QtCore/QtDebug>
 #include <QtCore/QUrl>
@@ -161,8 +162,12 @@ void CameraControllerDialog::init()
 {
     qDebug() << "CameraControllerDialog::init --> Start";
 
+    QString deviceId = grabberController->getDevice()->getDeviceId();
+    PreferencesTool *preferences = frontend->getPreferences();
+
     if (grabberController->isBrightness()) {
         stepBrightness = fillComboBox(brightnessComboBox, grabberController->getMaximumBrightness());
+        brightnessComboBox->setCurrentIndex(preferences->getIntegerPreference(deviceId, "brigthtness", brightnessComboBox->count()/2));
     }
     else {
         brightnessLabel->hide();
@@ -171,6 +176,7 @@ void CameraControllerDialog::init()
 
     if (grabberController->isContrast()) {
         stepContrast = fillComboBox(contrastComboBox, grabberController->getMaximumContrast());
+        contrastComboBox->setCurrentIndex(preferences->getIntegerPreference(deviceId, "contrast", contrastComboBox->count()/2));
     }
     else {
         contrastLabel->hide();
@@ -179,6 +185,7 @@ void CameraControllerDialog::init()
 
     if (grabberController->isSaturation()) {
         stepSaturation = fillComboBox(saturationComboBox, grabberController->getMaximumSaturation());
+        saturationComboBox->setCurrentIndex(preferences->getIntegerPreference(deviceId, "saturation", saturationComboBox->count()/2));
     }
     else {
         saturationLabel->hide();
@@ -187,6 +194,7 @@ void CameraControllerDialog::init()
 
     if (grabberController->isHue()) {
         stepHue = fillComboBox(hueComboBox, grabberController->getMaximumHue());
+        hueComboBox->setCurrentIndex(preferences->getIntegerPreference(deviceId, "hue", hueComboBox->count()/2));
     }
     else {
         hueLabel->hide();
@@ -195,6 +203,7 @@ void CameraControllerDialog::init()
 
     if (grabberController->isGamma()) {
         stepGamma = fillComboBox(gammaComboBox, grabberController->getMaximumGamma());
+        gammaComboBox->setCurrentIndex(preferences->getIntegerPreference(deviceId, "gamma", gammaComboBox->count()/2));
     }
     else {
         gammaLabel->hide();
@@ -203,6 +212,7 @@ void CameraControllerDialog::init()
 
     if (grabberController->isSharpness()) {
         stepSharpness = fillComboBox(sharpnessComboBox, grabberController->getMaximumSharpness());
+        sharpnessComboBox->setCurrentIndex(preferences->getIntegerPreference(deviceId, "sharpness", sharpnessComboBox->count()/2));
     }
     else {
         sharpnessLabel->hide();
@@ -211,6 +221,7 @@ void CameraControllerDialog::init()
 
     if (grabberController->isBacklight()) {
         stepBacklight = fillComboBox(backlightComboBox, grabberController->getMaximumSharpness());
+        backlightComboBox->setCurrentIndex(preferences->getIntegerPreference(deviceId, "backlight", backlightComboBox->count()/2));
     }
     else {
         backlightLabel->hide();
@@ -219,12 +230,14 @@ void CameraControllerDialog::init()
 
     if (grabberController->isAutomaticExposure()) {
         exposureLabel->hide();
+        exposureCheckBox->setChecked(preferences->getIntegerPreference(deviceId, "automaticexposure", false));
     }
     else {
         exposureCheckBox->hide();
     }
     if (grabberController->isExposure()) {
         stepExposure = fillComboBox(exposureComboBox, grabberController->getMaximumExposure());
+        exposureComboBox->setCurrentIndex(preferences->getIntegerPreference(deviceId, "exposure", exposureComboBox->count()/2));
     }
     else {
         exposureLabel->hide();
@@ -233,12 +246,14 @@ void CameraControllerDialog::init()
 
     if (grabberController->isAutomaticWhite()) {
         whiteLabel->hide();
+        whiteCheckBox->setChecked(preferences->getIntegerPreference(deviceId, "automaticwhite", false));
     }
     else {
         whiteCheckBox->hide();
     }
     if (grabberController->isWhite()) {
         stepWhite = fillComboBox(whiteComboBox, grabberController->getMaximumWhite());
+        whiteComboBox->setCurrentIndex(preferences->getIntegerPreference(deviceId, "white", whiteComboBox->count()/2));
     }
     else {
         whiteLabel->hide();
@@ -247,12 +262,14 @@ void CameraControllerDialog::init()
 
     if (grabberController->isAutomaticZoom()) {
         zoomLabel->hide();
+        zoomCheckBox->setChecked(preferences->getIntegerPreference(deviceId, "automaticzoom", false));
     }
     else {
         zoomCheckBox->hide();
     }
     if (grabberController->isZoom()) {
         stepZoom = fillComboBox(zoomComboBox, grabberController->getMaximumZoom());
+        zoomComboBox->setCurrentIndex(preferences->getIntegerPreference(deviceId, "zoom", zoomComboBox->count()/2));
     }
     else {
         zoomLabel->hide();
@@ -261,12 +278,14 @@ void CameraControllerDialog::init()
 
     if (grabberController->isAutomaticFocus()) {
         focusLabel->hide();
+        focusCheckBox->setChecked(preferences->getIntegerPreference(deviceId, "automaticfocus", false));
     }
     else {
         focusCheckBox->hide();
     }
     if (grabberController->isFocus()) {
         stepFocus = fillComboBox(focusComboBox, grabberController->getMaximumFocus());
+        focusComboBox->setCurrentIndex(preferences->getIntegerPreference(deviceId, "focus", focusComboBox->count()/2));
     }
     else {
         focusLabel->hide();
@@ -281,6 +300,8 @@ void CameraControllerDialog::changeBrightness(int index)
 {
     qDebug() << "CameraControllerDialog::changeBrightness --> Start";
 
+    QString deviceId = grabberController->getDevice()->getDeviceId();
+    PreferencesTool *preferences = frontend->getPreferences();
     int value = index * stepBrightness;
     int maxValue = grabberController->getMaximumBrightness();
 
@@ -288,6 +309,7 @@ void CameraControllerDialog::changeBrightness(int index)
         value = maxValue;
     }
     grabberController->setBrightness(value);
+    preferences->setIntegerPreference(deviceId, "brigthtness", index);
 
     qDebug() << "CameraControllerDialog::changeBrightness --> End";
 }
@@ -297,6 +319,8 @@ void CameraControllerDialog::changeContrast(int index)
 {
     qDebug() << "CameraControllerDialog::changeContrast --> Start";
 
+    QString deviceId = grabberController->getDevice()->getDeviceId();
+    PreferencesTool *preferences = frontend->getPreferences();
     int value = index * stepContrast;
     int maxValue = grabberController->getMaximumContrast();
 
@@ -304,6 +328,7 @@ void CameraControllerDialog::changeContrast(int index)
         value = maxValue;
     }
     grabberController->setContrast(value);
+    preferences->setIntegerPreference(deviceId, "contrast", index);
 
     qDebug() << "CameraControllerDialog::changeContrast --> End";
 }
@@ -313,6 +338,8 @@ void CameraControllerDialog::changeSaturation(int index)
 {
     qDebug() << "CameraControllerDialog::changeSaturation --> Start";
 
+    QString deviceId = grabberController->getDevice()->getDeviceId();
+    PreferencesTool *preferences = frontend->getPreferences();
     int value = index * stepSaturation;
     int maxValue = grabberController->getMaximumSaturation();
 
@@ -320,6 +347,7 @@ void CameraControllerDialog::changeSaturation(int index)
         value = maxValue;
     }
     grabberController->setSaturation(value);
+    preferences->setIntegerPreference(deviceId, "saturation", index);
 
     qDebug() << "CameraControllerDialog::changeSaturation --> End";
 }
@@ -329,6 +357,8 @@ void CameraControllerDialog::changeHue(int index)
 {
     qDebug() << "CameraControllerDialog::changeHue --> Start";
 
+    QString deviceId = grabberController->getDevice()->getDeviceId();
+    PreferencesTool *preferences = frontend->getPreferences();
     int value = index * stepHue;
     int maxValue = grabberController->getMaximumHue();
 
@@ -336,6 +366,7 @@ void CameraControllerDialog::changeHue(int index)
         value = maxValue;
     }
     grabberController->setHue(value);
+    preferences->setIntegerPreference(deviceId, "hue", index);
 
     qDebug() << "CameraControllerDialog::changeHue --> End";
 }
@@ -345,6 +376,8 @@ void CameraControllerDialog::changeGamma(int index)
 {
     qDebug() << "CameraControllerDialog::changeGamma --> Start";
 
+    QString deviceId = grabberController->getDevice()->getDeviceId();
+    PreferencesTool *preferences = frontend->getPreferences();
     int value = index * stepGamma;
     int maxValue = grabberController->getMaximumGamma();
 
@@ -352,6 +385,7 @@ void CameraControllerDialog::changeGamma(int index)
         value = maxValue;
     }
     grabberController->setGamma(value);
+    preferences->setIntegerPreference(deviceId, "gamma", index);
 
     qDebug() << "CameraControllerDialog::changeGamma --> End";
 }
@@ -361,6 +395,8 @@ void CameraControllerDialog::changeSharpness(int index)
 {
     qDebug() << "CameraControllerDialog::changeSharpness --> Start";
 
+    QString deviceId = grabberController->getDevice()->getDeviceId();
+    PreferencesTool *preferences = frontend->getPreferences();
     int value = index * stepSharpness;
     int maxValue = grabberController->getMaximumSharpness();
 
@@ -368,6 +404,7 @@ void CameraControllerDialog::changeSharpness(int index)
         value = maxValue;
     }
     grabberController->setSharpness(value);
+    preferences->setIntegerPreference(deviceId, "sharpness", index);
 
     qDebug() << "CameraControllerDialog::changeSharpness --> End";
 }
@@ -377,6 +414,8 @@ void CameraControllerDialog::changeBacklight(int index)
 {
     qDebug() << "CameraControllerDialog::changeBacklight --> Start";
 
+    QString deviceId = grabberController->getDevice()->getDeviceId();
+    PreferencesTool *preferences = frontend->getPreferences();
     int value = index * stepBacklight;
     int maxValue = grabberController->getMaximumBacklight();
 
@@ -384,6 +423,7 @@ void CameraControllerDialog::changeBacklight(int index)
         value = maxValue;
     }
     grabberController->setBacklight(value);
+    preferences->setIntegerPreference(deviceId, "backlight", index);
 
     qDebug() << "CameraControllerDialog::changeBacklight --> End";
 }
@@ -393,13 +433,18 @@ void CameraControllerDialog::changeAutoExposure(int newState)
 {
     qDebug() << "CameraControllerDialog::changeAutoExposure --> Start";
 
+    QString deviceId = grabberController->getDevice()->getDeviceId();
+    PreferencesTool *preferences = frontend->getPreferences();
+
     if (newState) {
         exposureComboBox->setEnabled(false);
         grabberController->setAutomaticExposure(true);
+        preferences->setIntegerPreference(deviceId, "automaticexposure", true);
     }
     else {
         exposureComboBox->setEnabled(true);
         grabberController->setAutomaticExposure(false);
+        preferences->setIntegerPreference(deviceId, "automaticexposure", false);
     }
 
     qDebug() << "CameraControllerDialog::changeAutoExposure --> End";
@@ -410,6 +455,8 @@ void CameraControllerDialog::changeExposure(int index)
 {
     qDebug() << "CameraControllerDialog::changeExposure --> Start";
 
+    QString deviceId = grabberController->getDevice()->getDeviceId();
+    PreferencesTool *preferences = frontend->getPreferences();
     int value = index * stepExposure;
     int maxValue = grabberController->getMaximumExposure();
 
@@ -417,6 +464,7 @@ void CameraControllerDialog::changeExposure(int index)
         value = maxValue;
     }
     grabberController->setExposure(value);
+    preferences->setIntegerPreference(deviceId, "exposure", index);
 
     qDebug() << "CameraControllerDialog::changeExposure --> End";
 }
@@ -426,13 +474,18 @@ void CameraControllerDialog::changeAutoWhite(int newState)
 {
     qDebug() << "CameraControllerDialog::changeAutoWhite --> Start";
 
+    QString deviceId = grabberController->getDevice()->getDeviceId();
+    PreferencesTool *preferences = frontend->getPreferences();
+
     if (newState) {
         whiteComboBox->setEnabled(false);
         grabberController->setAutomaticWhite(true);
+        preferences->setIntegerPreference(deviceId, "automaticwhite", true);
     }
     else {
         whiteComboBox->setEnabled(true);
         grabberController->setAutomaticWhite(false);
+        preferences->setIntegerPreference(deviceId, "automaticwhite", false);
     }
 
     qDebug() << "CameraControllerDialog::changeAutoWhite --> End";
@@ -443,6 +496,8 @@ void CameraControllerDialog::changeWhite(int index)
 {
     qDebug() << "CameraControllerDialog::changeWhite --> Start";
 
+    QString deviceId = grabberController->getDevice()->getDeviceId();
+    PreferencesTool *preferences = frontend->getPreferences();
     int value = index * stepWhite;
     int maxValue = grabberController->getMaximumWhite();
 
@@ -450,6 +505,7 @@ void CameraControllerDialog::changeWhite(int index)
         value = maxValue;
     }
     grabberController->setWhite(value);
+    preferences->setIntegerPreference(deviceId, "white", index);
 
     qDebug() << "CameraControllerDialog::changeWhite --> End";
 }
@@ -459,13 +515,18 @@ void CameraControllerDialog::changeAutoZoom(int newState)
 {
     qDebug() << "CameraControllerDialog::changeAutoZoo --> Start";
 
+    QString deviceId = grabberController->getDevice()->getDeviceId();
+    PreferencesTool *preferences = frontend->getPreferences();
+
     if (newState) {
         zoomComboBox->setEnabled(false);
         grabberController->setAutomaticZoom(true);
+        preferences->setIntegerPreference(deviceId, "automaticzoom", true);
     }
     else {
         zoomComboBox->setEnabled(true);
         grabberController->setAutomaticZoom(false);
+        preferences->setIntegerPreference(deviceId, "automaticzoom", false);
     }
 
     qDebug() << "CameraControllerDialog::changeAutoZoo --> End";
@@ -476,6 +537,8 @@ void CameraControllerDialog::changeZoom(int index)
 {
     qDebug() << "CameraControllerDialog::changeZoo --> Start";
 
+    QString deviceId = grabberController->getDevice()->getDeviceId();
+    PreferencesTool *preferences = frontend->getPreferences();
     int value = index * stepZoom;
     int maxValue = grabberController->getMaximumZoom();
 
@@ -483,6 +546,7 @@ void CameraControllerDialog::changeZoom(int index)
         value = maxValue;
     }
     grabberController->setZoom(value);
+    preferences->setIntegerPreference(deviceId, "zoom", index);
 
     qDebug() << "CameraControllerDialog::changeZoo --> End";
 }
@@ -492,13 +556,18 @@ void CameraControllerDialog::changeAutoFocus(int newState)
 {
     qDebug() << "CameraControllerDialog::changeAutoFocus --> Start";
 
+    QString deviceId = grabberController->getDevice()->getDeviceId();
+    PreferencesTool *preferences = frontend->getPreferences();
+
     if (newState) {
         focusComboBox->setEnabled(false);
         grabberController->setAutomaticFocus(true);
+        preferences->setIntegerPreference(deviceId, "automaticfocus", true);
     }
     else {
         focusComboBox->setEnabled(true);
         grabberController->setAutomaticFocus(false);
+        preferences->setIntegerPreference(deviceId, "automaticfocus", false);
     }
 
     qDebug() << "CameraControllerDialog::changeAutoFocus --> End";
@@ -509,6 +578,8 @@ void CameraControllerDialog::changeFocus(int index)
 {
     qDebug() << "CameraControllerDialog::changeFocus --> Start";
 
+    QString deviceId = grabberController->getDevice()->getDeviceId();
+    PreferencesTool *preferences = frontend->getPreferences();
     int value = index * stepFocus;
     int maxValue = grabberController->getMaximumFocus();
 
@@ -516,6 +587,7 @@ void CameraControllerDialog::changeFocus(int index)
         value = maxValue;
     }
     grabberController->setFocus(value);
+    preferences->setIntegerPreference(deviceId, "focus", index);
 
     qDebug() << "CameraControllerDialog::changeFocus --> End";
 }

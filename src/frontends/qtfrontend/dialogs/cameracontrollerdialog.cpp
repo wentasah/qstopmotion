@@ -49,6 +49,8 @@ CameraControllerDialog::CameraControllerDialog(Frontend *f,
     stepWhite = -1;
     stepZoom = -1;
     stepFocus = -1;
+    stepPan = -1;
+    stepTilt = -1;
 
     this->setWindowTitle(tr("qStopMotion Camera Controller"));
     this->setMinimumSize(200, 500);
@@ -58,62 +60,100 @@ CameraControllerDialog::CameraControllerDialog(Frontend *f,
     brightnessLabel = new QLabel(tr("Brightness:"));
     brightnessComboBox = new QComboBox();
     connect(brightnessComboBox, SIGNAL(activated(int)), this, SLOT(changeBrightness(int)));
+    brightnessLabel->hide();
+    brightnessComboBox->hide();
 
     contrastLabel = new QLabel(tr("Contrast:"));
     contrastComboBox = new QComboBox();
     connect(contrastComboBox, SIGNAL(activated(int)), this, SLOT(changeContrast(int)));
+    contrastLabel->hide();
+    contrastComboBox->hide();
 
     saturationLabel = new QLabel(tr("Saturation:"));
     saturationComboBox = new QComboBox();
     connect(saturationComboBox, SIGNAL(activated(int)), this, SLOT(changeSaturation(int)));
+    saturationLabel->hide();
+    saturationComboBox->hide();
 
     hueLabel = new QLabel(tr("Hue:"));
     hueComboBox = new QComboBox();
     connect(hueComboBox, SIGNAL(activated(int)), this, SLOT(changeHue(int)));
+    hueLabel->hide();
+    hueComboBox->hide();
 
     gammaLabel = new QLabel(tr("Gamma:"));
     gammaComboBox = new QComboBox();
     connect(gammaComboBox, SIGNAL(activated(int)), this, SLOT(changeGamma(int)));
+    gammaLabel->hide();
+    gammaComboBox->hide();
 
     sharpnessLabel = new QLabel(tr("Sharpness:"));
     sharpnessComboBox = new QComboBox();
     connect(sharpnessComboBox, SIGNAL(activated(int)), this, SLOT(changeSharpness(int)));
+    sharpnessLabel->hide();
+    sharpnessComboBox->hide();
 
     backlightLabel = new QLabel(tr("Backlight Compensation:"));
     backlightComboBox = new QComboBox();
     connect(backlightComboBox, SIGNAL(activated(int)), this, SLOT(changeBacklight(int)));
+    backlightLabel->hide();
+    backlightComboBox->hide();
 
     exposureCheckBox = new QCheckBox(tr("Automatic Exposure"));
     exposureCheckBox->setChecked(false);
     connect(exposureCheckBox, SIGNAL(stateChanged(int)), this, SLOT(changeAutoExposure(int)));
+    exposureCheckBox->hide();
 
     exposureLabel = new QLabel(tr("Exposure:"));
     exposureComboBox = new QComboBox();
     connect(exposureComboBox, SIGNAL(activated(int)), this, SLOT(changeExposure(int)));
+    exposureLabel->hide();
+    exposureComboBox->hide();
 
     whiteCheckBox = new QCheckBox(tr("Automatic White Balance"));
     whiteCheckBox->setChecked(false);
     connect(whiteCheckBox, SIGNAL(stateChanged(int)), this, SLOT(changeAutoWhite(int)));
+    whiteCheckBox->hide();
 
     whiteLabel = new QLabel(tr("White Balance:"));
     whiteComboBox = new QComboBox();
     connect(whiteComboBox, SIGNAL(activated(int)), this, SLOT(changeWhite(int)));
+    whiteLabel->hide();
+    whiteComboBox->hide();
 
     zoomCheckBox = new QCheckBox(tr("Automatic Zoom"));
     zoomCheckBox->setChecked(false);
     connect(zoomCheckBox, SIGNAL(stateChanged(int)), this, SLOT(changeAutoZoom(int)));
+    zoomCheckBox->hide();
 
     zoomLabel = new QLabel(tr("Zoom:"));
     zoomComboBox = new QComboBox();
     connect(zoomComboBox, SIGNAL(activated(int)), this, SLOT(changeZoom(int)));
+    zoomLabel->hide();
+    zoomComboBox->hide();
 
     focusCheckBox = new QCheckBox(tr("Automatic Focus"));
     focusCheckBox->setChecked(false);
     connect(focusCheckBox, SIGNAL(stateChanged(int)), this, SLOT(changeAutoFocus(int)));
+    focusCheckBox->hide();
 
     focusLabel = new QLabel(tr("Focus:"));
     focusComboBox = new QComboBox();
     connect(focusComboBox, SIGNAL(activated(int)), this, SLOT(changeFocus(int)));
+    focusLabel->hide();
+    focusComboBox->hide();
+
+    panLabel = new QLabel(tr("Pan:"));
+    panComboBox = new QComboBox();
+    connect(panComboBox, SIGNAL(activated(int)), this, SLOT(changePan(int)));
+    panLabel->hide();
+    panComboBox->hide();
+
+    tiltLabel = new QLabel(tr("Tilt:"));
+    tiltComboBox = new QComboBox();
+    connect(tiltComboBox, SIGNAL(activated(int)), this, SLOT(changeTilt(int)));
+    tiltLabel->hide();
+    tiltComboBox->hide();
 
     closeButton = new QPushButton(tr("&Close"));
     connect(closeButton, SIGNAL(clicked()), this, SLOT(reject()));
@@ -150,6 +190,10 @@ CameraControllerDialog::CameraControllerDialog(Frontend *f,
     mainLayout->addWidget(focusCheckBox);
     mainLayout->addWidget(focusLabel);
     mainLayout->addWidget(focusComboBox);
+    mainLayout->addWidget(panLabel);
+    mainLayout->addWidget(panComboBox);
+    mainLayout->addWidget(tiltLabel);
+    mainLayout->addWidget(tiltComboBox);
     mainLayout->addStretch();
     mainLayout->addLayout(bottomLayout);
     this->setLayout(mainLayout);
@@ -162,134 +206,129 @@ void CameraControllerDialog::init()
 {
     qDebug() << "CameraControllerDialog::init --> Start";
 
+    if (grabberController->getDevice() == NULL) {
+        // No device
+        return;
+    }
+
     QString deviceId = grabberController->getDevice()->getDeviceId();
     PreferencesTool *preferences = frontend->getPreferences();
 
     if (grabberController->isBrightness()) {
+        brightnessLabel->show();
+        brightnessComboBox->show();
         stepBrightness = fillComboBox(brightnessComboBox, grabberController->getMaximumBrightness());
         brightnessComboBox->setCurrentIndex(preferences->getIntegerPreference(deviceId, "brigthtness", brightnessComboBox->count()/2));
     }
-    else {
-        brightnessLabel->hide();
-        brightnessComboBox->hide();
-    }
 
     if (grabberController->isContrast()) {
+        contrastLabel->show();
+        contrastComboBox->show();
         stepContrast = fillComboBox(contrastComboBox, grabberController->getMaximumContrast());
         contrastComboBox->setCurrentIndex(preferences->getIntegerPreference(deviceId, "contrast", contrastComboBox->count()/2));
     }
-    else {
-        contrastLabel->hide();
-        contrastComboBox->hide();
-    }
 
     if (grabberController->isSaturation()) {
+        saturationLabel->show();
+        saturationComboBox->show();
         stepSaturation = fillComboBox(saturationComboBox, grabberController->getMaximumSaturation());
         saturationComboBox->setCurrentIndex(preferences->getIntegerPreference(deviceId, "saturation", saturationComboBox->count()/2));
     }
-    else {
-        saturationLabel->hide();
-        saturationComboBox->hide();
-    }
 
     if (grabberController->isHue()) {
+        hueLabel->show();
+        hueComboBox->show();
         stepHue = fillComboBox(hueComboBox, grabberController->getMaximumHue());
         hueComboBox->setCurrentIndex(preferences->getIntegerPreference(deviceId, "hue", hueComboBox->count()/2));
     }
-    else {
-        hueLabel->hide();
-        hueComboBox->hide();
-    }
 
     if (grabberController->isGamma()) {
+        gammaLabel->show();
+        gammaComboBox->show();
         stepGamma = fillComboBox(gammaComboBox, grabberController->getMaximumGamma());
         gammaComboBox->setCurrentIndex(preferences->getIntegerPreference(deviceId, "gamma", gammaComboBox->count()/2));
     }
-    else {
-        gammaLabel->hide();
-        gammaComboBox->hide();
-    }
 
     if (grabberController->isSharpness()) {
+        sharpnessLabel->show();
+        sharpnessComboBox->show();
         stepSharpness = fillComboBox(sharpnessComboBox, grabberController->getMaximumSharpness());
         sharpnessComboBox->setCurrentIndex(preferences->getIntegerPreference(deviceId, "sharpness", sharpnessComboBox->count()/2));
     }
-    else {
-        sharpnessLabel->hide();
-        sharpnessComboBox->hide();
-    }
 
     if (grabberController->isBacklight()) {
+        backlightLabel->show();
+        backlightComboBox->show();
         stepBacklight = fillComboBox(backlightComboBox, grabberController->getMaximumSharpness());
         backlightComboBox->setCurrentIndex(preferences->getIntegerPreference(deviceId, "backlight", backlightComboBox->count()/2));
     }
-    else {
-        backlightLabel->hide();
-        backlightComboBox->hide();
-    }
 
     if (grabberController->isAutomaticExposure()) {
-        exposureLabel->hide();
+        exposureCheckBox->show();
         exposureCheckBox->setChecked(preferences->getIntegerPreference(deviceId, "automaticexposure", false));
     }
     else {
-        exposureCheckBox->hide();
-    }
-    if (grabberController->isExposure()) {
-        stepExposure = fillComboBox(exposureComboBox, grabberController->getMaximumExposure());
-        exposureComboBox->setCurrentIndex(preferences->getIntegerPreference(deviceId, "exposure", exposureComboBox->count()/2));
-    }
-    else {
-        exposureLabel->hide();
-        exposureComboBox->hide();
+        if (grabberController->isExposure()) {
+            exposureLabel->show();
+            exposureComboBox->show();
+            stepExposure = fillComboBox(exposureComboBox, grabberController->getMaximumExposure());
+            exposureComboBox->setCurrentIndex(preferences->getIntegerPreference(deviceId, "exposure", exposureComboBox->count()/2));
+        }
     }
 
     if (grabberController->isAutomaticWhite()) {
-        whiteLabel->hide();
+        whiteCheckBox->show();
         whiteCheckBox->setChecked(preferences->getIntegerPreference(deviceId, "automaticwhite", false));
     }
     else {
-        whiteCheckBox->hide();
-    }
-    if (grabberController->isWhite()) {
-        stepWhite = fillComboBox(whiteComboBox, grabberController->getMaximumWhite());
-        whiteComboBox->setCurrentIndex(preferences->getIntegerPreference(deviceId, "white", whiteComboBox->count()/2));
-    }
-    else {
-        whiteLabel->hide();
-        whiteComboBox->hide();
+        if (grabberController->isWhite()) {
+            whiteLabel->show();
+            whiteComboBox->show();
+            stepWhite = fillComboBox(whiteComboBox, grabberController->getMaximumWhite());
+            whiteComboBox->setCurrentIndex(preferences->getIntegerPreference(deviceId, "white", whiteComboBox->count()/2));
+        }
     }
 
     if (grabberController->isAutomaticZoom()) {
-        zoomLabel->hide();
+        zoomCheckBox->show();
         zoomCheckBox->setChecked(preferences->getIntegerPreference(deviceId, "automaticzoom", false));
     }
     else {
-        zoomCheckBox->hide();
-    }
-    if (grabberController->isZoom()) {
-        stepZoom = fillComboBox(zoomComboBox, grabberController->getMaximumZoom());
-        zoomComboBox->setCurrentIndex(preferences->getIntegerPreference(deviceId, "zoom", zoomComboBox->count()/2));
-    }
-    else {
-        zoomLabel->hide();
-        zoomComboBox->hide();
+        if (grabberController->isZoom()) {
+            zoomLabel->show();
+            zoomComboBox->show();
+            stepZoom = fillComboBox(zoomComboBox, grabberController->getMaximumZoom());
+            zoomComboBox->setCurrentIndex(preferences->getIntegerPreference(deviceId, "zoom", zoomComboBox->count()/2));
+        }
     }
 
     if (grabberController->isAutomaticFocus()) {
-        focusLabel->hide();
+        focusCheckBox->show();
         focusCheckBox->setChecked(preferences->getIntegerPreference(deviceId, "automaticfocus", false));
     }
     else {
-        focusCheckBox->hide();
+        if (grabberController->isFocus()) {
+            focusLabel->show();
+            focusComboBox->show();
+            stepFocus = fillComboBox(focusComboBox, grabberController->getMaximumFocus());
+            focusComboBox->setCurrentIndex(preferences->getIntegerPreference(deviceId, "focus", focusComboBox->count()/2));
+        }
     }
-    if (grabberController->isFocus()) {
-        stepFocus = fillComboBox(focusComboBox, grabberController->getMaximumFocus());
-        focusComboBox->setCurrentIndex(preferences->getIntegerPreference(deviceId, "focus", focusComboBox->count()/2));
+
+    if (grabberController->isPan()) {
+        panLabel->show();
+        panComboBox->show();
+        stepPan = fillComboBox(panComboBox, grabberController->getMaximumPan());
+        panComboBox->setCurrentIndex(preferences->getIntegerPreference(deviceId, "pan", panComboBox->count()/2));
+    }
+
+    if (grabberController->isTilt()) {
+        tiltLabel->show();
+        tiltComboBox->show();
+        stepTilt = fillComboBox(tiltComboBox, grabberController->getMaximumTilt());
+        tiltComboBox->setCurrentIndex(preferences->getIntegerPreference(deviceId, "tilt", tiltComboBox->count()/2));
     }
     else {
-        focusLabel->hide();
-        focusComboBox->hide();
     }
 
     qDebug() << "CameraControllerDialog::init --> End";
@@ -590,6 +629,44 @@ void CameraControllerDialog::changeFocus(int index)
     preferences->setIntegerPreference(deviceId, "focus", index);
 
     qDebug() << "CameraControllerDialog::changeFocus --> End";
+}
+
+
+void CameraControllerDialog::changePan(int index)
+{
+    qDebug() << "CameraControllerDialog::changePan --> Start";
+
+    QString deviceId = grabberController->getDevice()->getDeviceId();
+    PreferencesTool *preferences = frontend->getPreferences();
+    int value = index * stepPan;
+    int maxValue = grabberController->getMaximumPan();
+
+    if (value > maxValue) {
+        value = maxValue;
+    }
+    grabberController->setPan(value);
+    preferences->setIntegerPreference(deviceId, "pan", index);
+
+    qDebug() << "CameraControllerDialog::changePan --> End";
+}
+
+
+void CameraControllerDialog::changeTilt(int index)
+{
+    qDebug() << "CameraControllerDialog::changeTilt --> Start";
+
+    QString deviceId = grabberController->getDevice()->getDeviceId();
+    PreferencesTool *preferences = frontend->getPreferences();
+    int value = index * stepTilt;
+    int maxValue = grabberController->getMaximumTilt();
+
+    if (value > maxValue) {
+        value = maxValue;
+    }
+    grabberController->setTilt(value);
+    preferences->setIntegerPreference(deviceId, "tilt", index);
+
+    qDebug() << "CameraControllerDialog::changeTilt --> End";
 }
 
 

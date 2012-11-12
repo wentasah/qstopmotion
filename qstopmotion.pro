@@ -1,7 +1,7 @@
 ###############################################################################
 # QtCreator file for the qStopMotion project                                  #
 # (c) Ralf Lange, longsoft.de                                                 #
-# Last update: 2012-06-24                                                     #
+# Last update: 2012-11-07                                                     #
 #                                                                             #
 # Please use CMake and the CMakeLists.txt file to build qStopMotion!          #
 ###############################################################################
@@ -80,6 +80,7 @@ HEADERS += src/config.h \
            src/technical/grabber/imagegrabberdevice.h \
            src/technical/grabber/imagegrabberfacade.h \
            src/technical/grabber/imagegrabberthread.h \
+           src/technical/grabber/windowsuvccontroller.h \
            src/technical/videoencoder/ffmpegencoder.h \
            src/technical/videoencoder/videoencoder.h \
            src/technical/videoencoder/videoencoderfactory.h
@@ -152,6 +153,7 @@ SOURCES += src/main.cpp \
            src/technical/grabber/imagegrabberdevice.cpp \
            src/technical/grabber/imagegrabberfacade.cpp \
            src/technical/grabber/imagegrabberthread.cpp \
+           src/technical/grabber/windowsuvccontroller.cpp \
            src/technical/videoencoder/ffmpegencoder.cpp \
            src/technical/videoencoder/videoencoder.cpp \
            src/technical/videoencoder/videoencoderfactory.cpp

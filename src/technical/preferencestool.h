@@ -62,6 +62,11 @@ public:
     static const QString applicationVersion;
 
     /**
+     * Version of the preferences
+     */
+    static const QString preferencesVersion;
+
+    /**
      * Relative to project or application directory
      */
     static const QString imageDirectory;

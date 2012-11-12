@@ -34,6 +34,7 @@
 
 const QString PreferencesTool::applicationName = QLatin1String("qstopmotion");
 const QString PreferencesTool::applicationVersion = QLatin1String("1.0.1");
+const QString PreferencesTool::preferencesVersion = QLatin1String("0.9");
 const QString PreferencesTool::preferencesSuffix = QLatin1String("qsmp");
 const QString PreferencesTool::preferencesName = QLatin1String("preferences");
 const QString PreferencesTool::projectSuffix = QLatin1String("qsmd");
@@ -128,9 +129,13 @@ bool PreferencesTool::setPreferencesFile(const QString &filePath, const QString 
     while (!element.isNull()) {
         if (element.nodeName().compare("version") == 0) {
             versionElement = element;
+            element = element.nextSiblingElement();
+            continue;
         }
         if (element.nodeName().compare("projects") == 0) {
             projectsElement = element;
+            element = element.nextSiblingElement();
+            continue;
         }
         // No special element, add to preferences element vector
         prefElement = new PreferencesElement(element.nodeName(), element);
@@ -469,6 +474,18 @@ void PreferencesTool::checkInitialized()
 
 void PreferencesTool::cleanTree()
 {
-    if (doc != NULL)
+    PreferencesElement *element;
+
+    if (doc != NULL) {
+        // rootElement = NULL;
+        // versionElement = NULL;
+        // projectsElement = NULL;
+        for (int elementIndex = 0 ; elementIndex < elements.count() ; elementIndex++) {
+            element = elements[elementIndex];
+            delete(element);
+            elements[elementIndex] = NULL;
+        }
+        elements.clear();
         doc->clear();
+    }
 }

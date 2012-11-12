@@ -580,7 +580,7 @@ void QtFrontend::initializePreferences()
     preferencesFile.append(QLatin1String("."));
     preferencesFile.append(PreferencesTool::preferencesSuffix);
 
-    if (!preferencesTool->setPreferencesFile(preferencesFile, "0.9")) {
+    if (!preferencesTool->setPreferencesFile(preferencesFile, PreferencesTool::preferencesVersion)) {
         // File doesn't exist or is corrupt
         setDefaultPreferences();
     }
@@ -593,6 +593,7 @@ void QtFrontend::setDefaultPreferences()
 {
     qDebug("QtFrontend::setDefaultPreferences --> Start");
 
+    preferencesTool->setVersion(PreferencesTool::preferencesVersion);
     preferencesTool->setBasicPreferenceDefaults();
     // preferencesTool->setEncoderDefaults();
 

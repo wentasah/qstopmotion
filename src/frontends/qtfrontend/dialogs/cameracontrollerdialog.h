@@ -153,6 +153,20 @@ private slots:
      */
     void changeFocus(int index);
 
+    /**
+     * Slot for notified the camera controller when the pan changes,
+     * so that pan can be updated.
+     * @param index the new pan value.
+     */
+    void changePan(int index);
+
+    /**
+     * Slot for notified the camera controller when the tilt changes,
+     * so that tilt can be updated.
+     * @param index the new tilt value.
+     */
+    void changeTilt(int index);
+
 private:
     /**
      * Fill the combobox with the values.
@@ -213,6 +227,14 @@ private:
     QLabel       *focusLabel;
     QComboBox    *focusComboBox;
     int           stepFocus;
+
+    QLabel       *panLabel;
+    QComboBox    *panComboBox;
+    int           stepPan;
+
+    QLabel       *tiltLabel;
+    QComboBox    *tiltComboBox;
+    int           stepTilt;
 
     QPushButton  *closeButton;
 };

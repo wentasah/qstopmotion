@@ -22,6 +22,7 @@
 #define GRABBERCONTROLLER_H
 
 #include "technical/grabber/imagegrabberdevice.h"
+#include "technical/grabber/grabbercontrolcapabilities.h"
 
 #include <QtCore/QString>
 #include <QtCore/QVector>
@@ -39,11 +40,12 @@ public:
     /**
      * Device controller capabilities
      */
-    enum grabberControllerCapabilities {
+    enum grabberControllerFlags {
         controller_none,
-        controller_1,
-        controller_2,
-        controller_3
+        controller_Auto,
+        controller_Manual,
+        controller_Relative,
+        controller_Absolute
     };
 
     /**
@@ -89,9 +91,9 @@ public:
 
     /**
      * Get the maximum value of the brightness.
-     * @return The maximum value of the brightness.
+     * @return The brightness control capabilities.
      */
-    int getMaximumBrightness();
+    GrabberControlCapabilities *getBrightnessCaps();
 
     /**
      * Get the current brightness value of the device.

@@ -1,0 +1,16 @@
+# use glob syntax.
+syntax: glob
+
+*.user
+*.bak
+*.bk
+*.tmp
+*.
+*~
+Thumbs.db
+
+ffmpeg/*
+qtruntime/*
+
+# switch to regexp syntax.
+syntax: regexp

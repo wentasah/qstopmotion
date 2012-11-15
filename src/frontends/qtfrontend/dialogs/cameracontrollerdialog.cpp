@@ -213,11 +213,15 @@ void CameraControllerDialog::init()
 
     QString deviceId = grabberController->getDevice()->getDeviceId();
     PreferencesTool *preferences = frontend->getPreferences();
+    // long min;
+    long max;
+    // long step;
 
     if (grabberController->isBrightness()) {
+        max = grabberController->getBrightnessCaps()->getMaximum();
         brightnessLabel->show();
         brightnessComboBox->show();
-        stepBrightness = fillComboBox(brightnessComboBox, grabberController->getMaximumBrightness());
+        stepBrightness = fillComboBox(brightnessComboBox, max);
         brightnessComboBox->setCurrentIndex(preferences->getIntegerPreference(deviceId, "brigthtness", brightnessComboBox->count()/2));
     }
 
@@ -341,8 +345,12 @@ void CameraControllerDialog::changeBrightness(int index)
 
     QString deviceId = grabberController->getDevice()->getDeviceId();
     PreferencesTool *preferences = frontend->getPreferences();
-    int value = index * stepBrightness;
-    int maxValue = grabberController->getMaximumBrightness();
+    // long minValue;
+    // long stepValue;
+    long maxValue;
+
+    maxValue = grabberController->getBrightnessCaps()->getMaximum();
+    long value = index * stepBrightness;
 
     if (value > maxValue) {
         value = maxValue;

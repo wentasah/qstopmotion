@@ -73,9 +73,9 @@ bool GrabberController::isBrightness()
 }
 
 
-int GrabberController::getMaximumBrightness()
+GrabberControlCapabilities *GrabberController::getBrightnessCaps()
 {
-    return 0;
+    return NULL;
 }
 
 

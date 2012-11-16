@@ -2,9 +2,12 @@
 syntax: glob
 
 *.user
+*.user.*
 *.bak
 *.bk
 *.tmp
+*.old
+*.converted
 *.
 *~
 Thumbs.db

@@ -27,14 +27,14 @@ GrabberControlCapabilities::GrabberControlCapabilities()
     maximum = 0L;
     step    = 0L;
     def     = 0L;
-    flags   = 0L;
+    flags   = control_none;
 }
 
-/*
+
 GrabberControlCapabilities::~GrabberControlCapabilities()
 {
 }
-*/
+
 
 long GrabberControlCapabilities::getMinimum()
 {
@@ -51,4 +51,10 @@ long GrabberControlCapabilities::getMaximum()
 long GrabberControlCapabilities::getStep()
 {
     return step;
+}
+
+
+long GrabberControlCapabilities::getFlags()
+{
+    return flags;
 }

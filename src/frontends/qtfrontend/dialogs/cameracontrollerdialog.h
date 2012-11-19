@@ -171,10 +171,10 @@ private:
     /**
      * Fill the combobox with the values.
      * @param comboBox The combo box to fill.
-     * @param maxValue The maximum value for the combo box.
+     * @param controlCaps The control capabilities.
      * @return The step lengt for the values of the combo box.
      */
-    int fillComboBox(QComboBox *comboBox, int maxValue);
+    int fillComboBox(QComboBox *comboBox, GrabberControlCapabilities *controlCaps);
 
     Frontend     *frontend;
 

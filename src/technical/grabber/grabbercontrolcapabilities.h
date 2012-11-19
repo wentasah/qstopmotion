@@ -70,6 +70,12 @@ public:
      */
     long getStep();
 
+    /**
+     * Get the flags value of the control
+     * @return The flags value of the control.
+     */
+    long getFlags();
+
 private:
 
     long minimum;

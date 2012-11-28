@@ -1,7 +1,7 @@
 ###############################################################################
 # CMake file for the qStopMotion project                                      #
 # (c) Ralf Lange, longsoft.de                                                 #
-# Last update: 2012-11-19                                                     #
+# Last update: 2012-11-28                                                     #
 #                                                                             #
 # Usage:                                                                      #
 #   * Qt-Creator (Windows, Linux)                                             #
@@ -236,9 +236,9 @@ set(SOURCES
 set(TRANSLATIONS
     translations/qstopmotion_de.ts
     translations/qstopmotion_fr.ts
+    translations/qstopmotion_da.ts
 #    translations/qstopmotion_br.ts
 #    translations/qstopmotion_cz.ts
-#    translations/qstopmotion_dk.ts
 #    translations/qstopmotion_es.ts
 #    translations/qstopmotion_fi.ts
 #    translations/qstopmotion_gr.ts
@@ -307,6 +307,8 @@ ENDIF(WIN32)
 ###############################################################################
 # gPhoto2 support
 #
+# (Only UNIX)
+#
 # used libraries: libgphoto2
 ###############################################################################
 
@@ -322,6 +324,26 @@ ELSE(UNIX)
     SET(GPHOTO2_LIBRARIES)
 
 ENDIF(UNIX)
+
+###############################################################################
+# DirectShow support
+#
+# (Only Windows)
+#
+# used libraries: strmiids.lib
+###############################################################################
+
+IF(WIN32)
+
+    SET(DIRECTSHOW_LIBRARIES
+        strmiids.lib      # ???
+    )
+
+ELSE(WIN32)
+
+    SET(DIRECTSHOW_LIBRARIES)
+
+ENDIF(WIN32)
 
 ###############################################################################
 # Directory definitions
@@ -431,6 +453,7 @@ target_link_libraries(
     ${QT_QTXML_LIBRARIES}
     ${GSTREAMER_LIBRARIES}
     ${GPHOTO2_LIBRARIES}
+    ${DIRECTSHOW_LIBRARIES}
 )
 
 add_definitions(${QT_DEFINITIONS})

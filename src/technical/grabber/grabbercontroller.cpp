@@ -46,6 +46,12 @@ GrabberController::~GrabberController()
 }
 
 
+bool GrabberController::init()
+{
+    return true;
+}
+
+
 ImageGrabberDevice* GrabberController::getDevice()
 {
     return device;

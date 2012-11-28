@@ -8,7 +8,9 @@ Update the translations of qStopMotion:
 2. start a command line and move to the project directory
 3. call lupdate qstopmotion.pro
 4. add, change or remove the translations in the ../translations/*.ts files using the Qt Liguist tool
-5. call lrelease qstopmotion.pro
+5. Uncomment the lines for the qt_*.ts files
+6. call lrelease qstopmotion.pro
+7. Comment out the lines for the qt_*.ts files
 
 Add a new laguage:
 1. add the qstopmotion_*.ts file for the new laguage in the qStopMotion.pro file

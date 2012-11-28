@@ -46,6 +46,12 @@ public:
      */
     ~GrabberDirectShowController();
 
+    /**
+     * Initialize the grabber controller.
+     * @return True if initialization is successful.
+     */
+    bool init();
+
     /**************************************************************************
      **************************************************************************
      * Camera capabilities

@@ -68,6 +68,12 @@ public:
     ImageGrabberDevice* getDevice();
 
     /**
+     * Initialize the grabber controller.
+     * @return True if initialization is successful.
+     */
+    bool init();
+
+    /**
      * Get the capabilities of the controller.
      * @return The capabilities of the controller.
      */

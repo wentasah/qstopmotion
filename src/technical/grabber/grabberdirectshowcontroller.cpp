@@ -20,6 +20,10 @@
 
 #include "grabberdirectshowcontroller.h"
 
+#include <dshow.h>
+#include <Ks.h>				// Required by KsMedia.h
+#include <KsMedia.h>		// For KSPROPERTY_CAMERACONTROL_FLAGS_*
+
 #include <QtCore/QtDebug>
 
 /**************************************************************************
@@ -41,6 +45,81 @@ GrabberDirectShowController::~GrabberDirectShowController()
     qDebug("GrabberDirectShowController::Destructor --> Start (Empty)");
 
     // qDebug("GrabberDirectShowController::Destructor --> End");
+}
+
+
+bool GrabberDirectShowController::init()
+{
+    qDebug("GrabberDirectShowController::init --> Start");
+
+    HRESULT hr;
+
+    printf("Enumerating video input devices ...\n");
+
+    // Create the System Device Enumerator.
+    ICreateDevEnum *pSysDevEnum = NULL;
+    hr = CoCreateInstance(CLSID_SystemDeviceEnum,
+                          NULL,
+                          CLSCTX_INPROC_SERVER,
+                          IID_ICreateDevEnum,
+                          (void **)&pSysDevEnum);
+    if(FAILED(hr))
+    {
+        qDebug("GrabberDirectShowController::Constructor --> Error end: Unable to create system device enumerator.\n");
+        return false;
+    }
+
+    // Obtain a class enumerator for the video input device category.
+    IEnumMoniker *pEnumCat = NULL;
+    hr = pSysDevEnum->CreateClassEnumerator(CLSID_VideoInputDeviceCategory, &pEnumCat, 0);
+
+    if(hr == S_OK)
+    {
+        // Enumerate the monikers.
+        IMoniker *pMoniker = NULL;
+        ULONG cFetched;
+        while(pEnumCat->Next(1, &pMoniker, &cFetched) == S_OK)
+        {
+            IPropertyBag *pPropBag;
+            hr = pMoniker->BindToStorage(NULL,
+                                         NULL,
+                                         IID_IPropertyBag,
+                                         (void **)&pPropBag);
+            if(SUCCEEDED(hr))
+            {
+                // To retrieve the filter's friendly name, do the following:
+                VARIANT varName;
+                VariantInit(&varName);
+                hr = pPropBag->Read(L"FriendlyName", &varName, 0);
+                if (SUCCEEDED(hr))
+                {
+                    // Display the name in your UI somehow.
+                    qDebug() << "GrabberDirectShowController::init --> Found device: " << varName.bstrVal;
+                }
+                VariantClear(&varName);
+
+                // To create an instance of the filter, do the following:
+                IBaseFilter *pFilter;
+                hr = pMoniker->BindToObject(NULL,
+                                            NULL,
+                                            IID_IBaseFilter,
+                                            (void**)&pFilter);
+
+                // Save the control capabilitries
+                // process_filter(pFilter);
+
+                // Remember to release pFilter later.
+                pPropBag->Release();
+            }
+            pMoniker->Release();
+        }
+        pEnumCat->Release();
+    }
+    pSysDevEnum->Release();
+
+    qDebug("GrabberDirectShowController::init --> End (Successful)");
+
+    return true;
 }
 
 

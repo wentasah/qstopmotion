@@ -1,7 +1,7 @@
 ###############################################################################
 # QtCreator file for the qStopMotion project                                  #
 # (c) Ralf Lange, longsoft.de                                                 #
-# Last update: 2012-11-19                                                     #
+# Last update: 2012-11-28                                                     #
 #                                                                             #
 # Please use CMake and the CMakeLists.txt file to build qStopMotion!          #
 ###############################################################################
@@ -39,6 +39,7 @@ HEADERS += src/config.h \
            src/frontends/qtfrontend/qtfrontend.h \
            src/frontends/qtfrontend/toolbar.h \
            src/frontends/qtfrontend/dialogs/aboutdialog.h \
+           src/frontends/qtfrontend/dialogs/cameracontrollerdialog.h \
            src/frontends/qtfrontend/dialogs/descriptiondialog.h \
            src/frontends/qtfrontend/dialogs/externalcommanddialog.h \
            src/frontends/qtfrontend/dialogs/helpbrowser.h \
@@ -55,14 +56,15 @@ HEADERS += src/config.h \
            src/frontends/qtfrontend/preferences/importwidget.h \
            src/frontends/qtfrontend/preferences/projectdialog.h \
            src/frontends/qtfrontend/preferences/projectwidget.h \
-           src/frontends/qtfrontend/timeline/timeline.h \
            src/frontends/qtfrontend/timeline/exposurethumbview.h \
            src/frontends/qtfrontend/timeline/thumbview.h \
+           src/frontends/qtfrontend/timeline/timeline.h \
            src/frontends/qtfrontend/tooltabs/compositingtab.h \
            src/frontends/qtfrontend/tooltabs/projecttab.h \
            src/frontends/qtfrontend/tooltabs/recordingtab.h \
            src/frontends/qtfrontend/tooltabs/viewtab.h \
            src/technical/externalchangemonitor.h \
+           src/technical/preferenceselement.h \
            src/technical/preferencestool.h \
            src/technical/util.h \
            src/technical/audio/audiodriver.h \
@@ -118,6 +120,7 @@ SOURCES += src/main.cpp \
            src/frontends/qtfrontend/qtfrontend.cpp \
            src/frontends/qtfrontend/toolbar.cpp \
            src/frontends/qtfrontend/dialogs/aboutdialog.cpp \
+           src/frontends/qtfrontend/dialogs/cameracontrollerdialog.cpp \
            src/frontends/qtfrontend/dialogs/descriptiondialog.cpp \
            src/frontends/qtfrontend/dialogs/externalcommanddialog.cpp \
            src/frontends/qtfrontend/dialogs/helpbrowser.cpp \
@@ -132,14 +135,15 @@ SOURCES += src/main.cpp \
            src/frontends/qtfrontend/preferences/importwidget.cpp \
            src/frontends/qtfrontend/preferences/projectdialog.cpp \
            src/frontends/qtfrontend/preferences/projectwidget.cpp \
-           src/frontends/qtfrontend/timeline/timeline.cpp \
            src/frontends/qtfrontend/timeline/exposurethumbview.cpp \
            src/frontends/qtfrontend/timeline/thumbview.cpp \
+           src/frontends/qtfrontend/timeline/timeline.cpp \
            src/frontends/qtfrontend/tooltabs/compositingtab.cpp \
            src/frontends/qtfrontend/tooltabs/projecttab.cpp \
            src/frontends/qtfrontend/tooltabs/recordingtab.cpp \
            src/frontends/qtfrontend/tooltabs/viewtab.cpp \
            src/technical/externalchangemonitor.cpp \
+           src/technical/preferenceselement.cpp \
            src/technical/preferencestool.cpp \
            src/technical/util.cpp \
            src/technical/grabber/gphotograbber.cpp \
@@ -163,9 +167,11 @@ SOURCES += src/main.cpp \
            src/technical/videoencoder/videoencoderfactory.cpp
 
 TRANSLATIONS += translations/qstopmotion_fr.ts \
+#                translations/qt_fr.ts \
 #                translations/qstopmotion_br.ts \
 #                translations/qstopmotion_cz.ts \
-#                translations/qstopmotion_dk.ts \
+                translations/qstopmotion_da.ts \
+#                translations/qt_da.ts \
 #                translations/qstopmotion_es.ts \
 #                translations/qstopmotion_fi.ts \
 #                translations/qstopmotion_gr.ts \
@@ -179,6 +185,7 @@ TRANSLATIONS += translations/qstopmotion_fr.ts \
 #                translations/qstopmotion_se.ts \
 #                translations/qstopmotion_sl.ts \
 #                translations/qstopmotion_tr.ts \
+#                translations/qt_de.ts \
                 translations/qstopmotion_de.ts
 
 DEPENDPATH += src

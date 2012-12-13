@@ -1,7 +1,7 @@
 ###############################################################################
 # CMake file for the qStopMotion project                                      #
 # (c) Ralf Lange, longsoft.de                                                 #
-# Last update: 2012-11-28                                                     #
+# Last update: 2012-12-13                                                     #
 #                                                                             #
 # Usage:                                                                      #
 #   * Qt-Creator (Windows, Linux)                                             #
@@ -77,14 +77,26 @@ set(HEADERS
     src/technical/audio/audioformat.h
     src/technical/grabber/grabbercontrolcapabilities.h
     src/technical/grabber/grabbercontroller.h
-    src/technical/grabber/grabberdirectshowcontroller.h
     src/technical/grabber/imagegrabberdevice.h
     src/technical/grabber/imagegrabberthread.h
-    src/technical/grabber/windowsuvccontroller.h
     src/technical/videoencoder/ffmpegencoder.h
     src/technical/videoencoder/videoencoder.h
     src/technical/videoencoder/videoencoderfactory.h
 )
+
+IF(WIN32)
+set(HEADERS
+    ${HEADERS}
+    src/technical/grabber/grabberdirectshowcontroller.h
+    src/technical/grabber/windowsuvccontroller.h
+)
+ENDIF(WIN32)
+
+# IF(UNIX)
+# set(HEADERS
+#     ${HEADERS}
+# )
+# ENDIF(UNIX)
 
 # add all header files of the project to MOC to MOC_HEADERS
 set(MOC_HEADERS
@@ -143,15 +155,27 @@ set(MOC_HEADERS
     src/technical/preferencestool.h
     src/technical/grabber/gphotograbber.h
     src/technical/grabber/gstreamerdevicegrabber.h
-    src/technical/grabber/gstreamerdirectshow1394grabber.h
-    src/technical/grabber/gstreamerdirectshowusbgrabber.h
-    src/technical/grabber/gstreamerdv1394grabber.h
     src/technical/grabber/gstreamergrabber.h
-    src/technical/grabber/gstreamerv4l2grabber.h
     src/technical/grabber/gstreamervideotestgrabber.h
     src/technical/grabber/imagegrabber.h
     src/technical/grabber/imagegrabberfacade.h
 )
+
+IF(WIN32)
+set(MOC_HEADERS
+    ${MOC_HEADERS}
+    src/technical/grabber/gstreamerdirectshow1394grabber.h
+    src/technical/grabber/gstreamerdirectshowusbgrabber.h
+)
+ENDIF(WIN32)
+
+IF(UNIX)
+set(MOC_HEADERS
+    ${MOC_HEADERS}
+    src/technical/grabber/gstreamerdv1394grabber.h
+    src/technical/grabber/gstreamerv4l2grabber.h
+)
+ENDIF(UNIX)
 
 # add all source files to SOURCES
 set(SOURCES
@@ -215,23 +239,35 @@ set(SOURCES
     src/technical/grabber/gphotograbber.cpp
     src/technical/grabber/grabbercontrolcapabilities.cpp
     src/technical/grabber/grabbercontroller.cpp
-    src/technical/grabber/grabberdirectshowcontroller.cpp
     src/technical/grabber/gstreamerdevicegrabber.cpp
-    src/technical/grabber/gstreamerdirectshow1394grabber.cpp
-    src/technical/grabber/gstreamerdirectshowusbgrabber.cpp
-    src/technical/grabber/gstreamerdv1394grabber.cpp
     src/technical/grabber/gstreamergrabber.cpp
-    src/technical/grabber/gstreamerv4l2grabber.cpp
     src/technical/grabber/gstreamervideotestgrabber.cpp
     src/technical/grabber/imagegrabber.cpp
     src/technical/grabber/imagegrabberdevice.cpp
     src/technical/grabber/imagegrabberfacade.cpp
     src/technical/grabber/imagegrabberthread.cpp
-    src/technical/grabber/windowsuvccontroller.cpp
     src/technical/videoencoder/ffmpegencoder.cpp
     src/technical/videoencoder/videoencoder.cpp
     src/technical/videoencoder/videoencoderfactory.cpp
 )
+
+IF(WIN32)
+set(SOURCES
+    ${SOURCES}
+    src/technical/grabber/grabberdirectshowcontroller.cpp
+    src/technical/grabber/gstreamerdirectshow1394grabber.cpp
+    src/technical/grabber/gstreamerdirectshowusbgrabber.cpp
+    src/technical/grabber/windowsuvccontroller.cpp
+)
+ENDIF(WIN32)
+
+IF(UNIX)
+set(SOURCES
+    ${SOURCES}
+    src/technical/grabber/gstreamerdv1394grabber.cpp
+    src/technical/grabber/gstreamerv4l2grabber.cpp
+)
+ENDIF(UNIX)
 
 set(TRANSLATIONS
     translations/qstopmotion_de.ts

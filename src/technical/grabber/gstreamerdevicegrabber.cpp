@@ -69,9 +69,9 @@ GstreamerDeviceGrabber::~GstreamerDeviceGrabber()
 }
 
 
-bool GstreamerDeviceGrabber::initializationSubclass(QVector<ImageGrabberDevice*> &devices)
+bool GstreamerDeviceGrabber::initialization(QVector<ImageGrabberDevice*> &devices)
 {
-    qDebug("GstreamerDeviceGrabber::initializationSubclass --> Start");
+    qDebug("GstreamerDeviceGrabber::initialization --> Start");
 
     const gchar *device_name = NULL;
     GstElementFactory *srcfactory = NULL;
@@ -90,7 +90,7 @@ bool GstreamerDeviceGrabber::initializationSubclass(QVector<ImageGrabberDevice*>
     device_size = devices.size();
 
 #ifdef Q_WS_X11
-    qDebug() << "GstreamerDeviceGrabber::initializationSubclass --> Check devices of dv1394src";
+    qDebug() << "GstreamerDeviceGrabber::initialization --> Check devices of dv1394src";
 
     device_name = "dv1394src";
     property_name = "device-name";
@@ -104,13 +104,13 @@ bool GstreamerDeviceGrabber::initializationSubclass(QVector<ImageGrabberDevice*>
     g_return_val_if_fail(srcfactory != NULL, false);
     src = gst_element_factory_create(srcfactory, "source");
     if (!src) {
-        qDebug() << "GstreamerDeviceGrabber::initializationSubclass --> Fatal: Can't create the source.";
+        qDebug() << "GstreamerDeviceGrabber::initialization --> Fatal: Can't create the source.";
     }
     g_return_val_if_fail(src != NULL, false);
 
     klass = G_OBJECT_GET_CLASS(src);
     if(!g_object_class_find_property(klass, property_id)) {
-        qDebug() << "GstreamerDeviceGrabber::initializationSubclass --> Fatal: Can't get class interface.";
+        qDebug() << "GstreamerDeviceGrabber::initialization --> Fatal: Can't get class interface.";
         gst_object_unref(GST_OBJECT(src));
         return false;
     }
@@ -118,19 +118,19 @@ bool GstreamerDeviceGrabber::initializationSubclass(QVector<ImageGrabberDevice*>
     if (GST_IS_PROPERTY_PROBE(src)) {
         probe = (GstPropertyProbe*)GST_PROPERTY_PROBE(src);
         if (!probe) {
-            qDebug() << "GstreamerDeviceGrabber::initializationSubclass --> Fatal: Can't get probe interface.";
+            qDebug() << "GstreamerDeviceGrabber::initialization --> Fatal: Can't get probe interface.";
             gst_object_unref(GST_OBJECT(src));
         }
 
         spec_id = gst_property_probe_get_property(probe, property_id);
         if(!spec_id) {
-            qDebug() << "GstreamerDeviceGrabber::initializationSubclass --> Fatal: Can't get device spec.";
+            qDebug() << "GstreamerDeviceGrabber::initialization --> Fatal: Can't get device spec.";
             gst_object_unref(GST_OBJECT(src));
         }
 
         values_id = gst_property_probe_probe_and_get_values(probe, spec_id);
         if(!values_id) {
-            qDebug() << "GstreamerDeviceGrabber::initializationSubclass --> Fatal: Can't get device id.";
+            qDebug() << "GstreamerDeviceGrabber::initialization --> Fatal: Can't get device id.";
             gst_object_unref(GST_OBJECT(src));
         }
 
@@ -140,7 +140,7 @@ bool GstreamerDeviceGrabber::initializationSubclass(QVector<ImageGrabberDevice*>
         }
 
         if (values_id != NULL) {
-            qDebug() << "GstreamerDeviceGrabber::initializationSubclass --> Check device count";
+            qDebug() << "GstreamerDeviceGrabber::initialization --> Check device count";
             for (unsigned int i = 0 ; i < values_id->n_values ; i++) {
                 // Handle the device id
                 GValue* value_id_pointer = g_value_array_get_nth(values_id, i);
@@ -149,7 +149,7 @@ bool GstreamerDeviceGrabber::initializationSubclass(QVector<ImageGrabberDevice*>
                 GValue value_name_string = {0,};
                 g_value_init(&value_name_string, G_TYPE_STRING);
                 if (!g_value_transform(value_id_pointer, &value_id_string)) {
-                    qDebug() << "GstreamerDeviceGrabber::initializationSubclass --> Fatal: Can't copy string.";
+                    qDebug() << "GstreamerDeviceGrabber::initialization --> Fatal: Can't copy string.";
                     gst_object_unref(GST_OBJECT(src));
                     return false;
                 }
@@ -158,7 +158,7 @@ bool GstreamerDeviceGrabber::initializationSubclass(QVector<ImageGrabberDevice*>
                     // Handle the device name
                     GValue* value_name_pointer = g_value_array_get_nth(values_name, i);
                     if (!g_value_transform(value_name_pointer, &value_name_string)) {
-                        qDebug() << "GstreamerDeviceGrabber::initializationSubclass --> Fatal: Can't copy string.";
+                        qDebug() << "GstreamerDeviceGrabber::initialization --> Fatal: Can't copy string.";
                         gst_object_unref(GST_OBJECT(src));
                         return false;
                     }
@@ -176,13 +176,13 @@ bool GstreamerDeviceGrabber::initializationSubclass(QVector<ImageGrabberDevice*>
                 }
                 // Add the device to the device list
                 devices.append(device);
-                qDebug() << "GstreamerDeviceGrabber::initializationSubclass --> device id " << i << " '" << devices[device_size]->getDeviceId() << "' (" << g_value_get_string(&value_id_string) << ")";
+                qDebug() << "GstreamerDeviceGrabber::initialization --> device id " << i << " '" << devices[device_size]->getDeviceId() << "' (" << g_value_get_string(&value_id_string) << ")";
                 if (values_name != NULL) {
-                    qDebug() << "GstreamerDeviceGrabber::initializationSubclass --> device name " << i << " '" << devices[device_size]->getDeviceName() << "' (" << g_value_get_string(&value_name_string) << ")";
+                    qDebug() << "GstreamerDeviceGrabber::initialization --> device name " << i << " '" << devices[device_size]->getDeviceName() << "' (" << g_value_get_string(&value_name_string) << ")";
                 }
                 else {
                     // No device name
-                    qDebug() << "GstreamerDeviceGrabber::initializationSubclass --> device name " << i << " '" << devices[device_size]->getDeviceName() << "' (empty)";
+                    qDebug() << "GstreamerDeviceGrabber::initialization --> device name " << i << " '" << devices[device_size]->getDeviceName() << "' (empty)";
                 }
             }
         }
@@ -199,17 +199,17 @@ bool GstreamerDeviceGrabber::initializationSubclass(QVector<ImageGrabberDevice*>
 
 #endif
 
-    qDebug() << "GstreamerDeviceGrabber::initializationSubclass --> device count: " << devices.size();
+    qDebug() << "GstreamerDeviceGrabber::initialization --> device count: " << devices.size();
 
-    qDebug("GstreamerDeviceGrabber::initializationSubclass --> End (true)");
+    qDebug("GstreamerDeviceGrabber::initialization --> End (true)");
 
     return true;
 }
 
 
-bool GstreamerDeviceGrabber::initSubclass()
+bool GstreamerDeviceGrabber::setUp()
 {
-    qDebug() << "GstreamerDeviceGrabber::initSubclass --> Start";
+    qDebug() << "GstreamerDeviceGrabber::setUp --> Start";
 
     GstBus *bus;
     int videoSource = frontend->getProject()->getVideoSource();
@@ -223,7 +223,7 @@ bool GstreamerDeviceGrabber::initSubclass()
     gst_bus_add_watch(bus, bus_callback, NULL);
     gst_object_unref(bus);
 
-    qDebug() << "GstreamerDeviceGrabber::initSubclass --> Build the pipeline: dv1394src ! queue ! dvdemux ! queue ! dvdec ! ffmpegcolorspace ! appsink";
+    qDebug() << "GstreamerDeviceGrabber::setUp --> Build the pipeline: dv1394src ! queue ! dvdemux ! queue ! dvdec ! ffmpegcolorspace ! appsink";
 
     // Examples:
     // gst-launch dv1394src ! video/x-dv ! dvdemux ! dvdec ! ffmpegcolorspace ! jpegenc ! multifilesink location=$IMAGEFILE
@@ -236,7 +236,7 @@ bool GstreamerDeviceGrabber::initSubclass()
 
     source = gst_element_factory_make("dv1394src", "source=dv1394src");
     if (!source) {
-        qDebug() << "GstreamerDeviceGrabber::initSubclass --> Fatal: Can't create the source.";
+        qDebug() << "GstreamerDeviceGrabber::setUp --> Fatal: Can't create the source.";
         return false;
     }
     // this property needs to be set before linking the element, where the device id configured in get_caps() */
@@ -245,53 +245,53 @@ bool GstreamerDeviceGrabber::initSubclass()
 
     filter1 = gst_element_factory_make("dvdemux", "filter1=dvdemux");
     if (!filter1) {
-        qDebug() << "GstreamerDeviceGrabber::initSubclass --> Fatal: Can't create the filter1.";
+        qDebug() << "GstreamerDeviceGrabber::setUp --> Fatal: Can't create the filter1.";
         return false;
     }
     g_object_set(G_OBJECT(filter1), "name", "d", NULL);
     queue1 = gst_element_factory_make("queue", "queue1=queue");
     if (!queue1) {
-        qDebug() << "GstreamerDeviceGrabber::initSubclass --> Fatal: Can't create the queue1.";
+        qDebug() << "GstreamerDeviceGrabber::setUp --> Fatal: Can't create the queue1.";
         return false;
     }
     filter2 = gst_element_factory_make("dvdec", "filter2=dvdec");
     if (!filter2) {
-        qDebug() << "GstreamerDeviceGrabber::initSubclass --> Fatal: Can't create the filter2.";
+        qDebug() << "GstreamerDeviceGrabber::setUp --> Fatal: Can't create the filter2.";
         return false;
     }
     queue2 = gst_element_factory_make("queue", "queue2=queue");
     if (!queue1) {
-        qDebug() << "GstreamerDeviceGrabber::initSubclass --> Fatal: Can't create the queue1.";
+        qDebug() << "GstreamerDeviceGrabber::setUp --> Fatal: Can't create the queue1.";
         return false;
     }
     /*
     filter3 = gst_element_factory_make("ffdeinterlace", "filter3=ffdeinterlace");
     if (!filter3) {
-        qDebug() << "GstreamerDeviceGrabber::initSubclass --> Fatal: Can't create the filter3.";
+        qDebug() << "GstreamerDeviceGrabber::setUp --> Fatal: Can't create the filter3.";
         return false;
     }
     */
     filter4 = gst_element_factory_make("ffmpegcolorspace", "filter4=ffmpegcolorspace");
     if (!filter4) {
-        qDebug() << "GstreamerDeviceGrabber::initSubclass --> Fatal: Can't create the filter4.";
+        qDebug() << "GstreamerDeviceGrabber::setUp --> Fatal: Can't create the filter4.";
         return false;
     }
     /*
     filter5 = gst_element_factory_make("jpegenc", "filter5=jpegenc");
     if (!filter5) {
-        qDebug() << "GstreamerDeviceGrabber::initSubclass --> Fatal: Can't create the filter5.";
+        qDebug() << "GstreamerDeviceGrabber::setUp --> Fatal: Can't create the filter5.";
         return false;
     }
     sink = gst_element_factory_make("multifilesink", "sink=multifilesink");
     if (!sink) {
-        qDebug() << "GstreamerDeviceGrabber::initSubclass --> Fatal: Can't create the sink.";
+        qDebug() << "GstreamerDeviceGrabber::setUp --> Fatal: Can't create the sink.";
         return false;
     }
     g_object_set(G_OBJECT (sink), "location", filePath.toLatin1().constData(), NULL);
     */
     sink = gst_element_factory_make("appsink", NULL);
     if (!sink) {
-        qDebug() << "GstreamerDeviceGrabber::initSubclass --> Fatal: Can't create the application sink.";
+        qDebug() << "GstreamerDeviceGrabber::setUp --> Fatal: Can't create the application sink.";
         return false;
     }
     gst_app_sink_set_max_buffers(GST_APP_SINK(sink), APP_SINK_MAX_BUFFERS);
@@ -316,37 +316,37 @@ bool GstreamerDeviceGrabber::initSubclass()
     //---------------------------------------------------------------------
 
     if (!gst_bin_add(GST_BIN (pipeline), source)) {
-        qDebug() << "GstreamerDeviceGrabber::initSubclass --> Fatal: Can't add the source to the bin.";
+        qDebug() << "GstreamerDeviceGrabber::setUp --> Fatal: Can't add the source to the bin.";
         return false;
     }
     if (!gst_bin_add(GST_BIN (pipeline), filter1)) {
-        qDebug() << "GstreamerDeviceGrabber::initSubclass --> Fatal: Can't add the filter1 to the bin.";
+        qDebug() << "GstreamerDeviceGrabber::setUp --> Fatal: Can't add the filter1 to the bin.";
         return false;
     }
     if (!gst_bin_add(GST_BIN (pipeline), queue1)) {
-        qDebug() << "GstreamerDeviceGrabber::initSubclass --> Fatal: Can't add the queue1 to the bin.";
+        qDebug() << "GstreamerDeviceGrabber::setUp --> Fatal: Can't add the queue1 to the bin.";
         return false;
     }
     if (!gst_bin_add(GST_BIN (pipeline), filter2)) {
-        qDebug() << "GstreamerDeviceGrabber::initSubclass --> Fatal: Can't add the filter2 to the bin.";
+        qDebug() << "GstreamerDeviceGrabber::setUp --> Fatal: Can't add the filter2 to the bin.";
         return false;
     }
     if (!gst_bin_add(GST_BIN (pipeline), queue2)) {
-        qDebug() << "GstreamerDeviceGrabber::initSubclass --> Fatal: Can't add the queue1 to the bin.";
+        qDebug() << "GstreamerDeviceGrabber::setUp --> Fatal: Can't add the queue1 to the bin.";
         return false;
     }
     if (!gst_bin_add(GST_BIN (pipeline), filter4)) {
-        qDebug() << "GstreamerDeviceGrabber::initSubclass --> Fatal: Can't add the filter1 to the bin.";
+        qDebug() << "GstreamerDeviceGrabber::setUp --> Fatal: Can't add the filter1 to the bin.";
         return false;
     }
     /*
     if (!gst_bin_add(GST_BIN (pipeline), filter5)) {
-        qDebug() << "GstreamerDeviceGrabber::initSubclass --> Fatal: Can't add the filter2 to the bin.";
+        qDebug() << "GstreamerDeviceGrabber::setUp --> Fatal: Can't add the filter2 to the bin.";
         return false;
     }
     */
     if (!gst_bin_add(GST_BIN (pipeline), sink)) {
-        qDebug() << "GstreamerDeviceGrabber::initSubclass --> Fatal: Can't add the sink to the bin.";
+        qDebug() << "GstreamerDeviceGrabber::setUp --> Fatal: Can't add the sink to the bin.";
         return false;
     }
 
@@ -355,55 +355,55 @@ bool GstreamerDeviceGrabber::initSubclass()
     //---------------------------------------------------------------------
 
     if (!gst_element_link(source, filter1)) {
-        qDebug() << "GstreamerDeviceGrabber::initSubclass --> Fatal: Can't link the filter1 to source.";
+        qDebug() << "GstreamerDeviceGrabber::setUp --> Fatal: Can't link the filter1 to source.";
         return false;
     }
     /*
     if (!gst_element_link(filter1, queue1)) {
-        qDebug() << "GstreamerDeviceGrabber::initSubclass --> Fatal: Can't link the queue1.";
+        qDebug() << "GstreamerDeviceGrabber::setUp --> Fatal: Can't link the queue1.";
         return false;
     }
 
     if (!gst_element_link(queue1, filter2)) {
-        qDebug() << "GstreamerDeviceGrabber::initSubclass --> Fatal: Can't link the filter2.";
+        qDebug() << "GstreamerDeviceGrabber::setUp --> Fatal: Can't link the filter2.";
         return false;
     }
     if (!gst_element_link(filter2, filter3)) {
-        qDebug() << "GstreamerDeviceGrabber::initSubclass --> Fatal: Can't link the filter3.";
+        qDebug() << "GstreamerDeviceGrabber::setUp --> Fatal: Can't link the filter3.";
         return false;
     }
     if (!gst_element_link(filter2, queue2)) {
-        qDebug() << "GstreamerDeviceGrabber::initSubclass --> Fatal: Can't link the queue1.";
+        qDebug() << "GstreamerDeviceGrabber::setUp --> Fatal: Can't link the queue1.";
         return false;
     }
     */
     if (!gst_element_link(filter2, filter4)) {
-        qDebug() << "GstreamerDeviceGrabber::initSubclass --> Fatal: Can't link the filter4.";
+        qDebug() << "GstreamerDeviceGrabber::setUp --> Fatal: Can't link the filter4.";
         return false;
     }
     /*
     if (!gst_element_link(filter4, filter5)) {
-        qDebug() << "GstreamerDeviceGrabber::initSubclass --> Fatal: Can't link the filter5.";
+        qDebug() << "GstreamerDeviceGrabber::setUp --> Fatal: Can't link the filter5.";
         return false;
     }
     if (!gst_element_link(filter5, sink)) {
-        qDebug() << "GstreamerDeviceGrabber::initSubclass --> Fatal: Can't link the sink to filter5.";
+        qDebug() << "GstreamerDeviceGrabber::setUp --> Fatal: Can't link the sink to filter5.";
         return false;
     }
     */
     if (!gst_element_link(filter4, sink)) {
-        qDebug() << "GstreamerDeviceGrabber::initSubclass --> Fatal: Can't link the sink to filter4.";
+        qDebug() << "GstreamerDeviceGrabber::setUp --> Fatal: Can't link the sink to filter4.";
         return false;
     }
     // Connect filter1 and filter2 via a pad
     // The reason is, that the demultiplexer can handle 2 streams (video and audio)
     g_signal_connect(filter1,"pad-added",G_CALLBACK(on_pad_added),filter2);
 
-    qDebug() << "GstreamerDeviceGrabber::initSubclass --> Start playing";
+    qDebug() << "GstreamerDeviceGrabber::setUp --> Start playing";
 
     gst_element_set_state(pipeline, GST_STATE_PLAYING);
 
-    qDebug() << "GstreamerDeviceGrabber::initSubclass --> End";
+    qDebug() << "GstreamerDeviceGrabber::setUp --> End";
 
     return true;
 }

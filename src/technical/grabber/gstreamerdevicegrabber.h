@@ -54,13 +54,13 @@ public:
      * @param devices The vector of initialized devices.
      * @return true on success, false otherwise
      */
-    bool initializationSubclass(QVector<ImageGrabberDevice*> &devices);
+    bool initialization(QVector<ImageGrabberDevice*> &devices);
 
     /**
      * Starts the grabber if it is marked to be runned in deamon mode.
      * @return true on success, false otherwise
      */
-    bool initSubclass();
+    bool setUp();
 
     /**
      * Get the live image from the camera

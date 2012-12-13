@@ -23,6 +23,9 @@
 
 #include "technical/grabber/grabbercontroller.h"
 
+#include <dshow.h>
+#include <Ks.h>				// Required by KsMedia.h
+#include <KsMedia.h>		// For KSPROPERTY_CAMERACONTROL_FLAGS_*
 
 /**
  * Interface to the controller of a device.
@@ -35,11 +38,9 @@ public:
 
     /**
      * Constructs and initializes the object.
-     * @param d The image grabber device of the controller.
      * @param caps The grabber controller capabilities.
      */
-    GrabberDirectShowController(ImageGrabberDevice *d,
-                                int                 caps);
+    GrabberDirectShowController(int caps);
 
     /**
      * Destructor
@@ -48,9 +49,10 @@ public:
 
     /**
      * Initialize the grabber controller.
+     * @param id The ID of the device.
      * @return True if initialization is successful.
      */
-    bool init();
+    bool init(const QString id);
 
     /**************************************************************************
      **************************************************************************
@@ -234,25 +236,25 @@ public:
      * Get the current automatic zoom value of the device.
      * @return True if the automatic zoom is on.
      */
-    // bool getAutomaticZoom();
+    bool getAutomaticZoom();
 
     /**
      * Set the automatic zoom value of the device.
      * @param az True if the automatic zoom will be switched on.
      */
-    // void setAutomaticZoom(bool az);
+    void setAutomaticZoom(bool az);
 
     /**
      * Get the current zoom value of the device.
      * @return The current zoom value.
      */
-    // int getZoom();
+    int getZoom();
 
     /**
      * Set the zoom value of the device.
      * @param z The new zoom value
      */
-    // void setZoom(int z);
+    void setZoom(int z);
 
     /**************************************************************************
      * Focus
@@ -315,6 +317,10 @@ public:
     void setTilt(int t);
 
 private:
+    IAMCameraControl *pCameraControl;
+
+    bool setCapabilities();
+
 };
 
 #endif

@@ -632,6 +632,12 @@ void MainWindowGUI::stopGrabber()
 }
 
 
+GrabberController * MainWindowGUI::getGrabberController()
+{
+    return grabber->getDevice(getVideoSource())->getController();
+}
+
+
 const QVector<ImageGrabberDevice*> MainWindowGUI::getDevices()
 {
     return grabber->getDevices();
@@ -728,7 +734,18 @@ int MainWindowGUI::getVideoSource()
 
 bool MainWindowGUI::setVideoSource(int index)
 {
-    return recordingTab->setVideoSource(index);
+    if (recordingTab->setVideoSource(index) == false) {
+        return false;
+    }
+
+    if (grabber->getDevice(index)->isController()) {
+        cameraControllerAct->setEnabled(true);
+    }
+    else {
+        cameraControllerAct->setEnabled(false);
+    }
+
+    return true;
 }
 
 
@@ -1318,11 +1335,11 @@ void MainWindowGUI::showCameraControllerDialog()
 {
     QRect fGeo = this->frameGeometry();
 
-    // Q_ASSERT(grabber->getController() != NULL);
+    Q_ASSERT(grabber->getDevice(getVideoSource())->getController() != NULL);
 
     if (cameraControllerDialog == 0) {
         cameraControllerDialog = new CameraControllerDialog(frontend,
-                                                            new GrabberController(NULL, 0), // grabber->getController(),
+                                                            grabber->getDevice(getVideoSource()),
                                                             this);
         cameraControllerDialog->init();
         cameraControllerDialog->setGeometry(geometry().x() + fGeo.width(), geometry().y(),

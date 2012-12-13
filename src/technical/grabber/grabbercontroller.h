@@ -21,12 +21,10 @@
 #ifndef GRABBERCONTROLLER_H
 #define GRABBERCONTROLLER_H
 
-#include "technical/grabber/imagegrabberdevice.h"
 #include "technical/grabber/grabbercontrolcapabilities.h"
 
 #include <QtCore/QString>
 #include <QtCore/QVector>
-
 
 /**
  * Interface to the controller of a device.
@@ -50,11 +48,9 @@ public:
 
     /**
      * Constructs and initializes the object.
-     * @param d The image grabber device of the controller.
      * @param caps The grabber controller capabilities.
      */
-    GrabberController(ImageGrabberDevice *d,
-                      int                 caps);
+    GrabberController(int caps);
 
     /**
      * Destructor
@@ -62,16 +58,11 @@ public:
     ~GrabberController();
 
     /**
-     * Get the device of the controller.
-     * @return The device of the controller.
-     */
-    ImageGrabberDevice* getDevice();
-
-    /**
      * Initialize the grabber controller.
+     * @param id The ID of the device.
      * @return True if initialization is successful.
      */
-    bool init();
+    bool init(const QString id);
 
     /**
      * Get the capabilities of the controller.
@@ -387,13 +378,13 @@ public:
      * Get the current automatic zoom value of the device.
      * @return True if the automatic zoom is on.
      */
-    bool getAutomaticZoom();
+    virtual bool getAutomaticZoom();
 
     /**
      * Set the automatic zoom value of the device.
      * @param az True if the automatic zoom will be switched on.
      */
-    void setAutomaticZoom(bool az);
+    virtual void setAutomaticZoom(bool az);
 
     /**
      * Has the camera a zoom control capability?
@@ -522,7 +513,6 @@ public:
     void setTilt(int t);
 
 private:
-    ImageGrabberDevice         *device;
     int                         controllerCap;
 
     GrabberControlCapabilities  brightnessCapabilities;

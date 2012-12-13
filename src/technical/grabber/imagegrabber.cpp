@@ -31,8 +31,6 @@ ImageGrabber::ImageGrabber(Frontend *f)
 
     frontend = f;
 
-    controller = NULL;
-
     qDebug("ImageGrabber::Constructor --> End");
 }
 
@@ -45,41 +43,9 @@ ImageGrabber::~ImageGrabber()
 }
 
 
-void ImageGrabber::initialization()
-{
-    qDebug("ImageGrabber::initialization --> Start (Empty)");
-
-    // qDebug("ImageGrabber::initialization --> End");
-}
-
-
-void ImageGrabber::init()
-{
-    qDebug() << "ImageGrabber::init --> Start (Empty)";
-
-    // qDebug() << "ImageGrabber::init --> End";
-}
-
-
 void ImageGrabber::finalize()
 {
     qDebug() << "ImageGrabber::finalize --> Start (Empty)";
 
     // qDebug() << "ImageGrabber::finalize --> End";
-}
-
-
-bool ImageGrabber::isController() const
-{
-    if (controller != NULL) {
-        return true;
-    }
-
-    return false;
-}
-
-
-GrabberController* ImageGrabber::getController()
-{
-    return controller;
 }

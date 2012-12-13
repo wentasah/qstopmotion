@@ -22,11 +22,13 @@
 #define IMAGEGRABBERDEVICE_H
 
 #include "frontends/frontend.h"
+#include "technical/grabber/grabbercontroller.h"
 
 #include <QtCore/QString>
 #include <QtCore/QVector>
 #include <QtGui/QImage>
 
+// class GrabberController;
 
 /**
  * Class containing all the informations of a device.
@@ -100,12 +102,33 @@ public:
      */
     imageGrabberDeviceCapabilities getDeviceCapability();
 
+    /**
+     * Has the grabber a controller interface?
+     * @return True if there is a controller interface.
+     */
+    bool isController() const;
+
+    /**
+     * Get the controller of the grabber.
+     * @return The controller of the grabber.
+     */
+    GrabberController *getController();
+
+    /**
+     * Set the controller of the grabber.
+     * @param The controller of the grabber.
+     */
+    void setController(GrabberController *c);
+
 private:
     QString   deviceId;
     // GSTValue *deviceIdValue;
     QString   deviceName;
     imageGrabberVideoSources deviceSource;
     imageGrabberDeviceCapabilities deviceCap;
+
+    GrabberController *controller;
+
 };
 
 #endif

@@ -25,6 +25,7 @@
 
 #include "frontends/frontend.h"
 #include "technical/grabber/grabbercontroller.h"
+#include "technical/grabber/imagegrabberdevice.h"
 
 #include <QtGui/QCheckBox>
 #include <QtGui/QComboBox>
@@ -40,7 +41,9 @@ public:
     /**
      * Constructor
      */
-    CameraControllerDialog(Frontend *f, GrabberController *controller, QWidget *parent = 0);
+    CameraControllerDialog(Frontend *f,
+                           ImageGrabberDevice *device,
+                           QWidget *parent = 0);
 
     /**
      * Initialize the dialog
@@ -178,7 +181,8 @@ private:
 
     Frontend     *frontend;
 
-    GrabberController *grabberController;
+    ImageGrabberDevice *grabberDevice;
+    GrabberController  *grabberController;
 
     QLabel       *brightnessLabel;
     QComboBox    *brightnessComboBox;

@@ -59,10 +59,22 @@ public:
     long getMinimum();
 
     /**
+     * Set the minimum value of the control
+     * @param mi The new minimum value of the control.
+     */
+    void setMinimum(long mi);
+
+    /**
      * Get the maximum value of the control
      * @return The maximum value of the control.
      */
     long getMaximum();
+
+    /**
+     * Set the maximum value of the control
+     * @param ma The new maximum value of the control.
+     */
+    void setMaximum(long ma);
 
     /**
      * Get the step value of the control
@@ -71,10 +83,34 @@ public:
     long getStep();
 
     /**
+     * Set the step value of the control
+     * @param st The new step value of the control.
+     */
+    void setStep(long st);
+
+    /**
+     * Get the def value of the control
+     * @return The def value of the control.
+     */
+    long getDef();
+
+    /**
+     * Set the flags value of the control
+     * @param fl The new flags value of the control.
+     */
+    void setDef(long de);
+
+    /**
      * Get the flags value of the control
      * @return The flags value of the control.
      */
     long getFlags();
+
+    /**
+     * Set the flags value of the control
+     * @param fl The new flags value of the control.
+     */
+    void setFlags(long fl);
 
 private:
 

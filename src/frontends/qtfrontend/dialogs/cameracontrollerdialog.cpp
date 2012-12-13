@@ -30,14 +30,15 @@
 
 
 CameraControllerDialog::CameraControllerDialog(Frontend *f,
-                                               GrabberController *controller,
+                                               ImageGrabberDevice *device,
                                                QWidget *parent)
     : QDialog(parent)
 {
     qDebug("CameraControllerDialog::Constructor --> Start");
 
     frontend = f;
-    grabberController = controller;
+    grabberDevice = device;
+    grabberController = device->getController();
     stepBrightness = -1;
     stepContrast = -1;
     stepSaturation = -1;
@@ -206,12 +207,7 @@ void CameraControllerDialog::init()
 {
     qDebug() << "CameraControllerDialog::init --> Start";
 
-    if (grabberController->getDevice() == NULL) {
-        // No device
-        return;
-    }
-
-    QString deviceId = grabberController->getDevice()->getDeviceId();
+    QString deviceId = grabberDevice->getDeviceId();
     PreferencesTool *preferences = frontend->getPreferences();
 
     if (grabberController->isBrightness()) {
@@ -339,7 +335,7 @@ void CameraControllerDialog::changeBrightness(int index)
 {
     qDebug() << "CameraControllerDialog::changeBrightness --> Start";
 
-    QString deviceId = grabberController->getDevice()->getDeviceId();
+    QString deviceId = grabberDevice->getDeviceId();
     PreferencesTool *preferences = frontend->getPreferences();
     // long minValue;
     // long stepValue;
@@ -362,7 +358,7 @@ void CameraControllerDialog::changeContrast(int index)
 {
     qDebug() << "CameraControllerDialog::changeContrast --> Start";
 
-    QString deviceId = grabberController->getDevice()->getDeviceId();
+    QString deviceId = grabberDevice->getDeviceId();
     PreferencesTool *preferences = frontend->getPreferences();
     int value = index * stepContrast;
     int maxValue = grabberController->getContrastCaps()->getMaximum();
@@ -381,7 +377,7 @@ void CameraControllerDialog::changeSaturation(int index)
 {
     qDebug() << "CameraControllerDialog::changeSaturation --> Start";
 
-    QString deviceId = grabberController->getDevice()->getDeviceId();
+    QString deviceId = grabberDevice->getDeviceId();
     PreferencesTool *preferences = frontend->getPreferences();
     int value = index * stepSaturation;
     int maxValue = grabberController->getSaturationCaps()->getMaximum();
@@ -400,7 +396,7 @@ void CameraControllerDialog::changeHue(int index)
 {
     qDebug() << "CameraControllerDialog::changeHue --> Start";
 
-    QString deviceId = grabberController->getDevice()->getDeviceId();
+    QString deviceId = grabberDevice->getDeviceId();
     PreferencesTool *preferences = frontend->getPreferences();
     int value = index * stepHue;
     int maxValue = grabberController->getHueCaps()->getMaximum();
@@ -419,7 +415,7 @@ void CameraControllerDialog::changeGamma(int index)
 {
     qDebug() << "CameraControllerDialog::changeGamma --> Start";
 
-    QString deviceId = grabberController->getDevice()->getDeviceId();
+    QString deviceId = grabberDevice->getDeviceId();
     PreferencesTool *preferences = frontend->getPreferences();
     int value = index * stepGamma;
     int maxValue = grabberController->getGammaCaps()->getMaximum();
@@ -438,7 +434,7 @@ void CameraControllerDialog::changeSharpness(int index)
 {
     qDebug() << "CameraControllerDialog::changeSharpness --> Start";
 
-    QString deviceId = grabberController->getDevice()->getDeviceId();
+    QString deviceId = grabberDevice->getDeviceId();
     PreferencesTool *preferences = frontend->getPreferences();
     int value = index * stepSharpness;
     int maxValue = grabberController->getSharpnessCaps()->getMaximum();
@@ -457,7 +453,7 @@ void CameraControllerDialog::changeBacklight(int index)
 {
     qDebug() << "CameraControllerDialog::changeBacklight --> Start";
 
-    QString deviceId = grabberController->getDevice()->getDeviceId();
+    QString deviceId = grabberDevice->getDeviceId();
     PreferencesTool *preferences = frontend->getPreferences();
     int value = index * stepBacklight;
     int maxValue = grabberController->getBacklightCaps()->getMaximum();
@@ -476,7 +472,7 @@ void CameraControllerDialog::changeAutoExposure(int newState)
 {
     qDebug() << "CameraControllerDialog::changeAutoExposure --> Start";
 
-    QString deviceId = grabberController->getDevice()->getDeviceId();
+    QString deviceId = grabberDevice->getDeviceId();
     PreferencesTool *preferences = frontend->getPreferences();
 
     if (newState) {
@@ -498,7 +494,7 @@ void CameraControllerDialog::changeExposure(int index)
 {
     qDebug() << "CameraControllerDialog::changeExposure --> Start";
 
-    QString deviceId = grabberController->getDevice()->getDeviceId();
+    QString deviceId = grabberDevice->getDeviceId();
     PreferencesTool *preferences = frontend->getPreferences();
     int value = index * stepExposure;
     int maxValue = grabberController->getExposureCaps()->getMaximum();
@@ -517,7 +513,7 @@ void CameraControllerDialog::changeAutoWhite(int newState)
 {
     qDebug() << "CameraControllerDialog::changeAutoWhite --> Start";
 
-    QString deviceId = grabberController->getDevice()->getDeviceId();
+    QString deviceId = grabberDevice->getDeviceId();
     PreferencesTool *preferences = frontend->getPreferences();
 
     if (newState) {
@@ -539,7 +535,7 @@ void CameraControllerDialog::changeWhite(int index)
 {
     qDebug() << "CameraControllerDialog::changeWhite --> Start";
 
-    QString deviceId = grabberController->getDevice()->getDeviceId();
+    QString deviceId = grabberDevice->getDeviceId();
     PreferencesTool *preferences = frontend->getPreferences();
     int value = index * stepWhite;
     int maxValue = grabberController->getWhiteCaps()->getMaximum();
@@ -558,7 +554,7 @@ void CameraControllerDialog::changeAutoZoom(int newState)
 {
     qDebug() << "CameraControllerDialog::changeAutoZoo --> Start";
 
-    QString deviceId = grabberController->getDevice()->getDeviceId();
+    QString deviceId = grabberDevice->getDeviceId();
     PreferencesTool *preferences = frontend->getPreferences();
 
     if (newState) {
@@ -580,7 +576,7 @@ void CameraControllerDialog::changeZoom(int index)
 {
     qDebug() << "CameraControllerDialog::changeZoo --> Start";
 
-    QString deviceId = grabberController->getDevice()->getDeviceId();
+    QString deviceId = grabberDevice->getDeviceId();
     PreferencesTool *preferences = frontend->getPreferences();
     int value = index * stepZoom;
     int maxValue = grabberController->getZoomCaps()->getMaximum();
@@ -599,7 +595,7 @@ void CameraControllerDialog::changeAutoFocus(int newState)
 {
     qDebug() << "CameraControllerDialog::changeAutoFocus --> Start";
 
-    QString deviceId = grabberController->getDevice()->getDeviceId();
+    QString deviceId = grabberDevice->getDeviceId();
     PreferencesTool *preferences = frontend->getPreferences();
 
     if (newState) {
@@ -621,7 +617,7 @@ void CameraControllerDialog::changeFocus(int index)
 {
     qDebug() << "CameraControllerDialog::changeFocus --> Start";
 
-    QString deviceId = grabberController->getDevice()->getDeviceId();
+    QString deviceId = grabberDevice->getDeviceId();
     PreferencesTool *preferences = frontend->getPreferences();
     int value = index * stepFocus;
     int maxValue = grabberController->getFocusCaps()->getMaximum();
@@ -640,7 +636,7 @@ void CameraControllerDialog::changePan(int index)
 {
     qDebug() << "CameraControllerDialog::changePan --> Start";
 
-    QString deviceId = grabberController->getDevice()->getDeviceId();
+    QString deviceId = grabberDevice->getDeviceId();
     PreferencesTool *preferences = frontend->getPreferences();
     int value = index * stepPan;
     int maxValue = grabberController->getPanCaps()->getMaximum();
@@ -659,7 +655,7 @@ void CameraControllerDialog::changeTilt(int index)
 {
     qDebug() << "CameraControllerDialog::changeTilt --> Start";
 
-    QString deviceId = grabberController->getDevice()->getDeviceId();
+    QString deviceId = grabberDevice->getDeviceId();
     PreferencesTool *preferences = frontend->getPreferences();
     int value = index * stepTilt;
     int maxValue = grabberController->getTiltCaps()->getMaximum();

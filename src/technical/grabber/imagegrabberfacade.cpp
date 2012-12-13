@@ -83,6 +83,14 @@ ImageGrabberFacade::~ImageGrabberFacade()
 }
 
 
+void ImageGrabberFacade::newDeviceSet()
+{
+    // Create a new instance of the device
+
+    // Initialize the grabber controller of the device
+}
+
+
 void ImageGrabberFacade::clearDevices()
 {
     qDebug("ImageGrabberFacade::clearDevices --> Start");
@@ -105,31 +113,31 @@ void ImageGrabberFacade::initialization()
     clearDevices();
 
     gstreamerVideoTestGrabber = new GstreamerVideoTestGrabber(frontend);
-    if (gstreamerVideoTestGrabber->initializationSubclass(devices)) {
+    if (gstreamerVideoTestGrabber->initialization(devices)) {
         isInitialized = true;
     }
 
 #ifdef Q_WS_X11
     gstreamerV4L2Grabber = new GstreamerV4L2Grabber(frontend);
-    if (gstreamerV4L2Grabber->initializationSubclass(devices)) {
+    if (gstreamerV4L2Grabber->initialization(devices)) {
         isInitialized = true;
     }
     gstreamerDv1394Grabber = new GstreamerDv1394Grabber(frontend);
-    if (gstreamerDv1394Grabber->initializationSubclass(devices)) {
+    if (gstreamerDv1394Grabber->initialization(devices)) {
         isInitialized = true;
     }
 #endif
 
 #ifdef Q_WS_WIN
     gstreamerDirectShowUsbGrabber = new GstreamerDirectShowUsbGrabber(frontend);
-    if (gstreamerDirectShowUsbGrabber->initializationSubclass(devices)) {
+    if (gstreamerDirectShowUsbGrabber->initialization(devices)) {
         isInitialized = true;
     }
 #endif
 
 #ifdef Q_WS_X11
     // gphotoGrabber = new GphotoGrabber(frontend);
-    // if (gphotoGrabber->initializationSubclass(devices)) {
+    // if (gphotoGrabber->initialization(devices)) {
     //     isInitialized = true;
     // }
 #endif
@@ -147,7 +155,7 @@ void ImageGrabberFacade::init()
 
     switch (videoDevice->getDeviceSource()) {
     case ImageGrabberDevice::testSource:
-        isInited = gstreamerVideoTestGrabber->initSubclass();
+        isInited = gstreamerVideoTestGrabber->setUp();
 
         if (!isGrabberInited()) {
             frontend->showWarning(tr("Check image grabber"),
@@ -159,7 +167,7 @@ void ImageGrabberFacade::init()
 
         break;
     case ImageGrabberDevice::video4LinuxSource:
-        isInited = gstreamerV4L2Grabber->initSubclass();
+        isInited = gstreamerV4L2Grabber->setUp();
 
         if (!isGrabberInited()) {
             frontend->showWarning(tr("Check image grabber"),
@@ -171,7 +179,7 @@ void ImageGrabberFacade::init()
 
         break;
     case ImageGrabberDevice::ieee1394Source:
-        isInited = gstreamerDv1394Grabber->initSubclass();
+        isInited = gstreamerDv1394Grabber->setUp();
 
         if (!isGrabberInited()) {
             frontend->showWarning(tr("Check image grabber"),
@@ -184,7 +192,7 @@ void ImageGrabberFacade::init()
         break;
     case ImageGrabberDevice::directShowUsbSource:
     case ImageGrabberDevice::directShow1394Source:
-        isInited = gstreamerDirectShowUsbGrabber->initSubclass();
+        isInited = gstreamerDirectShowUsbGrabber->setUp();
 
         if (!isGrabberInited()) {
             frontend->showWarning(tr("Check image grabber"),
@@ -196,7 +204,7 @@ void ImageGrabberFacade::init()
 
         break;
     case ImageGrabberDevice::gphoto2Source:
-        isInited = gphotoGrabber->initSubclass();
+        isInited = gphotoGrabber->setUp();
 
         if (!isGrabberInited()) {
             frontend->showWarning(tr("Check image grabber"),
@@ -215,7 +223,7 @@ void ImageGrabberFacade::init()
     /*
     // If the grabber is running in it's own process we use a timer.
     if (isGrabberProcess()) {
-        isInited = gstreamerVideoTestGrabber->initSubclass();
+        isInited = gstreamerVideoTestGrabber->setUp();
 
         if (!isGrabberInited()) {
             frontend->showWarning(tr("Check image grabber"),
@@ -328,18 +336,6 @@ bool ImageGrabberFacade::isGrabberInitialized() const
 bool ImageGrabberFacade::isGrabberInited() const
 {
     return isInited;
-}
-
-
-bool ImageGrabberFacade::isController() const
-{
-    return false;
-}
-
-
-GrabberController* ImageGrabberFacade::getController()
-{
-    return NULL;
 }
 
 

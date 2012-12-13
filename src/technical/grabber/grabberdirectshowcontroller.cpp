@@ -20,23 +20,20 @@
 
 #include "grabberdirectshowcontroller.h"
 
-#include <dshow.h>
-#include <Ks.h>				// Required by KsMedia.h
-#include <KsMedia.h>		// For KSPROPERTY_CAMERACONTROL_FLAGS_*
-
 #include <QtCore/QtDebug>
 
 /**************************************************************************
  * Default implementation of the grabber controller functions.
  **************************************************************************/
 
-GrabberDirectShowController::GrabberDirectShowController(ImageGrabberDevice *d,
-                                     int                 cap)
-    : GrabberController(d, cap)
+GrabberDirectShowController::GrabberDirectShowController(int cap)
+    : GrabberController(cap)
 {
-    qDebug("GrabberDirectShowController::Constructor --> Start (Empty)");
+    qDebug("GrabberDirectShowController::Constructor --> Start");
 
-    // qDebug("GrabberDirectShowController::Constructor --> End");
+    pCameraControl = NULL;
+
+    qDebug("GrabberDirectShowController::Constructor --> End");
 }
 
 
@@ -48,13 +45,14 @@ GrabberDirectShowController::~GrabberDirectShowController()
 }
 
 
-bool GrabberDirectShowController::init()
+bool GrabberDirectShowController::init(const QString id)
 {
     qDebug("GrabberDirectShowController::init --> Start");
 
+    bool ret = false;
     HRESULT hr;
 
-    printf("Enumerating video input devices ...\n");
+    qDebug("GrabberDirectShowController::init --> Enumerating video input devices ...\n");
 
     // Create the System Device Enumerator.
     ICreateDevEnum *pSysDevEnum = NULL;
@@ -63,8 +61,7 @@ bool GrabberDirectShowController::init()
                           CLSCTX_INPROC_SERVER,
                           IID_ICreateDevEnum,
                           (void **)&pSysDevEnum);
-    if(FAILED(hr))
-    {
+    if(FAILED(hr)) {
         qDebug("GrabberDirectShowController::Constructor --> Error end: Unable to create system device enumerator.\n");
         return false;
     }
@@ -73,43 +70,54 @@ bool GrabberDirectShowController::init()
     IEnumMoniker *pEnumCat = NULL;
     hr = pSysDevEnum->CreateClassEnumerator(CLSID_VideoInputDeviceCategory, &pEnumCat, 0);
 
-    if(hr == S_OK)
-    {
+    if (hr == S_OK) {
         // Enumerate the monikers.
         IMoniker *pMoniker = NULL;
         ULONG cFetched;
-        while(pEnumCat->Next(1, &pMoniker, &cFetched) == S_OK)
-        {
+        while ((ret == false) && (pEnumCat->Next(1, &pMoniker, &cFetched) == S_OK)) {
             IPropertyBag *pPropBag;
             hr = pMoniker->BindToStorage(NULL,
                                          NULL,
                                          IID_IPropertyBag,
                                          (void **)&pPropBag);
-            if(SUCCEEDED(hr))
-            {
+            if(SUCCEEDED(hr)) {
                 // To retrieve the filter's friendly name, do the following:
                 VARIANT varName;
                 VariantInit(&varName);
                 hr = pPropBag->Read(L"FriendlyName", &varName, 0);
-                if (SUCCEEDED(hr))
-                {
-                    // Display the name in your UI somehow.
-                    qDebug() << "GrabberDirectShowController::init --> Found device: " << varName.bstrVal;
-                }
+                QString deviceId((QChar*)(varName.bstrVal), ::SysStringLen(varName.bstrVal));
                 VariantClear(&varName);
 
-                // To create an instance of the filter, do the following:
-                IBaseFilter *pFilter;
-                hr = pMoniker->BindToObject(NULL,
-                                            NULL,
-                                            IID_IBaseFilter,
-                                            (void**)&pFilter);
+                if (SUCCEEDED(hr)) {
+                    // Display the name in your UI somehow.
+                    qDebug() << "GrabberDirectShowController::init --> Found device: " << deviceId;
+                }
 
-                // Save the control capabilitries
-                // process_filter(pFilter);
+                if (id.compare(deviceId) == 0) {
+                    // To create an instance of the filter, do the following:
+                    IBaseFilter *pFilter;
+                    hr = pMoniker->BindToObject(NULL,
+                                                NULL,
+                                                IID_IBaseFilter,
+                                                (void**)&pFilter);
 
-                // Remember to release pFilter later.
-                pPropBag->Release();
+                    // Save the control capabilitries
+
+                    // Get a pointer to the IAMCameraControl interface used to control the camera
+                    hr = pFilter->QueryInterface(IID_IAMCameraControl, (void **)&pCameraControl);
+                    if(hr == S_OK) {
+                        if (setCapabilities())
+                        {
+                            ret = true;
+                        }
+                    }
+                    else {
+                        qDebug("GrabberDirectShowController::init --> ERROR: Unable to access IAMCameraControl interface.");
+                    }
+
+                    // Remember to release pFilter later.
+                    pPropBag->Release();
+                }
             }
             pMoniker->Release();
         }
@@ -118,6 +126,81 @@ bool GrabberDirectShowController::init()
     pSysDevEnum->Release();
 
     qDebug("GrabberDirectShowController::init --> End (Successful)");
+
+    return ret;
+}
+
+
+bool GrabberDirectShowController::setCapabilities()
+{
+    long min;
+    long max;
+    long step;
+    long def;
+    long flags;
+    HRESULT hr;
+
+    Sleep(1000);
+    hr = pCameraControl->GetRange(CameraControl_Zoom, &min, &max, &step, &def, &flags);
+    if(hr == S_OK) {
+        getZoomCaps()->setMinimum(min);
+        getZoomCaps()->setMaximum(max);
+        getZoomCaps()->setStep(step);
+        getZoomCaps()->setDef(def);
+        if (flags & KSPROPERTY_CAMERACONTROL_FLAGS_AUTO) {
+            getZoomCaps()->setFlags(GrabberControlCapabilities::control_Auto);
+        }
+        else {
+            getZoomCaps()->setFlags(GrabberControlCapabilities::control_Manual);
+        }
+    }
+    else {
+        qDebug("GrabberDirectShowController::init --> Unable to retrieve Zoom property information.");
+    }
+
+    Sleep(1000);
+    hr = pCameraControl->GetRange(CameraControl_Focus, &min, &max, &step, &def, &flags);
+    if(hr == S_OK) {
+        getFocusCaps()->setMinimum(min);
+        getFocusCaps()->setMaximum(max);
+        getFocusCaps()->setStep(step);
+        getFocusCaps()->setDef(def);
+        if (flags & KSPROPERTY_CAMERACONTROL_FLAGS_AUTO) {
+            getFocusCaps()->setFlags(GrabberControlCapabilities::control_Auto);
+        }
+        else {
+            getFocusCaps()->setFlags(GrabberControlCapabilities::control_Manual);
+        }
+    }
+    else {
+        qDebug("GrabberDirectShowController::init --> Unable to retrieve Focus property information.\n");
+    }
+
+    Sleep(1000);
+    hr = pCameraControl->GetRange(CameraControl_Pan, &min, &max, &step, &def, &flags);
+    if(hr == S_OK) {
+        getPanCaps()->setMinimum(min);
+        getPanCaps()->setMaximum(max);
+        getPanCaps()->setStep(step);
+        getPanCaps()->setDef(def);
+        getPanCaps()->setFlags(flags);
+    }
+    else {
+        qDebug("GrabberDirectShowController::init --> Unable to retrieve Pan property information.\n");
+    }
+
+    Sleep(1000);
+    hr = pCameraControl->GetRange(CameraControl_Tilt, &min, &max, &step, &def, &flags);
+    if(hr == S_OK) {
+        getTiltCaps()->setMinimum(min);
+        getTiltCaps()->setMaximum(max);
+        getTiltCaps()->setStep(step);
+        getTiltCaps()->setDef(def);
+        getTiltCaps()->setFlags(flags);
+    }
+    else {
+        qDebug("GrabberDirectShowController::init --> Unable to retrieve Tilt property information.\n");
+    }
 
     return true;
 }
@@ -290,29 +373,76 @@ void GrabberDirectShowController::setWhite(int w)
 /**************************************************************************
  * Zoom
  **************************************************************************/
-/*
+
 bool GrabberDirectShowController::getAutomaticZoom()
 {
+    HRESULT hr = 0;
+    long flags; // = KSPROPERTY_CAMERACONTROL_FLAGS_ABSOLUTE | KSPROPERTY_CAMERACONTROL_FLAGS_MANUAL;
+    long z;
+
+    hr = pCameraControl->Get(CameraControl_Zoom, &z, &flags);
+    if (hr != S_OK)
+    {
+        qDebug() << "GrabberDirectShowController::Constructor --> ERROR: Unable to get Zoom property value. (Error 0x" << hr;
+        return false;
+    }
+
+    if (flags & KSPROPERTY_CAMERACONTROL_FLAGS_AUTO)
+    {
+        return true;
+    }
+
     return false;
 }
 
 
 void GrabberDirectShowController::setAutomaticZoom(bool az)
 {
-    Q_ASSERT( 1 );
+    HRESULT hr = 0;
+    long flags;
+    long z = 0;
+
+    if (az) {
+        flags = KSPROPERTY_CAMERACONTROL_FLAGS_AUTO;
+    }
+    else {
+        flags = KSPROPERTY_CAMERACONTROL_FLAGS_MANUAL;
+    }
+
+    hr = pCameraControl->Set(CameraControl_Zoom, (long)z, flags);
+    if (hr != S_OK)
+    {
+        qDebug() << "GrabberDirectShowController::Constructor --> ERROR: Unable to set CameraControl_Zoom property value to " << z << ". (Error 0x" << hr;
+    }
 }
 
 int GrabberDirectShowController::getZoom()
 {
-    return 0;
+    HRESULT hr = 0;
+    long flags; // = KSPROPERTY_CAMERACONTROL_FLAGS_ABSOLUTE | KSPROPERTY_CAMERACONTROL_FLAGS_MANUAL;
+    long z;
+
+    hr = pCameraControl->Get(CameraControl_Zoom, &z, &flags);
+    if (hr != S_OK) {
+        qDebug() << "GrabberDirectShowController::Constructor --> ERROR: Unable to get Zoom property value. (Error 0x" << hr;
+        return -1;
+    }
+
+    return (int)z;
 }
 
 
 void GrabberDirectShowController::setZoom(int z)
 {
-    Q_ASSERT( 1 );
+    HRESULT hr = 0;
+    long flags = KSPROPERTY_CAMERACONTROL_FLAGS_ABSOLUTE | KSPROPERTY_CAMERACONTROL_FLAGS_MANUAL;
+
+    hr = pCameraControl->Set(CameraControl_Zoom, (long)z, flags);
+    if (hr != S_OK) {
+        qDebug() << "GrabberDirectShowController::Constructor --> ERROR: Unable to set Zoom property value to " << z << ". (Error 0x" << hr;
+    }
 }
-*/
+
 /**************************************************************************
  * Focus
  **************************************************************************/

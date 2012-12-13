@@ -41,8 +41,7 @@ public:
      * @param d The image grabber device of the controller.
      * @param caps The grabber controller capabilities.
      */
-    WindowsUvcController(ImageGrabberDevice *d,
-                         int                 caps);
+    WindowsUvcController(int caps);
 
     /**
      * Destructor

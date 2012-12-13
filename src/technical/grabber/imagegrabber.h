@@ -24,8 +24,6 @@
 #define IMAGEGRABBER_H
 
 #include "frontends/frontend.h"
-#include "technical/grabber/grabbercontroller.h"
-#include "technical/grabber/imagegrabberdevice.h"
 
 #include <QtCore/QObject>
 #include <QtCore/QString>
@@ -93,39 +91,27 @@ public:
     ~ImageGrabber();
 
     /**
-     * Has the grabber a controller interface?
-     * @return True if there is a controller interface.
+     * Initialization of the Command line grabber
      */
-    bool isController() const;
-
-    /**
-     * Get the controller of the grabber.
-     * @return The controller of the grabber.
-     */
-    GrabberController *getController();
-
-    /**
-     * Initialization of the grabber.
-     */
-    void initialization();
+    virtual bool initialization(QVector<ImageGrabberDevice*> &devices) = 0;
 
     /**
      * Abstract function for initializing the grabber.
      * @return true on success, false otherwise
      */
-    void init();
-
-    /**
-     * Abstract function for initializing the grabber.
-     * @return true on success, false otherwise
-     */
-    void finalize();
+    virtual bool setUp() = 0;
 
     /**
      * Abstract function for shutting down the grabber.
      * @return true on success, false otherwise
      */
     virtual bool tearDown() = 0;
+
+    /**
+     * Abstract function for initializing the grabber.
+     * @return true on success, false otherwise
+     */
+    void finalize();
 
     /**
      * Abstract function for grabbing an image.
@@ -145,24 +131,11 @@ public:
      */
     virtual const QImage getRawImage() = 0;
 
-    /**
-     * Initialization of the Command line grabber
-     */
-    virtual bool initializationSubclass(QVector<ImageGrabberDevice*> &devices) = 0;
-
-    /**
-     * Abstract function for initializing the grabber.
-     * @return true on success, false otherwise
-     */
-    virtual bool initSubclass() = 0;
-
 protected:
     /**
      * Frontend of the application
      */
     Frontend *frontend;
-
-    GrabberController *controller;
 
 };
 

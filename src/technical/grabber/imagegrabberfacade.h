@@ -95,6 +95,11 @@ public:
     ~ImageGrabberFacade();
 
     /**
+     * A new device is set to use as video grabber
+     */
+    void newDeviceSet();
+
+    /**
      * Get the possible video devices.
      * @return Vector with the devices.
      */
@@ -124,18 +129,6 @@ public:
      * @return true if it is inited, false otherwise
      */
     bool isGrabberInited() const;
-
-    /**
-     * Has the grabber a controller interface?
-     * @return True if there is a controller interface.
-     */
-    bool isController() const;
-
-    /**
-     * Get the controller of the grabber.
-     * @return The controller of the grabber.
-     */
-    GrabberController *getController();
 
     /**
      * Initialization of the grabber.

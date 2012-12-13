@@ -34,6 +34,8 @@ ImageGrabberDevice::ImageGrabberDevice(const QString id,
     deviceSource = source;
     deviceCap = cap;
 
+    controller = NULL;
+
     qDebug("ImageGrabberDevice::Constructor --> End");
 }
 
@@ -41,6 +43,12 @@ ImageGrabberDevice::ImageGrabberDevice(const QString id,
 ImageGrabberDevice::~ImageGrabberDevice()
 {
     qDebug("ImageGrabberDevice::Destructor --> Start");
+
+    if (controller != NULL)
+    {
+        delete controller;
+        controller = NULL;
+    }
 
     qDebug("ImageGrabberDevice::Destructor --> End");
 }
@@ -67,4 +75,26 @@ ImageGrabberDevice::imageGrabberVideoSources ImageGrabberDevice::getDeviceSource
 ImageGrabberDevice::imageGrabberDeviceCapabilities ImageGrabberDevice::getDeviceCapability()
 {
     return deviceCap;
+}
+
+
+bool ImageGrabberDevice::isController() const
+{
+    if (controller != NULL) {
+        return true;
+    }
+
+    return false;
+}
+
+
+GrabberController* ImageGrabberDevice::getController()
+{
+    return controller;
+}
+
+
+void ImageGrabberDevice::setController(GrabberController *c)
+{
+    controller = c;
 }

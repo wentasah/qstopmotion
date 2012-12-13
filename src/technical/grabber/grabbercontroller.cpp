@@ -26,12 +26,10 @@
  * Default implementation of the grabber controller functions.
  **************************************************************************/
 
-GrabberController::GrabberController(ImageGrabberDevice *d,
-                                     int                 cap)
+GrabberController::GrabberController(int cap)
 {
     qDebug("GrabberController::Constructor --> Start");
 
-    device = d;
     controllerCap = cap;
 
     qDebug("GrabberController::Constructor --> End");
@@ -46,15 +44,9 @@ GrabberController::~GrabberController()
 }
 
 
-bool GrabberController::init()
+bool GrabberController::init(const QString id)
 {
     return true;
-}
-
-
-ImageGrabberDevice* GrabberController::getDevice()
-{
-    return device;
 }
 
 
@@ -285,6 +277,10 @@ void GrabberController::setBacklight(int /*b*/)
 
 bool GrabberController::isAutomaticExposure()
 {
+    if (exposureCapabilities.getFlags() == GrabberControlCapabilities::control_Auto) {
+        return true;
+    }
+
     return false;
 }
 
@@ -332,6 +328,10 @@ void GrabberController::setExposure(int /*e*/)
 
 bool GrabberController::isAutomaticWhite()
 {
+    if (whiteCapabilities.getFlags() == GrabberControlCapabilities::control_Auto) {
+        return true;
+    }
+
     return false;
 }
 
@@ -379,6 +379,10 @@ void GrabberController::setWhite(int /*w*/)
 
 bool GrabberController::isAutomaticZoom()
 {
+    if (zoomCapabilities.getFlags() == GrabberControlCapabilities::control_Auto) {
+        return true;
+    }
+
     return false;
 }
 
@@ -399,6 +403,7 @@ bool GrabberController::isZoom()
     if (zoomCapabilities.getFlags() != GrabberControlCapabilities::control_none) {
         return true;
     }
+
     return false;
 }
 
@@ -426,6 +431,10 @@ void GrabberController::setZoom(int /*z*/)
 
 bool GrabberController::isAutomaticFocus()
 {
+    if (focusCapabilities.getFlags() == GrabberControlCapabilities::control_Auto) {
+        return true;
+    }
+
     return false;
 }
 

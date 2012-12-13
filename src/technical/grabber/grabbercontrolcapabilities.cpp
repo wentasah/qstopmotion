@@ -42,9 +42,21 @@ long GrabberControlCapabilities::getMinimum()
 }
 
 
+void GrabberControlCapabilities::setMinimum(long mi)
+{
+    minimum = mi;
+}
+
+
 long GrabberControlCapabilities::getMaximum()
 {
     return maximum;
+}
+
+
+void GrabberControlCapabilities::setMaximum(long ma)
+{
+    maximum = ma;
 }
 
 
@@ -54,7 +66,31 @@ long GrabberControlCapabilities::getStep()
 }
 
 
+void GrabberControlCapabilities::setStep(long st)
+{
+    step = st;
+}
+
+
+long GrabberControlCapabilities::getDef()
+{
+    return def;
+}
+
+
+void GrabberControlCapabilities::setDef(long de)
+{
+    def = de;
+}
+
+
 long GrabberControlCapabilities::getFlags()
 {
     return flags;
+}
+
+
+void GrabberControlCapabilities::setFlags(long fl)
+{
+    flags = fl;
 }

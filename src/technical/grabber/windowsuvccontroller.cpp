@@ -26,9 +26,8 @@
  * Implementation of the Windows UVC controller functions.
  **************************************************************************/
 
-WindowsUvcController::WindowsUvcController(ImageGrabberDevice *d,
-                                           int                 cap)
-    : GrabberController(d, cap)
+WindowsUvcController::WindowsUvcController(int cap)
+    : GrabberController(cap)
 {
     qDebug("WindowsUvcController::Constructor --> Start (Empty)");
 

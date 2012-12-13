@@ -260,6 +260,12 @@ public:
     void stopGrabber();
 
     /**
+     * Get grabber controller.
+     * @return The controller of the current grabber
+     */
+    GrabberController *getGrabberController();
+
+    /**
      * Get the possible video devices.
      * @return Vector with the devices.
      */

@@ -32,6 +32,7 @@ GrabberDirectShowController::GrabberDirectShowController(int cap)
     qDebug("GrabberDirectShowController::Constructor --> Start");
 
     pCameraControl = NULL;
+    pQualityControl = NULL;
 
     qDebug("GrabberDirectShowController::Constructor --> End");
 }
@@ -106,7 +107,19 @@ bool GrabberDirectShowController::init(const QString id)
                     // Get a pointer to the IAMCameraControl interface used to control the camera
                     hr = pFilter->QueryInterface(IID_IAMCameraControl, (void **)&pCameraControl);
                     if(hr == S_OK) {
-                        if (setCapabilities())
+                        if (setControlCapabilities())
+                        {
+                            ret = true;
+                        }
+                    }
+                    else {
+                        qDebug("GrabberDirectShowController::init --> ERROR: Unable to access IAMCameraControl interface.");
+                    }
+
+                    // Get a pointer to the IAMVideoProcAmp interface used to control the camera
+                    hr = pFilter->QueryInterface(IID_IAMVideoProcAmp, (void **)&pQualityControl);
+                    if(hr == S_OK) {
+                        if (setQualityCapabilities())
                         {
                             ret = true;
                         }
@@ -131,8 +144,10 @@ bool GrabberDirectShowController::init(const QString id)
 }
 
 
-bool GrabberDirectShowController::setCapabilities()
+bool GrabberDirectShowController::setControlCapabilities()
 {
+    qDebug("GrabberDirectShowController::setCameraCapabilities --> Start");
+
     long min;
     long max;
     long step;
@@ -141,12 +156,30 @@ bool GrabberDirectShowController::setCapabilities()
     HRESULT hr;
 
     Sleep(1000);
+    hr = pCameraControl->GetRange(CameraControl_Exposure, &min, &max, &step, &def, &flags);
+    if(hr == S_OK) {
+        getExposureCaps()->setMinimum(min);
+        getExposureCaps()->setMaximum(max);
+        getExposureCaps()->setStep(step);
+        getExposureCaps()->setDefault(def);
+        if (flags & KSPROPERTY_CAMERACONTROL_FLAGS_AUTO) {
+            getExposureCaps()->setFlags(GrabberControlCapabilities::control_Auto);
+        }
+        else {
+            getExposureCaps()->setFlags(GrabberControlCapabilities::control_Manual);
+        }
+    }
+    else {
+        qDebug("GrabberDirectShowController::setCameraCapabilities --> Unable to retrieve Exposure property information.");
+    }
+
+    Sleep(1000);
     hr = pCameraControl->GetRange(CameraControl_Zoom, &min, &max, &step, &def, &flags);
     if(hr == S_OK) {
         getZoomCaps()->setMinimum(min);
         getZoomCaps()->setMaximum(max);
         getZoomCaps()->setStep(step);
-        getZoomCaps()->setDef(def);
+        getZoomCaps()->setDefault(def);
         if (flags & KSPROPERTY_CAMERACONTROL_FLAGS_AUTO) {
             getZoomCaps()->setFlags(GrabberControlCapabilities::control_Auto);
         }
@@ -155,7 +188,7 @@ bool GrabberDirectShowController::setCapabilities()
         }
     }
     else {
-        qDebug("GrabberDirectShowController::init --> Unable to retrieve Zoom property information.");
+        qDebug("GrabberDirectShowController::setCameraCapabilities --> Unable to retrieve Zoom property information.");
     }
 
     Sleep(1000);
@@ -164,7 +197,7 @@ bool GrabberDirectShowController::setCapabilities()
         getFocusCaps()->setMinimum(min);
         getFocusCaps()->setMaximum(max);
         getFocusCaps()->setStep(step);
-        getFocusCaps()->setDef(def);
+        getFocusCaps()->setDefault(def);
         if (flags & KSPROPERTY_CAMERACONTROL_FLAGS_AUTO) {
             getFocusCaps()->setFlags(GrabberControlCapabilities::control_Auto);
         }
@@ -173,7 +206,7 @@ bool GrabberDirectShowController::setCapabilities()
         }
     }
     else {
-        qDebug("GrabberDirectShowController::init --> Unable to retrieve Focus property information.\n");
+        qDebug("GrabberDirectShowController::setCameraCapabilities --> Unable to retrieve Focus property information.\n");
     }
 
     Sleep(1000);
@@ -182,11 +215,11 @@ bool GrabberDirectShowController::setCapabilities()
         getPanCaps()->setMinimum(min);
         getPanCaps()->setMaximum(max);
         getPanCaps()->setStep(step);
-        getPanCaps()->setDef(def);
+        getPanCaps()->setDefault(def);
         getPanCaps()->setFlags(flags);
     }
     else {
-        qDebug("GrabberDirectShowController::init --> Unable to retrieve Pan property information.\n");
+        qDebug("GrabberDirectShowController::setCameraCapabilities --> Unable to retrieve Pan property information.\n");
     }
 
     Sleep(1000);
@@ -195,12 +228,216 @@ bool GrabberDirectShowController::setCapabilities()
         getTiltCaps()->setMinimum(min);
         getTiltCaps()->setMaximum(max);
         getTiltCaps()->setStep(step);
-        getTiltCaps()->setDef(def);
+        getTiltCaps()->setDefault(def);
         getTiltCaps()->setFlags(flags);
     }
     else {
-        qDebug("GrabberDirectShowController::init --> Unable to retrieve Tilt property information.\n");
+        qDebug("GrabberDirectShowController::setCameraCapabilities --> Unable to retrieve Tilt property information.\n");
     }
+
+    Sleep(1000);
+    hr = pCameraControl->GetRange(CameraControl_Iris, &min, &max, &step, &def, &flags);
+    if(hr == S_OK) {
+        getIrisCaps()->setMinimum(min);
+        getIrisCaps()->setMaximum(max);
+        getIrisCaps()->setStep(step);
+        getIrisCaps()->setDefault(def);
+        if (flags & KSPROPERTY_CAMERACONTROL_FLAGS_AUTO) {
+            getIrisCaps()->setFlags(GrabberControlCapabilities::control_Auto);
+        }
+        else {
+            getIrisCaps()->setFlags(GrabberControlCapabilities::control_Manual);
+        }
+    }
+    else {
+        qDebug("GrabberDirectShowController::setCameraCapabilities --> Unable to retrieve Iris property information.");
+    }
+
+    Sleep(1000);
+    hr = pCameraControl->GetRange(CameraControl_Roll, &min, &max, &step, &def, &flags);
+    if(hr == S_OK) {
+        getRollCaps()->setMinimum(min);
+        getRollCaps()->setMaximum(max);
+        getRollCaps()->setStep(step);
+        getRollCaps()->setDefault(def);
+        if (flags & KSPROPERTY_CAMERACONTROL_FLAGS_AUTO) {
+            getRollCaps()->setFlags(GrabberControlCapabilities::control_Auto);
+        }
+        else {
+            getRollCaps()->setFlags(GrabberControlCapabilities::control_Manual);
+        }
+    }
+    else {
+        qDebug("GrabberDirectShowController::setCameraCapabilities --> Unable to retrieve Roll property information.");
+    }
+
+    qDebug("GrabberDirectShowController::setCameraCapabilities --> End");
+
+    return true;
+}
+
+
+bool GrabberDirectShowController::setQualityCapabilities()
+{
+    qDebug("GrabberDirectShowController::setQualityCapabilities --> Start");
+
+    long min;
+    long max;
+    long step;
+    long def;
+    long flags;
+    HRESULT hr;
+
+    Sleep(1000);
+    hr = pQualityControl->GetRange(VideoProcAmp_Brightness, &min, &max, &step, &def, &flags);
+    if(hr == S_OK) {
+        getBrightnessCaps()->setMinimum(min);
+        getBrightnessCaps()->setMaximum(max);
+        getBrightnessCaps()->setStep(step);
+        getBrightnessCaps()->setDefault(def);
+        if (flags & KSPROPERTY_VIDEOPROCAMP_FLAGS_AUTO) {
+            getBrightnessCaps()->setFlags(GrabberControlCapabilities::control_Auto);
+        }
+        else {
+            getBrightnessCaps()->setFlags(GrabberControlCapabilities::control_Manual);
+        }
+    }
+    else {
+        qDebug("GrabberDirectShowController::setQualityCapabilities --> Unable to retrieve Brightness property information.");
+    }
+
+    Sleep(1000);
+    hr = pQualityControl->GetRange(VideoProcAmp_Contrast, &min, &max, &step, &def, &flags);
+    if(hr == S_OK) {
+        getContrastCaps()->setMinimum(min);
+        getContrastCaps()->setMaximum(max);
+        getContrastCaps()->setStep(step);
+        getContrastCaps()->setDefault(def);
+        if (flags & KSPROPERTY_VIDEOPROCAMP_FLAGS_AUTO) {
+            getContrastCaps()->setFlags(GrabberControlCapabilities::control_Auto);
+        }
+        else {
+            getContrastCaps()->setFlags(GrabberControlCapabilities::control_Manual);
+        }
+    }
+    else {
+        qDebug("GrabberDirectShowController::setQualityCapabilities --> Unable to retrieve Contrast property information.");
+    }
+
+    Sleep(1000);
+    hr = pQualityControl->GetRange(VideoProcAmp_Saturation, &min, &max, &step, &def, &flags);
+    if(hr == S_OK) {
+        getSaturationCaps()->setMinimum(min);
+        getSaturationCaps()->setMaximum(max);
+        getSaturationCaps()->setStep(step);
+        getSaturationCaps()->setDefault(def);
+        if (flags & KSPROPERTY_VIDEOPROCAMP_FLAGS_AUTO) {
+            getSaturationCaps()->setFlags(GrabberControlCapabilities::control_Auto);
+        }
+        else {
+            getSaturationCaps()->setFlags(GrabberControlCapabilities::control_Manual);
+        }
+    }
+    else {
+        qDebug("GrabberDirectShowController::setQualityCapabilities --> Unable to retrieve Saturation property information.");
+    }
+
+    Sleep(1000);
+    hr = pQualityControl->GetRange(VideoProcAmp_Hue, &min, &max, &step, &def, &flags);
+    if(hr == S_OK) {
+        getHueCaps()->setMinimum(min);
+        getHueCaps()->setMaximum(max);
+        getHueCaps()->setStep(step);
+        getHueCaps()->setDefault(def);
+        if (flags & KSPROPERTY_VIDEOPROCAMP_FLAGS_AUTO) {
+            getHueCaps()->setFlags(GrabberControlCapabilities::control_Auto);
+        }
+        else {
+            getHueCaps()->setFlags(GrabberControlCapabilities::control_Manual);
+        }
+    }
+    else {
+        qDebug("GrabberDirectShowController::setQualityCapabilities --> Unable to retrieve Hue property information.");
+    }
+
+    Sleep(1000);
+    hr = pQualityControl->GetRange(VideoProcAmp_Gamma, &min, &max, &step, &def, &flags);
+    if(hr == S_OK) {
+        getGammaCaps()->setMinimum(min);
+        getGammaCaps()->setMaximum(max);
+        getGammaCaps()->setStep(step);
+        getGammaCaps()->setDefault(def);
+        if (flags & KSPROPERTY_VIDEOPROCAMP_FLAGS_AUTO) {
+            getGammaCaps()->setFlags(GrabberControlCapabilities::control_Auto);
+        }
+        else {
+            getGammaCaps()->setFlags(GrabberControlCapabilities::control_Manual);
+        }
+    }
+    else {
+        qDebug("GrabberDirectShowController::setQualityCapabilities --> Unable to retrieve Gamma property information.");
+    }
+
+    Sleep(1000);
+    hr = pQualityControl->GetRange(VideoProcAmp_Sharpness, &min, &max, &step, &def, &flags);
+    if(hr == S_OK) {
+        getSharpnessCaps()->setMinimum(min);
+        getSharpnessCaps()->setMaximum(max);
+        getSharpnessCaps()->setStep(step);
+        getSharpnessCaps()->setDefault(def);
+        if (flags & KSPROPERTY_VIDEOPROCAMP_FLAGS_AUTO) {
+            getSharpnessCaps()->setFlags(GrabberControlCapabilities::control_Auto);
+        }
+        else {
+            getSharpnessCaps()->setFlags(GrabberControlCapabilities::control_Manual);
+        }
+    }
+    else {
+        qDebug("GrabberDirectShowController::setQualityCapabilities --> Unable to retrieve Sharpness property information.");
+    }
+
+    Sleep(1000);
+    hr = pQualityControl->GetRange(VideoProcAmp_BacklightCompensation, &min, &max, &step, &def, &flags);
+    if(hr == S_OK) {
+        getBacklightCaps()->setMinimum(min);
+        getBacklightCaps()->setMaximum(max);
+        getBacklightCaps()->setStep(step);
+        getBacklightCaps()->setDefault(def);
+        if (flags & KSPROPERTY_VIDEOPROCAMP_FLAGS_AUTO) {
+            getBacklightCaps()->setFlags(GrabberControlCapabilities::control_Auto);
+        }
+        else {
+            getBacklightCaps()->setFlags(GrabberControlCapabilities::control_Manual);
+        }
+    }
+    else {
+        qDebug("GrabberDirectShowController::setQualityCapabilities --> Unable to retrieve Backlight Compensation property information.");
+    }
+
+    Sleep(1000);
+    hr = pQualityControl->GetRange(VideoProcAmp_WhiteBalance, &min, &max, &step, &def, &flags);
+    if(hr == S_OK) {
+        getWhiteCaps()->setMinimum(min);
+        getWhiteCaps()->setMaximum(max);
+        getWhiteCaps()->setStep(step);
+        getWhiteCaps()->setDefault(def);
+        if (flags & KSPROPERTY_VIDEOPROCAMP_FLAGS_AUTO) {
+            getWhiteCaps()->setFlags(GrabberControlCapabilities::control_Auto);
+        }
+        else {
+            getWhiteCaps()->setFlags(GrabberControlCapabilities::control_Manual);
+        }
+    }
+    else {
+        qDebug("GrabberDirectShowController::setQualityCapabilities --> Unable to retrieve White Balance property information.");
+    }
+
+    /*
+      VideoProcAmp_ColorEnable,
+      VideoProcAmp_Gain
+    */
+
+    qDebug("GrabberDirectShowController::setQualityCapabilities --> End");
 
     return true;
 }
@@ -208,7 +445,7 @@ bool GrabberDirectShowController::setCapabilities()
 
 /**************************************************************************
  **************************************************************************
- * Camera capabilities
+ * Camera quality capabilities
  **************************************************************************
  **************************************************************************/
 
@@ -318,6 +555,38 @@ void GrabberDirectShowController::setBacklight(int b)
 }
 */
 /**************************************************************************
+ * White Balance
+ **************************************************************************/
+/*
+bool GrabberDirectShowController::getAutomaticWhite()
+{
+    return false;
+}
+
+
+void GrabberDirectShowController::setAutomaticWhite(bool aw)
+{
+    Q_ASSERT( 1 );
+}
+
+int GrabberDirectShowController::getWhite()
+{
+    return 0;
+}
+
+
+void GrabberDirectShowController::setWhite(int w)
+{
+    Q_ASSERT( 1 );
+}
+*/
+/**************************************************************************
+ **************************************************************************
+ * Camera control capabilities
+ **************************************************************************
+ **************************************************************************/
+
+/**************************************************************************
  * Exposure
  **************************************************************************/
 /*
@@ -345,27 +614,28 @@ void GrabberDirectShowController::setExposure(int e)
 }
 */
 /**************************************************************************
- * White Balance
+ * Iris
  **************************************************************************/
 /*
-bool GrabberDirectShowController::getAutomaticWhite()
+bool GrabberDirectShowController::getAutomaticIris()
 {
     return false;
 }
 
 
-void GrabberDirectShowController::setAutomaticWhite(bool aw)
+void GrabberDirectShowController::setAutomaticIris(bool ae)
 {
     Q_ASSERT( 1 );
 }
 
-int GrabberDirectShowController::getWhite()
+
+bool GrabberDirectShowController::isIris()
 {
-    return 0;
+    return false;
 }
 
 
-void GrabberDirectShowController::setWhite(int w)
+void GrabberDirectShowController::setIris(int e)
 {
     Q_ASSERT( 1 );
 }
@@ -406,13 +676,14 @@ void GrabberDirectShowController::setAutomaticZoom(bool az)
         flags = KSPROPERTY_CAMERACONTROL_FLAGS_AUTO;
     }
     else {
+        z = getZoomCaps()->getDefault();
         flags = KSPROPERTY_CAMERACONTROL_FLAGS_MANUAL;
     }
 
-    hr = pCameraControl->Set(CameraControl_Zoom, (long)z, flags);
+    hr = pCameraControl->Set(CameraControl_Zoom, z, flags);
     if (hr != S_OK)
     {
-        qDebug() << "GrabberDirectShowController::Constructor --> ERROR: Unable to set CameraControl_Zoom property value to " << z << ". (Error 0x" << hr;
+        qDebug() << "GrabberDirectShowController::Constructor --> ERROR: Unable to set Zoom property value to " << z << ". (Error 0x" << hr;
     }
 }
 

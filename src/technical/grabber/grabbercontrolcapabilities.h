@@ -89,16 +89,16 @@ public:
     void setStep(long st);
 
     /**
-     * Get the def value of the control
-     * @return The def value of the control.
+     * Get the default value of the control
+     * @return The default value of the control.
      */
-    long getDef();
+    long getDefault();
 
     /**
-     * Set the flags value of the control
-     * @param fl The new flags value of the control.
+     * Set the default value of the control
+     * @param fl The new default value of the control.
      */
-    void setDef(long de);
+    void setDefault(long de);
 
     /**
      * Get the flags value of the control
@@ -117,7 +117,7 @@ private:
     long minimum;
     long maximum;
     long step;
-    long def;
+    long defaultt;
     long flags;
 
 };

@@ -23,11 +23,11 @@
 
 GrabberControlCapabilities::GrabberControlCapabilities()
 {
-    minimum = 0L;
-    maximum = 0L;
-    step    = 0L;
-    def     = 0L;
-    flags   = control_none;
+    minimum  = 0L;
+    maximum  = 0L;
+    step     = 0L;
+    defaultt = 0L;
+    flags    = control_none;
 }
 
 
@@ -72,15 +72,15 @@ void GrabberControlCapabilities::setStep(long st)
 }
 
 
-long GrabberControlCapabilities::getDef()
+long GrabberControlCapabilities::getDefault()
 {
-    return def;
+    return defaultt;
 }
 
 
-void GrabberControlCapabilities::setDef(long de)
+void GrabberControlCapabilities::setDefault(long de)
 {
-    def = de;
+    defaultt = de;
 }
 
 

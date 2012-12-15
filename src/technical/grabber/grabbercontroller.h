@@ -72,7 +72,7 @@ public:
 
     /**************************************************************************
      **************************************************************************
-     * Camera capabilities
+     * Camera quality capabilities
      **************************************************************************
      **************************************************************************/
 
@@ -273,52 +273,6 @@ public:
     void setBacklight(int b);
 
     /**************************************************************************
-     * Exposure
-     **************************************************************************/
-
-    /**
-     * Has the camera a automatic exposure control capability?
-     * @return True if the camera has a automatic exposure control apability.
-     */
-    bool isAutomaticExposure();
-
-    /**
-     * Get the current automatic exposure value of the device.
-     * @return True if the automatic exposure is on.
-     */
-    bool getAutomaticExposure();
-
-    /**
-     * Set the automatic exposure value of the device.
-     * @param ae True if the automatic exposure will be switched on.
-     */
-    void setAutomaticExposure(bool ae);
-
-    /**
-     * Has the camera a exposure control capability?
-     * @return True if the camera has a exposure control apability.
-     */
-    bool isExposure();
-
-    /**
-     * Get the capabilities of the exposure control.
-     * @return The exposure control capabilities.
-     */
-    GrabberControlCapabilities *getExposureCaps();
-
-    /**
-     * Get the current exposure value of the device.
-     * @return The current exposure value.
-     */
-    int getExposure();
-
-    /**
-     * Set the exposure value of the device.
-     * @param e The new exposure value
-     */
-    void setExposure(int e);
-
-    /**************************************************************************
      * White Balance
      **************************************************************************/
 
@@ -363,6 +317,58 @@ public:
      * @param w The new white balance value
      */
     void setWhite(int w);
+
+    /**************************************************************************
+     **************************************************************************
+     * Camera control capabilities
+     **************************************************************************
+     **************************************************************************/
+
+    /**************************************************************************
+     * Exposure
+     **************************************************************************/
+
+    /**
+     * Has the camera a automatic exposure control capability?
+     * @return True if the camera has a automatic exposure control apability.
+     */
+    bool isAutomaticExposure();
+
+    /**
+     * Get the current automatic exposure value of the device.
+     * @return True if the automatic exposure is on.
+     */
+    bool getAutomaticExposure();
+
+    /**
+     * Set the automatic exposure value of the device.
+     * @param ae True if the automatic exposure will be switched on.
+     */
+    void setAutomaticExposure(bool ae);
+
+    /**
+     * Has the camera a exposure control capability?
+     * @return True if the camera has a exposure control apability.
+     */
+    bool isExposure();
+
+    /**
+     * Get the capabilities of the exposure control.
+     * @return The exposure control capabilities.
+     */
+    GrabberControlCapabilities *getExposureCaps();
+
+    /**
+     * Get the current exposure value of the device.
+     * @return The current exposure value.
+     */
+    int getExposure();
+
+    /**
+     * Set the exposure value of the device.
+     * @param e The new exposure value
+     */
+    void setExposure(int e);
 
     /**************************************************************************
      * Zoom
@@ -512,6 +518,98 @@ public:
      */
     void setTilt(int t);
 
+    /**************************************************************************
+     * Iris
+     **************************************************************************/
+
+    /**
+     * Has the camera a automatic iris control capability?
+     * @return True if the camera has a automatic iris control apability.
+     */
+    bool isAutomaticIris();
+
+    /**
+     * Get the current automatic iris value of the device.
+     * @return True if the automatic iris is on.
+     */
+    bool getAutomaticIris();
+
+    /**
+     * Set the automatic iris value of the device.
+     * @param ai True if the automatic iris will be switched on.
+     */
+    void setAutomaticIris(bool ai);
+
+    /**
+     * Has the camera a iris control capability?
+     * @return True if the camera has a iris control apability.
+     */
+    bool isIris();
+
+    /**
+     * Get the capabilities of the iris control.
+     * @return The iris control capabilities.
+     */
+    GrabberControlCapabilities *getIrisCaps();
+
+    /**
+     * Get the current iris value of the device.
+     * @return The current iris value.
+     */
+    int getIris();
+
+    /**
+     * Set the iris value of the device.
+     * @param i The new iris value
+     */
+    void setIris(int i);
+
+    /**************************************************************************
+     * Roll
+     **************************************************************************/
+
+    /**
+     * Has the camera a automatic roll control capability?
+     * @return True if the camera has a automatic roll control apability.
+     */
+    bool isAutomaticRoll();
+
+    /**
+     * Get the current automatic roll value of the device.
+     * @return True if the automatic roll is on.
+     */
+    bool getAutomaticRoll();
+
+    /**
+     * Set the automatic roll value of the device.
+     * @param ar True if the automatic roll will be switched on.
+     */
+    void setAutomaticRoll(bool ar);
+
+    /**
+     * Has the camera a roll control capability?
+     * @return True if the camera has a roll control apability.
+     */
+    bool isRoll();
+
+    /**
+     * Get the capabilities of the roll control.
+     * @return The roll control capabilities.
+     */
+    GrabberControlCapabilities *getRollCaps();
+
+    /**
+     * Get the current roll value of the device.
+     * @return The current roll value.
+     */
+    int getRoll();
+
+    /**
+     * Set the roll value of the device.
+     * @param r The new roll value
+     */
+    void setRoll(int r);
+
 private:
     int                         controllerCap;
 
@@ -522,12 +620,14 @@ private:
     GrabberControlCapabilities  gammaCapabilities;
     GrabberControlCapabilities  sharpnessCapabilities;
     GrabberControlCapabilities  backlightCapabilities;
-    GrabberControlCapabilities  exposureCapabilities;
     GrabberControlCapabilities  whiteCapabilities;
+    GrabberControlCapabilities  exposureCapabilities;
     GrabberControlCapabilities  zoomCapabilities;
     GrabberControlCapabilities  focusCapabilities;
     GrabberControlCapabilities  panCapabilities;
     GrabberControlCapabilities  tiltCapabilities;
+    GrabberControlCapabilities  irisCapabilities;
+    GrabberControlCapabilities  rollCapabilities;
 };
 
 #endif

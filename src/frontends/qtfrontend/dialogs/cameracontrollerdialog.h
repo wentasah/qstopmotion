@@ -30,6 +30,7 @@
 #include <QtGui/QCheckBox>
 #include <QtGui/QComboBox>
 #include <QtGui/QDialog>
+#include <QtGui/QGroupBox>
 #include <QtGui/QLabel>
 #include <QtGui/QPushButton>
 
@@ -101,23 +102,9 @@ private slots:
     void changeBacklight(int index);
 
     /**
-     * Slot for notified the camera contoller when automatic exposure is changed, so that
-     * camera contoller can be updaten.
-     * @param newStateb The new state of the check box
-     */
-    void changeAutoExposure(int newState);
-
-    /**
-     * Slot for notified the camera controller when the exposure changes,
-     * so that exposure can be updated.
-     * @param index the new exposure value.
-     */
-    void changeExposure(int index);
-
-    /**
      * Slot for notified the camera contoller when automatic white balance is changed, so that
      * camera contoller can be updaten.
-     * @param newStateb The new state of the check box
+     * @param newState The new state of the check box
      */
     void changeAutoWhite(int newState);
 
@@ -127,6 +114,20 @@ private slots:
      * @param index the new white balance value.
      */
     void changeWhite(int index);
+
+    /**
+     * Slot for notified the camera contoller when automatic exposure is changed, so that
+     * camera contoller can be updaten.
+     * @param newState The new state of the check box
+     */
+    void changeAutoExposure(int newState);
+
+    /**
+     * Slot for notified the camera controller when the exposure changes,
+     * so that exposure can be updated.
+     * @param index the new exposure value.
+     */
+    void changeExposure(int index);
 
     /**
      * Slot for notified the camera contoller when automatic zoom is changed, so that
@@ -145,7 +146,7 @@ private slots:
     /**
      * Slot for notified the camera contoller when automatic focus is changed, so that
      * camera contoller can be updaten.
-     * @param newStateb The new state of the check box
+     * @param newState The new state of the check box
      */
     void changeAutoFocus(int newState);
 
@@ -170,6 +171,34 @@ private slots:
      */
     void changeTilt(int index);
 
+    /**
+     * Slot for notified the camera contoller when automatic iris is changed, so that
+     * camera contoller can be updaten.
+     * @param newState The new state of the check box
+     */
+    void changeAutoIris(int newState);
+
+    /**
+     * Slot for notified the camera controller when the iris changes,
+     * so that iris can be updated.
+     * @param index the new iris value.
+     */
+    void changeIris(int index);
+
+    /**
+     * Slot for notified the camera contoller when automatic roll is changed, so that
+     * camera contoller can be updaten.
+     * @param newState The new state of the check box
+     */
+    void changeAutoRoll(int newState);
+
+    /**
+     * Slot for notified the camera controller when the roll changes,
+     * so that iris can be updated.
+     * @param index the new roll value.
+     */
+    void changeRoll(int index);
+
 private:
     /**
      * Fill the combobox with the values.
@@ -182,7 +211,10 @@ private:
     Frontend     *frontend;
 
     ImageGrabberDevice *grabberDevice;
+    QString             deviceId;
     GrabberController  *grabberController;
+
+    QGroupBox    *qualityGroupBox;
 
     QLabel       *brightnessLabel;
     QComboBox    *brightnessComboBox;
@@ -212,15 +244,17 @@ private:
     QComboBox    *backlightComboBox;
     int           stepBacklight;
 
-    QCheckBox    *exposureCheckBox;
-    QLabel       *exposureLabel;
-    QComboBox    *exposureComboBox;
-    int           stepExposure;
-
     QCheckBox    *whiteCheckBox;
     QLabel       *whiteLabel;
     QComboBox    *whiteComboBox;
     int           stepWhite;
+
+    QGroupBox    *controlGroupBox;
+
+    QCheckBox    *exposureCheckBox;
+    QLabel       *exposureLabel;
+    QComboBox    *exposureComboBox;
+    int           stepExposure;
 
     QCheckBox    *zoomCheckBox;
     QLabel       *zoomLabel;
@@ -239,6 +273,16 @@ private:
     QLabel       *tiltLabel;
     QComboBox    *tiltComboBox;
     int           stepTilt;
+
+    QCheckBox    *irisCheckBox;
+    QLabel       *irisLabel;
+    QComboBox    *irisComboBox;
+    int           stepIris;
+
+    QCheckBox    *rollCheckBox;
+    QLabel       *rollLabel;
+    QComboBox    *rollComboBox;
+    int           stepRoll;
 
     QPushButton  *closeButton;
 };

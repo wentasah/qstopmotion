@@ -48,6 +48,7 @@ ProjectTab::ProjectTab(Frontend *f,
       lastVisitedDir.append(lvd);
     }
 
+    projectGroupBox     = 0;
     projectTree         = 0;
 
     scenesGroupBox      = 0;

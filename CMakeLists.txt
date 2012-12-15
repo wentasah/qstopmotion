@@ -153,7 +153,6 @@ set(MOC_HEADERS
     src/technical/externalchangemonitor.h
     src/technical/preferenceselement.h
     src/technical/preferencestool.h
-    src/technical/grabber/gphotograbber.h
     src/technical/grabber/gstreamerdevicegrabber.h
     src/technical/grabber/gstreamergrabber.h
     src/technical/grabber/gstreamervideotestgrabber.h
@@ -172,6 +171,7 @@ ENDIF(WIN32)
 IF(UNIX)
 set(MOC_HEADERS
     ${MOC_HEADERS}
+    src/technical/grabber/gphotograbber.h
     src/technical/grabber/gstreamerdv1394grabber.h
     src/technical/grabber/gstreamerv4l2grabber.h
 )
@@ -236,7 +236,6 @@ set(SOURCES
     src/technical/preferenceselement.cpp
     src/technical/preferencestool.cpp
     src/technical/util.cpp
-    src/technical/grabber/gphotograbber.cpp
     src/technical/grabber/grabbercontrolcapabilities.cpp
     src/technical/grabber/grabbercontroller.cpp
     src/technical/grabber/gstreamerdevicegrabber.cpp
@@ -264,6 +263,7 @@ ENDIF(WIN32)
 IF(UNIX)
 set(SOURCES
     ${SOURCES}
+    src/technical/grabber/gphotograbber.cpp
     src/technical/grabber/gstreamerdv1394grabber.cpp
     src/technical/grabber/gstreamerv4l2grabber.cpp
 )

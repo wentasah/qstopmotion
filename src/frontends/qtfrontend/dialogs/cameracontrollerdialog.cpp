@@ -38,6 +38,8 @@ CameraControllerDialog::CameraControllerDialog(Frontend *f,
 
     frontend = f;
     grabberDevice = device;
+    deviceId = grabberDevice->getDeviceId();
+    deviceId.remove(QChar(' '));   // Remove all spaces
     grabberController = device->getController();
     stepBrightness = -1;
     stepContrast = -1;
@@ -46,17 +48,23 @@ CameraControllerDialog::CameraControllerDialog(Frontend *f,
     stepGamma = -1;
     stepSharpness = -1;
     stepBacklight = -1;
-    stepExposure = -1;
     stepWhite = -1;
+    stepExposure = -1;
     stepZoom = -1;
     stepFocus = -1;
     stepPan = -1;
     stepTilt = -1;
+    stepIris = -1;
+    stepRoll = -1;
 
     this->setWindowTitle(tr("qStopMotion Camera Controller"));
     this->setMinimumSize(200, 500);
     // Enable help window for modal dialoges
     this->setAttribute(Qt::WA_GroupLeader);
+
+    qualityGroupBox = new QGroupBox(tr("Video Quality"));
+    QVBoxLayout *qualityLayout = new QVBoxLayout;
+    qualityGroupBox->setLayout(qualityLayout);
 
     brightnessLabel = new QLabel(tr("Brightness:"));
     brightnessComboBox = new QComboBox();
@@ -100,17 +108,6 @@ CameraControllerDialog::CameraControllerDialog(Frontend *f,
     backlightLabel->hide();
     backlightComboBox->hide();
 
-    exposureCheckBox = new QCheckBox(tr("Automatic Exposure"));
-    exposureCheckBox->setChecked(false);
-    connect(exposureCheckBox, SIGNAL(stateChanged(int)), this, SLOT(changeAutoExposure(int)));
-    exposureCheckBox->hide();
-
-    exposureLabel = new QLabel(tr("Exposure:"));
-    exposureComboBox = new QComboBox();
-    connect(exposureComboBox, SIGNAL(activated(int)), this, SLOT(changeExposure(int)));
-    exposureLabel->hide();
-    exposureComboBox->hide();
-
     whiteCheckBox = new QCheckBox(tr("Automatic White Balance"));
     whiteCheckBox->setChecked(false);
     connect(whiteCheckBox, SIGNAL(stateChanged(int)), this, SLOT(changeAutoWhite(int)));
@@ -121,6 +118,21 @@ CameraControllerDialog::CameraControllerDialog(Frontend *f,
     connect(whiteComboBox, SIGNAL(activated(int)), this, SLOT(changeWhite(int)));
     whiteLabel->hide();
     whiteComboBox->hide();
+
+    controlGroupBox = new QGroupBox(tr("Camera Control"));
+    QVBoxLayout *controlLayout = new QVBoxLayout;
+    controlGroupBox->setLayout(controlLayout);
+
+    exposureCheckBox = new QCheckBox(tr("Automatic Exposure"));
+    exposureCheckBox->setChecked(false);
+    connect(exposureCheckBox, SIGNAL(stateChanged(int)), this, SLOT(changeAutoExposure(int)));
+    exposureCheckBox->hide();
+
+    exposureLabel = new QLabel(tr("Exposure:"));
+    exposureComboBox = new QComboBox();
+    connect(exposureComboBox, SIGNAL(activated(int)), this, SLOT(changeExposure(int)));
+    exposureLabel->hide();
+    exposureComboBox->hide();
 
     zoomCheckBox = new QCheckBox(tr("Automatic Zoom"));
     zoomCheckBox->setChecked(false);
@@ -156,6 +168,28 @@ CameraControllerDialog::CameraControllerDialog(Frontend *f,
     tiltLabel->hide();
     tiltComboBox->hide();
 
+    irisCheckBox = new QCheckBox(tr("Automatic Iris"));
+    irisCheckBox->setChecked(false);
+    connect(irisCheckBox, SIGNAL(stateChanged(int)), this, SLOT(changeAutoIris(int)));
+    irisCheckBox->hide();
+
+    irisLabel = new QLabel(tr("Iris:"));
+    irisComboBox = new QComboBox();
+    connect(irisComboBox, SIGNAL(activated(int)), this, SLOT(changeIris(int)));
+    irisLabel->hide();
+    irisComboBox->hide();
+
+    rollCheckBox = new QCheckBox(tr("Automatic Roll"));
+    rollCheckBox->setChecked(false);
+    connect(rollCheckBox, SIGNAL(stateChanged(int)), this, SLOT(changeAutoRoll(int)));
+    rollCheckBox->hide();
+
+    rollLabel = new QLabel(tr("Roll:"));
+    rollComboBox = new QComboBox();
+    connect(rollComboBox, SIGNAL(activated(int)), this, SLOT(changeRoll(int)));
+    rollLabel->hide();
+    rollComboBox->hide();
+
     closeButton = new QPushButton(tr("&Close"));
     connect(closeButton, SIGNAL(clicked()), this, SLOT(reject()));
 
@@ -165,36 +199,47 @@ CameraControllerDialog::CameraControllerDialog(Frontend *f,
 
     QVBoxLayout *mainLayout = new QVBoxLayout;
     // mainLayout->addLayout(topLayout);
-    mainLayout->addWidget(brightnessLabel);
-    mainLayout->addWidget(brightnessComboBox);
-    mainLayout->addWidget(contrastLabel);
-    mainLayout->addWidget(contrastComboBox);
-    mainLayout->addWidget(saturationLabel);
-    mainLayout->addWidget(saturationComboBox);
-    mainLayout->addWidget(hueLabel);
-    mainLayout->addWidget(hueComboBox);
-    mainLayout->addWidget(gammaLabel);
-    mainLayout->addWidget(gammaComboBox);
-    mainLayout->addWidget(sharpnessLabel);
-    mainLayout->addWidget(sharpnessComboBox);
-    mainLayout->addWidget(backlightLabel);
-    mainLayout->addWidget(backlightComboBox);
-    mainLayout->addWidget(exposureCheckBox);
-    mainLayout->addWidget(exposureLabel);
-    mainLayout->addWidget(exposureComboBox);
-    mainLayout->addWidget(whiteCheckBox);
-    mainLayout->addWidget(whiteLabel);
-    mainLayout->addWidget(whiteComboBox);
-    mainLayout->addWidget(zoomCheckBox);
-    mainLayout->addWidget(zoomLabel);
-    mainLayout->addWidget(zoomComboBox);
-    mainLayout->addWidget(focusCheckBox);
-    mainLayout->addWidget(focusLabel);
-    mainLayout->addWidget(focusComboBox);
-    mainLayout->addWidget(panLabel);
-    mainLayout->addWidget(panComboBox);
-    mainLayout->addWidget(tiltLabel);
-    mainLayout->addWidget(tiltComboBox);
+
+    qualityLayout->addWidget(brightnessLabel);
+    qualityLayout->addWidget(brightnessComboBox);
+    qualityLayout->addWidget(contrastLabel);
+    qualityLayout->addWidget(contrastComboBox);
+    qualityLayout->addWidget(saturationLabel);
+    qualityLayout->addWidget(saturationComboBox);
+    qualityLayout->addWidget(hueLabel);
+    qualityLayout->addWidget(hueComboBox);
+    qualityLayout->addWidget(gammaLabel);
+    qualityLayout->addWidget(gammaComboBox);
+    qualityLayout->addWidget(sharpnessLabel);
+    qualityLayout->addWidget(sharpnessComboBox);
+    qualityLayout->addWidget(backlightLabel);
+    qualityLayout->addWidget(backlightComboBox);
+    qualityLayout->addWidget(whiteCheckBox);
+    qualityLayout->addWidget(whiteLabel);
+    qualityLayout->addWidget(whiteComboBox);
+
+    controlLayout->addWidget(exposureCheckBox);
+    controlLayout->addWidget(exposureLabel);
+    controlLayout->addWidget(exposureComboBox);
+    controlLayout->addWidget(zoomCheckBox);
+    controlLayout->addWidget(zoomLabel);
+    controlLayout->addWidget(zoomComboBox);
+    controlLayout->addWidget(focusCheckBox);
+    controlLayout->addWidget(focusLabel);
+    controlLayout->addWidget(focusComboBox);
+    controlLayout->addWidget(panLabel);
+    controlLayout->addWidget(panComboBox);
+    controlLayout->addWidget(tiltLabel);
+    controlLayout->addWidget(tiltComboBox);
+    controlLayout->addWidget(irisCheckBox);
+    controlLayout->addWidget(irisLabel);
+    controlLayout->addWidget(irisComboBox);
+    controlLayout->addWidget(rollCheckBox);
+    controlLayout->addWidget(rollLabel);
+    controlLayout->addWidget(rollComboBox);
+
+    mainLayout->addWidget(qualityGroupBox);
+    mainLayout->addWidget(controlGroupBox);
     mainLayout->addStretch();
     mainLayout->addLayout(bottomLayout);
     this->setLayout(mainLayout);
@@ -207,7 +252,6 @@ void CameraControllerDialog::init()
 {
     qDebug() << "CameraControllerDialog::init --> Start";
 
-    QString deviceId = grabberDevice->getDeviceId();
     PreferencesTool *preferences = frontend->getPreferences();
 
     if (grabberController->isBrightness()) {
@@ -259,19 +303,6 @@ void CameraControllerDialog::init()
         backlightComboBox->setCurrentIndex(preferences->getIntegerPreference(deviceId, "backlight", backlightComboBox->count()/2));
     }
 
-    if (grabberController->isAutomaticExposure()) {
-        exposureCheckBox->show();
-        exposureCheckBox->setChecked(preferences->getIntegerPreference(deviceId, "automaticexposure", false));
-    }
-    else {
-        if (grabberController->isExposure()) {
-            exposureLabel->show();
-            exposureComboBox->show();
-            stepExposure = fillComboBox(exposureComboBox, grabberController->getExposureCaps());
-            exposureComboBox->setCurrentIndex(preferences->getIntegerPreference(deviceId, "exposure", exposureComboBox->count()/2));
-        }
-    }
-
     if (grabberController->isAutomaticWhite()) {
         whiteCheckBox->show();
         whiteCheckBox->setChecked(preferences->getIntegerPreference(deviceId, "automaticwhite", false));
@@ -282,6 +313,19 @@ void CameraControllerDialog::init()
             whiteComboBox->show();
             stepWhite = fillComboBox(whiteComboBox, grabberController->getWhiteCaps());
             whiteComboBox->setCurrentIndex(preferences->getIntegerPreference(deviceId, "white", whiteComboBox->count()/2));
+        }
+    }
+
+    if (grabberController->isAutomaticExposure()) {
+        exposureCheckBox->show();
+        exposureCheckBox->setChecked(preferences->getIntegerPreference(deviceId, "automaticexposure", false));
+    }
+    else {
+        if (grabberController->isExposure()) {
+            exposureLabel->show();
+            exposureComboBox->show();
+            stepExposure = fillComboBox(exposureComboBox, grabberController->getExposureCaps());
+            exposureComboBox->setCurrentIndex(preferences->getIntegerPreference(deviceId, "exposure", exposureComboBox->count()/2));
         }
     }
 
@@ -327,6 +371,32 @@ void CameraControllerDialog::init()
     else {
     }
 
+    if (grabberController->isAutomaticIris()) {
+        irisCheckBox->show();
+        irisCheckBox->setChecked(preferences->getIntegerPreference(deviceId, "automaticiris", false));
+    }
+    else {
+        if (grabberController->isIris()) {
+            irisLabel->show();
+            irisComboBox->show();
+            stepIris = fillComboBox(irisComboBox, grabberController->getIrisCaps());
+            irisComboBox->setCurrentIndex(preferences->getIntegerPreference(deviceId, "iris", irisComboBox->count()/2));
+        }
+    }
+
+    if (grabberController->isAutomaticRoll()) {
+        rollCheckBox->show();
+        rollCheckBox->setChecked(preferences->getIntegerPreference(deviceId, "automaticroll", false));
+    }
+    else {
+        if (grabberController->isRoll()) {
+            rollLabel->show();
+            rollComboBox->show();
+            stepRoll = fillComboBox(rollComboBox, grabberController->getRollCaps());
+            rollComboBox->setCurrentIndex(preferences->getIntegerPreference(deviceId, "roll", rollComboBox->count()/2));
+        }
+    }
+
     qDebug() << "CameraControllerDialog::init --> End";
 }
 
@@ -335,7 +405,6 @@ void CameraControllerDialog::changeBrightness(int index)
 {
     qDebug() << "CameraControllerDialog::changeBrightness --> Start";
 
-    QString deviceId = grabberDevice->getDeviceId();
     PreferencesTool *preferences = frontend->getPreferences();
     // long minValue;
     // long stepValue;
@@ -358,7 +427,6 @@ void CameraControllerDialog::changeContrast(int index)
 {
     qDebug() << "CameraControllerDialog::changeContrast --> Start";
 
-    QString deviceId = grabberDevice->getDeviceId();
     PreferencesTool *preferences = frontend->getPreferences();
     int value = index * stepContrast;
     int maxValue = grabberController->getContrastCaps()->getMaximum();
@@ -377,7 +445,6 @@ void CameraControllerDialog::changeSaturation(int index)
 {
     qDebug() << "CameraControllerDialog::changeSaturation --> Start";
 
-    QString deviceId = grabberDevice->getDeviceId();
     PreferencesTool *preferences = frontend->getPreferences();
     int value = index * stepSaturation;
     int maxValue = grabberController->getSaturationCaps()->getMaximum();
@@ -396,7 +463,6 @@ void CameraControllerDialog::changeHue(int index)
 {
     qDebug() << "CameraControllerDialog::changeHue --> Start";
 
-    QString deviceId = grabberDevice->getDeviceId();
     PreferencesTool *preferences = frontend->getPreferences();
     int value = index * stepHue;
     int maxValue = grabberController->getHueCaps()->getMaximum();
@@ -415,7 +481,6 @@ void CameraControllerDialog::changeGamma(int index)
 {
     qDebug() << "CameraControllerDialog::changeGamma --> Start";
 
-    QString deviceId = grabberDevice->getDeviceId();
     PreferencesTool *preferences = frontend->getPreferences();
     int value = index * stepGamma;
     int maxValue = grabberController->getGammaCaps()->getMaximum();
@@ -434,7 +499,6 @@ void CameraControllerDialog::changeSharpness(int index)
 {
     qDebug() << "CameraControllerDialog::changeSharpness --> Start";
 
-    QString deviceId = grabberDevice->getDeviceId();
     PreferencesTool *preferences = frontend->getPreferences();
     int value = index * stepSharpness;
     int maxValue = grabberController->getSharpnessCaps()->getMaximum();
@@ -453,7 +517,6 @@ void CameraControllerDialog::changeBacklight(int index)
 {
     qDebug() << "CameraControllerDialog::changeBacklight --> Start";
 
-    QString deviceId = grabberDevice->getDeviceId();
     PreferencesTool *preferences = frontend->getPreferences();
     int value = index * stepBacklight;
     int maxValue = grabberController->getBacklightCaps()->getMaximum();
@@ -468,52 +531,10 @@ void CameraControllerDialog::changeBacklight(int index)
 }
 
 
-void CameraControllerDialog::changeAutoExposure(int newState)
-{
-    qDebug() << "CameraControllerDialog::changeAutoExposure --> Start";
-
-    QString deviceId = grabberDevice->getDeviceId();
-    PreferencesTool *preferences = frontend->getPreferences();
-
-    if (newState) {
-        exposureComboBox->setEnabled(false);
-        grabberController->setAutomaticExposure(true);
-        preferences->setIntegerPreference(deviceId, "automaticexposure", true);
-    }
-    else {
-        exposureComboBox->setEnabled(true);
-        grabberController->setAutomaticExposure(false);
-        preferences->setIntegerPreference(deviceId, "automaticexposure", false);
-    }
-
-    qDebug() << "CameraControllerDialog::changeAutoExposure --> End";
-}
-
-
-void CameraControllerDialog::changeExposure(int index)
-{
-    qDebug() << "CameraControllerDialog::changeExposure --> Start";
-
-    QString deviceId = grabberDevice->getDeviceId();
-    PreferencesTool *preferences = frontend->getPreferences();
-    int value = index * stepExposure;
-    int maxValue = grabberController->getExposureCaps()->getMaximum();
-
-    if (value > maxValue) {
-        value = maxValue;
-    }
-    grabberController->setExposure(value);
-    preferences->setIntegerPreference(deviceId, "exposure", index);
-
-    qDebug() << "CameraControllerDialog::changeExposure --> End";
-}
-
-
 void CameraControllerDialog::changeAutoWhite(int newState)
 {
     qDebug() << "CameraControllerDialog::changeAutoWhite --> Start";
 
-    QString deviceId = grabberDevice->getDeviceId();
     PreferencesTool *preferences = frontend->getPreferences();
 
     if (newState) {
@@ -535,7 +556,6 @@ void CameraControllerDialog::changeWhite(int index)
 {
     qDebug() << "CameraControllerDialog::changeWhite --> Start";
 
-    QString deviceId = grabberDevice->getDeviceId();
     PreferencesTool *preferences = frontend->getPreferences();
     int value = index * stepWhite;
     int maxValue = grabberController->getWhiteCaps()->getMaximum();
@@ -550,11 +570,49 @@ void CameraControllerDialog::changeWhite(int index)
 }
 
 
+void CameraControllerDialog::changeAutoExposure(int newState)
+{
+    qDebug() << "CameraControllerDialog::changeAutoExposure --> Start";
+
+    PreferencesTool *preferences = frontend->getPreferences();
+
+    if (newState) {
+        exposureComboBox->setEnabled(false);
+        grabberController->setAutomaticExposure(true);
+        preferences->setIntegerPreference(deviceId, "automaticexposure", true);
+    }
+    else {
+        exposureComboBox->setEnabled(true);
+        grabberController->setAutomaticExposure(false);
+        preferences->setIntegerPreference(deviceId, "automaticexposure", false);
+    }
+
+    qDebug() << "CameraControllerDialog::changeAutoExposure --> End";
+}
+
+
+void CameraControllerDialog::changeExposure(int index)
+{
+    qDebug() << "CameraControllerDialog::changeExposure --> Start";
+
+    PreferencesTool *preferences = frontend->getPreferences();
+    int value = index * stepExposure;
+    int maxValue = grabberController->getExposureCaps()->getMaximum();
+
+    if (value > maxValue) {
+        value = maxValue;
+    }
+    grabberController->setExposure(value);
+    preferences->setIntegerPreference(deviceId, "exposure", index);
+
+    qDebug() << "CameraControllerDialog::changeExposure --> End";
+}
+
+
 void CameraControllerDialog::changeAutoZoom(int newState)
 {
     qDebug() << "CameraControllerDialog::changeAutoZoo --> Start";
 
-    QString deviceId = grabberDevice->getDeviceId();
     PreferencesTool *preferences = frontend->getPreferences();
 
     if (newState) {
@@ -576,7 +634,6 @@ void CameraControllerDialog::changeZoom(int index)
 {
     qDebug() << "CameraControllerDialog::changeZoo --> Start";
 
-    QString deviceId = grabberDevice->getDeviceId();
     PreferencesTool *preferences = frontend->getPreferences();
     int value = index * stepZoom;
     int maxValue = grabberController->getZoomCaps()->getMaximum();
@@ -595,7 +652,6 @@ void CameraControllerDialog::changeAutoFocus(int newState)
 {
     qDebug() << "CameraControllerDialog::changeAutoFocus --> Start";
 
-    QString deviceId = grabberDevice->getDeviceId();
     PreferencesTool *preferences = frontend->getPreferences();
 
     if (newState) {
@@ -617,7 +673,6 @@ void CameraControllerDialog::changeFocus(int index)
 {
     qDebug() << "CameraControllerDialog::changeFocus --> Start";
 
-    QString deviceId = grabberDevice->getDeviceId();
     PreferencesTool *preferences = frontend->getPreferences();
     int value = index * stepFocus;
     int maxValue = grabberController->getFocusCaps()->getMaximum();
@@ -636,7 +691,6 @@ void CameraControllerDialog::changePan(int index)
 {
     qDebug() << "CameraControllerDialog::changePan --> Start";
 
-    QString deviceId = grabberDevice->getDeviceId();
     PreferencesTool *preferences = frontend->getPreferences();
     int value = index * stepPan;
     int maxValue = grabberController->getPanCaps()->getMaximum();
@@ -655,7 +709,6 @@ void CameraControllerDialog::changeTilt(int index)
 {
     qDebug() << "CameraControllerDialog::changeTilt --> Start";
 
-    QString deviceId = grabberDevice->getDeviceId();
     PreferencesTool *preferences = frontend->getPreferences();
     int value = index * stepTilt;
     int maxValue = grabberController->getTiltCaps()->getMaximum();
@@ -667,6 +720,84 @@ void CameraControllerDialog::changeTilt(int index)
     preferences->setIntegerPreference(deviceId, "tilt", index);
 
     qDebug() << "CameraControllerDialog::changeTilt --> End";
+}
+
+
+void CameraControllerDialog::changeAutoIris(int newState)
+{
+    qDebug() << "CameraControllerDialog::changeAutoIris --> Start";
+
+    PreferencesTool *preferences = frontend->getPreferences();
+
+    if (newState) {
+        irisComboBox->setEnabled(false);
+        grabberController->setAutomaticIris(true);
+        preferences->setIntegerPreference(deviceId, "automaticiris", true);
+    }
+    else {
+        irisComboBox->setEnabled(true);
+        grabberController->setAutomaticIris(false);
+        preferences->setIntegerPreference(deviceId, "automaticiris", false);
+    }
+
+    qDebug() << "CameraControllerDialog::changeAutoIris --> End";
+}
+
+
+void CameraControllerDialog::changeIris(int index)
+{
+    qDebug() << "CameraControllerDialog::changeIris --> Start";
+
+    PreferencesTool *preferences = frontend->getPreferences();
+    int value = index * stepIris;
+    int maxValue = grabberController->getIrisCaps()->getMaximum();
+
+    if (value > maxValue) {
+        value = maxValue;
+    }
+    grabberController->setIris(value);
+    preferences->setIntegerPreference(deviceId, "iris", index);
+
+    qDebug() << "CameraControllerDialog::changeIris --> End";
+}
+
+
+void CameraControllerDialog::changeAutoRoll(int newState)
+{
+    qDebug() << "CameraControllerDialog::changeAutoRoll --> Start";
+
+    PreferencesTool *preferences = frontend->getPreferences();
+
+    if (newState) {
+        rollComboBox->setEnabled(false);
+        grabberController->setAutomaticRoll(true);
+        preferences->setIntegerPreference(deviceId, "automaticroll", true);
+    }
+    else {
+        rollComboBox->setEnabled(true);
+        grabberController->setAutomaticRoll(false);
+        preferences->setIntegerPreference(deviceId, "automaticroll", false);
+    }
+
+    qDebug() << "CameraControllerDialog::changeAutoRoll --> End";
+}
+
+
+void CameraControllerDialog::changeRoll(int index)
+{
+    qDebug() << "CameraControllerDialog::changeRoll --> Start";
+
+    PreferencesTool *preferences = frontend->getPreferences();
+    int value = index * stepRoll;
+    int maxValue = grabberController->getRollCaps()->getMaximum();
+
+    if (value > maxValue) {
+        value = maxValue;
+    }
+    grabberController->setRoll(value);
+    preferences->setIntegerPreference(deviceId, "roll", index);
+
+    qDebug() << "CameraControllerDialog::changeRoll --> End";
 }
 
 

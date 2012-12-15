@@ -57,7 +57,7 @@ int GrabberController::getControllerCapabilities()
 
 /**************************************************************************
  **************************************************************************
- * Camera capabilities
+ * Camera quality capabilities
  **************************************************************************
  **************************************************************************/
 
@@ -272,57 +272,6 @@ void GrabberController::setBacklight(int /*b*/)
 }
 
 /**************************************************************************
- * Exposure
- **************************************************************************/
-
-bool GrabberController::isAutomaticExposure()
-{
-    if (exposureCapabilities.getFlags() == GrabberControlCapabilities::control_Auto) {
-        return true;
-    }
-
-    return false;
-}
-
-
-bool GrabberController::getAutomaticExposure()
-{
-    return false;
-}
-
-
-void GrabberController::setAutomaticExposure(bool /*ae*/)
-{
-    Q_ASSERT( 1 );
-}
-
-bool GrabberController::isExposure()
-{
-    if (exposureCapabilities.getFlags() != GrabberControlCapabilities::control_none) {
-        return true;
-    }
-    return false;
-}
-
-
-GrabberControlCapabilities *GrabberController::getExposureCaps()
-{
-    return &exposureCapabilities;
-}
-
-
-int GrabberController::getExposure()
-{
-    return 0;
-}
-
-
-void GrabberController::setExposure(int /*e*/)
-{
-    Q_ASSERT( 1 );
-}
-
-/**************************************************************************
  * White Balance
  **************************************************************************/
 
@@ -369,6 +318,63 @@ int GrabberController::getWhite()
 
 
 void GrabberController::setWhite(int /*w*/)
+{
+    Q_ASSERT( 1 );
+}
+
+/**************************************************************************
+ **************************************************************************
+ * Camera control capabilities
+ **************************************************************************
+ **************************************************************************/
+
+/**************************************************************************
+ * Exposure
+ **************************************************************************/
+
+bool GrabberController::isAutomaticExposure()
+{
+    if (exposureCapabilities.getFlags() == GrabberControlCapabilities::control_Auto) {
+        return true;
+    }
+
+    return false;
+}
+
+
+bool GrabberController::getAutomaticExposure()
+{
+    return false;
+}
+
+
+void GrabberController::setAutomaticExposure(bool /*ae*/)
+{
+    Q_ASSERT( 1 );
+}
+
+bool GrabberController::isExposure()
+{
+    if (exposureCapabilities.getFlags() != GrabberControlCapabilities::control_none) {
+        return true;
+    }
+    return false;
+}
+
+
+GrabberControlCapabilities *GrabberController::getExposureCaps()
+{
+    return &exposureCapabilities;
+}
+
+
+int GrabberController::getExposure()
+{
+    return 0;
+}
+
+
+void GrabberController::setExposure(int /*e*/)
 {
     Q_ASSERT( 1 );
 }
@@ -532,6 +538,108 @@ int GrabberController::getTilt()
 
 
 void GrabberController::setTilt(int /*t*/)
+{
+    Q_ASSERT( 1 );
+}
+
+/**************************************************************************
+ * Iris
+ **************************************************************************/
+
+bool GrabberController::isAutomaticIris()
+{
+    if (irisCapabilities.getFlags() == GrabberControlCapabilities::control_Auto) {
+        return true;
+    }
+
+    return false;
+}
+
+
+bool GrabberController::getAutomaticIris()
+{
+    return false;
+}
+
+
+void GrabberController::setAutomaticIris(bool /*ai*/)
+{
+    Q_ASSERT( 1 );
+}
+
+bool GrabberController::isIris()
+{
+    if (irisCapabilities.getFlags() != GrabberControlCapabilities::control_none) {
+        return true;
+    }
+    return false;
+}
+
+
+GrabberControlCapabilities *GrabberController::getIrisCaps()
+{
+    return &irisCapabilities;
+}
+
+
+int GrabberController::getIris()
+{
+    return 0;
+}
+
+
+void GrabberController::setIris(int /*i*/)
+{
+    Q_ASSERT( 1 );
+}
+
+/**************************************************************************
+ * Roll
+ **************************************************************************/
+
+bool GrabberController::isAutomaticRoll()
+{
+    if (rollCapabilities.getFlags() == GrabberControlCapabilities::control_Auto) {
+        return true;
+    }
+
+    return false;
+}
+
+
+bool GrabberController::getAutomaticRoll()
+{
+    return false;
+}
+
+
+void GrabberController::setAutomaticRoll(bool /*ar*/)
+{
+    Q_ASSERT( 1 );
+}
+
+bool GrabberController::isRoll()
+{
+    if (rollCapabilities.getFlags() != GrabberControlCapabilities::control_none) {
+        return true;
+    }
+    return false;
+}
+
+
+GrabberControlCapabilities *GrabberController::getRollCaps()
+{
+    return &rollCapabilities;
+}
+
+
+int GrabberController::getRoll()
+{
+    return 0;
+}
+
+
+void GrabberController::setRoll(int /*r*/)
 {
     Q_ASSERT( 1 );
 }

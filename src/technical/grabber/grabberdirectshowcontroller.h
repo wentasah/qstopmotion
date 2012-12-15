@@ -56,7 +56,7 @@ public:
 
     /**************************************************************************
      **************************************************************************
-     * Camera capabilities
+     * Camera quality capabilities
      **************************************************************************
      **************************************************************************/
 
@@ -173,6 +173,40 @@ public:
     // void setBacklight(int b);
 
     /**************************************************************************
+     * White Balance
+     **************************************************************************/
+
+    /**
+     * Get the current automatic white balance value of the device.
+     * @return True if the automatic white balance is on.
+     */
+    // bool getAutomaticWhite();
+
+    /**
+     * Set the automatic white balance value of the device.
+     * @param ae True if the automatic white balance will be switched on.
+     */
+    // void setAutomaticWhite(bool ae);
+
+    /**
+     * Get the current white balance value of the device.
+     * @return The current white balance value.
+     */
+    // int getWhite();
+
+    /**
+     * Set the white balance value of the device.
+     * @param w The new white balance value
+     */
+    // void setWhite(int w);
+
+    /**************************************************************************
+     **************************************************************************
+     * Camera control capabilities
+     **************************************************************************
+     **************************************************************************/
+
+    /**************************************************************************
      * Exposure
      **************************************************************************/
 
@@ -201,32 +235,32 @@ public:
     // void setExposure(int e);
 
     /**************************************************************************
-     * White Balance
+     * Iris
      **************************************************************************/
 
     /**
-     * Get the current automatic white balance value of the device.
-     * @return True if the automatic white balance is on.
+     * Get the current automatic iris value of the device.
+     * @return True if the automatic iris is on.
      */
-    // bool getAutomaticWhite();
+    // bool getAutomaticIris();
 
     /**
-     * Set the automatic white balance value of the device.
-     * @param ae True if the automatic white balance will be switched on.
+     * Set the automatic iris value of the device.
+     * @param ae True if the automatic iris will be switched on.
      */
-    // void setAutomaticWhite(bool ae);
+    // void setAutomaticIris(bool ae);
 
     /**
-     * Get the current white balance value of the device.
-     * @return The current white balance value.
+     * Get the current iris value of the device.
+     * @return The current iris value.
      */
-    // int getWhite();
+    // int getIris();
 
     /**
-     * Set the white balance value of the device.
-     * @param w The new white balance value
+     * Set the iris value of the device.
+     * @param e The new iris value
      */
-    // void setWhite(int w);
+    // void setIris(int e);
 
     /**************************************************************************
      * Zoom
@@ -318,8 +352,10 @@ public:
 
 private:
     IAMCameraControl *pCameraControl;
+    IAMVideoProcAmp *pQualityControl;
 
-    bool setCapabilities();
+    bool setControlCapabilities();
+    bool setQualityCapabilities();
 
 };
 

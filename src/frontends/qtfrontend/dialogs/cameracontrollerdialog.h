@@ -53,11 +53,25 @@ public:
 
 private slots:
     /**
+     * Slot for notified the camera contoller when automatic brightness is changed, so that
+     * camera contoller can be updaten.
+     * @param newState The new state of the check box
+     */
+    void changeAutoBrightness(int newState);
+
+    /**
      * Slot for notified the camera controller when the brightness changes,
      * so that brightness can be updated.
      * @param index the new brightness value.
      */
     void changeBrightness(int index);
+
+    /**
+     * Slot for notified the camera contoller when automatic contrast is changed, so that
+     * camera contoller can be updaten.
+     * @param newState The new state of the check box
+     */
+    void changeAutoContrast(int newState);
 
     /**
      * Slot for notified the camera controller when the contrast changes,
@@ -67,11 +81,25 @@ private slots:
     void changeContrast(int index);
 
     /**
+     * Slot for notified the camera contoller when automatic saturation is changed, so that
+     * camera contoller can be updaten.
+     * @param newState The new state of the check box
+     */
+    void changeAutoSaturation(int newState);
+
+    /**
      * Slot for notified the camera controller when the saturation changes,
      * so that saturation can be updated.
      * @param index the new saturation value.
      */
     void changeSaturation(int index);
+
+    /**
+     * Slot for notified the camera contoller when automatic hue is changed, so that
+     * camera contoller can be updaten.
+     * @param newState The new state of the check box
+     */
+    void changeAutoHue(int newState);
 
     /**
      * Slot for notified the camera controller when the hue changes,
@@ -81,6 +109,13 @@ private slots:
     void changeHue(int index);
 
     /**
+     * Slot for notified the camera contoller when automatic gamma is changed, so that
+     * camera contoller can be updaten.
+     * @param newState The new state of the check box
+     */
+    void changeAutoGamma(int newState);
+
+    /**
      * Slot for notified the camera controller when the gamma changes,
      * so that gamma can be updated.
      * @param index the new gamma value.
@@ -88,11 +123,25 @@ private slots:
     void changeGamma(int index);
 
     /**
+     * Slot for notified the camera contoller when automatic sharpness is changed, so that
+     * camera contoller can be updaten.
+     * @param newState The new state of the check box
+     */
+    void changeAutoSharpness(int newState);
+
+    /**
      * Slot for notified the camera controller when the sharpness changes,
      * so that sharpness can be updated.
      * @param index the new sharpness value.
      */
     void changeSharpness(int index);
+
+    /**
+     * Slot for notified the camera contoller when automatic backlight is changed, so that
+     * camera contoller can be updaten.
+     * @param newState The new state of the check box
+     */
+    void changeAutoBacklight(int newState);
 
     /**
      * Slot for notified the camera controller when the backlight compensation changes,
@@ -158,11 +207,25 @@ private slots:
     void changeFocus(int index);
 
     /**
+     * Slot for notified the camera contoller when automatic pan is changed, so that
+     * camera contoller can be updaten.
+     * @param newState The new state of the check box
+     */
+    void changeAutoPan(int newState);
+
+    /**
      * Slot for notified the camera controller when the pan changes,
      * so that pan can be updated.
      * @param index the new pan value.
      */
     void changePan(int index);
+
+    /**
+     * Slot for notified the camera contoller when automatic tilt is changed, so that
+     * camera contoller can be updaten.
+     * @param newState The new state of the check box
+     */
+    void changeAutoTilt(int newState);
 
     /**
      * Slot for notified the camera controller when the tilt changes,
@@ -216,30 +279,37 @@ private:
 
     QGroupBox    *qualityGroupBox;
 
+    QCheckBox    *brightnessCheckBox;
     QLabel       *brightnessLabel;
     QComboBox    *brightnessComboBox;
     int           stepBrightness;
 
+    QCheckBox    *contrastCheckBox;
     QLabel       *contrastLabel;
     QComboBox    *contrastComboBox;
     int           stepContrast;
 
+    QCheckBox    *saturationCheckBox;
     QLabel       *saturationLabel;
     QComboBox    *saturationComboBox;
     int           stepSaturation;
 
+    QCheckBox    *hueCheckBox;
     QLabel       *hueLabel;
     QComboBox    *hueComboBox;
     int           stepHue;
 
+    QCheckBox    *gammaCheckBox;
     QLabel       *gammaLabel;
     QComboBox    *gammaComboBox;
     int           stepGamma;
 
+    QCheckBox    *sharpnessCheckBox;
     QLabel       *sharpnessLabel;
     QComboBox    *sharpnessComboBox;
     int           stepSharpness;
 
+    QCheckBox    *backlightCheckBox;
     QLabel       *backlightLabel;
     QComboBox    *backlightComboBox;
     int           stepBacklight;
@@ -266,10 +336,12 @@ private:
     QComboBox    *focusComboBox;
     int           stepFocus;
 
+    QCheckBox    *panCheckBox;
     QLabel       *panLabel;
     QComboBox    *panComboBox;
     int           stepPan;
 
+    QCheckBox    *tiltCheckBox;
     QLabel       *tiltLabel;
     QComboBox    *tiltComboBox;
     int           stepTilt;

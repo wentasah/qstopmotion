@@ -81,16 +81,22 @@ public:
      **************************************************************************/
 
     /**
-     * Has the camera a brightness control capability?
-     * @return True if the camera has a brightness control apability.
-     */
-    bool isBrightness();
-
-    /**
      * Get the capabilities of the brightness control.
      * @return The brightness control capabilities.
      */
     GrabberControlCapabilities *getBrightnessCaps();
+
+    /**
+     * Get the current automatic brightness value of the device.
+     * @return True if the automatic brightness is on.
+     */
+    virtual bool getAutomaticBrightness();
+
+    /**
+     * Set the automatic brightness value of the device.
+     * @param az True if the automatic brightness will be switched on.
+     */
+    virtual void setAutomaticBrightness(bool ab);
 
     /**
      * Get the current brightness value of the device.
@@ -109,16 +115,22 @@ public:
      **************************************************************************/
 
     /**
-     * Has the camera a contrast control capability?
-     * @return True if the camera has a contrast control apability.
-     */
-    bool isContrast();
-
-    /**
      * Get the capabilities of the contrast control.
      * @return The contrast control capabilities.
      */
     GrabberControlCapabilities *getContrastCaps();
+
+    /**
+     * Get the current automatic contrast value of the device.
+     * @return True if the automatic contrast is on.
+     */
+    virtual bool getAutomaticContrast();
+
+    /**
+     * Set the automatic contrast value of the device.
+     * @param az True if the automatic contrast will be switched on.
+     */
+    virtual void setAutomaticContrast(bool ac);
 
     /**
      * Get the current contrast value of the device.
@@ -137,16 +149,22 @@ public:
      **************************************************************************/
 
     /**
-     * Has the camera a saturation control capability?
-     * @return True if the camera has a saturation control apability.
-     */
-    bool isSaturation();
-
-    /**
      * Get the capabilities of the saturation control.
      * @return The saturation control capabilities.
      */
     GrabberControlCapabilities *getSaturationCaps();
+
+    /**
+     * Get the current automatic saturation value of the device.
+     * @return True if the automatic saturation is on.
+     */
+    virtual bool getAutomaticSaturation();
+
+    /**
+     * Set the automatic saturation value of the device.
+     * @param az True if the automatic saturation will be switched on.
+     */
+    virtual void setAutomaticSaturation(bool as);
 
     /**
      * Get the current saturation value of the device.
@@ -165,16 +183,22 @@ public:
      **************************************************************************/
 
     /**
-     * Has the camera a hue control capability?
-     * @return True if the camera has a hue control apability.
-     */
-    bool isHue();
-
-    /**
      * Get the capabilities of the hue control.
      * @return The hue control capabilities.
      */
     GrabberControlCapabilities *getHueCaps();
+
+    /**
+     * Get the current automatic hue value of the device.
+     * @return True if the automatic hue is on.
+     */
+    virtual bool getAutomaticHue();
+
+    /**
+     * Set the automatic hue value of the device.
+     * @param az True if the automatic hue will be switched on.
+     */
+    virtual void setAutomaticHue(bool ah);
 
     /**
      * Get the current hue value of the device.
@@ -193,16 +217,22 @@ public:
      **************************************************************************/
 
     /**
-     * Has the camera a gamma control capability?
-     * @return True if the camera has a gamma control apability.
-     */
-    bool isGamma();
-
-    /**
      * Get the capabilities of the gamma control.
      * @return The gamma control capabilities.
      */
     GrabberControlCapabilities *getGammaCaps();
+
+    /**
+     * Get the current automatic gamma value of the device.
+     * @return True if the automatic gamma is on.
+     */
+    virtual bool getAutomaticGamma();
+
+    /**
+     * Set the automatic gamma value of the device.
+     * @param az True if the automatic gamma will be switched on.
+     */
+    virtual void setAutomaticGamma(bool ag);
 
     /**
      * Get the current gamma value of the device.
@@ -221,16 +251,22 @@ public:
      **************************************************************************/
 
     /**
-     * Has the camera a sharpness control capability?
-     * @return True if the camera has a sharpness control apability.
-     */
-    bool isSharpness();
-
-    /**
      * Get the capabilities of the sharpness control.
      * @return The sharpness control capabilities.
      */
     GrabberControlCapabilities *getSharpnessCaps();
+
+    /**
+     * Get the current automatic sharpness value of the device.
+     * @return True if the automatic sharpness is on.
+     */
+    virtual bool getAutomaticSharpness();
+
+    /**
+     * Set the automatic sharpness value of the device.
+     * @param az True if the automatic sharpness will be switched on.
+     */
+    virtual void setAutomaticSharpness(bool as);
 
     /**
      * Get the current sharpness value of the device.
@@ -249,16 +285,22 @@ public:
      **************************************************************************/
 
     /**
-     * Has the camera a backlight compensation control capability?
-     * @return True if the camera has a backlight compensation control apability.
-     */
-    bool isBacklight();
-
-    /**
      * Get the capabilities of the backlight control.
      * @return The backlight control capabilities.
      */
     GrabberControlCapabilities *getBacklightCaps();
+
+    /**
+     * Get the current automatic backlight value of the device.
+     * @return True if the automatic backlight is on.
+     */
+    virtual bool getAutomaticBacklight();
+
+    /**
+     * Set the automatic backlight value of the device.
+     * @param az True if the automatic backlight will be switched on.
+     */
+    virtual void setAutomaticBacklight(bool ab);
 
     /**
      * Get the current backlight compensation value of the device.
@@ -277,10 +319,10 @@ public:
      **************************************************************************/
 
     /**
-     * Has the camera a automatic white balance control capability?
-     * @return True if the camera has a automatic white balance control apability.
+     * Get the capabilities of the white control.
+     * @return The white control capabilities.
      */
-    bool isAutomaticWhite();
+    GrabberControlCapabilities *getWhiteCaps();
 
     /**
      * Get the current automatic white balance value of the device.
@@ -293,18 +335,6 @@ public:
      * @param ae True if the automatic white balance will be switched on.
      */
     void setAutomaticWhite(bool ae);
-
-    /**
-     * Has the camera a white balance control capability?
-     * @return True if the camera has a white balance control apability.
-     */
-    bool isWhite();
-
-    /**
-     * Get the capabilities of the white control.
-     * @return The white control capabilities.
-     */
-    GrabberControlCapabilities *getWhiteCaps();
 
     /**
      * Get the current white balance value of the device.
@@ -329,10 +359,10 @@ public:
      **************************************************************************/
 
     /**
-     * Has the camera a automatic exposure control capability?
-     * @return True if the camera has a automatic exposure control apability.
+     * Get the capabilities of the exposure control.
+     * @return The exposure control capabilities.
      */
-    bool isAutomaticExposure();
+    GrabberControlCapabilities *getExposureCaps();
 
     /**
      * Get the current automatic exposure value of the device.
@@ -345,18 +375,6 @@ public:
      * @param ae True if the automatic exposure will be switched on.
      */
     void setAutomaticExposure(bool ae);
-
-    /**
-     * Has the camera a exposure control capability?
-     * @return True if the camera has a exposure control apability.
-     */
-    bool isExposure();
-
-    /**
-     * Get the capabilities of the exposure control.
-     * @return The exposure control capabilities.
-     */
-    GrabberControlCapabilities *getExposureCaps();
 
     /**
      * Get the current exposure value of the device.
@@ -375,10 +393,10 @@ public:
      **************************************************************************/
 
     /**
-     * Has the camera a automatic zoom control capability?
-     * @return True if the camera has a automatic zoom control apability.
+     * Get the capabilities of the zoom control.
+     * @return The zoom control capabilities.
      */
-    bool isAutomaticZoom();
+    GrabberControlCapabilities *getZoomCaps();
 
     /**
      * Get the current automatic zoom value of the device.
@@ -391,18 +409,6 @@ public:
      * @param az True if the automatic zoom will be switched on.
      */
     virtual void setAutomaticZoom(bool az);
-
-    /**
-     * Has the camera a zoom control capability?
-     * @return True if the camera has a zoom control apability.
-     */
-    bool isZoom();
-
-    /**
-     * Get the capabilities of the zoom control.
-     * @return The zoom control capabilities.
-     */
-    GrabberControlCapabilities *getZoomCaps();
 
     /**
      * Get the current zoom value of the device.
@@ -421,10 +427,10 @@ public:
      **************************************************************************/
 
     /**
-     * Has the camera a automatic focus control capability?
-     * @return True if the camera has a automatic focus control apability.
+     * Get the capabilities of the focus control.
+     * @return The focus control capabilities.
      */
-    bool isAutomaticFocus();
+    GrabberControlCapabilities *getFocusCaps();
 
     /**
      * Get the current automatic focus value of the device.
@@ -437,18 +443,6 @@ public:
      * @param af True if the automatic focus will be switched on.
      */
     void setAutomaticFocus(bool af);
-
-    /**
-     * Has the camera a focus control capability?
-     * @return True if the camera has a focus control apability.
-     */
-    bool isFocus();
-
-    /**
-     * Get the capabilities of the focus control.
-     * @return The focus control capabilities.
-     */
-    GrabberControlCapabilities *getFocusCaps();
 
     /**
      * Get the current focus value of the device.
@@ -467,16 +461,22 @@ public:
      **************************************************************************/
 
     /**
-     * Has the camera a pan control capability?
-     * @return True if the camera has a pan control apability.
-     */
-    bool isPan();
-
-    /**
      * Get the capabilities of the pan control.
      * @return The pan control capabilities.
      */
     GrabberControlCapabilities *getPanCaps();
+
+    /**
+     * Get the current automatic pan value of the device.
+     * @return True if the automatic pan is on.
+     */
+    virtual bool getAutomaticPan();
+
+    /**
+     * Set the automatic pan value of the device.
+     * @param az True if the automatic pan will be switched on.
+     */
+    virtual void setAutomaticPan(bool ap);
 
     /**
      * Get the current pan value of the device.
@@ -495,16 +495,22 @@ public:
      **************************************************************************/
 
     /**
-     * Has the camera a tilt control capability?
-     * @return True if the camera has a tilt control apability.
-     */
-    bool isTilt();
-
-    /**
      * Get the capabilities of the tilt control.
      * @return The tilt control capabilities.
      */
     GrabberControlCapabilities *getTiltCaps();
+
+    /**
+     * Get the current automatic tilt value of the device.
+     * @return True if the automatic tilt is on.
+     */
+    virtual bool getAutomaticTilt();
+
+    /**
+     * Set the automatic tilt value of the device.
+     * @param az True if the automatic tilt will be switched on.
+     */
+    virtual void setAutomaticTilt(bool at);
 
     /**
      * Get the current tilt value of the device.
@@ -523,10 +529,10 @@ public:
      **************************************************************************/
 
     /**
-     * Has the camera a automatic iris control capability?
-     * @return True if the camera has a automatic iris control apability.
+     * Get the capabilities of the iris control.
+     * @return The iris control capabilities.
      */
-    bool isAutomaticIris();
+    GrabberControlCapabilities *getIrisCaps();
 
     /**
      * Get the current automatic iris value of the device.
@@ -539,18 +545,6 @@ public:
      * @param ai True if the automatic iris will be switched on.
      */
     void setAutomaticIris(bool ai);
-
-    /**
-     * Has the camera a iris control capability?
-     * @return True if the camera has a iris control apability.
-     */
-    bool isIris();
-
-    /**
-     * Get the capabilities of the iris control.
-     * @return The iris control capabilities.
-     */
-    GrabberControlCapabilities *getIrisCaps();
 
     /**
      * Get the current iris value of the device.
@@ -569,10 +563,10 @@ public:
      **************************************************************************/
 
     /**
-     * Has the camera a automatic roll control capability?
-     * @return True if the camera has a automatic roll control apability.
+     * Get the capabilities of the roll control.
+     * @return The roll control capabilities.
      */
-    bool isAutomaticRoll();
+    GrabberControlCapabilities *getRollCaps();
 
     /**
      * Get the current automatic roll value of the device.
@@ -585,18 +579,6 @@ public:
      * @param ar True if the automatic roll will be switched on.
      */
     void setAutomaticRoll(bool ar);
-
-    /**
-     * Has the camera a roll control capability?
-     * @return True if the camera has a roll control apability.
-     */
-    bool isRoll();
-
-    /**
-     * Get the capabilities of the roll control.
-     * @return The roll control capabilities.
-     */
-    GrabberControlCapabilities *getRollCaps();
 
     /**
      * Get the current roll value of the device.

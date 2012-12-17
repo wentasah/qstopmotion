@@ -36,6 +36,25 @@ GrabberControlCapabilities::~GrabberControlCapabilities()
 }
 
 
+bool GrabberControlCapabilities::isCapability()
+{
+    if (getFlags() != GrabberControlCapabilities::control_none) {
+        return true;
+    }
+    return false;
+}
+
+
+bool GrabberControlCapabilities::isAutomatic()
+{
+    if (getFlags() == GrabberControlCapabilities::control_Auto) {
+        return true;
+    }
+
+    return false;
+}
+
+
 long GrabberControlCapabilities::getMinimum()
 {
     return minimum;

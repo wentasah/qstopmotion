@@ -53,6 +53,18 @@ public:
     ~GrabberControlCapabilities();
 
     /**
+     * Has the camera this control capability?
+     * @return True if the camera has this control apability.
+     */
+    bool isCapability();
+
+    /**
+     * Has the capability a automatic control?
+     * @return True if the capability has a automatic control.
+     */
+    bool isAutomatic();
+
+    /**
      * Get the minimum value of the control
      * @return The minimum value of the control.
      */

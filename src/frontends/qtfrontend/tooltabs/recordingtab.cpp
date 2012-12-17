@@ -440,6 +440,7 @@ void RecordingTab::changeVideoSource(int index)
     qDebug() << "RecordingTab::changeSource --> Start";
 
     frontend->getProject()->getAnimationProject()->setVideoSource(index);
+    frontend->setVideoSource(index);
 
     qDebug() << "RecordingTab::changeSource --> End";
 }

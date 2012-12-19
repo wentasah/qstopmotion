@@ -326,6 +326,72 @@ void GrabberController::setWhite(int /*w*/)
 }
 
 /**************************************************************************
+ * Gain
+ **************************************************************************/
+
+GrabberControlCapabilities *GrabberController::getGainCaps()
+{
+    return &gainCapabilities;
+}
+
+
+bool GrabberController::getAutomaticGain()
+{
+    return false;
+}
+
+
+void GrabberController::setAutomaticGain(bool /*ag*/)
+{
+    Q_ASSERT( 1 );
+}
+
+
+int GrabberController::getGain()
+{
+    return 0;
+}
+
+
+void GrabberController::setGain(int /*g*/)
+{
+    Q_ASSERT( 1 );
+}
+
+/**************************************************************************
+ * Color Enable
+ **************************************************************************/
+
+GrabberControlCapabilities *GrabberController::getColorCaps()
+{
+    return &colorCapabilities;
+}
+
+
+bool GrabberController::getAutomaticColor()
+{
+    return false;
+}
+
+
+void GrabberController::setAutomaticColor(bool /*ac*/)
+{
+    Q_ASSERT( 1 );
+}
+
+
+int GrabberController::getColor()
+{
+    return 0;
+}
+
+
+void GrabberController::setColor(int /*c*/)
+{
+    Q_ASSERT( 1 );
+}
+
+/**************************************************************************
  **************************************************************************
  * Camera control capabilities
  **************************************************************************

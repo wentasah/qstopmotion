@@ -151,6 +151,34 @@ private slots:
     void changeBacklight(int index);
 
     /**
+     * Slot for notified the camera contoller when automatic gain is changed, so that
+     * camera contoller can be updaten.
+     * @param newState The new state of the check box
+     */
+    void changeAutoGain(int newState);
+
+    /**
+     * Slot for notified the camera controller when the gain changes,
+     * so that gain can be updated.
+     * @param index the new gain value.
+     */
+    void changeGain(int index);
+
+    /**
+     * Slot for notified the camera contoller when automatic color enable is changed, so that
+     * camera contoller can be updaten.
+     * @param newState The new state of the check box
+     */
+    void changeAutoColor(int newState);
+
+    /**
+     * Slot for notified the camera controller when the color enable changes,
+     * so that color enable can be updated.
+     * @param index the new white balance value.
+     */
+    void changeColor(int index);
+
+    /**
      * Slot for notified the camera contoller when automatic white balance is changed, so that
      * camera contoller can be updaten.
      * @param newState The new state of the check box
@@ -318,6 +346,16 @@ private:
     QLabel       *whiteLabel;
     QComboBox    *whiteComboBox;
     int           stepWhite;
+
+    QCheckBox    *gainCheckBox;
+    QLabel       *gainLabel;
+    QComboBox    *gainComboBox;
+    int           stepGain;
+
+    QCheckBox    *colorCheckBox;
+    QLabel       *colorLabel;
+    QComboBox    *colorComboBox;
+    int           stepColor;
 
     QGroupBox    *controlGroupBox;
 

@@ -94,7 +94,7 @@ public:
 
     /**
      * Set the automatic brightness value of the device.
-     * @param az True if the automatic brightness will be switched on.
+     * @param ab True if the automatic brightness will be switched on.
      */
     virtual void setAutomaticBrightness(bool ab);
 
@@ -128,7 +128,7 @@ public:
 
     /**
      * Set the automatic contrast value of the device.
-     * @param az True if the automatic contrast will be switched on.
+     * @param ac True if the automatic contrast will be switched on.
      */
     virtual void setAutomaticContrast(bool ac);
 
@@ -162,7 +162,7 @@ public:
 
     /**
      * Set the automatic saturation value of the device.
-     * @param az True if the automatic saturation will be switched on.
+     * @param as True if the automatic saturation will be switched on.
      */
     virtual void setAutomaticSaturation(bool as);
 
@@ -196,7 +196,7 @@ public:
 
     /**
      * Set the automatic hue value of the device.
-     * @param az True if the automatic hue will be switched on.
+     * @param ah True if the automatic hue will be switched on.
      */
     virtual void setAutomaticHue(bool ah);
 
@@ -230,7 +230,7 @@ public:
 
     /**
      * Set the automatic gamma value of the device.
-     * @param az True if the automatic gamma will be switched on.
+     * @param ag True if the automatic gamma will be switched on.
      */
     virtual void setAutomaticGamma(bool ag);
 
@@ -264,7 +264,7 @@ public:
 
     /**
      * Set the automatic sharpness value of the device.
-     * @param az True if the automatic sharpness will be switched on.
+     * @param as True if the automatic sharpness will be switched on.
      */
     virtual void setAutomaticSharpness(bool as);
 
@@ -298,7 +298,7 @@ public:
 
     /**
      * Set the automatic backlight value of the device.
-     * @param az True if the automatic backlight will be switched on.
+     * @param ab True if the automatic backlight will be switched on.
      */
     virtual void setAutomaticBacklight(bool ab);
 
@@ -332,9 +332,9 @@ public:
 
     /**
      * Set the automatic white balance value of the device.
-     * @param ae True if the automatic white balance will be switched on.
+     * @param aw True if the automatic white balance will be switched on.
      */
-    void setAutomaticWhite(bool ae);
+    void setAutomaticWhite(bool aw);
 
     /**
      * Get the current white balance value of the device.
@@ -347,6 +347,74 @@ public:
      * @param w The new white balance value
      */
     void setWhite(int w);
+
+    /**************************************************************************
+     * Gain
+     **************************************************************************/
+
+    /**
+     * Get the capabilities of the gain control.
+     * @return The gain control capabilities.
+     */
+    GrabberControlCapabilities *getGainCaps();
+
+    /**
+     * Get the current automatic gain value of the device.
+     * @return True if the automatic gain is on.
+     */
+    bool getAutomaticGain();
+
+    /**
+     * Set the automatic gain value of the device.
+     * @param ag True if the automatic gain will be switched on.
+     */
+    void setAutomaticGain(bool ag);
+
+    /**
+     * Get the current gain value of the device.
+     * @return The current gain value.
+     */
+    int getGain();
+
+    /**
+     * Set the gain value of the device.
+     * @param g The new gain value
+     */
+    void setGain(int g);
+
+    /**************************************************************************
+     * Color Enable
+     **************************************************************************/
+
+    /**
+     * Get the capabilities of the color enable control.
+     * @return The color enable control capabilities.
+     */
+    GrabberControlCapabilities *getColorCaps();
+
+    /**
+     * Get the current automatic color enable value of the device.
+     * @return True if the automatic color enable is on.
+     */
+    bool getAutomaticColor();
+
+    /**
+     * Set the automatic color enable value of the device.
+     * @param ac True if the automatic color enable will be switched on.
+     */
+    void setAutomaticColor(bool ac);
+
+    /**
+     * Get the current color enable value of the device.
+     * @return The current color enable value.
+     */
+    int getColor();
+
+    /**
+     * Set the color enable value of the device.
+     * @param c The new color enable value
+     */
+    void setColor(int c);
 
     /**************************************************************************
      **************************************************************************
@@ -474,7 +542,7 @@ public:
 
     /**
      * Set the automatic pan value of the device.
-     * @param az True if the automatic pan will be switched on.
+     * @param ap True if the automatic pan will be switched on.
      */
     virtual void setAutomaticPan(bool ap);
 
@@ -508,7 +576,7 @@ public:
 
     /**
      * Set the automatic tilt value of the device.
-     * @param az True if the automatic tilt will be switched on.
+     * @param at True if the automatic tilt will be switched on.
      */
     virtual void setAutomaticTilt(bool at);
 
@@ -595,6 +663,7 @@ public:
 private:
     int                         controllerCap;
 
+    // Video capabilities
     GrabberControlCapabilities  brightnessCapabilities;
     GrabberControlCapabilities  contrastCapabilities;
     GrabberControlCapabilities  saturationCapabilities;
@@ -603,6 +672,10 @@ private:
     GrabberControlCapabilities  sharpnessCapabilities;
     GrabberControlCapabilities  backlightCapabilities;
     GrabberControlCapabilities  whiteCapabilities;
+    GrabberControlCapabilities  gainCapabilities;
+    GrabberControlCapabilities  colorCapabilities;
+
+    // Camera control capabilities
     GrabberControlCapabilities  exposureCapabilities;
     GrabberControlCapabilities  zoomCapabilities;
     GrabberControlCapabilities  focusCapabilities;

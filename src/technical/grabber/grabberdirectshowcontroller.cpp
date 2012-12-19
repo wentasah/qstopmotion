@@ -432,10 +432,41 @@ bool GrabberDirectShowController::setQualityCapabilities()
         qDebug("GrabberDirectShowController::setQualityCapabilities --> Unable to retrieve White Balance property information.");
     }
 
-    /*
-      VideoProcAmp_ColorEnable,
-      VideoProcAmp_Gain
-    */
+    Sleep(1000);
+    hr = pQualityControl->GetRange(VideoProcAmp_Gain, &min, &max, &step, &def, &flags);
+    if(hr == S_OK) {
+        getGainCaps()->setMinimum(min);
+        getGainCaps()->setMaximum(max);
+        getGainCaps()->setStep(step);
+        getGainCaps()->setDefault(def);
+        if (flags & KSPROPERTY_VIDEOPROCAMP_FLAGS_AUTO) {
+            getGainCaps()->setFlags(GrabberControlCapabilities::control_Auto);
+        }
+        else {
+            getGainCaps()->setFlags(GrabberControlCapabilities::control_Manual);
+        }
+    }
+    else {
+        qDebug("GrabberDirectShowController::setQualityCapabilities --> Unable to retrieve Gain property information.");
+    }
+
+    Sleep(1000);
+    hr = pQualityControl->GetRange(VideoProcAmp_ColorEnable, &min, &max, &step, &def, &flags);
+    if(hr == S_OK) {
+        getColorCaps()->setMinimum(min);
+        getColorCaps()->setMaximum(max);
+        getColorCaps()->setStep(step);
+        getColorCaps()->setDefault(def);
+        if (flags & KSPROPERTY_VIDEOPROCAMP_FLAGS_AUTO) {
+            getColorCaps()->setFlags(GrabberControlCapabilities::control_Auto);
+        }
+        else {
+            getColorCaps()->setFlags(GrabberControlCapabilities::control_Manual);
+        }
+    }
+    else {
+        qDebug("GrabberDirectShowController::setQualityCapabilities --> Unable to retrieve Color Enable property information.");
+    }
 
     qDebug("GrabberDirectShowController::setQualityCapabilities --> End");
 
@@ -453,6 +484,18 @@ bool GrabberDirectShowController::setQualityCapabilities()
  * Brightness
  **************************************************************************/
 /*
+bool GrabberDirectShowController::getAutomaticBrightness()
+{
+    return false;
+}
+
+
+void GrabberDirectShowController::setAutomaticBrightness(bool ab)
+{
+    Q_ASSERT( 1 );
+}
+
+
 int GrabberDirectShowController::getBrightness()
 {
     return 0;
@@ -468,6 +511,18 @@ void GrabberDirectShowController::setBrightness(int b)
  * Contrast
  **************************************************************************/
 /*
+bool GrabberDirectShowController::getAutomaticContrast()
+{
+    return false;
+}
+
+
+void GrabberDirectShowController::setAutomaticContrast(bool ac)
+{
+    Q_ASSERT( 1 );
+}
+
+
 int GrabberDirectShowController::getContrast()
 {
     return 0;
@@ -483,6 +538,18 @@ void GrabberDirectShowController::setContrast(int c)
  * Saturation
  **************************************************************************/
 /*
+bool GrabberDirectShowController::getAutomaticSaturation()
+{
+    return false;
+}
+
+
+void GrabberDirectShowController::setAutomaticSaturation(bool as)
+{
+    Q_ASSERT( 1 );
+}
+
+
 int GrabberDirectShowController::getSaturation()
 {
     return 0;
@@ -498,6 +565,18 @@ void GrabberDirectShowController::setSaturation(int s)
  * Hue
  **************************************************************************/
 /*
+bool GrabberDirectShowController::getAutomaticHue()
+{
+    return false;
+}
+
+
+void GrabberDirectShowController::setAutomaticHue(bool ah)
+{
+    Q_ASSERT( 1 );
+}
+
+
 int GrabberDirectShowController::getHue()
 {
     return 0;
@@ -513,6 +592,18 @@ void GrabberDirectShowController::setHue(int h)
  * Gamma
  **************************************************************************/
 /*
+bool GrabberDirectShowController::getAutomaticGamma()
+{
+    return false;
+}
+
+
+void GrabberDirectShowController::setAutomaticGamma(bool ag)
+{
+    Q_ASSERT( 1 );
+}
+
+
 int GrabberDirectShowController::getGamma()
 {
     return 0;
@@ -528,6 +619,18 @@ void GrabberDirectShowController::setGamma(int g)
  * Sharpness
  **************************************************************************/
 /*
+bool GrabberDirectShowController::getAutomaticSharpness()
+{
+    return false;
+}
+
+
+void GrabberDirectShowController::setAutomaticSharpness(bool as)
+{
+    Q_ASSERT( 1 );
+}
+
+
 int GrabberDirectShowController::getSharpness()
 {
     return 0;
@@ -543,6 +646,18 @@ void GrabberDirectShowController::setSharpness(int s)
  * Backlight Compensation
  **************************************************************************/
 /*
+bool GrabberDirectShowController::getAutomaticBacklight()
+{
+    return false;
+}
+
+
+void GrabberDirectShowController::setAutomaticBacklight(bool ab)
+{
+    Q_ASSERT( 1 );
+}
+
+
 int GrabberDirectShowController::getBacklight()
 {
     return 0;
@@ -569,6 +684,7 @@ void GrabberDirectShowController::setAutomaticWhite(bool aw)
     Q_ASSERT( 1 );
 }
 
+
 int GrabberDirectShowController::getWhite()
 {
     return 0;
@@ -576,6 +692,60 @@ int GrabberDirectShowController::getWhite()
 
 
 void GrabberDirectShowController::setWhite(int w)
+{
+    Q_ASSERT( 1 );
+}
+*/
+/**************************************************************************
+ * Gain
+ **************************************************************************/
+/*
+bool GrabberDirectShowController::getAutomaticGain()
+{
+    return false;
+}
+
+
+void GrabberDirectShowController::setAutomaticGain(bool ag)
+{
+    Q_ASSERT( 1 );
+}
+
+
+int GrabberDirectShowController::getGain()
+{
+    return 0;
+}
+
+
+void GrabberDirectShowController::setGain(int g)
+{
+    Q_ASSERT( 1 );
+}
+*/
+/**************************************************************************
+ * Color Enable
+ **************************************************************************/
+/*
+bool GrabberDirectShowController::getAutomaticColor()
+{
+    return false;
+}
+
+
+void GrabberDirectShowController::setAutomaticColor(bool ac)
+{
+    Q_ASSERT( 1 );
+}
+
+
+int GrabberDirectShowController::getColor()
+{
+    return 0;
+}
+
+
+void GrabberDirectShowController::setColor(int c)
 {
     Q_ASSERT( 1 );
 }
@@ -609,33 +779,6 @@ bool GrabberDirectShowController::isExposure()
 
 
 void GrabberDirectShowController::setExposure(int e)
-{
-    Q_ASSERT( 1 );
-}
-*/
-/**************************************************************************
- * Iris
- **************************************************************************/
-/*
-bool GrabberDirectShowController::getAutomaticIris()
-{
-    return false;
-}
-
-
-void GrabberDirectShowController::setAutomaticIris(bool ae)
-{
-    Q_ASSERT( 1 );
-}
-
-
-bool GrabberDirectShowController::isIris()
-{
-    return false;
-}
-
-
-void GrabberDirectShowController::setIris(int e)
 {
     Q_ASSERT( 1 );
 }
@@ -744,6 +887,18 @@ void GrabberDirectShowController::setFocus(int f)
  * Pan
  **************************************************************************/
 
+bool GrabberDirectShowController::getAutomaticPan()
+{
+    return false;
+}
+
+
+void GrabberDirectShowController::setAutomaticPan(bool ap)
+{
+    Q_ASSERT( 1 );
+}
+
+
 int GrabberDirectShowController::getPan()
 {
     return 0;
@@ -759,6 +914,18 @@ void GrabberDirectShowController::setPan(int p)
  * Tilt
  **************************************************************************/
 
+bool GrabberDirectShowController::getAutomaticTilt()
+{
+    return false;
+}
+
+
+void GrabberDirectShowController::setAutomaticTilt(bool at)
+{
+    Q_ASSERT( 1 );
+}
+
+
 int GrabberDirectShowController::getTilt()
 {
     return 0;
@@ -769,3 +936,57 @@ void GrabberDirectShowController::setTilt(int t)
 {
     Q_ASSERT( 1 );
 }
+/**************************************************************************
+ * Iris
+ **************************************************************************/
+/*
+bool GrabberDirectShowController::getAutomaticIris()
+{
+    return false;
+}
+
+
+void GrabberDirectShowController::setAutomaticIris(bool ae)
+{
+    Q_ASSERT( 1 );
+}
+
+
+bool GrabberDirectShowController::isIris()
+{
+    return false;
+}
+
+
+void GrabberDirectShowController::setIris(int e)
+{
+    Q_ASSERT( 1 );
+}
+*/
+/**************************************************************************
+ * Roll
+ **************************************************************************/
+/*
+bool GrabberDirectShowController::getAutomaticRoll()
+{
+    return false;
+}
+
+
+void GrabberDirectShowController::setAutomaticRoll(bool ar)
+{
+    Q_ASSERT( 1 );
+}
+
+
+bool GrabberDirectShowController::isRoll()
+{
+    return false;
+}
+
+
+void GrabberDirectShowController::setRoll(int e)
+{
+    Q_ASSERT( 1 );
+}
+*/

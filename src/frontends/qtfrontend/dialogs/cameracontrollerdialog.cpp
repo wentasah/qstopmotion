@@ -49,6 +49,8 @@ CameraControllerDialog::CameraControllerDialog(Frontend *f,
     stepSharpness = -1;
     stepBacklight = -1;
     stepWhite = -1;
+    stepGain = -1;
+    stepColor = -1;
     stepExposure = -1;
     stepZoom = -1;
     stepFocus = -1;
@@ -153,6 +155,28 @@ CameraControllerDialog::CameraControllerDialog(Frontend *f,
     connect(whiteComboBox, SIGNAL(activated(int)), this, SLOT(changeWhite(int)));
     whiteLabel->hide();
     whiteComboBox->hide();
+
+    gainCheckBox = new QCheckBox(tr("Automatic Gain"));
+    gainCheckBox->setChecked(false);
+    connect(gainCheckBox, SIGNAL(stateChanged(int)), this, SLOT(changeAutoGain(int)));
+    gainCheckBox->hide();
+
+    gainLabel = new QLabel(tr("Gain:"));
+    gainComboBox = new QComboBox();
+    connect(gainComboBox, SIGNAL(activated(int)), this, SLOT(changeGain(int)));
+    gainLabel->hide();
+    gainComboBox->hide();
+
+    colorCheckBox = new QCheckBox(tr("Automatic Color Enable"));
+    colorCheckBox->setChecked(false);
+    connect(colorCheckBox, SIGNAL(stateChanged(int)), this, SLOT(changeAutoColor(int)));
+    colorCheckBox->hide();
+
+    colorLabel = new QLabel(tr("Color Enable:"));
+    colorComboBox = new QComboBox();
+    connect(colorComboBox, SIGNAL(activated(int)), this, SLOT(changeColor(int)));
+    colorLabel->hide();
+    colorComboBox->hide();
 
     controlGroupBox = new QGroupBox(tr("Camera Control"));
     QVBoxLayout *controlLayout = new QVBoxLayout;
@@ -269,6 +293,12 @@ CameraControllerDialog::CameraControllerDialog(Frontend *f,
     qualityLayout->addWidget(whiteCheckBox);
     qualityLayout->addWidget(whiteLabel);
     qualityLayout->addWidget(whiteComboBox);
+    qualityLayout->addWidget(gainCheckBox);
+    qualityLayout->addWidget(gainLabel);
+    qualityLayout->addWidget(gainComboBox);
+    qualityLayout->addWidget(colorCheckBox);
+    qualityLayout->addWidget(colorLabel);
+    qualityLayout->addWidget(colorComboBox);
 
     controlLayout->addWidget(exposureCheckBox);
     controlLayout->addWidget(exposureLabel);
@@ -307,202 +337,264 @@ void CameraControllerDialog::init()
     qDebug() << "CameraControllerDialog::init --> Start";
 
     PreferencesTool *preferences = frontend->getPreferences();
+    int  defaultIndex;
+    GrabberControlCapabilities *capabilities;
 
-    if (grabberController->getBrightnessCaps()->isAutomatic()) {
+    capabilities = grabberController->getBrightnessCaps();
+    if (capabilities->isAutomatic()) {
         brightnessCheckBox->show();
         brightnessCheckBox->setChecked(preferences->getIntegerPreference(deviceId, "automaticbrightness", false));
     }
-    if (grabberController->getBrightnessCaps()->isCapability()) {
-        if (!grabberController->getBrightnessCaps()->isAutomatic()) {
+    if (capabilities->isCapability()) {
+        if (!capabilities->isAutomatic()) {
             brightnessLabel->show();
         }
         brightnessComboBox->show();
-        stepBrightness = fillComboBox(brightnessComboBox, grabberController->getBrightnessCaps());
-        brightnessComboBox->setCurrentIndex(preferences->getIntegerPreference(deviceId, "brigthtness", brightnessComboBox->count()/2));
+        stepBrightness = fillComboBox(brightnessComboBox, capabilities);
+        defaultIndex = (capabilities->getDefault() - capabilities->getMinimum()) / capabilities->getStep();
+        brightnessComboBox->setCurrentIndex(preferences->getIntegerPreference(deviceId, "brigthtness", defaultIndex));
     }
 
-    if (grabberController->getContrastCaps()->isAutomatic()) {
+    capabilities = grabberController->getContrastCaps();
+    if (capabilities->isAutomatic()) {
         contrastCheckBox->show();
         contrastCheckBox->setChecked(preferences->getIntegerPreference(deviceId, "automaticcontrast", false));
     }
-    if (grabberController->getContrastCaps()->isCapability()) {
-        if (!grabberController->getContrastCaps()->isAutomatic()) {
+    if (capabilities->isCapability()) {
+        if (!capabilities->isAutomatic()) {
             contrastLabel->show();
         }
         contrastComboBox->show();
-        stepContrast = fillComboBox(contrastComboBox, grabberController->getContrastCaps());
-        contrastComboBox->setCurrentIndex(preferences->getIntegerPreference(deviceId, "contrast", contrastComboBox->count()/2));
+        stepContrast = fillComboBox(contrastComboBox, capabilities);
+        defaultIndex = (capabilities->getDefault() - capabilities->getMinimum()) / capabilities->getStep();
+        contrastComboBox->setCurrentIndex(preferences->getIntegerPreference(deviceId, "contrast", defaultIndex));
     }
 
-    if (grabberController->getSaturationCaps()->isAutomatic()) {
+    capabilities = grabberController->getSaturationCaps();
+    if (capabilities->isAutomatic()) {
         saturationCheckBox->show();
         saturationCheckBox->setChecked(preferences->getIntegerPreference(deviceId, "automaticsaturation", false));
     }
-    if (grabberController->getSaturationCaps()->isCapability()) {
-        if (!grabberController->getSaturationCaps()->isAutomatic()) {
+    if (capabilities->isCapability()) {
+        if (!capabilities->isAutomatic()) {
             saturationLabel->show();
         }
         saturationComboBox->show();
-        stepSaturation = fillComboBox(saturationComboBox, grabberController->getSaturationCaps());
-        saturationComboBox->setCurrentIndex(preferences->getIntegerPreference(deviceId, "saturation", saturationComboBox->count()/2));
+        stepSaturation = fillComboBox(saturationComboBox, capabilities);
+        defaultIndex = (capabilities->getDefault() - capabilities->getMinimum()) / capabilities->getStep();
+        saturationComboBox->setCurrentIndex(preferences->getIntegerPreference(deviceId, "saturation", defaultIndex));
     }
 
-    if (grabberController->getHueCaps()->isAutomatic()) {
+    capabilities = grabberController->getHueCaps();
+    if (capabilities->isAutomatic()) {
         hueCheckBox->show();
         hueCheckBox->setChecked(preferences->getIntegerPreference(deviceId, "automatichue", false));
     }
-    if (grabberController->getHueCaps()->isCapability()) {
-        if (!grabberController->getHueCaps()->isAutomatic()) {
+    if (capabilities->isCapability()) {
+        if (!capabilities->isAutomatic()) {
             hueLabel->show();
         }
         hueComboBox->show();
-        stepHue = fillComboBox(hueComboBox, grabberController->getHueCaps());
-        hueComboBox->setCurrentIndex(preferences->getIntegerPreference(deviceId, "hue", hueComboBox->count()/2));
+        stepHue = fillComboBox(hueComboBox, capabilities);
+        defaultIndex = (capabilities->getDefault() - capabilities->getMinimum()) / capabilities->getStep();
+        hueComboBox->setCurrentIndex(preferences->getIntegerPreference(deviceId, "hue", defaultIndex));
     }
 
-    if (grabberController->getGammaCaps()->isAutomatic()) {
+    capabilities = grabberController->getGammaCaps();
+    if (capabilities->isAutomatic()) {
         gammaCheckBox->show();
         gammaCheckBox->setChecked(preferences->getIntegerPreference(deviceId, "automaticgamma", false));
     }
-    if (grabberController->getGammaCaps()->isCapability()) {
-        if (!grabberController->getGammaCaps()->isAutomatic()) {
+    if (capabilities->isCapability()) {
+        if (!capabilities->isAutomatic()) {
             gammaLabel->show();
         }
         gammaComboBox->show();
-        stepGamma = fillComboBox(gammaComboBox, grabberController->getGammaCaps());
-        gammaComboBox->setCurrentIndex(preferences->getIntegerPreference(deviceId, "gamma", gammaComboBox->count()/2));
+        stepGamma = fillComboBox(gammaComboBox, capabilities);
+        defaultIndex = (capabilities->getDefault() - capabilities->getMinimum()) / capabilities->getStep();
+        gammaComboBox->setCurrentIndex(preferences->getIntegerPreference(deviceId, "gamma", defaultIndex));
     }
 
-    if (grabberController->getSharpnessCaps()->isAutomatic()) {
+    capabilities = grabberController->getSharpnessCaps();
+    if (capabilities->isAutomatic()) {
         sharpnessCheckBox->show();
         sharpnessCheckBox->setChecked(preferences->getIntegerPreference(deviceId, "automaticsharpness", false));
     }
-    if (grabberController->getSharpnessCaps()->isCapability()) {
-        if (!grabberController->getSharpnessCaps()->isAutomatic()) {
+    if (capabilities->isCapability()) {
+        if (!capabilities->isAutomatic()) {
             sharpnessLabel->show();
         }
         sharpnessComboBox->show();
-        stepSharpness = fillComboBox(sharpnessComboBox, grabberController->getSharpnessCaps());
-        sharpnessComboBox->setCurrentIndex(preferences->getIntegerPreference(deviceId, "sharpness", sharpnessComboBox->count()/2));
+        stepSharpness = fillComboBox(sharpnessComboBox, capabilities);
+        defaultIndex = (capabilities->getDefault() - capabilities->getMinimum()) / capabilities->getStep();
+        sharpnessComboBox->setCurrentIndex(preferences->getIntegerPreference(deviceId, "sharpness", defaultIndex));
     }
 
-    if (grabberController->getBacklightCaps()->isAutomatic()) {
+    capabilities = grabberController->getBacklightCaps();
+    if (capabilities->isAutomatic()) {
         backlightCheckBox->show();
         backlightCheckBox->setChecked(preferences->getIntegerPreference(deviceId, "automaticbacklight", false));
     }
-    if (grabberController->getBacklightCaps()->isCapability()) {
-        if (!grabberController->getBacklightCaps()->isAutomatic()) {
+    if (capabilities->isCapability()) {
+        if (!capabilities->isAutomatic()) {
             backlightLabel->show();
         }
         backlightComboBox->show();
-        stepBacklight = fillComboBox(backlightComboBox, grabberController->getBacklightCaps());
-        backlightComboBox->setCurrentIndex(preferences->getIntegerPreference(deviceId, "backlight", backlightComboBox->count()/2));
+        stepBacklight = fillComboBox(backlightComboBox, capabilities);
+        defaultIndex = (capabilities->getDefault() - capabilities->getMinimum()) / capabilities->getStep();
+        backlightComboBox->setCurrentIndex(preferences->getIntegerPreference(deviceId, "backlight", defaultIndex));
     }
 
-    if (grabberController->getWhiteCaps()->isAutomatic()) {
+    capabilities = grabberController->getWhiteCaps();
+    if (capabilities->isAutomatic()) {
         whiteCheckBox->show();
         whiteCheckBox->setChecked(preferences->getIntegerPreference(deviceId, "automaticwhite", false));
     }
-    if (grabberController->getWhiteCaps()->isCapability()) {
-        if (!grabberController->getWhiteCaps()->isAutomatic()) {
+    if (capabilities->isCapability()) {
+        if (!capabilities->isAutomatic()) {
             whiteLabel->show();
         }
         whiteComboBox->show();
-        stepWhite = fillComboBox(whiteComboBox, grabberController->getWhiteCaps());
-        whiteComboBox->setCurrentIndex(preferences->getIntegerPreference(deviceId, "white", whiteComboBox->count()/2));
+        stepWhite = fillComboBox(whiteComboBox, capabilities);
+        defaultIndex = (capabilities->getDefault() - capabilities->getMinimum()) / capabilities->getStep();
+        whiteComboBox->setCurrentIndex(preferences->getIntegerPreference(deviceId, "white", defaultIndex));
     }
 
-    if (grabberController->getExposureCaps()->isAutomatic()) {
+    capabilities = grabberController->getGainCaps();
+    if (capabilities->isAutomatic()) {
+        gainCheckBox->show();
+        gainCheckBox->setChecked(preferences->getIntegerPreference(deviceId, "automaticgain", false));
+    }
+    if (capabilities->isCapability()) {
+        if (!capabilities->isAutomatic()) {
+            gainLabel->show();
+        }
+        gainComboBox->show();
+        stepGain = fillComboBox(gainComboBox, capabilities);
+        defaultIndex = (capabilities->getDefault() - capabilities->getMinimum()) / capabilities->getStep();
+        gainComboBox->setCurrentIndex(preferences->getIntegerPreference(deviceId, "gain", defaultIndex));
+    }
+
+    capabilities = grabberController->getColorCaps();
+    if (capabilities->isAutomatic()) {
+        colorCheckBox->show();
+        colorCheckBox->setChecked(preferences->getIntegerPreference(deviceId, "automaticcolor", false));
+    }
+    if (capabilities->isCapability()) {
+        if (!capabilities->isAutomatic()) {
+            colorLabel->show();
+        }
+        colorComboBox->show();
+        stepColor = fillComboBox(colorComboBox, capabilities);
+        defaultIndex = (capabilities->getDefault() - capabilities->getMinimum()) / capabilities->getStep();
+        colorComboBox->setCurrentIndex(preferences->getIntegerPreference(deviceId, "color", defaultIndex));
+    }
+
+    capabilities = grabberController->getExposureCaps();
+    if (capabilities->isAutomatic()) {
         exposureCheckBox->show();
         exposureCheckBox->setChecked(preferences->getIntegerPreference(deviceId, "automaticexposure", false));
     }
-    if (grabberController->getExposureCaps()->isCapability()) {
-        if (!grabberController->getExposureCaps()->isAutomatic()) {
+    if (capabilities->isCapability()) {
+        if (!capabilities->isAutomatic()) {
             exposureLabel->show();
         }
         exposureComboBox->show();
-        stepExposure = fillComboBox(exposureComboBox, grabberController->getExposureCaps());
-        exposureComboBox->setCurrentIndex(preferences->getIntegerPreference(deviceId, "exposure", exposureComboBox->count()/2));
+        stepExposure = fillComboBox(exposureComboBox, capabilities);
+        defaultIndex = (capabilities->getDefault() - capabilities->getMinimum()) / capabilities->getStep();
+        exposureComboBox->setCurrentIndex(preferences->getIntegerPreference(deviceId, "exposure", defaultIndex));
     }
 
-    if (grabberController->getZoomCaps()->isAutomatic()) {
+    capabilities = grabberController->getZoomCaps();
+    if (capabilities->isAutomatic()) {
         zoomCheckBox->show();
         zoomCheckBox->setChecked(preferences->getIntegerPreference(deviceId, "automaticzoom", false));
     }
-    if (grabberController->getZoomCaps()->isCapability()) {
-        if (!grabberController->getZoomCaps()->isAutomatic()) {
+    if (capabilities->isCapability()) {
+        if (!capabilities->isAutomatic()) {
             zoomLabel->show();
         }
         zoomComboBox->show();
-        stepZoom = fillComboBox(zoomComboBox, grabberController->getZoomCaps());
-        zoomComboBox->setCurrentIndex(preferences->getIntegerPreference(deviceId, "zoom", zoomComboBox->count()/2));
+        stepZoom = fillComboBox(zoomComboBox, capabilities);
+        defaultIndex = (capabilities->getDefault() - capabilities->getMinimum()) / capabilities->getStep();
+        zoomComboBox->setCurrentIndex(preferences->getIntegerPreference(deviceId, "zoom", defaultIndex));
     }
 
-    if (grabberController->getFocusCaps()->isAutomatic()) {
+    capabilities = grabberController->getFocusCaps();
+    if (capabilities->isAutomatic()) {
         focusCheckBox->show();
         focusCheckBox->setChecked(preferences->getIntegerPreference(deviceId, "automaticfocus", false));
     }
-    if (grabberController->getFocusCaps()->isCapability()) {
-        if (!grabberController->getFocusCaps()->isAutomatic()) {
+    if (capabilities->isCapability()) {
+        if (!capabilities->isAutomatic()) {
             focusLabel->show();
         }
         focusComboBox->show();
-        stepFocus = fillComboBox(focusComboBox, grabberController->getFocusCaps());
-        focusComboBox->setCurrentIndex(preferences->getIntegerPreference(deviceId, "focus", focusComboBox->count()/2));
+        stepFocus = fillComboBox(focusComboBox, capabilities);
+        defaultIndex = (capabilities->getDefault() - capabilities->getMinimum()) / capabilities->getStep();
+        focusComboBox->setCurrentIndex(preferences->getIntegerPreference(deviceId, "focus", defaultIndex));
     }
 
-    if (grabberController->getPanCaps()->isAutomatic()) {
+    capabilities = grabberController->getPanCaps();
+    if (capabilities->isAutomatic()) {
         panCheckBox->show();
         panCheckBox->setChecked(preferences->getIntegerPreference(deviceId, "automaticpan", false));
     }
-    if (grabberController->getPanCaps()->isCapability()) {
-        if (!grabberController->getPanCaps()->isAutomatic()) {
+    if (capabilities->isCapability()) {
+        if (!capabilities->isAutomatic()) {
             panLabel->show();
         }
         panLabel->show();
         panComboBox->show();
-        stepPan = fillComboBox(panComboBox, grabberController->getPanCaps());
-        panComboBox->setCurrentIndex(preferences->getIntegerPreference(deviceId, "pan", panComboBox->count()/2));
+        stepPan = fillComboBox(panComboBox, capabilities);
+        defaultIndex = (capabilities->getDefault() - capabilities->getMinimum()) / capabilities->getStep();
+        panComboBox->setCurrentIndex(preferences->getIntegerPreference(deviceId, "pan", defaultIndex));
     }
 
-    if (grabberController->getTiltCaps()->isAutomatic()) {
+    capabilities = grabberController->getTiltCaps();
+    if (capabilities->isAutomatic()) {
         tiltCheckBox->show();
         tiltCheckBox->setChecked(preferences->getIntegerPreference(deviceId, "automatictilt", false));
     }
-    if (grabberController->getTiltCaps()->isCapability()) {
-        if (!grabberController->getTiltCaps()->isAutomatic()) {
+    if (capabilities->isCapability()) {
+        if (!capabilities->isAutomatic()) {
             tiltLabel->show();
         }
         tiltLabel->show();
         tiltComboBox->show();
-        stepTilt = fillComboBox(tiltComboBox, grabberController->getTiltCaps());
-        tiltComboBox->setCurrentIndex(preferences->getIntegerPreference(deviceId, "tilt", tiltComboBox->count()/2));
+        stepTilt = fillComboBox(tiltComboBox, capabilities);
+        defaultIndex = (capabilities->getDefault() - capabilities->getMinimum()) / capabilities->getStep();
+        tiltComboBox->setCurrentIndex(preferences->getIntegerPreference(deviceId, "tilt", defaultIndex));
     }
 
-    if (grabberController->getIrisCaps()->isAutomatic()) {
+    capabilities = grabberController->getIrisCaps();
+    if (capabilities->isAutomatic()) {
         irisCheckBox->show();
         irisCheckBox->setChecked(preferences->getIntegerPreference(deviceId, "automaticiris", false));
     }
-    if (grabberController->getIrisCaps()->isCapability()) {
-        if (!grabberController->getIrisCaps()->isAutomatic()) {
+    if (capabilities->isCapability()) {
+        if (!capabilities->isAutomatic()) {
             irisLabel->show();
         }
         irisComboBox->show();
-        stepIris = fillComboBox(irisComboBox, grabberController->getIrisCaps());
-        irisComboBox->setCurrentIndex(preferences->getIntegerPreference(deviceId, "iris", irisComboBox->count()/2));
+        stepIris = fillComboBox(irisComboBox, capabilities);
+        defaultIndex = (capabilities->getDefault() - capabilities->getMinimum()) / capabilities->getStep();
+        irisComboBox->setCurrentIndex(preferences->getIntegerPreference(deviceId, "iris", defaultIndex));
     }
 
-    if (grabberController->getRollCaps()->isAutomatic()) {
+    capabilities = grabberController->getRollCaps();
+    if (capabilities->isAutomatic()) {
         rollCheckBox->show();
         rollCheckBox->setChecked(preferences->getIntegerPreference(deviceId, "automaticroll", false));
     }
-    if (grabberController->getRollCaps()->isCapability()) {
-        if (!grabberController->getRollCaps()->isAutomatic()) {
+    if (capabilities->isCapability()) {
+        if (!capabilities->isAutomatic()) {
             rollLabel->show();
         }
         rollComboBox->show();
-        stepRoll = fillComboBox(rollComboBox, grabberController->getRollCaps());
-        rollComboBox->setCurrentIndex(preferences->getIntegerPreference(deviceId, "roll", rollComboBox->count()/2));
+        stepRoll = fillComboBox(rollComboBox, capabilities);
+        defaultIndex = (capabilities->getDefault() - capabilities->getMinimum()) / capabilities->getStep();
+        rollComboBox->setCurrentIndex(preferences->getIntegerPreference(deviceId, "roll", defaultIndex));
     }
 
     qDebug() << "CameraControllerDialog::init --> End";
@@ -822,6 +914,84 @@ void CameraControllerDialog::changeWhite(int index)
     preferences->setIntegerPreference(deviceId, "white", index);
 
     qDebug() << "CameraControllerDialog::changeWhite --> End";
+}
+
+
+void CameraControllerDialog::changeAutoGain(int newState)
+{
+    qDebug() << "CameraControllerDialog::changeAutoGain --> Start";
+
+    PreferencesTool *preferences = frontend->getPreferences();
+
+    if (newState) {
+        gainComboBox->setEnabled(false);
+        grabberController->setAutomaticGain(true);
+        preferences->setIntegerPreference(deviceId, "automaticgain", true);
+    }
+    else {
+        gainComboBox->setEnabled(true);
+        grabberController->setAutomaticGain(false);
+        preferences->setIntegerPreference(deviceId, "automaticgain", false);
+    }
+
+    qDebug() << "CameraControllerDialog::changeAutoGain --> End";
+}
+
+
+void CameraControllerDialog::changeGain(int index)
+{
+    qDebug() << "CameraControllerDialog::changeGain --> Start";
+
+    PreferencesTool *preferences = frontend->getPreferences();
+    int value = index * stepGain;
+    int maxValue = grabberController->getGainCaps()->getMaximum();
+
+    if (value > maxValue) {
+        value = maxValue;
+    }
+    grabberController->setGain(value);
+    preferences->setIntegerPreference(deviceId, "gain", index);
+
+    qDebug() << "CameraControllerDialog::changeGain --> End";
+}
+
+
+void CameraControllerDialog::changeAutoColor(int newState)
+{
+    qDebug() << "CameraControllerDialog::changeAutoColor --> Start";
+
+    PreferencesTool *preferences = frontend->getPreferences();
+
+    if (newState) {
+        colorComboBox->setEnabled(false);
+        grabberController->setAutomaticColor(true);
+        preferences->setIntegerPreference(deviceId, "automaticcolor", true);
+    }
+    else {
+        colorComboBox->setEnabled(true);
+        grabberController->setAutomaticColor(false);
+        preferences->setIntegerPreference(deviceId, "automaticcolor", false);
+    }
+
+    qDebug() << "CameraControllerDialog::changeAutoColor --> End";
+}
+
+
+void CameraControllerDialog::changeColor(int index)
+{
+    qDebug() << "CameraControllerDialog::changeColor --> Start";
+
+    PreferencesTool *preferences = frontend->getPreferences();
+    int value = index * stepColor;
+    int maxValue = grabberController->getColorCaps()->getMaximum();
+
+    if (value > maxValue) {
+        value = maxValue;
+    }
+    grabberController->setColor(value);
+    preferences->setIntegerPreference(deviceId, "color", index);
+
+    qDebug() << "CameraControllerDialog::changeColor --> End";
 }
 
 

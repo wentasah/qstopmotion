@@ -65,6 +65,18 @@ public:
      **************************************************************************/
 
     /**
+     * Get the current automatic brightness value of the device.
+     * @return True if the automatic brightness is on.
+     */
+    // bool getAutomaticBrightness();
+
+    /**
+     * Set the automatic brightness value of the device.
+     * @param ab True if the automatic brightness will be switched on.
+     */
+    // void setAutomaticBrightness(bool ab);
+
+    /**
      * Get the current brightness value of the device.
      * @return The current brightness value.
      */
@@ -79,6 +91,18 @@ public:
     /**************************************************************************
      * Contrast
      **************************************************************************/
+
+    /**
+     * Get the current automatic contrast value of the device.
+     * @return True if the automatic contrast is on.
+     */
+    // bool getAutomaticContrast();
+
+    /**
+     * Set the automatic contrast value of the device.
+     * @param ac True if the automatic contrast will be switched on.
+     */
+    // void setAutomaticContrast(bool ac);
 
     /**
      * Get the current contrast value of the device.
@@ -97,6 +121,18 @@ public:
      **************************************************************************/
 
     /**
+     * Get the current automatic saturation value of the device.
+     * @return True if the automatic saturation is on.
+     */
+    // bool getAutomaticSaturation();
+
+    /**
+     * Set the automatic saturation value of the device.
+     * @param as True if the automatic saturation will be switched on.
+     */
+    // void setAutomaticSaturation(bool as);
+
+    /**
      * Get the current saturation value of the device.
      * @return The current saturation value.
      */
@@ -111,6 +147,18 @@ public:
     /**************************************************************************
      * Hue
      **************************************************************************/
+
+    /**
+     * Get the current automatic hue value of the device.
+     * @return True if the automatic hue is on.
+     */
+    // bool getAutomaticHue();
+
+    /**
+     * Set the automatic hue value of the device.
+     * @param ah True if the automatic hue will be switched on.
+     */
+    // void setAutomaticHue(bool ah);
 
     /**
      * Get the current hue value of the device.
@@ -129,6 +177,18 @@ public:
      **************************************************************************/
 
     /**
+     * Get the current automatic gamma value of the device.
+     * @return True if the automatic gamma is on.
+     */
+    // bool getAutomaticGamma();
+
+    /**
+     * Set the automatic gamma value of the device.
+     * @param ag True if the automatic gamma will be switched on.
+     */
+    // void setAutomaticGamma(bool ag);
+
+    /**
      * Get the current gamma value of the device.
      * @return The current gamma value.
      */
@@ -145,6 +205,18 @@ public:
      **************************************************************************/
 
     /**
+     * Get the current automatic sharpness value of the device.
+     * @return True if the automatic sharpness is on.
+     */
+    // bool getAutomaticSharpness();
+
+    /**
+     * Set the automatic sharpness value of the device.
+     * @param as True if the automatic sharpness will be switched on.
+     */
+    // void setAutomaticSharpness(bool as);
+
+    /**
      * Get the current sharpness value of the device.
      * @return The current sharpness value.
      */
@@ -159,6 +231,18 @@ public:
     /**************************************************************************
      * Backlight Compensation
      **************************************************************************/
+
+    /**
+     * Get the current automatic backlight compensation value of the device.
+     * @return True if the automatic backlight compensation is on.
+     */
+    // bool getAutomaticBacklight();
+
+    /**
+     * Set the automatic backlight compensation value of the device.
+     * @param ab True if the automatic backlight compensation will be switched on.
+     */
+    // void setAutomaticBacklight(bool ab);
 
     /**
      * Get the current backlight compensation value of the device.
@@ -201,6 +285,62 @@ public:
     // void setWhite(int w);
 
     /**************************************************************************
+     * Gain
+     **************************************************************************/
+
+    /**
+     * Get the current automatic gain value of the device.
+     * @return True if the automatic gain is on.
+     */
+    // bool getAutomaticGain();
+
+    /**
+     * Set the automatic gain value of the device.
+     * @param ag True if the automatic gain will be switched on.
+     */
+    // void setAutomaticGain(bool ag);
+
+    /**
+     * Get the current gain value of the device.
+     * @return The current gain value.
+     */
+    // int getGain();
+
+    /**
+     * Set the gain value of the device.
+     * @param g The new gain value
+     */
+    // void setGain(int g);
+
+    /**************************************************************************
+     * Color Enable
+     **************************************************************************/
+
+    /**
+     * Get the current automatic color enable value of the device.
+     * @return True if the automatic color enable is on.
+     */
+    // bool getAutomaticColor();
+
+    /**
+     * Set the automatic color enable value of the device.
+     * @param ac True if the automatic color enable will be switched on.
+     */
+    // void setAutomaticColor(bool ac);
+
+    /**
+     * Get the current color enable value of the device.
+     * @return The current color enable value.
+     */
+    // int getColor();
+
+    /**
+     * Set the color enable value of the device.
+     * @param c The new color enable value
+     */
+    // void setColor(int c);
+
+    /**************************************************************************
      **************************************************************************
      * Camera control capabilities
      **************************************************************************
@@ -233,34 +373,6 @@ public:
      * @param e The new exposure value
      */
     // void setExposure(int e);
-
-    /**************************************************************************
-     * Iris
-     **************************************************************************/
-
-    /**
-     * Get the current automatic iris value of the device.
-     * @return True if the automatic iris is on.
-     */
-    // bool getAutomaticIris();
-
-    /**
-     * Set the automatic iris value of the device.
-     * @param ae True if the automatic iris will be switched on.
-     */
-    // void setAutomaticIris(bool ae);
-
-    /**
-     * Get the current iris value of the device.
-     * @return The current iris value.
-     */
-    // int getIris();
-
-    /**
-     * Set the iris value of the device.
-     * @param e The new iris value
-     */
-    // void setIris(int e);
 
     /**************************************************************************
      * Zoom
@@ -323,6 +435,18 @@ public:
      **************************************************************************/
 
     /**
+     * Get the current automatic pan value of the device.
+     * @return True if the automatic pan is on.
+     */
+    bool getAutomaticPan();
+
+    /**
+     * Set the automatic pan value of the device.
+     * @param ap True if the automatic pan will be switched on.
+     */
+    void setAutomaticPan(bool ap);
+
+    /**
      * Get the current pan value of the device.
      * @return The current pan value.
      */
@@ -339,6 +463,18 @@ public:
      **************************************************************************/
 
     /**
+     * Get the current automatic tilt value of the device.
+     * @return True if the automatic tilt is on.
+     */
+    bool getAutomaticTilt();
+
+    /**
+     * Set the automatic tilt value of the device.
+     * @param at True if the automatic tilt will be switched on.
+     */
+    void setAutomaticTilt(bool at);
+
+    /**
      * Get the current tilt value of the device.
      * @return The current tilt value.
      */
@@ -349,6 +485,62 @@ public:
      * @param t The new tilt value
      */
     void setTilt(int t);
+
+    /**************************************************************************
+     * Iris
+     **************************************************************************/
+
+    /**
+     * Get the current automatic iris value of the device.
+     * @return True if the automatic iris is on.
+     */
+    // bool getAutomaticIris();
+
+    /**
+     * Set the automatic iris value of the device.
+     * @param ae True if the automatic iris will be switched on.
+     */
+    // void setAutomaticIris(bool ae);
+
+    /**
+     * Get the current iris value of the device.
+     * @return The current iris value.
+     */
+    // int getIris();
+
+    /**
+     * Set the iris value of the device.
+     * @param e The new iris value
+     */
+    // void setIris(int e);
+
+    /**************************************************************************
+     * Roll
+     **************************************************************************/
+
+    /**
+     * Get the current automatic roll value of the device.
+     * @return True if the automatic roll is on.
+     */
+    // bool getAutomaticRoll();
+
+    /**
+     * Set the automatic roll value of the device.
+     * @param ar True if the automatic roll will be switched on.
+     */
+    // void setAutomaticRoll(bool ar);
+
+    /**
+     * Get the current roll value of the device.
+     * @return The current roll value.
+     */
+    // int getRoll();
+
+    /**
+     * Set the roll value of the device.
+     * @param r The new roll value
+     */
+    // void setRoll(int r);
 
 private:
     IAMCameraControl *pCameraControl;

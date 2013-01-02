@@ -55,7 +55,7 @@ public:
     /**
      * Destructor
      */
-    ~GrabberController();
+    virtual ~GrabberController();
 
     /**
      * Initialize the grabber controller.
@@ -102,13 +102,13 @@ public:
      * Get the current brightness value of the device.
      * @return The current brightness value.
      */
-    int getBrightness();
+    virtual int getBrightness();
 
     /**
      * Set the brightness value of the device.
      * @param b The new brightness value
      */
-    void setBrightness(int b);
+    virtual void setBrightness(int b);
 
     /**************************************************************************
      * Contrast
@@ -136,13 +136,13 @@ public:
      * Get the current contrast value of the device.
      * @return The current contrast value.
      */
-    int getContrast();
+    virtual int getContrast();
 
     /**
      * Set the contrast value of the device.
      * @param c The new contrast value
      */
-    void setContrast(int c);
+    virtual void setContrast(int c);
 
     /**************************************************************************
      * Saturation
@@ -170,13 +170,13 @@ public:
      * Get the current saturation value of the device.
      * @return The current saturation value.
      */
-    int getSaturation();
+    virtual int getSaturation();
 
     /**
      * Set the saturation value of the device.
      * @param s The new saturation value
      */
-    void setSaturation(int s);
+    virtual void setSaturation(int s);
 
     /**************************************************************************
      * Hue
@@ -204,13 +204,13 @@ public:
      * Get the current hue value of the device.
      * @return The current hue value.
      */
-    int getHue();
+    virtual int getHue();
 
     /**
      * Set the hue value of the device.
      * @param h The new hue value
      */
-    void setHue(int h);
+    virtual void setHue(int h);
 
     /**************************************************************************
      * Gamma
@@ -238,13 +238,13 @@ public:
      * Get the current gamma value of the device.
      * @return The current gamma value.
      */
-    int getGamma();
+    virtual int getGamma();
 
     /**
      * Set the gamma value of the device.
      * @param g The new gamma value
      */
-    void setGamma(int g);
+    virtual void setGamma(int g);
 
     /**************************************************************************
      * Sharpness
@@ -272,13 +272,13 @@ public:
      * Get the current sharpness value of the device.
      * @return The current sharpness value.
      */
-    int getSharpness();
+    virtual int getSharpness();
 
     /**
      * Set the sharpness value of the device.
      * @param s The new sharpness value
      */
-    void setSharpness(int s);
+    virtual void setSharpness(int s);
 
     /**************************************************************************
      * Backlight Compensation
@@ -306,13 +306,13 @@ public:
      * Get the current backlight compensation value of the device.
      * @return The current backlight compensation value.
      */
-    int getBacklight();
+    virtual int getBacklight();
 
     /**
      * Set the backlight compensation value of the device.
      * @param b The new backlight compensation value
      */
-    void setBacklight(int b);
+    virtual void setBacklight(int b);
 
     /**************************************************************************
      * White Balance
@@ -328,25 +328,25 @@ public:
      * Get the current automatic white balance value of the device.
      * @return True if the automatic white balance is on.
      */
-    bool getAutomaticWhite();
+    virtual bool getAutomaticWhite();
 
     /**
      * Set the automatic white balance value of the device.
      * @param aw True if the automatic white balance will be switched on.
      */
-    void setAutomaticWhite(bool aw);
+    virtual void setAutomaticWhite(bool aw);
 
     /**
      * Get the current white balance value of the device.
      * @return The current white balance value.
      */
-    int getWhite();
+    virtual int getWhite();
 
     /**
      * Set the white balance value of the device.
      * @param w The new white balance value
      */
-    void setWhite(int w);
+    virtual void setWhite(int w);
 
     /**************************************************************************
      * Gain
@@ -362,25 +362,25 @@ public:
      * Get the current automatic gain value of the device.
      * @return True if the automatic gain is on.
      */
-    bool getAutomaticGain();
+    virtual bool getAutomaticGain();
 
     /**
      * Set the automatic gain value of the device.
      * @param ag True if the automatic gain will be switched on.
      */
-    void setAutomaticGain(bool ag);
+    virtual void setAutomaticGain(bool ag);
 
     /**
      * Get the current gain value of the device.
      * @return The current gain value.
      */
-    int getGain();
+    virtual int getGain();
 
     /**
      * Set the gain value of the device.
      * @param g The new gain value
      */
-    void setGain(int g);
+    virtual void setGain(int g);
 
     /**************************************************************************
      * Color Enable
@@ -396,25 +396,25 @@ public:
      * Get the current automatic color enable value of the device.
      * @return True if the automatic color enable is on.
      */
-    bool getAutomaticColor();
+    virtual bool getAutomaticColor();
 
     /**
      * Set the automatic color enable value of the device.
      * @param ac True if the automatic color enable will be switched on.
      */
-    void setAutomaticColor(bool ac);
+    virtual void setAutomaticColor(bool ac);
 
     /**
      * Get the current color enable value of the device.
      * @return The current color enable value.
      */
-    int getColor();
+    virtual int getColor();
 
     /**
      * Set the color enable value of the device.
      * @param c The new color enable value
      */
-    void setColor(int c);
+    virtual void setColor(int c);
 
     /**************************************************************************
      **************************************************************************
@@ -436,25 +436,25 @@ public:
      * Get the current automatic exposure value of the device.
      * @return True if the automatic exposure is on.
      */
-    bool getAutomaticExposure();
+    virtual bool getAutomaticExposure();
 
     /**
      * Set the automatic exposure value of the device.
      * @param ae True if the automatic exposure will be switched on.
      */
-    void setAutomaticExposure(bool ae);
+    virtual void setAutomaticExposure(bool ae);
 
     /**
      * Get the current exposure value of the device.
      * @return The current exposure value.
      */
-    int getExposure();
+    virtual int getExposure();
 
     /**
      * Set the exposure value of the device.
      * @param e The new exposure value
      */
-    void setExposure(int e);
+    virtual void setExposure(int e);
 
     /**************************************************************************
      * Zoom
@@ -482,13 +482,13 @@ public:
      * Get the current zoom value of the device.
      * @return The current zoom value.
      */
-    int getZoom();
+    virtual int getZoom();
 
     /**
      * Set the zoom value of the device.
      * @param z The new zoom value
      */
-    void setZoom(int z);
+    virtual void setZoom(int z);
 
     /**************************************************************************
      * Focus
@@ -504,25 +504,25 @@ public:
      * Get the current automatic focus value of the device.
      * @return True if the automatic focus is on.
      */
-    bool getAutomaticFocus();
+    virtual bool getAutomaticFocus();
 
     /**
      * Set the automatic focus value of the device.
      * @param af True if the automatic focus will be switched on.
      */
-    void setAutomaticFocus(bool af);
+    virtual void setAutomaticFocus(bool af);
 
     /**
      * Get the current focus value of the device.
      * @return The current focus value.
      */
-    int getFocus();
+    virtual int getFocus();
 
     /**
      * Set the focus value of the device.
      * @param f The new focus value
      */
-    void setFocus(int f);
+    virtual void setFocus(int f);
 
     /**************************************************************************
      * Pan
@@ -550,13 +550,13 @@ public:
      * Get the current pan value of the device.
      * @return The current pan value.
      */
-    int getPan();
+    virtual int getPan();
 
     /**
      * Set the pan value of the device.
      * @param p The new pan value
      */
-    void setPan(int p);
+    virtual void setPan(int p);
 
     /**************************************************************************
      * Tilt
@@ -584,13 +584,13 @@ public:
      * Get the current tilt value of the device.
      * @return The current tilt value.
      */
-    int getTilt();
+    virtual int getTilt();
 
     /**
      * Set the tilt value of the device.
      * @param t The new tilt value
      */
-    void setTilt(int t);
+    virtual void setTilt(int t);
 
     /**************************************************************************
      * Iris
@@ -606,25 +606,25 @@ public:
      * Get the current automatic iris value of the device.
      * @return True if the automatic iris is on.
      */
-    bool getAutomaticIris();
+    virtual bool getAutomaticIris();
 
     /**
      * Set the automatic iris value of the device.
      * @param ai True if the automatic iris will be switched on.
      */
-    void setAutomaticIris(bool ai);
+    virtual void setAutomaticIris(bool ai);
 
     /**
      * Get the current iris value of the device.
      * @return The current iris value.
      */
-    int getIris();
+    virtual int getIris();
 
     /**
      * Set the iris value of the device.
      * @param i The new iris value
      */
-    void setIris(int i);
+    virtual void setIris(int i);
 
     /**************************************************************************
      * Roll
@@ -640,25 +640,25 @@ public:
      * Get the current automatic roll value of the device.
      * @return True if the automatic roll is on.
      */
-    bool getAutomaticRoll();
+    virtual bool getAutomaticRoll();
 
     /**
      * Set the automatic roll value of the device.
      * @param ar True if the automatic roll will be switched on.
      */
-    void setAutomaticRoll(bool ar);
+    virtual void setAutomaticRoll(bool ar);
 
     /**
      * Get the current roll value of the device.
      * @return The current roll value.
      */
-    int getRoll();
+    virtual int getRoll();
 
     /**
      * Set the roll value of the device.
      * @param r The new roll value
      */
-    void setRoll(int r);
+    virtual void setRoll(int r);
 
 private:
     int                         controllerCap;

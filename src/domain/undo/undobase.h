@@ -45,7 +45,7 @@ protected:
     /**
      * Destructor
      */
-    ~UndoBase();
+    virtual ~UndoBase();
 
     /**
      * Abstract function for undoing the command represented by this undo object.

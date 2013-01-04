@@ -134,7 +134,7 @@ private:
     QSpinBox     *horizontalGridSpin;
 
     int           actualLanguage;
-    PreferencesTool::captureButtonFunction actualButtonFunction;
+    int           actualButtonFunction;
     bool          actualVerticalGrid;
     int           actualVerticalSpin;
     bool          actualHorizontalGrid;

@@ -193,13 +193,37 @@ void ProjectWidget::initialize()
     if (tabType) {
         // The tab is used in gerneral dialog
         PreferencesTool *pref = frontend->getPreferences();
+        int              value;
 
-        defaultRecordingMode = pref->getIntegerPreference("preferences", "defaultrecordingmode", 0);
-        defaultVideoSource = pref->getIntegerPreference("preferences", "defaultvideosource", 0);
-        defaultMixMode = pref->getIntegerPreference("preferences", "defaultmixmode", 0);
-        defaultMixCount = pref->getIntegerPreference("preferences", "defaultmixcount", 2);
-        defaultPlaybackCount = pref->getIntegerPreference("preferences", "defaultplaybackcount", 2);
-        // defaultUnitMode = pref->getIntegerPreference("preferences", "defaultunitmode", 0);
+        if (pref->getIntegerPreference("preferences", "defaultrecordingmode", value) == false) {
+            value = 0;
+        }
+        defaultRecordingMode = value;
+
+        if (pref->getIntegerPreference("preferences", "defaultvideosource", value) == false) {
+            value = 0;
+        }
+        defaultVideoSource = value;
+
+        if (pref->getIntegerPreference("preferences", "defaultmixingmode", value) == false) {
+            value = 0;
+        }
+        defaultMixMode = value;
+
+        if (pref->getIntegerPreference("preferences", "defaultmixcount", value) == false) {
+            value = 0;
+        }
+        defaultMixCount = value;
+
+        if (pref->getIntegerPreference("preferences", "defaultplaybackcount", value) == false) {
+            value = 0;
+        }
+        defaultPlaybackCount = value;
+
+        // if (pref->getIntegerPreference("preferences", "defaultunitmode", value) == false) {
+        //     value = 0;
+        // }
+        // bdefaultUnitMode = value;
     }
     else {
         // The tab is used in project dialog

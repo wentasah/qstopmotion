@@ -233,15 +233,35 @@ void ExportWidget::initialize()
     qDebug("ExportWidget::initialize --> Start");
 
     PreferencesTool *pref = frontend->getPreferences();
+    int              value;
 
     // Read eEncoder preferences
     if (tabType) {
         // This is a general dialog tab
-        activeEncoderApplication = pref->getIntegerPreference("preferences", "defaultencoderapplication", VideoEncoder::noneApplication);
-        activeVideoFormat = pref->getIntegerPreference("preferences", "defaultvideoformat", VideoEncoder::mp4Format);
-        activeVideoSize = pref->getIntegerPreference("preferences", "defaultvideosize", VideoEncoder::defaultSize);
-        activeFramesPerSecond = pref->getIntegerPreference("preferences", "defaultframespersecond", 12);
-        activeUseDefaultOutputFile = pref->getIntegerPreference("preferences", "defaultusedefaultoutputfile", false);
+        if (pref->getIntegerPreference("preferences", "defaultencoderapplication", value) == false) {
+            value = VideoEncoder::noneApplication;
+        }
+        activeEncoderApplication = value;
+
+        if (pref->getIntegerPreference("preferences", "defaultvideoformat", value) == false) {
+            value = VideoEncoder::noneFormat;
+        }
+        activeVideoFormat = value;
+
+        if (pref->getIntegerPreference("preferences", "defaultvideosize", value) == false) {
+            value = VideoEncoder::defaultSize;
+        }
+        activeVideoSize = value;
+
+        if (pref->getIntegerPreference("preferences", "defaultframespersecond", value) == false) {
+            value = 12;
+        }
+        activeFramesPerSecond = value;
+
+        if (pref->getIntegerPreference("preferences", "defaultusedefaultoutputfile", value) == false) {
+            value = false;
+        }
+        activeUseDefaultOutputFile = value;
     }
     else {
         // This is a project dialog tab

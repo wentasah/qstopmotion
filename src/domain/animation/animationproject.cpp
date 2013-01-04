@@ -156,6 +156,19 @@ const QString AnimationProject::getOldSoundPath() const
  * Project preferences
  **************************************************************************/
 
+int AnimationProject::getRecordingMode() const
+{
+    return recordingMode;
+}
+
+
+void AnimationProject::setRecordingMode(int newRecordingMode)
+{
+    recordingMode = newRecordingMode;
+    incSettingsChanges();
+}
+
+
 int AnimationProject::getVideoSource() const
 {
     return videoSource;
@@ -543,7 +556,12 @@ bool AnimationProject::readSettingsFromProject(QDomElement &settingsNode)
 
         // Save project parameter
 
-        if (nodeName.compare("videosource") == 0) {
+        if (nodeName.compare("recordingmode") == 0) {
+            QString tmp = currElement.text();
+            recordingMode = tmp.toInt();
+            frontend->setRecordingMode(tmp.toInt());
+        }
+        else if (nodeName.compare("videosource") == 0) {
             QString tmp = currElement.text();
             if (frontend->setVideoSource(tmp.toInt())) {
                 videoSource = tmp.toInt();
@@ -631,6 +649,12 @@ bool AnimationProject::saveSettingsToProject(QDomDocument &doc, QDomElement &set
     qDebug("AnimationProject::saveSettingsToProject --> Start");
 
     // Save project parameter
+
+    // Save recording mode parameter
+    QDomElement recordingModeElement = doc.createElement("recordingmode");
+    QDomText recordingModeText = doc.createTextNode(QString("%1").arg(recordingMode));
+    recordingModeElement.appendChild(recordingModeText);
+    settingsNode.appendChild(recordingModeElement);
 
     // Save video source parameter
     QDomElement videoSourceElement = doc.createElement("videosource");

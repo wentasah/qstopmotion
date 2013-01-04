@@ -146,6 +146,8 @@ MainWindowGUI::MainWindowGUI(QApplication *stApp, Frontend *f)
 
 void MainWindowGUI::init()
 {
+    int  value;
+
     lastVisitedDir.clear();
 
     this->initTranslations();
@@ -216,10 +218,23 @@ void MainWindowGUI::init()
     connect(this, SIGNAL(startOpenProject()), this, SLOT(openProject()));
     connect(this, SIGNAL(startExit()),  this, SLOT(closeApplication()));
 
-    verticalGrid = pref->getIntegerPreference("preferences", "verticalgrid", false);
-    verticalSpin = pref->getIntegerPreference("preferences", "verticalspin", 5);
-    horizontalGrid = pref->getIntegerPreference("preferences", "horizontalgrid", false);
-    horizontalSpin = pref->getIntegerPreference("preferences", "horizontalspin", 5);
+    if (pref->getIntegerPreference("preferences", "verticalgrid", value) == false) {
+        value = false;
+    }
+    verticalGrid = value;
+
+    if (pref->getIntegerPreference("preferences", "verticalspin", verticalSpin) == false) {
+        verticalSpin = 5;
+    }
+
+    if (pref->getIntegerPreference("preferences", "horizontalgrid", value) == false) {
+        value = false;
+    }
+    horizontalGrid = value;
+
+    if (pref->getIntegerPreference("preferences", "horizontalspin", horizontalSpin) == false) {
+        horizontalSpin = 5;
+    }
 
     qDebug("MainWindowGUI::Constructor --> End");
 }
@@ -1029,14 +1044,14 @@ void MainWindowGUI::exportToVideo()
 {
     qDebug("MainWindowGUI::exportToVideo --> Start");
 
+    VideoEncoder    *enc = NULL;
+    PreferencesTool *pref = frontend->getPreferences();
+    int              activeEncoderApplication = VideoEncoder::noneApplication;
+    int              useDefaultOutputFile = 0;
+
     recordingTab->checkCameraOff();
 
-    VideoEncoder *enc = NULL;
-    PreferencesTool *pref = frontend->getPreferences();
-    int activeEncoderApplication = pref->getIntegerPreference("preferences", "encoderapplication", VideoEncoder::noneApplication);
-
-    if (activeEncoderApplication == VideoEncoder::noneApplication)
-    {
+    if (pref->getIntegerPreference("preferences", "encoderapplication", activeEncoderApplication) == false) {
         frontend->showWarning(tr("Warning"),
                               tr("Cannot find any registered encoder to be used for video export.\n"
                                  "This can be setted in the preferences menu.\n"
@@ -1057,12 +1072,15 @@ void MainWindowGUI::exportToVideo()
         return;
     }
 
-    if (pref->getIntegerPreference("preferences", "usedefaultoutputfile", 0) == 1) {
-        QStringList filters;
-        QString exportSuffix;
-        QString outputFile;
+    pref->getIntegerPreference("preferences", "usedefaultoutputfile", useDefaultOutputFile);
+    if (useDefaultOutputFile == 1) {
+        QStringList  filters;
+        QString      exportSuffix;
+        QString      outputFile;
+        int          videoFormat = VideoEncoder::noneFormat;
 
-        switch(pref->getIntegerPreference("preferences", "videoformat", VideoEncoder::noneFormat)) {
+        pref->getIntegerPreference("preferences", "videoformat", videoFormat);
+        switch(videoFormat) {
         case VideoEncoder::aviFormat:
             filters << tr("AVI Videos (*.avi)");
             exportSuffix.append("avi");
@@ -1094,14 +1112,18 @@ void MainWindowGUI::exportToVideo()
             enc->setOutputFile(outputFile);
         }
     } else {
-        QString outputFileName = pref->getStringPreference("preferences", "defaultoutputfilename", "");
-        if (outputFileName.isEmpty()) {
+        QString  outputFileName;
+        int      videoFormat = VideoEncoder::noneFormat;
+
+        if (pref->getStringPreference("preferences", "defaultoutputfilename", outputFileName)) {
             frontend->showWarning(tr("Warning"),
                                   tr("No default output file name defined.\n"
                                      "Check your settings in the preferences menu!"));
             return;
         }
-        switch(pref->getIntegerPreference("preferences", "videoformat", VideoEncoder::noneFormat)) {
+
+        pref->getIntegerPreference("preferences", "videoformat", videoFormat);
+        switch(videoFormat) {
         case VideoEncoder::aviFormat:
             if (outputFileName.indexOf(".avi") == -1) {
                 outputFileName.append(".avi");
@@ -1383,8 +1405,11 @@ void MainWindowGUI::createTranslator(const QString &newLocale)
     QString appTranslationFile("qstopmotion_");
     QString qtTranslationFile("qt_");
     QString qmPath(frontend->getTranslationsDirName());
-    QString languagePref = frontend->getPreferences()->getStringPreference("preferences", "language", newLocale);
+    QString languagePref;
 
+    if (frontend->getPreferences()->getStringPreference("preferences", "language", languagePref) == false) {
+        languagePref.append(newLocale);
+    }
     if (newLocale.isEmpty()) {
         if (languagePref.isEmpty()) {
             // Get system locale.

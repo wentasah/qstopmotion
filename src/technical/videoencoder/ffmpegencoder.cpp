@@ -85,9 +85,11 @@ FfmpegEncoder::~FfmpegEncoder()
 
 const QString FfmpegEncoder::getStartCommand() const
 {
-    QString startCommand;
-    QString imagePath = animationProject->getNewImagePath();
+    QString          startCommand;
+    QString          imagePath = animationProject->getNewImagePath();
     PreferencesTool *pref = animationProject->getFrontend()->getPreferences();
+    int              videoSize = VideoEncoder::defaultSize;
+    int              videoFormat = VideoEncoder::noneFormat;
 
     // Prepare start command
     //
@@ -153,7 +155,8 @@ const QString FfmpegEncoder::getStartCommand() const
     startCommand.append(QString(" -r 25"));
 
     // Video size (default = Input size)
-    switch(pref->getIntegerPreference("preferences", "videosize", VideoEncoder::defaultSize)) {
+    pref->getIntegerPreference("preferences", "videosize", videoSize);
+    switch(videoSize) {
     case VideoEncoder::qvgaSize:
         startCommand.append(" -s qvga");
         break;
@@ -175,7 +178,8 @@ const QString FfmpegEncoder::getStartCommand() const
     }
 
     // Video format
-    switch(pref->getIntegerPreference("preferences", "videoformat", VideoEncoder::noneFormat)) {
+    pref->getIntegerPreference("preferences", "videoformat", videoFormat);
+    switch(videoFormat) {
     case VideoEncoder::aviFormat:
         startCommand.append(" -f avi");
         break;

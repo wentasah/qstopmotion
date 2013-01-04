@@ -72,15 +72,17 @@ bool PreferencesElement::setStringPreference(const QString &key, const QString &
 }
 
 
-const QString PreferencesElement::getStringPreference(const QString &key, const QString &defaultValue)
+bool PreferencesElement::getStringPreference(const QString &key, QString &value)
 {
     QDomElement node = findPreferencesNode(key);
 
     if (!node.isNull()) {
-        return node.text();
+        value.clear();
+        value.append(node.text());
+        return true;
     }
 
-    return defaultValue;
+    return false;
 }
 
 
@@ -108,16 +110,17 @@ bool PreferencesElement::setIntegerPreference(const QString &key, const int attr
 }
 
 
-int PreferencesElement::getIntegerPreference(const QString &key, const int defaultValue)
+bool PreferencesElement::getIntegerPreference(const QString &key, int &value)
 {
     QDomElement node = findPreferencesNode(key);
 
     if (!node.isNull()) {
         QString tmp = node.text();
-        return tmp.toInt();
+        value = tmp.toInt();
+        return true;
     }
 
-    return defaultValue;
+    return false;
 }
 
 

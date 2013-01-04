@@ -241,16 +241,16 @@ bool PreferencesTool::setStringPreference(const QString &name, const QString &ke
 }
 
 
-const QString PreferencesTool::getStringPreference(const QString &name, const QString &key, const QString &defaultValue)
+bool PreferencesTool::getStringPreference(const QString &name, const QString &key, QString &value)
 {
     checkInitialized();
     PreferencesElement *element = findPreferencesElement(name);
 
     if (element != NULL) {
-        return element->getStringPreference(key, defaultValue);
+        return element->getStringPreference(key, value);
     }
 
-    return defaultValue;
+    return false;
 }
 
 
@@ -277,16 +277,16 @@ bool PreferencesTool::setIntegerPreference(const QString &name, const QString &k
 }
 
 
-int PreferencesTool::getIntegerPreference(const QString &name, const QString &key, const int defaultValue)
+bool PreferencesTool::getIntegerPreference(const QString &name, const QString &key, int &value)
 {
     checkInitialized();
     PreferencesElement *element = findPreferencesElement(name);
 
     if (element != NULL) {
-        return element->getIntegerPreference(key, defaultValue);
+        return element->getIntegerPreference(key, value);
     }
 
-    return defaultValue;
+    return false;
 }
 
 

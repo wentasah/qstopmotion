@@ -198,14 +198,14 @@ public:
     /**
      * Adds a string preference.
      * @param name The element name for the key for retrieving the preference.
-     * @param key the key for retrieving the preference.
-     * @param attribute the attribute for the preference.
-     * @param flushLater true if you don't want the preferencesTool to flush
+     * @param key The key for retrieving the preference.
+     * @param attribute The attribute for the preference.
+     * @param flushLater True if you don't want the preferencesTool to flush
      * the preferences to disk at once. This is given for to allow
      * optimalization when several preferences ar saved at the same time.
      * flushPreferences() should be called at once after the preferences are
      * set to store them to disk.
-     * @return true if the preference was succesfully saved. If flushLater is
+     * @return True if the preference was succesfully saved. If flushLater is
      * set to true this function will return true automaticaly.
      */
     bool setStringPreference(const QString &name, const QString &key, const QString &attribute, bool flushLater = false);
@@ -213,25 +213,23 @@ public:
     /**
      * Retrieves a string preference.
      * @param name The element name for the key for retrieving the preference.
-     * @param key the key of the preference to retrieve.
-     * @param defaultValue a default value for preferences which aren't set
-     * by the user yet.
-     * @return the attribute for the given key or "defaultValue" if the key
-     * wasn't found.
+     * @param key The key of the preference to retrieve.
+     * @param value The value of the preference.
+     * @return true if the preference was succesfully readed.
      */
-    const QString getStringPreference(const QString &name, const QString &key, const QString &defaultValue);
+    bool getStringPreference(const QString &name, const QString &key, QString &value);
 
     /**
      * Adds an int preference.
      * @param name The element name for the key for retrieving the preference.
-     * @param key the key for retrieving the preference.
-     * @param attribute the attribute for the preference.
-     * @param flushLater true if you don't want the preferencesTool to flush
+     * @param key The key for retrieving the preference.
+     * @param attribute The attribute for the preference.
+     * @param flushLater True if you don't want the preferencesTool to flush
      * the preferences to disk at once. This is given for to allow
      * optimalization when several preferences ar saved at the same time.
      * flushPreferences() should be called at once after the preferences are
      * set to store them to disk.
-     * @return true if the preference was succesfully saved. If flushLater is
+     * @return True if the preference was succesfully saved. If flushLater is
      * set to true this function will return true automaticaly.
      */
     bool setIntegerPreference(const QString &name, const QString &key, const int attribute, bool flushLater = false);
@@ -239,13 +237,11 @@ public:
     /**
      * Retrieves an int preference.
      * @param name The element name for the key for retrieving the preference.
-     * @param key the key of the preference to retrieve.
-     * @param defaultValue a default value for preferences which aren't set
-     * by the user yet.
-     * @return the attribute for the given key or "defaultValue" if the key
-     * wasn't found.
+     * @param key The key of the preference to retrieve.
+     * @param value The value of the preference.
+     * @return true if the preference was succesfully readed.
      */
-    int getIntegerPreference(const QString &name, const QString &key, const int defaultValue);
+    bool getIntegerPreference(const QString &name, const QString &key, int &value);
 
     /**
      * Set the default preferences

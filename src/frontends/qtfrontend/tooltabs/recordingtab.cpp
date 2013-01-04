@@ -60,7 +60,9 @@ RecordingTab::RecordingTab(Frontend *f,
     this->setObjectName("RecordingTab");
 
     PreferencesTool *pref = frontend->getPreferences();
-    captureFunction = (PreferencesTool::captureButtonFunction)pref->getIntegerPreference("preferences", "capturebutton", PreferencesTool::captureButtonAfter);
+    if (pref->getIntegerPreference("preferences", "capturebutton", captureFunction) == false) {
+        captureFunction = PreferencesTool::captureButtonAfter;
+    }
 
     cameraTimer = new QTimer(this);
     cameraTimer->setSingleShot(true);

@@ -282,12 +282,29 @@ void QtFrontend::init()
     mw->init();
 
     // Restore the size and position of the application
-    QSize appSize;
-    QPoint appPos;
-    appSize.setHeight(preferencesTool->getIntegerPreference("preferences", "applicationsizeheight", 593));
-    appSize.setWidth(preferencesTool->getIntegerPreference("preferences", "applicationsizewidth", 751));
-    appPos.setX(preferencesTool->getIntegerPreference("preferences", "applicationposx", 80));
-    appPos.setY(preferencesTool->getIntegerPreference("preferences", "applicationposy", 20));
+    QSize   appSize;
+    QPoint  appPos;
+    int     value;
+
+    if (preferencesTool->getIntegerPreference("preferences", "applicationsizeheight", value) == false) {
+        value = 593;
+    }
+    appSize.setHeight(value);
+
+    if (preferencesTool->getIntegerPreference("preferences", "applicationsizewidth", value) == false) {
+        value = 751;
+    }
+    appSize.setWidth(value);
+
+    if (preferencesTool->getIntegerPreference("preferences", "applicationposx", value) == false) {
+        value = 80;
+    }
+    appPos.setX(value);
+
+    if (preferencesTool->getIntegerPreference("preferences", "applicationposy", value) == false) {
+        value = 20;
+    }
+    appPos.setY(value);
 
     // Was the last position on a not existing second screen?
     if (appPos.x() > QApplication::desktop()->width()) {

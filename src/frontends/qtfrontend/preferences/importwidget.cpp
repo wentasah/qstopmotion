@@ -324,15 +324,35 @@ void ImportWidget::initialize()
     qDebug("ImportWidget::initialize --> Start");
 
     PreferencesTool *pref = frontend->getPreferences();
+    int              value;
 
     // Read eEncoder preferences
     if (tabType) {
         // This is a general dialog tab
-        activeGrabberSource = pref->getIntegerPreference("preferences", "defaultgrabbersource", ImageGrabberDevice::testSource);
-        activeImageFormat = pref->getIntegerPreference("preferences", "defaultimageformat", ImageGrabber::jpegFormat);
-        activeImageSize = pref->getIntegerPreference("preferences", "defaultimagesize", ImageGrabber::defaultSize);
-        activeTransform = pref->getIntegerPreference("preferences", "defaulttransformation", true);
-        activeImageAdjustment = pref->getIntegerPreference("preferences", "defaultimageadjustment", ImageGrabber::centerDown);
+        if (pref->getIntegerPreference("preferences", "defaultgrabbersource", value) == false) {
+            value = ImageGrabberDevice::testSource;
+        }
+        activeGrabberSource = value;
+
+        if (pref->getIntegerPreference("preferences", "defaultimageformat", value) == false) {
+            value = ImageGrabber::jpegFormat;
+        }
+        activeImageFormat = value;
+
+        if (pref->getIntegerPreference("preferences", "defaultimagesize", value) == false) {
+            value = ImageGrabber::defaultSize;
+        }
+        activeImageSize = value;
+
+        if (pref->getIntegerPreference("preferences", "defaulttransformation", value) == false) {
+            value = false;
+        }
+        activeTransform = value;
+
+        if (pref->getIntegerPreference("preferences", "defaultimageadjustment", value) == false) {
+            value = ImageGrabber::centerDown;
+        }
+        activeImageAdjustment = value;
     }
     else {
         // This is a project dialog tab

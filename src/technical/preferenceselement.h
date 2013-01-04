@@ -57,41 +57,37 @@ public:
 
     /**
      * Adds a string preference.
-     * @param key the key for retrieving the preference.
-     * @param attribute the attribute for the preference.
-     * @return true if the preference was succesfully saved. If flushLater is
+     * @param key The key for retrieving the preference.
+     * @param attribute The attribute for the preference.
+     * @return True if the preference was succesfully saved. If flushLater is
      * set to true this function will return true automaticaly.
      */
     bool setStringPreference(const QString &key, const QString &attribute);
 
     /**
      * Retrieves a string preference.
-     * @param key the key of the preference to retrieve.
-     * @param defaultValue a default value for preferences which aren't set
-     * by the user yet.
-     * @return the attribute for the given key or "defaultValue" if the key
-     * wasn't found.
+     * @param key The key of the preference to retrieve.
+     * @param value The value of the preference.
+     * @return True if the preference was succesfully readed.
      */
-    const QString getStringPreference(const QString &key, const QString &defaultValue);
+    bool getStringPreference(const QString &key, QString &value);
 
     /**
      * Adds an int preference.
-     * @param key the key for retrieving the preference.
-     * @param attribute the attribute for the preference.
-     * @return true if the preference was succesfully saved. If flushLater is
+     * @param key The key for retrieving the preference.
+     * @param attribute The attribute for the preference.
+     * @return True if the preference was succesfully saved. If flushLater is
      * set to true this function will return true automaticaly.
      */
     bool setIntegerPreference(const QString &key, const int attribute);
 
     /**
      * Retrieves an int preference.
-     * @param key the key of the preference to retrieve.
-     * @param defaultValue a default value for preferences which aren't set
-     * by the user yet.
-     * @return the attribute for the given key or "defaultValue" if the key
-     * wasn't found.
+     * @param key The key of the preference to retrieve.
+     * @param value The value of the preference.
+     * @return True if the preference was succesfully readed.
      */
-    int getIntegerPreference(const QString &key, const int defaultValue);
+    bool getIntegerPreference(const QString &key, int &value);
 
     /**
      * Removes the preference with the key "key". (Which, in practice, means

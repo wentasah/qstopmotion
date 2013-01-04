@@ -244,7 +244,7 @@ private:
     ToolBar     *toolBar;
     bool         cameraOn;
     QTimer      *cameraTimer;
-    PreferencesTool::captureButtonFunction captureFunction;
+    int          captureFunction;
 
     QShortcut   *mixAccel;
     QShortcut   *diffAccel;

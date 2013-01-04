@@ -175,6 +175,7 @@ void GeneralWidget::initialize()
     qDebug("GeneralWidget::initialize --> Start");
 
     PreferencesTool *pref = frontend->getPreferences();
+    int              value;
 
     QString actualLocale = pref->getStringPreference("preferences", "language", QString());
     QVector<QString> locales = frontend->getLocales();
@@ -185,7 +186,9 @@ void GeneralWidget::initialize()
     }
     languageCombo->setCurrentIndex(actualLanguage);
 
-    actualButtonFunction = (PreferencesTool::captureButtonFunction)pref->getIntegerPreference("preferences", "capturebutton", PreferencesTool::captureButtonAfter);
+    if (pref->getIntegerPreference("preferences", "capturebutton", actualButtonFunction) == false) {
+        actualButtonFunction = PreferencesTool::captureButtonAfter;
+    }
     switch (actualButtonFunction) {
     case PreferencesTool::captureButtonBevor:
         setBevorButtonOn();
@@ -198,14 +201,28 @@ void GeneralWidget::initialize()
         break;
     }
 
-    actualVerticalGrid = pref->getIntegerPreference("preferences", "verticalgrid", false);
+    if (pref->getIntegerPreference("preferences", "verticalgrid", value) == false) {
+        value = false;
+    }
+    actualVerticalGrid = value;
     verticalGridCheck->setChecked(actualVerticalGrid);
-    actualVerticalSpin = pref->getIntegerPreference("preferences", "verticalspin", 5);
+
+    if (pref->getIntegerPreference("preferences", "verticalspin", value) == false) {
+        value = 5;
+    }
+    actualVerticalSpin = value;
     verticalGridSpin->setValue(actualVerticalSpin);
 
-    actualHorizontalGrid = pref->getIntegerPreference("preferences", "horizontalgrid", false);
+    if (pref->getIntegerPreference("preferences", "horizontalgrid", value) == false) {
+        value = false;
+    }
+    actualHorizontalGrid = value;
     horizontalGridCheck->setChecked(actualHorizontalGrid);
-    actualHorizontalSpin = pref->getIntegerPreference("preferences", "horizontalspin", 5);
+
+    if (pref->getIntegerPreference("preferences", "horizontalspin", value) == false) {
+        value = 5;
+    }
+    actualHorizontalSpin = value;
     horizontalGridSpin->setValue(actualHorizontalSpin);
 
     qDebug("GeneralWidget::initialize --> End");

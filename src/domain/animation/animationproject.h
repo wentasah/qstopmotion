@@ -130,8 +130,20 @@ public:
      **************************************************************************/
 
     /**
-     * Get the active source of the project.
-     * @return active source.
+     * Get the active recording mode of the project.
+     * @return active recording mode.
+     */
+    int getRecordingMode() const;
+
+    /**
+     * Set the active recording mode of the project.
+     * @param newRecordingMode The new recording mode.
+     */
+    void setRecordingMode(int newRecordingMode);
+
+    /**
+     * Get the active video source of the project.
+     * @return active video source.
      */
     int getVideoSource() const;
 
@@ -828,6 +840,11 @@ private:
      * Serializer to be used on saving and loading of the project.
      */
     ProjectSerializer *serializer;
+
+    /**
+     * Active recording mode of the project.
+     */
+    int recordingMode;
 
     /**
      * Active video source of the project.

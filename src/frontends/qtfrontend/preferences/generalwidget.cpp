@@ -176,9 +176,10 @@ void GeneralWidget::initialize()
 
     PreferencesTool *pref = frontend->getPreferences();
     int              value;
-
-    QString actualLocale = pref->getStringPreference("preferences", "language", QString());
+    QString          actualLocale;
     QVector<QString> locales = frontend->getLocales();
+
+    pref->getStringPreference("preferences", "language", actualLocale);
     for (int index = 0; index < locales.count(); index++) {
         if (actualLocale.compare(locales[index]) == 0) {
             actualLanguage = index;

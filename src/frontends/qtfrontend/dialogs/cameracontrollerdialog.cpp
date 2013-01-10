@@ -337,8 +337,8 @@ void CameraControllerDialog::init()
     qDebug() << "CameraControllerDialog::init --> Start";
 
     PreferencesTool            *preferences = frontend->getPreferences();
-    int                         defaultIndex;
     GrabberControlCapabilities *capabilities;
+    bool                        checked;
     int                         value;
 
     capabilities = grabberController->getBrightnessCaps();
@@ -346,15 +346,17 @@ void CameraControllerDialog::init()
         brightnessCheckBox->show();
         if (preferences->getIntegerPreference(deviceId, "automaticbrightness", value)) {
             if (value == 1) {
-                brightnessCheckBox->setChecked(true);
+                checked = true;
             }
             else {
-                brightnessCheckBox->setChecked(false);
+                checked = false;
             }
         }
         else {
-            brightnessCheckBox->setChecked(false);
+            checked = false;
         }
+        brightnessCheckBox->setChecked(checked);
+        changeAutoBrightness(checked, false);
     }
     if (capabilities->isCapability()) {
         if (!capabilities->isAutomatic()) {
@@ -362,13 +364,12 @@ void CameraControllerDialog::init()
         }
         brightnessComboBox->show();
         stepBrightness = fillComboBox(brightnessComboBox, capabilities);
-        if (preferences->getIntegerPreference(deviceId, "brigthtness", value)) {
-            brightnessComboBox->setCurrentIndex(value);
+        if (preferences->getIntegerPreference(deviceId, "brigthtness", value) == false) {
+            // Calculate default value
+            value = (capabilities->getDefault() - capabilities->getMinimum()) / capabilities->getStep();
         }
-        else {
-            defaultIndex = (capabilities->getDefault() - capabilities->getMinimum()) / capabilities->getStep();
-            brightnessComboBox->setCurrentIndex(defaultIndex);
-        }
+        brightnessComboBox->setCurrentIndex(value);
+        changeBrightness(value, false);
     }
 
     capabilities = grabberController->getContrastCaps();
@@ -376,15 +377,17 @@ void CameraControllerDialog::init()
         contrastCheckBox->show();
         if (preferences->getIntegerPreference(deviceId, "automaticcontrast", value)) {
             if (value == 1) {
-                contrastCheckBox->setChecked(true);
+                checked = true;
             }
             else {
-                contrastCheckBox->setChecked(false);
+                checked = false;
             }
         }
         else {
-            contrastCheckBox->setChecked(false);
+            checked = false;
         }
+        contrastCheckBox->setChecked(checked);
+        changeAutoContrast(checked, false);
     }
     if (capabilities->isCapability()) {
         if (!capabilities->isAutomatic()) {
@@ -392,13 +395,12 @@ void CameraControllerDialog::init()
         }
         contrastComboBox->show();
         stepContrast = fillComboBox(contrastComboBox, capabilities);
-        if (preferences->getIntegerPreference(deviceId, "contrast", value)) {
-            contrastComboBox->setCurrentIndex(value);
+        if (preferences->getIntegerPreference(deviceId, "contrast", value) == false) {
+            // Calculate default value
+            value = (capabilities->getDefault() - capabilities->getMinimum()) / capabilities->getStep();
         }
-        else {
-            defaultIndex = (capabilities->getDefault() - capabilities->getMinimum()) / capabilities->getStep();
-            contrastComboBox->setCurrentIndex(defaultIndex);
-        }
+        contrastComboBox->setCurrentIndex(value);
+        changeContrast(value, false);
     }
 
     capabilities = grabberController->getSaturationCaps();
@@ -406,15 +408,17 @@ void CameraControllerDialog::init()
         saturationCheckBox->show();
         if (preferences->getIntegerPreference(deviceId, "automaticsaturation", value)) {
             if (value == 1) {
-                saturationCheckBox->setChecked(true);
+                checked = true;
             }
             else {
-                saturationCheckBox->setChecked(false);
+                checked = false;
             }
         }
         else {
-            saturationCheckBox->setChecked(false);
+            checked = false;
         }
+        saturationCheckBox->setChecked(checked);
+        changeAutoSaturation(checked, false);
     }
     if (capabilities->isCapability()) {
         if (!capabilities->isAutomatic()) {
@@ -422,13 +426,12 @@ void CameraControllerDialog::init()
         }
         saturationComboBox->show();
         stepSaturation = fillComboBox(saturationComboBox, capabilities);
-        if (preferences->getIntegerPreference(deviceId, "saturation", value)) {
-            saturationComboBox->setCurrentIndex(value);
+        if (preferences->getIntegerPreference(deviceId, "saturation", value) == false) {
+            // Calculate default value
+            value = (capabilities->getDefault() - capabilities->getMinimum()) / capabilities->getStep();
         }
-        else {
-            defaultIndex = (capabilities->getDefault() - capabilities->getMinimum()) / capabilities->getStep();
-            saturationComboBox->setCurrentIndex(defaultIndex);
-        }
+        saturationComboBox->setCurrentIndex(value);
+        changeSaturation(value, false);
     }
 
     capabilities = grabberController->getHueCaps();
@@ -436,15 +439,17 @@ void CameraControllerDialog::init()
         hueCheckBox->show();
         if (preferences->getIntegerPreference(deviceId, "automatichue", value)) {
             if (value == 1) {
-                hueCheckBox->setChecked(true);
+                checked = true;
             }
             else {
-                hueCheckBox->setChecked(false);
+                checked = false;
             }
         }
         else {
-            hueCheckBox->setChecked(false);
+            checked = false;
         }
+        hueCheckBox->setChecked(checked);
+        changeAutoHue(checked, false);
     }
     if (capabilities->isCapability()) {
         if (!capabilities->isAutomatic()) {
@@ -452,13 +457,12 @@ void CameraControllerDialog::init()
         }
         hueComboBox->show();
         stepHue = fillComboBox(hueComboBox, capabilities);
-        if (preferences->getIntegerPreference(deviceId, "hue", value)) {
-            hueComboBox->setCurrentIndex(value);
+        if (preferences->getIntegerPreference(deviceId, "hue", value) == false) {
+            // Calculate default value
+            value = (capabilities->getDefault() - capabilities->getMinimum()) / capabilities->getStep();
         }
-        else {
-            defaultIndex = (capabilities->getDefault() - capabilities->getMinimum()) / capabilities->getStep();
-            hueComboBox->setCurrentIndex(defaultIndex);
-        }
+        hueComboBox->setCurrentIndex(value);
+        changeHue(value, false);
     }
 
     capabilities = grabberController->getGammaCaps();
@@ -466,15 +470,17 @@ void CameraControllerDialog::init()
         gammaCheckBox->show();
         if (preferences->getIntegerPreference(deviceId, "automaticgamma", value)) {
             if (value == 1) {
-                gammaCheckBox->setChecked(true);
+                checked = true;
             }
             else {
-                gammaCheckBox->setChecked(false);
+                checked = false;
             }
         }
         else {
-            gammaCheckBox->setChecked(false);
+            checked = false;
         }
+        gammaCheckBox->setChecked(checked);
+        changeAutoGamma(checked, false);
     }
     if (capabilities->isCapability()) {
         if (!capabilities->isAutomatic()) {
@@ -482,13 +488,11 @@ void CameraControllerDialog::init()
         }
         gammaComboBox->show();
         stepGamma = fillComboBox(gammaComboBox, capabilities);
-        if (preferences->getIntegerPreference(deviceId, "gamma", value)) {
-            gammaComboBox->setCurrentIndex(value);
+        if (preferences->getIntegerPreference(deviceId, "gamma", value) == false) {
+            // Calculate default value
+            value = (capabilities->getDefault() - capabilities->getMinimum()) / capabilities->getStep();
         }
-        else {
-            defaultIndex = (capabilities->getDefault() - capabilities->getMinimum()) / capabilities->getStep();
-            gammaComboBox->setCurrentIndex(defaultIndex);
-        }
+        gammaComboBox->setCurrentIndex(value);
     }
 
     capabilities = grabberController->getSharpnessCaps();
@@ -496,15 +500,17 @@ void CameraControllerDialog::init()
         sharpnessCheckBox->show();
         if (preferences->getIntegerPreference(deviceId, "automaticsharpness", value)) {
             if (value == 1) {
-                sharpnessCheckBox->setChecked(true);
+                checked = true;
             }
             else {
-                sharpnessCheckBox->setChecked(false);
+                checked = false;
             }
         }
         else {
-            sharpnessCheckBox->setChecked(false);
+            checked = false;
         }
+        sharpnessCheckBox->setChecked(checked);
+        changeAutoSharpness(checked, false);
     }
     if (capabilities->isCapability()) {
         if (!capabilities->isAutomatic()) {
@@ -512,13 +518,12 @@ void CameraControllerDialog::init()
         }
         sharpnessComboBox->show();
         stepSharpness = fillComboBox(sharpnessComboBox, capabilities);
-        if (preferences->getIntegerPreference(deviceId, "sharpness", value)) {
-            sharpnessComboBox->setCurrentIndex(value);
+        if (preferences->getIntegerPreference(deviceId, "sharpness", value) == false) {
+            // Calculate default value
+            value = (capabilities->getDefault() - capabilities->getMinimum()) / capabilities->getStep();
         }
-        else {
-            defaultIndex = (capabilities->getDefault() - capabilities->getMinimum()) / capabilities->getStep();
-            sharpnessComboBox->setCurrentIndex(defaultIndex);
-        }
+        sharpnessComboBox->setCurrentIndex(value);
+        changeSharpness(value, false);
     }
 
     capabilities = grabberController->getBacklightCaps();
@@ -526,15 +531,17 @@ void CameraControllerDialog::init()
         backlightCheckBox->show();
         if (preferences->getIntegerPreference(deviceId, "automaticbacklight", value)) {
             if (value == 1) {
-                backlightCheckBox->setChecked(true);
+                checked = true;
             }
             else {
-                backlightCheckBox->setChecked(false);
+                checked = false;
             }
         }
         else {
-            backlightCheckBox->setChecked(false);
+            checked = false;
         }
+        backlightCheckBox->setChecked(checked);
+        changeAutoBacklight(checked, false);
     }
     if (capabilities->isCapability()) {
         if (!capabilities->isAutomatic()) {
@@ -542,13 +549,12 @@ void CameraControllerDialog::init()
         }
         backlightComboBox->show();
         stepBacklight = fillComboBox(backlightComboBox, capabilities);
-        if (preferences->getIntegerPreference(deviceId, "backlight", value)) {
-            backlightComboBox->setCurrentIndex(value);
+        if (preferences->getIntegerPreference(deviceId, "backlight", value) == false) {
+            // Calculate default value
+            value = (capabilities->getDefault() - capabilities->getMinimum()) / capabilities->getStep();
         }
-        else {
-            defaultIndex = (capabilities->getDefault() - capabilities->getMinimum()) / capabilities->getStep();
-            backlightComboBox->setCurrentIndex(defaultIndex);
-        }
+        backlightComboBox->setCurrentIndex(value);
+        changeBacklight(value, false);
     }
 
     capabilities = grabberController->getWhiteCaps();
@@ -556,15 +562,17 @@ void CameraControllerDialog::init()
         whiteCheckBox->show();
         if (preferences->getIntegerPreference(deviceId, "automaticwhite", value)) {
             if (value == 1) {
-                whiteCheckBox->setChecked(true);
+                checked = true;
             }
             else {
-                whiteCheckBox->setChecked(false);
+                checked = false;
             }
         }
         else {
-            whiteCheckBox->setChecked(false);
+            checked = false;
         }
+        whiteCheckBox->setChecked(checked);
+        changeAutoWhite(checked, false);
     }
     if (capabilities->isCapability()) {
         if (!capabilities->isAutomatic()) {
@@ -572,13 +580,12 @@ void CameraControllerDialog::init()
         }
         whiteComboBox->show();
         stepWhite = fillComboBox(whiteComboBox, capabilities);
-        if (preferences->getIntegerPreference(deviceId, "white", value)) {
-            whiteComboBox->setCurrentIndex(value);
+        if (preferences->getIntegerPreference(deviceId, "white", value) == false) {
+            // Calculate default value
+            value = (capabilities->getDefault() - capabilities->getMinimum()) / capabilities->getStep();
         }
-        else {
-            defaultIndex = (capabilities->getDefault() - capabilities->getMinimum()) / capabilities->getStep();
-            whiteComboBox->setCurrentIndex(defaultIndex);
-        }
+        whiteComboBox->setCurrentIndex(value);
+        changeWhite(value, false);
     }
 
     capabilities = grabberController->getGainCaps();
@@ -586,15 +593,17 @@ void CameraControllerDialog::init()
         gainCheckBox->show();
         if (preferences->getIntegerPreference(deviceId, "automaticgain", value)) {
             if (value == 1) {
-                gainCheckBox->setChecked(true);
+                checked = true;
             }
             else {
-                gainCheckBox->setChecked(false);
+                checked = false;
             }
         }
         else {
-            gainCheckBox->setChecked(false);
+            checked = false;
         }
+        gainCheckBox->setChecked(checked);
+        changeAutoGain(checked, false);
     }
     if (capabilities->isCapability()) {
         if (!capabilities->isAutomatic()) {
@@ -602,13 +611,12 @@ void CameraControllerDialog::init()
         }
         gainComboBox->show();
         stepGain = fillComboBox(gainComboBox, capabilities);
-        if (preferences->getIntegerPreference(deviceId, "gain", value)) {
-            gainComboBox->setCurrentIndex(value);
+        if (preferences->getIntegerPreference(deviceId, "gain", value) == false) {
+            // Calculate default value
+            value = (capabilities->getDefault() - capabilities->getMinimum()) / capabilities->getStep();
         }
-        else {
-            defaultIndex = (capabilities->getDefault() - capabilities->getMinimum()) / capabilities->getStep();
-            gainComboBox->setCurrentIndex(defaultIndex);
-        }
+        gainComboBox->setCurrentIndex(value);
+        changeGain(value, false);
     }
 
     capabilities = grabberController->getColorCaps();
@@ -616,15 +624,17 @@ void CameraControllerDialog::init()
         colorCheckBox->show();
         if (preferences->getIntegerPreference(deviceId, "automaticcolor", value)) {
             if (value == 1) {
-                colorCheckBox->setChecked(true);
+                checked = true;
             }
             else {
-                colorCheckBox->setChecked(false);
+                checked = false;
             }
         }
         else {
-            colorCheckBox->setChecked(false);
+            checked = false;
         }
+        colorCheckBox->setChecked(checked);
+        changeAutoColor(checked, false);
     }
     if (capabilities->isCapability()) {
         if (!capabilities->isAutomatic()) {
@@ -632,13 +642,12 @@ void CameraControllerDialog::init()
         }
         colorComboBox->show();
         stepColor = fillComboBox(colorComboBox, capabilities);
-        if (preferences->getIntegerPreference(deviceId, "color", value)) {
-            colorComboBox->setCurrentIndex(value);
+        if (preferences->getIntegerPreference(deviceId, "color", value) == false) {
+            // Calculate default value
+            value = (capabilities->getDefault() - capabilities->getMinimum()) / capabilities->getStep();
         }
-        else {
-            defaultIndex = (capabilities->getDefault() - capabilities->getMinimum()) / capabilities->getStep();
-            colorComboBox->setCurrentIndex(defaultIndex);
-        }
+        colorComboBox->setCurrentIndex(value);
+        changeColor(value, false);
     }
 
     capabilities = grabberController->getExposureCaps();
@@ -646,15 +655,17 @@ void CameraControllerDialog::init()
         exposureCheckBox->show();
         if (preferences->getIntegerPreference(deviceId, "automaticexposure", value)) {
             if (value == 1) {
-                exposureCheckBox->setChecked(true);
+                checked = true;
             }
             else {
-                exposureCheckBox->setChecked(false);
+                checked = false;
             }
         }
         else {
-            exposureCheckBox->setChecked(false);
+            checked = false;
         }
+        exposureCheckBox->setChecked(checked);
+        changeAutoExposure(checked, false);
     }
     if (capabilities->isCapability()) {
         if (!capabilities->isAutomatic()) {
@@ -662,13 +673,12 @@ void CameraControllerDialog::init()
         }
         exposureComboBox->show();
         stepExposure = fillComboBox(exposureComboBox, capabilities);
-        if (preferences->getIntegerPreference(deviceId, "exposure", value)) {
-            exposureComboBox->setCurrentIndex(value);
+        if (preferences->getIntegerPreference(deviceId, "exposure", value) == false) {
+            // Calculate default value
+            value = (capabilities->getDefault() - capabilities->getMinimum()) / capabilities->getStep();
         }
-        else {
-            defaultIndex = (capabilities->getDefault() - capabilities->getMinimum()) / capabilities->getStep();
-            exposureComboBox->setCurrentIndex(defaultIndex);
-        }
+        exposureComboBox->setCurrentIndex(value);
+        changeExposure(value, false);
     }
 
     capabilities = grabberController->getZoomCaps();
@@ -676,15 +686,17 @@ void CameraControllerDialog::init()
         zoomCheckBox->show();
         if (preferences->getIntegerPreference(deviceId, "automaticzoom", value)) {
             if (value == 1) {
-                zoomCheckBox->setChecked(true);
+                checked = true;
             }
             else {
-                zoomCheckBox->setChecked(false);
+                checked = false;
             }
         }
         else {
-            zoomCheckBox->setChecked(false);
+            checked = false;
         }
+        zoomCheckBox->setChecked(checked);
+        changeAutoZoom(checked, false);
     }
     if (capabilities->isCapability()) {
         if (!capabilities->isAutomatic()) {
@@ -692,13 +704,12 @@ void CameraControllerDialog::init()
         }
         zoomComboBox->show();
         stepZoom = fillComboBox(zoomComboBox, capabilities);
-        if (preferences->getIntegerPreference(deviceId, "zoom", value)) {
-            zoomComboBox->setCurrentIndex(value);
+        if (preferences->getIntegerPreference(deviceId, "zoom", value) == false) {
+            // Calculate default value
+            value = (capabilities->getDefault() - capabilities->getMinimum()) / capabilities->getStep();
         }
-        else {
-            defaultIndex = (capabilities->getDefault() - capabilities->getMinimum()) / capabilities->getStep();
-            zoomComboBox->setCurrentIndex(defaultIndex);
-        }
+        zoomComboBox->setCurrentIndex(value);
+        changeZoom(value, false);
     }
 
     capabilities = grabberController->getFocusCaps();
@@ -706,15 +717,17 @@ void CameraControllerDialog::init()
         focusCheckBox->show();
         if (preferences->getIntegerPreference(deviceId, "automaticfocus", value)) {
             if (value == 1) {
-                focusCheckBox->setChecked(true);
+                checked = true;
             }
             else {
-                focusCheckBox->setChecked(false);
+                checked = false;
             }
         }
         else {
-            focusCheckBox->setChecked(false);
+            checked = false;
         }
+        focusCheckBox->setChecked(checked);
+        changeAutoFocus(checked, false);
     }
     if (capabilities->isCapability()) {
         if (!capabilities->isAutomatic()) {
@@ -722,13 +735,12 @@ void CameraControllerDialog::init()
         }
         focusComboBox->show();
         stepFocus = fillComboBox(focusComboBox, capabilities);
-        if (preferences->getIntegerPreference(deviceId, "focus", value)) {
-            focusComboBox->setCurrentIndex(value);
+        if (preferences->getIntegerPreference(deviceId, "focus", value) == false) {
+            // Calculate default value
+            value = (capabilities->getDefault() - capabilities->getMinimum()) / capabilities->getStep();
         }
-        else {
-            defaultIndex = (capabilities->getDefault() - capabilities->getMinimum()) / capabilities->getStep();
-            focusComboBox->setCurrentIndex(defaultIndex);
-        }
+        focusComboBox->setCurrentIndex(value);
+        changeFocus(value, false);
     }
 
     capabilities = grabberController->getPanCaps();
@@ -736,15 +748,17 @@ void CameraControllerDialog::init()
         panCheckBox->show();
         if (preferences->getIntegerPreference(deviceId, "automaticpan", value)) {
             if (value == 1) {
-                panCheckBox->setChecked(true);
+                checked = true;
             }
             else {
-                panCheckBox->setChecked(false);
+                checked = false;
             }
         }
         else {
-            panCheckBox->setChecked(false);
+            checked = false;
         }
+        panCheckBox->setChecked(checked);
+        changeAutoPan(checked, false);
     }
     if (capabilities->isCapability()) {
         if (!capabilities->isAutomatic()) {
@@ -753,13 +767,12 @@ void CameraControllerDialog::init()
         panLabel->show();
         panComboBox->show();
         stepPan = fillComboBox(panComboBox, capabilities);
-        if (preferences->getIntegerPreference(deviceId, "pan", value)) {
-            panComboBox->setCurrentIndex(value);
+        if (preferences->getIntegerPreference(deviceId, "pan", value) == false) {
+            // Calculate default value
+            value = (capabilities->getDefault() - capabilities->getMinimum()) / capabilities->getStep();
         }
-        else {
-            defaultIndex = (capabilities->getDefault() - capabilities->getMinimum()) / capabilities->getStep();
-            panComboBox->setCurrentIndex(defaultIndex);
-        }
+        panComboBox->setCurrentIndex(value);
+        changePan(value, false);
     }
 
     capabilities = grabberController->getTiltCaps();
@@ -767,15 +780,17 @@ void CameraControllerDialog::init()
         tiltCheckBox->show();
         if (preferences->getIntegerPreference(deviceId, "automatictilt", value)) {
             if (value == 1) {
-                tiltCheckBox->setChecked(true);
+                checked = true;
             }
             else {
-                tiltCheckBox->setChecked(false);
+                checked = false;
             }
         }
         else {
-            tiltCheckBox->setChecked(false);
+            checked = false;
         }
+        tiltCheckBox->setChecked(checked);
+        changeAutoTilt(checked, false);
     }
     if (capabilities->isCapability()) {
         if (!capabilities->isAutomatic()) {
@@ -784,13 +799,12 @@ void CameraControllerDialog::init()
         tiltLabel->show();
         tiltComboBox->show();
         stepTilt = fillComboBox(tiltComboBox, capabilities);
-        if (preferences->getIntegerPreference(deviceId, "tilt", value)) {
-            tiltComboBox->setCurrentIndex(value);
+        if (preferences->getIntegerPreference(deviceId, "tilt", value) == false) {
+            // Calculate default value
+            value = (capabilities->getDefault() - capabilities->getMinimum()) / capabilities->getStep();
         }
-        else {
-            defaultIndex = (capabilities->getDefault() - capabilities->getMinimum()) / capabilities->getStep();
-            tiltComboBox->setCurrentIndex(defaultIndex);
-        }
+        tiltComboBox->setCurrentIndex(value);
+        changeTilt(value, false);
     }
 
     capabilities = grabberController->getIrisCaps();
@@ -798,15 +812,17 @@ void CameraControllerDialog::init()
         irisCheckBox->show();
         if (preferences->getIntegerPreference(deviceId, "automaticiris", value)) {
             if (value == 1) {
-                irisCheckBox->setChecked(true);
+                checked = true;
             }
             else {
-                irisCheckBox->setChecked(false);
+                checked = false;
             }
         }
         else {
-            irisCheckBox->setChecked(false);
+            checked = false;
         }
+        irisCheckBox->setChecked(checked);
+        changeAutoIris(checked, false);
     }
     if (capabilities->isCapability()) {
         if (!capabilities->isAutomatic()) {
@@ -814,13 +830,12 @@ void CameraControllerDialog::init()
         }
         irisComboBox->show();
         stepIris = fillComboBox(irisComboBox, capabilities);
-        if (preferences->getIntegerPreference(deviceId, "iris", value)) {
-            irisComboBox->setCurrentIndex(value);
+        if (preferences->getIntegerPreference(deviceId, "iris", value) == false) {
+            // Calculate default value
+            value = (capabilities->getDefault() - capabilities->getMinimum()) / capabilities->getStep();
         }
-        else {
-            defaultIndex = (capabilities->getDefault() - capabilities->getMinimum()) / capabilities->getStep();
-            irisComboBox->setCurrentIndex(defaultIndex);
-        }
+        irisComboBox->setCurrentIndex(value);
+        changeIris(value, false);
     }
 
     capabilities = grabberController->getRollCaps();
@@ -828,15 +843,17 @@ void CameraControllerDialog::init()
         rollCheckBox->show();
         if (preferences->getIntegerPreference(deviceId, "automaticroll", value)) {
             if (value == 1) {
-                rollCheckBox->setChecked(true);
+                checked = true;
             }
             else {
-                rollCheckBox->setChecked(false);
+                checked = false;
             }
         }
         else {
-            rollCheckBox->setChecked(false);
+            checked = false;
         }
+        rollCheckBox->setChecked(checked);
+        changeAutoRoll(checked, false);
     }
     if (capabilities->isCapability()) {
         if (!capabilities->isAutomatic()) {
@@ -844,13 +861,12 @@ void CameraControllerDialog::init()
         }
         rollComboBox->show();
         stepRoll = fillComboBox(rollComboBox, capabilities);
-        if (preferences->getIntegerPreference(deviceId, "roll", value)) {
-            rollComboBox->setCurrentIndex(value);
+        if (preferences->getIntegerPreference(deviceId, "roll", value) == false) {
+            // Calculate default value
+            value = (capabilities->getDefault() - capabilities->getMinimum()) / capabilities->getStep();
         }
-        else {
-            defaultIndex = (capabilities->getDefault() - capabilities->getMinimum()) / capabilities->getStep();
-            rollComboBox->setCurrentIndex(defaultIndex);
-        }
+        rollComboBox->setCurrentIndex(value);
+        changeRoll(value, false);
     }
 
     qDebug() << "CameraControllerDialog::init --> End";
@@ -859,6 +875,12 @@ void CameraControllerDialog::init()
 
 void CameraControllerDialog::changeAutoBrightness(int newState)
 {
+    changeAutoBrightness(newState, true);
+}
+
+
+void CameraControllerDialog::changeAutoBrightness(int newState, bool save)
+{
     qDebug() << "CameraControllerDialog::changeAutoBrightness --> Start";
 
     PreferencesTool *preferences = frontend->getPreferences();
@@ -866,12 +888,13 @@ void CameraControllerDialog::changeAutoBrightness(int newState)
     if (newState) {
         brightnessComboBox->setEnabled(false);
         grabberController->setAutomaticBrightness(true);
-        preferences->setIntegerPreference(deviceId, "automaticbrightness", true);
     }
     else {
         brightnessComboBox->setEnabled(true);
         grabberController->setAutomaticBrightness(false);
-        preferences->setIntegerPreference(deviceId, "automaticbrightness", false);
+    }
+    if (save) {
+        preferences->setIntegerPreference(deviceId, "automaticbrightness", newState);
     }
 
     qDebug() << "CameraControllerDialog::changeAutoBrightness --> End";
@@ -880,27 +903,37 @@ void CameraControllerDialog::changeAutoBrightness(int newState)
 
 void CameraControllerDialog::changeBrightness(int index)
 {
+    changeBrightness(index, true);
+}
+
+
+void CameraControllerDialog::changeBrightness(int index, bool save)
+{
     qDebug() << "CameraControllerDialog::changeBrightness --> Start";
 
     PreferencesTool *preferences = frontend->getPreferences();
-    // long minValue;
-    // long stepValue;
-    long maxValue;
-
-    maxValue = grabberController->getBrightnessCaps()->getMaximum();
     long value = index * stepBrightness;
+    long maxValue = grabberController->getBrightnessCaps()->getMaximum();
 
     if (value > maxValue) {
         value = maxValue;
     }
     grabberController->setBrightness(value);
-    preferences->setIntegerPreference(deviceId, "brigthtness", index);
+    if (save) {
+        preferences->setIntegerPreference(deviceId, "brigthtness", index);
+    }
 
     qDebug() << "CameraControllerDialog::changeBrightness --> End";
 }
 
 
 void CameraControllerDialog::changeAutoContrast(int newState)
+{
+    changeAutoContrast(newState, true);
+}
+
+
+void CameraControllerDialog::changeAutoContrast(int newState, bool save)
 {
     qDebug() << "CameraControllerDialog::changeAutoContrast --> Start";
 
@@ -909,12 +942,13 @@ void CameraControllerDialog::changeAutoContrast(int newState)
     if (newState) {
         contrastComboBox->setEnabled(false);
         grabberController->setAutomaticContrast(true);
-        preferences->setIntegerPreference(deviceId, "automaticcontrast", true);
     }
     else {
         contrastComboBox->setEnabled(true);
         grabberController->setAutomaticContrast(false);
-        preferences->setIntegerPreference(deviceId, "automaticcontrast", false);
+    }
+    if (save) {
+        preferences->setIntegerPreference(deviceId, "automaticcontrast", newState);
     }
 
     qDebug() << "CameraControllerDialog::changeAutoContrast --> End";
@@ -922,6 +956,12 @@ void CameraControllerDialog::changeAutoContrast(int newState)
 
 
 void CameraControllerDialog::changeContrast(int index)
+{
+    changeContrast(index, true);
+}
+
+
+void CameraControllerDialog::changeContrast(int index, bool save)
 {
     qDebug() << "CameraControllerDialog::changeContrast --> Start";
 
@@ -933,13 +973,21 @@ void CameraControllerDialog::changeContrast(int index)
         value = maxValue;
     }
     grabberController->setContrast(value);
-    preferences->setIntegerPreference(deviceId, "contrast", index);
+    if (save) {
+        preferences->setIntegerPreference(deviceId, "contrast", index);
+    }
 
     qDebug() << "CameraControllerDialog::changeContrast --> End";
 }
 
 
 void CameraControllerDialog::changeAutoSaturation(int newState)
+{
+    changeAutoSaturation(newState, true);
+}
+
+
+void CameraControllerDialog::changeAutoSaturation(int newState, bool save)
 {
     qDebug() << "CameraControllerDialog::changeAutoSaturation --> Start";
 
@@ -948,12 +996,13 @@ void CameraControllerDialog::changeAutoSaturation(int newState)
     if (newState) {
         saturationComboBox->setEnabled(false);
         grabberController->setAutomaticSaturation(true);
-        preferences->setIntegerPreference(deviceId, "automaticsaturation", true);
     }
     else {
         saturationComboBox->setEnabled(true);
         grabberController->setAutomaticSaturation(false);
-        preferences->setIntegerPreference(deviceId, "automaticsaturation", false);
+    }
+    if (save) {
+        preferences->setIntegerPreference(deviceId, "automaticsaturation", newState);
     }
 
     qDebug() << "CameraControllerDialog::changeAutoSaturation --> End";
@@ -961,6 +1010,12 @@ void CameraControllerDialog::changeAutoSaturation(int newState)
 
 
 void CameraControllerDialog::changeSaturation(int index)
+{
+    changeSaturation(index, true);
+}
+
+
+void CameraControllerDialog::changeSaturation(int index, bool save)
 {
     qDebug() << "CameraControllerDialog::changeSaturation --> Start";
 
@@ -972,13 +1027,21 @@ void CameraControllerDialog::changeSaturation(int index)
         value = maxValue;
     }
     grabberController->setSaturation(value);
-    preferences->setIntegerPreference(deviceId, "saturation", index);
+    if (save) {
+        preferences->setIntegerPreference(deviceId, "saturation", index);
+    }
 
     qDebug() << "CameraControllerDialog::changeSaturation --> End";
 }
 
 
 void CameraControllerDialog::changeAutoHue(int newState)
+{
+    changeAutoHue(newState, true);
+}
+
+
+void CameraControllerDialog::changeAutoHue(int newState, bool save)
 {
     qDebug() << "CameraControllerDialog::changeAutoHue --> Start";
 
@@ -987,12 +1050,13 @@ void CameraControllerDialog::changeAutoHue(int newState)
     if (newState) {
         hueComboBox->setEnabled(false);
         grabberController->setAutomaticHue(true);
-        preferences->setIntegerPreference(deviceId, "automatichue", true);
     }
     else {
         hueComboBox->setEnabled(true);
         grabberController->setAutomaticHue(false);
-        preferences->setIntegerPreference(deviceId, "automatichue", false);
+    }
+    if (save) {
+        preferences->setIntegerPreference(deviceId, "automatichue", newState);
     }
 
     qDebug() << "CameraControllerDialog::changeAutoHue --> End";
@@ -1000,6 +1064,12 @@ void CameraControllerDialog::changeAutoHue(int newState)
 
 
 void CameraControllerDialog::changeHue(int index)
+{
+    changeHue(index, true);
+}
+
+
+void CameraControllerDialog::changeHue(int index, bool save)
 {
     qDebug() << "CameraControllerDialog::changeHue --> Start";
 
@@ -1011,13 +1081,21 @@ void CameraControllerDialog::changeHue(int index)
         value = maxValue;
     }
     grabberController->setHue(value);
-    preferences->setIntegerPreference(deviceId, "hue", index);
+    if (save) {
+        preferences->setIntegerPreference(deviceId, "hue", index);
+    }
 
     qDebug() << "CameraControllerDialog::changeHue --> End";
 }
 
 
 void CameraControllerDialog::changeAutoGamma(int newState)
+{
+    changeAutoGamma(newState, true);
+}
+
+
+void CameraControllerDialog::changeAutoGamma(int newState, bool save)
 {
     qDebug() << "CameraControllerDialog::changeAutoGamma --> Start";
 
@@ -1026,12 +1104,13 @@ void CameraControllerDialog::changeAutoGamma(int newState)
     if (newState) {
         gammaComboBox->setEnabled(false);
         grabberController->setAutomaticGamma(true);
-        preferences->setIntegerPreference(deviceId, "automaticgamma", true);
     }
     else {
         gammaComboBox->setEnabled(true);
         grabberController->setAutomaticGamma(false);
-        preferences->setIntegerPreference(deviceId, "automaticgamma", false);
+    }
+    if (save) {
+        preferences->setIntegerPreference(deviceId, "automaticgamma", newState);
     }
 
     qDebug() << "CameraControllerDialog::changeAutoGamma --> End";
@@ -1039,6 +1118,12 @@ void CameraControllerDialog::changeAutoGamma(int newState)
 
 
 void CameraControllerDialog::changeGamma(int index)
+{
+    changeGamma(index, true);
+}
+
+
+void CameraControllerDialog::changeGamma(int index, bool save)
 {
     qDebug() << "CameraControllerDialog::changeGamma --> Start";
 
@@ -1050,13 +1135,21 @@ void CameraControllerDialog::changeGamma(int index)
         value = maxValue;
     }
     grabberController->setGamma(value);
-    preferences->setIntegerPreference(deviceId, "gamma", index);
+    if (save) {
+        preferences->setIntegerPreference(deviceId, "gamma", index);
+    }
 
     qDebug() << "CameraControllerDialog::changeGamma --> End";
 }
 
 
 void CameraControllerDialog::changeAutoSharpness(int newState)
+{
+    changeAutoSharpness(newState, true);
+}
+
+
+void CameraControllerDialog::changeAutoSharpness(int newState, bool save)
 {
     qDebug() << "CameraControllerDialog::changeAutoSharpness --> Start";
 
@@ -1065,12 +1158,13 @@ void CameraControllerDialog::changeAutoSharpness(int newState)
     if (newState) {
         sharpnessComboBox->setEnabled(false);
         grabberController->setAutomaticSharpness(true);
-        preferences->setIntegerPreference(deviceId, "automaticsharpness", true);
     }
     else {
         sharpnessComboBox->setEnabled(true);
         grabberController->setAutomaticSharpness(false);
-        preferences->setIntegerPreference(deviceId, "automaticsharpness", false);
+    }
+    if (save) {
+        preferences->setIntegerPreference(deviceId, "automaticsharpness", newState);
     }
 
     qDebug() << "CameraControllerDialog::changeAutoSharpness --> End";
@@ -1078,6 +1172,12 @@ void CameraControllerDialog::changeAutoSharpness(int newState)
 
 
 void CameraControllerDialog::changeSharpness(int index)
+{
+    changeSharpness(index, true);
+}
+
+
+void CameraControllerDialog::changeSharpness(int index, bool save)
 {
     qDebug() << "CameraControllerDialog::changeSharpness --> Start";
 
@@ -1089,13 +1189,21 @@ void CameraControllerDialog::changeSharpness(int index)
         value = maxValue;
     }
     grabberController->setSharpness(value);
-    preferences->setIntegerPreference(deviceId, "sharpness", index);
+    if (save) {
+        preferences->setIntegerPreference(deviceId, "sharpness", index);
+    }
 
     qDebug() << "CameraControllerDialog::changeSharpness --> End";
 }
 
 
 void CameraControllerDialog::changeAutoBacklight(int newState)
+{
+    changeAutoBacklight(newState, true);
+}
+
+
+void CameraControllerDialog::changeAutoBacklight(int newState, bool save)
 {
     qDebug() << "CameraControllerDialog::changeAutoBacklight --> Start";
 
@@ -1104,12 +1212,13 @@ void CameraControllerDialog::changeAutoBacklight(int newState)
     if (newState) {
         backlightComboBox->setEnabled(false);
         grabberController->setAutomaticBacklight(true);
-        preferences->setIntegerPreference(deviceId, "automaticbacklight", true);
     }
     else {
         backlightComboBox->setEnabled(true);
         grabberController->setAutomaticBacklight(false);
-        preferences->setIntegerPreference(deviceId, "automaticbacklight", false);
+    }
+    if (save) {
+        preferences->setIntegerPreference(deviceId, "automaticbacklight", newState);
     }
 
     qDebug() << "CameraControllerDialog::changeAutoBacklight --> End";
@@ -1117,6 +1226,12 @@ void CameraControllerDialog::changeAutoBacklight(int newState)
 
 
 void CameraControllerDialog::changeBacklight(int index)
+{
+    changeBacklight(index, true);
+}
+
+
+void CameraControllerDialog::changeBacklight(int index, bool save)
 {
     qDebug() << "CameraControllerDialog::changeBacklight --> Start";
 
@@ -1128,13 +1243,21 @@ void CameraControllerDialog::changeBacklight(int index)
         value = maxValue;
     }
     grabberController->setBacklight(value);
-    preferences->setIntegerPreference(deviceId, "backlight", index);
+    if (save) {
+        preferences->setIntegerPreference(deviceId, "backlight", index);
+    }
 
     qDebug() << "CameraControllerDialog::changeBacklight --> End";
 }
 
 
 void CameraControllerDialog::changeAutoWhite(int newState)
+{
+    changeAutoWhite(newState, true);
+}
+
+
+void CameraControllerDialog::changeAutoWhite(int newState, bool save)
 {
     qDebug() << "CameraControllerDialog::changeAutoWhite --> Start";
 
@@ -1143,12 +1266,13 @@ void CameraControllerDialog::changeAutoWhite(int newState)
     if (newState) {
         whiteComboBox->setEnabled(false);
         grabberController->setAutomaticWhite(true);
-        preferences->setIntegerPreference(deviceId, "automaticwhite", true);
     }
     else {
         whiteComboBox->setEnabled(true);
         grabberController->setAutomaticWhite(false);
-        preferences->setIntegerPreference(deviceId, "automaticwhite", false);
+    }
+    if (save) {
+        preferences->setIntegerPreference(deviceId, "automaticwhite", newState);
     }
 
     qDebug() << "CameraControllerDialog::changeAutoWhite --> End";
@@ -1156,6 +1280,12 @@ void CameraControllerDialog::changeAutoWhite(int newState)
 
 
 void CameraControllerDialog::changeWhite(int index)
+{
+    changeWhite(index, true);
+}
+
+
+void CameraControllerDialog::changeWhite(int index, bool save)
 {
     qDebug() << "CameraControllerDialog::changeWhite --> Start";
 
@@ -1167,13 +1297,21 @@ void CameraControllerDialog::changeWhite(int index)
         value = maxValue;
     }
     grabberController->setWhite(value);
-    preferences->setIntegerPreference(deviceId, "white", index);
+    if (save) {
+        preferences->setIntegerPreference(deviceId, "white", index);
+    }
 
     qDebug() << "CameraControllerDialog::changeWhite --> End";
 }
 
 
 void CameraControllerDialog::changeAutoGain(int newState)
+{
+    changeAutoGain(newState, true);
+}
+
+
+void CameraControllerDialog::changeAutoGain(int newState, bool save)
 {
     qDebug() << "CameraControllerDialog::changeAutoGain --> Start";
 
@@ -1182,12 +1320,13 @@ void CameraControllerDialog::changeAutoGain(int newState)
     if (newState) {
         gainComboBox->setEnabled(false);
         grabberController->setAutomaticGain(true);
-        preferences->setIntegerPreference(deviceId, "automaticgain", true);
     }
     else {
         gainComboBox->setEnabled(true);
         grabberController->setAutomaticGain(false);
-        preferences->setIntegerPreference(deviceId, "automaticgain", false);
+    }
+    if (save) {
+        preferences->setIntegerPreference(deviceId, "automaticgain", newState);
     }
 
     qDebug() << "CameraControllerDialog::changeAutoGain --> End";
@@ -1195,6 +1334,12 @@ void CameraControllerDialog::changeAutoGain(int newState)
 
 
 void CameraControllerDialog::changeGain(int index)
+{
+    changeGain(index, true);
+}
+
+
+void CameraControllerDialog::changeGain(int index, bool save)
 {
     qDebug() << "CameraControllerDialog::changeGain --> Start";
 
@@ -1206,13 +1351,21 @@ void CameraControllerDialog::changeGain(int index)
         value = maxValue;
     }
     grabberController->setGain(value);
-    preferences->setIntegerPreference(deviceId, "gain", index);
+    if (save) {
+        preferences->setIntegerPreference(deviceId, "gain", index);
+    }
 
     qDebug() << "CameraControllerDialog::changeGain --> End";
 }
 
 
 void CameraControllerDialog::changeAutoColor(int newState)
+{
+    changeAutoColor(newState, true);
+}
+
+
+void CameraControllerDialog::changeAutoColor(int newState, bool save)
 {
     qDebug() << "CameraControllerDialog::changeAutoColor --> Start";
 
@@ -1221,12 +1374,13 @@ void CameraControllerDialog::changeAutoColor(int newState)
     if (newState) {
         colorComboBox->setEnabled(false);
         grabberController->setAutomaticColor(true);
-        preferences->setIntegerPreference(deviceId, "automaticcolor", true);
     }
     else {
         colorComboBox->setEnabled(true);
         grabberController->setAutomaticColor(false);
-        preferences->setIntegerPreference(deviceId, "automaticcolor", false);
+    }
+    if (save) {
+        preferences->setIntegerPreference(deviceId, "automaticcolor", newState);
     }
 
     qDebug() << "CameraControllerDialog::changeAutoColor --> End";
@@ -1234,6 +1388,12 @@ void CameraControllerDialog::changeAutoColor(int newState)
 
 
 void CameraControllerDialog::changeColor(int index)
+{
+    changeColor(index, true);
+}
+
+
+void CameraControllerDialog::changeColor(int index, bool save)
 {
     qDebug() << "CameraControllerDialog::changeColor --> Start";
 
@@ -1245,13 +1405,21 @@ void CameraControllerDialog::changeColor(int index)
         value = maxValue;
     }
     grabberController->setColor(value);
-    preferences->setIntegerPreference(deviceId, "color", index);
+    if (save) {
+        preferences->setIntegerPreference(deviceId, "color", index);
+    }
 
     qDebug() << "CameraControllerDialog::changeColor --> End";
 }
 
 
 void CameraControllerDialog::changeAutoExposure(int newState)
+{
+    changeAutoExposure(newState, true);
+}
+
+
+void CameraControllerDialog::changeAutoExposure(int newState, bool save)
 {
     qDebug() << "CameraControllerDialog::changeAutoExposure --> Start";
 
@@ -1260,12 +1428,13 @@ void CameraControllerDialog::changeAutoExposure(int newState)
     if (newState) {
         exposureComboBox->setEnabled(false);
         grabberController->setAutomaticExposure(true);
-        preferences->setIntegerPreference(deviceId, "automaticexposure", true);
     }
     else {
         exposureComboBox->setEnabled(true);
         grabberController->setAutomaticExposure(false);
-        preferences->setIntegerPreference(deviceId, "automaticexposure", false);
+    }
+    if (save) {
+        preferences->setIntegerPreference(deviceId, "automaticexposure", newState);
     }
 
     qDebug() << "CameraControllerDialog::changeAutoExposure --> End";
@@ -1273,6 +1442,12 @@ void CameraControllerDialog::changeAutoExposure(int newState)
 
 
 void CameraControllerDialog::changeExposure(int index)
+{
+    changeExposure(index, true);
+}
+
+
+void CameraControllerDialog::changeExposure(int index, bool save)
 {
     qDebug() << "CameraControllerDialog::changeExposure --> Start";
 
@@ -1284,13 +1459,21 @@ void CameraControllerDialog::changeExposure(int index)
         value = maxValue;
     }
     grabberController->setExposure(value);
-    preferences->setIntegerPreference(deviceId, "exposure", index);
+    if (save) {
+        preferences->setIntegerPreference(deviceId, "exposure", index);
+    }
 
     qDebug() << "CameraControllerDialog::changeExposure --> End";
 }
 
 
 void CameraControllerDialog::changeAutoZoom(int newState)
+{
+    changeAutoZoom(newState, true);
+}
+
+
+void CameraControllerDialog::changeAutoZoom(int newState, bool save)
 {
     qDebug() << "CameraControllerDialog::changeAutoZoo --> Start";
 
@@ -1299,12 +1482,13 @@ void CameraControllerDialog::changeAutoZoom(int newState)
     if (newState) {
         zoomComboBox->setEnabled(false);
         grabberController->setAutomaticZoom(true);
-        preferences->setIntegerPreference(deviceId, "automaticzoom", true);
     }
     else {
         zoomComboBox->setEnabled(true);
         grabberController->setAutomaticZoom(false);
-        preferences->setIntegerPreference(deviceId, "automaticzoom", false);
+    }
+    if (save) {
+        preferences->setIntegerPreference(deviceId, "automaticzoom", newState);
     }
 
     qDebug() << "CameraControllerDialog::changeAutoZoo --> End";
@@ -1312,6 +1496,12 @@ void CameraControllerDialog::changeAutoZoom(int newState)
 
 
 void CameraControllerDialog::changeZoom(int index)
+{
+    changeZoom(index, true);
+}
+
+
+void CameraControllerDialog::changeZoom(int index, bool save)
 {
     qDebug() << "CameraControllerDialog::changeZoo --> Start";
 
@@ -1323,13 +1513,21 @@ void CameraControllerDialog::changeZoom(int index)
         value = maxValue;
     }
     grabberController->setZoom(value);
-    preferences->setIntegerPreference(deviceId, "zoom", index);
+    if (save) {
+        preferences->setIntegerPreference(deviceId, "zoom", index);
+    }
 
     qDebug() << "CameraControllerDialog::changeZoo --> End";
 }
 
 
 void CameraControllerDialog::changeAutoFocus(int newState)
+{
+    changeAutoFocus(newState, true);
+}
+
+
+void CameraControllerDialog::changeAutoFocus(int newState, bool save)
 {
     qDebug() << "CameraControllerDialog::changeAutoFocus --> Start";
 
@@ -1338,12 +1536,13 @@ void CameraControllerDialog::changeAutoFocus(int newState)
     if (newState) {
         focusComboBox->setEnabled(false);
         grabberController->setAutomaticFocus(true);
-        preferences->setIntegerPreference(deviceId, "automaticfocus", true);
     }
     else {
         focusComboBox->setEnabled(true);
         grabberController->setAutomaticFocus(false);
-        preferences->setIntegerPreference(deviceId, "automaticfocus", false);
+    }
+    if (save) {
+        preferences->setIntegerPreference(deviceId, "automaticfocus", newState);
     }
 
     qDebug() << "CameraControllerDialog::changeAutoFocus --> End";
@@ -1351,6 +1550,12 @@ void CameraControllerDialog::changeAutoFocus(int newState)
 
 
 void CameraControllerDialog::changeFocus(int index)
+{
+    changeFocus(index, true);
+}
+
+
+void CameraControllerDialog::changeFocus(int index, bool save)
 {
     qDebug() << "CameraControllerDialog::changeFocus --> Start";
 
@@ -1362,13 +1567,21 @@ void CameraControllerDialog::changeFocus(int index)
         value = maxValue;
     }
     grabberController->setFocus(value);
-    preferences->setIntegerPreference(deviceId, "focus", index);
+    if (save) {
+        preferences->setIntegerPreference(deviceId, "focus", index);
+    }
 
     qDebug() << "CameraControllerDialog::changeFocus --> End";
 }
 
 
 void CameraControllerDialog::changeAutoPan(int newState)
+{
+    changeAutoPan(newState, true);
+}
+
+
+void CameraControllerDialog::changeAutoPan(int newState, bool save)
 {
     qDebug() << "CameraControllerDialog::changeAutoPan --> Start";
 
@@ -1377,12 +1590,13 @@ void CameraControllerDialog::changeAutoPan(int newState)
     if (newState) {
         panComboBox->setEnabled(false);
         grabberController->setAutomaticPan(true);
-        preferences->setIntegerPreference(deviceId, "automaticpan", true);
     }
     else {
         panComboBox->setEnabled(true);
         grabberController->setAutomaticPan(false);
-        preferences->setIntegerPreference(deviceId, "automaticpan", false);
+    }
+    if (save) {
+        preferences->setIntegerPreference(deviceId, "automaticpan", newState);
     }
 
     qDebug() << "CameraControllerDialog::changeAutoPan --> End";
@@ -1390,6 +1604,12 @@ void CameraControllerDialog::changeAutoPan(int newState)
 
 
 void CameraControllerDialog::changePan(int index)
+{
+    changePan(index, true);
+}
+
+
+void CameraControllerDialog::changePan(int index, bool save)
 {
     qDebug() << "CameraControllerDialog::changePan --> Start";
 
@@ -1401,13 +1621,21 @@ void CameraControllerDialog::changePan(int index)
         value = maxValue;
     }
     grabberController->setPan(value);
-    preferences->setIntegerPreference(deviceId, "pan", index);
+    if (save) {
+        preferences->setIntegerPreference(deviceId, "pan", index);
+    }
 
     qDebug() << "CameraControllerDialog::changePan --> End";
 }
 
 
 void CameraControllerDialog::changeAutoTilt(int newState)
+{
+    changeAutoTilt(newState, true);
+}
+
+
+void CameraControllerDialog::changeAutoTilt(int newState, bool save)
 {
     qDebug() << "CameraControllerDialog::changeAutoTilt --> Start";
 
@@ -1416,12 +1644,13 @@ void CameraControllerDialog::changeAutoTilt(int newState)
     if (newState) {
         tiltComboBox->setEnabled(false);
         grabberController->setAutomaticTilt(true);
-        preferences->setIntegerPreference(deviceId, "automatictilt", true);
     }
     else {
         tiltComboBox->setEnabled(true);
         grabberController->setAutomaticTilt(false);
-        preferences->setIntegerPreference(deviceId, "automatictilt", false);
+    }
+    if (save) {
+        preferences->setIntegerPreference(deviceId, "automatictilt", newState);
     }
 
     qDebug() << "CameraControllerDialog::changeAutoTilt --> End";
@@ -1429,6 +1658,12 @@ void CameraControllerDialog::changeAutoTilt(int newState)
 
 
 void CameraControllerDialog::changeTilt(int index)
+{
+    changeTilt(index, true);
+}
+
+
+void CameraControllerDialog::changeTilt(int index, bool save)
 {
     qDebug() << "CameraControllerDialog::changeTilt --> Start";
 
@@ -1440,13 +1675,21 @@ void CameraControllerDialog::changeTilt(int index)
         value = maxValue;
     }
     grabberController->setTilt(value);
-    preferences->setIntegerPreference(deviceId, "tilt", index);
+    if (save) {
+        preferences->setIntegerPreference(deviceId, "tilt", index);
+    }
 
     qDebug() << "CameraControllerDialog::changeTilt --> End";
 }
 
 
 void CameraControllerDialog::changeAutoIris(int newState)
+{
+    changeAutoIris(newState, true);
+}
+
+
+void CameraControllerDialog::changeAutoIris(int newState, bool save)
 {
     qDebug() << "CameraControllerDialog::changeAutoIris --> Start";
 
@@ -1455,12 +1698,13 @@ void CameraControllerDialog::changeAutoIris(int newState)
     if (newState) {
         irisComboBox->setEnabled(false);
         grabberController->setAutomaticIris(true);
-        preferences->setIntegerPreference(deviceId, "automaticiris", true);
     }
     else {
         irisComboBox->setEnabled(true);
         grabberController->setAutomaticIris(false);
-        preferences->setIntegerPreference(deviceId, "automaticiris", false);
+    }
+    if (save) {
+        preferences->setIntegerPreference(deviceId, "automaticiris", newState);
     }
 
     qDebug() << "CameraControllerDialog::changeAutoIris --> End";
@@ -1468,6 +1712,12 @@ void CameraControllerDialog::changeAutoIris(int newState)
 
 
 void CameraControllerDialog::changeIris(int index)
+{
+    changeIris(index, true);
+}
+
+
+void CameraControllerDialog::changeIris(int index, bool save)
 {
     qDebug() << "CameraControllerDialog::changeIris --> Start";
 
@@ -1479,13 +1729,21 @@ void CameraControllerDialog::changeIris(int index)
         value = maxValue;
     }
     grabberController->setIris(value);
-    preferences->setIntegerPreference(deviceId, "iris", index);
+    if (save) {
+        preferences->setIntegerPreference(deviceId, "iris", index);
+    }
 
     qDebug() << "CameraControllerDialog::changeIris --> End";
 }
 
 
 void CameraControllerDialog::changeAutoRoll(int newState)
+{
+    changeAutoRoll(newState, true);
+}
+
+
+void CameraControllerDialog::changeAutoRoll(int newState, bool save)
 {
     qDebug() << "CameraControllerDialog::changeAutoRoll --> Start";
 
@@ -1494,12 +1752,13 @@ void CameraControllerDialog::changeAutoRoll(int newState)
     if (newState) {
         rollComboBox->setEnabled(false);
         grabberController->setAutomaticRoll(true);
-        preferences->setIntegerPreference(deviceId, "automaticroll", true);
     }
     else {
         rollComboBox->setEnabled(true);
         grabberController->setAutomaticRoll(false);
-        preferences->setIntegerPreference(deviceId, "automaticroll", false);
+    }
+    if (save) {
+        preferences->setIntegerPreference(deviceId, "automaticroll", newState);
     }
 
     qDebug() << "CameraControllerDialog::changeAutoRoll --> End";
@@ -1507,6 +1766,12 @@ void CameraControllerDialog::changeAutoRoll(int newState)
 
 
 void CameraControllerDialog::changeRoll(int index)
+{
+    changeRoll(index, true);
+}
+
+
+void CameraControllerDialog::changeRoll(int index, bool save)
 {
     qDebug() << "CameraControllerDialog::changeRoll --> Start";
 
@@ -1518,7 +1783,9 @@ void CameraControllerDialog::changeRoll(int index)
         value = maxValue;
     }
     grabberController->setRoll(value);
-    preferences->setIntegerPreference(deviceId, "roll", index);
+    if (save) {
+        preferences->setIntegerPreference(deviceId, "roll", index);
+    }
 
     qDebug() << "CameraControllerDialog::changeRoll --> End";
 }

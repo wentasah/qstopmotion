@@ -152,7 +152,9 @@ void MainWindowGUI::init()
 
     this->initTranslations();
     PreferencesTool *pref = frontend->getPreferences();
-    QString activeLocale = pref->getStringPreference("preferences", "language", QString());
+    QString activeLocale;
+
+    pref->getStringPreference("preferences", "language", activeLocale);
     createTranslator(activeLocale);
 
     grabber = new ImageGrabberFacade(frontend);

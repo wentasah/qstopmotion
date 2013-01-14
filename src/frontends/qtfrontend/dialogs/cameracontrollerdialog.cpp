@@ -912,7 +912,7 @@ void CameraControllerDialog::changeBrightness(int index, bool save)
     qDebug() << "CameraControllerDialog::changeBrightness --> Start";
 
     PreferencesTool *preferences = frontend->getPreferences();
-    long value = index * stepBrightness;
+    long value = grabberController->getBrightnessCaps()->getMinimum() + (index * stepBrightness);
     long maxValue = grabberController->getBrightnessCaps()->getMaximum();
 
     if (value > maxValue) {
@@ -966,7 +966,7 @@ void CameraControllerDialog::changeContrast(int index, bool save)
     qDebug() << "CameraControllerDialog::changeContrast --> Start";
 
     PreferencesTool *preferences = frontend->getPreferences();
-    int value = index * stepContrast;
+    int value = grabberController->getContrastCaps()->getMinimum() + (index * stepContrast);
     int maxValue = grabberController->getContrastCaps()->getMaximum();
 
     if (value > maxValue) {
@@ -1020,7 +1020,7 @@ void CameraControllerDialog::changeSaturation(int index, bool save)
     qDebug() << "CameraControllerDialog::changeSaturation --> Start";
 
     PreferencesTool *preferences = frontend->getPreferences();
-    int value = index * stepSaturation;
+    int value = grabberController->getSaturationCaps()->getMinimum() + (index * stepSaturation);
     int maxValue = grabberController->getSaturationCaps()->getMaximum();
 
     if (value > maxValue) {
@@ -1074,7 +1074,7 @@ void CameraControllerDialog::changeHue(int index, bool save)
     qDebug() << "CameraControllerDialog::changeHue --> Start";
 
     PreferencesTool *preferences = frontend->getPreferences();
-    int value = index * stepHue;
+    int value = grabberController->getHueCaps()->getMinimum() + (index * stepHue);
     int maxValue = grabberController->getHueCaps()->getMaximum();
 
     if (value > maxValue) {
@@ -1128,7 +1128,7 @@ void CameraControllerDialog::changeGamma(int index, bool save)
     qDebug() << "CameraControllerDialog::changeGamma --> Start";
 
     PreferencesTool *preferences = frontend->getPreferences();
-    int value = index * stepGamma;
+    int value = grabberController->getGammaCaps()->getMinimum() + (index * stepGamma);
     int maxValue = grabberController->getGammaCaps()->getMaximum();
 
     if (value > maxValue) {
@@ -1182,7 +1182,7 @@ void CameraControllerDialog::changeSharpness(int index, bool save)
     qDebug() << "CameraControllerDialog::changeSharpness --> Start";
 
     PreferencesTool *preferences = frontend->getPreferences();
-    int value = index * stepSharpness;
+    int value = grabberController->getSharpnessCaps()->getMinimum() + (index * stepSharpness);
     int maxValue = grabberController->getSharpnessCaps()->getMaximum();
 
     if (value > maxValue) {
@@ -1236,7 +1236,7 @@ void CameraControllerDialog::changeBacklight(int index, bool save)
     qDebug() << "CameraControllerDialog::changeBacklight --> Start";
 
     PreferencesTool *preferences = frontend->getPreferences();
-    int value = index * stepBacklight;
+    int value = grabberController->getBacklightCaps()->getMinimum() + (index * stepBacklight);
     int maxValue = grabberController->getBacklightCaps()->getMaximum();
 
     if (value > maxValue) {
@@ -1290,7 +1290,7 @@ void CameraControllerDialog::changeWhite(int index, bool save)
     qDebug() << "CameraControllerDialog::changeWhite --> Start";
 
     PreferencesTool *preferences = frontend->getPreferences();
-    int value = index * stepWhite;
+    int value = grabberController->getWhiteCaps()->getMinimum() + (index * stepWhite);
     int maxValue = grabberController->getWhiteCaps()->getMaximum();
 
     if (value > maxValue) {
@@ -1344,7 +1344,7 @@ void CameraControllerDialog::changeGain(int index, bool save)
     qDebug() << "CameraControllerDialog::changeGain --> Start";
 
     PreferencesTool *preferences = frontend->getPreferences();
-    int value = index * stepGain;
+    int value = grabberController->getGainCaps()->getMinimum() + (index * stepGain);
     int maxValue = grabberController->getGainCaps()->getMaximum();
 
     if (value > maxValue) {
@@ -1398,7 +1398,7 @@ void CameraControllerDialog::changeColor(int index, bool save)
     qDebug() << "CameraControllerDialog::changeColor --> Start";
 
     PreferencesTool *preferences = frontend->getPreferences();
-    int value = index * stepColor;
+    int value = grabberController->getColorCaps()->getMinimum() + (index * stepColor);
     int maxValue = grabberController->getColorCaps()->getMaximum();
 
     if (value > maxValue) {
@@ -1452,7 +1452,7 @@ void CameraControllerDialog::changeExposure(int index, bool save)
     qDebug() << "CameraControllerDialog::changeExposure --> Start";
 
     PreferencesTool *preferences = frontend->getPreferences();
-    int value = index * stepExposure;
+    int value = grabberController->getExposureCaps()->getMinimum() + (index * stepExposure);
     int maxValue = grabberController->getExposureCaps()->getMaximum();
 
     if (value > maxValue) {
@@ -1506,7 +1506,7 @@ void CameraControllerDialog::changeZoom(int index, bool save)
     qDebug() << "CameraControllerDialog::changeZoo --> Start";
 
     PreferencesTool *preferences = frontend->getPreferences();
-    int value = index * stepZoom;
+    int value = grabberController->getZoomCaps()->getMinimum() + (index * stepZoom);
     int maxValue = grabberController->getZoomCaps()->getMaximum();
 
     if (value > maxValue) {
@@ -1560,7 +1560,7 @@ void CameraControllerDialog::changeFocus(int index, bool save)
     qDebug() << "CameraControllerDialog::changeFocus --> Start";
 
     PreferencesTool *preferences = frontend->getPreferences();
-    int value = index * stepFocus;
+    int value = grabberController->getFocusCaps()->getMinimum() + (index * stepFocus);
     int maxValue = grabberController->getFocusCaps()->getMaximum();
 
     if (value > maxValue) {
@@ -1614,7 +1614,7 @@ void CameraControllerDialog::changePan(int index, bool save)
     qDebug() << "CameraControllerDialog::changePan --> Start";
 
     PreferencesTool *preferences = frontend->getPreferences();
-    int value = index * stepPan;
+    int value = grabberController->getPanCaps()->getMinimum() + (index * stepPan);
     int maxValue = grabberController->getPanCaps()->getMaximum();
 
     if (value > maxValue) {
@@ -1668,7 +1668,7 @@ void CameraControllerDialog::changeTilt(int index, bool save)
     qDebug() << "CameraControllerDialog::changeTilt --> Start";
 
     PreferencesTool *preferences = frontend->getPreferences();
-    int value = index * stepTilt;
+    int value = grabberController->getTiltCaps()->getMinimum() + (index * stepTilt);
     int maxValue = grabberController->getTiltCaps()->getMaximum();
 
     if (value > maxValue) {
@@ -1722,7 +1722,7 @@ void CameraControllerDialog::changeIris(int index, bool save)
     qDebug() << "CameraControllerDialog::changeIris --> Start";
 
     PreferencesTool *preferences = frontend->getPreferences();
-    int value = index * stepIris;
+    int value = grabberController->getIrisCaps()->getMinimum() + (index * stepIris);
     int maxValue = grabberController->getIrisCaps()->getMaximum();
 
     if (value > maxValue) {
@@ -1776,7 +1776,7 @@ void CameraControllerDialog::changeRoll(int index, bool save)
     qDebug() << "CameraControllerDialog::changeRoll --> Start";
 
     PreferencesTool *preferences = frontend->getPreferences();
-    int value = index * stepRoll;
+    int value = grabberController->getRollCaps()->getMinimum() + (index * stepRoll);
     int maxValue = grabberController->getRollCaps()->getMaximum();
 
     if (value > maxValue) {

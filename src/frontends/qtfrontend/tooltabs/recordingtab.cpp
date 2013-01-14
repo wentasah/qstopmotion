@@ -565,12 +565,16 @@ void RecordingTab::changeMixCount(int newMixCount)
     int mixMode = mixModeCombo->currentIndex();
     switch (mixMode) {
     case 0:
-        frontend->getProject()->getAnimationProject()->setMixCount(newMixCount);
+        if (frontend->getProject()->getAnimationProject()->getMixCount() != newMixCount) {
+            frontend->getProject()->getAnimationProject()->setMixCount(newMixCount);
+        }
         break;
     case 1:
         break;
     case 2:
-        frontend->getProject()->getAnimationProject()->setPlaybackCount(newMixCount);
+        if (frontend->getProject()->getAnimationProject()->getPlaybackCount() != newMixCount) {
+            frontend->getProject()->getAnimationProject()->setPlaybackCount(newMixCount);
+        }
         break;
     case 3:
         break;

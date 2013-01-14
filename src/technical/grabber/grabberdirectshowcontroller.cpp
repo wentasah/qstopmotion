@@ -759,30 +759,79 @@ void GrabberDirectShowController::setColor(int c)
 /**************************************************************************
  * Exposure
  **************************************************************************/
-/*
+
 bool GrabberDirectShowController::getAutomaticExposure()
 {
+    HRESULT hr = 0;
+    long flags; // = KSPROPERTY_CAMERACONTROL_FLAGS_ABSOLUTE | KSPROPERTY_CAMERACONTROL_FLAGS_MANUAL;
+    long e;
+
+    hr = pCameraControl->Get(CameraControl_Exposure, &e, &flags);
+    if (hr != S_OK)
+    {
+        qDebug() << "GrabberDirectShowController::getAutomaticExposure --> ERROR: Unable to get Exposure property value. (Error 0x" << hr << ")";
+        return false;
+    }
+
+    if (flags & KSPROPERTY_CAMERACONTROL_FLAGS_AUTO)
+    {
+        return true;
+    }
+
     return false;
 }
 
 
 void GrabberDirectShowController::setAutomaticExposure(bool ae)
 {
-    Q_ASSERT( 1 );
+    HRESULT hr = 0;
+    long flags;
+    long e = 0;
+
+    if (ae) {
+        flags = KSPROPERTY_CAMERACONTROL_FLAGS_AUTO;
+    }
+    else {
+        e = getExposureCaps()->getDefault();
+        flags = KSPROPERTY_CAMERACONTROL_FLAGS_MANUAL;
+    }
+
+    hr = pCameraControl->Set(CameraControl_Exposure, e, flags);
+    if (hr != S_OK)
+    {
+        qDebug() << "GrabberDirectShowController::setAutomaticExposure --> ERROR: Unable to set Exposure property value to " << e << ". (Error 0x" << hr << ")";
+    }
 }
 
 
-bool GrabberDirectShowController::isExposure()
+int GrabberDirectShowController::getExposure()
 {
-    return false;
+    HRESULT hr = 0;
+    long flags; // = KSPROPERTY_CAMERACONTROL_FLAGS_ABSOLUTE | KSPROPERTY_CAMERACONTROL_FLAGS_MANUAL;
+    long e;
+
+    hr = pCameraControl->Get(CameraControl_Exposure, &e, &flags);
+    if (hr != S_OK) {
+        qDebug() << "GrabberDirectShowController::getExposure --> ERROR: Unable to get Exposure property value. (Error 0x" << hr << ")";
+        return -1;
+    }
+
+    return (int)e;
 }
 
 
 void GrabberDirectShowController::setExposure(int e)
 {
-    Q_ASSERT( 1 );
+    HRESULT hr = 0;
+    // long flags = KSPROPERTY_CAMERACONTROL_FLAGS_ABSOLUTE | KSPROPERTY_CAMERACONTROL_FLAGS_MANUAL;
+    long flags = KSPROPERTY_CAMERACONTROL_FLAGS_RELATIVE | KSPROPERTY_CAMERACONTROL_FLAGS_MANUAL;
+
+    hr = pCameraControl->Set(CameraControl_Exposure, (long)e, flags);
+    if (hr != S_OK) {
+        qDebug() << "GrabberDirectShowController::setExposure --> ERROR: Unable to set Exposure property value to " << e << ". (Error 0x" << hr << ")";
+    }
 }
-*/
+
 /**************************************************************************
  * Zoom
  **************************************************************************/
@@ -796,7 +845,7 @@ bool GrabberDirectShowController::getAutomaticZoom()
     hr = pCameraControl->Get(CameraControl_Zoom, &z, &flags);
     if (hr != S_OK)
     {
-        qDebug() << "GrabberDirectShowController::Constructor --> ERROR: Unable to get Zoom property value. (Error 0x" << hr;
+        qDebug() << "GrabberDirectShowController::getAutomaticZoom --> ERROR: Unable to get Zoom property value. (Error 0x" << hr << ")";
         return false;
     }
 
@@ -826,7 +875,7 @@ void GrabberDirectShowController::setAutomaticZoom(bool az)
     hr = pCameraControl->Set(CameraControl_Zoom, z, flags);
     if (hr != S_OK)
     {
-        qDebug() << "GrabberDirectShowController::Constructor --> ERROR: Unable to set Zoom property value to " << z << ". (Error 0x" << hr;
+        qDebug() << "GrabberDirectShowController::setAutomaticZoom --> ERROR: Unable to set Zoom property value to " << z << ". (Error 0x" << hr << ")";
     }
 }
 
@@ -838,7 +887,7 @@ int GrabberDirectShowController::getZoom()
 
     hr = pCameraControl->Get(CameraControl_Zoom, &z, &flags);
     if (hr != S_OK) {
-        qDebug() << "GrabberDirectShowController::Constructor --> ERROR: Unable to get Zoom property value. (Error 0x" << hr;
+        qDebug() << "GrabberDirectShowController::getZoom --> ERROR: Unable to get Zoom property value. (Error 0x" << hr << ")";
         return -1;
     }
 
@@ -853,61 +902,157 @@ void GrabberDirectShowController::setZoom(int z)
 
     hr = pCameraControl->Set(CameraControl_Zoom, (long)z, flags);
     if (hr != S_OK) {
-        qDebug() << "GrabberDirectShowController::Constructor --> ERROR: Unable to set Zoom property value to " << z << ". (Error 0x" << hr;
+        qDebug() << "GrabberDirectShowController::setZoom --> ERROR: Unable to set Zoom property value to " << z << ". (Error 0x" << hr << ")";
     }
 }
 
 /**************************************************************************
  * Focus
  **************************************************************************/
-/*
+
 bool GrabberDirectShowController::getAutomaticFocus()
 {
+    HRESULT hr = 0;
+    long flags; // = KSPROPERTY_CAMERACONTROL_FLAGS_ABSOLUTE | KSPROPERTY_CAMERACONTROL_FLAGS_MANUAL;
+    long f;
+
+    hr = pCameraControl->Get(CameraControl_Focus, &f, &flags);
+    if (hr != S_OK)
+    {
+        qDebug() << "GrabberDirectShowController::getAutomaticFocus --> ERROR: Unable to get Focus property value. (Error 0x" << hr << ")";
+        return false;
+    }
+
+    if (flags & KSPROPERTY_CAMERACONTROL_FLAGS_AUTO)
+    {
+        return true;
+    }
+
     return false;
 }
 
 
 void GrabberDirectShowController::setAutomaticFocus(bool af)
 {
-    Q_ASSERT( 1 );
+    HRESULT hr = 0;
+    long flags;
+    long f = 0;
+
+    if (af) {
+        flags = KSPROPERTY_CAMERACONTROL_FLAGS_AUTO;
+    }
+    else {
+        f = getFocusCaps()->getDefault();
+        flags = KSPROPERTY_CAMERACONTROL_FLAGS_MANUAL;
+    }
+
+    hr = pCameraControl->Set(CameraControl_Focus, f, flags);
+    if (hr != S_OK)
+    {
+        qDebug() << "GrabberDirectShowController::setAutomaticFocus --> ERROR: Unable to set Focus property value to " << f << ". (Error 0x" << hr << ")";
+    }
 }
 
 int GrabberDirectShowController::getFocus()
 {
-    return 0;
+    HRESULT hr = 0;
+    long flags; // = KSPROPERTY_CAMERACONTROL_FLAGS_ABSOLUTE | KSPROPERTY_CAMERACONTROL_FLAGS_MANUAL;
+    long f;
+
+    hr = pCameraControl->Get(CameraControl_Focus, &f, &flags);
+    if (hr != S_OK) {
+        qDebug() << "GrabberDirectShowController::getFocus --> ERROR: Unable to get Focus property value. (Error 0x" << hr << ")";
+        return -1;
+    }
+
+    return (int)f;
 }
 
 
 void GrabberDirectShowController::setFocus(int f)
 {
-    Q_ASSERT( 1 );
+    HRESULT hr = 0;
+    long flags = KSPROPERTY_CAMERACONTROL_FLAGS_ABSOLUTE | KSPROPERTY_CAMERACONTROL_FLAGS_MANUAL;
+
+    hr = pCameraControl->Set(CameraControl_Focus, (long)f, flags);
+    if (hr != S_OK) {
+        qDebug() << "GrabberDirectShowController::setFocus --> ERROR: Unable to set Focus property value to " << f << ". (Error 0x" << hr << ")";
+    }
 }
-*/
+
 /**************************************************************************
  * Pan
  **************************************************************************/
 
 bool GrabberDirectShowController::getAutomaticPan()
 {
+    HRESULT hr = 0;
+    long flags; // = KSPROPERTY_CAMERACONTROL_FLAGS_ABSOLUTE | KSPROPERTY_CAMERACONTROL_FLAGS_MANUAL;
+    long p;
+
+    hr = pCameraControl->Get(CameraControl_Pan, &p, &flags);
+    if (hr != S_OK)
+    {
+        qDebug() << "GrabberDirectShowController::getAutomaticPan --> ERROR: Unable to get Pan property value. (Error 0x" << hr << ")";
+        return false;
+    }
+
+    if (flags & KSPROPERTY_CAMERACONTROL_FLAGS_AUTO)
+    {
+        return true;
+    }
+
     return false;
 }
 
 
 void GrabberDirectShowController::setAutomaticPan(bool ap)
 {
-    Q_ASSERT( 1 );
+    HRESULT hr = 0;
+    long flags;
+    long p = 0;
+
+    if (ap) {
+        flags = KSPROPERTY_CAMERACONTROL_FLAGS_AUTO;
+    }
+    else {
+        p = getPanCaps()->getDefault();
+        flags = KSPROPERTY_CAMERACONTROL_FLAGS_MANUAL;
+    }
+
+    hr = pCameraControl->Set(CameraControl_Pan, p, flags);
+    if (hr != S_OK)
+    {
+        qDebug() << "GrabberDirectShowController::setAutomaticPan --> ERROR: Unable to set Pan property value to " << p << ". (Error 0x" << hr << ")";
+    }
 }
 
 
 int GrabberDirectShowController::getPan()
 {
-    return 0;
+    HRESULT hr = 0;
+    long flags; // = KSPROPERTY_CAMERACONTROL_FLAGS_ABSOLUTE | KSPROPERTY_CAMERACONTROL_FLAGS_MANUAL;
+    long p;
+
+    hr = pCameraControl->Get(CameraControl_Pan, &p, &flags);
+    if (hr != S_OK) {
+        qDebug() << "GrabberDirectShowController::getPan --> ERROR: Unable to get Pan property value. (Error 0x" << hr << ")";
+        return -1;
+    }
+
+    return (int)p;
 }
 
 
 void GrabberDirectShowController::setPan(int p)
 {
-    Q_ASSERT( 1 );
+    HRESULT hr = 0;
+    long flags = KSPROPERTY_CAMERACONTROL_FLAGS_ABSOLUTE | KSPROPERTY_CAMERACONTROL_FLAGS_MANUAL;
+
+    hr = pCameraControl->Set(CameraControl_Pan, (long)p, flags);
+    if (hr != S_OK) {
+        qDebug() << "GrabberDirectShowController::setPan --> ERROR: Unable to set Pan property value to " << p << ". (Error 0x" << hr << ")";
+    }
 }
 
 /**************************************************************************
@@ -916,77 +1061,220 @@ void GrabberDirectShowController::setPan(int p)
 
 bool GrabberDirectShowController::getAutomaticTilt()
 {
+    HRESULT hr = 0;
+    long flags; // = KSPROPERTY_CAMERACONTROL_FLAGS_ABSOLUTE | KSPROPERTY_CAMERACONTROL_FLAGS_MANUAL;
+    long t;
+
+    hr = pCameraControl->Get(CameraControl_Tilt, &t, &flags);
+    if (hr != S_OK)
+    {
+        qDebug() << "GrabberDirectShowController::getAutomaticTilt --> ERROR: Unable to get Tilt property value. (Error 0x" << hr << ")";
+        return false;
+    }
+
+    if (flags & KSPROPERTY_CAMERACONTROL_FLAGS_AUTO)
+    {
+        return true;
+    }
+
     return false;
 }
 
 
 void GrabberDirectShowController::setAutomaticTilt(bool at)
 {
-    Q_ASSERT( 1 );
+    HRESULT hr = 0;
+    long flags;
+    long t = 0;
+
+    if (at) {
+        flags = KSPROPERTY_CAMERACONTROL_FLAGS_AUTO;
+    }
+    else {
+        t = getTiltCaps()->getDefault();
+        flags = KSPROPERTY_CAMERACONTROL_FLAGS_MANUAL;
+    }
+
+    hr = pCameraControl->Set(CameraControl_Tilt, t, flags);
+    if (hr != S_OK)
+    {
+        qDebug() << "GrabberDirectShowController::setAutomaticTilt --> ERROR: Unable to set Tilt property value to " << t << ". (Error 0x" << hr << ")";
+    }
 }
 
 
 int GrabberDirectShowController::getTilt()
 {
-    return 0;
+    HRESULT hr = 0;
+    long flags; // = KSPROPERTY_CAMERACONTROL_FLAGS_ABSOLUTE | KSPROPERTY_CAMERACONTROL_FLAGS_MANUAL;
+    long t;
+
+    hr = pCameraControl->Get(CameraControl_Tilt, &t, &flags);
+    if (hr != S_OK) {
+        qDebug() << "GrabberDirectShowController::getTilt --> ERROR: Unable to get Tilt property value. (Error 0x" << hr << ")";
+        return -1;
+    }
+
+    return (int)t;
 }
 
 
 void GrabberDirectShowController::setTilt(int t)
 {
-    Q_ASSERT( 1 );
+    HRESULT hr = 0;
+    long flags = KSPROPERTY_CAMERACONTROL_FLAGS_ABSOLUTE | KSPROPERTY_CAMERACONTROL_FLAGS_MANUAL;
+
+    hr = pCameraControl->Set(CameraControl_Tilt, (long)t, flags);
+    if (hr != S_OK) {
+        qDebug() << "GrabberDirectShowController::setTilt --> ERROR: Unable to set Zoom property value to " << t << ". (Error 0x" << hr << ")";
+    }
 }
 /**************************************************************************
  * Iris
  **************************************************************************/
-/*
+
 bool GrabberDirectShowController::getAutomaticIris()
 {
+    HRESULT hr = 0;
+    long flags; // = KSPROPERTY_CAMERACONTROL_FLAGS_ABSOLUTE | KSPROPERTY_CAMERACONTROL_FLAGS_MANUAL;
+    long i;
+
+    hr = pCameraControl->Get(CameraControl_Iris, &i, &flags);
+    if (hr != S_OK)
+    {
+        qDebug() << "GrabberDirectShowController::getAutomaticIris --> ERROR: Unable to get Iris property value. (Error 0x" << hr << ")";
+        return false;
+    }
+
+    if (flags & KSPROPERTY_CAMERACONTROL_FLAGS_AUTO)
+    {
+        return true;
+    }
+
     return false;
 }
 
 
-void GrabberDirectShowController::setAutomaticIris(bool ae)
+void GrabberDirectShowController::setAutomaticIris(bool ai)
 {
-    Q_ASSERT( 1 );
+    HRESULT hr = 0;
+    long flags;
+    long i = 0;
+
+    if (ai) {
+        flags = KSPROPERTY_CAMERACONTROL_FLAGS_AUTO;
+    }
+    else {
+        i = getZoomCaps()->getDefault();
+        flags = KSPROPERTY_CAMERACONTROL_FLAGS_MANUAL;
+    }
+
+    hr = pCameraControl->Set(CameraControl_Iris, i, flags);
+    if (hr != S_OK)
+    {
+        qDebug() << "GrabberDirectShowController::setAutomaticIris --> ERROR: Unable to set Iris property value to " << i << ". (Error 0x" << hr << ")";
+    }
 }
 
 
-bool GrabberDirectShowController::isIris()
+int GrabberDirectShowController::getIris()
 {
-    return false;
+    HRESULT hr = 0;
+    long flags; // = KSPROPERTY_CAMERACONTROL_FLAGS_ABSOLUTE | KSPROPERTY_CAMERACONTROL_FLAGS_MANUAL;
+    long i;
+
+    hr = pCameraControl->Get(CameraControl_Iris, &i, &flags);
+    if (hr != S_OK) {
+        qDebug() << "GrabberDirectShowController::getIris --> ERROR: Unable to get Iris property value. (Error 0x" << hr << ")";
+        return -1;
+    }
+
+    return (int)i;
 }
 
 
-void GrabberDirectShowController::setIris(int e)
+void GrabberDirectShowController::setIris(int i)
 {
-    Q_ASSERT( 1 );
+    HRESULT hr = 0;
+    long flags = KSPROPERTY_CAMERACONTROL_FLAGS_ABSOLUTE | KSPROPERTY_CAMERACONTROL_FLAGS_MANUAL;
+
+    hr = pCameraControl->Set(CameraControl_Iris, (long)i, flags);
+    if (hr != S_OK) {
+        qDebug() << "GrabberDirectShowController::setIris --> ERROR: Unable to set Iris property value to " << i << ". (Error 0x" << hr << ")";
+    }
 }
-*/
+
 /**************************************************************************
  * Roll
  **************************************************************************/
-/*
+
 bool GrabberDirectShowController::getAutomaticRoll()
 {
+    HRESULT hr = 0;
+    long flags; // = KSPROPERTY_CAMERACONTROL_FLAGS_ABSOLUTE | KSPROPERTY_CAMERACONTROL_FLAGS_MANUAL;
+    long r;
+
+    hr = pCameraControl->Get(CameraControl_Roll, &r, &flags);
+    if (hr != S_OK)
+    {
+        qDebug() << "GrabberDirectShowController::getAutomaticRoll --> ERROR: Unable to get Roll property value. (Error 0x" << hr << ")";
+        return false;
+    }
+
+    if (flags & KSPROPERTY_CAMERACONTROL_FLAGS_AUTO)
+    {
+        return true;
+    }
+
     return false;
 }
 
 
 void GrabberDirectShowController::setAutomaticRoll(bool ar)
 {
-    Q_ASSERT( 1 );
+    HRESULT hr = 0;
+    long flags;
+    long r = 0;
+
+    if (ar) {
+        flags = KSPROPERTY_CAMERACONTROL_FLAGS_AUTO;
+    }
+    else {
+        r = getRollCaps()->getDefault();
+        flags = KSPROPERTY_CAMERACONTROL_FLAGS_MANUAL;
+    }
+
+    hr = pCameraControl->Set(CameraControl_Roll, r, flags);
+    if (hr != S_OK)
+    {
+        qDebug() << "GrabberDirectShowController::setAutomaticRoll --> ERROR: Unable to set Roll property value to " << r << ". (Error 0x" << hr << ")";
+    }
 }
 
 
-bool GrabberDirectShowController::isRoll()
+int GrabberDirectShowController::getRoll()
 {
-    return false;
+    HRESULT hr = 0;
+    long flags; // = KSPROPERTY_CAMERACONTROL_FLAGS_ABSOLUTE | KSPROPERTY_CAMERACONTROL_FLAGS_MANUAL;
+    long r;
+
+    hr = pCameraControl->Get(CameraControl_Roll, &r, &flags);
+    if (hr != S_OK) {
+        qDebug() << "GrabberDirectShowController::getRoll --> ERROR: Unable to get Roll property value. (Error 0x" << hr << ")";
+        return -1;
+    }
+
+    return (int)r;
 }
 
 
-void GrabberDirectShowController::setRoll(int e)
+void GrabberDirectShowController::setRoll(int r)
 {
-    Q_ASSERT( 1 );
+    HRESULT hr = 0;
+    long flags = KSPROPERTY_CAMERACONTROL_FLAGS_ABSOLUTE | KSPROPERTY_CAMERACONTROL_FLAGS_MANUAL;
+
+    hr = pCameraControl->Set(CameraControl_Roll, (long)r, flags);
+    if (hr != S_OK) {
+        qDebug() << "GrabberDirectShowController::setRoll --> ERROR: Unable to set Roll property value to " << r << ". (Error 0x" << hr << ")";
+    }
 }
-*/

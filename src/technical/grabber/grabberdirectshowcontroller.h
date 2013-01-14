@@ -354,25 +354,25 @@ public:
      * Get the current automatic exposure value of the device.
      * @return True if the automatic exposure is on.
      */
-    // bool getAutomaticExposure();
+    bool getAutomaticExposure();
 
     /**
      * Set the automatic exposure value of the device.
      * @param ae True if the automatic exposure will be switched on.
      */
-    // void setAutomaticExposure(bool ae);
+    void setAutomaticExposure(bool ae);
 
     /**
      * Get the current exposure value of the device.
      * @return The current exposure value.
      */
-    // int getExposure();
+    int getExposure();
 
     /**
      * Set the exposure value of the device.
      * @param e The new exposure value
      */
-    // void setExposure(int e);
+    void setExposure(int e);
 
     /**************************************************************************
      * Zoom
@@ -410,25 +410,25 @@ public:
      * Get the current automatic focus value of the device.
      * @return True if the automatic focus is on.
      */
-    // bool getAutomaticFocus();
+    bool getAutomaticFocus();
 
     /**
      * Set the automatic focus value of the device.
      * @param af True if the automatic focus will be switched on.
      */
-    // void setAutomaticFocus(bool af);
+    void setAutomaticFocus(bool af);
 
     /**
      * Get the current focus value of the device.
      * @return The current focus value.
      */
-    // int getFocus();
+    int getFocus();
 
     /**
      * Set the focus value of the device.
      * @param f The new focus value
      */
-    // void setFocus(int f);
+    void setFocus(int f);
 
     /**************************************************************************
      * Pan
@@ -494,25 +494,25 @@ public:
      * Get the current automatic iris value of the device.
      * @return True if the automatic iris is on.
      */
-    // bool getAutomaticIris();
+    bool getAutomaticIris();
 
     /**
      * Set the automatic iris value of the device.
      * @param ae True if the automatic iris will be switched on.
      */
-    // void setAutomaticIris(bool ae);
+    void setAutomaticIris(bool ae);
 
     /**
      * Get the current iris value of the device.
      * @return The current iris value.
      */
-    // int getIris();
+    int getIris();
 
     /**
      * Set the iris value of the device.
      * @param e The new iris value
      */
-    // void setIris(int e);
+    void setIris(int e);
 
     /**************************************************************************
      * Roll
@@ -522,29 +522,29 @@ public:
      * Get the current automatic roll value of the device.
      * @return True if the automatic roll is on.
      */
-    // bool getAutomaticRoll();
+    bool getAutomaticRoll();
 
     /**
      * Set the automatic roll value of the device.
      * @param ar True if the automatic roll will be switched on.
      */
-    // void setAutomaticRoll(bool ar);
+    void setAutomaticRoll(bool ar);
 
     /**
      * Get the current roll value of the device.
      * @return The current roll value.
      */
-    // int getRoll();
+    int getRoll();
 
     /**
      * Set the roll value of the device.
      * @param r The new roll value
      */
-    // void setRoll(int r);
+    void setRoll(int r);
 
 private:
     IAMCameraControl *pCameraControl;
-    IAMVideoProcAmp *pQualityControl;
+    IAMVideoProcAmp  *pQualityControl;
 
     bool setControlCapabilities();
     bool setQualityCapabilities();

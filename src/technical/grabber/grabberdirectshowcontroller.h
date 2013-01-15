@@ -68,25 +68,25 @@ public:
      * Get the current automatic brightness value of the device.
      * @return True if the automatic brightness is on.
      */
-    // bool getAutomaticBrightness();
+    bool getAutomaticBrightness();
 
     /**
      * Set the automatic brightness value of the device.
      * @param ab True if the automatic brightness will be switched on.
      */
-    // void setAutomaticBrightness(bool ab);
+    void setAutomaticBrightness(bool ab);
 
     /**
      * Get the current brightness value of the device.
      * @return The current brightness value.
      */
-    // int getBrightness();
+    int getBrightness();
 
     /**
      * Set the brightness value of the device.
      * @param b The new brightness value
      */
-    // void setBrightness(int b);
+    void setBrightness(int b);
 
     /**************************************************************************
      * Contrast
@@ -96,25 +96,25 @@ public:
      * Get the current automatic contrast value of the device.
      * @return True if the automatic contrast is on.
      */
-    // bool getAutomaticContrast();
+    bool getAutomaticContrast();
 
     /**
      * Set the automatic contrast value of the device.
      * @param ac True if the automatic contrast will be switched on.
      */
-    // void setAutomaticContrast(bool ac);
+    void setAutomaticContrast(bool ac);
 
     /**
      * Get the current contrast value of the device.
      * @return The current contrast value.
      */
-    // int getContrast();
+    int getContrast();
 
     /**
      * Set the contrast value of the device.
      * @param c The new contrast value
      */
-    // void setContrast(int c);
+    void setContrast(int c);
 
     /**************************************************************************
      * Saturation
@@ -124,25 +124,25 @@ public:
      * Get the current automatic saturation value of the device.
      * @return True if the automatic saturation is on.
      */
-    // bool getAutomaticSaturation();
+    bool getAutomaticSaturation();
 
     /**
      * Set the automatic saturation value of the device.
      * @param as True if the automatic saturation will be switched on.
      */
-    // void setAutomaticSaturation(bool as);
+    void setAutomaticSaturation(bool as);
 
     /**
      * Get the current saturation value of the device.
      * @return The current saturation value.
      */
-    // int getSaturation();
+    int getSaturation();
 
     /**
      * Set the saturation value of the device.
      * @param s The new saturation value
      */
-    // void setSaturation(int s);
+    void setSaturation(int s);
 
     /**************************************************************************
      * Hue
@@ -152,25 +152,25 @@ public:
      * Get the current automatic hue value of the device.
      * @return True if the automatic hue is on.
      */
-    // bool getAutomaticHue();
+    bool getAutomaticHue();
 
     /**
      * Set the automatic hue value of the device.
      * @param ah True if the automatic hue will be switched on.
      */
-    // void setAutomaticHue(bool ah);
+    void setAutomaticHue(bool ah);
 
     /**
      * Get the current hue value of the device.
      * @return The current hue value.
      */
-    // int getHue();
+    int getHue();
 
     /**
      * Set the hue value of the device.
      * @param h The new hue value
      */
-    // void setHue(int h);
+    void setHue(int h);
 
     /**************************************************************************
      * Gamma
@@ -180,25 +180,25 @@ public:
      * Get the current automatic gamma value of the device.
      * @return True if the automatic gamma is on.
      */
-    // bool getAutomaticGamma();
+    bool getAutomaticGamma();
 
     /**
      * Set the automatic gamma value of the device.
      * @param ag True if the automatic gamma will be switched on.
      */
-    // void setAutomaticGamma(bool ag);
+    void setAutomaticGamma(bool ag);
 
     /**
      * Get the current gamma value of the device.
      * @return The current gamma value.
      */
-    // int getGamma();
+    int getGamma();
 
     /**
      * Set the gamma value of the device.
      * @param g The new gamma value
      */
-    // void setGamma(int g);
+    void setGamma(int g);
 
     /**************************************************************************
      * Sharpness
@@ -208,25 +208,25 @@ public:
      * Get the current automatic sharpness value of the device.
      * @return True if the automatic sharpness is on.
      */
-    // bool getAutomaticSharpness();
+    bool getAutomaticSharpness();
 
     /**
      * Set the automatic sharpness value of the device.
      * @param as True if the automatic sharpness will be switched on.
      */
-    // void setAutomaticSharpness(bool as);
+    void setAutomaticSharpness(bool as);
 
     /**
      * Get the current sharpness value of the device.
      * @return The current sharpness value.
      */
-    // int getSharpness();
+    int getSharpness();
 
     /**
      * Set the sharpness value of the device.
      * @param s The new sharpness value
      */
-    // void setSharpness(int s);
+    void setSharpness(int s);
 
     /**************************************************************************
      * Backlight Compensation
@@ -236,25 +236,25 @@ public:
      * Get the current automatic backlight compensation value of the device.
      * @return True if the automatic backlight compensation is on.
      */
-    // bool getAutomaticBacklight();
+    bool getAutomaticBacklight();
 
     /**
      * Set the automatic backlight compensation value of the device.
      * @param ab True if the automatic backlight compensation will be switched on.
      */
-    // void setAutomaticBacklight(bool ab);
+    void setAutomaticBacklight(bool ab);
 
     /**
      * Get the current backlight compensation value of the device.
      * @return The current backlight compensation value.
      */
-    // int getBacklight();
+    int getBacklight();
 
     /**
      * Set the backlight compensation value of the device.
      * @param b The new backlight compensation value
      */
-    // void setBacklight(int b);
+    void setBacklight(int b);
 
     /**************************************************************************
      * White Balance
@@ -264,25 +264,25 @@ public:
      * Get the current automatic white balance value of the device.
      * @return True if the automatic white balance is on.
      */
-    // bool getAutomaticWhite();
+    bool getAutomaticWhite();
 
     /**
      * Set the automatic white balance value of the device.
      * @param ae True if the automatic white balance will be switched on.
      */
-    // void setAutomaticWhite(bool ae);
+    void setAutomaticWhite(bool ae);
 
     /**
      * Get the current white balance value of the device.
      * @return The current white balance value.
      */
-    // int getWhite();
+    int getWhite();
 
     /**
      * Set the white balance value of the device.
      * @param w The new white balance value
      */
-    // void setWhite(int w);
+    void setWhite(int w);
 
     /**************************************************************************
      * Gain
@@ -292,25 +292,25 @@ public:
      * Get the current automatic gain value of the device.
      * @return True if the automatic gain is on.
      */
-    // bool getAutomaticGain();
+    bool getAutomaticGain();
 
     /**
      * Set the automatic gain value of the device.
      * @param ag True if the automatic gain will be switched on.
      */
-    // void setAutomaticGain(bool ag);
+    void setAutomaticGain(bool ag);
 
     /**
      * Get the current gain value of the device.
      * @return The current gain value.
      */
-    // int getGain();
+    int getGain();
 
     /**
      * Set the gain value of the device.
      * @param g The new gain value
      */
-    // void setGain(int g);
+    void setGain(int g);
 
     /**************************************************************************
      * Color Enable
@@ -320,25 +320,25 @@ public:
      * Get the current automatic color enable value of the device.
      * @return True if the automatic color enable is on.
      */
-    // bool getAutomaticColor();
+    bool getAutomaticColor();
 
     /**
      * Set the automatic color enable value of the device.
      * @param ac True if the automatic color enable will be switched on.
      */
-    // void setAutomaticColor(bool ac);
+    void setAutomaticColor(bool ac);
 
     /**
      * Get the current color enable value of the device.
      * @return The current color enable value.
      */
-    // int getColor();
+    int getColor();
 
     /**
      * Set the color enable value of the device.
      * @param c The new color enable value
      */
-    // void setColor(int c);
+    void setColor(int c);
 
     /**************************************************************************
      **************************************************************************

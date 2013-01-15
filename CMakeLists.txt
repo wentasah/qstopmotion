@@ -1,7 +1,7 @@
 ###############################################################################
 # CMake file for the qStopMotion project                                      #
 # (c) Ralf Lange, longsoft.de                                                 #
-# Last update: 2012-12-13                                                     #
+# Last update: 2013-01-15                                                     #
 #                                                                             #
 # Usage:                                                                      #
 #   * Qt-Creator (Windows, Linux)                                             #
@@ -92,11 +92,12 @@ set(HEADERS
 )
 ENDIF(WIN32)
 
-# IF(UNIX)
-# set(HEADERS
-#     ${HEADERS}
-# )
-# ENDIF(UNIX)
+IF(UNIX)
+set(HEADERS
+    ${HEADERS}
+    src/technical/grabber/grabberv4l2controller.h
+)
+ENDIF(UNIX)
 
 # add all header files of the project to MOC to MOC_HEADERS
 set(MOC_HEADERS
@@ -263,6 +264,7 @@ ENDIF(WIN32)
 IF(UNIX)
 set(SOURCES
     ${SOURCES}
+    src/technical/grabber/grabberv4l2controller.cpp
     src/technical/grabber/gphotograbber.cpp
     src/technical/grabber/gstreamerdv1394grabber.cpp
     src/technical/grabber/gstreamerv4l2grabber.cpp

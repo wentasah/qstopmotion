@@ -44,7 +44,7 @@ GrabberController::~GrabberController()
 }
 
 
-bool GrabberController::init(const QString id)
+bool GrabberController::init(const QString &id)
 {
     return true;
 }

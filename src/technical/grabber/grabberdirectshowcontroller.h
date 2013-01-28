@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2012-2012 by                                                *
+ *  Copyright (C) 2012-2013 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -52,7 +52,7 @@ public:
      * @param id The ID of the device.
      * @return True if initialization is successful.
      */
-    bool init(const QString id);
+    bool init(const QString &id);
 
     /**************************************************************************
      **************************************************************************

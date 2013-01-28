@@ -1,5 +1,5 @@
 Building qStopMotion using Unix makefile on Linux
-Last Change: 2012/01/10
+Last Change: 2013/01/18
 
 1. Preparation of the development environment
 ================================================================================
@@ -30,6 +30,8 @@ Last Change: 2012/01/10
     (dshowvideosrc)]
 * ffmpeg (Version >= 0.5.2)
 * libxml2, libxml2-dev, libxml-dbg
+* libv4l, libv4l-devel, v4l-utils, v4l-utils-dev
+* libgphoto2, libgphoto2-devel
 
 1.2 Install necessary libraries direct from the source
 --------------------------------------------------------------------------------

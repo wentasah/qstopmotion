@@ -19,6 +19,7 @@
  ******************************************************************************/
 
 #include "gstreamerv4l2grabber.h"
+#include "technical/grabber/grabberv4l2controller.h"
 
 #include "technical/util.h"
 
@@ -68,6 +69,8 @@ bool GstreamerV4L2Grabber::initialization(QVector<ImageGrabberDevice*> &devices)
     GValueArray *values_id = NULL;
     int device_size;
     ImageGrabberDevice *device = NULL;
+    GrabberV4L2Controller *deviceController = NULL;
+
 
     device_size = devices.size();
 
@@ -158,6 +161,20 @@ bool GstreamerV4L2Grabber::initialization(QVector<ImageGrabberDevice*> &devices)
                  }
                 // Add the device to the device list
                 devices.append(device);
+
+                // Create grabber controller
+                deviceController = new GrabberV4L2Controller(0);
+                if (deviceController->init(device->getDeviceId()))
+                {
+                    device->setController(deviceController);
+                }
+                else
+                {
+                    delete deviceController;
+                    deviceController = NULL;
+                }
+
+
                 qDebug() << "GstreamerV4L2Grabber::initialization --> device id " << i << " '" << devices[device_size]->getDeviceId() << "' (" << g_value_get_string(&value_id_string) << ")";
                 if (values_name != NULL) {
                     qDebug() << "GstreamerV4L2Grabber::initialization --> device name " << i << " '" << devices[device_size]->getDeviceName() << "' (" << g_value_get_string(&value_name_string) << ")";

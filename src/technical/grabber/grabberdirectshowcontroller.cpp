@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2012-2012 by                                                *
+ *  Copyright (C) 2012-2013 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -46,7 +46,7 @@ GrabberDirectShowController::~GrabberDirectShowController()
 }
 
 
-bool GrabberDirectShowController::init(const QString id)
+bool GrabberDirectShowController::init(const QString &id)
 {
     qDebug("GrabberDirectShowController::init --> Start");
 

@@ -21,6 +21,9 @@
 #ifndef GRABBERV4L2CONTROLLER_H
 #define GRABBERV4L2CONTROLLER_H
 
+#include <linux/videodev2.h>
+#include <libv4l2.h>
+
 #include "technical/grabber/grabbercontroller.h"
 
 
@@ -49,7 +52,7 @@ public:
      * @param id The ID of the device.
      * @return True if initialization is successful.
      */
-    bool init(const QString id);
+    bool init(const QString &id);
 
     /**************************************************************************
      **************************************************************************
@@ -65,25 +68,25 @@ public:
      * Get the current automatic brightness value of the device.
      * @return True if the automatic brightness is on.
      */
-    // bool getAutomaticBrightness();
+    bool getAutomaticBrightness();
 
     /**
      * Set the automatic brightness value of the device.
      * @param ab True if the automatic brightness will be switched on.
      */
-    // void setAutomaticBrightness(bool ab);
+    void setAutomaticBrightness(bool ab);
 
     /**
      * Get the current brightness value of the device.
      * @return The current brightness value.
      */
-    // int getBrightness();
+    int getBrightness();
 
     /**
      * Set the brightness value of the device.
      * @param b The new brightness value
      */
-    // void setBrightness(int b);
+    void setBrightness(int b);
 
     /**************************************************************************
      * Contrast
@@ -379,25 +382,25 @@ public:
      * Get the current automatic zoom value of the device.
      * @return True if the automatic zoom is on.
      */
-    bool getAutomaticZoom();
+    // bool getAutomaticZoom();
 
     /**
      * Set the automatic zoom value of the device.
      * @param az True if the automatic zoom will be switched on.
      */
-    void setAutomaticZoom(bool az);
+    // void setAutomaticZoom(bool az);
 
     /**
      * Get the current zoom value of the device.
      * @return The current zoom value.
      */
-    int getZoom();
+    // int getZoom();
 
     /**
      * Set the zoom value of the device.
      * @param z The new zoom value
      */
-    void setZoom(int z);
+    // void setZoom(int z);
 
     /**************************************************************************
      * Focus
@@ -435,25 +438,25 @@ public:
      * Get the current automatic pan value of the device.
      * @return True if the automatic pan is on.
      */
-    bool getAutomaticPan();
+    // bool getAutomaticPan();
 
     /**
      * Set the automatic pan value of the device.
      * @param ap True if the automatic pan will be switched on.
      */
-    void setAutomaticPan(bool ap);
+    // void setAutomaticPan(bool ap);
 
     /**
      * Get the current pan value of the device.
      * @return The current pan value.
      */
-    int getPan();
+    // int getPan();
 
     /**
      * Set the pan value of the device.
      * @param p The new pan value
      */
-    void setPan(int p);
+    // void setPan(int p);
 
     /**************************************************************************
      * Tilt
@@ -463,25 +466,25 @@ public:
      * Get the current automatic tilt value of the device.
      * @return True if the automatic tilt is on.
      */
-    bool getAutomaticTilt();
+    // bool getAutomaticTilt();
 
     /**
      * Set the automatic tilt value of the device.
      * @param at True if the automatic tilt will be switched on.
      */
-    void setAutomaticTilt(bool at);
+    // void setAutomaticTilt(bool at);
 
     /**
      * Get the current tilt value of the device.
      * @return The current tilt value.
      */
-    int getTilt();
+    // int getTilt();
 
     /**
      * Set the tilt value of the device.
      * @param t The new tilt value
      */
-    void setTilt(int t);
+    // void setTilt(int t);
 
     /**************************************************************************
      * Iris
@@ -540,9 +543,16 @@ public:
     // void setRoll(int r);
 
 private:
+    int                   fd;
+    struct v4l2_queryctrl queryctrl;
+    struct v4l2_querymenu querymenu;
+    int                   errno;
+
+
     // IAMCameraControl *pCameraControl;
     // IAMVideoProcAmp *pQualityControl;
 
+    void enumerate_menu();
     bool setControlCapabilities();
     bool setQualityCapabilities();
 

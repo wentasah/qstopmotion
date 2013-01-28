@@ -1,5 +1,5 @@
 Building qStopMotion using Qt-Creator IDE on Linux
-Last Change: 2012/01/09
+Last Change: 2013/01/18
 
 1. Preparation of the development environment
 ================================================================================
@@ -30,6 +30,9 @@ Last Change: 2012/01/09
   - gstreamer-ffmpeg-dev
   - gstreamer-ffmpeg-dbg
 * ffmpeg (Version >= 0.5.2)
+* libxml2, libxml2-dev, libxml-dbg
+* libv4l, libv4l-devel, v4l-utils, v4l-utils-dev
+* libgphoto2, libgphoto2-devel
 
 1.2 Qt Creator for Linux
 --------------------------------------------------------------------------------

@@ -62,7 +62,7 @@ public:
      * @param id The ID of the device.
      * @return True if initialization is successful.
      */
-    bool init(const QString id);
+    bool init(const QString &id);
 
     /**
      * Get the capabilities of the controller.

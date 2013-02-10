@@ -1,7 +1,7 @@
 ###############################################################################
 # CMake file for the qStopMotion project                                      #
 # (c) Ralf Lange, longsoft.de                                                 #
-# Last update: 2013-01-15                                                     #
+# Last update: 2013-01-29                                                     #
 #                                                                             #
 # Usage:                                                                      #
 #   * Qt-Creator (Windows, Linux)                                             #
@@ -364,6 +364,27 @@ ELSE(UNIX)
 ENDIF(UNIX)
 
 ###############################################################################
+# Video4Linux2 support
+#
+# (Only UNIX)
+#
+# used libraries: libv4l2
+###############################################################################
+
+IF(UNIX)
+
+    include(${CMAKE_SOURCE_DIR}/cmake/FindV4L2PkgConfig.cmake)
+    message("V4L2_INCLUDE_DIRS: ${V4L2_INCLUDE_DIRS}")
+    message("V4L2_LIBRARIES: ${V4L2_LIBRARIES}")
+
+ELSE(UNIX)
+
+    SET(V4L2_INCLUDE_DIRS)
+    SET(V4L2_LIBRARIES)
+
+ENDIF(UNIX)
+
+###############################################################################
 # DirectShow support
 #
 # (Only Windows)
@@ -394,6 +415,7 @@ include_directories(
     ${QT_QTXML_INCLUDE_DIR}
     ${GSTREAMER_INCLUDE_DIR}
     ${GPHOTO2_INCLUDE_DIR}
+    ${V4L2_INCLUDE_DIRS}
 )
 
 ###############################################################################
@@ -491,6 +513,7 @@ target_link_libraries(
     ${QT_QTXML_LIBRARIES}
     ${GSTREAMER_LIBRARIES}
     ${GPHOTO2_LIBRARIES}
+    ${V4L2_LIBRARIES}
     ${DIRECTSHOW_LIBRARIES}
 )
 

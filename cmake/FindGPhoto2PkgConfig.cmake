@@ -1,7 +1,7 @@
 ###############################################################################
-# CMake file to find the GStreamer files on the Linuc platform.               #
+# CMake file to find the GStreamer files on the Linux platform.               #
 # (c) Ralf Lange, longsoft.de                                                 #
-# Last update: 2012-07-24                                                     #
+# Last update: 2013-01-29                                                     #
 #                                                                             #
 ###############################################################################
 #

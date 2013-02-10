@@ -39,7 +39,8 @@ CameraControllerDialog::CameraControllerDialog(Frontend *f,
     frontend = f;
     grabberDevice = device;
     deviceId = grabberDevice->getDeviceId();
-    deviceId.remove(QChar(' '));   // Remove all spaces
+    deviceId.remove(QChar(' '));   // Remove all spaces (Windows)
+    deviceId.remove(QChar('/'));   // Remove all slashs (Linux)
     grabberController = device->getController();
     stepBrightness = -1;
     stepContrast = -1;
@@ -67,6 +68,7 @@ CameraControllerDialog::CameraControllerDialog(Frontend *f,
     qualityGroupBox = new QGroupBox(tr("Video Quality"));
     QVBoxLayout *qualityLayout = new QVBoxLayout;
     qualityGroupBox->setLayout(qualityLayout);
+    qualityCount = 0;
 
     brightnessCheckBox = new QCheckBox(tr("Automatic Pan"));
     brightnessCheckBox->setChecked(false);
@@ -181,6 +183,7 @@ CameraControllerDialog::CameraControllerDialog(Frontend *f,
     controlGroupBox = new QGroupBox(tr("Camera Control"));
     QVBoxLayout *controlLayout = new QVBoxLayout;
     controlGroupBox->setLayout(controlLayout);
+    controlCount = 0;
 
     exposureCheckBox = new QCheckBox(tr("Automatic Exposure"));
     exposureCheckBox->setChecked(false);
@@ -343,6 +346,7 @@ void CameraControllerDialog::init()
 
     capabilities = grabberController->getBrightnessCaps();
     if (capabilities->isAutomatic()) {
+        qualityCount++;
         brightnessCheckBox->show();
         if (preferences->getIntegerPreference(deviceId, "automaticbrightness", value)) {
             if (value == 1) {
@@ -359,12 +363,13 @@ void CameraControllerDialog::init()
         changeAutoBrightness(checked, false);
     }
     if (capabilities->isCapability()) {
+        qualityCount++;
         if (!capabilities->isAutomatic()) {
             brightnessLabel->show();
         }
         brightnessComboBox->show();
         stepBrightness = fillComboBox(brightnessComboBox, capabilities);
-        if (preferences->getIntegerPreference(deviceId, "brigthtness", value) == false) {
+        if (preferences->getIntegerPreference(deviceId, "brightness", value) == false) {
             // Calculate default value
             value = (capabilities->getDefault() - capabilities->getMinimum()) / capabilities->getStep();
         }
@@ -374,6 +379,7 @@ void CameraControllerDialog::init()
 
     capabilities = grabberController->getContrastCaps();
     if (capabilities->isAutomatic()) {
+        qualityCount++;
         contrastCheckBox->show();
         if (preferences->getIntegerPreference(deviceId, "automaticcontrast", value)) {
             if (value == 1) {
@@ -390,6 +396,7 @@ void CameraControllerDialog::init()
         changeAutoContrast(checked, false);
     }
     if (capabilities->isCapability()) {
+        qualityCount++;
         if (!capabilities->isAutomatic()) {
             contrastLabel->show();
         }
@@ -405,6 +412,7 @@ void CameraControllerDialog::init()
 
     capabilities = grabberController->getSaturationCaps();
     if (capabilities->isAutomatic()) {
+        qualityCount++;
         saturationCheckBox->show();
         if (preferences->getIntegerPreference(deviceId, "automaticsaturation", value)) {
             if (value == 1) {
@@ -421,6 +429,7 @@ void CameraControllerDialog::init()
         changeAutoSaturation(checked, false);
     }
     if (capabilities->isCapability()) {
+        qualityCount++;
         if (!capabilities->isAutomatic()) {
             saturationLabel->show();
         }
@@ -436,6 +445,7 @@ void CameraControllerDialog::init()
 
     capabilities = grabberController->getHueCaps();
     if (capabilities->isAutomatic()) {
+        qualityCount++;
         hueCheckBox->show();
         if (preferences->getIntegerPreference(deviceId, "automatichue", value)) {
             if (value == 1) {
@@ -452,6 +462,7 @@ void CameraControllerDialog::init()
         changeAutoHue(checked, false);
     }
     if (capabilities->isCapability()) {
+        qualityCount++;
         if (!capabilities->isAutomatic()) {
             hueLabel->show();
         }
@@ -467,6 +478,7 @@ void CameraControllerDialog::init()
 
     capabilities = grabberController->getGammaCaps();
     if (capabilities->isAutomatic()) {
+        qualityCount++;
         gammaCheckBox->show();
         if (preferences->getIntegerPreference(deviceId, "automaticgamma", value)) {
             if (value == 1) {
@@ -483,6 +495,7 @@ void CameraControllerDialog::init()
         changeAutoGamma(checked, false);
     }
     if (capabilities->isCapability()) {
+        qualityCount++;
         if (!capabilities->isAutomatic()) {
             gammaLabel->show();
         }
@@ -497,6 +510,7 @@ void CameraControllerDialog::init()
 
     capabilities = grabberController->getSharpnessCaps();
     if (capabilities->isAutomatic()) {
+        qualityCount++;
         sharpnessCheckBox->show();
         if (preferences->getIntegerPreference(deviceId, "automaticsharpness", value)) {
             if (value == 1) {
@@ -513,6 +527,7 @@ void CameraControllerDialog::init()
         changeAutoSharpness(checked, false);
     }
     if (capabilities->isCapability()) {
+        qualityCount++;
         if (!capabilities->isAutomatic()) {
             sharpnessLabel->show();
         }
@@ -528,6 +543,7 @@ void CameraControllerDialog::init()
 
     capabilities = grabberController->getBacklightCaps();
     if (capabilities->isAutomatic()) {
+        qualityCount++;
         backlightCheckBox->show();
         if (preferences->getIntegerPreference(deviceId, "automaticbacklight", value)) {
             if (value == 1) {
@@ -544,6 +560,7 @@ void CameraControllerDialog::init()
         changeAutoBacklight(checked, false);
     }
     if (capabilities->isCapability()) {
+        qualityCount++;
         if (!capabilities->isAutomatic()) {
             backlightLabel->show();
         }
@@ -559,6 +576,7 @@ void CameraControllerDialog::init()
 
     capabilities = grabberController->getWhiteCaps();
     if (capabilities->isAutomatic()) {
+        qualityCount++;
         whiteCheckBox->show();
         if (preferences->getIntegerPreference(deviceId, "automaticwhite", value)) {
             if (value == 1) {
@@ -575,6 +593,7 @@ void CameraControllerDialog::init()
         changeAutoWhite(checked, false);
     }
     if (capabilities->isCapability()) {
+        qualityCount++;
         if (!capabilities->isAutomatic()) {
             whiteLabel->show();
         }
@@ -590,6 +609,7 @@ void CameraControllerDialog::init()
 
     capabilities = grabberController->getGainCaps();
     if (capabilities->isAutomatic()) {
+        qualityCount++;
         gainCheckBox->show();
         if (preferences->getIntegerPreference(deviceId, "automaticgain", value)) {
             if (value == 1) {
@@ -606,6 +626,7 @@ void CameraControllerDialog::init()
         changeAutoGain(checked, false);
     }
     if (capabilities->isCapability()) {
+        qualityCount++;
         if (!capabilities->isAutomatic()) {
             gainLabel->show();
         }
@@ -621,6 +642,7 @@ void CameraControllerDialog::init()
 
     capabilities = grabberController->getColorCaps();
     if (capabilities->isAutomatic()) {
+        qualityCount++;
         colorCheckBox->show();
         if (preferences->getIntegerPreference(deviceId, "automaticcolor", value)) {
             if (value == 1) {
@@ -637,6 +659,7 @@ void CameraControllerDialog::init()
         changeAutoColor(checked, false);
     }
     if (capabilities->isCapability()) {
+        qualityCount++;
         if (!capabilities->isAutomatic()) {
             colorLabel->show();
         }
@@ -650,8 +673,13 @@ void CameraControllerDialog::init()
         changeColor(value, false);
     }
 
+    if (qualityCount == 0) {
+        qualityGroupBox->hide();
+    }
+
     capabilities = grabberController->getExposureCaps();
     if (capabilities->isAutomatic()) {
+        controlCount++;
         exposureCheckBox->show();
         if (preferences->getIntegerPreference(deviceId, "automaticexposure", value)) {
             if (value == 1) {
@@ -668,6 +696,7 @@ void CameraControllerDialog::init()
         changeAutoExposure(checked, false);
     }
     if (capabilities->isCapability()) {
+        controlCount++;
         if (!capabilities->isAutomatic()) {
             exposureLabel->show();
         }
@@ -683,6 +712,7 @@ void CameraControllerDialog::init()
 
     capabilities = grabberController->getZoomCaps();
     if (capabilities->isAutomatic()) {
+        controlCount++;
         zoomCheckBox->show();
         if (preferences->getIntegerPreference(deviceId, "automaticzoom", value)) {
             if (value == 1) {
@@ -699,6 +729,7 @@ void CameraControllerDialog::init()
         changeAutoZoom(checked, false);
     }
     if (capabilities->isCapability()) {
+        controlCount++;
         if (!capabilities->isAutomatic()) {
             zoomLabel->show();
         }
@@ -714,6 +745,7 @@ void CameraControllerDialog::init()
 
     capabilities = grabberController->getFocusCaps();
     if (capabilities->isAutomatic()) {
+        controlCount++;
         focusCheckBox->show();
         if (preferences->getIntegerPreference(deviceId, "automaticfocus", value)) {
             if (value == 1) {
@@ -730,6 +762,7 @@ void CameraControllerDialog::init()
         changeAutoFocus(checked, false);
     }
     if (capabilities->isCapability()) {
+        controlCount++;
         if (!capabilities->isAutomatic()) {
             focusLabel->show();
         }
@@ -745,6 +778,7 @@ void CameraControllerDialog::init()
 
     capabilities = grabberController->getPanCaps();
     if (capabilities->isAutomatic()) {
+        controlCount++;
         panCheckBox->show();
         if (preferences->getIntegerPreference(deviceId, "automaticpan", value)) {
             if (value == 1) {
@@ -761,6 +795,7 @@ void CameraControllerDialog::init()
         changeAutoPan(checked, false);
     }
     if (capabilities->isCapability()) {
+        controlCount++;
         if (!capabilities->isAutomatic()) {
             panLabel->show();
         }
@@ -777,6 +812,7 @@ void CameraControllerDialog::init()
 
     capabilities = grabberController->getTiltCaps();
     if (capabilities->isAutomatic()) {
+        controlCount++;
         tiltCheckBox->show();
         if (preferences->getIntegerPreference(deviceId, "automatictilt", value)) {
             if (value == 1) {
@@ -793,6 +829,7 @@ void CameraControllerDialog::init()
         changeAutoTilt(checked, false);
     }
     if (capabilities->isCapability()) {
+        controlCount++;
         if (!capabilities->isAutomatic()) {
             tiltLabel->show();
         }
@@ -809,6 +846,7 @@ void CameraControllerDialog::init()
 
     capabilities = grabberController->getIrisCaps();
     if (capabilities->isAutomatic()) {
+        controlCount++;
         irisCheckBox->show();
         if (preferences->getIntegerPreference(deviceId, "automaticiris", value)) {
             if (value == 1) {
@@ -825,6 +863,7 @@ void CameraControllerDialog::init()
         changeAutoIris(checked, false);
     }
     if (capabilities->isCapability()) {
+        controlCount++;
         if (!capabilities->isAutomatic()) {
             irisLabel->show();
         }
@@ -840,6 +879,7 @@ void CameraControllerDialog::init()
 
     capabilities = grabberController->getRollCaps();
     if (capabilities->isAutomatic()) {
+        controlCount++;
         rollCheckBox->show();
         if (preferences->getIntegerPreference(deviceId, "automaticroll", value)) {
             if (value == 1) {
@@ -856,6 +896,7 @@ void CameraControllerDialog::init()
         changeAutoRoll(checked, false);
     }
     if (capabilities->isCapability()) {
+        controlCount++;
         if (!capabilities->isAutomatic()) {
             rollLabel->show();
         }
@@ -867,6 +908,10 @@ void CameraControllerDialog::init()
         }
         rollComboBox->setCurrentIndex(value);
         changeRoll(value, false);
+    }
+
+    if (controlCount == 0) {
+        controlGroupBox->hide();
     }
 
     qDebug() << "CameraControllerDialog::init --> End";
@@ -920,7 +965,7 @@ void CameraControllerDialog::changeBrightness(int index, bool save)
     }
     grabberController->setBrightness(value);
     if (save) {
-        preferences->setIntegerPreference(deviceId, "brigthtness", index);
+        preferences->setIntegerPreference(deviceId, "brightness", index);
     }
 
     qDebug() << "CameraControllerDialog::changeBrightness --> End";

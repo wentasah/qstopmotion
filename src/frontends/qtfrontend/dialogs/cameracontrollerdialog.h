@@ -578,6 +578,7 @@ private:
     GrabberController  *grabberController;
 
     QGroupBox    *qualityGroupBox;
+    int           qualityCount;
 
     QCheckBox    *brightnessCheckBox;
     QLabel       *brightnessLabel;
@@ -630,6 +631,7 @@ private:
     int           stepColor;
 
     QGroupBox    *controlGroupBox;
+    int           controlCount;
 
     QCheckBox    *exposureCheckBox;
     QLabel       *exposureLabel;

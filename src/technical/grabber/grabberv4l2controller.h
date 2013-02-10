@@ -22,10 +22,42 @@
 #define GRABBERV4L2CONTROLLER_H
 
 #include <linux/videodev2.h>
-#include <libv4l2.h>
+#include <linux/uvcvideo.h>
 
 #include "technical/grabber/grabbercontroller.h"
 
+
+/*
+ * Dynamic controls
+ */
+
+#define V4L2_CID_BASE_EXTCTR                    0x0A046D01
+#define V4L2_CID_BASE_LOGITECH                  V4L2_CID_BASE_EXTCTR
+// #define V4L2_CID_PAN_RELATIVE_LOGITECH          V4L2_CID_BASE_LOGITECH
+// #define V4L2_CID_TILT_RELATIVE_LOGITECH         V4L2_CID_BASE_LOGITECH+1
+#define V4L2_CID_PANTILT_RESET_LOGITECH         V4L2_CID_BASE_LOGITECH+2
+
+// this should realy be replaced by V4L2_CID_FOCUS_ABSOLUTE in libwebcam
+#define V4L2_CID_FOCUS_LOGITECH                 V4L2_CID_BASE_LOGITECH+3
+#define V4L2_CID_LED1_MODE_LOGITECH             V4L2_CID_BASE_LOGITECH+4
+#define V4L2_CID_LED1_FREQUENCY_LOGITECH        V4L2_CID_BASE_LOGITECH+5
+#define V4L2_CID_DISABLE_PROCESSING_LOGITECH    V4L2_CID_BASE_LOGITECH+0x70
+#define V4L2_CID_RAW_BITS_PER_PIXEL_LOGITECH    V4L2_CID_BASE_LOGITECH+0x71
+#define V4L2_CID_LAST_EXTCTR                    V4L2_CID_RAW_BITS_PER_PIXEL_LOGITECH
+
+#define UVC_GUID_LOGITECH_VIDEO_PIPE        {0x82, 0x06, 0x61, 0x63, 0x70, 0x50, 0xab, 0x49, 0xb8, 0xcc, 0xb3, 0x85, 0x5e, 0x8d, 0x22, 0x50}
+#define UVC_GUID_LOGITECH_MOTOR_CONTROL     {0x82, 0x06, 0x61, 0x63, 0x70, 0x50, 0xab, 0x49, 0xb8, 0xcc, 0xb3, 0x85, 0x5e, 0x8d, 0x22, 0x56}
+#define UVC_GUID_LOGITECH_USER_HW_CONTROL   {0x82, 0x06, 0x61, 0x63, 0x70, 0x50, 0xab, 0x49, 0xb8, 0xcc, 0xb3, 0x85, 0x5e, 0x8d, 0x22, 0x1f}
+
+#define XU_HW_CONTROL_LED1                  1
+#define XU_MOTORCONTROL_PANTILT_RELATIVE    1
+#define XU_MOTORCONTROL_PANTILT_RESET       2
+#define XU_MOTORCONTROL_FOCUS               3
+#define XU_COLOR_PROCESSING_DISABLE         5
+#define XU_RAW_DATA_BITS_PER_PIXEL          8
+
+//set ioctl retries to 4 - linux uvc as increased timeout from 1000 to 3000 ms
+#define IOCTL_RETRY 4
 
 /**
  * Interface to the controller of a device.
@@ -35,6 +67,8 @@
 class GrabberV4L2Controller : public GrabberController
 {
 public:
+
+    // static struct uvc_xu_control_mapping xu_mappings[];
 
     /**
      * Constructs and initializes the object.
@@ -96,25 +130,25 @@ public:
      * Get the current automatic contrast value of the device.
      * @return True if the automatic contrast is on.
      */
-    // bool getAutomaticContrast();
+    bool getAutomaticContrast();
 
     /**
      * Set the automatic contrast value of the device.
      * @param ac True if the automatic contrast will be switched on.
      */
-    // void setAutomaticContrast(bool ac);
+    void setAutomaticContrast(bool ac);
 
     /**
      * Get the current contrast value of the device.
      * @return The current contrast value.
      */
-    // int getContrast();
+    int getContrast();
 
     /**
      * Set the contrast value of the device.
      * @param c The new contrast value
      */
-    // void setContrast(int c);
+    void setContrast(int c);
 
     /**************************************************************************
      * Saturation
@@ -546,15 +580,26 @@ private:
     int                   fd;
     struct v4l2_queryctrl queryctrl;
     struct v4l2_querymenu querymenu;
-    int                   errno;
 
 
     // IAMCameraControl *pCameraControl;
     // IAMVideoProcAmp *pQualityControl;
 
+    /**
+     * ioctl with a number of retries in the case of failure
+     * @param fd Device descriptor
+     * @param IOCTL_X ioctl reference
+     * @param arg Pointer to ioctl data
+     * @return ioctl result
+     */
+    int xioctl(int fd, int IOCTL_X, void *arg);
+
+    int  initDynCtrls(int fd);
     void enumerate_menu();
-    bool setControlCapabilities();
-    bool setQualityCapabilities();
+    void getControlData(GrabberControlCapabilities *caps);
+    void getControlFlag(GrabberControlCapabilities *caps, int id);
+    bool setBaseCapabilities();
+    bool setPrivateCapabilities();
 
 };
 

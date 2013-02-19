@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2012-2012 by                                                *
+ *  Copyright (C) 2012-2013 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -23,6 +23,7 @@
 
 GrabberControlCapabilities::GrabberControlCapabilities()
 {
+    id       = 0;
     minimum  = 0L;
     maximum  = 0L;
     step     = 0L;
@@ -52,6 +53,18 @@ bool GrabberControlCapabilities::isAutomatic()
     }
 
     return false;
+}
+
+
+unsigned int GrabberControlCapabilities::getId()
+{
+    return id;
+}
+
+
+void GrabberControlCapabilities::setId(unsigned int i)
+{
+    id = i;
 }
 
 

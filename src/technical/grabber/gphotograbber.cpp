@@ -20,9 +20,6 @@
 
 #include "gphotograbber.h"
 
-// gPhoto2 is only available on X11 systems!!
-#ifdef Q_WS_X11
-
 #include "technical/grabber/imagegrabberdevice.h"
 #include "technical/util.h"
 
@@ -266,5 +263,3 @@ void GphotoGrabber::errordumper(GPLogLevel level,
     vfprintf(stdout, format, args);
     fprintf(stdout, "\n");
 }
-
-#endif  // X11

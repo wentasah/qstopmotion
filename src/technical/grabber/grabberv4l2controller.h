@@ -22,41 +22,11 @@
 #define GRABBERV4L2CONTROLLER_H
 
 #include <linux/videodev2.h>
-#include <linux/uvcvideo.h>
 
 #include "technical/grabber/grabbercontroller.h"
 
 
-/*
- * Dynamic controls
- */
-
-#define V4L2_CID_BASE_EXTCTR                    0x0A046D01
-#define V4L2_CID_BASE_LOGITECH                  V4L2_CID_BASE_EXTCTR
-// #define V4L2_CID_PAN_RELATIVE_LOGITECH          V4L2_CID_BASE_LOGITECH
-// #define V4L2_CID_TILT_RELATIVE_LOGITECH         V4L2_CID_BASE_LOGITECH+1
-#define V4L2_CID_PANTILT_RESET_LOGITECH         V4L2_CID_BASE_LOGITECH+2
-
-// this should realy be replaced by V4L2_CID_FOCUS_ABSOLUTE in libwebcam
-#define V4L2_CID_FOCUS_LOGITECH                 V4L2_CID_BASE_LOGITECH+3
-#define V4L2_CID_LED1_MODE_LOGITECH             V4L2_CID_BASE_LOGITECH+4
-#define V4L2_CID_LED1_FREQUENCY_LOGITECH        V4L2_CID_BASE_LOGITECH+5
-#define V4L2_CID_DISABLE_PROCESSING_LOGITECH    V4L2_CID_BASE_LOGITECH+0x70
-#define V4L2_CID_RAW_BITS_PER_PIXEL_LOGITECH    V4L2_CID_BASE_LOGITECH+0x71
-#define V4L2_CID_LAST_EXTCTR                    V4L2_CID_RAW_BITS_PER_PIXEL_LOGITECH
-
-#define UVC_GUID_LOGITECH_VIDEO_PIPE        {0x82, 0x06, 0x61, 0x63, 0x70, 0x50, 0xab, 0x49, 0xb8, 0xcc, 0xb3, 0x85, 0x5e, 0x8d, 0x22, 0x50}
-#define UVC_GUID_LOGITECH_MOTOR_CONTROL     {0x82, 0x06, 0x61, 0x63, 0x70, 0x50, 0xab, 0x49, 0xb8, 0xcc, 0xb3, 0x85, 0x5e, 0x8d, 0x22, 0x56}
-#define UVC_GUID_LOGITECH_USER_HW_CONTROL   {0x82, 0x06, 0x61, 0x63, 0x70, 0x50, 0xab, 0x49, 0xb8, 0xcc, 0xb3, 0x85, 0x5e, 0x8d, 0x22, 0x1f}
-
-#define XU_HW_CONTROL_LED1                  1
-#define XU_MOTORCONTROL_PANTILT_RELATIVE    1
-#define XU_MOTORCONTROL_PANTILT_RESET       2
-#define XU_MOTORCONTROL_FOCUS               3
-#define XU_COLOR_PROCESSING_DISABLE         5
-#define XU_RAW_DATA_BITS_PER_PIXEL          8
-
-//set ioctl retries to 4 - linux uvc as increased timeout from 1000 to 3000 ms
+// set ioctl retries to 4 - linux uvc as increased timeout from 1000 to 3000 ms
 #define IOCTL_RETRY 4
 
 /**
@@ -130,13 +100,13 @@ public:
      * Get the current automatic contrast value of the device.
      * @return True if the automatic contrast is on.
      */
-    bool getAutomaticContrast();
+    // bool getAutomaticContrast();
 
     /**
      * Set the automatic contrast value of the device.
      * @param ac True if the automatic contrast will be switched on.
      */
-    void setAutomaticContrast(bool ac);
+    // void setAutomaticContrast(bool ac);
 
     /**
      * Get the current contrast value of the device.
@@ -170,13 +140,13 @@ public:
      * Get the current saturation value of the device.
      * @return The current saturation value.
      */
-    // int getSaturation();
+    int getSaturation();
 
     /**
      * Set the saturation value of the device.
      * @param s The new saturation value
      */
-    // void setSaturation(int s);
+    void setSaturation(int s);
 
     /**************************************************************************
      * Hue
@@ -186,25 +156,25 @@ public:
      * Get the current automatic hue value of the device.
      * @return True if the automatic hue is on.
      */
-    // bool getAutomaticHue();
+    bool getAutomaticHue();
 
     /**
      * Set the automatic hue value of the device.
      * @param ah True if the automatic hue will be switched on.
      */
-    // void setAutomaticHue(bool ah);
+    void setAutomaticHue(bool ah);
 
     /**
      * Get the current hue value of the device.
      * @return The current hue value.
      */
-    // int getHue();
+    int getHue();
 
     /**
      * Set the hue value of the device.
      * @param h The new hue value
      */
-    // void setHue(int h);
+    void setHue(int h);
 
     /**************************************************************************
      * Gamma
@@ -226,13 +196,13 @@ public:
      * Get the current gamma value of the device.
      * @return The current gamma value.
      */
-    // int getGamma();
+    int getGamma();
 
     /**
      * Set the gamma value of the device.
      * @param g The new gamma value
      */
-    // void setGamma(int g);
+    void setGamma(int g);
 
     /**************************************************************************
      * Sharpness
@@ -254,13 +224,13 @@ public:
      * Get the current sharpness value of the device.
      * @return The current sharpness value.
      */
-    // int getSharpness();
+    int getSharpness();
 
     /**
      * Set the sharpness value of the device.
      * @param s The new sharpness value
      */
-    // void setSharpness(int s);
+    void setSharpness(int s);
 
     /**************************************************************************
      * Backlight Compensation
@@ -282,13 +252,13 @@ public:
      * Get the current backlight compensation value of the device.
      * @return The current backlight compensation value.
      */
-    // int getBacklight();
+    int getBacklight();
 
     /**
      * Set the backlight compensation value of the device.
      * @param b The new backlight compensation value
      */
-    // void setBacklight(int b);
+    void setBacklight(int b);
 
     /**************************************************************************
      * White Balance
@@ -298,25 +268,25 @@ public:
      * Get the current automatic white balance value of the device.
      * @return True if the automatic white balance is on.
      */
-    // bool getAutomaticWhite();
+    bool getAutomaticWhite();
 
     /**
      * Set the automatic white balance value of the device.
      * @param ae True if the automatic white balance will be switched on.
      */
-    // void setAutomaticWhite(bool ae);
+    void setAutomaticWhite(bool ae);
 
     /**
      * Get the current white balance value of the device.
      * @return The current white balance value.
      */
-    // int getWhite();
+    int getWhite();
 
     /**
      * Set the white balance value of the device.
      * @param w The new white balance value
      */
-    // void setWhite(int w);
+    void setWhite(int w);
 
     /**************************************************************************
      * Gain
@@ -326,25 +296,25 @@ public:
      * Get the current automatic gain value of the device.
      * @return True if the automatic gain is on.
      */
-    // bool getAutomaticGain();
+    bool getAutomaticGain();
 
     /**
      * Set the automatic gain value of the device.
      * @param ag True if the automatic gain will be switched on.
      */
-    // void setAutomaticGain(bool ag);
+    void setAutomaticGain(bool ag);
 
     /**
      * Get the current gain value of the device.
      * @return The current gain value.
      */
-    // int getGain();
+    int getGain();
 
     /**
      * Set the gain value of the device.
      * @param g The new gain value
      */
-    // void setGain(int g);
+    void setGain(int g);
 
     /**************************************************************************
      * Color Enable
@@ -366,13 +336,13 @@ public:
      * Get the current color enable value of the device.
      * @return The current color enable value.
      */
-    // int getColor();
+    int getColor();
 
     /**
      * Set the color enable value of the device.
      * @param c The new color enable value
      */
-    // void setColor(int c);
+    void setColor(int c);
 
     /**************************************************************************
      **************************************************************************
@@ -388,25 +358,25 @@ public:
      * Get the current automatic exposure value of the device.
      * @return True if the automatic exposure is on.
      */
-    // bool getAutomaticExposure();
+    bool getAutomaticExposure();
 
     /**
      * Set the automatic exposure value of the device.
      * @param ae True if the automatic exposure will be switched on.
      */
-    // void setAutomaticExposure(bool ae);
+    void setAutomaticExposure(bool ae);
 
     /**
      * Get the current exposure value of the device.
      * @return The current exposure value.
      */
-    // int getExposure();
+    int getExposure();
 
     /**
      * Set the exposure value of the device.
      * @param e The new exposure value
      */
-    // void setExposure(int e);
+    void setExposure(int e);
 
     /**************************************************************************
      * Zoom
@@ -585,6 +555,8 @@ private:
     // IAMCameraControl *pCameraControl;
     // IAMVideoProcAmp *pQualityControl;
 
+    int query_ioctl(int hdevice, int current_ctrl, struct v4l2_queryctrl *ctrl);
+
     /**
      * ioctl with a number of retries in the case of failure
      * @param fd Device descriptor
@@ -594,10 +566,9 @@ private:
      */
     int xioctl(int fd, int IOCTL_X, void *arg);
 
-    int  initDynCtrls(int fd);
     void enumerate_menu();
-    void getControlData(GrabberControlCapabilities *caps);
-    void getControlFlag(GrabberControlCapabilities *caps, int id);
+    void getControlData(GrabberControlCapabilities *caps, unsigned int id);
+    void getControlFlag(GrabberControlCapabilities *caps, unsigned int id);
     bool setBaseCapabilities();
     bool setPrivateCapabilities();
 

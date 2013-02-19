@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2012-2012 by                                                *
+ *  Copyright (C) 2012-2013 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -65,6 +65,18 @@ public:
     bool isAutomatic();
 
     /**
+     * Get the id of the control
+     * @return The id of the control.
+     */
+    unsigned int getId();
+
+    /**
+     * Set the id of the control
+     * @param i The new id of the control.
+     */
+    void setId(unsigned int i);
+
+    /**
      * Get the minimum value of the control
      * @return The minimum value of the control.
      */
@@ -126,11 +138,12 @@ public:
 
 private:
 
-    long minimum;
-    long maximum;
-    long step;
-    long defaultt;
-    long flags;
+    unsigned int  id;
+    long          minimum;
+    long          maximum;
+    long          step;
+    long          defaultt;
+    long          flags;
 
 };
 

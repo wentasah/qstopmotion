@@ -23,9 +23,6 @@
 
 #include "technical/grabber/imagegrabber.h"
 
-// gPhoto2 is only available on X11 systems!!
-#ifdef Q_WS_X11
-
 // Include files of the gphoto library
 #include <gphoto2/gphoto2.h>
 
@@ -112,7 +109,5 @@ private:
     QImage liveImage;
     QImage rawImage;
 };
-
-#endif    // X11
 
 #endif

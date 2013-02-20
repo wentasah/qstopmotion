@@ -23,12 +23,13 @@
 
 GrabberControlCapabilities::GrabberControlCapabilities()
 {
-    id       = 0;
-    minimum  = 0L;
-    maximum  = 0L;
-    step     = 0L;
-    defaultt = 0L;
-    flags    = control_none;
+    ctrl_id    = 0;
+    ctrl_class = 0;
+    minimum    = 0L;
+    maximum    = 0L;
+    step       = 0L;
+    defaultt   = 0L;
+    flags      = control_none;
 }
 
 
@@ -56,15 +57,39 @@ bool GrabberControlCapabilities::isAutomatic()
 }
 
 
-unsigned int GrabberControlCapabilities::getId()
+unsigned int GrabberControlCapabilities::getControlId()
 {
-    return id;
+    return ctrl_id;
 }
 
 
-void GrabberControlCapabilities::setId(unsigned int i)
+void GrabberControlCapabilities::setControlId(unsigned int id)
 {
-    id = i;
+    ctrl_id = id;
+}
+
+
+unsigned int GrabberControlCapabilities::getControlClass()
+{
+    return ctrl_class;
+}
+
+
+void GrabberControlCapabilities::setControlClass(unsigned int cl)
+{
+    ctrl_class = cl;
+}
+
+
+unsigned int GrabberControlCapabilities::getControlType()
+{
+    return ctrl_type;
+}
+
+
+void GrabberControlCapabilities::setControlType(unsigned int ct)
+{
+    ctrl_type = ct;
 }
 
 

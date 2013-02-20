@@ -173,9 +173,11 @@ void GrabberV4L2Controller::enumerate_menu ()
 }
 
 
-void GrabberV4L2Controller::getControlData(GrabberControlCapabilities *caps, unsigned int id)
+void GrabberV4L2Controller::getControlData(GrabberControlCapabilities *caps, long flags)
 {
-    caps->setId(id);
+    caps->setControlId(queryctrl.id);
+    caps->setControlType(queryctrl.type);
+    caps->setFlags(flags);
 
     switch (queryctrl.type) {
     case V4L2_CTRL_TYPE_MENU:
@@ -187,7 +189,6 @@ void GrabberV4L2Controller::getControlData(GrabberControlCapabilities *caps, uns
         caps->setStep(queryctrl.step);
         caps->setDefault(queryctrl.default_value);
         caps->setFlags(GrabberControlCapabilities::control_Manual);
-
         break;
     // case V4L2_CTRL_TYPE_INTEGER_MENU:   // Not defined on Debian systems
     case V4L2_CTRL_TYPE_INTEGER64:
@@ -203,12 +204,12 @@ void GrabberV4L2Controller::getControlData(GrabberControlCapabilities *caps, uns
 }
 
 
-void GrabberV4L2Controller::getControlFlag(GrabberControlCapabilities *caps, unsigned int id)
+void GrabberV4L2Controller::getControlFlag(GrabberControlCapabilities *caps)
 {
     int                 ret = 0;
     struct v4l2_control ctrl;
 
-    ctrl.id = id;
+    ctrl.id = queryctrl.id;
     ctrl.value = 0;
     ret = xioctl(fd, VIDIOC_G_CTRL, &ctrl);
     if (ret != 0) {
@@ -228,8 +229,10 @@ bool GrabberV4L2Controller::setBaseCapabilities()
 {
     qDebug("GrabberV4L2Controller::setBaseCapabilities --> Start");
 
-    int ret = 0;
-    int currentctrl = 0;
+    int                         ret = 0;
+    int                         currentctrl = 0;
+    GrabberControlCapabilities *caps = NULL;
+    int                         flags = 0;
 
     queryctrl.id = 0 | V4L2_CTRL_FLAG_NEXT_CTRL;
     ret = query_ioctl(fd, currentctrl, &queryctrl);
@@ -271,91 +274,147 @@ bool GrabberV4L2Controller::setBaseCapabilities()
                 enumerate_menu ();
             }
 
+            caps = NULL;
+            flags = GrabberControlCapabilities::control_none;
+
             switch (queryctrl.id) {
             case V4L2_CID_BRIGHTNESS:
-                getControlData(getBrightnessCaps(), V4L2_CID_BRIGHTNESS);
+                caps = getBrightnessCaps();
+                getControlData(caps, flags);
+                caps->setControlClass(caps->getControlId() & 0xFFFF0000);
                 break;
             case V4L2_CID_AUTOBRIGHTNESS:
-                getControlFlag(getBrightnessCaps(), V4L2_CID_AUTOBRIGHTNESS);
+                getControlFlag(getBrightnessCaps());
                 break;
             case V4L2_CID_CONTRAST:
-                getControlData(getContrastCaps(), V4L2_CID_CONTRAST);
+                caps = getContrastCaps();
+                getControlData(caps, flags);
+                caps->setControlClass(caps->getControlId() & 0xFFFF0000);
                 break;
             case V4L2_CID_SATURATION:
-                getControlData(getSaturationCaps(), V4L2_CID_SATURATION);
+                caps = getSaturationCaps();
+                getControlData(caps, flags);
+                caps->setControlClass(caps->getControlId() & 0xFFFF0000);
                 break;
             case V4L2_CID_HUE:
-                getControlData(getHueCaps(), V4L2_CID_HUE);
+                caps = getHueCaps();
+                getControlData(caps, flags);
+                caps->setControlClass(caps->getControlId() & 0xFFFF0000);
                 break;
             case V4L2_CID_HUE_AUTO:
-                getControlFlag(getHueCaps(), V4L2_CID_HUE_AUTO);
+                getControlFlag(getHueCaps());
                 break;
             case V4L2_CID_GAMMA:
-                getControlData(getGammaCaps(), V4L2_CID_GAMMA);
+                caps = getGammaCaps();
+                getControlData(caps, flags);
+                caps->setControlClass(caps->getControlId() & 0xFFFF0000);
                 break;
             case V4L2_CID_SHARPNESS:
-                getControlData(getSharpnessCaps(), V4L2_CID_SHARPNESS);
+                caps = getSharpnessCaps();
+                getControlData(caps, flags);
+                caps->setControlClass(caps->getControlId() & 0xFFFF0000);
                 break;
             case V4L2_CID_BACKLIGHT_COMPENSATION:
-                getControlData(getBacklightCaps(), V4L2_CID_BACKLIGHT_COMPENSATION);
+                caps = getBacklightCaps();
+                getControlData(caps, flags);
+                caps->setControlClass(caps->getControlId() & 0xFFFF0000);
                 break;
             case V4L2_CID_WHITE_BALANCE_TEMPERATURE:
-                getControlData(getWhiteCaps(), V4L2_CID_WHITE_BALANCE_TEMPERATURE);
+                caps = getWhiteCaps();
+                getControlData(caps, flags);
+                caps->setControlClass(caps->getControlId() & 0xFFFF0000);
                 break;
             case V4L2_CID_AUTO_WHITE_BALANCE:
-                getControlFlag(getWhiteCaps(), V4L2_CID_AUTO_WHITE_BALANCE);
+                getControlFlag(getWhiteCaps());
                 break;
             case V4L2_CID_GAIN:
-                getControlData(getGainCaps(), V4L2_CID_GAIN);
+                caps = getGainCaps();
+                getControlData(caps, flags);
+                caps->setControlClass(caps->getControlId() & 0xFFFF0000);
                 break;
             case V4L2_CID_AUTOGAIN:
-                getControlFlag(getGainCaps(), V4L2_CID_AUTOGAIN);
+                getControlFlag(getGainCaps());
                 break;
             case V4L2_CID_COLOR_KILLER:
-                getControlData(getColorCaps(), V4L2_CID_COLOR_KILLER);
+                caps = getColorCaps();
+                getControlData(caps, flags);
+                caps->setControlClass(caps->getControlId() & 0xFFFF0000);
                 break;
             case V4L2_CID_EXPOSURE:
-                getControlData(getExposureCaps(), V4L2_CID_EXPOSURE);
+                caps = getExposureCaps();
+                getControlData(caps, flags);
+                caps->setControlClass(caps->getControlId() & 0xFFFF0000);
                 break;
             case V4L2_CID_EXPOSURE_ABSOLUTE:         // "Exposure (Absolute)"
-                getControlData(getExposureCaps(), V4L2_CID_EXPOSURE_ABSOLUTE);
+                caps = getExposureCaps();
+                flags = GrabberController::controller_Absolute;
+                getControlData(caps, flags);
+                caps->setControlClass(caps->getControlId() & 0xFFFF0000);
                 break;
             case V4L2_CID_EXPOSURE_AUTO:             // "Exposure, Auto"
-                getControlFlag(getExposureCaps(), V4L2_CID_EXPOSURE_AUTO);
+                getControlFlag(getExposureCaps());
                 break;
             case V4L2_CID_ZOOM_ABSOLUTE:             // "Zool, Absolute"
-                getControlData(getZoomCaps(), V4L2_CID_ZOOM_ABSOLUTE);
+                caps = getZoomCaps();
+                flags = GrabberController::controller_Absolute;
+                getControlData(caps, flags);
+                caps->setControlClass(caps->getControlId() & 0xFFFF0000);
                 break;
             case V4L2_CID_ZOOM_RELATIVE:             // "Zool, Relative"
-                getControlData(getZoomCaps(), V4L2_CID_ZOOM_RELATIVE);
+                caps = getZoomCaps();
+                flags = GrabberController::controller_Relative;
+                getControlData(caps, flags);
+                caps->setControlClass(caps->getControlId() & 0xFFFF0000);
                 break;
             case V4L2_CID_ZOOM_CONTINUOUS:           // "Zool, Continuous"
-                getControlData(getZoomCaps(), V4L2_CID_ZOOM_CONTINUOUS);
+                caps = getZoomCaps();
+                getControlData(caps, flags);
+                caps->setControlClass(caps->getControlId() & 0xFFFF0000);
                 break;
             case V4L2_CID_FOCUS_ABSOLUTE:            // "Focus (absolute)"
-                getControlData(getFocusCaps(), V4L2_CID_FOCUS_ABSOLUTE);
+                caps = getFocusCaps();
+                flags = GrabberController::controller_Absolute;
+                getControlData(caps, flags);
+                caps->setControlClass(caps->getControlId() & 0xFFFF0000);
                 break;
             case V4L2_CID_FOCUS_RELATIVE:            // "Focus (relative)"
-                getControlData(getFocusCaps(), V4L2_CID_FOCUS_RELATIVE);
+                caps = getFocusCaps();
+                flags = GrabberController::controller_Relative;
+                getControlData(caps, flags);
+                caps->setControlClass(caps->getControlId() & 0xFFFF0000);
                 break;
             case V4L2_CID_FOCUS_AUTO:                // "Focus, Auto"
-                getControlFlag(getExposureCaps(), V4L2_CID_EXPOSURE_AUTO);
+                getControlFlag(getExposureCaps());
                 break;
             case V4L2_CID_PAN_ABSOLUTE:
-                getControlData(getPanCaps(), V4L2_CID_PAN_ABSOLUTE);
+                caps = getPanCaps();
+                flags = GrabberController::controller_Absolute;
+                getControlData(caps, flags);
+                caps->setControlClass(caps->getControlId() & 0xFFFF0000);
                 break;
             case V4L2_CID_PAN_RELATIVE:
-                getControlData(getPanCaps(), V4L2_CID_PAN_RELATIVE);
+                caps = getPanCaps();
+                flags = GrabberController::controller_Relative;
+                getControlData(caps, flags);
+                caps->setControlClass(caps->getControlId() & 0xFFFF0000);
                 break;
             case V4L2_CID_TILT_ABSOLUTE:
-                getControlData(getTiltCaps(), V4L2_CID_TILT_ABSOLUTE);
+                caps = getTiltCaps();
+                flags = GrabberController::controller_Absolute;
+                getControlData(caps, flags);
+                caps->setControlClass(caps->getControlId() & 0xFFFF0000);
                 break;
             case V4L2_CID_TILT_RELATIVE:
-                getControlData(getTiltCaps(), V4L2_CID_TILT_RELATIVE);
+                caps = getTiltCaps();
+                flags = GrabberController::controller_Relative;
+                getControlData(caps, flags);
+                caps->setControlClass(caps->getControlId() & 0xFFFF0000);
                 break;
             default:
                 qDebug() << "GrabberV4L2Controller::setBaseCapabilities --> Not Supported Base Control: " << (char*)(queryctrl.name) << " (" << queryctrl.id << ")" << (queryctrl.id & 0xFFFF0000);
             }
+
+
 next_control:
             queryctrl.id |= V4L2_CTRL_FLAG_NEXT_CTRL;
 
@@ -388,55 +447,81 @@ next_control:
             enumerate_menu ();
         }
 
+        caps = NULL;
+        flags = GrabberControlCapabilities::control_none;
+
         switch (queryctrl.id) {
         case V4L2_CID_BRIGHTNESS:
-            getControlData(getBrightnessCaps(), V4L2_CID_BRIGHTNESS);
+            caps = getBrightnessCaps();
+            getControlData(caps, flags);
+            caps->setControlClass(V4L2_CTRL_CLASS_USER);
             break;
         case V4L2_CID_AUTOBRIGHTNESS:
-            getControlFlag(getBrightnessCaps(), V4L2_CID_AUTOBRIGHTNESS);
+            getControlFlag(getBrightnessCaps());
             break;
         case V4L2_CID_CONTRAST:
-            getControlData(getContrastCaps(), V4L2_CID_CONTRAST);
+            caps = getContrastCaps();
+            getControlData(caps, flags);
+            caps->setControlClass(V4L2_CTRL_CLASS_USER);
             break;
         case V4L2_CID_SATURATION:
-            getControlData(getSaturationCaps(), V4L2_CID_SATURATION);
+            caps = getSaturationCaps();
+            getControlData(caps, flags);
+            caps->setControlClass(V4L2_CTRL_CLASS_USER);
             break;
         case V4L2_CID_HUE:
-            getControlData(getHueCaps(), V4L2_CID_HUE);
+            caps = getHueCaps();
+            getControlData(caps, flags);
+            caps->setControlClass(V4L2_CTRL_CLASS_USER);
             break;
         case V4L2_CID_HUE_AUTO:
-            getControlFlag(getHueCaps(), V4L2_CID_HUE_AUTO);
+            getControlFlag(getHueCaps());
             break;
         case V4L2_CID_GAMMA:
-            getControlData(getGammaCaps(), V4L2_CID_GAMMA);
+            caps = getGammaCaps();
+            getControlData(caps, flags);
+            caps->setControlClass(V4L2_CTRL_CLASS_USER);
             break;
         case V4L2_CID_SHARPNESS:
-            getControlData(getSharpnessCaps(), V4L2_CID_SHARPNESS);
+            caps = getSharpnessCaps();
+            getControlData(caps, flags);
+            caps->setControlClass(V4L2_CTRL_CLASS_USER);
             break;
         case V4L2_CID_BACKLIGHT_COMPENSATION:
-            getControlData(getBacklightCaps(), V4L2_CID_BACKLIGHT_COMPENSATION);
+            caps = getBacklightCaps();
+            getControlData(caps, flags);
+            caps->setControlClass(V4L2_CTRL_CLASS_USER);
             break;
         case V4L2_CID_WHITE_BALANCE_TEMPERATURE:
-            getControlData(getWhiteCaps(), V4L2_CID_WHITE_BALANCE_TEMPERATURE);
+            caps = getWhiteCaps();
+            getControlData(caps, flags);
+            caps->setControlClass(V4L2_CTRL_CLASS_USER);
             break;
         case V4L2_CID_AUTO_WHITE_BALANCE:
-            getControlFlag(getWhiteCaps(), V4L2_CID_AUTO_WHITE_BALANCE);
+            getControlFlag(getWhiteCaps());
             break;
         case V4L2_CID_GAIN:
-            getControlData(getGainCaps(), V4L2_CID_GAIN);
+            caps = getGainCaps();
+            getControlData(caps, flags);
+            caps->setControlClass(V4L2_CTRL_CLASS_USER);
             break;
         case V4L2_CID_AUTOGAIN:
-            getControlFlag(getGainCaps(), V4L2_CID_AUTOGAIN);
+            getControlFlag(getGainCaps());
             break;
         case V4L2_CID_COLOR_KILLER:
-            getControlData(getColorCaps(), V4L2_CID_COLOR_KILLER);
+            caps = getColorCaps();
+            getControlData(caps, flags);
+            caps->setControlClass(V4L2_CTRL_CLASS_USER);
             break;
         case V4L2_CID_EXPOSURE:                  // "Exposure (Absolute)"
-            getControlData(getExposureCaps(), V4L2_CID_EXPOSURE);
+            caps = getExposureCaps();
+            getControlData(caps, flags);
+            caps->setControlClass(V4L2_CTRL_CLASS_USER);
             break;
         default:
             qDebug() << "GrabberV4L2Controller::setBaseCapabilities --> Not Supported Base Control: " << (char*)(queryctrl.name) << " (" << queryctrl.id << ")" << (queryctrl.id & 0xFFFF0000);
         }
+
     }
 
     qDebug("GrabberV4L2Controller::setBaseCapabilities --> End V4L2_CID_BASE");
@@ -464,24 +549,39 @@ bool GrabberV4L2Controller::setPrivateCapabilities()
 
         qDebug() << "GrabberV4L2Controller::setPrivateCapabilities --> Private Control: " << (char*)(queryctrl.name);
 /*
+        caps = NULL;
+        flags = GrabberControlCapabilities::control_none;
+
         switch (queryctrl.id) {
         case V4L2_CID_ZOOM:
-            getControlData(getZoomCaps());
+            caps = getZoomCaps();
+            getControlData(caps, flags);
+            caps->setControlClass(V4L2_CTRL_CLASS_USER);
             break;
         case V4L2_CID_FOCUS:
-            getControlData(getFocusCaps());
+            caps = getFocusCaps();
+            getControlData(caps, flags);
+            caps->setControlClass(V4L2_CTRL_CLASS_USER);
             break;
         case V4L2_CID_PAN:
-            getControlData(getPanCaps());
+            caps = getPanCaps();
+            getControlData(caps, flags);
+            caps->setControlClass(V4L2_CTRL_CLASS_USER);
             break;
         case V4L2_CID_TILT:
-            getControlData(getTiltCaps());
+            caps = getTiltCaps();
+            getControlData(caps, flags);
+            caps->setControlClass(V4L2_CTRL_CLASS_USER);
             break;
         case V4L2_CID_ITIS:
-            getControlData(getIrisCaps());
+            caps = getIrisCaps();
+            getControlData(caps, flags);
+            caps->setControlClass(V4L2_CTRL_CLASS_USER);
             break;
         case V4L2_CID_ROLL:
-            getControlData(getRollCaps());
+            caps = getRollCaps();
+            getControlData(caps, flags);
+            caps->setControlClass(V4L2_CTRL_CLASS_USER);
             break;
         default:
             qDebug() << "GrabberV4L2Controller::setPrivateCapabilities --> Not Supported Private Control: " << (char*)(queryctrl.name);
@@ -490,6 +590,7 @@ bool GrabberV4L2Controller::setPrivateCapabilities()
         if (queryctrl.type == V4L2_CTRL_TYPE_MENU) {
             enumerate_menu ();
         }
+
     }
 
     qDebug("GrabberV4L2Controller::setPrivateCapabilities --> End");
@@ -497,6 +598,128 @@ bool GrabberV4L2Controller::setPrivateCapabilities()
     return true;
 }
 
+
+/*
+ * sets the value for control id
+ */
+int GrabberV4L2Controller::setCtrlValue(GrabberControlCapabilities *caps, int value)
+{
+    qDebug("GrabberV4L2Controller::setCtrlValue --> Start");
+
+    int ret = 0;
+
+    if (caps->getControlClass() == V4L2_CTRL_CLASS_USER) {
+        // using VIDIOC_G_CTRL for user class controls
+
+        struct v4l2_control ctrl;
+
+        ctrl.id = caps->getControlId();
+        ctrl.value = value;
+        ret = xioctl(fd, VIDIOC_S_CTRL, &ctrl);
+    }
+    else {
+        // using VIDIOC_G_EXT_CTRLS on single controls
+
+        struct v4l2_ext_controls ctrls = {0};
+        struct v4l2_ext_control ctrl = {0};
+        ctrl.id = caps->getControlId();
+        switch (caps->getControlType())
+        {
+            // case V4L2_CTRL_TYPE_STRING:
+            //     ctrl.size = control->value;
+            //     ctrl.string = control->string;
+            //     break;
+            case V4L2_CTRL_TYPE_INTEGER64:
+                ctrl.value64 = (long)value;
+                break;
+            default:
+                ctrl.value = value;
+                break;
+        }
+        // ctrls.ctrl_class = caps->getControlClass();
+        ctrls.count = 1;
+        ctrls.controls = &ctrl;
+        ret = xioctl(fd, VIDIOC_S_EXT_CTRLS, &ctrls);
+        if (ret) {
+            qDebug() << "GrabberV4L2Controller::setCtrlValue --> control id: " << ctrl.id << " failed to set (error " << ret << ")";
+        }
+    }
+
+    // update real value
+    // get_ctrl(hdevice, control_list, id, NULL);
+
+    qDebug("GrabberV4L2Controller::setCtrlValue --> End");
+    return (ret);
+}
+
+/*
+ * Gets the value for control id
+ * and updates control flags and widgets
+ */
+int GrabberV4L2Controller::getCtrlValue(GrabberControlCapabilities *caps, int &value)
+{
+    qDebug("GrabberV4L2Controller::setCtrlValue --> Start");
+
+    int ret = 0;
+
+    if (caps->getControlClass() == V4L2_CTRL_CLASS_USER) {
+        // using VIDIOC_G_CTRL for user class controls
+
+        struct v4l2_control ctrl;
+        ctrl.id = caps->getControlId();
+        ctrl.value = 0;
+        ret = xioctl(fd, VIDIOC_G_CTRL, &ctrl);
+        if (ret) {
+            qDebug() << "GrabberV4L2Controller::setCtrlValue --> control id: " << ctrl.id << " failed to get value (error " << ret << ")";
+        }
+        else {
+            value = ctrl.value;
+        }
+    }
+    else
+    {
+        // using VIDIOC_G_EXT_CTRLS on single controls
+
+        struct v4l2_ext_controls ctrls = {0};
+        struct v4l2_ext_control ctrl = {0};
+        ctrl.id = caps->getControlId();
+        // ctrl.size = 0;
+        // if(control->control.type == V4L2_CTRL_TYPE_STRING)
+        // {
+        //     ctrl.size = control->control.maximum + 1;
+        //     ctrl.string = control->string;
+        // }
+        ctrls.ctrl_class = caps->getControlClass();
+        ctrls.count = 1;
+        ctrls.controls = &ctrl;
+        ret = xioctl(fd, VIDIOC_G_EXT_CTRLS, &ctrls);
+        if (ret) {
+            qDebug() << "GrabberV4L2Controller::setCtrlValue --> control id: " << ctrl.id << " failed to get value (error " << ret << ")";
+        }
+        else {
+            switch(caps->getControlType()) {
+                // case V4L2_CTRL_TYPE_STRING:
+                //     //string gets set on VIDIOC_G_EXT_CTRLS
+                //     //add the maximum size to value
+                //     control->value = ctrl.size;
+                //     break;
+                case V4L2_CTRL_TYPE_INTEGER64:
+                    value = (int)ctrl.value64;
+                    break;
+                default:
+                    value = ctrl.value;
+                    // printf("control %i [0x%08x] = %i\n", i, clist[i].id, clist[i].value);
+                    break;
+            }
+        }
+    }
+
+    // update_ctrl_flags(control_list, id);
+    // update_widget_state(control_list, all_data);
+
+    qDebug("GrabberV4L2Controller::setCtrlValue --> End");
+    return (ret);
+}
 
 /**************************************************************************
  **************************************************************************
@@ -507,7 +730,7 @@ bool GrabberV4L2Controller::setPrivateCapabilities()
 /**************************************************************************
  * Brightness
  **************************************************************************/
-
+/*
 bool GrabberV4L2Controller::getAutomaticBrightness()
 {
     return false;
@@ -518,7 +741,7 @@ void GrabberV4L2Controller::setAutomaticBrightness(bool ab)
 {
     Q_ASSERT( 1 );
 }
-
+*/
 
 int GrabberV4L2Controller::getBrightness()
 {
@@ -530,19 +753,7 @@ void GrabberV4L2Controller::setBrightness(int b)
 {
     qDebug("GrabberV4L2Controller::setBrightness --> Start");
 
-    struct v4l2_control control;
-
-    memset (&control, 0, sizeof (control));
-    control.id = getBrightnessCaps()->getId();
-    control.value = b;
-
-    if (-1 == ioctl (fd, VIDIOC_S_CTRL, &control)) {
-        qDebug("GrabberV4L2Controller::setBrightness --> Error End (VIDIOC_S_CTRL)");
-        return;
-    }
-
-    // Errors ignored
-    ioctl (fd, VIDIOC_S_CTRL, &control);
+    setCtrlValue(getBrightnessCaps(), b);
 
     qDebug("GrabberV4L2Controller::setBrightness --> End");
 }
@@ -573,19 +784,7 @@ void GrabberV4L2Controller::setContrast(int c)
 {
     qDebug("GrabberV4L2Controller::setContrast --> Start");
 
-    struct v4l2_control control;
-
-    memset (&control, 0, sizeof (control));
-    control.id = getContrastCaps()->getId();
-    control.value = c;
-
-    if (-1 == ioctl (fd, VIDIOC_S_CTRL, &control)) {
-        qDebug("GrabberV4L2Controller::setContrast --> Error End (VIDIOC_S_CTRL)");
-        return;
-    }
-
-    // Errors ignored
-    ioctl (fd, VIDIOC_S_CTRL, &control);
+    setCtrlValue(getContrastCaps(), c);
 
     qDebug("GrabberV4L2Controller::setContrast --> End");
 }
@@ -616,19 +815,7 @@ void GrabberV4L2Controller::setSaturation(int s)
 {
     qDebug("GrabberV4L2Controller::setSaturation --> Start");
 
-    struct v4l2_control control;
-
-    memset (&control, 0, sizeof (control));
-    control.id = getSaturationCaps()->getId();
-    control.value = s;
-
-    if (-1 == ioctl (fd, VIDIOC_S_CTRL, &control)) {
-        qDebug("GrabberV4L2Controller::setSaturation --> Error End (VIDIOC_S_CTRL)");
-        return;
-    }
-
-    // Errors ignored
-    ioctl (fd, VIDIOC_S_CTRL, &control);
+    setCtrlValue(getSaturationCaps(), s);
 
     qDebug("GrabberV4L2Controller::setSaturation --> End");
 }
@@ -636,7 +823,7 @@ void GrabberV4L2Controller::setSaturation(int s)
 /**************************************************************************
  * Hue
  **************************************************************************/
-
+/*
 bool GrabberV4L2Controller::getAutomaticHue()
 {
     return false;
@@ -647,7 +834,7 @@ void GrabberV4L2Controller::setAutomaticHue(bool ah)
 {
     Q_ASSERT( 1 );
 }
-
+*/
 
 int GrabberV4L2Controller::getHue()
 {
@@ -659,19 +846,7 @@ void GrabberV4L2Controller::setHue(int h)
 {
     qDebug("GrabberV4L2Controller::setHue --> Start");
 
-    struct v4l2_control control;
-
-    memset (&control, 0, sizeof (control));
-    control.id = getHueCaps()->getId();
-    control.value = h;
-
-    if (-1 == ioctl (fd, VIDIOC_S_CTRL, &control)) {
-        qDebug("GrabberV4L2Controller::setHue --> Error End (VIDIOC_S_CTRL)");
-        return;
-    }
-
-    // Errors ignored
-    ioctl (fd, VIDIOC_S_CTRL, &control);
+    setCtrlValue(getHueCaps(), h);
 
     qDebug("GrabberV4L2Controller::setHue --> End");
 }
@@ -702,19 +877,7 @@ void GrabberV4L2Controller::setGamma(int g)
 {
     qDebug("GrabberV4L2Controller::setGamma --> Start");
 
-    struct v4l2_control control;
-
-    memset (&control, 0, sizeof (control));
-    control.id = getGammaCaps()->getId();
-    control.value = g;
-
-    if (-1 == ioctl (fd, VIDIOC_S_CTRL, &control)) {
-        qDebug("GrabberV4L2Controller::setGamma --> Error End (VIDIOC_S_CTRL)");
-        return;
-    }
-
-    // Errors ignored
-    ioctl (fd, VIDIOC_S_CTRL, &control);
+    setCtrlValue(getGammaCaps(), g);
 
     qDebug("GrabberV4L2Controller::setGamma --> End");
 }
@@ -745,19 +908,7 @@ void GrabberV4L2Controller::setSharpness(int s)
 {
     qDebug("GrabberV4L2Controller::setSharpness --> Start");
 
-    struct v4l2_control control;
-
-    memset (&control, 0, sizeof (control));
-    control.id = getSharpnessCaps()->getId();
-    control.value = s;
-
-    if (-1 == ioctl (fd, VIDIOC_S_CTRL, &control)) {
-        qDebug("GrabberV4L2Controller::setSharpness --> Error End (VIDIOC_S_CTRL)");
-        return;
-    }
-
-    // Errors ignored
-    ioctl (fd, VIDIOC_S_CTRL, &control);
+    setCtrlValue(getSharpnessCaps(), s);
 
     qDebug("GrabberV4L2Controller::setSharpness --> End");
 }
@@ -788,19 +939,7 @@ void GrabberV4L2Controller::setBacklight(int b)
 {
     qDebug("GrabberV4L2Controller::setBacklight --> Start");
 
-    struct v4l2_control control;
-
-    memset (&control, 0, sizeof (control));
-    control.id = getBacklightCaps()->getId();
-    control.value = b;
-
-    if (-1 == ioctl (fd, VIDIOC_S_CTRL, &control)) {
-        qDebug("GrabberV4L2Controller::setBacklight --> Error End (VIDIOC_S_CTRL)");
-        return;
-    }
-
-    // Errors ignored
-    ioctl (fd, VIDIOC_S_CTRL, &control);
+    setCtrlValue(getBacklightCaps(), b);
 
     qDebug("GrabberV4L2Controller::setBacklight --> End");
 }
@@ -808,7 +947,7 @@ void GrabberV4L2Controller::setBacklight(int b)
 /**************************************************************************
  * White Balance
  **************************************************************************/
-
+/*
 bool GrabberV4L2Controller::getAutomaticWhite()
 {
     return false;
@@ -819,7 +958,7 @@ void GrabberV4L2Controller::setAutomaticWhite(bool aw)
 {
     Q_ASSERT( 1 );
 }
-
+*/
 
 int GrabberV4L2Controller::getWhite()
 {
@@ -831,19 +970,7 @@ void GrabberV4L2Controller::setWhite(int w)
 {
     qDebug("GrabberV4L2Controller::setWhite --> Start");
 
-    struct v4l2_control control;
-
-    memset (&control, 0, sizeof (control));
-    control.id = getWhiteCaps()->getId();
-    control.value = w;
-
-    if (-1 == ioctl (fd, VIDIOC_S_CTRL, &control)) {
-        qDebug("GrabberV4L2Controller::setWhite --> Error End (VIDIOC_S_CTRL)");
-        return;
-    }
-
-    // Errors ignored
-    ioctl (fd, VIDIOC_S_CTRL, &control);
+    setCtrlValue(getWhiteCaps(), w);
 
     qDebug("GrabberV4L2Controller::setWhite --> End");
 }
@@ -851,7 +978,7 @@ void GrabberV4L2Controller::setWhite(int w)
 /**************************************************************************
  * Gain
  **************************************************************************/
-
+/*
 bool GrabberV4L2Controller::getAutomaticGain()
 {
     return false;
@@ -862,7 +989,7 @@ void GrabberV4L2Controller::setAutomaticGain(bool ag)
 {
     Q_ASSERT( 1 );
 }
-
+*/
 
 int GrabberV4L2Controller::getGain()
 {
@@ -874,19 +1001,7 @@ void GrabberV4L2Controller::setGain(int g)
 {
     qDebug("GrabberV4L2Controller::setGain --> Start");
 
-    struct v4l2_control control;
-
-    memset (&control, 0, sizeof (control));
-    control.id = getGainCaps()->getId();
-    control.value = g;
-
-    if (-1 == ioctl (fd, VIDIOC_S_CTRL, &control)) {
-        qDebug("GrabberV4L2Controller::setGain --> Error End (VIDIOC_S_CTRL)");
-        return;
-    }
-
-    // Errors ignored
-    ioctl (fd, VIDIOC_S_CTRL, &control);
+    setCtrlValue(getGainCaps(), g);
 
     qDebug("GrabberV4L2Controller::setGain --> End");
 }
@@ -917,19 +1032,7 @@ void GrabberV4L2Controller::setColor(int c)
 {
     qDebug("GrabberV4L2Controller::setColor --> Start");
 
-    struct v4l2_control control;
-
-    memset (&control, 0, sizeof (control));
-    control.id = getColorCaps()->getId();
-    control.value = c;
-
-    if (-1 == ioctl (fd, VIDIOC_S_CTRL, &control)) {
-        qDebug("GrabberV4L2Controller::setColor --> Error End (VIDIOC_S_CTRL)");
-        return;
-    }
-
-    // Errors ignored
-    ioctl (fd, VIDIOC_S_CTRL, &control);
+    setCtrlValue(getColorCaps(), c);
 
     qDebug("GrabberV4L2Controller::setColor --> End");
 }
@@ -943,7 +1046,7 @@ void GrabberV4L2Controller::setColor(int c)
 /**************************************************************************
  * Exposure
  **************************************************************************/
-
+/*
 bool GrabberV4L2Controller::getAutomaticExposure()
 {
     return false;
@@ -954,7 +1057,7 @@ void GrabberV4L2Controller::setAutomaticExposure(bool ae)
 {
     Q_ASSERT( 1 );
 }
-
+*/
 
 int GrabberV4L2Controller::getExposure()
 {
@@ -966,19 +1069,7 @@ void GrabberV4L2Controller::setExposure(int e)
 {
     qDebug("GrabberV4L2Controller::setExposure --> Start");
 
-    struct v4l2_control control;
-
-    memset (&control, 0, sizeof (control));
-    control.id = getExposureCaps()->getId();
-    control.value = e;
-
-    if (-1 == ioctl (fd, VIDIOC_S_CTRL, &control)) {
-        qDebug("GrabberV4L2Controller::setExposure --> Error End (VIDIOC_S_CTRL)");
-        return;
-    }
-
-    // Errors ignored
-    ioctl (fd, VIDIOC_S_CTRL, &control);
+    setCtrlValue(getExposureCaps(), e);
 
     qDebug("GrabberV4L2Controller::setExposure --> End");
 }
@@ -997,18 +1088,27 @@ void GrabberV4L2Controller::setAutomaticZoom(bool az)
 {
     Q_ASSERT( 1 );
 }
+*/
 
 int GrabberV4L2Controller::getZoom()
 {
-    return 0;
+    int value = 0;
+
+    getCtrlValue(getZoomCaps(), value);
+
+    return value;
 }
 
 
 void GrabberV4L2Controller::setZoom(int z)
 {
-    Q_ASSERT( 1 );
+    qDebug("GrabberV4L2Controller::setZoom --> Start");
+
+    setCtrlValue(getZoomCaps(), z);
+
+    qDebug("GrabberV4L2Controller::setZoom --> End");
 }
-*/
+
 /**************************************************************************
  * Focus
  **************************************************************************/
@@ -1023,6 +1123,7 @@ void GrabberV4L2Controller::setAutomaticFocus(bool af)
 {
     Q_ASSERT( 1 );
 }
+*/
 
 int GrabberV4L2Controller::getFocus()
 {
@@ -1032,9 +1133,13 @@ int GrabberV4L2Controller::getFocus()
 
 void GrabberV4L2Controller::setFocus(int f)
 {
-    Q_ASSERT( 1 );
+    qDebug("GrabberV4L2Controller::setFocus --> Start");
+
+    setCtrlValue(getFocusCaps(), f);
+
+    qDebug("GrabberV4L2Controller::setFocus --> End");
 }
-*/
+
 /**************************************************************************
  * Pan
  **************************************************************************/

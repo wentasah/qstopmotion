@@ -68,13 +68,37 @@ public:
      * Get the id of the control
      * @return The id of the control.
      */
-    unsigned int getId();
+    unsigned int getControlId();
 
     /**
      * Set the id of the control
      * @param i The new id of the control.
      */
-    void setId(unsigned int i);
+    void setControlId(unsigned int cl);
+
+    /**
+     * Get the class of the control
+     * @return The class of the control.
+     */
+    unsigned int getControlClass();
+
+    /**
+     * Set the class of the control
+     * @param i The new class of the control.
+     */
+    void setControlClass(unsigned int id);
+
+    /**
+     * Get the type of the control
+     * @return The type of the control.
+     */
+    unsigned int getControlType();
+
+    /**
+     * Set the type of the control
+     * @param i The new type of the control.
+     */
+    void setControlType(unsigned int type);
 
     /**
      * Get the minimum value of the control
@@ -138,7 +162,9 @@ public:
 
 private:
 
-    unsigned int  id;
+    unsigned int  ctrl_id;
+    unsigned int  ctrl_class;
+    unsigned int  ctrl_type;
     long          minimum;
     long          maximum;
     long          step;

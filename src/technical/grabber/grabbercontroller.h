@@ -43,7 +43,8 @@ public:
         controller_Auto,
         controller_Manual,
         controller_Relative,
-        controller_Absolute
+        controller_Absolute,
+        controller_Continuous
     };
 
     /**

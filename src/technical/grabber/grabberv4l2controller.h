@@ -72,13 +72,13 @@ public:
      * Get the current automatic brightness value of the device.
      * @return True if the automatic brightness is on.
      */
-    bool getAutomaticBrightness();
+    // bool getAutomaticBrightness();
 
     /**
      * Set the automatic brightness value of the device.
      * @param ab True if the automatic brightness will be switched on.
      */
-    void setAutomaticBrightness(bool ab);
+    // void setAutomaticBrightness(bool ab);
 
     /**
      * Get the current brightness value of the device.
@@ -156,13 +156,13 @@ public:
      * Get the current automatic hue value of the device.
      * @return True if the automatic hue is on.
      */
-    bool getAutomaticHue();
+    // bool getAutomaticHue();
 
     /**
      * Set the automatic hue value of the device.
      * @param ah True if the automatic hue will be switched on.
      */
-    void setAutomaticHue(bool ah);
+    // void setAutomaticHue(bool ah);
 
     /**
      * Get the current hue value of the device.
@@ -268,13 +268,13 @@ public:
      * Get the current automatic white balance value of the device.
      * @return True if the automatic white balance is on.
      */
-    bool getAutomaticWhite();
+    // bool getAutomaticWhite();
 
     /**
      * Set the automatic white balance value of the device.
      * @param ae True if the automatic white balance will be switched on.
      */
-    void setAutomaticWhite(bool ae);
+    // void setAutomaticWhite(bool ae);
 
     /**
      * Get the current white balance value of the device.
@@ -296,13 +296,13 @@ public:
      * Get the current automatic gain value of the device.
      * @return True if the automatic gain is on.
      */
-    bool getAutomaticGain();
+    // bool getAutomaticGain();
 
     /**
      * Set the automatic gain value of the device.
      * @param ag True if the automatic gain will be switched on.
      */
-    void setAutomaticGain(bool ag);
+    // void setAutomaticGain(bool ag);
 
     /**
      * Get the current gain value of the device.
@@ -358,13 +358,13 @@ public:
      * Get the current automatic exposure value of the device.
      * @return True if the automatic exposure is on.
      */
-    bool getAutomaticExposure();
+    // bool getAutomaticExposure();
 
     /**
      * Set the automatic exposure value of the device.
      * @param ae True if the automatic exposure will be switched on.
      */
-    void setAutomaticExposure(bool ae);
+    // void setAutomaticExposure(bool ae);
 
     /**
      * Get the current exposure value of the device.
@@ -398,13 +398,13 @@ public:
      * Get the current zoom value of the device.
      * @return The current zoom value.
      */
-    // int getZoom();
+    int getZoom();
 
     /**
      * Set the zoom value of the device.
      * @param z The new zoom value
      */
-    // void setZoom(int z);
+    void setZoom(int z);
 
     /**************************************************************************
      * Focus
@@ -426,13 +426,13 @@ public:
      * Get the current focus value of the device.
      * @return The current focus value.
      */
-    // int getFocus();
+    int getFocus();
 
     /**
      * Set the focus value of the device.
      * @param f The new focus value
      */
-    // void setFocus(int f);
+    void setFocus(int f);
 
     /**************************************************************************
      * Pan
@@ -567,10 +567,12 @@ private:
     int xioctl(int fd, int IOCTL_X, void *arg);
 
     void enumerate_menu();
-    void getControlData(GrabberControlCapabilities *caps, unsigned int id);
-    void getControlFlag(GrabberControlCapabilities *caps, unsigned int id);
+    void getControlData(GrabberControlCapabilities *caps, long flags = GrabberController::controller_none);
+    void getControlFlag(GrabberControlCapabilities *caps);
     bool setBaseCapabilities();
     bool setPrivateCapabilities();
+    int  setCtrlValue(GrabberControlCapabilities *caps, int value);
+    int  getCtrlValue(GrabberControlCapabilities *caps, int &value);
 
 };
 

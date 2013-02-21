@@ -123,16 +123,15 @@ void FrameViewImage::updateRemoveScene(int)
 void FrameViewImage::updateRemoveTake(int,
                                       int)
 {
-    int activeSceneIndex = frontend->getProject()->getActiveSceneIndex();
-    if (0 > activeSceneIndex) {
+    if (frontend->getProject()->getActiveSceneIndex() < 0) {
+        showLogo();
+        update();
         return;
     }
-    int activeTakeIndex = frontend->getProject()->getActiveTakeIndex();
-    if (0 > activeTakeIndex) {
-        return;
+    if (frontend->getProject()->getActiveTakeIndex() < 0) {
+        showLogo();
+        update();
     }
-    showLogo();
-    update();
 }
 
 
@@ -430,7 +429,7 @@ void FrameViewImage::activateExposure()
     case stillImageMode:
         exposure = frontend->getProject()->getActiveExposure();
 
-        Q_ASSERT(exposure != NULL);
+        // Q_ASSERT(exposure != NULL);
 
         if (exposure != NULL) {
             const QString fileName = exposure->getImagePath();

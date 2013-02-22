@@ -22,10 +22,14 @@
 
 #include "imagegrabberfacade.h"
 
+#ifdef Q_WS_X11
 #include "technical/grabber/gphotograbber.h"
+#endif
 #include "technical/grabber/gstreamerdirectshowusbgrabber.h"
+#ifdef Q_WS_X11
 #include "technical/grabber/gstreamerdv1394grabber.h"
 #include "technical/grabber/gstreamerv4l2grabber.h"
+#endif
 #include "technical/grabber/gstreamervideotestgrabber.h"
 
 #include <QtCore/QtDebug>

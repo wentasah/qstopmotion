@@ -26,7 +26,6 @@
 #include <QtCore/QtDebug>
 #include <QtCore/QUrl>
 #include <QtGui/QHBoxLayout>
-#include <QtGui/QVBoxLayout>
 
 
 CameraControllerDialog::CameraControllerDialog(Frontend *f,
@@ -60,8 +59,8 @@ CameraControllerDialog::CameraControllerDialog(Frontend *f,
     stepIris = -1;
     stepRoll = -1;
 
-    this->setWindowTitle(tr("qStopMotion Camera Controller"));
-    this->setMinimumSize(200, 500);
+    setWindowTitle(tr("qStopMotion Camera Controller"));
+    setMinimumSize(200, 500);
     // Enable help window for modal dialoges
     this->setAttribute(Qt::WA_GroupLeader);
 
@@ -269,7 +268,7 @@ CameraControllerDialog::CameraControllerDialog(Frontend *f,
     bottomLayout->addStretch();
     bottomLayout->addWidget(closeButton);
 
-    QVBoxLayout *mainLayout = new QVBoxLayout;
+    mainLayout = new QVBoxLayout;
     // mainLayout->addLayout(topLayout);
 
     controlLayout->addWidget(brightnessCheckBox);
@@ -673,6 +672,9 @@ void CameraControllerDialog::init()
         changeColor(value, false);
     }
 
+    // TODO: This will not work
+    mainLayout->setStretchFactor(qualityGroupBox, qualityCount);
+
     if (qualityCount == 0) {
         qualityGroupBox->hide();
     }
@@ -910,11 +912,64 @@ void CameraControllerDialog::init()
         changeRoll(value, false);
     }
 
+    // TODO: This will not work
+    mainLayout->setStretchFactor(controlGroupBox, controlCount);
+
     if (controlCount == 0) {
         controlGroupBox->hide();
     }
 
     qDebug() << "CameraControllerDialog::init --> End";
+}
+
+
+void CameraControllerDialog::retranslateStrings()
+{
+    qDebug() << "CameraControllerDialog::retranslateStrings --> Start";
+
+    setWindowTitle(tr("qStopMotion Camera Controller"));
+
+    qualityGroupBox->setTitle(tr("Video Quality"));
+    brightnessCheckBox->setText(tr("Automatic Pan"));
+    brightnessLabel->setText(tr("Brightness:"));
+    contrastCheckBox->setText(tr("Automatic Contrast"));
+    contrastLabel->setText(tr("Contrast:"));
+    saturationCheckBox->setText(tr("Automatic Saturation"));
+    saturationLabel->setText(tr("Saturation:"));
+    hueCheckBox->setText(tr("Automatic Hue"));
+    hueLabel->setText(tr("Hue:"));
+    gammaCheckBox->setText(tr("Automatic Gamma"));
+    gammaLabel->setText(tr("Gamma:"));
+    sharpnessCheckBox->setText(tr("Automatic Sharpness"));
+    sharpnessLabel->setText(tr("Sharpness:"));
+    backlightCheckBox->setText(tr("Automatic Backlight Compensation"));
+    backlightLabel->setText(tr("Backlight Compensation:"));
+    whiteCheckBox->setText(tr("Automatic White Balance"));
+    whiteLabel->setText(tr("White Balance:"));
+    gainCheckBox->setText(tr("Automatic Gain"));
+    gainLabel->setText(tr("Gain:"));
+    colorCheckBox->setText(tr("Automatic Color Enable"));
+    colorLabel->setText(tr("Color Enable:"));
+
+    controlGroupBox->setTitle(tr("Camera Control"));
+    exposureCheckBox->setText(tr("Automatic Exposure"));
+    exposureLabel->setText(tr("Exposure:"));
+    zoomCheckBox->setText(tr("Automatic Zoom"));
+    zoomLabel->setText(tr("Zoom:"));
+    focusCheckBox->setText(tr("Automatic Focus"));
+    focusLabel->setText(tr("Focus:"));
+    panCheckBox->setText(tr("Automatic Pan"));
+    panLabel->setText(tr("Pan:"));
+    tiltCheckBox->setText(tr("Automatic Tilt"));
+    tiltLabel->setText(tr("Tilt:"));
+    irisCheckBox->setText(tr("Automatic Iris"));
+    irisLabel->setText(tr("Iris:"));
+    rollCheckBox->setText(tr("Automatic Roll"));
+    rollLabel->setText(tr("Roll:"));
+
+    closeButton->setText(tr("&Close"));
+
+    qDebug() << "CameraControllerDialog::retranslateStrings --> End";
 }
 
 

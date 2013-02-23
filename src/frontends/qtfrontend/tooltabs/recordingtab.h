@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2010-2012 by                                                *
+ *  Copyright (C) 2010-2013 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -141,6 +141,9 @@ public:
      */
     void initialize();
 
+    /**
+     * Retranslate all strings of the tab after changing the language setting
+     */
     void retranslateStrings();
 
     /**

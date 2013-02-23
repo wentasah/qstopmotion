@@ -33,6 +33,7 @@
 #include <QtGui/QGroupBox>
 #include <QtGui/QLabel>
 #include <QtGui/QPushButton>
+#include <QtGui/QVBoxLayout>
 
 
 class CameraControllerDialog : public QDialog
@@ -50,6 +51,11 @@ public:
      * Initialize the dialog
      */
     void init();
+
+    /**
+     * Retranslate all strings of the tab after changing the language setting
+     */
+    void retranslateStrings();
 
 private slots:
     /**
@@ -667,6 +673,8 @@ private:
     QLabel       *rollLabel;
     QComboBox    *rollComboBox;
     int           stepRoll;
+
+    QVBoxLayout  *mainLayout;
 
     QPushButton  *closeButton;
 };

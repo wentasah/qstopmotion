@@ -489,6 +489,10 @@ void MainWindowGUI::retranslateStrings()
     // compositingTab->retranslateStrings();
     // sideBar->setTabText(3, QString(tr("Compositing")));
 
+    if (cameraControllerDialog != NULL) {
+        cameraControllerDialog->retranslateStrings();
+    }
+
     qDebug("MainWindowGUI::retranslateStrings --> End");
 }
 

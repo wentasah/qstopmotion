@@ -256,7 +256,7 @@ void ExposureThumbView::contentsDropped(QDropEvent * /* event */)
             QStringList::Iterator it = fileNames.begin();
             while (it != fileNames.end()) {
                 QString fileName = *it;
-                fNames.push_back(fileName);
+                fNames.append(fileName);
                 ++it;
             }
             // timeLine->getFrontend()->getProject()->addFrames(fNames);

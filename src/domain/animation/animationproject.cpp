@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2012 by                                                *
+ *  Copyright (C) 2005-2013 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -42,7 +42,7 @@ AnimationProject::AnimationProject(Frontend* f)
 
     activeSceneIndex   = -1;
     nextSceneIndex     = 0;
-    numSounds          = -1;
+    soundsNumber       = -1;
     nextTotalExposureIndex = 0;
 
     recordingMode      = 0;
@@ -1138,7 +1138,7 @@ bool AnimationProject::saveScenesToProject(QDomDocument &doc, QDomElement &anima
     }
 
     // Reset the temp file index
-    Exposure::tempNum = 0;
+    Exposure::tempNumber = 0;
 
     for (sceneIndex = 0; sceneIndex < sceneSize; ++sceneIndex) {
         // Scenes
@@ -1281,7 +1281,7 @@ int AnimationProject::addSoundToScene(unsigned int sceneIndex, const QString &so
 {
     qDebug("AnimationProject::addSoundToScene --> Start");
 
-    ++numSounds;
+    ++soundsNumber;
     int ret = scenes[sceneIndex]->addSound(sound, soundName);
     if (ret == -1) {
         frontend->showWarning(tr("Add Sound"),
@@ -1289,13 +1289,13 @@ int AnimationProject::addSoundToScene(unsigned int sceneIndex, const QString &so
             "Check that you have the right permissions set.\n"
             "The animation will be runned without sound if you\n"
             "choose to play."));
-        --numSounds;
+        --soundsNumber;
     } else if (ret == -2) {
         frontend->showWarning(tr("Add Sound"),
             tr("The selected audio file is not valid within the\n"
             "given audio format. The animation will be runned\n"
             "without sound if you choose to play."));
-        --numSounds;
+        --soundsNumber;
     }
 
     qDebug("AnimationProject::addSoundToScene --> End");
@@ -1303,10 +1303,10 @@ int AnimationProject::addSoundToScene(unsigned int sceneIndex, const QString &so
 }
 
 
-void AnimationProject::removeSoundFromScene(unsigned int sceneIndex, unsigned int soundNumber)
+void AnimationProject::removeSoundFromScene(unsigned int sceneIndex, unsigned int soundIndex)
 {
-    scenes[sceneIndex]->removeSound(soundNumber);
-    --numSounds;
+    scenes[sceneIndex]->removeSound(soundIndex);
+    --soundsNumber;
 }
 
 

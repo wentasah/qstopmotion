@@ -58,7 +58,7 @@ void ViewFacade::attatch(Observer *o)
     qDebug("ViewFacade::attatch --> Start");
 
     if (o != NULL) {
-        observers.push_back(o);
+        observers.append(o);
     } else {
         qDebug("ViewFacade::attatch --> Trying to attatch a NULL pointer to the ViewFacade");
     }

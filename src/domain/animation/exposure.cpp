@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2012 by                                                *
+ *  Copyright (C) 2005-2013 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -31,7 +31,7 @@
 #include <QtCore/QtDebug>
 
 
-unsigned int Exposure::tempNum = 0;
+unsigned int Exposure::tempNumber = 0;
 
 
 Exposure::Exposure(Take *take)
@@ -163,13 +163,13 @@ const QString Exposure::getImagePath() const
 }
 
 /*
-void Exposure::moveToImageDir(const QString &directory, unsigned int imgNum)
+void Exposure::moveToImageDir(const QString &directory, unsigned int imageIndex)
 {
     Q_ASSERT(!directory.isEmpty());
 
     QString newPath;
     QString filename;
-    QString tmp(QString("%1").arg(imgNum));
+    QString tmp(QString("%1").arg(imageIndex));
 
     int fileLength = tmp.length();
 
@@ -217,9 +217,9 @@ void Exposure::moveToTemp(bool isRecovery)
     fromImagePath.append(theFrame);
 
     // creates a new image name
-    QString toImageName(QString("tmp_%1%2").arg(Exposure::tempNum)
+    QString toImageName(QString("tmp_%1%2").arg(Exposure::tempNumber)
                         .arg(fromImagePath.mid(fromImagePath.lastIndexOf('.'))));
-    Exposure::tempNum++;
+    Exposure::tempNumber++;
 
     toImagePath.append(parent->getAppTempDirName());
     toImagePath.append(QLatin1String("/"));
@@ -256,9 +256,9 @@ void Exposure::copyToTemp()
     fromImagePath.append(theFrame);
 
     // creates a new image name
-    QString toImageName(QString("tmp_%1%2").arg(Exposure::tempNum)
+    QString toImageName(QString("tmp_%1%2").arg(Exposure::tempNumber)
                         .arg(fromImagePath.mid(fromImagePath.lastIndexOf('.'))));
-    Exposure::tempNum++;
+    Exposure::tempNumber++;
 
     toImagePath.append(parent->getAppTempDirName());
     toImagePath.append(QLatin1String("/"));

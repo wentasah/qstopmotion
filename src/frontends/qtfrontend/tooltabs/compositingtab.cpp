@@ -166,9 +166,9 @@ void CompositingTab::initialize()
             if ( pref->getEncoder(id, name, desc, start, stop, filename) ) {
                 encoderTable->setItem(i, 0, new QTableWidgetItem(name) );
                 encoderTable->setItem(i, 1, new QTableWidgetItem(desc) );
-                startEncoderStrings.push_back(start);
-                stopEncoderStrings.push_back(stop);
-                outputFiles.push_back(filename);
+                startEncoderStrings.append(start);
+                stopEncoderStrings.append(stop);
+                outputFiles.append(filename);
 
                 if ( id.compare(activeId) == 0 )
                     active = idx;

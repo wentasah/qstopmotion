@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2012 by                                                *
+ *  Copyright (C) 2005-2013 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -466,7 +466,7 @@ public:
 
     /**
      * Sets the scene with at position sceneIndex as the active scene.
-     * @param sceneIndex the number of the new active scene.
+     * @param sceneIndex the index of the new active scene.
      */
     void setActiveSceneIndex(int sceneIndex);
 
@@ -576,7 +576,7 @@ public:
      **************************************************************************/
 
     /**
-     * Adds the sound from the file "sound" to sceneat position sceneNumber.
+     * Adds the sound from the file "sound" to scene at position sceneIndex.
      * @param sceneIndex the index of the scene to add the sound to
      * @param filename the path to the file with the sound
      * @param soundName the new name of the sound.
@@ -587,12 +587,12 @@ public:
     int addSoundToScene(unsigned int sceneIndex, const QString &filename, const QString &soundName);
 
     /**
-     * Removes the sound with index soundNumber from the scene with index
+     * Removes the sound with index soundIndex from the scene with index
      * sceneIndex.
      * @param sceneIndex the index of the scene to remove a sound from.
-     * @param soundNumber the index of the sound to remove from the frame.
+     * @param soundIndex the index of the sound to remove from the frame.
      */
-    void removeSoundFromScene(unsigned int sceneIndex, unsigned int soundNumber);
+    void removeSoundFromScene(unsigned int sceneIndex, unsigned int soundIndex);
 
     /**
      * Plays the sound of the scene with index sceneIndex.
@@ -612,7 +612,7 @@ public:
 
     /**
      * Sets the take with at position takeIndex as the active take.
-     * @param takeIndex the number of the new active take.
+     * @param takeIndex the index of the new active take.
      */
     void setActiveTakeIndex(int takeIndex);
 
@@ -936,7 +936,7 @@ private:
     /**
      * Number of sounds added to the model.
      */
-    int numSounds;
+    int soundsNumber;
 
     /**
      * Number of unsaved changes in the settings

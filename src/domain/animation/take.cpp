@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2012 by                                                *
+ *  Copyright (C) 2005-2013 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -327,9 +327,9 @@ int Take::getExposureSize() const
 }
 
 
-Exposure* Take::getExposure(unsigned int exposureNumber)
+Exposure* Take::getExposure(unsigned int exposureIndex)
 {
-    return exposures[exposureNumber];
+    return exposures[exposureIndex];
 }
 
 
@@ -512,7 +512,7 @@ QVector<QString> Take::getImagePaths() const
     unsigned int exposureSize = exposures.size();
 
     for (unsigned int exposureIndex = 0; exposureIndex < exposureSize; ++exposureIndex) {
-        imagePaths.push_back(exposures[exposureIndex]->getImagePath());
+        imagePaths.append(exposures[exposureIndex]->getImagePath());
     }
     return imagePaths;
 }

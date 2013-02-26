@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2012 by                                                *
+ *  Copyright (C) 2005-2013 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -51,7 +51,7 @@ public:
     /**
      * Number of files in the temporary directory.
      */
-    static unsigned int tempNum;
+    static unsigned int tempNumber;
 
     /**
      * Default constructor
@@ -138,18 +138,18 @@ public:
      *
      * Moves sounds and images belonging to this Exposure into project directories.
      * @param imageDir the image directory to move images into
-     * @param imgNum a number describing the position of this Exposure relative
-     * to the other Exposures. E.g. 000005 if this Exposure is number five in the sequence
+     * @param imageIndex a index describing the position of this Exposure relative
+     * to the other Exposures. E.g. 000005 if this Exposure is position five in the sequence
      * of Exposures.
      */
-    // void moveToProjectDir(const QString &imageDir, unsigned int imgNum);
+    // void moveToProjectDir(const QString &imageDir, unsigned int imageIndex);
 
     /**
      * Moves the images to an image directory.
      * @param directory the directory where the project files are stored
-     * @param imgNum the number of the image which is used to set a filename
+     * @param imageIndex the index of the image which is used to set a filename
      */
-    // void moveToImageDir(const QString &directory, unsigned int imgNum);
+    // void moveToImageDir(const QString &directory, unsigned int imageIndex);
 
     /**
      * Moves the files belonging to this Exposure from the current directory

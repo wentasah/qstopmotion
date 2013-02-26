@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2012 by                                                *
+ *  Copyright (C) 2005-2013 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -392,10 +392,10 @@ public:
     int addSound(const QString &filename, const QString &soundName);
 
     /**
-     * Removes sound number soundNumber from this Exposure.
-     * @param soundNumber
+     * Removes sound with the index soundIndex from this Exposure.
+     * @param soundIndex Index of the sound to remove.
      */
-    void removeSound(unsigned int soundNumber);
+    void removeSound(unsigned int soundIndex);
 
     /**
      * Returns the number of sounds in this Exposure.
@@ -411,11 +411,11 @@ public:
     QVector<AudioFormat*>& getSounds();
 
     /**
-     * Retrieves the name of the sound at index soundNumber in this Exposure.
-     * @param soundNumber the sound to return.
-     * @return the sound at index soundNumber in this Exposure.
+     * Retrieves the name of the sound at index soundIndex in this Exposure.
+     * @param soundIndex the index of the sound to return.
+     * @return the sound at index soundIndex in this Exposure.
      */
-    const QString getSoundName(unsigned int soundNumber) const;
+    const QString getSoundName(unsigned int soundIndex) const;
 
     /**
      * Plays the sounds belonging to this Exposure.
@@ -481,7 +481,7 @@ private:
     /**
      * Number of sounds belonging to this Exposure.
      */
-    int soundNum;
+    int soundsNumber;
 
     /**
      * Start position of the take on the sound file of the scene

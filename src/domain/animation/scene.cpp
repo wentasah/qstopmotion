@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2012 by                                                *
+ *  Copyright (C) 2005-2013 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -32,11 +32,11 @@
 
 Scene::Scene(AnimationProject *project)
 {
-    parent          = project;
-    activeTakeIndex = -1;
-    nextTakeIndex   = 0;
-    isProjectFile   = false;
-    soundNum        = 0;
+    parent             = project;
+    activeTakeIndex    = -1;
+    nextTakeIndex      = 0;
+    isProjectFile      = false;
+    soundsNumber       = 0;
     soundStartPosition = 0;
 }
 
@@ -326,9 +326,9 @@ int Scene::getTakeSize() const
 }
 
 
-Take* Scene::getTake(unsigned int takeNumber)
+Take* Scene::getTake(unsigned int takeIndex)
 {
-    return takes[takeNumber];
+    return takes[takeIndex];
 }
 
 
@@ -471,9 +471,9 @@ unsigned int Scene::getExposureSize() const
 }
 
 
-Exposure* Scene::getExposure(unsigned int takeNumber, unsigned int exposureNumber)
+Exposure* Scene::getExposure(unsigned int takeIndex, unsigned int exposureIndex)
 {
-    return takes[takeNumber]->getExposure(exposureNumber);
+    return takes[takeIndex]->getExposure(exposureIndex);
 }
 
 
@@ -657,11 +657,11 @@ int Scene::addSound(const QString & /*filename*/, const QString & /*soundname*/)
         // Update with the new path
         f->setFilename(newSoundPath);
         // and add it to the vector
-        sounds.push_back(f);
+        sounds.append(f);
 
         QString ss("Sound");
-        ss.append(QString::number(soundNum));
-        soundNames.push_back(ss);
+        ss.append(QString::number(soundsNumber));
+        soundNames.append(ss);
 
         soundNames[soundNumber] = soundName;
 
@@ -674,11 +674,11 @@ int Scene::addSound(const QString & /*filename*/, const QString & /*soundname*/)
 }
 
 
-void Scene::removeSound(unsigned int soundNumber)
+void Scene::removeSound(unsigned int soundIndex)
 {
-    Q_ASSERT(sounds[soundNumber] != NULL);
+    Q_ASSERT(sounds[soundIndex] != NULL);
 
-    AudioFormat *f = sounds[soundNumber];
+    AudioFormat *f = sounds[soundIndex];
     if (QFile::exists(f->getSoundPath()) == 0) {
         if (!QFile::remove(f->getSoundPath())) {
             // Not successful
@@ -686,10 +686,10 @@ void Scene::removeSound(unsigned int soundNumber)
                                                 tr("Can't remove sound file!"));
         }
     }
-    delete sounds[soundNumber];
-    sounds[soundNumber] = NULL;
-    sounds.erase(sounds.begin() + soundNumber);
-    --soundNum;
+    delete sounds[soundIndex];
+    sounds[soundIndex] = NULL;
+    sounds.erase(sounds.begin() + soundIndex);
+    --soundsNumber;
 }
 
 
@@ -705,9 +705,9 @@ QVector<AudioFormat*>& Scene::getSounds()
 }
 
 
-const QString Scene::getSoundName(unsigned int soundNumber) const
+const QString Scene::getSoundName(unsigned int soundIndex) const
 {
-    return soundNames[soundNumber];
+    return soundNames[soundIndex];
 }
 
 
@@ -738,7 +738,7 @@ void Scene::moveToSoundDir(const QString &directory)
         QString newSoundPath(QString("%1/%2_snd_%3%4")
                              .arg(directory)
                              .arg(this->id)
-                             .arg(++soundNum)
+                             .arg(++soundsNumber)
                              .arg(soundPath.mid(soundPath.lastIndexOf('.'))));
 
         if (QFile::exists(soundPath) == 0) {

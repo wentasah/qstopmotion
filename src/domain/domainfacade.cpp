@@ -1088,7 +1088,7 @@ void DomainFacade::addExposureToUndo(const QString &filePath,
                                      int            sceneIndex,
                                      int            takeIndex)
 {
-    Exposure::tempNum++;
+    Exposure::tempNumber++;
 
     UndoExposureAdd *u = new UndoExposureAdd(this, filePath, sceneIndex, takeIndex);
     getUndoStack()->push(u);
@@ -1112,7 +1112,7 @@ void DomainFacade::insertExposureToUndo(const QString &filePath,
                                         int            takeIndex,
                                         int            exposureIndex)
 {
-    Exposure::tempNum++;
+    Exposure::tempNumber++;
 
     UndoExposureInsert *u = new UndoExposureInsert(this, filePath,
                                                    sceneIndex, takeIndex, exposureIndex);
@@ -1186,7 +1186,7 @@ const QString DomainFacade::copyToTemp(const QImage &rawImage)
     qDebug("DomainFacade::copyToTemp --> Start");
 
     // creates a new image name
-    QString toImageName(QString("tmp_%1.").arg(Exposure::tempNum));
+    QString toImageName(QString("tmp_%1.").arg(Exposure::tempNumber));
     switch (animationProject->getImageFormat()) {
     case ImageGrabber::jpegFormat:
         toImageName.append(PreferencesTool::jpegSuffix);
@@ -1223,7 +1223,7 @@ const QString DomainFacade::copyToTemp(const QImage &rawImage)
                                tr("Can't copy image to temp directory!"));
     }
 
-    Exposure::tempNum++;
+    Exposure::tempNumber++;
 
     qDebug("DomainFacade::copyToTemp --> End");
 

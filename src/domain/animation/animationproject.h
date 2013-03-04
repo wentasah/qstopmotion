@@ -441,6 +441,13 @@ public:
      */
     bool saveSettingsToProject(QDomDocument &doc, QDomElement &settingsNode);
 
+    /**
+     * Convert all images of the project to a new new image format.
+     * @param newFormat The new format of the images.
+     * @return true if all images are converted to the new image format.
+     */
+    bool convertImages(int newFormat);
+
     /**************************************************************************
      * Scene functions
      **************************************************************************/

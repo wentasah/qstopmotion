@@ -614,11 +614,26 @@ void ImportWidget::changeImageGrabberSources(int /*index*/)
 }
 
 
-void ImportWidget::changeImageFormat(int /*index*/)
+void ImportWidget::changeImageFormat(int index)
 {
-    // qDebug() << "ImportWidget::changeImageFormat --> Start";
+    qDebug() << "ImportWidget::changeImageFormat --> Start";
 
-    // qDebug() << "ImportWidget::changeImageFormat --> End";
+    if (!tabType) {
+        // Project settings are changed
+
+        // Convert the existing images
+
+        if (frontend->convertImages(index)) {
+            // Images converted
+            activeImageFormat = index;
+        }
+        else {
+            // Images not converted, user break
+            imageFormatCombo->setCurrentIndex(activeImageFormat);
+        }
+    }
+
+    qDebug() << "ImportWidget::changeImageFormat --> End";
 }
 
 

@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2012 by                                                *
+ *  Copyright (C) 2005-2013 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -199,6 +199,13 @@ public:
      * @param newVideoSource the new active source.
      */
     void setVideoSource(int newVideoSource);
+
+    /**
+     * Convert all images of the current project to a new image file format.
+     * @param newFormat The new format of the images.
+     * @return true if all images are converted to the new image format.
+     */
+    bool convertImages(int newFormat);
 
     /**
      * Get the active mixing mode of the project.

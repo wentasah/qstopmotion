@@ -165,6 +165,13 @@ public:
     void copyToTemp();
 
     /**
+     * Convert the files belonging to this Exposure to a new image format
+     * @param newFormat The new format of the images.
+     * from the directory to the temporary directory.
+     */
+    void convertToTemp(int newFormat);
+
+    /**
      * Moves the files belonging to this Exposure from the current directory
      * to the project directory.
      */

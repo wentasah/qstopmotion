@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2012 by                                                *
+ *  Copyright (C) 2005-2013 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -254,6 +254,12 @@ void DomainFacade::setVideoSource(int newVideoSource)
 {
     animationProject->setVideoSource(newVideoSource);
     frontend->setVideoSource(newVideoSource);
+}
+
+
+bool DomainFacade::convertImages(int newFormat)
+{
+    return animationProject->convertImages(newFormat);
 }
 
 

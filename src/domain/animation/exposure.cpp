@@ -25,10 +25,12 @@
 #include "domain/animation/projectserializer.h"
 #include "technical/util.h"
 #include "technical/preferencestool.h"
+#include "technical/grabber/imagegrabber.h"
 
 #include <QtCore/QFile>
 #include <QtCore/QString>
 #include <QtCore/QtDebug>
+#include <QtGui/QImage>
 
 
 unsigned int Exposure::tempNumber = 0;
@@ -273,6 +275,59 @@ void Exposure::copyToTemp()
     // if (exposureLocation == InTrashPath) {
     //     Exposure::trashNum--;
     // }
+
+    theFrame.clear();
+    theFrame.append(toImageName);
+    exposureLocation = AnimationProject::InTempPath;
+}
+
+
+void Exposure::convertToTemp(int newFormat)
+{
+    QString fromImagePath;
+    QString toImagePath;
+
+    switch (exposureLocation) {
+    case AnimationProject::InProjectPath:
+        fromImagePath.append(parent->getOldImagePath());
+        break;
+    case AnimationProject::InTempPath:
+        fromImagePath.append(parent->getAppTempDirName());
+        break;
+    default:
+        return;
+    }
+
+    fromImagePath.append(QLatin1String("/"));
+    fromImagePath.append(theFrame);
+
+    // creates a new image name
+    QString toImageName(theFrame.left(theFrame.lastIndexOf('.') + 1));  // Including the '.')
+
+    switch(newFormat) {
+    case ImageGrabber::jpegFormat:
+        toImageName.append(PreferencesTool::jpegSuffix);
+        break;
+    case ImageGrabber::tiffFormat:
+        toImageName.append(PreferencesTool::tiffSuffix);
+        break;
+    case ImageGrabber::bmpFormat:
+        toImageName.append(PreferencesTool::bmpSuffix);
+        break;
+    }
+
+    toImagePath.append(parent->getAppTempDirName());
+    toImagePath.append(QLatin1String("/"));
+    toImagePath.append(toImageName);
+
+    // Save the image in the new file format to the temp dirctory
+    QImage image(fromImagePath);
+
+    if (!image.save(toImagePath, 0)) {
+        // Not successful
+        parent->getFrontend()->showCritical(tr("Critical"),
+                                            tr("Can't save image in the new file format to temporary directory!"));
+    }
 
     theFrame.clear();
     theFrame.append(toImageName);

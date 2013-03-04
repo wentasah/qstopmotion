@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2012 by                                                *
+ *  Copyright (C) 2005-2013 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -448,6 +448,13 @@ public:
      * @return true if the new index is set, false else.
      */
     virtual bool setVideoSource(int index) = 0;
+
+    /**
+     * Convert all images of the current project to a new image file format.
+     * @param newFormat The new format of the images.
+     * @return true if all images are converted to the new image format.
+     */
+    virtual bool convertImages(int newFormat) = 0;
 
     /**
      * Get the mix mode.

@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2012 by                                                *
+ *  Copyright (C) 2005-2013 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -900,6 +900,12 @@ int QtFrontend::getVideoSource()
 bool QtFrontend::setVideoSource(int index)
 {
     return mw->setVideoSource(index);
+}
+
+
+bool QtFrontend::convertImages(int newFormat)
+{
+    return mw->convertImages(newFormat);
 }
 
 

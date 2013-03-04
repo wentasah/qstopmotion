@@ -1273,6 +1273,45 @@ bool AnimationProject::saveAsScenesToProject(QDomDocument &doc, QDomElement &ani
 }
 
 
+bool AnimationProject::convertImages(int newFormat)
+{
+    qDebug("AnimationProject::saveScenesToProject --> Start");
+
+    unsigned int  sceneSize = scenes.size();
+    unsigned int  sceneIndex;
+
+    // Removes frames which already are saved. Had to do this to prevent
+    // frames to overwrite each other.
+    for (sceneIndex = 0; sceneIndex < sceneSize; ++sceneIndex) {
+        Scene *scene = scenes[sceneIndex];
+        unsigned int takeSize = scene->getTakeSize();
+        for (unsigned int takeIndex = 0; takeIndex < takeSize; ++takeIndex) {
+            Take *take = scene->getTake(takeIndex);
+            unsigned int exposureSize = take->getExposureSize();
+            for (unsigned int exposureIndex = 0; exposureIndex < exposureSize; ++exposureIndex) {
+                Exposure *exposure = take->getExposure(exposureIndex);
+                exposure->convertToTemp(newFormat);
+            }
+        }
+    }
+    incAnimationChanges();
+
+    setImageFormat(newFormat);
+    incSettingsChanges();
+
+    /* Delete all image file that stay in the image directory
+    // (All files that deleted from the project.)
+    QString     imagePath = this->getOldImagePath();
+    QDir        imageDir(imagePath);
+    QStringList fileNameList = imageDir.entryList(QDir::Files);
+    for (int fileIndex = 0 ; fileIndex < fileNameList.count() ; fileIndex++) {
+        imageDir.remove(fileNameList[fileIndex]);
+    }
+    */
+
+    return true;
+}
+
 /**************************************************************************
  * Sound functions
  **************************************************************************/

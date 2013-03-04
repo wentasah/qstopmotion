@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2012 by                                                *
+ *  Copyright (C) 2005-2013 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -766,6 +766,33 @@ bool MainWindowGUI::setVideoSource(int index)
         cameraControllerAct->setEnabled(false);
     }
 
+    return true;
+}
+
+
+bool MainWindowGUI::convertImages(int newFormat)
+{
+    if (frontend->getProject()->getTotalExposureSize()) {
+        int convert = frontend->askQuestion(tr("Existing Images"),
+                                            tr("There are some images in the open project. Do you want to convert the images to the new file format?"));
+        if (convert == 0) {
+            // user pressed button 0, which is 'yes'
+
+            if (frontend->getProject()->convertImages(newFormat)) {
+                saveProject();
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+        else {
+            // user say not 'yes'
+            return false;
+        }
+    }
+
+    // The project is empty
     return true;
 }
 

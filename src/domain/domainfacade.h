@@ -203,9 +203,10 @@ public:
     /**
      * Convert all images of the current project to a new image file format.
      * @param newFormat The new format of the images.
+     * @param newQuality The new quality value of the images.
      * @return true if all images are converted to the new image format.
      */
-    bool convertImages(int newFormat);
+    bool convertImages(int newFormat, int newQuality);
 
     /**
      * Get the active mixing mode of the project.
@@ -282,6 +283,18 @@ public:
      * @param newVF The new image format.
      */
     void setImageFormat(int newVF);
+
+    /**
+     * Get the image quality of the project.
+     * @return image quality value.
+     */
+    int getImageQuality();
+
+    /**
+     * Set the image quality of the project.
+     * @param newValue The new image quality value.
+     */
+    void setImageQuality(int newValue);
 
     /**
      * Get the image size of the project.

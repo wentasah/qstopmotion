@@ -930,7 +930,7 @@ void CameraControllerDialog::retranslateStrings()
     setWindowTitle(tr("qStopMotion Camera Controller"));
 
     qualityGroupBox->setTitle(tr("Video Quality"));
-    brightnessCheckBox->setText(tr("Automatic Pan"));
+    brightnessCheckBox->setText(tr("Automatic Brightness"));
     brightnessLabel->setText(tr("Brightness:"));
     contrastCheckBox->setText(tr("Automatic Contrast"));
     contrastLabel->setText(tr("Contrast:"));

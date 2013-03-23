@@ -903,9 +903,9 @@ bool QtFrontend::setVideoSource(int index)
 }
 
 
-bool QtFrontend::convertImages(int newFormat)
+bool QtFrontend::convertImages(int newFormat, int newQuality)
 {
-    return mw->convertImages(newFormat);
+    return mw->convertImages(newFormat, newQuality);
 }
 
 

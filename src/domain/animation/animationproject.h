@@ -225,9 +225,21 @@ public:
 
     /**
      * Set the image format of the project.
-     * @param newVF The new image format.
+     * @param newIF The new image format.
      */
-    void setImageFormat(int newVF);
+    void setImageFormat(int newIF);
+
+    /**
+     * Get the image quality value of the project.
+     * @return image quality value.
+     */
+    int getImageQuality();
+
+    /**
+     * Set the image quality value of the project.
+     * @param newValue The new image quality value.
+     */
+    void setImageQuality(int newValue);
 
     /**
      * Get the image size of the project.
@@ -444,9 +456,10 @@ public:
     /**
      * Convert all images of the project to a new new image format.
      * @param newFormat The new format of the images.
+     * @param newQuality The new quality value of the images.
      * @return true if all images are converted to the new image format.
      */
-    bool convertImages(int newFormat);
+    bool convertImages(int newFormat, int newQuality);
 
     /**************************************************************************
      * Scene functions
@@ -880,6 +893,7 @@ private:
 
     int grabberSource;
     int imageFormat;
+    int imageQuality;
     int imageSize;
 
     /**

@@ -282,7 +282,7 @@ void Exposure::copyToTemp()
 }
 
 
-void Exposure::convertToTemp(int newFormat)
+void Exposure::convertToTemp(int newFormat, int quality)
 {
     QString fromImagePath;
     QString toImagePath;
@@ -323,7 +323,7 @@ void Exposure::convertToTemp(int newFormat)
     // Save the image in the new file format to the temp dirctory
     QImage image(fromImagePath);
 
-    if (!image.save(toImagePath, 0)) {
+    if (!image.save(toImagePath, 0, quality)) {
         // Not successful
         parent->getFrontend()->showCritical(tr("Critical"),
                                             tr("Can't save image in the new file format to temporary directory!"));

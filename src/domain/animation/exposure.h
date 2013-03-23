@@ -166,10 +166,11 @@ public:
 
     /**
      * Convert the files belonging to this Exposure to a new image format
-     * @param newFormat The new format of the images.
+     * @param newFormat The new format of the images
      * from the directory to the temporary directory.
+     * @param quality The quality of the image.
      */
-    void convertToTemp(int newFormat);
+    void convertToTemp(int newFormat, int quality);
 
     /**
      * Moves the files belonging to this Exposure from the current directory

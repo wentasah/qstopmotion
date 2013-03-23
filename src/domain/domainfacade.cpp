@@ -257,9 +257,9 @@ void DomainFacade::setVideoSource(int newVideoSource)
 }
 
 
-bool DomainFacade::convertImages(int newFormat)
+bool DomainFacade::convertImages(int newFormat, int newQuality)
 {
-    return animationProject->convertImages(newFormat);
+    return animationProject->convertImages(newFormat, newQuality);
 }
 
 
@@ -338,6 +338,18 @@ int DomainFacade::getImageFormat()
 void DomainFacade::setImageFormat(int newIF)
 {
     animationProject->setImageFormat(newIF);
+}
+
+
+int DomainFacade::getImageQuality()
+{
+    return animationProject->getImageQuality();
+}
+
+
+void DomainFacade::setImageQuality(int newValue)
+{
+    animationProject->setImageQuality(newValue);
 }
 
 

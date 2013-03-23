@@ -770,15 +770,15 @@ bool MainWindowGUI::setVideoSource(int index)
 }
 
 
-bool MainWindowGUI::convertImages(int newFormat)
+bool MainWindowGUI::convertImages(int newFormat, int newQuality)
 {
     if (frontend->getProject()->getTotalExposureSize()) {
         int convert = frontend->askQuestion(tr("Existing Images"),
-                                            tr("There are some images in the open project. Do you want to convert the images to the new file format?"));
+                                            tr("There are some images in the open project. Do you want to convert the images to the new file format or quality?"));
         if (convert == 0) {
             // user pressed button 0, which is 'yes'
 
-            if (frontend->getProject()->convertImages(newFormat)) {
+            if (frontend->getProject()->convertImages(newFormat, newQuality)) {
                 saveProject();
                 return true;
             }

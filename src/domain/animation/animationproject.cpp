@@ -59,6 +59,7 @@ AnimationProject::AnimationProject(Frontend* f)
     grabberSource      = 0;
     imageAdjustment    = 0;
     imageFormat        = 0;
+    imageQuality   = 100;
     imageSize          = 0;
     videoFormat        = 0;
     videoSize          = 0;
@@ -268,8 +269,25 @@ int AnimationProject::getImageFormat()
 
 void AnimationProject::setImageFormat(int newIF)
 {
-    imageFormat = newIF;
-    incSettingsChanges();
+    if (imageFormat != newIF) {
+        imageFormat = newIF;
+        incSettingsChanges();
+    }
+}
+
+
+int AnimationProject::getImageQuality()
+{
+    return imageQuality;
+}
+
+
+void AnimationProject::setImageQuality(int newValue)
+{
+    if (imageQuality != newValue) {
+        imageQuality = newValue;
+        incSettingsChanges();
+    }
 }
 
 
@@ -607,6 +625,10 @@ bool AnimationProject::readSettingsFromProject(QDomElement &settingsNode)
             QString tmp = currElement.text();
             imageFormat = tmp.toInt();
         }
+        else if (nodeName.compare("imagequality") == 0) {
+            QString tmp = currElement.text();
+            imageQuality = tmp.toInt();
+        }
         else if (nodeName.compare("imagesize") == 0) {
             QString tmp = currElement.text();
             imageSize = tmp.toInt();
@@ -709,6 +731,12 @@ bool AnimationProject::saveSettingsToProject(QDomDocument &doc, QDomElement &set
     QDomText ifText = doc.createTextNode(QString("%1").arg(imageFormat));
     ifElement.appendChild(ifText);
     settingsNode.appendChild(ifElement);
+
+    // Save imageQuality parameter
+    QDomElement icElement = doc.createElement("imagequality");
+    QDomText icText = doc.createTextNode(QString("%1").arg(imageQuality));
+    icElement.appendChild(icText);
+    settingsNode.appendChild(icElement);
 
     // Save imageSize parameter
     QDomElement isElement = doc.createElement("imagesize");
@@ -1273,7 +1301,7 @@ bool AnimationProject::saveAsScenesToProject(QDomDocument &doc, QDomElement &ani
 }
 
 
-bool AnimationProject::convertImages(int newFormat)
+bool AnimationProject::convertImages(int newFormat, int newQuality)
 {
     qDebug("AnimationProject::saveScenesToProject --> Start");
 
@@ -1290,14 +1318,14 @@ bool AnimationProject::convertImages(int newFormat)
             unsigned int exposureSize = take->getExposureSize();
             for (unsigned int exposureIndex = 0; exposureIndex < exposureSize; ++exposureIndex) {
                 Exposure *exposure = take->getExposure(exposureIndex);
-                exposure->convertToTemp(newFormat);
+                exposure->convertToTemp(newFormat, newQuality);
             }
         }
     }
     incAnimationChanges();
 
     setImageFormat(newFormat);
-    incSettingsChanges();
+    setImageQuality(newQuality);
 
     /* Delete all image file that stay in the image directory
     // (All files that deleted from the project.)

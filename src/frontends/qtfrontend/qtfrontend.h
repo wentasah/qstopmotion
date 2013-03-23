@@ -430,9 +430,10 @@ public:
     /**
      * Convert all images of the current project to a new image file format.
      * @param newFormat The new format of the images.
+     * @param newQuality The new quality value of the images.
      * @return true if all images are converted to the new image format.
      */
-    bool convertImages(int newFormat);
+    bool convertImages(int newFormat, int newQuality);
 
     /**
      * Get the mix mode.

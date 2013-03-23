@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2012 by                                                *
+ *  Copyright (C) 2005-2013 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -26,11 +26,13 @@
 #include "technical/grabber/imagegrabber.h"
 
 #include <QtCore/QtDebug>
+#include <QtCore/QRect>
 #include <QtGui/QFileDialog>
 #include <QtGui/QGridLayout>
 #include <QtGui/QHeaderView>
 #include <QtGui/QInputDialog>
 #include <QtGui/QLabel>
+#include <QtGui/QSpacerItem>
 
 
 ImportWidget::ImportWidget(Frontend *f, bool type, QWidget *parent) : QWidget(parent)
@@ -54,6 +56,11 @@ ImportWidget::ImportWidget(Frontend *f, bool type, QWidget *parent) : QWidget(pa
     imageFormatLabel         = 0;
     imageFormatCombo         = 0;
     activeImageFormat        = ImageGrabber::jpegFormat;
+    imageQualityLabel        = 0;
+    imageQualitySlider       = 0;
+    activeImageQuality       = 100;
+    qualityMinimumLabel      = 0;
+    qualityMaximumLabel      = 0;
     imageSizeLabel           = 0;
     imageSizeCombo           = 0;
     activeImageSize          = ImageGrabber::defaultSize;
@@ -106,7 +113,7 @@ void ImportWidget::makeGUI()
     }
 
     infoText->setMinimumWidth(440);
-    infoText->setMaximumHeight(52);
+    infoText->setMaximumHeight(40);
     infoText->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 
     // Encoder preferences
@@ -117,6 +124,8 @@ void ImportWidget::makeGUI()
     grabberSourceCombo = new QComboBox();
     grabberSourceLabel->setBuddy(grabberSourceCombo);
     grabberSourceCombo->setFocusPolicy(Qt::NoFocus);
+    grabberSourceCombo->setMinimumWidth(300);
+    grabberSourceCombo->setMaximumWidth(300);
     connect(grabberSourceCombo, SIGNAL(activated(int)), this, SLOT(changeImageGrabberSources(int)));
 
     grabberSourceCombo->addItem(tr("Test Source"));
@@ -139,15 +148,34 @@ void ImportWidget::makeGUI()
     imageFormatCombo = new QComboBox();
     imageFormatLabel->setBuddy(imageFormatCombo);
     imageFormatCombo->setFocusPolicy(Qt::NoFocus);
+    imageFormatCombo->setMinimumWidth(300);
+    imageFormatCombo->setMaximumWidth(300);
     connect(imageFormatCombo, SIGNAL(activated(int)), this, SLOT(changeImageFormat(int)));
     imageFormatCombo->addItem(tr("JPEG"));
     imageFormatCombo->addItem(tr("TIFF"));
     imageFormatCombo->addItem(tr("BMP"));
 
+    imageQualityLabel = new QLabel(tr("Image Quality:"));
+    imageQualitySlider = new QSlider();
+    imageQualitySlider->setMaximum(0);
+    imageQualitySlider->setMaximum(100);
+    imageQualitySlider->setOrientation(Qt::Horizontal);
+    imageQualitySlider->setMinimumWidth(300);
+    imageQualitySlider->setMaximumWidth(300);
+    imageQualitySlider->setTickPosition(QSlider::TicksBelow);
+    imageQualitySlider->setTickInterval(20);
+    imageQualitySlider->setSingleStep(10);
+    imageQualitySlider->setPageStep(20);
+    connect(imageQualitySlider, SIGNAL(sliderReleased()), this, SLOT(changeImageQuality()));
+    qualityMinimumLabel = new QLabel(tr("Min"));
+    qualityMaximumLabel = new QLabel(tr("Max"));
+
     imageSizeLabel = new QLabel(tr("Image Size:"));
     imageSizeCombo = new QComboBox();
     imageSizeLabel->setBuddy(imageSizeCombo);
     imageSizeCombo->setFocusPolicy(Qt::NoFocus);
+    imageSizeCombo->setMinimumWidth(300);
+    imageSizeCombo->setMaximumWidth(300);
     connect(imageSizeCombo, SIGNAL(activated(int)), this, SLOT(changeImageSize(int)));
     imageSizeCombo->addItem(tr("Default Grabber Size"));
     imageSizeCombo->addItem(tr("QVGA (320x240)"));
@@ -181,7 +209,7 @@ void ImportWidget::makeGUI()
     }
 
     transformText->setMinimumWidth(440);
-    transformText->setMaximumHeight(52);
+    transformText->setMaximumHeight(60);
     transformText->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 
     scaleButton = new QRadioButton(tr("Scale the whole image"));
@@ -280,16 +308,26 @@ void ImportWidget::makeGUI()
 
     // Grabber preferences
     QGridLayout *grabberPrefsLayout = new QGridLayout;
-    grabberPrefsLayout->addWidget(grabberSourceLabel, 0, 0);
-    grabberPrefsLayout->addWidget(grabberSourceCombo, 0, 1);
+    grabberPrefsLayout->setColumnStretch(0, 1);
+    grabberPrefsLayout->addWidget(grabberSourceLabel, 0, 0, Qt::AlignLeft);
+    grabberPrefsLayout->addWidget(grabberSourceCombo, 0, 1, Qt::AlignRight);
     grabberPrefs->setLayout(grabberPrefsLayout);
 
     // Image import preferences
+    QHBoxLayout *icLayout = new QHBoxLayout;
+    icLayout->addWidget(qualityMinimumLabel, 0, Qt::AlignLeft);
+    icLayout->addStretch();
+    icLayout->addWidget(qualityMaximumLabel, 0, Qt::AlignRight);
+
     QGridLayout *imagePrefsLayout = new QGridLayout;
-    imagePrefsLayout->addWidget(imageFormatLabel, 1, 0);
-    imagePrefsLayout->addWidget(imageFormatCombo, 1, 1);
-    imagePrefsLayout->addWidget(imageSizeLabel, 2, 0);
-    imagePrefsLayout->addWidget(imageSizeCombo, 2, 1);
+    imagePrefsLayout->setColumnStretch(0, 1);
+    imagePrefsLayout->addWidget(imageFormatLabel, 0, 0, Qt::AlignLeft);
+    imagePrefsLayout->addWidget(imageFormatCombo, 0, 1, Qt::AlignRight);
+    imagePrefsLayout->addWidget(imageQualityLabel, 1, 0, Qt::AlignLeft);
+    imagePrefsLayout->addWidget(imageQualitySlider, 1, 1, Qt::AlignRight);
+    imagePrefsLayout->addLayout(icLayout, 2, 1, Qt::AlignRight);
+    imagePrefsLayout->addWidget(imageSizeLabel, 3, 0, Qt::AlignLeft);
+    imagePrefsLayout->addWidget(imageSizeCombo, 3, 1, Qt::AlignRight);
     imagePrefs->setLayout(imagePrefsLayout);
 
     // Transform preferences
@@ -339,6 +377,11 @@ void ImportWidget::initialize()
         }
         activeImageFormat = value;
 
+        if (pref->getIntegerPreference("preferences", "defaultimagequality", value) == false) {
+            value = 100;
+        }
+        activeImageQuality = value;
+
         if (pref->getIntegerPreference("preferences", "defaultimagesize", value) == false) {
             value = ImageGrabber::defaultSize;
         }
@@ -358,6 +401,7 @@ void ImportWidget::initialize()
         // This is a project dialog tab
         activeGrabberSource = frontend->getProject()->getGrabberSource();
         activeImageFormat = frontend->getProject()->getImageFormat();
+        activeImageQuality = frontend->getProject()->getImageQuality();
         activeImageSize = frontend->getProject()->getImageSize();
         activeTransform = frontend->getProject()->getImageTransformation();
         activeImageAdjustment = frontend->getProject()->getImageAdjustment();
@@ -366,16 +410,17 @@ void ImportWidget::initialize()
     setImageGrabberSource(activeGrabberSource);
 
     imageFormatCombo->setCurrentIndex(activeImageFormat);
+    enableQuality();
+
+    imageQualitySlider->setValue(activeImageQuality);
 
     imageSizeCombo->setCurrentIndex(activeImageSize);
 
     // Transformation preferences
-    if (activeTransform)
-    {
+    if (activeTransform) {
         setScaleButtonOn();
     }
-    else
-    {
+    else {
         setClipButtonOn();
     }
 
@@ -401,6 +446,7 @@ void ImportWidget::apply()
 
     PreferencesTool *pref = frontend->getPreferences();
     int index;
+    int value;
     bool changings = false;
 
     switch (grabberSourceCombo->currentIndex()) {
@@ -429,22 +475,25 @@ void ImportWidget::apply()
 #endif
         break;
     }
-    if (activeGrabberSource != index)
-    {
+    if (activeGrabberSource != index) {
         activeGrabberSource = index;
         changings = true;
     }
 
     index = imageFormatCombo->currentIndex();
-    if (activeImageFormat != index)
-    {
+    if (activeImageFormat != index) {
         activeImageFormat = index;
         changings = true;
     }
 
+    value = imageQualitySlider->value();
+    if (activeImageQuality != value) {
+        activeImageQuality = value;
+        changings = true;
+    }
+
     index = imageSizeCombo->currentIndex();
-    if (activeImageSize != index)
-    {
+    if (activeImageSize != index) {
         activeImageSize = index;
         changings = true;
     }
@@ -500,6 +549,7 @@ void ImportWidget::apply()
             // This is a general dialog tab
             pref->setIntegerPreference("preferences", "defaultgrabbersource", activeGrabberSource);
             pref->setIntegerPreference("preferences", "defaultimageformat", activeImageFormat);
+            pref->setIntegerPreference("preferences", "defaultimagequality", activeImageQuality);
             pref->setIntegerPreference("preferences", "defaultimagesize", activeImageSize);
             pref->setIntegerPreference("preferences", "defaulttransformation", activeTransform);
             pref->setIntegerPreference("preferences", "defaultimageadjustment", activeImageAdjustment);
@@ -508,6 +558,7 @@ void ImportWidget::apply()
             // This is a project dialog tab
             frontend->getProject()->setGrabberSource(activeGrabberSource);
             frontend->getProject()->setImageFormat(activeImageFormat);
+            frontend->getProject()->setImageQuality(activeImageQuality);
             frontend->getProject()->setImageSize(activeImageSize);
             frontend->getProject()->setImageTransformation(activeTransform);
             frontend->getProject()->setImageAdjustment(activeImageAdjustment);
@@ -524,6 +575,8 @@ void ImportWidget::reset()
 
     setImageGrabberSource(activeGrabberSource);
     imageFormatCombo->setCurrentIndex(activeImageFormat);
+    enableQuality();
+    imageQualitySlider->setValue(activeImageQuality);
     imageSizeCombo->setCurrentIndex(activeImageSize);
     if (activeTransform)
     {
@@ -623,7 +676,7 @@ void ImportWidget::changeImageFormat(int index)
 
         // Convert the existing images
 
-        if (frontend->convertImages(index)) {
+        if (frontend->convertImages(index, activeImageQuality)) {
             // Images converted
             activeImageFormat = index;
         }
@@ -633,7 +686,38 @@ void ImportWidget::changeImageFormat(int index)
         }
     }
 
+    enableQuality();
+
     qDebug() << "ImportWidget::changeImageFormat --> End";
+}
+
+
+void ImportWidget::changeImageQuality()
+{
+    qDebug() << "ImportWidget::changeImageQuality --> Start";
+
+    int value = imageQualitySlider->value();
+
+    if (activeImageQuality == value) {
+        return;
+    }
+
+    if (!tabType) {
+        // Project settings are changed
+
+        // Convert the existing images
+
+        if (frontend->convertImages(activeImageFormat, value)) {
+            // Images converted
+            activeImageQuality = value;
+        }
+        else {
+            // Images not converted, user break
+            imageQualitySlider->setValue(activeImageQuality);
+        }
+    }
+
+    qDebug() << "ImportWidget::changeImageQuality --> End";
 }
 
 
@@ -680,4 +764,21 @@ void ImportWidget::setClipButtonOn()
     leftDownButton->setEnabled(true);
     centerDownButton->setEnabled(true);
     rightDownButton->setEnabled(true);
+}
+
+
+void ImportWidget::enableQuality()
+{
+    if (imageFormatCombo->currentIndex() == ImageGrabber::jpegFormat) {
+        imageQualityLabel->setEnabled(true);
+        imageQualitySlider->setEnabled(true);
+        qualityMinimumLabel->setEnabled(true);
+        qualityMaximumLabel->setEnabled(true);
+    }
+    else {
+        imageQualityLabel->setEnabled(false);
+        imageQualitySlider->setEnabled(false);
+        qualityMinimumLabel->setEnabled(false);
+        qualityMaximumLabel->setEnabled(false);
+    }
 }

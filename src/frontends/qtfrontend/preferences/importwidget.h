@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2012 by                                                *
+ *  Copyright (C) 2005-2013 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -31,6 +31,7 @@
 #include <QtGui/QPushButton>
 #include <QtGui/QRadioButton>
 #include <QtGui/QSpinBox>
+#include <QtGui/QSlider>
 #include <QtGui/QTableWidget>
 #include <QtGui/QTextEdit>
 #include <QtGui/QToolBox>
@@ -100,6 +101,12 @@ private slots:
     void changeImageFormat(int index);
 
     /**
+     * Slot for notified the image import tab when the image quality changes,
+     * so that image import preferences can be updated.
+     */
+    void changeImageQuality();
+
+    /**
      * Slot for notified the image import tab when the image size changes,
      * so that image import preferences can be updated.
      * @param index the new image size.
@@ -142,6 +149,11 @@ private:
     QLabel       *imageFormatLabel;
     QComboBox    *imageFormatCombo;
     int           activeImageFormat;
+    QLabel       *imageQualityLabel;
+    QSlider      *imageQualitySlider;
+    int           activeImageQuality;
+    QLabel       *qualityMinimumLabel;
+    QLabel       *qualityMaximumLabel;
     QLabel       *imageSizeLabel;
     QComboBox    *imageSizeCombo;
     int           activeImageSize;
@@ -166,6 +178,8 @@ private:
     int           activeImageAdjustment;
 
     void makeGUI();
+
+    void enableQuality();
 };
 
 #endif

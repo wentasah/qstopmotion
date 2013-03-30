@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2010-2012 by                                                *
+ *  Copyright (C) 2010-2013 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -60,8 +60,13 @@ void FrameViewImage::initCompleted()
 {
     qDebug("FrameViewImage::initCompleted --> Start");
 
+    // Fill the image buffer
     clearImageBuffer();
     loadImageBuffer();
+
+    // Clear the display
+    displayMode = emptyMode;
+    repaint();
 
     qDebug("FrameViewImage::initCompleted --> End");
 }
@@ -76,7 +81,6 @@ void FrameViewImage::updateRemoveProject()
     qDebug("FrameViewImage::updateRemoveProject --> Start");
 
     showLogo();
-    update();
 
     qDebug("FrameViewImage::updateRemoveProject --> End");
 }
@@ -106,12 +110,10 @@ void FrameViewImage::updateRemoveScene(int)
 {
     if (frontend->getProject()->getActiveSceneIndex() < 0) {
         showLogo();
-        update();
         return;
     }
     if (frontend->getProject()->getActiveTakeIndex() < 0) {
         showLogo();
-        update();
     }
 }
 
@@ -125,12 +127,10 @@ void FrameViewImage::updateRemoveTake(int,
 {
     if (frontend->getProject()->getActiveSceneIndex() < 0) {
         showLogo();
-        update();
         return;
     }
     if (frontend->getProject()->getActiveTakeIndex() < 0) {
         showLogo();
-        update();
     }
 }
 
@@ -317,18 +317,7 @@ void FrameViewImage::paintEvent(QPaintEvent *)
     int      x = (widgetRect.width() - outputImageSize.width()) / 2;
     int      y = (widgetRect.height() - outputImageSize.height()) / 2;
 
-    switch (displayMode) {
-    case logoMode:
-        // Playing still image
-
-        widgetPainter.fillRect(widgetRect, QColor(225, 225, 225, 255));
-        break;
-    case stillImageMode:
-        // Playing still image
-
-        widgetPainter.fillRect(widgetRect, QColor(225, 225, 225, 255));
-        break;
-    case liveImageMode:
+    if (displayMode == liveImageMode) {
         // Playing live video
 
         int offset;
@@ -357,17 +346,21 @@ void FrameViewImage::paintEvent(QPaintEvent *)
                 imagePainter.drawImage(0, 0, diffImage);
             }
             break;
-        case 2:
-            // Image Playback mode
-
-            break;
         }
-        break;
-    case playbackMode:
-        break;
     }
 
-    widgetPainter.drawImage(x, y, outputImage);
+    switch (displayMode) {
+    case emptyMode:
+        // Display nothing
+        widgetPainter.fillRect(widgetRect, QColor(225, 225, 225, 255));
+        break;
+    case logoMode:
+        // Fill the start screen
+        widgetPainter.fillRect(widgetRect, QColor(225, 225, 225, 255));
+    default:
+        // Display the actual image
+        widgetPainter.drawImage(x, y, outputImage);
+    }
 
     switch (displayMode) {
     case liveImageMode:
@@ -444,7 +437,6 @@ void FrameViewImage::activateExposure()
     case playbackMode:
         break;
     }
-
 
     qDebug("FrameViewImage::activateExposure --> End");
 }
@@ -595,10 +587,10 @@ void FrameViewImage::showLogo()
     QString iconFile(frontend->getGraphicsDirName());
     iconFile.append(QLatin1String("qstopmotion_logo_60.png"));
 
-    // activeImage = clipAndScale(QImage(iconFile));
     activeImage = QImage(iconFile);
 
     displayMode = logoMode;
+    update();
 
     qDebug("FrameViewImage::showLogo --> End");
 }

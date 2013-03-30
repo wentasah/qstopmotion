@@ -73,7 +73,8 @@ GrabberV4L2Controller::~GrabberV4L2Controller()
 
     if (fd >= 0) {
         // Close the device file
-        close(fd);
+        v4l2_close(fd);
+        // close(fd);
         fd = -1;
     }
 
@@ -87,11 +88,20 @@ bool GrabberV4L2Controller::init(const QString &id)
 
     qDebug("GrabberV4L2Controller::init --> Open the device ...");
 
-    fd = open(id.toAscii(), O_RDWR | O_NONBLOCK);
-    if (fd < 0) {
-        qDebug() << "GrabberV4L2Controller::init --> Cannot open " << id;
+    fd = v4l2_open(id.toAscii(), O_RDWR | O_NONBLOCK, 0);
+    if (fd < 0)
+    {
+        qDebug() << "GrabberV4L2Controller::init --> Error opening V4L2 interface for " << id;
+        v4l2_close(fd);
         return false;
     }
+
+    // fd = open(id.toAscii(), O_RDWR | O_NONBLOCK);
+    // if (fd < 0) {
+    //     qDebug() << "GrabberV4L2Controller::init --> Error opening standard interface for " << id;
+    //     close(fd);
+    //     return false;
+    // }
 
     // Enumerating device capabilities
 
@@ -636,7 +646,7 @@ int GrabberV4L2Controller::setCtrlValue(GrabberControlCapabilities *caps, int va
                 ctrl.value = value;
                 break;
         }
-        // ctrls.ctrl_class = caps->getControlClass();
+        ctrls.ctrl_class = caps->getControlClass();
         ctrls.count = 1;
         ctrls.controls = &ctrl;
         ret = xioctl(fd, VIDIOC_S_EXT_CTRLS, &ctrls);
@@ -1103,6 +1113,8 @@ int GrabberV4L2Controller::getZoom()
 void GrabberV4L2Controller::setZoom(int z)
 {
     qDebug("GrabberV4L2Controller::setZoom --> Start");
+
+    setCtrlValue(getZoomCaps(), z);
 
     setCtrlValue(getZoomCaps(), z);
 

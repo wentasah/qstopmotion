@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2010-2012 by                                                *
+ *  Copyright (C) 2010-2013 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -453,6 +453,8 @@ void RecordingTab::cameraButtonClicked()
     qDebug("RecordingTab::cameraButtonClicked --> Start");
 
     if (cameraOn == false) {
+        // Camera is off
+
         if (!frontend->getProject()->isActiveProject()) {
             // No active project
             frontend->showInformation(tr("Information"), tr("No active project. Please create a new project or open an existing project."));
@@ -473,14 +475,16 @@ void RecordingTab::cameraButtonClicked()
 
         qDebug("RecordingTab::cameraButtonClicked --> Start playing video from webcam");
 
-        QString iconFile(frontend->getIconsDirName());
-        iconFile.append(QLatin1String("cameraoff.png"));
-
-        cameraButton->setIcon(QIcon(iconFile));
-
         cameraOn = frontend->startGrabber();
 
         if (cameraOn) {
+            videoSourceCombo->setEnabled(false);
+
+            QString iconFile(frontend->getIconsDirName());
+            iconFile.append(QLatin1String("cameraoff.png"));
+
+            cameraButton->setIcon(QIcon(iconFile));
+
             switch (captureFunction) {
             // case PreferencesTool::captureButtonBevor:
             //     break;
@@ -498,6 +502,7 @@ void RecordingTab::cameraButtonClicked()
             }
         }
     } else {
+        // Camera is on
         qDebug("RecordingTab::cameraButtonClicked --> Stop playing video from webcam");
 
         QString iconFile(frontend->getIconsDirName());
@@ -508,6 +513,8 @@ void RecordingTab::cameraButtonClicked()
         frontend->stopGrabber();
 
         cameraOn = false;
+
+        videoSourceCombo->setEnabled(true);
     }
 
     if (cameraOn) {

@@ -759,6 +759,14 @@ bool MainWindowGUI::setVideoSource(int index)
         return false;
     }
 
+    if (cameraControllerDialog != 0) {
+        if (cameraControllerDialog->isVisible()) {
+            cameraControllerDialog->reject();
+        }
+        delete cameraControllerDialog;
+        cameraControllerDialog = 0;
+    }
+
     if (grabber->getDevice(index)->isController()) {
         cameraControllerAct->setEnabled(true);
     }

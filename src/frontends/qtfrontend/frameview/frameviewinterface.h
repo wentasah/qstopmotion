@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2010-2012 by                                                *
+ *  Copyright (C) 2010-2013 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -52,6 +52,7 @@ public:
      * Enum with all possible image output formats
      */
     enum frameViewDisplayMode {
+        emptyMode,           // Display nothing
         logoMode,            // Display the logo
         stillImageMode,      // Display the actual image of the project
         liveImageMode,       // Display the live image

@@ -53,13 +53,13 @@ public:
      * @param devices The vector of initialized devices.
      * @return true on success, false otherwise.
      */
-    virtual bool initializationSubclass(QVector<ImageGrabberDevice*> &devices);
+    bool initialization(QVector<ImageGrabberDevice*> &devices);
 
     /**
      * Starts the grabber if it is marked to be runned in deamon mode.
      * @return true on success, false otherwise
      */
-    virtual bool initSubclass();
+    bool setUp();
 
     /**
      * Get the live image from the camera
@@ -85,29 +85,42 @@ public:
     virtual bool tearDown();
 
 protected:
-    static int lookup_widget(CameraWidget *widget,
-                             const char *key,
-                             CameraWidget **child);
+    static int lookupWidget(CameraWidget  *widget,
+                            const char    *key,
+                            CameraWidget* *child);
 
-    static void errordumper(GPLogLevel level,
+    static void errorDumper(GPLogLevel  level,
                             const char *domain,
                             const char *format,
-                            va_list args,
-                            void *data);
+                            va_list     args,
+                            void       *data);
+
+    bool canonEnableCapture(Camera       *gphotoCamera,
+                            GPContext    *gphotoContext,
+                            CameraWidget *gphotoConfig);
+
+    void populateWithConfigs(CameraWidget *gphotoConfig);
+
 private:
-    QString filePath;
+    QString    filePath;
 
 protected:
-    Camera *gphotoCamera;
+    Camera    *gphotoCamera;
     GPContext *gphotoContext;
 
 private:
-    int         activeSource;
-    bool        isInitSuccess;
-    bool        firstImage;
+    int        activeSource;
+    bool       isInitSuccess;
+    bool       firstImage;
 
-    QImage liveImage;
-    QImage rawImage;
+    QImage     liveImage;
+    QImage     rawImage;
+
+    bool       canCaptureImage;
+    bool       canCaptureAudio;
+    bool       canCaptureVideo;
+    bool       canCapturePreview;
+    bool       canConfigure;
 };
 
 #endif

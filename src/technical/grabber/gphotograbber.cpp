@@ -39,22 +39,53 @@ GphotoGrabber::GphotoGrabber(Frontend *f)
 {
     qDebug("GphotoGrabber::Constructor --> Start");
 
+    int ret;
+
     gphotoCamera = NULL;
     gphotoContext = NULL;
 
-    int retval;
+    canCaptureImage = false;
+    canCaptureAudio = false;
+    canCaptureVideo = false;
+    canCapturePreview = false;
+    canConfigure = false;
 
     gphotoContext = gp_context_new();
-    gp_log_add_func(GP_LOG_ERROR, errordumper, NULL);
+    gp_log_add_func(GP_LOG_ERROR, errorDumper, NULL);
     gp_camera_new(&gphotoCamera);
 
     qDebug("GphotoGrabber::Constructor --> Camera init.  Takes a second or three...");
-    retval = gp_camera_init(gphotoCamera, gphotoContext);
-    if (retval != GP_OK) {
-        qDebug("GphotoGrabber::Constructor --> Error during camera initialization!");
+    ret = gp_camera_init(gphotoCamera, gphotoContext);
+    if (ret != GP_OK) {
+        qDebug() << "GphotoGrabber::Constructor --> Error during camera initialization: " << gp_result_as_string(ret);
         isInitSuccess = false;
     }
     isInitSuccess = true;
+
+    // summary
+    CameraText sum;
+    ret = gp_camera_get_summary(gphotoCamera, &sum, gphotoContext);
+    if (ret != GP_OK) {
+        qDebug() << "GphotoGrabber::Constructor --> Error gp_camera_get_summary: " << gp_result_as_string(ret);
+    }
+    qDebug() << "GphotoGrabber::Constructor --> Summary: " << QString(sum.text);
+
+    // manual
+    CameraText manual;
+    ret = gp_camera_get_manual(gphotoCamera, &manual, gphotoContext);
+    if (ret != GP_OK) {
+        qDebug() << "GphotoGrabber::Constructor --> Error gp_camera_get_manual: " << gp_result_as_string(ret);
+    }
+    qDebug() << "GphotoGrabber::Constructor --> Manual: " << QString(manual.text);
+
+    // about
+    CameraText about;
+    ret = gp_camera_get_about(gphotoCamera, &about, gphotoContext);
+    if (ret != GP_OK) {
+        qDebug() << "GphotoGrabber::Constructor --> Error gp_camera_get_about: " << gp_result_as_string(ret);
+    }
+    qDebug() << "GphotoGrabber::Constructor --> About: " << QString(about.text);
+
 
     QString rootDir;
     rootDir.append(frontend->getUserDirName());
@@ -74,18 +105,18 @@ GphotoGrabber::~GphotoGrabber()
 }
 
 
-bool GphotoGrabber::initializationSubclass(QVector<ImageGrabberDevice*> &devices)
+bool GphotoGrabber::initialization(QVector<ImageGrabberDevice*> &devices)
 {
-    qDebug("GphotoGrabber::initializationSubclass --> Start");
+    qDebug("GphotoGrabber::initialization --> Start");
 
     if (!isInitSuccess) {
-        qDebug("GphotoGrabber::initializationSubclass --> End (Error)");
+        qDebug("GphotoGrabber::initialization --> End (Error)");
         return false;
     }
 
     ImageGrabberDevice *device = NULL;
 
-    qDebug() << "GphotoGrabber::initializationSubclass --> Add video test device";
+    qDebug() << "GphotoGrabber::initialization --> Add video test device";
 
     device = new ImageGrabberDevice("",
                                     QApplication::translate("GphotoGrabber", "Gphoto2 device"),
@@ -93,75 +124,98 @@ bool GphotoGrabber::initializationSubclass(QVector<ImageGrabberDevice*> &devices
                                     ImageGrabberDevice::video_x_none);
     devices.append(device);
 
-    qDebug() << "GphotoGrabber::initializationSubclass --> device count: " << devices.size();
+    qDebug() << "GphotoGrabber::initialization --> device count: " << devices.size();
 
-    qDebug("GphotoGrabber::initializationSubclass --> End");
+    qDebug("GphotoGrabber::initialization --> End");
     return true;
 }
 
 
-bool GphotoGrabber::initSubclass()
+bool GphotoGrabber::setUp()
 {
-    qDebug() << "GphotoGrabber::initSubclass --> Start";
+    qDebug() << "GphotoGrabber::setUp --> Start";
 
     if (!isInitSuccess) {
-        qDebug("GphotoGrabber::initSubclass --> End (Error)");
+        qDebug("GphotoGrabber::setUp --> End (Error)");
         return false;
     }
 
-    CameraWidget     *widget = NULL;
-    CameraWidget     *child = NULL;
-    CameraWidgetType  type;
+    CameraWidget     *gphotoConfig = NULL;
+    CameraAbilities   abilities;
     int               ret;
-    int               onoff = true;
+    bool              returnValue = true;
 
-    ret = gp_camera_get_config(gphotoCamera, &widget, gphotoContext);
+    ret = gp_camera_get_config(gphotoCamera, &gphotoConfig, gphotoContext);
     if (ret < GP_OK) {
         // fprintf (stderr, "camera_get_config failed: %d\n", ret);
-        qDebug("GphotoGrabber::initSubclass --> End (camera_get_config failed)");
+        qDebug() << "GphotoGrabber::setUp --> Error End camera_get_config failed: " << gp_result_as_string(ret);
         return false;
     }
-    ret = lookup_widget(widget, "capture", &child);
-    if (ret < GP_OK) {
-        // fprintf (stderr, "lookup widget failed: %d\n", ret);
-        qDebug("GphotoGrabber::initSubclass --> End (lookup widget failed)");
+
+    if (false == canonEnableCapture(gphotoCamera, gphotoContext, gphotoConfig)) {
+        returnValue = false;
         goto out;
     }
 
-    ret = gp_widget_get_type(child, &type);
-    if (ret < GP_OK) {
-        // fprintf (stderr, "widget get type failed: %d\n", ret);
-        qDebug("GphotoGrabber::initSubclass --> End (widget get type failed)");
+    populateWithConfigs(gphotoConfig);
+
+    // Abilities
+    qDebug() << "GphotoGrabber::setUp --> Checking camera abilities";
+    ret = gp_camera_get_abilities (gphotoCamera, &abilities);
+    if (ret != GP_OK) {
+        qDebug() << "GphotoGrabber::setUp --> Error End gp_camera_get_abilities: " << gp_result_as_string(ret);
+        returnValue = false;
         goto out;
     }
-    switch (type) {
-    case GP_WIDGET_TOGGLE:
-        break;
-    default:
-        // fprintf (stderr, "widget has bad type %d\n", type);
-        qDebug("GphotoGrabber::initSubclass --> End (widget has bad type)");
-        ret = GP_ERROR_BAD_PARAMETERS;
-        goto out;
+
+    if (ret >= GP_OK)
+    {
+        // rewrite model
+        qDebug() << "GphotoGrabber::setUp --> Abilities.model: " << QString(abilities.model);
+        switch (abilities.status)
+        {
+        case GP_DRIVER_STATUS_PRODUCTION:
+            qDebug() << "GphotoGrabber::setUp --> Abilities.driver_status: production";
+            break;
+        case GP_DRIVER_STATUS_TESTING:
+            qDebug() << "GphotoGrabber::setUp --> Abilities.driver_status: testing";
+            break;
+        case GP_DRIVER_STATUS_EXPERIMENTAL:
+            qDebug() << "GphotoGrabber::setUp --> Abilities.driver_status: experimental";
+            break;
+        case GP_DRIVER_STATUS_DEPRECATED:
+            qDebug() << "GphotoGrabber::setUp --> Abilities.driver_status: deprecated";
+            break;
+        default:
+            qDebug() << "GphotoGrabber::setUp --> Abilities.driver_status: unknown";
+        }
+
+        qDebug() << "GphotoGrabber::setUp --> Abilities.library: " << abilities.library;
+        qDebug() << "GphotoGrabber::setUp --> Abilities.operations: " << abilities.operations;
+
+        if ((abilities.operations & GP_OPERATION_CAPTURE_IMAGE) > 0 ) {
+            canCaptureImage = true;
+        }
+        if ((abilities.operations & GP_OPERATION_CAPTURE_VIDEO) > 0) {
+            canCaptureAudio = true;
+        }
+        if ((abilities.operations & GP_OPERATION_CAPTURE_AUDIO) > 0) {
+            canCaptureVideo = true;
+        }
+        if ((abilities.operations & GP_OPERATION_CAPTURE_PREVIEW) > 0) {
+            canCapturePreview = true;
+        }
+        if ((abilities.operations & GP_OPERATION_CONFIG) > 0) {
+            canConfigure = true;
+        }
     }
-    /* Now set the toggle to the wanted value */
-    ret = gp_widget_set_value (child, &onoff);
-    if (ret < GP_OK) {
-        // fprintf (stderr, "toggling Canon capture to %d failed with %d\n", onoff, ret);
-        qDebug("GphotoGrabber::initSubclass --> End (toggling Canon capture failed)");
-        goto out;
-    }
-    // OK
-    ret = gp_camera_set_config (gphotoCamera, widget, gphotoContext);
-    if (ret < GP_OK) {
-        // fprintf (stderr, "camera_set_config failed: %d\n", ret);
-        qDebug("GphotoGrabber::initSubclass --> End (camera_set_config failed)");
-        return false;
-    }
+
+    qDebug("GphotoGrabber::setUp --> End");
+
 out:
-    gp_widget_free (widget);
+    gp_widget_free(gphotoConfig);
 
-    qDebug("GphotoGrabber::initSubclass --> End");
-    return true;
+    return returnValue;
 }
 
 
@@ -186,44 +240,65 @@ const QImage GphotoGrabber::getLiveImage()
 {
     qDebug() << "GphotoGrabber::getLiveImage --> Start";
 
-    CameraFile *file;
+    CameraFile    *cf;
+    unsigned long  mysize = 0;
+    const char    *data = NULL;
+    int            ret;
+
+    if (false == canCapturePreview) {
+        return getRawImage();
+    }
+
+    ret = gp_file_new(&cf);
+    if (ret != GP_OK) {
+        qDebug() << "GphotoGrabber::getLiveImage --> Error End gp_file_new: " << gp_result_as_string(ret);
+        return QImage();
+    }
+
+    ret = gp_camera_capture_preview(gphotoCamera, cf, gphotoContext);
+    if (ret != GP_OK) {
+        qDebug() << "GphotoGrabber::getLiveImage --> Error End gp_camera_capture_preview: " << gp_result_as_string(ret);
+        return QImage();
+    }
+
+    // setImage(cf, a);
+
+    ret = gp_file_get_data_and_size(cf, &data, &mysize);
+    if (ret != GP_OK) {
+        qDebug() << "GphotoGrabber::getLiveImage --> Error: gp_file_get_data_and_size: " << gp_result_as_string(ret);
+        return QImage();
+    }
+
+    if (mysize == 0 ) {
+        return QImage();
+    }
+
+    rawImage.loadFromData((uchar*)data, (uint)mysize);
+
+    /*
     char output_file[256];
     char temp_file[256];
-    int retval;
-
-    retval = gp_file_new(&file);
-    if (retval != GP_OK) {
-        // fprintf(stderr,"gp_file_new: %d\n", retval);
-        qDebug() << "GphotoGrabber::getLiveImage --> End (gp_file_new)";
-        return QImage();
-    }
-    retval = gp_camera_capture_preview(gphotoCamera, file, gphotoContext);
-    if (retval != GP_OK) {
-        // fprintf(stderr,"gp_camera_capture_preview(%d): %d\n", i, retval);
-        qDebug() << "GphotoGrabber::getLiveImage --> End (gp_camera_capture_preview)";
-        return QImage();
-    }
 
     sprintf(output_file, "%s", filePath.toAscii().data());
     sprintf(temp_file, "%s.tmp", output_file);
 
-    retval = gp_file_save(file, temp_file);
-    if (retval != GP_OK) {
-        // fprintf(stderr,"gp_camera_capture_preview(%d): %d\n", i, retval);
-        qDebug() << "GphotoGrabber::getLiveImage --> End (gp_camera_capture_preview)";
+    ret = gp_file_save(cf, temp_file);
+    if (ret != GP_OK) {
+        // fprintf(stderr,"gp_camera_capture_preview(%d): %d\n", i, ret);
+        qDebug() << "GphotoGrabber::getLiveImage --> Error End gp_camera_capture_preview: " << gp_result_as_string(ret);
         return QImage();
     }
-    gp_file_unref(file);
+    gp_file_unref(cf);
 
-    /* When the file name is constant, unlink first... */
+    // When the file name is constant, unlink first...
     unlink(output_file);   // Delete the name from the file system (#include <unistd.h>)
 
-    /* Always doing this */
+    // Always doing this
     link(temp_file, output_file);  // Create a new link to the existing file (#include <unistd.h>)
-    unlink(temp_file);   // Delete the name from the file system (#include <unistd.h>)
-
+    unlink(temp_file);             // Delete the name from the file system (#include <unistd.h>)
 
     liveImage.load(filePath);
+    */
 
     qDebug() << "GphotoGrabber::getLiveImage --> End";
     return liveImage;
@@ -232,17 +307,56 @@ const QImage GphotoGrabber::getLiveImage()
 
 const QImage GphotoGrabber::getRawImage()
 {
-    // rawImage.load(filePath);
+    qDebug() << "GphotoGrabber::getRawImage --> Start";
 
-    // rawImage = getImage();
+    CameraFilePath  cfp;
+    CameraFile     *cf;
+    unsigned long   mysize = 0;
+    const char     *data = NULL;
+    int             ret;
 
+    // Taking Image
+    ret = gp_camera_capture(gphotoCamera, GP_CAPTURE_IMAGE, &cfp, gphotoContext );
+    if (ret != GP_OK) {
+        qDebug() << "GphotoGrabber::getRawImage --> Error: gp_camera_capture: " << gp_result_as_string(ret);
+        return QImage();
+    }
+
+    // Downloading Image
+    ret = gp_file_new(&cf);
+    if (ret != GP_OK) {
+        qDebug() << "gp_file_new";
+        return QImage();
+    }
+
+    ret = gp_camera_file_get(gphotoCamera, cfp.folder, cfp.name, GP_FILE_TYPE_NORMAL, cf, gphotoContext);
+    if (ret != GP_OK) {
+        qDebug() << "GphotoGrabber::getRawImage --> Error: gp_camera_file_get: " << gp_result_as_string(ret);
+        return QImage();
+    }
+
+    // setImage(cf, a);
+
+    ret = gp_file_get_data_and_size(cf, &data, &mysize);
+    if (ret != GP_OK) {
+        qDebug() << "GphotoGrabber::getRawImage --> Error: gp_file_get_data_and_size: " << gp_result_as_string(ret);
+        return QImage();
+    }
+
+    if (mysize == 0 ) {
+        return QImage();
+    }
+
+    rawImage.loadFromData((uchar*)data, (uint)mysize);
+
+    qDebug() << "GphotoGrabber::getRawImage --> End";
     return rawImage;
 }
 
 
-int GphotoGrabber::lookup_widget(CameraWidget *widget,
-                                 const char *key,
-                                 CameraWidget **child)
+int GphotoGrabber::lookupWidget(CameraWidget  *widget,
+                                const char    *key,
+                                CameraWidget* *child)
 {
     int ret;
 
@@ -254,12 +368,231 @@ int GphotoGrabber::lookup_widget(CameraWidget *widget,
 }
 
 
-void GphotoGrabber::errordumper(GPLogLevel level,
+void GphotoGrabber::errorDumper(GPLogLevel  level,
                                 const char *domain,
                                 const char *format,
-                                va_list args,
-                                void *data)
+                                va_list     args,
+                                void       *data)
 {
-    vfprintf(stdout, format, args);
-    fprintf(stdout, "\n");
+    char temp[1024];
+
+    vsprintf(temp, format, args);
+    qDebug() << "GphotoGrabber::errorDumper --> Error: " << temp;
 }
+
+
+bool GphotoGrabber::canonEnableCapture(Camera       *gphotoCamera,
+                                       GPContext    *gphotoContext,
+                                       CameraWidget *gphotoConfig)
+{
+    int               onoff = 1;
+    CameraWidgetType  type;
+    CameraWidget     *child;
+    int               ret;
+
+    ret = lookupWidget(gphotoConfig, "capture", &child);
+    if (ret < GP_OK) {
+        // fprintf (stderr, "lookup widget failed: %d\n", ret);
+        qDebug() << "GphotoGrabber::setUp --> Error End - lookup widget failed: " << gp_result_as_string(ret);
+        return false;
+    }
+
+    ret = gp_widget_get_type(child, &type);
+    if (ret < GP_OK) {
+        // fprintf (stderr, "widget get type failed: %d\n", ret);
+        qDebug() << "GphotoGrabber::setUp --> Error End - widget get type failed: " << gp_result_as_string(ret);
+        return false;
+    }
+
+    switch (type) {
+    case GP_WIDGET_TOGGLE:
+        break;
+    default:
+        // fprintf (stderr, "widget has bad type %d\n", type);
+        qDebug() << "GphotoGrabber::setUp --> Error End - widget has bad type";
+        ret = GP_ERROR_BAD_PARAMETERS;
+        return false;
+    }
+
+    /* Now set the toggle to the wanted value */
+    ret = gp_widget_set_value(child, &onoff);
+    if (ret < GP_OK) {
+        // fprintf (stderr, "toggling Canon capture to %d failed with %d\n", onoff, ret);
+        qDebug() << "GphotoGrabber::setUp --> Error End - toggling Canon capture failed: " << gp_result_as_string(ret);
+        return false;
+    }
+
+    // OK
+    ret = gp_camera_set_config(gphotoCamera, gphotoConfig, gphotoContext);
+    if (ret < GP_OK) {
+        // fprintf (stderr, "camera_set_config failed: %d\n", ret);
+        qDebug() << "GphotoGrabber::setUp --> Error End - camera_set_config: " << gp_result_as_string(ret);
+        return false;
+    }
+
+}
+
+
+void GphotoGrabber::populateWithConfigs(CameraWidget *gphotoConfig)
+{
+    qDebug() << "GphotoGrabber::populateWithConfigs --> Start";
+
+    int               i;
+    int               count;
+    int               childrenTotal;
+    const char       *namePointer;
+    const char       *valuePointer;
+    CameraWidget     *child;
+    CameraWidgetType  widgetType;
+    QString           name;
+    QString           value;
+    int               date;
+    int               ret;
+
+    ret = gp_widget_get_type(gphotoConfig, &widgetType);
+    if (ret != GP_OK) {
+        qDebug() << "GphotoGrabber::populateWithConfigs --> Error gp_widget_get_type: " << gp_result_as_string(ret);
+    }
+    switch (widgetType) {
+    case GP_WIDGET_RADIO:
+
+        ret = gp_widget_get_name(gphotoConfig, &namePointer);
+        if (ret != GP_OK) {
+            qDebug() << "GphotoGrabber::populateWithConfigs --> Error gp_widget_get_name: " << gp_result_as_string(ret);
+        }
+        ret = gp_widget_get_value(gphotoConfig, &valuePointer);
+        if (ret != GP_OK) {
+            qDebug() << "GphotoGrabber::populateWithConfigs --> Error gp_widget_get_value: " << gp_result_as_string(ret);
+        }
+
+        if (valuePointer == NULL)
+            break;
+
+        count = gp_widget_count_choices(gphotoConfig);
+
+        name.clear();
+        name.append(namePointer);
+        value.clear();
+        value.append(valuePointer);
+        // sdialog.addItem(n,v);
+        qDebug() << "GphotoGrabber::populateWithConfigs --> GP_WIDGET_RADIO --> Name: " << name << " --> Value: " << value;
+
+        /*
+        string sname = string(name);
+        string sval  = string(val);
+        printf("%s=%s\n", name, val);
+        if ( sname == "iso" )
+            iso = val;
+        if ( sname == "aperture" )
+            aperture = val;
+        if ( sname == "shutterspeed" )
+            shutter = val;
+        if ( sname == "capturetarget" )
+            target = val;
+        */
+
+        break;
+    case GP_WIDGET_TEXT:
+
+        ret = gp_widget_get_name(gphotoConfig, &namePointer);
+        if (ret != GP_OK) {
+            qDebug() << "GphotoGrabber::populateWithConfigs --> Error gp_widget_get_name: " << gp_result_as_string(ret);
+        }
+        ret = gp_widget_get_value(gphotoConfig, &valuePointer);
+        if (ret != GP_OK) {
+            qDebug() << "GphotoGrabber::populateWithConfigs --> Error gp_widget_get_value: " << gp_result_as_string(ret);
+        }
+
+        //QString log;
+        //logMessage(log.sprintf("%s=%s", name, val));
+        name.clear();
+        name.append(namePointer);
+        value.clear();
+        value.append(valuePointer);
+        // sdialog.addItem(n,v);
+        qDebug() << "GphotoGrabber::populateWithConfigs --> GP_WIDGET_TEXT --> Name: " << name << " --> Value: " << value;
+
+        /*
+        string sname = string(name);
+        string sval  = string(val);
+
+        printf("%s=%s\n", name, val);
+        if ( sname == "batterylevel" )
+            battery = sval;
+        if ( sname == "ownername" )
+            ownername = sval;
+        if ( sname == "serialnumber" )
+            serialnumber = sval;
+        if ( sname == "model" )
+            model = sval;
+        if ( sname == "ptpversion" )
+            ptpversion = sval;
+        */
+
+        break;
+    case GP_WIDGET_RANGE:
+
+        ret = gp_widget_get_name(gphotoConfig, &namePointer);
+        if (ret != GP_OK) {
+            qDebug() << "GphotoGrabber::populateWithConfigs --> Error gp_widget_get_name: " << gp_result_as_string(ret);
+        }
+        name.clear();
+        name.append(namePointer);
+        qDebug() << "GphotoGrabber::populateWithConfigs --> GP_WIDGET_RANGE --> Name: " << name;
+
+        break;
+    case GP_WIDGET_TOGGLE:
+
+        ret = gp_widget_get_name(gphotoConfig, &namePointer);
+        if (ret != GP_OK) {
+            qDebug() << "GphotoGrabber::populateWithConfigs --> Error gp_widget_get_name: " << gp_result_as_string(ret);
+        }
+        name.clear();
+        name.append(namePointer);
+        qDebug() << "GphotoGrabber::populateWithConfigs --> GP_WIDGET_TOGGLE --> Name: " << name;
+
+        break;
+    case GP_WIDGET_DATE:
+
+        ret = gp_widget_get_name(gphotoConfig, &namePointer);
+        if (ret != GP_OK) {
+            qDebug() << "GphotoGrabber::populateWithConfigs --> Error gp_widget_get_name: " << gp_result_as_string(ret);
+        }
+        ret = gp_widget_get_value(gphotoConfig, &date);
+        if (ret != GP_OK) {
+            qDebug() << "GphotoGrabber::populateWithConfigs --> Error gp_widget_get_value: " << gp_result_as_string(ret);
+        }
+        name.clear();
+        name.append(namePointer);
+        qDebug() << "GphotoGrabber::populateWithConfigs --> GP_WIDGET_RADIO --> Name: " << name << " --> Date: " << date;
+
+        break;
+    case GP_WIDGET_WINDOW:
+    case GP_WIDGET_SECTION:
+
+        qDebug() << "GphotoGrabber::populateWithConfigs --> GP_WIDGET_WINDOW / GP_WIDGET_SECTION";
+
+        childrenTotal = gp_widget_count_children(gphotoConfig);
+        if (childrenTotal < GP_OK) {
+            qDebug() << "GphotoGrabber::populateWithConfigs --> Error gp_widget_count_children: " << gp_result_as_string(ret);
+        }
+        for (i = 0; i < childrenTotal; i ++) {
+            ret = gp_widget_get_child(gphotoConfig, i, &child);
+            if (ret != GP_OK) {
+                qDebug() << "GphotoGrabber::populateWithConfigs --> Error gp_widget_get_child: " << gp_result_as_string(ret);
+            }
+            populateWithConfigs(child);
+        }
+
+        break;
+    default:
+
+        qDebug() << "GphotoGrabber::populateWithConfigs --> default!!!";
+
+        break;
+    }
+
+    qDebug() << "GphotoGrabber::populateWithConfigs --> End";
+}
+
+

@@ -1,7 +1,7 @@
 ###############################################################################
 # QtCreator file for the qStopMotion project                                  #
 # (c) Ralf Lange, longsoft.de                                                 #
-# Last update: 2013-01-15                                                     #
+# Last update: 2013-04-07                                                     #
 #                                                                             #
 # Please use CMake and the CMakeLists.txt file to build qStopMotion!          #
 ###############################################################################
@@ -69,6 +69,7 @@ HEADERS += src/config.h \
            src/technical/util.h \
            src/technical/audio/audiodriver.h \
            src/technical/audio/audioformat.h \
+           src/technical/grabber/gphotocontroller.h \
            src/technical/grabber/gphotograbber.h \
            src/technical/grabber/grabbercontrolcapabilities.h \
            src/technical/grabber/grabbercontroller.h \
@@ -147,6 +148,7 @@ SOURCES += src/main.cpp \
            src/technical/preferenceselement.cpp \
            src/technical/preferencestool.cpp \
            src/technical/util.cpp \
+           src/technical/grabber/gphotocontroller.cpp \
            src/technical/grabber/gphotograbber.cpp \
            src/technical/grabber/grabbercontrolcapabilities.cpp \
            src/technical/grabber/grabbercontroller.cpp \

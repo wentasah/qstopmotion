@@ -21,10 +21,10 @@
 #ifndef GPHOTOGRABBER_H
 #define GPHOTOGRABBER_H
 
-#include "technical/grabber/imagegrabber.h"
-
 // Include files of the gphoto library
 #include <gphoto2/gphoto2.h>
+
+#include "technical/grabber/imagegrabber.h"
 
 
 /**

@@ -20,6 +20,7 @@
 
 #include "gphotograbber.h"
 
+#include "technical/grabber/gphotocontroller.h"
 #include "technical/grabber/imagegrabberdevice.h"
 #include "technical/util.h"
 
@@ -109,6 +110,8 @@ bool GphotoGrabber::initialization(QVector<ImageGrabberDevice*> &devices)
 {
     qDebug("GphotoGrabber::initialization --> Start");
 
+    GphotoController *deviceController = NULL;
+
     if (!isInitSuccess) {
         qDebug("GphotoGrabber::initialization --> End (Error)");
         return false;
@@ -123,6 +126,18 @@ bool GphotoGrabber::initialization(QVector<ImageGrabberDevice*> &devices)
                                     ImageGrabberDevice::gphoto2Source,
                                     ImageGrabberDevice::video_x_none);
     devices.append(device);
+
+    // Create grabber controller
+    deviceController = new GphotoController(0);
+    if (deviceController->init(device->getDeviceId()))
+    {
+        device->setController(deviceController);
+    }
+    else
+    {
+        delete deviceController;
+        deviceController = NULL;
+    }
 
     qDebug() << "GphotoGrabber::initialization --> device count: " << devices.size();
 

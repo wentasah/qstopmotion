@@ -50,7 +50,7 @@ AnimationProject::AnimationProject(Frontend* f)
     mixMode            = 0;
     mixCount           = 0;
     playbackCount      = 0;
-    framesPerSecond    = 0;
+    videoFps           = 0;
 
     unitMode           = 0;
     grabberSource      = 0;
@@ -59,10 +59,11 @@ AnimationProject::AnimationProject(Frontend* f)
     grabberSource      = 0;
     imageAdjustment    = 0;
     imageFormat        = 0;
-    imageQuality   = 100;
+    imageQuality       = 100;
     imageSize          = 0;
     videoFormat        = 0;
     videoSize          = 0;
+    liveViewFps        = 20;
 
     settingsChanges    = 0;
     animationChanges   = 0;
@@ -329,6 +330,21 @@ void AnimationProject::setImageAdjustment(int newA)
     incSettingsChanges();
 }
 
+
+int AnimationProject::getLiveViewFps()
+{
+    return liveViewFps;
+}
+
+
+void AnimationProject::setLiveViewFps(int newValue)
+{
+    if (liveViewFps != newValue) {
+        liveViewFps = newValue;
+        incSettingsChanges();
+    }
+}
+
 /**************************************************************************
  * Video export preferences
  **************************************************************************/
@@ -372,15 +388,15 @@ void AnimationProject::setVideoSize(int newVS)
 }
 
 
-int AnimationProject::getFramesPerSecond() const
+int AnimationProject::getVideoFps() const
 {
-    return framesPerSecond;
+    return videoFps;
 }
 
 
-void AnimationProject::setFramesPerSecond(int newFPS)
+void AnimationProject::setVideoFps(int newFPS)
 {
-    framesPerSecond = newFPS;
+    videoFps = newFPS;
     incSettingsChanges();
 }
 
@@ -641,6 +657,10 @@ bool AnimationProject::readSettingsFromProject(QDomElement &settingsNode)
             QString tmp = currElement.text();
             imageAdjustment = tmp.toInt();
         }
+        else if (nodeName.compare("liveviewfps") == 0) {
+            QString tmp = currElement.text();
+            liveViewFps = tmp.toInt();
+        }
         // Save video export parameter
         else if (nodeName.compare("encoderapplication") == 0) {
             QString tmp = currElement.text();
@@ -654,9 +674,9 @@ bool AnimationProject::readSettingsFromProject(QDomElement &settingsNode)
             QString tmp = currElement.text();
             videoSize = tmp.toInt();
         }
-        else if (nodeName.compare("framespersecond") == 0) {
+        else if (nodeName.compare("videofps") == 0) {
             QString tmp = currElement.text();
-            framesPerSecond = tmp.toInt();
+            videoFps = tmp.toInt();
         }
         else if (nodeName.compare("usedefaultoutputfile") == 0) {
             QString tmp = currElement.text();
@@ -756,6 +776,12 @@ bool AnimationProject::saveSettingsToProject(QDomDocument &doc, QDomElement &set
     iaElement.appendChild(iaText);
     settingsNode.appendChild(iaElement);
 
+    // Save liveViewFps parameter
+    QDomElement lvfElement = doc.createElement("liveviewfps");
+    QDomText lvfText = doc.createTextNode(QString("%1").arg(liveViewFps));
+    lvfElement.appendChild(lvfText);
+    settingsNode.appendChild(lvfElement);
+
     // Save video export preferences
 
     // Save encoderApplication parameter
@@ -776,9 +802,9 @@ bool AnimationProject::saveSettingsToProject(QDomDocument &doc, QDomElement &set
     vsElement.appendChild(vsText);
     settingsNode.appendChild(vsElement);
 
-    // Save framesPerSecond parameter
-    QDomElement fpsElement = doc.createElement("framespersecond");
-    QDomText fpsText = doc.createTextNode(QString("%1").arg(framesPerSecond));
+    // Save videoFps parameter
+    QDomElement fpsElement = doc.createElement("videofps");
+    QDomText fpsText = doc.createTextNode(QString("%1").arg(videoFps));
     fpsElement.appendChild(fpsText);
     settingsNode.appendChild(fpsElement);
 

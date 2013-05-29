@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2012 by                                                *
+ *  Copyright (C) 2005-2013 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -120,10 +120,16 @@ public:
     void notifyNewMixCount(int newMixCount);
 
     /**
-     * Notify the observers that a new frames per second value is selected.
+     * Notify the observers that a new live view frames per second value is selected.
      * @param newFps the new frames per second.
      */
-    void notifyNewFramesPerSecond(int newFpse);
+    void notifyNewLiveViewFps(int newFps);
+
+    /**
+     * Notify the observers that a new video frames per second value is selected.
+     * @param newFps the new frames per second.
+     */
+    void notifyNewVideoFps(int newFps);
 
     /**************************************************************************
      * Scene notification functions

@@ -60,6 +60,7 @@ GphotoGrabber::GphotoGrabber(Frontend *f)
     if (ret != GP_OK) {
         qDebug() << "GphotoGrabber::Constructor --> Error during camera initialization: " << gp_result_as_string(ret);
         isInitSuccess = false;
+        return;
     }
     isInitSuccess = true;
 
@@ -69,7 +70,12 @@ GphotoGrabber::GphotoGrabber(Frontend *f)
     if (ret != GP_OK) {
         qDebug() << "GphotoGrabber::Constructor --> Error gp_camera_get_summary: " << gp_result_as_string(ret);
     }
-    qDebug() << "GphotoGrabber::Constructor --> Summary: " << QString(sum.text);
+    QStringList sumList = QString(sum.text).split('\n');
+    for (int i = 0; i < sumList.size(); i++) {
+        qDebug() << "GphotoGrabber::Constructor --> Summary: " << sumList.at(i);
+    }
+    manufacturer.append(sumList.at(0).split(' ').at(1));
+    model.append(sumList.at(1).split(' ').at(1));
 
     // manual
     CameraText manual;
@@ -77,7 +83,9 @@ GphotoGrabber::GphotoGrabber(Frontend *f)
     if (ret != GP_OK) {
         qDebug() << "GphotoGrabber::Constructor --> Error gp_camera_get_manual: " << gp_result_as_string(ret);
     }
-    qDebug() << "GphotoGrabber::Constructor --> Manual: " << QString(manual.text);
+    else {
+        qDebug() << "GphotoGrabber::Constructor --> Manual: " << QString(manual.text);
+    }
 
     // about
     CameraText about;
@@ -122,7 +130,7 @@ bool GphotoGrabber::initialization(QVector<ImageGrabberDevice*> &devices)
     qDebug() << "GphotoGrabber::initialization --> Add video test device";
 
     device = new ImageGrabberDevice("",
-                                    QApplication::translate("GphotoGrabber", "Gphoto2 device"),
+                                    QString("%1 %2").arg(manufacturer).arg(model),
                                     ImageGrabberDevice::gphoto2Source,
                                     ImageGrabberDevice::video_x_none);
     devices.append(device);
@@ -138,6 +146,8 @@ bool GphotoGrabber::initialization(QVector<ImageGrabberDevice*> &devices)
         delete deviceController;
         deviceController = NULL;
     }
+
+    isInitSuccess = true;
 
     qDebug() << "GphotoGrabber::initialization --> device count: " << devices.size();
 
@@ -167,12 +177,14 @@ bool GphotoGrabber::setUp()
         return false;
     }
 
-    if (false == canonEnableCapture(gphotoCamera, gphotoContext, gphotoConfig)) {
-        returnValue = false;
-        goto out;
-    }
+    if (manufacturer.compare("canon", Qt::CaseInsensitive) == 0) {
+        if (false == canonEnableCapture(gphotoCamera, gphotoContext, gphotoConfig)) {
+            returnValue = false;
+            goto out;
+        }
 
-    populateWithConfigs(gphotoConfig);
+        populateWithConfigs(gphotoConfig);
+    }
 
     // Abilities
     qDebug() << "GphotoGrabber::setUp --> Checking camera abilities";
@@ -288,7 +300,7 @@ const QImage GphotoGrabber::getLiveImage()
         return QImage();
     }
 
-    rawImage.loadFromData((uchar*)data, (uint)mysize);
+    liveImage.loadFromData((uchar*)data, (uint)mysize);
 
     /*
     char output_file[256];
@@ -374,6 +386,25 @@ int GphotoGrabber::lookupWidget(CameraWidget  *widget,
                                 CameraWidget* *child)
 {
     int ret;
+    CameraWidget* ch;
+
+    int childrenCount = gp_widget_count_children(widget);
+    if (childrenCount < GP_OK) {
+        return childrenCount;
+    }
+    for (int c = 0 ; c < childrenCount ; c++) {
+        const char *name;
+
+        ret = gp_widget_get_child(widget, c, &ch);
+        if (ret < GP_OK) {
+            return ret;
+        }
+        ret = gp_widget_get_name(ch, &name);
+        if (ret < GP_OK) {
+            return ret;
+        }
+        qDebug() << "GphotoGrabber::lookupWidget --> Children (" << c << "): Name: " << name;
+    }
 
     ret = gp_widget_get_child_by_name(widget, key, child);
     if (ret < GP_OK) {

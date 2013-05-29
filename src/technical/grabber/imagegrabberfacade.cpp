@@ -140,10 +140,10 @@ void ImageGrabberFacade::initialization()
 #endif
 
 #ifdef Q_WS_X11
-    // gphotoGrabber = new GphotoGrabber(frontend);
-    // if (gphotoGrabber->initialization(devices)) {
-    //     isInitialized = true;
-    // }
+    gphotoGrabber = new GphotoGrabber(frontend);
+    if (gphotoGrabber->initialization(devices)) {
+        isInitialized = true;
+    }
 #endif
 
     qDebug("ImageGrabberFacade::initialization --> End");

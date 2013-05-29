@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2010-2012 by                                                *
+ *  Copyright (C) 2010-2013 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -485,7 +485,10 @@ void ProjectTab::updateMixMode(int) {}
 void ProjectTab::updateMixCount(int) {}
 
 
-void ProjectTab::updateFramesPerSecond(int) {}
+void ProjectTab::updateLiveViewFps(int) {}
+
+
+void ProjectTab::updateVideoFps(int) {}
 
 
 /**************************************************************************

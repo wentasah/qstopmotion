@@ -58,7 +58,7 @@ ExportWidget::ExportWidget(Frontend *f, bool type, QWidget *parent) : QWidget(pa
     activeVideoSize          = VideoEncoder::defaultSize;
     videoFpsLabel            = 0;
     videoFpsChooser          = 0;
-    activeFramesPerSecond    = 12;
+    activeVideoFps           = 12;
 
     // Output file preferences
     outputPrefs              = 0;
@@ -253,10 +253,10 @@ void ExportWidget::initialize()
         }
         activeVideoSize = value;
 
-        if (pref->getIntegerPreference("preferences", "defaultframespersecond", value) == false) {
+        if (pref->getIntegerPreference("preferences", "defaultvideofps", value) == false) {
             value = 12;
         }
-        activeFramesPerSecond = value;
+        activeVideoFps = value;
 
         if (pref->getIntegerPreference("preferences", "defaultusedefaultoutputfile", value) == false) {
             value = false;
@@ -268,7 +268,7 @@ void ExportWidget::initialize()
         activeEncoderApplication = frontend->getProject()->getEncoderApplication();
         activeVideoFormat = frontend->getProject()->getVideoFormat();
         activeVideoSize = frontend->getProject()->getVideoSize();
-        activeFramesPerSecond = frontend->getProject()->getFramesPerSecond();
+        activeVideoFps = frontend->getProject()->getVideoFps();
         activeUseDefaultOutputFile = frontend->getProject()->getUseDefaultOutputFile();
         activeDefaultOutputFileName = frontend->getProject()->getDefaultOutputFileName();
     }
@@ -300,7 +300,7 @@ void ExportWidget::initialize()
         videoSizeCombo->setCurrentIndex(activeVideoSize);
     }
 
-    this->videoFpsChooser->setValue(activeFramesPerSecond);
+    this->videoFpsChooser->setValue(activeVideoFps);
 
     // Output file preferences
     if (activeUseDefaultOutputFile)
@@ -358,8 +358,8 @@ void ExportWidget::apply()
     }
 
     index = videoFpsChooser->value();
-    if (activeFramesPerSecond != index) {
-        activeFramesPerSecond = index;
+    if (activeVideoFps != index) {
+        activeVideoFps = index;
         changings = true;
     }
 
@@ -383,7 +383,7 @@ void ExportWidget::apply()
             pref->setIntegerPreference("preferences", "defaultencoderapplication", activeEncoderApplication);
             pref->setIntegerPreference("preferences", "defaultvideoformat", activeVideoFormat);
             pref->setIntegerPreference("preferences", "defaultvideosize", activeVideoSize);
-            pref->setIntegerPreference("preferences", "defaultframespersecond", activeFramesPerSecond);
+            pref->setIntegerPreference("preferences", "defaultvideofps", activeVideoFps);
             pref->setIntegerPreference("preferences", "defaultusedefaultoutputfile", activeUseDefaultOutputFile);
         }
         else {
@@ -391,7 +391,7 @@ void ExportWidget::apply()
             frontend->getProject()->setEncoderApplication(activeEncoderApplication);
             frontend->getProject()->setVideoFormat(activeVideoFormat);
             frontend->getProject()->setVideoSize(activeVideoSize);
-            frontend->getProject()->setFramesPerSecond(activeFramesPerSecond);
+            frontend->getProject()->setVideoFps(activeVideoFps);
             frontend->getProject()->setUseDefaultOutputFile(activeUseDefaultOutputFile);
             frontend->getProject()->setDefaultOutputFileName(activeDefaultOutputFileName);
         }
@@ -408,7 +408,7 @@ void ExportWidget::reset()
     encoderApplicationCombo->setCurrentIndex(activeEncoderApplication);
     videoFormatCombo->setCurrentIndex(activeVideoFormat);
     videoSizeCombo->setCurrentIndex(activeVideoSize);
-    videoFpsChooser->setValue(activeFramesPerSecond);
+    videoFpsChooser->setValue(activeVideoFps);
     if (activeUseDefaultOutputFile)
     {
         setYesButtonOn();

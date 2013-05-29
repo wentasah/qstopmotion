@@ -71,6 +71,7 @@ ImportWidget::ImportWidget(Frontend *f, bool type, QWidget *parent) : QWidget(pa
     scaleButton              = 0;
     clipButton               = 0;
 
+    // Adjustment preferences
     adjustmentPrefs          = 0;
     leftUpButton             = 0;
     centerUpButton           = 0;
@@ -82,6 +83,14 @@ ImportWidget::ImportWidget(Frontend *f, bool type, QWidget *parent) : QWidget(pa
     centerDownButton         = 0;
     rightDownButton          = 0;
     activeImageAdjustment    = ImageGrabber::centerDown;
+
+    // Live view preferences
+    liveViewPrefs            = 0;
+    liveViewFpsLabel         = 0;
+    liveViewFpsSlider        = 0;
+    activeLiveViewFps        = 20;
+    fpsMinimumLabel          = 0;
+    fpsMaximumLabel          = 0;
 
     this->setObjectName("ImportWidget");
 
@@ -113,10 +122,11 @@ void ImportWidget::makeGUI()
     }
 
     infoText->setMinimumWidth(440);
-    infoText->setMaximumHeight(40);
+    infoText->setMinimumHeight(55);
+    infoText->setMaximumHeight(60);
     infoText->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 
-    // Encoder preferences
+    // Image grabber preferences
     grabberPrefs = new QGroupBox;
     grabberPrefs->setTitle(tr("Image grabber settings"));
 
@@ -141,6 +151,13 @@ void ImportWidget::makeGUI()
     grabberSourceCombo->addItem(tr("Direct Show (FireWire DigiCam)"));
 #endif
 
+    QGridLayout *grabberPrefsLayout = new QGridLayout;
+    grabberPrefsLayout->setColumnStretch(0, 1);
+    grabberPrefsLayout->addWidget(grabberSourceLabel, 0, 0, Qt::AlignLeft);
+    grabberPrefsLayout->addWidget(grabberSourceCombo, 0, 1, Qt::AlignRight);
+    grabberPrefs->setLayout(grabberPrefsLayout);
+
+    // Image import preferences
     imagePrefs = new QGroupBox;
     imagePrefs->setTitle(tr("Image import settings"));
 
@@ -185,8 +202,25 @@ void ImportWidget::makeGUI()
     imageSizeCombo->addItem(tr("HD Ready (1280x720)"));
     imageSizeCombo->addItem(tr("Full HD (1900x1080)"));
 
+    QHBoxLayout *icLayout = new QHBoxLayout;
+    icLayout->addWidget(qualityMinimumLabel, 0, Qt::AlignLeft);
+    icLayout->addStretch();
+    icLayout->addWidget(qualityMaximumLabel, 0, Qt::AlignRight);
+
+    QGridLayout *imagePrefsLayout = new QGridLayout;
+    imagePrefsLayout->setColumnStretch(0, 1);
+    imagePrefsLayout->addWidget(imageFormatLabel, 0, 0, Qt::AlignLeft);
+    imagePrefsLayout->addWidget(imageFormatCombo, 0, 1, Qt::AlignRight);
+    imagePrefsLayout->addWidget(imageQualityLabel, 1, 0, Qt::AlignLeft);
+    imagePrefsLayout->addWidget(imageQualitySlider, 1, 1, Qt::AlignRight);
+    imagePrefsLayout->addLayout(icLayout, 2, 1, Qt::AlignRight);
+    imagePrefsLayout->addWidget(imageSizeLabel, 3, 0, Qt::AlignLeft);
+    imagePrefsLayout->addWidget(imageSizeCombo, 3, 1, Qt::AlignRight);
+    imagePrefs->setLayout(imagePrefsLayout);
+
     // Transformation preferences
     transformPrefs = new QGroupBox;
+    transformPrefs->setMinimumSize(440, 300);
     transformPrefs->setTitle(tr("Transformation settings"));
 
     transformText = new QTextEdit;
@@ -209,7 +243,8 @@ void ImportWidget::makeGUI()
     }
 
     transformText->setMinimumWidth(440);
-    transformText->setMaximumHeight(60);
+    transformText->setMinimumHeight(75);
+    transformText->setMaximumHeight(90);
     transformText->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 
     scaleButton = new QRadioButton(tr("Scale the whole image"));
@@ -298,38 +333,6 @@ void ImportWidget::makeGUI()
 
     adjustmentPrefs->setLayout(adjustmentPrefsLayout);
 
-    // Widget layout
-    QVBoxLayout *mainLayout = new QVBoxLayout;
-    mainLayout->addWidget(infoText);
-    mainLayout->addWidget(grabberPrefs);
-    mainLayout->addWidget(imagePrefs);
-    mainLayout->addWidget(transformPrefs);
-    setLayout(mainLayout);
-
-    // Grabber preferences
-    QGridLayout *grabberPrefsLayout = new QGridLayout;
-    grabberPrefsLayout->setColumnStretch(0, 1);
-    grabberPrefsLayout->addWidget(grabberSourceLabel, 0, 0, Qt::AlignLeft);
-    grabberPrefsLayout->addWidget(grabberSourceCombo, 0, 1, Qt::AlignRight);
-    grabberPrefs->setLayout(grabberPrefsLayout);
-
-    // Image import preferences
-    QHBoxLayout *icLayout = new QHBoxLayout;
-    icLayout->addWidget(qualityMinimumLabel, 0, Qt::AlignLeft);
-    icLayout->addStretch();
-    icLayout->addWidget(qualityMaximumLabel, 0, Qt::AlignRight);
-
-    QGridLayout *imagePrefsLayout = new QGridLayout;
-    imagePrefsLayout->setColumnStretch(0, 1);
-    imagePrefsLayout->addWidget(imageFormatLabel, 0, 0, Qt::AlignLeft);
-    imagePrefsLayout->addWidget(imageFormatCombo, 0, 1, Qt::AlignRight);
-    imagePrefsLayout->addWidget(imageQualityLabel, 1, 0, Qt::AlignLeft);
-    imagePrefsLayout->addWidget(imageQualitySlider, 1, 1, Qt::AlignRight);
-    imagePrefsLayout->addLayout(icLayout, 2, 1, Qt::AlignRight);
-    imagePrefsLayout->addWidget(imageSizeLabel, 3, 0, Qt::AlignLeft);
-    imagePrefsLayout->addWidget(imageSizeCombo, 3, 1, Qt::AlignRight);
-    imagePrefs->setLayout(imagePrefsLayout);
-
     // Transform preferences
     QVBoxLayout *transformPrefsLayout = new QVBoxLayout;
     hbLayout = new QHBoxLayout;
@@ -352,6 +355,47 @@ void ImportWidget::makeGUI()
     hbLayout->addStretch(1);
     transformPrefsLayout->addLayout(hbLayout);
     transformPrefs->setLayout(transformPrefsLayout);
+
+    // Live view preferences
+    liveViewPrefs = new QGroupBox;
+    liveViewPrefs->setTitle(tr("Live view settings"));
+
+    liveViewFpsLabel = new QLabel(tr("Frames per second:"));
+    liveViewFpsSlider = new QSlider();
+    liveViewFpsSlider->setMaximum(1);
+    liveViewFpsSlider->setMaximum(50);
+    liveViewFpsSlider->setOrientation(Qt::Horizontal);
+    liveViewFpsSlider->setMinimumWidth(300);
+    liveViewFpsSlider->setMaximumWidth(300);
+    liveViewFpsSlider->setTickPosition(QSlider::TicksBelow);
+    liveViewFpsSlider->setTickInterval(2);
+    liveViewFpsSlider->setSingleStep(5);
+    liveViewFpsSlider->setPageStep(10);
+    connect(liveViewFpsSlider, SIGNAL(sliderReleased()), this, SLOT(changeLiveViewFps()));
+    fpsMinimumLabel = new QLabel(tr("0.1"));
+    fpsMaximumLabel = new QLabel(tr("5.0"));
+
+    QHBoxLayout *fpsLayout = new QHBoxLayout;
+    fpsLayout->addWidget(fpsMinimumLabel, 0, Qt::AlignLeft);
+    fpsLayout->addStretch();
+    fpsLayout->addWidget(fpsMaximumLabel, 0, Qt::AlignRight);
+
+    QGridLayout *liveViewPrefsLayout = new QGridLayout;
+    liveViewPrefsLayout->setColumnStretch(0, 1);
+    liveViewPrefsLayout->addWidget(liveViewFpsLabel, 1, 0, Qt::AlignLeft);
+    liveViewPrefsLayout->addWidget(liveViewFpsSlider, 1, 1, Qt::AlignRight);
+    liveViewPrefsLayout->addLayout(fpsLayout, 2, 1, Qt::AlignRight);
+    liveViewPrefs->setLayout(liveViewPrefsLayout);
+
+    // Widget layout
+    QVBoxLayout *mainLayout = new QVBoxLayout;
+    mainLayout->addWidget(infoText);
+    mainLayout->addWidget(grabberPrefs);
+    mainLayout->addWidget(imagePrefs);
+    mainLayout->addWidget(transformPrefs);
+    mainLayout->addWidget(liveViewPrefs);
+    setLayout(mainLayout);
+    // setMinimumHeight(500);
 
     qDebug("ImportWidget::makeGUI --> End");
 }
@@ -396,6 +440,11 @@ void ImportWidget::initialize()
             value = ImageGrabber::centerDown;
         }
         activeImageAdjustment = value;
+
+        if (pref->getIntegerPreference("preferences", "defaultliveviewfps", value) == false) {
+            value = 20;
+        }
+        activeLiveViewFps = value;
     }
     else {
         // This is a project dialog tab
@@ -405,6 +454,7 @@ void ImportWidget::initialize()
         activeImageSize = frontend->getProject()->getImageSize();
         activeTransform = frontend->getProject()->getImageTransformation();
         activeImageAdjustment = frontend->getProject()->getImageAdjustment();
+        activeLiveViewFps = frontend->getProject()->getLiveViewFps();
     }
 
     setImageGrabberSource(activeGrabberSource);
@@ -425,6 +475,8 @@ void ImportWidget::initialize()
     }
 
     setAdjustment(activeImageAdjustment);
+
+    liveViewFpsSlider->setValue(activeLiveViewFps);
 
     qDebug("ImportWidget::initialize --> End");
 }
@@ -544,6 +596,12 @@ void ImportWidget::apply()
         changings = true;
     }
 
+    value = liveViewFpsSlider->value();
+    if (activeLiveViewFps != value) {
+        activeLiveViewFps = value;
+        changings = true;
+    }
+
     if (changings) {
         if (tabType) {
             // This is a general dialog tab
@@ -553,6 +611,7 @@ void ImportWidget::apply()
             pref->setIntegerPreference("preferences", "defaultimagesize", activeImageSize);
             pref->setIntegerPreference("preferences", "defaulttransformation", activeTransform);
             pref->setIntegerPreference("preferences", "defaultimageadjustment", activeImageAdjustment);
+            pref->setIntegerPreference("preferences", "defaultliveviewfps", activeLiveViewFps);
         }
         else {
             // This is a project dialog tab
@@ -562,6 +621,7 @@ void ImportWidget::apply()
             frontend->getProject()->setImageSize(activeImageSize);
             frontend->getProject()->setImageTransformation(activeTransform);
             frontend->getProject()->setImageAdjustment(activeImageAdjustment);
+            frontend->getProject()->setLiveViewFps(activeLiveViewFps);
         }
     }
 
@@ -587,6 +647,7 @@ void ImportWidget::reset()
         setClipButtonOn();
     }
     setAdjustment(activeImageAdjustment);
+    liveViewFpsSlider->setValue(activeLiveViewFps);
 
     qDebug("ImportWidget::reset --> End");
 }
@@ -781,4 +842,25 @@ void ImportWidget::enableQuality()
         qualityMinimumLabel->setEnabled(false);
         qualityMaximumLabel->setEnabled(false);
     }
+}
+
+
+void ImportWidget::changeLiveViewFps()
+{
+    qDebug() << "ImportWidget::changeLiveViewFps --> Start";
+
+    int value = liveViewFpsSlider->value();
+
+    if (activeLiveViewFps == value) {
+        return;
+    }
+
+    /*
+    if (!tabType) {
+        // Project settings are changed
+
+    }
+    */
+
+    qDebug() << "ImportWidget::changeLiveViewFps --> End";
 }

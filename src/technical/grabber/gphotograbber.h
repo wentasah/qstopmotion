@@ -121,6 +121,9 @@ private:
     bool       canCaptureVideo;
     bool       canCapturePreview;
     bool       canConfigure;
+
+    QString    manufacturer;
+    QString    model;
 };
 
 #endif

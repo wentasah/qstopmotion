@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2012 by                                                *
+ *  Copyright (C) 2005-2013 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -165,18 +165,30 @@ void ViewFacade::notifyNewMixCount(int newMixCount)
 }
 
 
-void ViewFacade::notifyNewFramesPerSecond(int newFps)
+void ViewFacade::notifyNewLiveViewFps(int newFps)
 {
-    qDebug("ViewFacade::notifyNewFramesPerSecond --> Start");
+    qDebug("ViewFacade::notifyNewLiveViewFps --> Start");
 
     int numElem = observers.size();
     for (int i = 0; i < numElem; ++i) {
-        observers[i]->updateFramesPerSecond(newFps);
+        observers[i]->updateLiveViewFps(newFps);
     }
 
-    qDebug("ViewFacade::notifyNewFramesPerSecond --> End");
+    qDebug("ViewFacade::notifyNewLiveViewFps --> End");
 }
 
+
+void ViewFacade::notifyNewVideoFps(int newFps)
+{
+    qDebug("ViewFacade::notifyNewVideoFps --> Start");
+
+    int numElem = observers.size();
+    for (int i = 0; i < numElem; ++i) {
+        observers[i]->updateVideoFps(newFps);
+    }
+
+    qDebug("ViewFacade::notifyNewVideoFps --> End");
+}
 
 /**************************************************************************
  * Scene notification functions

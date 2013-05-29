@@ -138,10 +138,16 @@ public:
     virtual void updateMixCount(int newMixCount);
 
     /**
-     * Function to recieve notification when new frames per second is set.
+     * Function to recieve notification when new live view frames per second value is set.
      * @param newFps the new frames per second
      */
-    virtual void updateFramesPerSecond(int newFps);
+    virtual void updateLiveViewFps(int newFps);
+
+    /**
+     * Function to recieve notification when new video frames per second value is set.
+     * @param newFps the new frames per second
+     */
+    virtual void updateVideoFps(int newFps);
 
     /**************************************************************************
      * Scene notification functions
@@ -311,10 +317,16 @@ public:
     void setMixCount(int mixCount);
 
     /**
-     * Sets the speed for the playback.
-     * @param playbackSpeed the speed to be setted
+     * Sets the live view frames per second.
+     * @param fps the speed to be setted
      */
-    void setFps(int fps);
+    void setLiveViewFps(int fps);
+
+    /**
+     * Sets the video frames per second for the playback.
+     * @param fps the speed to be setted
+     */
+    void setVideoFps(int fps);
 
     /**
      * Function for performing the redraw with the next frame of the animation.
@@ -397,7 +409,12 @@ protected:
     /**
      *
      */
-    int framesPerSecond;
+    int liveViewFps;
+
+    /**
+     *
+     */
+    int videoFps;
 
     /**
      *

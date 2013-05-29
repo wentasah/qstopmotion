@@ -47,7 +47,7 @@ FrameViewInterface::FrameViewInterface(Frontend *f, QWidget *parent, int fps)
 
     frontend = f;
 
-    this->framesPerSecond = fps;
+    this->liveViewFps = fps;
 
     displayMode = logoMode;
 
@@ -166,13 +166,23 @@ void FrameViewInterface::updateMixCount(int newMixCount)
 }
 
 
-void FrameViewInterface::updateFramesPerSecond(int newFps)
+void FrameViewInterface::updateLiveViewFps(int newFps)
 {
-    qDebug("FrameViewInterface::updateFramesPerSecond --> Start");
+    qDebug("FrameViewInterface::updateLiveViewFps --> Start");
 
-    this->setFps(newFps);
+    this->setLiveViewFps(newFps);
 
-    qDebug("FrameViewInterface::updateFramesPerSecond --> End");
+    qDebug("FrameViewInterface::updateLiveViewFps --> End");
+}
+
+
+void FrameViewInterface::updateVideoFps(int newFps)
+{
+    qDebug("FrameViewInterface::updateVideoFps --> Start");
+
+    this->setVideoFps(newFps);
+
+    qDebug("FrameViewInterface::updateVideoFps --> End");
 }
 
 
@@ -250,7 +260,7 @@ bool FrameViewInterface::cameraOn()
     initCompleted();
 
     displayMode = liveImageMode;
-    grabTimer.start(150);
+    grabTimer.start(1000 / liveViewFps * 10 );  // The liveViewFps = 20 means 2.0
 
     qDebug("FrameViewInterface::cameraOn --> End");
     return true;
@@ -296,12 +306,12 @@ bool FrameViewInterface::setMixMode(int mode)
     // Going into playback mode.
     if (mode == 2 && this->mixMode != 2) {
         grabTimer.stop();
-        playbackTimer.start(1000 / framesPerSecond);
+        playbackTimer.start(1000 / videoFps);
     }
     // Going out of playback mode.
     else if (mode != 2 && mixMode == 2) {
         playbackTimer.stop();
-        grabTimer.start(150);
+        grabTimer.start(1000 / liveViewFps * 10);  // The liveViewFps = 20 means 2.0
     }
 
     mixMode = mode;
@@ -317,9 +327,18 @@ void FrameViewInterface::setMixCount(int mixCount)
 }
 
 
-void FrameViewInterface::setFps(int fps)
+void FrameViewInterface::setLiveViewFps(int fps)
 {
-    this->framesPerSecond = fps;
+    this->liveViewFps = fps;
+    if (grabTimer.isActive()) {
+        grabTimer.setInterval(1000 / fps * 10);  // The liveViewFps = 20 means 2.0
+    }
+}
+
+
+void FrameViewInterface::setVideoFps(int fps)
+{
+    this->videoFps = fps;
     if (playbackTimer.isActive()) {
         playbackTimer.setInterval(1000 / fps);
     }

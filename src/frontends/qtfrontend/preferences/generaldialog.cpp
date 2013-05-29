@@ -62,9 +62,6 @@ GeneralDialog::GeneralDialog(Frontend *f, QWidget *parent)
 
     setLayout(mainLayout);
     setWindowTitle(tr("General Preferences"));
-    // setMaximumWidth(600);
-    setMinimumWidth(500);
-    setMinimumHeight(200);
     setModal(false);
 
     makeGeneralSettingsTab();
@@ -82,7 +79,7 @@ void GeneralDialog::makeGeneralSettingsTab()
 
     generalSettingsTab = new GeneralWidget(frontend);
     generalSettingsTab->initialize();
-    // generalSettingsTab->setMinimumHeight(300);
+    generalSettingsTab->setMinimumHeight(700);
     tabWidget->addTab(generalSettingsTab, tr("&General Settings"));
 
     qDebug("GeneralDialog::makeGeneralSettingsTab --> End");
@@ -95,7 +92,7 @@ void GeneralDialog::makeProjectValueTab()
 
     projectValueTab = new ProjectWidget(frontend, true);
     projectValueTab->initialize();
-    // projectValueTab->setMinimumHeight(300);
+    projectValueTab->setMinimumHeight(700);
     tabWidget->addTab(projectValueTab, tr("&New Project Values"));
 
     qDebug("GeneralDialog::makeProjectValueTab --> End");
@@ -108,7 +105,7 @@ void GeneralDialog::makeVideoExportTab()
 
     videoExportTab = new ExportWidget(frontend, true);
     videoExportTab->initialize();
-    // videoExportTab->setMinimumHeight(300);
+    videoExportTab->setMinimumHeight(700);
     tabWidget->addTab(videoExportTab, tr("Video &Export"));
 
     qDebug("GeneralDialog::makeVideoExportTab --> End");
@@ -121,7 +118,7 @@ void GeneralDialog::makeImageImportTab()
 
     imageImportTab = new ImportWidget(frontend, true);
     imageImportTab->initialize();
-    // imageImportTab->setMinimumHeight(300);
+    imageImportTab->setMinimumHeight(700);
     tabWidget->addTab(imageImportTab, tr("&Image Import"));
 
     qDebug("GeneralDialog::makeImageImportTab --> End");

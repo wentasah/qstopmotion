@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2012 by                                                *
+ *  Copyright (C) 2005-2013 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -108,7 +108,7 @@ const QString FfmpegEncoder::getStartCommand() const
     // ===============================
 
     // Input frame rate (default = 25)
-    startCommand.append(QString(" -r %1").arg(animationProject->getFramesPerSecond()));
+    startCommand.append(QString(" -r %1").arg(animationProject->getVideoFps()));
 
     // ===============================
     // Input files

@@ -392,6 +392,19 @@ void DomainFacade::setImageAdjustment(int newA)
     animationProject->setImageAdjustment(newA);
 }
 
+
+int DomainFacade::getLiveViewFps()
+{
+    return animationProject->getLiveViewFps();
+}
+
+
+void DomainFacade::setLiveViewFps(int newValue)
+{
+    animationProject->setLiveViewFps(newValue);
+    getView()->notifyNewLiveViewFps(newValue);
+}
+
 /**************************************************************************
  * Video export preferences
  **************************************************************************/
@@ -432,16 +445,16 @@ void DomainFacade::setVideoSize(int newVS)
 }
 
 
-int DomainFacade::getFramesPerSecond()
+int DomainFacade::getVideoFps()
 {
-    return animationProject->getFramesPerSecond();
+    return animationProject->getVideoFps();
 }
 
 
-void DomainFacade::setFramesPerSecond(int newFps)
+void DomainFacade::setVideoFps(int newFps)
 {
-    animationProject->setFramesPerSecond(newFps);
-    getView()->notifyNewFramesPerSecond(newFps);
+    animationProject->setVideoFps(newFps);
+    getView()->notifyNewVideoFps(newFps);
 }
 
 
@@ -741,6 +754,11 @@ void DomainFacade::setProjectSettingsToDefault()
     }
     setImageFormat(value);
 
+    if (pref->getIntegerPreference("preferences", "defaultimagequality", value) == false) {
+        value = 100;
+    }
+    setImageQuality(value);
+
     if (pref->getIntegerPreference("preferences", "defaultimagesize", value) == false) {
         value = ImageGrabber::defaultSize;
     }
@@ -755,6 +773,11 @@ void DomainFacade::setProjectSettingsToDefault()
         value = ImageGrabber::centerDown;
     }
     setImageAdjustment(value);
+
+    if (pref->getIntegerPreference("preferences", "defaultliveviewfps", value) == false) {
+        value = 20;
+    }
+    setLiveViewFps(value);
 
     // Video export preferences
     if (pref->getIntegerPreference("preferences", "defaultencoderapplication", value) == false) {
@@ -772,10 +795,10 @@ void DomainFacade::setProjectSettingsToDefault()
     }
     setVideoSize(value);
 
-    if (pref->getIntegerPreference("preferences", "defaultframespersecond", value) == false) {
+    if (pref->getIntegerPreference("preferences", "defaultvideofps", value) == false) {
         value = 12;
     }
-    setFramesPerSecond(value);
+    setVideoFps(value);
 
     if (pref->getIntegerPreference("preferences", "defaultusedefaultoutputfile", value) == false) {
         value = false;

@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2010-2012 by Ralf Lange                                 *
+ *   Copyright (C) 2010-2013 by Ralf Lange                                 *
  *   ralf.lange@longsoft.de                                                *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -117,10 +117,16 @@ public:
     void updateMixCount(int newMixCount);
 
     /**
-     * Function to recieve notification when new frames per second is set.
-     * @param newFps the new frames per second
+     * Function to recieve notification when new live view frames per second value is set.
+     * @param newFps the new frames per second value
      */
-    void updateFramesPerSecond(int newFps);
+    void updateLiveViewFps(int newFps);
+
+    /**
+     * Function to recieve notification when new video frames per second value is set.
+     * @param newFps the new frames per second value
+     */
+    void updateVideoFps(int newFps);
 
     /**************************************************************************
      * Scene notification functions

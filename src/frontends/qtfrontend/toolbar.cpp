@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2010-2012 by                                                *
+ *  Copyright (C) 2010-2013 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -255,7 +255,7 @@ void ToolBar::runAnimation()
     int activeSceneIndex = frontend->getProject()->getActiveSceneIndex();
     int activeTakeIndex = frontend->getProject()->getActiveTakeIndex();
     exposureCount = frontend->getProject()->getTakeExposureSize(activeSceneIndex, activeTakeIndex);
-    fps = frontend->getProject()->getFramesPerSecond();
+    fps = frontend->getProject()->getVideoFps();
 
     if (frontend->getProject()->getActiveSceneIndex() >= 0) {
         if (exposureCount > 0) {

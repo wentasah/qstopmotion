@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2012 by                                                *
+ *  Copyright (C) 2005-2013 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -86,10 +86,18 @@ public:
     virtual void updateMixCount(int newMixCount) = 0;
 
     /**
-     * Abstract function for recieving notification when a new frames per second is set.
+     * Abstract function for recieving notification when a new live view frames
+     * per second value is set.
      * @param newFps the new frames per second
      */
-    virtual void updateFramesPerSecond(int newFps) = 0;
+    virtual void updateLiveViewFps(int newFps) = 0;
+
+    /**
+     * Abstract function for recieving notification when a new video frames
+     * per second value is set.
+     * @param newFps the new frames per second
+     */
+    virtual void updateVideoFps(int newFps) = 0;
 
     /**************************************************************************
      * Scene notification functions

@@ -332,6 +332,18 @@ public:
      */
     void setImageAdjustment(int newIA);
 
+    /**
+     * Get the live view fps of the project.
+     * @return live view fps value.
+     */
+    int getLiveViewFps();
+
+    /**
+     * Set the live view fps of the project.
+     * @param newValue The new live view fps value.
+     */
+    void setLiveViewFps(int newValue);
+
     /**************************************************************************
      * Video export preferences
      **************************************************************************/
@@ -373,16 +385,16 @@ public:
     void setVideoSize(int newVS);
 
     /**
-     * Get the number of frames per second of the project.
-     * @return number of frames per second.
+     * Get the video frames per second of the project.
+     * @return The video frames per second.
      */
-    int getFramesPerSecond();
+    int getVideoFps();
 
     /**
-     * Set the number of frames per second of the project.
-     * @param newFPS The new number of frames per second.
+     * Set the video frames per second of the project.
+     * @param newFPS The new video frames per second.
      */
-    void setFramesPerSecond(int newFPS);
+    void setVideoFps(int newFPS);
 
     /**
      * Get the use default output file flag of the project.

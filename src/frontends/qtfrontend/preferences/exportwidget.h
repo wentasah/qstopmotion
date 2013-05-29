@@ -152,7 +152,7 @@ private:
     int           activeVideoSize;
     QLabel       *videoFpsLabel;
     QSpinBox     *videoFpsChooser;
-    int           activeFramesPerSecond;
+    int           activeVideoFps;
 
     // Output file preferences
     QGroupBox    *outputPrefs;

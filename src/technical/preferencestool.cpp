@@ -335,11 +335,12 @@ void PreferencesTool::setBasicPreferenceDefaults()
     setIntegerPreference("preferences", "defaultimagesize", ImageGrabber::defaultSize);
     setIntegerPreference("preferences", "defaulttransformation", true);
     setIntegerPreference("preferences", "defaultimageadjustment", ImageGrabber::centerDown);
+    setIntegerPreference("preferences", "defaulliveviewfps", 20);
     // Video export defaults
     setIntegerPreference("preferences", "defaultencoderapplication", VideoEncoder::noneApplication);
     setIntegerPreference("preferences", "defaultvideoformat", VideoEncoder::mp4Format);
     setIntegerPreference("preferences", "defaultvideosize", VideoEncoder::defaultSize);
-    setIntegerPreference("preferences", "defaultframespersecond", 12);
+    setIntegerPreference("preferences", "defaultvideofps", 12);
     setIntegerPreference("preferences", "defaultusedefaultoutputfile", false);
 }
 

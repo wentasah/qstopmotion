@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2012 by                                                *
+ *  Copyright (C) 2005-2013 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -109,10 +109,16 @@ public:
     void updateMixCount(int newMixCount);
 
     /**
-     * Function to recieve notification when new frames per second is set.
-     * @param newFps the new frames per second
+     * Function to recieve notification when new live view frames per second value is set.
+     * @param newFps the new frames per second value
      */
-    void updateFramesPerSecond(int newFps);
+    void updateLiveViewFps(int newFps);
+
+    /**
+     * Function to recieve notification when new video frames per second value is set.
+     * @param newFps the new frames per second value
+     */
+    void updateVideoFps(int newFps);
 
     /**************************************************************************
      * Scene notification functions

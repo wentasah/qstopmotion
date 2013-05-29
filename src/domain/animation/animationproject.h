@@ -277,6 +277,18 @@ public:
      */
     void setImageAdjustment(int newIA);
 
+    /**
+     * Get the live view fps of the project.
+     * @return live view fps value.
+     */
+    int getLiveViewFps();
+
+    /**
+     * Set the live view fps of the project.
+     * @param newValue The new live view fps value.
+     */
+    void setLiveViewFps(int newValue);
+
     /**************************************************************************
      * Video export preferences
      **************************************************************************/
@@ -318,16 +330,16 @@ public:
     void setVideoSize(int newVS);
 
     /**
-     * Get the number of frames per second of the project.
-     * @return number of frames per second.
+     * Get the video frames per second of the project.
+     * @return The video frames per second.
      */
-    int getFramesPerSecond() const;
+    int getVideoFps() const;
 
     /**
-     * Set the number of frames per second of the project.
-     * @param newFPS The new number of frames per second.
+     * Set the video frames per second of the project.
+     * @param newFPS The new video frames per second.
      */
-    void setFramesPerSecond(int newFPS);
+    void setVideoFps(int newFPS);
 
     /**
      * Get the use default output file flag of the project.
@@ -891,9 +903,24 @@ private:
      */
     int encoderApplication;
 
+    /**
+     * Active grabber source of the project.
+     */
     int grabberSource;
+
+    /**
+     * Active image format of the project.
+     */
     int imageFormat;
+
+    /**
+     * Active image quality of the project.
+     */
     int imageQuality;
+
+    /**
+     * Active image size of the project.
+     */
     int imageSize;
 
     /**
@@ -902,7 +929,15 @@ private:
      */
     bool imageTransformation;
 
+    /**
+     * Active image adjustment of the project.
+     */
     int imageAdjustment;
+
+    /**
+     * Active live view fps of the project.
+     */
+    int liveViewFps;
 
     /**
      * Active video format of the project.
@@ -915,9 +950,9 @@ private:
     int videoSize;
 
     /**
-     * Active frames pre second of the project.
+     * Active video frames per second of the project.
      */
-    int framesPerSecond;
+    int videoFps;
 
     /**
      * Active use default output file flag of the project.

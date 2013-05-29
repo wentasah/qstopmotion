@@ -126,6 +126,12 @@ private slots:
      */
     void setClipButtonOn();
 
+    /**
+     * Slot for notified the image import tab when the live view fps changes,
+     * so that image import preferences can be updated.
+     */
+    void changeLiveViewFps();
+
 private:
     Frontend     *frontend;
 
@@ -165,6 +171,7 @@ private:
     QRadioButton *clipButton;
     bool          activeTransform;
 
+    // Adjustment preferences
     QGroupBox    *adjustmentPrefs;
     QRadioButton *leftUpButton;
     QRadioButton *centerUpButton;
@@ -176,6 +183,14 @@ private:
     QRadioButton *centerDownButton;
     QRadioButton *rightDownButton;
     int           activeImageAdjustment;
+
+    // Live view preferences
+    QGroupBox    *liveViewPrefs;
+    QLabel       *liveViewFpsLabel;
+    QSlider      *liveViewFpsSlider;
+    int           activeLiveViewFps;
+    QLabel       *fpsMinimumLabel;
+    QLabel       *fpsMaximumLabel;
 
     void makeGUI();
 

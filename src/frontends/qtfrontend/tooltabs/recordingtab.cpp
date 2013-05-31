@@ -69,6 +69,7 @@ RecordingTab::RecordingTab(Frontend *f,
     QObject::connect(cameraTimer, SIGNAL(timeout()), this, SLOT(storeFrame()));
 
     makeGUI();
+    retranslateStrings();
 
     createAccelerators();
 }
@@ -79,6 +80,185 @@ RecordingTab::~RecordingTab()
     if (cameraTimer != NULL) {
         delete cameraTimer;
     }
+}
+
+
+void RecordingTab::makeGUI()
+{
+    QString iconFile(frontend->getIconsDirName());
+
+    QVBoxLayout *tabLayout = new QVBoxLayout;
+    QVector<QString> deviceNames = frontend->getDeviceNames();
+    int deviceSize = deviceNames.size();
+
+    // ========================================================================
+    // Recording group box
+    recordingGroupBox = new QGroupBox("recordingGroupBox");
+    // recordingGroupBox->setFlat(true);
+
+    recordingModeCombo = new QComboBox();
+    recordingModeCombo->setFocusPolicy(Qt::NoFocus);
+    connect(recordingModeCombo, SIGNAL(activated(int)), this, SLOT(changeRecordingMode(int)));
+
+    QVBoxLayout *recordingLayout = new QVBoxLayout;
+    recordingLayout->setMargin(4);
+    // recordingLayout->setSpacing(2);
+    // recordingLayout->addStretch(1);
+    recordingLayout->addWidget(recordingModeCombo);
+    recordingLayout->addStretch(10);
+    recordingGroupBox->setLayout(recordingLayout);
+
+    // ========================================================================
+    // Camera group box
+    cameraGroupBox = new QGroupBox("cameraGroupBox");
+    // cameraGroupBox->setFlat(true);
+
+    videoSourceCombo = new QComboBox();
+    videoSourceCombo->setFocusPolicy(Qt::NoFocus);
+    connect(videoSourceCombo, SIGNAL(activated(int)), this, SLOT(changeVideoSource(int)));
+    for (int deviceIndex = 0 ; deviceIndex < deviceSize ; deviceIndex++) {
+        videoSourceCombo->addItem(deviceNames[deviceIndex]);
+    }
+
+    cameraButton = new QPushButton;
+    iconFile.append(QLatin1String("cameraon.png"));
+    cameraButton->setIcon(QPixmap(iconFile));
+    // cameraButton->setFlat(true);
+    cameraButton->setFocusPolicy(Qt::NoFocus);
+    connect(cameraButton, SIGNAL(clicked()), this, SLOT(cameraButtonClicked()));
+    // cameraButton->setEnabled(false);
+
+    QVBoxLayout *cameraLayout = new QVBoxLayout;
+    cameraLayout->setMargin(4);
+    // cameraLayout->setSpacing(2);
+    // cameraLayout->addStretch(1);
+    cameraLayout->addWidget(videoSourceCombo);
+    cameraLayout->addWidget(cameraButton);
+    cameraLayout->addStretch(10);
+    cameraGroupBox->setLayout(cameraLayout);
+
+    // ========================================================================
+    // Capture group box
+    captureGroupBox = new QGroupBox("captureGroupBox");
+    // secondGroupBox->setFlat(true);
+
+    mixModeCombo = new QComboBox();
+    mixModeCombo->setFocusPolicy(Qt::NoFocus);
+    connect(mixModeCombo, SIGNAL(activated(int)), this, SLOT(changeMixMode(int)));
+
+    mixCountSliderCaption = new QLabel();
+
+    mixCountSlider = new QSlider(Qt::Horizontal);
+    mixCountSlider->setMinimum(0);
+    mixCountSlider->setMaximum(5);
+    mixCountSlider->setPageStep(1);
+    mixCountSlider->setValue(2);
+    mixCountSlider->setTickPosition(QSlider::TicksBelow);
+    mixCountSlider->setFocusPolicy(Qt::NoFocus);
+    connect(mixCountSlider, SIGNAL(valueChanged(int)), this, SLOT(changeMixCount(int)));
+
+    QVBoxLayout *captureLayout = new QVBoxLayout;
+    captureLayout->setMargin(4);
+    // captureLayout->setSpacing(2);
+    // captureLayout->addStretch(1);
+    captureLayout->addWidget(mixModeCombo);
+    captureLayout->addWidget(mixCountSliderCaption);
+    captureLayout->addWidget(mixCountSlider);
+    captureLayout->addStretch(10);
+    captureGroupBox->setLayout(captureLayout);
+    captureGroupBox->hide();
+
+    /* ========================================================================
+    // Auto group box
+    autoGroupBox = new QGroupBox("autoGroupBox");
+    autoGroupBox->setFlat(true);
+
+    unitModeChooseCombo = new QComboBox();
+    unitModeChooseCombo->setFocusPolicy(Qt::NoFocus);
+    unitModeChooseCombo->setEnabled(false);
+    connect(unitModeChooseCombo, SIGNAL(activated(int)), this, SLOT(changeUnitMode(int)));
+
+    QVBoxLayout *autoLayout = new QVBoxLayout;
+    autoLayout->setMargin(4);
+    autoLayout->setSpacing(2);
+    autoLayout->addStretch(1);
+    autoLayout->addWidget(unitModeChooseCombo);
+    */
+
+    // ========================================================================
+    // Tab layout
+    tabLayout->setMargin(0);
+    tabLayout->setSpacing(2);
+    // tabLayout->addStretch(1);
+    tabLayout->addWidget(recordingGroupBox);
+    tabLayout->addWidget(cameraGroupBox);
+    tabLayout->addWidget(captureGroupBox);
+    // tabLayout->addWidget(autoGroupBox);
+    tabLayout->addStretch(1);
+
+    setLayout(tabLayout);
+
+    connect(toolBar->getCaptureButton(), SIGNAL(clicked()), this, SLOT(captureFrame()));
+}
+
+
+void RecordingTab::retranslateStrings()
+{
+    recordingGroupBox->setTitle(tr("Recording"));
+    recordingModeCombo->addItem(tr("Single frame capture"));
+    // recordingModeCombo->addItem(tr("Automated recording"));
+
+    cameraGroupBox->setTitle(tr("Camera"));
+
+    captureGroupBox->setTitle(tr("Capture"));
+    mixModeCombo->clear();
+    mixModeCombo->addItem(tr("Mix"));
+    mixModeCombo->addItem(tr("Diff"));
+    mixModeCombo->addItem(tr("Playback"));
+    /*
+    autoGroupBox->setTitle(tr("Auto"));
+    unitModeCombo->clear();
+    unitModeCombo->addItem("");
+    unitModeCombo->addItem(tr("Pr sec"));
+    unitModeCombo->addItem(tr("Pr min"));
+    unitModeCombo->addItem(tr("Pr hr"));
+    unitModeCombo->setCurrentIndex(0);
+    */
+
+    QString infoText =
+        tr("<h4>Toggle camera on/off (C)</h4> "
+           "<p>Click this button to toggle the camera on and off</p> ");
+    cameraButton->setToolTip(infoText);
+    cameraButton->setWhatsThis(infoText);
+
+    mixCountSliderCaption->setText(tr("Number of images:"));
+    infoText =
+        tr("<h4>Number of images</h4> "
+           "<p>By changing the value in this slidebar you can specify how many images "
+           "backwards in the animation which should be mixed on top of the camera or "
+           "if you are in playback mode: how many images to play. </p> "
+           "<p>By mixing the previous image(s) onto the camera you can more easily see "
+           "how the next shot will be in relation to the other, therby making a smoother "
+           "stop motion animation!</p>");
+    mixCountSliderCaption->setWhatsThis(infoText);
+    mixCountSlider->setWhatsThis(infoText);
+}
+
+
+void RecordingTab::initialize()
+{
+    qDebug() << "RecordingTab::initialize --> Start";
+    /*
+    int videoSource = frontend->getProject()->getAnimationProject()->getVideoSource();
+    this->videoSourceCombo->setCurrentIndex(videoSource);
+
+    int mixingMode = frontend->getProject()->getAnimationProject()->getMixingMode();
+    changeMixingMode(mixingMode);
+
+    int unitMode = frontend->getProject()->getAnimationProject()->getUnitMode();
+    this->unitModeChooseCombo->setCurrentIndex(unitMode);
+    */
+    qDebug() << "RecordingTab::initialize --> End";
 }
 
 
@@ -191,141 +371,6 @@ void RecordingTab::changeCaptureButtonFunction(PreferencesTool::captureButtonFun
 }
 
 
-void RecordingTab::makeGUI()
-{
-    QString iconFile(frontend->getIconsDirName());
-
-    QVBoxLayout *tabLayout = new QVBoxLayout;
-    QVector<QString> deviceNames = frontend->getDeviceNames();
-    int deviceSize = deviceNames.size();
-
-    // ========================================================================
-    // Recording group box
-    recordingGroupBox = new QGroupBox(tr("Auto"));
-    // recordingGroupBox->setFlat(true);
-
-    recordingModeCombo = new QComboBox();
-    recordingModeCombo->setFocusPolicy(Qt::NoFocus);
-    connect(recordingModeCombo, SIGNAL(activated(int)), this, SLOT(changeRecordingMode(int)));
-
-    QVBoxLayout *recordingLayout = new QVBoxLayout;
-    recordingLayout->setMargin(4);
-    // recordingLayout->setSpacing(2);
-    // recordingLayout->addStretch(1);
-    recordingLayout->addWidget(recordingModeCombo);
-    recordingLayout->addStretch(10);
-    recordingGroupBox->setLayout(recordingLayout);
-
-    // ========================================================================
-    // Camera group box
-    cameraGroupBox = new QGroupBox(tr("Camera"));
-    // cameraGroupBox->setFlat(true);
-
-    videoSourceCombo = new QComboBox();
-    videoSourceCombo->setFocusPolicy(Qt::NoFocus);
-    connect(videoSourceCombo, SIGNAL(activated(int)), this, SLOT(changeVideoSource(int)));
-    for (int deviceIndex = 0 ; deviceIndex < deviceSize ; deviceIndex++) {
-        videoSourceCombo->addItem(deviceNames[deviceIndex]);
-    }
-
-    cameraButton = new QPushButton;
-    iconFile.append(QLatin1String("cameraon.png"));
-    cameraButton->setIcon(QPixmap(iconFile));
-    // cameraButton->setFlat(true);
-    cameraButton->setFocusPolicy(Qt::NoFocus);
-    connect(cameraButton, SIGNAL(clicked()), this, SLOT(cameraButtonClicked()));
-    // cameraButton->setEnabled(false);
-
-    QVBoxLayout *cameraLayout = new QVBoxLayout;
-    cameraLayout->setMargin(4);
-    // cameraLayout->setSpacing(2);
-    // cameraLayout->addStretch(1);
-    cameraLayout->addWidget(videoSourceCombo);
-    cameraLayout->addWidget(cameraButton);
-    cameraLayout->addStretch(10);
-    cameraGroupBox->setLayout(cameraLayout);
-
-    // ========================================================================
-    // Capture group box
-    captureGroupBox = new QGroupBox(tr("Capture"));
-    // secondGroupBox->setFlat(true);
-
-    mixModeCombo = new QComboBox();
-    mixModeCombo->setFocusPolicy(Qt::NoFocus);
-    connect(mixModeCombo, SIGNAL(activated(int)), this, SLOT(changeMixMode(int)));
-
-    mixCountSliderCaption = new QLabel();
-
-    mixCountSlider = new QSlider(Qt::Horizontal);
-    mixCountSlider->setMinimum(0);
-    mixCountSlider->setMaximum(5);
-    mixCountSlider->setPageStep(1);
-    mixCountSlider->setValue(2);
-    mixCountSlider->setTickPosition(QSlider::TicksBelow);
-    mixCountSlider->setFocusPolicy(Qt::NoFocus);
-    connect(mixCountSlider, SIGNAL(valueChanged(int)), this, SLOT(changeMixCount(int)));
-
-    QVBoxLayout *captureLayout = new QVBoxLayout;
-    captureLayout->setMargin(4);
-    // captureLayout->setSpacing(2);
-    // captureLayout->addStretch(1);
-    captureLayout->addWidget(mixModeCombo);
-    captureLayout->addWidget(mixCountSliderCaption);
-    captureLayout->addWidget(mixCountSlider);
-    captureLayout->addStretch(10);
-    captureGroupBox->setLayout(captureLayout);
-    captureGroupBox->hide();
-
-    /* ========================================================================
-    // Auto group box
-    autoGroupBox = new QGroupBox(tr("Auto"));
-    autoGroupBox->setFlat(true);
-
-    unitModeChooseCombo = new QComboBox();
-    unitModeChooseCombo->setFocusPolicy(Qt::NoFocus);
-    unitModeChooseCombo->setEnabled(false);
-    connect(unitModeChooseCombo, SIGNAL(activated(int)), this, SLOT(changeUnitMode(int)));
-
-    QVBoxLayout *autoLayout = new QVBoxLayout;
-    autoLayout->setMargin(4);
-    autoLayout->setSpacing(2);
-    autoLayout->addStretch(1);
-    autoLayout->addWidget(unitModeChooseCombo);
-    */
-
-    // ========================================================================
-    // Tab layout
-    tabLayout->setMargin(0);
-    tabLayout->setSpacing(2);
-    // tabLayout->addStretch(1);
-    tabLayout->addWidget(recordingGroupBox);
-    tabLayout->addWidget(cameraGroupBox);
-    tabLayout->addWidget(captureGroupBox);
-    // tabLayout->addWidget(autoGroupBox);
-    tabLayout->addStretch(1);
-
-    setLayout(tabLayout);
-
-    connect(toolBar->getCaptureButton(), SIGNAL(clicked()), this, SLOT(captureFrame()));
-}
-
-
-void RecordingTab::initialize()
-{
-    qDebug() << "RecordingTab::initialize --> Start";
-    /*
-    int videoSource = frontend->getProject()->getAnimationProject()->getVideoSource();
-    this->videoSourceCombo->setCurrentIndex(videoSource);
-
-    int mixingMode = frontend->getProject()->getAnimationProject()->getMixingMode();
-    changeMixingMode(mixingMode);
-
-    int unitMode = frontend->getProject()->getAnimationProject()->getUnitMode();
-    this->unitModeChooseCombo->setCurrentIndex(unitMode);
-    */
-    qDebug() << "RecordingTab::initialize --> End";
-}
-
 /*
 void RecordingTab::resizeEvent(QResizeEvent *event)
 {
@@ -365,49 +410,6 @@ void RecordingTab::apply()
     }
 }
 */
-
-
-void RecordingTab::retranslateStrings()
-{
-    recordingGroupBox->setTitle(tr("Recording"));
-    recordingModeCombo->addItem(tr("Single frame capture"));
-    // recordingModeCombo->addItem(tr("Automated recording"));
-
-    cameraGroupBox->setTitle(tr("Camera"));
-
-    captureGroupBox->setTitle(tr("Capture"));
-    mixModeCombo->clear();
-    mixModeCombo->addItem(tr("Mix"));
-    mixModeCombo->addItem(tr("Diff"));
-    mixModeCombo->addItem(tr("Playback"));
-    /*
-    autoGroupBox->setTitle(tr("Auto"));
-    unitModeCombo->clear();
-    unitModeCombo->addItem("");
-    unitModeCombo->addItem(tr("Pr sec"));
-    unitModeCombo->addItem(tr("Pr min"));
-    unitModeCombo->addItem(tr("Pr hr"));
-    unitModeCombo->setCurrentIndex(0);
-    */
-
-    QString infoText =
-        tr("<h4>Toggle camera on/off (C)</h4> "
-           "<p>Click this button to toggle the camera on and off</p> ");
-    cameraButton->setToolTip(infoText);
-    cameraButton->setWhatsThis(infoText);
-
-    mixCountSliderCaption->setText(tr("Number of images:"));
-    infoText =
-        tr("<h4>Number of images</h4> "
-           "<p>By changing the value in this slidebar you can specify how many images "
-           "backwards in the animation which should be mixed on top of the camera or "
-           "if you are in playback mode: how many images to play. </p> "
-           "<p>By mixing the previous image(s) onto the camera you can more easily see "
-           "how the next shot will be in relation to the other, therby making a smoother "
-           "stop motion animation!</p>");
-    mixCountSliderCaption->setWhatsThis(infoText);
-    mixCountSlider->setWhatsThis(infoText);
-}
 
 
 void RecordingTab::setMixModeMixing()

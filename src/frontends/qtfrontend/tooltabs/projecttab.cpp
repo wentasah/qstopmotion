@@ -78,6 +78,7 @@ ProjectTab::ProjectTab(Frontend *f,
     this->setObjectName("ProjectTab");
 
     makeGUI();
+    retranslateStrings();
     enableTab();
     frontend->getView()->attatch(this);
 
@@ -110,7 +111,7 @@ void ProjectTab::makeGUI()
 
     // ========================================================================
     // Project tree
-    projectGroupBox = new QGroupBox(tr("Project Tree"));
+    projectGroupBox = new QGroupBox("projectGroupBox");
     // projectGroupBox->setFlat(true);
 
     projectTree = new QTreeWidget();
@@ -131,7 +132,7 @@ void ProjectTab::makeGUI()
 
     // ========================================================================
     // Scene buttons
-    scenesGroupBox = new QGroupBox(tr("Scenes"));
+    scenesGroupBox = new QGroupBox("scenesGroupBox");
     // scenesGroupBox->setFlat(true);
 
     insertSceneButton = new QPushButton;
@@ -171,7 +172,7 @@ void ProjectTab::makeGUI()
 
     // ========================================================================
     // Take buttons
-    takesGroupBox = new QGroupBox(tr("Takes"));
+    takesGroupBox = new QGroupBox("takesGroupBox");
     // takesGroupBox->setFlat(true);
 
     insertTakeButton = new QPushButton;
@@ -213,7 +214,7 @@ void ProjectTab::makeGUI()
 
     // ========================================================================
     // Frame buttons
-    framesGroupBox = new QGroupBox(tr("Frames"));
+    framesGroupBox = new QGroupBox("framesGroupBox");
     // framesGroupBox->setFlat(true);
 
     insertFramesButton = new QPushButton;
@@ -255,7 +256,7 @@ void ProjectTab::makeGUI()
 
     // ========================================================================
     // Edit buttons
-    editGroupBox = new QGroupBox(tr("Edit"));
+    editGroupBox = new QGroupBox("editGroupBox");
     // editGroupBox->setFlat(true);
 
     editFrameButton = new QPushButton;
@@ -290,6 +291,94 @@ void ProjectTab::makeGUI()
     setLayout(tabLayout);
 
     qDebug("ProjectTab::makeGUI --> End");
+}
+
+
+void ProjectTab::retranslateStrings()
+{
+    qDebug("ProjectTab::retranslateStrings --> Start");
+
+    projectGroupBox->setTitle(tr("Project Tree"));
+
+    scenesGroupBox->setTitle(tr("Scenes"));
+
+    QString infoText =
+        tr("<h4>Insert new Scene (CTRL+E)</h4> "
+           "<p>Click this button to create a new <em>scene</em> "
+           "and <em>insert</em> it bevor the selected scene.</p>");
+    insertSceneButton->setToolTip(infoText);
+    insertSceneButton->setWhatsThis(infoText);
+
+    infoText =
+        tr("<h4>Append new Scene (CTRL+E)</h4> "
+           "<p>Click this button to create a new <em>scene</em> "
+           "and <em>append</em> it at the end of the animation.</p>");
+    addSceneButton->setToolTip(infoText);
+    addSceneButton->setWhatsThis(infoText);
+
+    infoText =
+        tr("<h4>Remove Scene (SHIFT+Delete)</h4> "
+           "<p>Click this button to <em>remove</em> the selected <em>scene</em> "
+           "from the animation.</p>");
+    removeSceneButton->setToolTip(infoText);
+    removeSceneButton->setWhatsThis(infoText);
+
+    takesGroupBox->setTitle(tr("Takes"));
+
+    infoText =
+        tr("<h4>Insert new Take (CTRL+E)</h4> "
+           "<p>Click this button to create a new <em>take</em> "
+           "and <em>insert</em> it bevor the selected take.</p>");
+    insertTakeButton->setToolTip(infoText);
+    insertTakeButton->setWhatsThis(infoText);
+
+    infoText =
+        tr("<h4>Append new Take (CTRL+E)</h4> "
+           "<p>Click this button to create a new <em>take</em> "
+           "and <em>append</em> it to the end of the scene.</p>");
+    addTakeButton->setToolTip(infoText);
+    addTakeButton->setWhatsThis(infoText);
+
+    infoText =
+        tr("<h4>Remove Take (SHIFT+Delete)</h4> "
+           "<p>Click this button to <em>remove</em> the selected <em>take</em> "
+           "from the animation.</p>");
+    removeTakeButton->setToolTip(infoText);
+    removeTakeButton->setWhatsThis(infoText);
+
+    framesGroupBox->setTitle(tr("Frames"));
+
+    infoText =
+        tr("<h4>Insert Frames (CTRL+F)</h4> "
+           "<p>Click on this button to <em>insert frames</em> "
+           "bevor the selected frame.</p>");
+    insertFramesButton->setToolTip(infoText);
+    insertFramesButton->setWhatsThis(infoText);
+
+    infoText =
+        tr("<h4>Append Frames (CTRL+F)</h4> "
+           "<p>Click on this button to <em>append frames</em> at the "
+           "end of the take.</p>");
+    addFramesButton->setToolTip(infoText);
+    addFramesButton->setWhatsThis(infoText);
+
+    infoText =
+        tr("<h4>Remove Frame (Delete)</h4> "
+           "<p>Click this button to <em>remove</em> the selected <em>frame</em> "
+           "from the take.</p>");
+    removeFramesButton->setToolTip(infoText);
+    removeFramesButton->setWhatsThis(infoText);
+
+    editGroupBox->setTitle(tr("Edit"));
+
+    infoText =
+        tr("<h4>Launch Photo Editor</h4> "
+           "<p>Click this button to open the active frame in the photo editor</p> "
+           "<p>Note that you can also drag images from the frame bar and drop them on the photo editor</p>");
+    editFrameButton->setToolTip(infoText);
+    editFrameButton->setWhatsThis(infoText);
+
+    qDebug("ProjectTab::retranslateStrings --> End");
 }
 
 
@@ -830,7 +919,7 @@ void ProjectTab::updateSetNewActiveExposure(int exposureIndex)
     }
 
     // For writing the frame number in the frame number display
-    emit newActiveFrame(QString(tr("Exposure number: ")) + QString("%1").arg(exposureIndex + 1));
+    emit newActiveFrame(tr("Exposure number: ") + QString("%1").arg(exposureIndex + 1));
 
     // For setting the value in the spinbox in the gotomenu
     emit newActiveFrame(exposureIndex + 1);
@@ -1440,96 +1529,6 @@ void ProjectTab::gimpProcessFinished(int /*exitCode*/, QProcess::ExitStatus /*ex
 
     qDebug("ProjectTab::gimpProcessFinished --> End");
 }
-
-
-void ProjectTab::retranslateStrings()
-{
-    qDebug("ProjectTab::retranslateStrings --> Start");
-
-    projectGroupBox->setTitle(tr("Project Tree"));
-
-    scenesGroupBox->setTitle(tr("Scenes"));
-
-    QString infoText =
-        tr("<h4>Insert new Scene (CTRL+E)</h4> "
-           "<p>Click this button to create a new <em>scene</em> "
-           "and <em>insert</em> it bevor the selected scene.</p>");
-    insertSceneButton->setToolTip(infoText);
-    insertSceneButton->setWhatsThis(infoText);
-
-    infoText =
-        tr("<h4>Append new Scene (CTRL+E)</h4> "
-           "<p>Click this button to create a new <em>scene</em> "
-           "and <em>append</em> it at the end of the animation.</p>");
-    addSceneButton->setToolTip(infoText);
-    addSceneButton->setWhatsThis(infoText);
-
-    infoText =
-        tr("<h4>Remove Scene (SHIFT+Delete)</h4> "
-           "<p>Click this button to <em>remove</em> the selected <em>scene</em> "
-           "from the animation.</p>");
-    removeSceneButton->setToolTip(infoText);
-    removeSceneButton->setWhatsThis(infoText);
-
-    takesGroupBox->setTitle(tr("Takes"));
-
-    infoText =
-        tr("<h4>Insert new Take (CTRL+E)</h4> "
-           "<p>Click this button to create a new <em>take</em> "
-           "and <em>insert</em> it bevor the selected take.</p>");
-    insertTakeButton->setToolTip(infoText);
-    insertTakeButton->setWhatsThis(infoText);
-
-    infoText =
-        tr("<h4>Append new Take (CTRL+E)</h4> "
-           "<p>Click this button to create a new <em>take</em> "
-           "and <em>append</em> it to the end of the scene.</p>");
-    addTakeButton->setToolTip(infoText);
-    addTakeButton->setWhatsThis(infoText);
-
-    infoText =
-        tr("<h4>Remove Take (SHIFT+Delete)</h4> "
-           "<p>Click this button to <em>remove</em> the selected <em>take</em> "
-           "from the animation.</p>");
-    removeTakeButton->setToolTip(infoText);
-    removeTakeButton->setWhatsThis(infoText);
-
-    framesGroupBox->setTitle(tr("Frames"));
-
-    infoText =
-        tr("<h4>Insert Frames (CTRL+F)</h4> "
-           "<p>Click on this button to <em>insert frames</em> "
-           "bevor the selected frame.</p>");
-    insertFramesButton->setToolTip(infoText);
-    insertFramesButton->setWhatsThis(infoText);
-
-    infoText =
-        tr("<h4>Append Frames (CTRL+F)</h4> "
-           "<p>Click on this button to <em>append frames</em> at the "
-           "end of the take.</p>");
-    addFramesButton->setToolTip(infoText);
-    addFramesButton->setWhatsThis(infoText);
-
-    infoText =
-        tr("<h4>Remove Frame (Delete)</h4> "
-           "<p>Click this button to <em>remove</em> the selected <em>frame</em> "
-           "from the take.</p>");
-    removeFramesButton->setToolTip(infoText);
-    removeFramesButton->setWhatsThis(infoText);
-
-    editGroupBox->setTitle(tr("Edit"));
-
-    infoText =
-        tr("<h4>Launch Photo Editor</h4> "
-           "<p>Click this button to open the active frame in the photo editor</p> "
-           "<p>Note that you can also drag images from the frame bar and drop them on the photo editor</p>");
-    editFrameButton->setToolTip(infoText);
-    editFrameButton->setWhatsThis(infoText);
-
-    qDebug("ProjectTab::retranslateStrings --> End");
-}
-
-
 void ProjectTab::chooseFrame()
 {
 }

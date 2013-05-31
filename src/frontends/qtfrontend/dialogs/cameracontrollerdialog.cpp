@@ -59,209 +59,221 @@ CameraControllerDialog::CameraControllerDialog(Frontend *f,
     stepIris = -1;
     stepRoll = -1;
 
-    setWindowTitle(tr("qStopMotion Camera Controller"));
+    makeGUI();
+    retranslateStrings();
+
+    qDebug("CameraControllerDialog::Constructor --> End");
+}
+
+
+void CameraControllerDialog::makeGUI()
+{
+    qDebug() << "CameraControllerDialog::makeGUI --> Start";
+
+
+    setWindowTitle("windowTitle");
     setMinimumSize(200, 500);
     // Enable help window for modal dialoges
     this->setAttribute(Qt::WA_GroupLeader);
 
-    qualityGroupBox = new QGroupBox(tr("Video Quality"));
+    qualityGroupBox = new QGroupBox("qualityGroupBox");
     QVBoxLayout *qualityLayout = new QVBoxLayout;
     qualityGroupBox->setLayout(qualityLayout);
     qualityCount = 0;
 
-    brightnessCheckBox = new QCheckBox(tr("Automatic Pan"));
+    brightnessCheckBox = new QCheckBox("brightnessCheckBox");
     brightnessCheckBox->setChecked(false);
     connect(brightnessCheckBox, SIGNAL(stateChanged(int)), this, SLOT(changeAutoBrightness(int)));
     brightnessCheckBox->hide();
 
-    brightnessLabel = new QLabel(tr("Brightness:"));
+    brightnessLabel = new QLabel("brightnessLabel");
     brightnessComboBox = new QComboBox();
     connect(brightnessComboBox, SIGNAL(activated(int)), this, SLOT(changeBrightness(int)));
     brightnessLabel->hide();
     brightnessComboBox->hide();
 
-    contrastCheckBox = new QCheckBox(tr("Automatic Contrast"));
+    contrastCheckBox = new QCheckBox("contrastCheckBox");
     contrastCheckBox->setChecked(false);
     connect(contrastCheckBox, SIGNAL(stateChanged(int)), this, SLOT(changeAutoContrast(int)));
     contrastCheckBox->hide();
 
-    contrastLabel = new QLabel(tr("Contrast:"));
+    contrastLabel = new QLabel("contrastLabel");
     contrastComboBox = new QComboBox();
     connect(contrastComboBox, SIGNAL(activated(int)), this, SLOT(changeContrast(int)));
     contrastLabel->hide();
     contrastComboBox->hide();
 
-    saturationCheckBox = new QCheckBox(tr("Automatic Saturation"));
+    saturationCheckBox = new QCheckBox("saturationCheckBox");
     saturationCheckBox->setChecked(false);
     connect(saturationCheckBox, SIGNAL(stateChanged(int)), this, SLOT(changeAutoSaturation(int)));
     saturationCheckBox->hide();
 
-    saturationLabel = new QLabel(tr("Saturation:"));
+    saturationLabel = new QLabel("saturationLabel");
     saturationComboBox = new QComboBox();
     connect(saturationComboBox, SIGNAL(activated(int)), this, SLOT(changeSaturation(int)));
     saturationLabel->hide();
     saturationComboBox->hide();
 
-    hueCheckBox = new QCheckBox(tr("Automatic Hue"));
+    hueCheckBox = new QCheckBox("hueCheckBox");
     hueCheckBox->setChecked(false);
     connect(hueCheckBox, SIGNAL(stateChanged(int)), this, SLOT(changeAutoHue(int)));
     hueCheckBox->hide();
 
-    hueLabel = new QLabel(tr("Hue:"));
+    hueLabel = new QLabel("hueLabel");
     hueComboBox = new QComboBox();
     connect(hueComboBox, SIGNAL(activated(int)), this, SLOT(changeHue(int)));
     hueLabel->hide();
     hueComboBox->hide();
 
-    gammaCheckBox = new QCheckBox(tr("Automatic Gamma"));
+    gammaCheckBox = new QCheckBox("gammaCheckBox");
     gammaCheckBox->setChecked(false);
     connect(gammaCheckBox, SIGNAL(stateChanged(int)), this, SLOT(changeAutoGamma(int)));
     gammaCheckBox->hide();
 
-    gammaLabel = new QLabel(tr("Gamma:"));
+    gammaLabel = new QLabel("gammaLabel");
     gammaComboBox = new QComboBox();
     connect(gammaComboBox, SIGNAL(activated(int)), this, SLOT(changeGamma(int)));
     gammaLabel->hide();
     gammaComboBox->hide();
 
-    sharpnessCheckBox = new QCheckBox(tr("Automatic Sharpness"));
+    sharpnessCheckBox = new QCheckBox("sharpnessCheckBox");
     sharpnessCheckBox->setChecked(false);
     connect(sharpnessCheckBox, SIGNAL(stateChanged(int)), this, SLOT(changeAutoSharpness(int)));
     sharpnessCheckBox->hide();
 
-    sharpnessLabel = new QLabel(tr("Sharpness:"));
+    sharpnessLabel = new QLabel("sharpnessLabel");
     sharpnessComboBox = new QComboBox();
     connect(sharpnessComboBox, SIGNAL(activated(int)), this, SLOT(changeSharpness(int)));
     sharpnessLabel->hide();
     sharpnessComboBox->hide();
 
-    backlightCheckBox = new QCheckBox(tr("Automatic Backlight Compensation"));
+    backlightCheckBox = new QCheckBox("backlightCheckBox");
     backlightCheckBox->setChecked(false);
     connect(backlightCheckBox, SIGNAL(stateChanged(int)), this, SLOT(changeAutoBacklight(int)));
     backlightCheckBox->hide();
 
-    backlightLabel = new QLabel(tr("Backlight Compensation:"));
+    backlightLabel = new QLabel("backlightLabel");
     backlightComboBox = new QComboBox();
     connect(backlightComboBox, SIGNAL(activated(int)), this, SLOT(changeBacklight(int)));
     backlightLabel->hide();
     backlightComboBox->hide();
 
-    whiteCheckBox = new QCheckBox(tr("Automatic White Balance"));
+    whiteCheckBox = new QCheckBox("whiteCheckBox");
     whiteCheckBox->setChecked(false);
     connect(whiteCheckBox, SIGNAL(stateChanged(int)), this, SLOT(changeAutoWhite(int)));
     whiteCheckBox->hide();
 
-    whiteLabel = new QLabel(tr("White Balance:"));
+    whiteLabel = new QLabel("whiteLabel");
     whiteComboBox = new QComboBox();
     connect(whiteComboBox, SIGNAL(activated(int)), this, SLOT(changeWhite(int)));
     whiteLabel->hide();
     whiteComboBox->hide();
 
-    gainCheckBox = new QCheckBox(tr("Automatic Gain"));
+    gainCheckBox = new QCheckBox("gainCheckBox");
     gainCheckBox->setChecked(false);
     connect(gainCheckBox, SIGNAL(stateChanged(int)), this, SLOT(changeAutoGain(int)));
     gainCheckBox->hide();
 
-    gainLabel = new QLabel(tr("Gain:"));
+    gainLabel = new QLabel("gainLabel");
     gainComboBox = new QComboBox();
     connect(gainComboBox, SIGNAL(activated(int)), this, SLOT(changeGain(int)));
     gainLabel->hide();
     gainComboBox->hide();
 
-    colorCheckBox = new QCheckBox(tr("Automatic Color Enable"));
+    colorCheckBox = new QCheckBox("colorCheckBox");
     colorCheckBox->setChecked(false);
     connect(colorCheckBox, SIGNAL(stateChanged(int)), this, SLOT(changeAutoColor(int)));
     colorCheckBox->hide();
 
-    colorLabel = new QLabel(tr("Color Enable:"));
+    colorLabel = new QLabel("colorLabel");
     colorComboBox = new QComboBox();
     connect(colorComboBox, SIGNAL(activated(int)), this, SLOT(changeColor(int)));
     colorLabel->hide();
     colorComboBox->hide();
 
-    controlGroupBox = new QGroupBox(tr("Camera Control"));
+    controlGroupBox = new QGroupBox("controlGroupBox");
     QVBoxLayout *controlLayout = new QVBoxLayout;
     controlGroupBox->setLayout(controlLayout);
     controlCount = 0;
 
-    exposureCheckBox = new QCheckBox(tr("Automatic Exposure"));
+    exposureCheckBox = new QCheckBox("exposureCheckBox");
     exposureCheckBox->setChecked(false);
     connect(exposureCheckBox, SIGNAL(stateChanged(int)), this, SLOT(changeAutoExposure(int)));
     exposureCheckBox->hide();
 
-    exposureLabel = new QLabel(tr("Exposure:"));
+    exposureLabel = new QLabel("exposureLabel");
     exposureComboBox = new QComboBox();
     connect(exposureComboBox, SIGNAL(activated(int)), this, SLOT(changeExposure(int)));
     exposureLabel->hide();
     exposureComboBox->hide();
 
-    zoomCheckBox = new QCheckBox(tr("Automatic Zoom"));
+    zoomCheckBox = new QCheckBox("zoomCheckBox");
     zoomCheckBox->setChecked(false);
     connect(zoomCheckBox, SIGNAL(stateChanged(int)), this, SLOT(changeAutoZoom(int)));
     zoomCheckBox->hide();
 
-    zoomLabel = new QLabel(tr("Zoom:"));
+    zoomLabel = new QLabel("zoomLabel");
     zoomComboBox = new QComboBox();
     connect(zoomComboBox, SIGNAL(activated(int)), this, SLOT(changeZoom(int)));
     zoomLabel->hide();
     zoomComboBox->hide();
 
-    focusCheckBox = new QCheckBox(tr("Automatic Focus"));
+    focusCheckBox = new QCheckBox("focusCheckBox");
     focusCheckBox->setChecked(false);
     connect(focusCheckBox, SIGNAL(stateChanged(int)), this, SLOT(changeAutoFocus(int)));
     focusCheckBox->hide();
 
-    focusLabel = new QLabel(tr("Focus:"));
+    focusLabel = new QLabel("focusLabel");
     focusComboBox = new QComboBox();
     connect(focusComboBox, SIGNAL(activated(int)), this, SLOT(changeFocus(int)));
     focusLabel->hide();
     focusComboBox->hide();
 
-    panCheckBox = new QCheckBox(tr("Automatic Pan"));
+    panCheckBox = new QCheckBox("panCheckBox");
     panCheckBox->setChecked(false);
     connect(panCheckBox, SIGNAL(stateChanged(int)), this, SLOT(changeAutoPan(int)));
     panCheckBox->hide();
 
-    panLabel = new QLabel(tr("Pan:"));
+    panLabel = new QLabel("panLabel");
     panComboBox = new QComboBox();
     connect(panComboBox, SIGNAL(activated(int)), this, SLOT(changePan(int)));
     panLabel->hide();
     panComboBox->hide();
 
-    tiltCheckBox = new QCheckBox(tr("Automatic Tilt"));
+    tiltCheckBox = new QCheckBox("tiltCheckBox");
     tiltCheckBox->setChecked(false);
     connect(tiltCheckBox, SIGNAL(stateChanged(int)), this, SLOT(changeAutoTilt(int)));
     tiltCheckBox->hide();
 
-    tiltLabel = new QLabel(tr("Tilt:"));
+    tiltLabel = new QLabel("tiltLabel");
     tiltComboBox = new QComboBox();
     connect(tiltComboBox, SIGNAL(activated(int)), this, SLOT(changeTilt(int)));
     tiltLabel->hide();
     tiltComboBox->hide();
 
-    irisCheckBox = new QCheckBox(tr("Automatic Iris"));
+    irisCheckBox = new QCheckBox("irisCheckBox");
     irisCheckBox->setChecked(false);
     connect(irisCheckBox, SIGNAL(stateChanged(int)), this, SLOT(changeAutoIris(int)));
     irisCheckBox->hide();
 
-    irisLabel = new QLabel(tr("Iris:"));
+    irisLabel = new QLabel("irisLabel");
     irisComboBox = new QComboBox();
     connect(irisComboBox, SIGNAL(activated(int)), this, SLOT(changeIris(int)));
     irisLabel->hide();
     irisComboBox->hide();
 
-    rollCheckBox = new QCheckBox(tr("Automatic Roll"));
+    rollCheckBox = new QCheckBox("rollCheckBox");
     rollCheckBox->setChecked(false);
     connect(rollCheckBox, SIGNAL(stateChanged(int)), this, SLOT(changeAutoRoll(int)));
     rollCheckBox->hide();
 
-    rollLabel = new QLabel(tr("Roll:"));
+    rollLabel = new QLabel("rollLabel");
     rollComboBox = new QComboBox();
     connect(rollComboBox, SIGNAL(activated(int)), this, SLOT(changeRoll(int)));
     rollLabel->hide();
     rollComboBox->hide();
 
-    closeButton = new QPushButton(tr("&Close"));
+    closeButton = new QPushButton("closeButton");
     connect(closeButton, SIGNAL(clicked()), this, SLOT(reject()));
 
     QHBoxLayout *bottomLayout = new QHBoxLayout;
@@ -330,13 +342,65 @@ CameraControllerDialog::CameraControllerDialog(Frontend *f,
     mainLayout->addLayout(bottomLayout);
     this->setLayout(mainLayout);
 
-    qDebug("CameraControllerDialog::Constructor --> End");
+    qDebug("CameraControllerDialog::makeGUI --> End");
 }
 
 
-void CameraControllerDialog::init()
+void CameraControllerDialog::retranslateStrings()
 {
-    qDebug() << "CameraControllerDialog::init --> Start";
+    qDebug() << "CameraControllerDialog::retranslateStrings --> Start";
+
+    setWindowTitle(tr("qStopMotion Camera Controller"));
+
+    qualityGroupBox->setTitle(tr("Video Quality"));
+
+    brightnessCheckBox->setText(tr("Automatic Brightness"));
+    brightnessLabel->setText(tr("Brightness:"));
+    contrastCheckBox->setText(tr("Automatic Contrast"));
+    contrastLabel->setText(tr("Contrast:"));
+    saturationCheckBox->setText(tr("Automatic Saturation"));
+    saturationLabel->setText(tr("Saturation:"));
+    hueCheckBox->setText(tr("Automatic Hue"));
+    hueLabel->setText(tr("Hue:"));
+    gammaCheckBox->setText(tr("Automatic Gamma"));
+    gammaLabel->setText(tr("Gamma:"));
+    sharpnessCheckBox->setText(tr("Automatic Sharpness"));
+    sharpnessLabel->setText(tr("Sharpness:"));
+    backlightCheckBox->setText(tr("Automatic Backlight Compensation"));
+    backlightLabel->setText(tr("Backlight Compensation:"));
+    whiteCheckBox->setText(tr("Automatic White Balance"));
+    whiteLabel->setText(tr("White Balance:"));
+    gainCheckBox->setText(tr("Automatic Gain"));
+    gainLabel->setText(tr("Gain:"));
+    colorCheckBox->setText(tr("Automatic Color Enable"));
+    colorLabel->setText(tr("Color Enable:"));
+
+    controlGroupBox->setTitle(tr("Camera Control"));
+
+    exposureCheckBox->setText(tr("Automatic Exposure"));
+    exposureLabel->setText(tr("Exposure:"));
+    zoomCheckBox->setText(tr("Automatic Zoom"));
+    zoomLabel->setText(tr("Zoom:"));
+    focusCheckBox->setText(tr("Automatic Focus"));
+    focusLabel->setText(tr("Focus:"));
+    panCheckBox->setText(tr("Automatic Pan"));
+    panLabel->setText(tr("Pan:"));
+    tiltCheckBox->setText(tr("Automatic Tilt"));
+    tiltLabel->setText(tr("Tilt:"));
+    irisCheckBox->setText(tr("Automatic Iris"));
+    irisLabel->setText(tr("Iris:"));
+    rollCheckBox->setText(tr("Automatic Roll"));
+    rollLabel->setText(tr("Roll:"));
+
+    closeButton->setText(tr("&Close"));
+
+    qDebug() << "CameraControllerDialog::retranslateStrings --> End";
+}
+
+
+void CameraControllerDialog::initialize()
+{
+    qDebug() << "CameraControllerDialog::initialize --> Start";
 
     PreferencesTool            *preferences = frontend->getPreferences();
     GrabberControlCapabilities *capabilities;
@@ -919,57 +983,7 @@ void CameraControllerDialog::init()
         controlGroupBox->hide();
     }
 
-    qDebug() << "CameraControllerDialog::init --> End";
-}
-
-
-void CameraControllerDialog::retranslateStrings()
-{
-    qDebug() << "CameraControllerDialog::retranslateStrings --> Start";
-
-    setWindowTitle(tr("qStopMotion Camera Controller"));
-
-    qualityGroupBox->setTitle(tr("Video Quality"));
-    brightnessCheckBox->setText(tr("Automatic Brightness"));
-    brightnessLabel->setText(tr("Brightness:"));
-    contrastCheckBox->setText(tr("Automatic Contrast"));
-    contrastLabel->setText(tr("Contrast:"));
-    saturationCheckBox->setText(tr("Automatic Saturation"));
-    saturationLabel->setText(tr("Saturation:"));
-    hueCheckBox->setText(tr("Automatic Hue"));
-    hueLabel->setText(tr("Hue:"));
-    gammaCheckBox->setText(tr("Automatic Gamma"));
-    gammaLabel->setText(tr("Gamma:"));
-    sharpnessCheckBox->setText(tr("Automatic Sharpness"));
-    sharpnessLabel->setText(tr("Sharpness:"));
-    backlightCheckBox->setText(tr("Automatic Backlight Compensation"));
-    backlightLabel->setText(tr("Backlight Compensation:"));
-    whiteCheckBox->setText(tr("Automatic White Balance"));
-    whiteLabel->setText(tr("White Balance:"));
-    gainCheckBox->setText(tr("Automatic Gain"));
-    gainLabel->setText(tr("Gain:"));
-    colorCheckBox->setText(tr("Automatic Color Enable"));
-    colorLabel->setText(tr("Color Enable:"));
-
-    controlGroupBox->setTitle(tr("Camera Control"));
-    exposureCheckBox->setText(tr("Automatic Exposure"));
-    exposureLabel->setText(tr("Exposure:"));
-    zoomCheckBox->setText(tr("Automatic Zoom"));
-    zoomLabel->setText(tr("Zoom:"));
-    focusCheckBox->setText(tr("Automatic Focus"));
-    focusLabel->setText(tr("Focus:"));
-    panCheckBox->setText(tr("Automatic Pan"));
-    panLabel->setText(tr("Pan:"));
-    tiltCheckBox->setText(tr("Automatic Tilt"));
-    tiltLabel->setText(tr("Tilt:"));
-    irisCheckBox->setText(tr("Automatic Iris"));
-    irisLabel->setText(tr("Iris:"));
-    rollCheckBox->setText(tr("Automatic Roll"));
-    rollLabel->setText(tr("Roll:"));
-
-    closeButton->setText(tr("&Close"));
-
-    qDebug() << "CameraControllerDialog::retranslateStrings --> End";
+    qDebug() << "CameraControllerDialog::initialize --> End";
 }
 
 

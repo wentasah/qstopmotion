@@ -47,9 +47,9 @@ public:
                    QWidget *parent = 0);
 
     /**
-     * Applies the settings in the import tab.
+     * Retranslate all strings of the tab after changing the language setting
      */
-    void apply();
+    void retranslateStrings();
 
     /**
      * Initializes the table and fills it with starting values.
@@ -57,9 +57,9 @@ public:
     void initialize();
 
     /**
-     * Retranslate all strings of the tab after changing the language setting
+     * Applies the settings in the import tab.
      */
-    void retranslateStrings();
+    void apply();
 
 protected:
     // void resizeEvent(QResizeEvent *event);

@@ -51,15 +51,10 @@ ToolBar::ToolBar(Frontend     *f,
     setObjectName("ToolBar");
 
     makeGUI();
+    retranslateStrings();
 
     runAnimationTimer = new QTimer(this);
     QObject::connect(runAnimationTimer, SIGNAL(timeout()), this, SLOT(playNextFrame()));
-}
-
-
-QPushButton* ToolBar::getCaptureButton()
-{
-    return captureButton;
 }
 
 
@@ -82,7 +77,6 @@ void ToolBar::makeGUI()
     toBeginButton = new QPushButton;
     iconFile.clear();
     iconFile.append(frontend->getIconsDirName());
-    // iconFile.append(QLatin1String("tobegin.png"));
     iconFile.append(QLatin1String("firstexposure.png"));
     toBeginButton->setIcon(QPixmap(iconFile));
     // toBeginButton->setFlat(true);
@@ -93,7 +87,6 @@ void ToolBar::makeGUI()
     previousFrameButton = new QPushButton;
     iconFile.clear();
     iconFile.append(frontend->getIconsDirName());
-    // iconFile.append(QLatin1String("previousframe.png"));
     iconFile.append(QLatin1String("previousexposure.png"));
     previousFrameButton->setIcon(QPixmap(iconFile));
     // previousFrameButton->setFlat(true);
@@ -121,7 +114,6 @@ void ToolBar::makeGUI()
     nextFrameButton = new QPushButton;
     iconFile.clear();
     iconFile.append(frontend->getIconsDirName());
-    // iconFile.append(QLatin1String("nextframe.png"));
     iconFile.append(QLatin1String("nextexposure.png"));
     nextFrameButton->setIcon(QPixmap(iconFile));
     // nextFrameButton->setFlat(true);
@@ -132,7 +124,6 @@ void ToolBar::makeGUI()
     toEndButton = new QPushButton;
     iconFile.clear();
     iconFile.append(frontend->getIconsDirName());
-    // iconFile.append(QLatin1String("toend.png"));
     iconFile.append(QLatin1String("lastexposure.png"));
     toEndButton->setIcon(QPixmap(iconFile));
     // toEndButton->setFlat(true);
@@ -156,6 +147,49 @@ void ToolBar::makeGUI()
     buttonLayout->addWidget(toEndButton);
     buttonLayout->addStretch(10);
     setLayout(buttonLayout);
+
+}
+
+
+void ToolBar::retranslateStrings()
+{
+    QString infoText = tr("<h4>Play animation (K, P)</h4>");
+    playButton->setToolTip(infoText);
+    /*
+    infoText = tr("<h4>Previous scene (I)</h4>");
+    previousSceneButton->setToolTip(infoText);
+
+    infoText = tr("<h4>Previous scene (I)</h4>");
+    previousTakeButton->setToolTip(infoText);
+    */
+    infoText = tr("<h4>First frame of the take (J, Left)</h4>");
+    toBeginButton->setToolTip(infoText);
+
+    infoText = tr("<h4>Previous frame (J, Left)</h4>");
+    previousFrameButton->setToolTip(infoText);
+
+    infoText = tr("<h4>Previous frame (J, Left)</h4>");
+    previousFrameButton->setToolTip(infoText);
+
+    infoText = tr("<h4>Next frame (L, Right)</h4>");
+    nextFrameButton->setToolTip(infoText);
+
+    infoText = tr("<h4>Last frame of the take (L, Right)</h4>");
+    toEndButton->setToolTip(infoText);
+    /*
+    infoText = tr("<h4>Next take (O)</h4>");
+    nextTakeButton->setToolTip(infoText);
+
+    infoText = tr("<h4>Next scene (O)</h4>");
+    nextSceneButton->setToolTip(infoText);
+    */
+    infoText =
+        tr("<h4>Capture Frame (Space)</h4> "
+           "<p>Click on this button to <em>capture</em> a frame from the "
+           "camera an put it in the animation</p> <p> This can also be "
+           "done by pressing the <b>Space key</b></p>");
+    captureButton->setWhatsThis(infoText);
+    captureButton->setToolTip(infoText);
 
 }
 
@@ -237,6 +271,19 @@ void ToolBar::apply()
         pref->setActiveEncoder(QString());
     }
     */
+}
+
+
+QPushButton* ToolBar::getCaptureButton()
+{
+    return captureButton;
+}
+
+
+void ToolBar::setActualState(int newState)
+{
+    actualState = newState;
+    toolBarStateChanged();
 }
 
 
@@ -581,52 +628,3 @@ void ToolBar::toEnd()
 {
 }
 */
-
-void ToolBar::retranslateStrings()
-{
-    QString infoText = tr("<h4>Play animation (K, P)</h4>");
-    playButton->setToolTip(infoText);
-    /*
-    infoText = tr("<h4>Previous scene (I)</h4>");
-    previousSceneButton->setToolTip(infoText);
-
-    infoText = tr("<h4>Previous scene (I)</h4>");
-    previousTakeButton->setToolTip(infoText);
-    */
-    infoText = tr("<h4>First frame of the take (J, Left)</h4>");
-    toBeginButton->setToolTip(infoText);
-
-    infoText = tr("<h4>Previous frame (J, Left)</h4>");
-    previousFrameButton->setToolTip(infoText);
-
-    infoText = tr("<h4>Previous frame (J, Left)</h4>");
-    previousFrameButton->setToolTip(infoText);
-
-    infoText = tr("<h4>Next frame (L, Right)</h4>");
-    nextFrameButton->setToolTip(infoText);
-
-    infoText = tr("<h4>Last frame of the take (L, Right)</h4>");
-    toEndButton->setToolTip(infoText);
-    /*
-    infoText = tr("<h4>Next take (O)</h4>");
-    nextTakeButton->setToolTip(infoText);
-
-    infoText = tr("<h4>Next scene (O)</h4>");
-    nextSceneButton->setToolTip(infoText);
-    */
-    infoText =
-        tr("<h4>Capture Frame (Space)</h4> "
-           "<p>Click on this button to <em>capture</em> a frame from the "
-           "camera an put it in the animation</p> <p> This can also be "
-           "done by pressing the <b>Space key</b></p>");
-    captureButton->setWhatsThis(infoText);
-    captureButton->setToolTip(infoText);
-
-}
-
-
-void ToolBar::setActualState(int newState)
-{
-    actualState = newState;
-    toolBarStateChanged();
-}

@@ -59,6 +59,16 @@ public:
     ~RecordingTab();
 
     /**
+     * Retranslate all strings of the tab after changing the language setting
+     */
+    void retranslateStrings();
+
+    /**
+     * Initializes the table and fills it with starting values.
+     */
+    void initialize();
+
+    /**
      * Is the camera switched on.
      * @return true if the camera is on.
      */
@@ -135,16 +145,6 @@ public:
      * Applies the settings in the import tab.
      */
     // void apply();
-
-    /**
-     * Initializes the table and fills it with starting values.
-     */
-    void initialize();
-
-    /**
-     * Retranslate all strings of the tab after changing the language setting
-     */
-    void retranslateStrings();
 
     /**
      * A new capture button function is selected in the preferences menu.

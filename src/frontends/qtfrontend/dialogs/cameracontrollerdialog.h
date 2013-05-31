@@ -48,14 +48,19 @@ public:
                            QWidget *parent = 0);
 
     /**
-     * Initialize the dialog
+     * Create the GUI elements
      */
-    void init();
+    void makeGUI();
 
     /**
      * Retranslate all strings of the tab after changing the language setting
      */
     void retranslateStrings();
+
+    /**
+     * Initialize the dialog
+     */
+    void initialize();
 
 private slots:
     /**

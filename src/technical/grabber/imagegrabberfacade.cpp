@@ -161,62 +161,22 @@ void ImageGrabberFacade::init()
     case ImageGrabberDevice::testSource:
         isInited = gstreamerVideoTestGrabber->setUp();
 
-        if (!isGrabberInited()) {
-            frontend->showWarning(tr("Check image grabber"),
-                                  tr("Grabbing failed. This may happen if you try\n"
-                                     "to grab from an invalid device. Please check\n"
-                                     "your grabber settings in the preferences menu."));
-            return;
-        }
-
         break;
     case ImageGrabberDevice::video4LinuxSource:
         isInited = gstreamerV4L2Grabber->setUp();
 
-        if (!isGrabberInited()) {
-            frontend->showWarning(tr("Check image grabber"),
-                                  tr("Grabbing failed. This may happen if you try\n"
-                                     "to grab from an invalid device. Please check\n"
-                                     "your grabber settings in the preferences menu."));
-            return;
-        }
-
         break;
     case ImageGrabberDevice::ieee1394Source:
         isInited = gstreamerDv1394Grabber->setUp();
-
-        if (!isGrabberInited()) {
-            frontend->showWarning(tr("Check image grabber"),
-                                  tr("Grabbing failed. This may happen if you try\n"
-                                     "to grab from an invalid device. Please check\n"
-                                     "your grabber settings in the preferences menu."));
-            return;
-        }
 
         break;
     case ImageGrabberDevice::directShowUsbSource:
     case ImageGrabberDevice::directShow1394Source:
         isInited = gstreamerDirectShowUsbGrabber->setUp();
 
-        if (!isGrabberInited()) {
-            frontend->showWarning(tr("Check image grabber"),
-                                  tr("Grabbing failed. This may happen if you try\n"
-                                     "to grab from an invalid device. Please check\n"
-                                     "your grabber settings in the preferences menu."));
-            return;
-        }
-
         break;
     case ImageGrabberDevice::gphoto2Source:
         isInited = gphotoGrabber->setUp();
-
-        if (!isGrabberInited()) {
-            frontend->showWarning(tr("Check image grabber"),
-                                  tr("Grabbing failed. This may happen if you try\n"
-                                     "to grab from an invalid device. Please check\n"
-                                     "your grabber settings in the preferences menu."));
-            return;
-        }
 
         break;
     default:
@@ -224,35 +184,13 @@ void ImageGrabberFacade::init()
         break;
     }
 
-    /*
-    // If the grabber is running in it's own process we use a timer.
-    if (isGrabberProcess()) {
-        isInited = gstreamerVideoTestGrabber->setUp();
-
-        if (!isGrabberInited()) {
-            frontend->showWarning(tr("Check image grabber"),
-                                  tr("Grabbing failed. This may happen if you try\n"
-                                     "to grab from an invalid device. Please check\n"
-                                     "your grabber settings in the preferences menu."));
-            return;
-        }
+    if (!isGrabberInited()) {
+        frontend->showWarning(tr("Check image grabber"),
+                              tr("Grabbing failed. This may happen if you try\n"
+                                 "to grab from an invalid device. Please select\n"
+                                 "another device on the recording tool tab."));
+        return;
     }
-    // Otherwise a thread is needed
-    else {
-        grabberThread = new ImageGrabberThread(gstreamerVideoTestGrabber);
-
-        grabberThread->start();
-        grabberThread->wait(500);
-
-        if (grabberThread->wasGrabbingSuccess() == false) {
-            frontend->showWarning(tr("Check image grabber"),
-                                  tr("Grabbing failed. This may happen if you try\n"
-                                     "to grab from an invalid device. Please check\n"
-                                     "your grabber settings in the preferences menu."));
-            return;
-        }
-    }
-    */
 
     qDebug() << "ImageGrabberFacade::init --> End";
 }
@@ -288,20 +226,6 @@ void ImageGrabberFacade::finalize()
     default:
         break;
     }
-
-    /*
-    if (isGrabberProcess()) {
-        gstreamerVideoTestGrabber->tearDown();
-    }
-    else {
-        if (grabberThread != 0) {
-            grabberThread->terminate();
-            grabberThread->wait();
-            delete grabberThread;
-            grabberThread = 0;
-        }
-    }
-    */
 
     qDebug() << "ImageGrabberFacade::finalize --> End";
 }

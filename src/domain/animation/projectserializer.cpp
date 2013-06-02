@@ -168,9 +168,15 @@ bool ProjectSerializer::save(AnimationProject *animation, bool saveAs)
             }
         }
         if (!QFile::rename(newProjectFilePath, backup)) {
-            // Not successful
-            frontend->showCritical(tr("Critical"),
-                                   tr("Can't rename project file to backup!"));
+            // Rename not successful --> copy and remove
+            if (!QFile::copy(newProjectFilePath, backup)) {
+                frontend->showCritical(tr("Critical"),
+                                       tr("Can't copy the project file to backup!"));
+            }
+            if (!QFile::remove(newProjectFilePath)) {
+                frontend->showCritical(tr("Critical"),
+                                       tr("Can't remove the old project file!"));
+            }
         }
     }
     QFile file(newProjectFilePath);

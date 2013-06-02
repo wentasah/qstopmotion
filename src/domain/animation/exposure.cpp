@@ -164,43 +164,6 @@ const QString Exposure::getImagePath() const
     return absImagePath;
 }
 
-/*
-void Exposure::moveToImageDir(const QString &directory, unsigned int imageIndex)
-{
-    Q_ASSERT(!directory.isEmpty());
-
-    QString newPath;
-    QString filename;
-    QString tmp(QString("%1").arg(imageIndex));
-
-    int fileLength = tmp.length();
-
-    // creates a filename with six characters as total length,
-    // empty characters are filled with zeros
-    for (int i = 0; i < 6 - fileLength; ++i) {
-        filename[i] = '0';
-    }
-    filename.append(tmp);
-
-    // gets a pointer to the last occurence of a '.'
-    // and appends the extension
-    filename.append(theFrame.mid(theFrame.lastIndexOf('.')));
-
-    // creates new image path
-    newPath.append(directory);
-    newPath.append(QLatin1String("/"));
-    newPath.append(filename);
-
-    if (!QFile::rename(theFrame, newPath)) {
-        // Not successful
-        parent->getFrontend()->showCritical(tr("Critical"),
-                                            tr("Can't move image to image directory!"));
-    }
-
-    theFrame.clear();
-    theFrame.append(newPath);
-}
-*/
 
 void Exposure::moveToTemp(bool isRecovery)
 {
@@ -229,9 +192,15 @@ void Exposure::moveToTemp(bool isRecovery)
 
     if (!isRecovery) {
         if (!QFile::rename(fromImagePath, toImagePath)) {
-            // Not successful
-            parent->getFrontend()->showCritical(tr("Critical"),
-                                                tr("Can't move image to temporary directory!"));
+            // Rename not successful --> copy and remove
+            if (!QFile::copy(fromImagePath, toImagePath)) {
+                parent->getFrontend()->showCritical(tr("Critical"),
+                                                    tr("Can't copy the image to the temporary directory!"));
+            }
+            if (!QFile::remove(fromImagePath)) {
+                parent->getFrontend()->showCritical(tr("Critical"),
+                                                    tr("Can't remove the image from the project directory!"));
+            }
         }
     }
 
@@ -269,7 +238,7 @@ void Exposure::copyToTemp()
     if (!QFile::copy(fromImagePath, toImagePath)) {
         // Not successful
         parent->getFrontend()->showCritical(tr("Critical"),
-                                            tr("Can't copy image to temporary directory!"));
+                                            tr("Can't copy the image to the temporary directory!"));
     }
 
     // if (exposureLocation == InTrashPath) {
@@ -326,7 +295,7 @@ void Exposure::convertToTemp(int newFormat, int quality)
     if (!image.save(toImagePath, 0, quality)) {
         // Not successful
         parent->getFrontend()->showCritical(tr("Critical"),
-                                            tr("Can't save image in the new file format to temporary directory!"));
+                                            tr("Can't save the image in the new file format to the temporary directory!"));
     }
 
     theFrame.clear();
@@ -356,9 +325,15 @@ void Exposure::moveToProject(const QString newName)
     toImagePath.append(newName);
 
     if (!QFile::rename(fromImagePath, toImagePath)) {
-        // Not successful
-        parent->getFrontend()->showCritical(tr("Critical"),
-                                            tr("Can't move image to project directory!"));
+        // Rename not successful --> copy and remove
+        if (!QFile::copy(fromImagePath, toImagePath)) {
+            parent->getFrontend()->showCritical(tr("Critical"),
+                                                tr("Can't copy the image to the project directory!"));
+        }
+        if (!QFile::remove(fromImagePath)) {
+            parent->getFrontend()->showCritical(tr("Critical"),
+                                                tr("Can't remove the image in the temporary directory!"));
+        }
     }
 
     theFrame.clear();

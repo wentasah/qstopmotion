@@ -648,9 +648,15 @@ int Scene::addSound(const QString & /*filename*/, const QString & /*soundname*/)
             }
         } else {
             if (!QFile::rename(filename, newSoundPath)) {
-                // Not successful
-                parent->getFrontend()->showCritical(tr("Critical"),
-                                                    tr("Can't rename soundfile!"));
+                // Rename not successful --> copy and remove
+                if (!QFile::copy(filename, newSoundPath)) {
+                    parent->getFrontend()->showCritical(tr("Critical"),
+                                                        tr("Can't copy soundfile!"));
+                }
+                if (!QFile::remove(filename)) {
+                    parent->getFrontend()->showCritical(tr("Critical"),
+                                                        tr("Can't remove soundfile!"));
+                }
             }
         }
 
@@ -744,9 +750,15 @@ void Scene::moveToSoundDir(const QString &directory)
         if (QFile::exists(soundPath) == 0) {
             // Move from old path to new path
             if (!QFile::rename(soundPath, newSoundPath)) {
-                // Not successful
-                parent->getFrontend()->showCritical(tr("Critical"),
-                                                    tr("Can't move sound file!"));
+                // Rename not successful --> copy and remove
+                if (!QFile::copy(soundPath, newSoundPath)) {
+                    parent->getFrontend()->showCritical(tr("Critical"),
+                                                        tr("Can't copy sound file!"));
+                }
+                if (!QFile::remove(soundPath)) {
+                    parent->getFrontend()->showCritical(tr("Critical"),
+                                                        tr("Can't remove sound file!"));
+                }
             }
         }
         // Update with the new path

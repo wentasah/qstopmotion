@@ -109,6 +109,7 @@ protected:
     GPContext *gphotoContext;
 
 private:
+    int        gphotoErrorId;
     int        activeSource;
     bool       isInitSuccess;
     bool       firstImage;

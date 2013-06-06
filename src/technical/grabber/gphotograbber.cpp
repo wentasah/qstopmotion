@@ -52,7 +52,7 @@ GphotoGrabber::GphotoGrabber(Frontend *f)
     canConfigure = false;
 
     gphotoContext = gp_context_new();
-    gp_log_add_func(GP_LOG_ERROR, errorDumper, NULL);
+    // gphotoErrorId = gp_log_add_func(GP_LOG_ERROR, errorDumper, NULL);
     gp_camera_new(&gphotoCamera);
 
     qDebug("GphotoGrabber::Constructor --> Camera init.  Takes a second or three...");
@@ -109,8 +109,16 @@ GphotoGrabber::GphotoGrabber(Frontend *f)
 GphotoGrabber::~GphotoGrabber()
 {
     qDebug("GphotoGrabber::Destructor --> Start (Empty)");
+    /*
+    int ret;
 
-    // qDebug("GphotoGrabber::Destructor --> End");
+    ret = gp_log_remove_func(gphotoErrorId);
+    if (ret != GP_OK) {
+        qDebug() << "GphotoGrabber::Constructor --> Error gp_camera_get_about: " << gp_result_as_string(ret);
+    }
+
+    qDebug("GphotoGrabber::Destructor --> End");
+    */
 }
 
 

@@ -1,7 +1,7 @@
 ###############################################################################
 # CMake file for the qStopMotion project                                      #
 # (c) Ralf Lange, longsoft.de                                                 #
-# Last update: 2013-04-07                                                     #
+# Last update: 2013-06-05                                                     #
 #                                                                             #
 # Usage:                                                                      #
 #   * Qt-Creator (Windows, Linux)                                             #
@@ -341,6 +341,8 @@ ELSE(WIN32)
     message("GSTREAMER_STATIC_LIBRARIES: ${GSTREAMER_STATIC_LIBRARIES}")
     message("GSTREAMER_VERSION: ${GSTREAMER_VERSION}")
     message("GSTREAMER_DEFINITIONS: ${GSTREAMER_DEFINITIONS}")
+
+    add_definitions("-Wno-deprecated-declarations")
 
 ENDIF(WIN32)
 

@@ -76,7 +76,18 @@ public:
      */
     ~MainWindowGUI();
 
-    void init();
+    /**
+     * Retranslates the strings.
+     *
+     * This function is called after a new translator has been installed so that
+     * the program strings are retranslated to the new language.
+     */
+    void retranslateStrings();
+
+    /**
+     * Initializes the main window and fills it with starting values.
+     */
+    void initialize();
 
     /**
      * Overloaded mouse listener. Closes the embedded menues when the user
@@ -163,14 +174,6 @@ public:
      * @param newSpin The new number of lines.
      */
     void setHorizontalSpin(int newSpin);
-
-    /**
-     * Retranslates the strings.
-     *
-     * This function is called after a new translator has been installed so that
-     * the program strings are retranslated to the new language.
-     */
-    void retranslateStrings();
 
     /**
      * Function for displaying progress on timeconsuming operations.

@@ -55,14 +55,19 @@ public:
     ~ProjectTab();
 
     /**
-     * Applies the settings in the import tab.
+     * Retranslate all GUI strings
      */
-    void apply();
+    void retranslateStrings();
 
     /**
      * Initializes the table and fills it with starting values.
      */
     void initialize();
+
+    /**
+     * Applies the settings in the import tab.
+     */
+    void apply();
 
     /**
      * Enable all functionality of the tab
@@ -73,11 +78,6 @@ public:
      * Disable all functionality of the tab
      */
     void disableTab();
-
-    /**
-     * Retranslate all GUI strings
-     */
-    void retranslateStrings();
 
     /**************************************************************************
      * Animation notification functions

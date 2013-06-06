@@ -1,51 +1,36 @@
-Building qStopMotion using Qt-Creator IDE on Windows with the Visual Studio as host
-Last Change: 2012/01/09
+Building qStopMotion using Qt-Creator IDE on Windows with the Windows SDK as host
+Last Change: 2013-03-06
 
 1. Preparation of the development environment
 ================================================================================
 
-1.1 Install MS Visual Studio tools
+1.1 Install the Windows SDK
 --------------------------------------------------------------------------------
 
-There are two possibilities for the MS Visual Studio tools:
-* Install the IDE and the debugging tools or
-* Install the Windows SDK
-
-1.1.1 Install the IDE and the Debugging Tools
-
-1.1.1.1 Install MS Visual Studio 2010 (Express or Professional)
-* Qt creator uses only the command line tools.
-* Install in the default installation directory.
-
-1.1.1.2 Download and install the Debugging tools for Windows
-* Download the latest version of "Debugging Tools for Windows" from the
-  Microsoft Web site
-  "http://msdn.microsoft.com/en-us/windows/hardware/gg463016.aspx"
-* Install in the default installation directory.
-
-1.1.2 Install the Windows SDK
-* Download the Windows SDK for .NET 3.5 including the Visual Studio 2008 command
-  line tools and the debugging tools for windows.
-* Install in the default installation directory.
+* Download the "Windows SDK for Windows 7 and .NET Framework 3.5 Service Pack 1"
+* This package including the Visual Studio 2008 command line tools and the
+  debugging tools for windows.
+* Install in the default installation directory
+  (C:\Program Files\Microsoft SDKs\Windows\v6.1).
 
 1.2 Qt for Windows and Visual Studio
 --------------------------------------------------------------------------------
 
-* Download Qt libraries 4.6.2 for Windows (VS 2008) from qt.nokia.com/downloads
+* Download Qt libraries 4.6.3 for Windows 32-bit (VS 2008) from qt-project.com/downloads
 * Install in the Directory C:\Tools\Qt\...
 * Qt need write permissions to this directory during compilation and linking.
-* Add the binary directory to the path variable (e.g. C:\Tools\Qt\4.6.2\bin).
+* Add the binary directory to the path variable (e.g. C:\Tools\Qt\4.6.3\bin).
 
 1.3 Download and install Qt-Creator for Windows
 --------------------------------------------------------------------------------
 
-* Download Qt Creator 2.1.0 for Windows (not the full SDK) from
-  qt.nokia.com/downloads
+* Download Qt Creator 2.1.0 for Windows 32-bit (not the full SDK) from
+  qt-project.org/downloads
 * Install in the Directory C:\Tools\Qt\...
 * The installation of the MinGW runtime development tools is not necessary.
 * Create a start script for the Qt-Creator (C:\Tools\qtcreatorstart.bat)
-    rem Set the Visual Studio 10 environment variables
-    call "c:\Program Files\Microsoft Visual Studio 10.0\VC\vcvarsall.bat"
+    rem Set the Windows SDK environment variables
+    call "C:\Program Files (x86)\Microsoft Visual Studio 9.0\VC\bin\vcvars32.bat"
     rem Start the Qt-Creator
     "C:\Tools\Qt\qtcreator-2.1.0\bin\qtcreator.exe"
 * Create a shortcut to the start script.
@@ -70,7 +55,7 @@ There are two possibilities for the MS Visual Studio tools:
 * Install in the default installation directory.
 * Create a start script for CMake (C:\Tools\cmakestart.bat)
     rem Set the Visual Studion 10 environment variables
-    call "c:\Program Files\Microsoft Visual Studio 10.0\VC\vcvarsall.bat"
+    call "C:\Program Files (x86)\Microsoft Visual Studio 9.0\VC\bin\vcvars32.bat"
     rem Start the CMake GUI
     "C:\Program Files\CMake 2.8\bin\cmake-gui.exe"
 * Create a shortcut to the start script.
@@ -89,6 +74,9 @@ There are two possibilities for the MS Visual Studio tools:
 
 * Start Qt Creator using the shortcut to the start script.
 * Open the CMakeLists.txt file as new project.
+* In the dialog of the CMake-Assistent press the 'Run CMake' button.
+* Ignore the CMake Warnings 'system runtime library file does not exist' messages.
+* If the 'Finisch' button is enabled press this button.
 * Build | Build Solution
 * Locking for error and warning messages
 
@@ -96,6 +84,9 @@ There are two possibilities for the MS Visual Studio tools:
 --------------------------------------------------------------------------------
 
 * Start Qt Creator using the shortcut to the start script.
+* In the dialog of the CMake-Assistent press the 'Run CMake' button.
+* Ignore the CMake Warnings 'system runtime library file does not exist' messages.
+* If the 'Finisch' button is enabled press this button.
 * Open Options | Settings | Debugger
 * On the Cdb tab enable the CDB. Normaly the path to the debugger will find
   automatically.

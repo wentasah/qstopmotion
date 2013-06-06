@@ -55,10 +55,14 @@ public:
             QWidget      *parent = 0);
 
     /**
-     * Get the capture button of the tool bar
-     * @return The capture button
+     * Retranslate all GUI strings
      */
-    QPushButton* getCaptureButton();
+    void retranslateStrings();
+
+    /**
+     * Initializes the table and fills it with starting values.
+     */
+    void initialize();
 
     /**
      * Applies the settings in the import tab.
@@ -66,11 +70,10 @@ public:
     void apply();
 
     /**
-     * Initializes the table and fills it with starting values.
+     * Get the capture button of the tool bar
+     * @return The capture button
      */
-    void initialize();
-
-    void retranslateStrings();
+    QPushButton* getCaptureButton();
 
     /**
      * Set an new state to the tool bar.

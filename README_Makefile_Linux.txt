@@ -1,5 +1,5 @@
 Building qStopMotion using Unix makefile on Linux
-Last Change: 2013/01/18
+Last Change: 2013-02-28
 
 1. Preparation of the development environment
 ================================================================================
@@ -8,26 +8,33 @@ Last Change: 2013/01/18
 --------------------------------------------------------------------------------
 
 * g++ (Version >= 4.4.3)
-* qt4 libraries (32 or 64 bit, Version >= 4.6.2)
+* qt4 libraries (32 or 64 bit, Version >= 4.6.3)
   - libqt4, libqt4-dev, libqt4-dbg (qt4-core, qt4-gui, qt4-xml)
   - qt4-examples / qt4-demos
   - qt4-dev-tools
   - qt4-qmake
   - qt4-help, qt4-doc
+* CMake (Version >= 2.8.7)
+  - The version 2.8.7 ist the first that can create working Debian packages
+  - If the package in the package manager is an older version install CMake
+    from the source
 * Mercurial Client (Version >= 1.4.3)
 * gstreamer (Version >= 0.10.28)
-  - gstreamer-tools
-  - libgstreamer, libgstreamer-dev, libgstreamer-dbg
-  - gstreamer-plugins-base, gstreamer-plugins-base-dbg
-    (videotestsrc, ffmpegcolorspace, videorate, videoscale, interfaces)
-  - gstreamer-plugins-good, gstreamer-plugins-good-dbg
-    (v4l2src, dv1394src, dvdemux, dvdec, jpegenc, multifilesink)
-  - gstreamer-ffmpeg, gstreamer-ffmpeg-dbg
-    (ffdemux_dv, ffdec_dvvideo, ffdeinterlace)
-  - python-gst, python-gst-dev, python-gst-dbg
-  - [Optional: gstreamer-plugins-ugly, gstreamer-plugins-ugly-dbg]
-  - [Optional: gstreamer-plugins-bad, gstreamer-plugins-bad-dbg
-    (dshowvideosrc)]
+  - gstreamer
+  - gstreamer-dev
+  - gstreamer-dbg
+  - gstreamer-plugins-base (videotestsrc, ffmpegcolorspace, videorate, videoscale)
+  - gstreamer-plugins-base-dev
+  - gstreamer-plugins-base-dbg
+  - gstreamer-plugins-good (v4l2src, dv1394src, dvdemux, dvdec, jpegenc, multifilesink)
+  - gstreamer-plugins-good-dbg
+  - (gstreamer-plugins-ugly)
+  - (gstreamer-plugins-ugly-dbg)
+  - (gstreamer-plugins-bad) (dshowvideosrc)
+  - (gstreamer-plugins-bad-dbg)
+  - gstreamer-ffmpeg (ffdemux_dv, ffdec_dvvideo, ffdeinterlace)
+  - gstreamer-ffmpeg-dev
+  - gstreamer-ffmpeg-dbg
 * ffmpeg (Version >= 0.5.2)
 * libxml2, libxml2-dev, libxml-dbg
 * libv4l, libv4l-devel, v4l-utils, v4l-utils-dev

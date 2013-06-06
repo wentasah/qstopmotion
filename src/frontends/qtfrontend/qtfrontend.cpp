@@ -279,7 +279,7 @@ void QtFrontend::init()
     viewFacade = new ViewFacade(this);
 
     mw = new MainWindowGUI(stApp, this);
-    mw->init();
+    mw->initialize();
 
     // Restore the size and position of the application
     QSize   appSize;

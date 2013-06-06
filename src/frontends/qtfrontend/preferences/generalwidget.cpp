@@ -75,7 +75,7 @@ void GeneralWidget::makeGUI()
 
     QVBoxLayout *tabLayout = new QVBoxLayout;
 
-    languageGroupBox = new QGroupBox(QString(tr("Language")));
+    languageGroupBox = new QGroupBox(tr("Language"));
     // languageGroupBox->setFlat(true);
 
     languageCombo = new QComboBox();

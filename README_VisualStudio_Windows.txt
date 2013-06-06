@@ -1,5 +1,5 @@
 Building qStopMotion using MS Visual Studio 2010
-Last Change: 2012/01/09
+Last Change: 2013-02-28
 
 1. Preparation of the development environment
 ================================================================================
@@ -12,10 +12,10 @@ Last Change: 2012/01/09
 1.2 Qt for Windows and Visual Studio
 --------------------------------------------------------------------------------
 
-* Download Qt libraries 4.6.2 for Windows (VS 2008) from qt.nokia.com/downloads
+* Download Qt libraries 4.6.3 for Windows 32-bit (VS 2008) from qt-project.com/downloads
 * Install in the Directory C:\Tools\Qt\...
 * Qt need write permissions to this directory during compilation and linking.
-* Add the binary directory to the path variable (e.g. C:\Tools\Qt\4.6.2\bin\).
+* Add the binary directory to the path variable (e.g. C:\Tools\Qt\4.6.3\bin\).
 
 1.3 Gstreamer
 --------------------------------------------------------------------------------

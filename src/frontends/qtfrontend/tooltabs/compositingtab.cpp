@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2010-2011 by                                                *
+ *  Copyright (C) 2010-2013 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -48,6 +48,7 @@ CompositingTab::CompositingTab(Frontend *f,
     this->setObjectName("CompositingTab");
 
     makeGUI();
+    retranslateStrings();
 }
 
 
@@ -56,7 +57,7 @@ void CompositingTab::makeGUI()
     QVBoxLayout *tabLayout = new QVBoxLayout;
     QString iconFile(frontend->getIconsDirName());
 
-    firstGroupBox = new QGroupBox(QString(tr("First Group Box")));
+    firstGroupBox = new QGroupBox(QString("firstGroupBox"));
     // firstGroupBox->setFlat(true);
 
     firstIcon = new QLabel();
@@ -86,7 +87,7 @@ void CompositingTab::makeGUI()
     firstLayout->addStretch(10);
     firstGroupBox->setLayout(firstLayout);
 
-    secondGroupBox = new QGroupBox(QString(tr("Second Group Box")));
+    secondGroupBox = new QGroupBox(QString("secondGroupBox"));
     // secondGroupBox->setFlat(true);
 
     secondButton = new QPushButton;
@@ -107,7 +108,7 @@ void CompositingTab::makeGUI()
     secondLayout->addStretch(10);
     secondGroupBox->setLayout(secondLayout);
 
-    thirdGroupBox = new QGroupBox(QString(tr("Third Group Box")));
+    thirdGroupBox = new QGroupBox(QString("thirdGroupBox"));
     // thirdGroupBox->setFlat(true);
 
     thirdButton = new QPushButton;
@@ -138,6 +139,24 @@ void CompositingTab::makeGUI()
 
     setLayout(tabLayout);
 
+}
+
+
+void CompositingTab::retranslateStrings()
+{
+    /*
+    QString infoText = tr("<h4>First Button</h4>");
+    firstButton->setToolTip(infoText);
+    firstButton->setWhatsThis(infoText);
+
+    infoText = tr("<h4>Second Button</h4>");
+    secondButton->setToolTip(infoText);
+    secondButton->setWhatsThis(infoText);
+
+    infoText = tr("<h4>Third Button</h4>");
+    thirdButton->setToolTip(infoText);
+    thirdButton->setWhatsThis(infoText);
+    */
 }
 
 
@@ -237,21 +256,4 @@ void CompositingTab::secondSlot()
 
 void CompositingTab::thirdSlot()
 {
-}
-
-
-void CompositingTab::retranslateStrings()
-{
-    QString infoText = tr("<h4>First Button</h4>");
-    firstButton->setToolTip(infoText);
-    firstButton->setWhatsThis(infoText);
-
-    infoText = tr("<h4>Second Button</h4>");
-    secondButton->setToolTip(infoText);
-    secondButton->setWhatsThis(infoText);
-
-    infoText = tr("<h4>Third Button</h4>");
-    thirdButton->setToolTip(infoText);
-    thirdButton->setWhatsThis(infoText);
-
 }

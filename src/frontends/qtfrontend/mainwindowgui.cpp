@@ -144,7 +144,339 @@ MainWindowGUI::MainWindowGUI(QApplication *stApp, Frontend *f)
     qDebug("MainWindowGUI::Constructor --> End");
 }
 
-void MainWindowGUI::init()
+
+MainWindowGUI::~MainWindowGUI()
+{
+    qDebug("MainWindowGUI::Destructor --> Start");
+
+    if (helpBrowser) {
+        helpBrowser->close();
+        delete helpBrowser;
+        helpBrowser = 0;
+    }
+
+    if (grabber != 0) {
+        delete grabber;
+        grabber = 0;
+    }
+
+    frontend = NULL;
+
+    qDebug("MainWindowGUI::Destructor --> End");
+}
+
+
+void MainWindowGUI::retranslateStrings()
+{
+    qDebug("MainWindowGUI::retranslateStrings --> Start");
+
+    // The actions caption texts
+    newAct->setText(tr("&New"));
+    openAct->setText(tr("&Open"));
+    saveAct->setText(tr("&Save"));
+    saveAsAct->setText(tr("Save &As"));
+    videoAct->setText(tr("Video"));
+    cinelerraAct->setText(tr("Cinelerra"));
+    quitAct->setText(tr("&Quit"));
+    undoAct->setText(tr("&Undo"));
+    redoAct->setText(tr("Re&do"));
+    insertSceneAct->setText(tr("Insert Scene"));
+    addSceneAct->setText(tr("Add Scene"));
+    removeSceneAct->setText(tr("Remove Scene"));
+    insertTakeAct->setText(tr("Insert Take"));
+    addTakeAct->setText(tr("Add Take"));
+    removeTakeAct->setText(tr("Remove Take"));
+    insertFramesAct->setText(tr("Insert Frames"));
+    addFramesAct->setText(tr("Add Frames"));
+    removeFramesAct->setText(tr("Remove Frames"));
+    // cutAct->setText(tr("Cu&t"));
+    // copyAct->setText(tr("&Copy"));
+    // pasteAct->setText(tr("&Paste"));
+    generalAct->setText(tr("&Configure Application"));
+    projectAct->setText(tr("&Configure Project"));
+    whatsthisAct->setText(tr("What's &This"));
+    undoViewAct->setText(tr("&Undo stack"));
+    cameraControllerAct->setText(tr("&Camera Controller"));
+    helpAct->setText(tr("&Help"));
+    aboutQtAct->setText(tr("About &Qt"));
+    aboutAct->setText(tr("&About"));
+
+    // The menus
+    fileMenu->setTitle(tr("&File"));
+    mostRecentMenu->setTitle(tr("Open &Recent"));
+    exportMenu->setTitle(tr("&Export"));
+    editMenu->setTitle(tr("&Edit"));
+    settingsMenu->setTitle(tr("&Settings"));
+    viewMenu->setTitle(tr("&View"));
+    helpMenu->setTitle(tr("&Help"));
+
+    updateMostRecentMenu();
+
+    // Status bar
+    projectLabel->setText(tr("Project ID: "));
+    sceneLabel->setText(tr("Scene ID: "));
+    takeLabel->setText(tr("Take ID: "));
+    exposureLabel->setText(tr("Exposure ID: "));
+
+    // The sub widgets
+    toolBar->retranslateStrings();
+    recordingTab->retranslateStrings();
+    sideBar->setTabText(0, tr("Recording"));
+    projectTab->retranslateStrings();
+    sideBar->setTabText(1, tr("Project"));
+    // viewTab->retranslateStrings();
+    // sideBar->setTabText(2, tr("View"));
+    // compositingTab->retranslateStrings();
+    // sideBar->setTabText(3, tr("Compositing"));
+
+    // Tooltip and whatsthis texts
+    retranslateHelpText();
+
+    if (cameraControllerDialog != NULL) {
+        cameraControllerDialog->retranslateStrings();
+    }
+
+    qDebug("MainWindowGUI::retranslateStrings --> End");
+}
+
+
+void MainWindowGUI::retranslateHelpText()
+{
+    QString infoText;
+
+    //File menu
+    infoText =
+        tr("<h4>New</h4> "
+           "<p>Creates a <em>new</em> project.</p>");
+    newAct->setWhatsThis(infoText);
+    //The prepend part is a trick to keep the accelerator in the tooltip
+    infoText =
+        newAct->toolTip().prepend(tr("New project"));
+    newAct->setToolTip(infoText);
+
+    infoText =
+        tr("<h4>Open</h4> "
+           "<p><em>Opens</em> a qStopMotion project file.</p>");
+    openAct->setWhatsThis(infoText);
+    infoText =
+        openAct->toolTip().prepend(tr("Open project"));
+    openAct->setToolTip(infoText);
+
+    infoText =
+        tr("<h4>Save</h4> "
+           "<p><em>Saves</em> the current animation as a qStopMotion "
+           "project file. <BR>If this project has been saved before it will "
+           "automaticly be saved to the previously selected file.</p>");
+    saveAct->setWhatsThis(infoText);
+    infoText =
+        saveAct->toolTip().prepend(tr("Save project"));
+    saveAct->setToolTip(infoText);
+
+    infoText =
+        tr("<h4>Save As</h4> "
+           "<p><em>Saves</em> the current animation as a qStopMotion "
+           "project file.</p>");
+    saveAsAct->setWhatsThis(infoText);
+    infoText =
+        saveAsAct->toolTip().prepend(tr("Save project As"));
+    saveAsAct->setToolTip(infoText);
+
+    infoText =
+        tr("<h4>Video</h4> "
+           "<p>Exports the current project as <em>video</em>.</p>"
+           "You will be given a wizard to guide you.");
+    videoAct->setWhatsThis(infoText);
+    videoAct->setToolTip(infoText);
+
+    infoText =
+        tr("<h4>Cinelerra</h4> "
+           "<p>Exports the current animation as a <em>cinelerra-cv</em> project.</p>"
+           "You will be given a wizard to guide you.");
+    cinelerraAct->setWhatsThis(infoText);
+    cinelerraAct->setToolTip(infoText);
+
+    infoText =
+        tr("<h4>Quit</h4> "
+           "<p><em>Quits</em> the program.</p>");
+    quitAct->setWhatsThis(infoText);
+    infoText =
+        quitAct->toolTip().prepend(tr("Quit"));
+    quitAct->setToolTip(infoText);
+
+
+    //Edit menu
+    infoText =
+        tr("<h4>Undo</h4> "
+           "<p><em>Undoes</em> your last operation. You can press undo "
+           "several time to undo earlier operations.</p>");
+    undoAct->setWhatsThis(infoText);
+    infoText =
+        undoAct->toolTip().prepend(tr("Undo"));
+    undoAct->setToolTip(infoText);
+
+    infoText =
+        tr("<h4>Redo</h4> "
+           "<p><em>Redoes</em> your last operation. You can press redo "
+           "several times to redo several operations.</p>");
+    redoAct->setWhatsThis(infoText);
+    infoText =
+        redoAct->toolTip().prepend(tr("Redo"));
+    redoAct->setToolTip(infoText);
+/*
+    infoText =
+        tr("<h4>Cut</h4> "
+           "<p><em>Cuts</em> the selected frames out of the animation and adds them "
+           "to the clipboard so that you can paste them in somewhere else.</p>");
+    cutAct->setWhatsThis(infoText);
+    infoText =
+        cutAct->toolTip().prepend(tr("Cut"));
+    cutAct->setToolTip(infoText);
+
+    infoText =
+        tr("<h4>Copy</h4> "
+           "<p><em>Copies</em> the selected frames to the clipboard. You can "
+           "then paste them in another place.</p>");
+    copyAct->setWhatsThis(infoText);
+    infoText =
+        copyAct->toolTip().prepend(tr("Copy"));
+    copyAct->setToolTip(infoText);
+
+    infoText =
+        tr("<h4>Paste</h4> "
+           "<p><em>Pastes</em> the frames which are currently in the clipboard "
+           "into the selected location.</p> <p>You can copy/cut images from another "
+           "programs and then use this option to paste them into this animation.</p>");
+    pasteAct->setWhatsThis(infoText);
+    infoText =
+        pasteAct->toolTip().prepend(tr("Paste"));
+    pasteAct->setToolTip(infoText);
+
+    infoText =
+        tr("<h4>Go to frame</h4> "
+           "<p>This will bring up a popup-menu at the bottom where you can choose "
+           "a frame you want to <em>go to</em>.</p>");
+    gotoFrameAct->setWhatsThis(infoText);
+    infoText =
+        gotoFrameAct->toolTip().prepend(tr("Go to frame"));
+    gotoFrameAct->setToolTip(infoText);
+*/
+    infoText =
+        tr("<h4>Configure Application</h4> "
+           "<p>This will opens a window where you can <em>configure</em> "
+           "the application with various settings.</p>");
+    generalAct->setWhatsThis(infoText);
+    infoText =
+        generalAct->toolTip().prepend(tr("Configure qStopMotion"));
+    generalAct->setToolTip(infoText);
+
+    infoText =
+        tr("<h4>Configure Project</h4> "
+           "<p>This will opens a window where you can <em>configure</em> "
+           "the project with various settings.</p>");
+    projectAct->setWhatsThis(infoText);
+    infoText =
+        projectAct->toolTip().prepend(tr("Configure qStopMotion"));
+    projectAct->setToolTip(infoText);
+
+
+    //Help menu
+    infoText =
+        tr("<h4>What's This</h4> "
+           "<p>This will give you a WhatsThis mouse cursor which can be used to "
+           "bring up helpful information like this.</p>");
+    whatsthisAct->setWhatsThis(infoText);
+    infoText =
+        whatsthisAct->toolTip().prepend(tr("What's This"));
+    whatsthisAct->setToolTip(infoText);
+
+    infoText =
+        tr("<h4>Help</h4> "
+           "<p>This button will bring up a dialog with the qStopMotion manual</p>");
+    helpAct->setWhatsThis(infoText);
+    infoText =
+        helpAct->toolTip().prepend(tr("Help"));
+    helpAct->setToolTip(infoText);
+
+    infoText =
+        tr("<h4>About Qt</h4> "
+           "<p>This will display a small information box where you can read "
+           "general information about the Qt library.</p>");
+    aboutQtAct->setWhatsThis(infoText);
+    infoText =
+        aboutAct->toolTip().prepend(tr("About Qt"));
+    aboutQtAct->setToolTip(infoText);
+
+    infoText =
+        tr("<h4>About</h4> "
+           "<p>This will display a small information box where you can read "
+           "general information as well as the names of the developers "
+           "behind this excellent piece of software.</p>");
+    aboutAct->setWhatsThis(infoText);
+    infoText =
+        aboutAct->toolTip().prepend(tr("About"));
+    aboutAct->setToolTip(infoText);
+
+
+    // Status bar
+    infoText =
+        tr("<h4>Project ID</h4><p>This area displays the id "
+           "of the currently active project</p>");
+    projectLabel->setToolTip(infoText);
+    projectLabel->setWhatsThis(infoText);
+    projectID->setToolTip(infoText);
+    projectID->setWhatsThis(infoText);
+
+    infoText =
+        tr("<h4>Scene ID</h4><p>This area displays the id "
+           "of the currently selected scene</p>");
+    sceneLabel->setToolTip(infoText);
+    sceneLabel->setWhatsThis(infoText);
+    sceneID->setToolTip(infoText);
+    sceneID->setWhatsThis(infoText);
+
+    infoText =
+        tr("<h4>Take ID</h4><p>This area displays the id "
+           "of the currently selected take</p>");
+    takeLabel->setToolTip(infoText);
+    takeLabel->setWhatsThis(infoText);
+    takeID->setToolTip(infoText);
+    takeID->setWhatsThis(infoText);
+
+    infoText =
+        tr("<h4>Exposure ID</h4><p>This area displays the id "
+           "of the currently selected exposure</p>");
+    exposureLabel->setToolTip(infoText);
+    exposureLabel->setWhatsThis(infoText);
+    exposureID->setToolTip(infoText);
+    exposureID->setWhatsThis(infoText);
+
+    //Various menues
+    infoText =
+        tr("<h4>FrameView</h4><p> In this area you can see the "
+           "selected frame. You can also play "
+           "animations in this window by pressing the "
+           "<b>Play</b> button.</p>");
+    frameView->setWhatsThis(infoText);
+/*
+    infoText =
+        tr("<h4>Go to frame menu</h4> "
+           "<p>Here you can specify a framenumber and the program will jump "
+           "to the specified frame</p> ");
+    gotoMenuWidget->setWhatsThis(infoText);
+*/
+    infoText =
+        tr("<h4>TimeLine</h4> "
+           "<p>In this area you can see the frames and scenes "
+           "in the animations and build the animation "
+           "by moving the them around.</p><p>You can "
+           "switch to the next and the previous frame "
+           "using the <b>arrow buttons</b> or <b>x</b> "
+           "and <b>z</b></p> ");
+    timeLine->setWhatsThis(infoText);
+}
+
+
+void MainWindowGUI::initialize()
 {
     int  value;
 
@@ -201,7 +533,7 @@ void MainWindowGUI::init()
     createMenus();
 
     // Mainwindow preferences.
-    setWindowTitle(tr("qStopMotion - No Animation Project"));
+    setWindowTitle("qStopMotion");
     QString iconFile(frontend->getIconsDirName());
     iconFile.append(QLatin1String("window.png"));
     setWindowIcon(QPixmap(iconFile));
@@ -239,27 +571,6 @@ void MainWindowGUI::init()
     }
 
     qDebug("MainWindowGUI::Constructor --> End");
-}
-
-
-MainWindowGUI::~MainWindowGUI()
-{
-    qDebug("MainWindowGUI::Destructor --> Start");
-
-    if (helpBrowser) {
-        helpBrowser->close();
-        delete helpBrowser;
-        helpBrowser = 0;
-    }
-
-    if (grabber != 0) {
-        delete grabber;
-        grabber = 0;
-    }
-
-    frontend = NULL;
-
-    qDebug("MainWindowGUI::Destructor --> End");
 }
 
 
@@ -386,114 +697,6 @@ int MainWindowGUI::getHorizontalSpin()
 void MainWindowGUI::setHorizontalSpin(int newSpin)
 {
     horizontalSpin = newSpin;
-}
-
-
-void MainWindowGUI::retranslateStrings()
-{
-    qDebug("MainWindowGUI::retranslateStrings --> Start");
-
-    //The actions caption texts
-    newAct->setText(tr("&New"));
-    qDebug() << "MainWindowGUI::retranslateStrings --> new:" << newAct->text();
-    openAct->setText(tr("&Open"));
-    saveAct->setText(tr("&Save"));
-    saveAsAct->setText(tr("Save &As"));
-    videoAct->setText(tr("Video"));
-    cinelerraAct->setText(tr("Cinelerra"));
-    quitAct->setText(tr("&Quit"));
-    undoAct->setText(tr("&Undo"));
-    redoAct->setText(tr("Re&do"));
-    insertSceneAct->setText(tr("Insert Scene"));
-    addSceneAct->setText(tr("Add Scene"));
-    removeSceneAct->setText(tr("Remove Scene"));
-    insertTakeAct->setText(tr("Insert Take"));
-    addTakeAct->setText(tr("Add Take"));
-    removeTakeAct->setText(tr("Remove Take"));
-    insertFramesAct->setText(tr("Insert Frames"));
-    addFramesAct->setText(tr("Add Frames"));
-    removeFramesAct->setText(tr("Remove Frames"));
-    // cutAct->setText(tr("Cu&t"));
-    // copyAct->setText(tr("&Copy"));
-    // pasteAct->setText(tr("&Paste"));
-    generalAct->setText(tr("&Configure Application"));
-    projectAct->setText(tr("&Configure Project"));
-    whatsthisAct->setText(tr("What's &This"));
-    undoViewAct->setText(tr("&Undo stack"));
-    cameraControllerAct->setText(tr("&Camera Controller"));
-    helpAct->setText(tr("&Help"));
-    aboutQtAct->setText(tr("About &Qt"));
-    aboutAct->setText(tr("&About"));
-
-    // Status bar
-    projectLabel->setText(tr("Project ID: "));
-    sceneLabel->setText(tr("Scene ID: "));
-    takeLabel->setText(tr("Take ID: "));
-    exposureLabel->setText(tr("Exposure ID: "));
-
-    //Tooltip and whatsthis texts
-    retranslateHelpText();
-
-    //The menus
-    menuBar()->clear();
-    menuBar()->addMenu(fileMenu);
-
-    fileMenu->clear();
-    fileMenu->setTitle(tr("&File"));
-    fileMenu->addAction(newAct);
-    fileMenu->addAction(openAct);
-    fileMenu->addMenu(mostRecentMenu);
-
-    updateMostRecentMenu();
-
-    fileMenu->addSeparator();
-    fileMenu->addAction(saveAct);
-    fileMenu->addAction(saveAsAct);
-    fileMenu->addMenu(exportMenu);
-
-    exportMenu->clear();
-    exportMenu->setTitle(tr("&Export"));
-    exportMenu->addAction(videoAct);
-    exportMenu->addAction(cinelerraAct);
-
-    fileMenu->addSeparator();
-    fileMenu->addAction(quitAct);
-
-    // Edit menu
-    editMenu->setTitle(tr("&Edit"));
-    menuBar()->addMenu(editMenu);
-
-    // Settings menu
-    settingsMenu->clear();
-    settingsMenu->setTitle(tr("&Settings"));
-    settingsMenu->addAction(generalAct);
-    settingsMenu->addAction(projectAct);
-    menuBar()->addMenu(settingsMenu);
-
-    // View menu
-    viewMenu->setTitle(tr("&View"));
-    menuBar()->addMenu(viewMenu);
-
-    // Help menu
-    helpMenu->setTitle(tr("&Help"));
-    menuBar()->addMenu(helpMenu);
-
-    // The submenus
-    toolBar->retranslateStrings();
-    recordingTab->retranslateStrings();
-    sideBar->setTabText(0, QString(tr("Recording")));
-    projectTab->retranslateStrings();
-    sideBar->setTabText(1, QString(tr("Project")));
-    // viewTab->retranslateStrings();
-    // sideBar->setTabText(2, QString(tr("View")));
-    // compositingTab->retranslateStrings();
-    // sideBar->setTabText(3, QString(tr("Compositing")));
-
-    if (cameraControllerDialog != NULL) {
-        cameraControllerDialog->retranslateStrings();
-    }
-
-    qDebug("MainWindowGUI::retranslateStrings --> End");
 }
 
 
@@ -1404,7 +1607,7 @@ void MainWindowGUI::showCameraControllerDialog()
         cameraControllerDialog = new CameraControllerDialog(frontend,
                                                             grabber->getDevice(getVideoSource()),
                                                             this);
-        cameraControllerDialog->init();
+        cameraControllerDialog->initialize();
         cameraControllerDialog->setGeometry(geometry().x() + fGeo.width(), geometry().y(),
                                             200, height());
     }
@@ -1961,11 +2164,29 @@ void MainWindowGUI::createActions()
 
 void MainWindowGUI::createMenus()
 {
-    fileMenu = menuBar()->addMenu(tr("&File"));
-    exportMenu = fileMenu->addMenu(tr("&Export"));
-    mostRecentMenu = fileMenu->addMenu(tr("Open &Recent"));
+    // Export menu
+    exportMenu = new QMenu(this);
+    exportMenu->addAction(videoAct);
+    exportMenu->addAction(cinelerraAct);
 
-    editMenu = menuBar()->addMenu(tr("&Edit"));
+    // Most recent menu
+    mostRecentMenu = new QMenu(this);
+
+    // File menu
+    fileMenu = new QMenu(this);
+    fileMenu->addAction(newAct);
+    fileMenu->addAction(openAct);
+    fileMenu->addMenu(mostRecentMenu);
+    fileMenu->addSeparator();
+    fileMenu->addAction(saveAct);
+    fileMenu->addAction(saveAsAct);
+    fileMenu->addMenu(exportMenu);
+    fileMenu->addSeparator();
+    fileMenu->addAction(quitAct);
+    menuBar()->addMenu(fileMenu);
+
+    // Edit menu
+    editMenu = new QMenu(this);
     editMenu->addAction(undoAct);
     editMenu->addAction(redoAct);
     editMenu->addSeparator();
@@ -1984,19 +2205,28 @@ void MainWindowGUI::createMenus()
     // editMenu->addAction(cutAct);
     // editMenu->addAction(copyAct);
     // editMenu->addAction(pasteAct);
+    menuBar()->addMenu(editMenu);
 
-    settingsMenu = menuBar()->addMenu(tr("&Settings"));
+    // Settings menu
+    settingsMenu = new QMenu(this);
+    settingsMenu->addAction(generalAct);
+    settingsMenu->addAction(projectAct);
+    menuBar()->addMenu(settingsMenu);
 
-    viewMenu = menuBar()->addMenu(tr("&View"));
+    // View menu
+    viewMenu = new QMenu(this);
     viewMenu->addAction(undoViewAct);
     viewMenu->addAction(cameraControllerAct);
+    menuBar()->addMenu(viewMenu);
 
-    helpMenu = menuBar()->addMenu(tr("&Help"));
+    // Help menu
+    helpMenu = new QMenu(this);
     helpMenu->addAction(whatsthisAct);
     helpMenu->addAction(helpAct);
     helpMenu->addSeparator();
     helpMenu->addAction(aboutQtAct);
     helpMenu->addAction(aboutAct);
+    menuBar()->addMenu(helpMenu);
 }
 
 
@@ -2018,26 +2248,26 @@ void MainWindowGUI::makeToolsMenu(QHBoxLayout *layout)
                                     this);
     recordingTab->initialize();
     iconFile.append(QLatin1String("clapper.png"));
-    sideBar->addTab(recordingTab, QIcon(iconFile), QString(tr("Recording")));
+    sideBar->addTab(recordingTab, QIcon(iconFile), "Recording");
 
     projectTab = new ProjectTab(frontend,
                                 lastVisitedDir);
     iconFile.clear();
     iconFile.append(frontend->getIconsDirName());
     iconFile.append(QLatin1String("view.png"));
-    sideBar->addTab(projectTab, QIcon(iconFile), QString(tr("Project")));
+    sideBar->addTab(projectTab, QIcon(iconFile), "Project");
 /*
     viewTab = new ViewTab(frontend);
     iconFile.clear();
     iconFile.append(frontend->getIconsDirName());
     iconFile.append(QLatin1String("view.png"));
-    sideBar->addTab(viewTab, QIcon(iconFile), QString(tr("View")));
+    sideBar->addTab(viewTab, QIcon(iconFile), "View");
 
     compositingTab = new CompositingTab(frontend);
     iconFile.clear();
     iconFile.append(frontend->getIconsDirName());
     iconFile.append(QLatin1String("compositing.png"));
-    sideBar->addTab(compositingTab, QIcon(iconFile), QString(tr("Compositing")));
+    sideBar->addTab(compositingTab, QIcon(iconFile), "Compositing");
 */
 }
 
@@ -2196,242 +2426,6 @@ void MainWindowGUI::keyReleaseEvent(QKeyEvent * k)
 }
 
 
-void MainWindowGUI::retranslateHelpText()
-{
-    QString infoText;
-
-    //File menu
-    infoText =
-        tr("<h4>New</h4> "
-           "<p>Creates a <em>new</em> project.</p>");
-    newAct->setWhatsThis(infoText);
-    //The prepend part is a trick to keep the accelerator in the tooltip
-    infoText =
-        newAct->toolTip().prepend(tr("New project"));
-    newAct->setToolTip(infoText);
-
-    infoText =
-        tr("<h4>Open</h4> "
-           "<p><em>Opens</em> a qStopMotion project file.</p>");
-    openAct->setWhatsThis(infoText);
-    infoText =
-        openAct->toolTip().prepend(tr("Open project"));
-    openAct->setToolTip(infoText);
-
-    infoText =
-        tr("<h4>Save</h4> "
-           "<p><em>Saves</em> the current animation as a qStopMotion "
-           "project file. <BR>If this project has been saved before it will "
-           "automaticly be saved to the previously selected file.</p>");
-    saveAct->setWhatsThis(infoText);
-    infoText =
-        saveAct->toolTip().prepend(tr("Save project"));
-    saveAct->setToolTip(infoText);
-
-    infoText =
-        tr("<h4>Save As</h4> "
-           "<p><em>Saves</em> the current animation as a qStopMotion "
-           "project file.</p>");
-    saveAsAct->setWhatsThis(infoText);
-    infoText =
-        saveAsAct->toolTip().prepend(tr("Save project As"));
-    saveAsAct->setToolTip(infoText);
-
-    infoText =
-        tr("<h4>Video</h4> "
-           "<p>Exports the current project as <em>video</em>.</p>"
-           "You will be given a wizard to guide you.");
-    videoAct->setWhatsThis(infoText);
-    videoAct->setToolTip(infoText);
-
-    infoText =
-        tr("<h4>Cinelerra</h4> "
-           "<p>Exports the current animation as a <em>cinelerra-cv</em> project.</p>"
-           "You will be given a wizard to guide you.");
-    cinelerraAct->setWhatsThis(infoText);
-    cinelerraAct->setToolTip(infoText);
-
-    infoText =
-        tr("<h4>Quit</h4> "
-           "<p><em>Quits</em> the program.</p>");
-    quitAct->setWhatsThis(infoText);
-    infoText =
-        quitAct->toolTip().prepend(tr("Quit"));
-    quitAct->setToolTip(infoText);
-
-
-    //Edit menu
-    infoText =
-        tr("<h4>Undo</h4> "
-           "<p><em>Undoes</em> your last operation. You can press undo "
-           "several time to undo earlier operations.</p>");
-    undoAct->setWhatsThis(infoText);
-    infoText =
-        undoAct->toolTip().prepend(tr("Undo"));
-    undoAct->setToolTip(infoText);
-
-    infoText =
-        tr("<h4>Redo</h4> "
-           "<p><em>Redoes</em> your last operation. You can press redo "
-           "several times to redo several operations.</p>");
-    redoAct->setWhatsThis(infoText);
-    infoText =
-        redoAct->toolTip().prepend(tr("Redo"));
-    redoAct->setToolTip(infoText);
-/*
-    infoText =
-        tr("<h4>Cut</h4> "
-           "<p><em>Cuts</em> the selected frames out of the animation and adds them "
-           "to the clipboard so that you can paste them in somewhere else.</p>");
-    cutAct->setWhatsThis(infoText);
-    infoText =
-        cutAct->toolTip().prepend(tr("Cut"));
-    cutAct->setToolTip(infoText);
-
-    infoText =
-        tr("<h4>Copy</h4> "
-           "<p><em>Copies</em> the selected frames to the clipboard. You can "
-           "then paste them in another place.</p>");
-    copyAct->setWhatsThis(infoText);
-    infoText =
-        copyAct->toolTip().prepend(tr("Copy"));
-    copyAct->setToolTip(infoText);
-
-    infoText =
-        tr("<h4>Paste</h4> "
-           "<p><em>Pastes</em> the frames which are currently in the clipboard "
-           "into the selected location.</p> <p>You can copy/cut images from another "
-           "programs and then use this option to paste them into this animation.</p>");
-    pasteAct->setWhatsThis(infoText);
-    infoText =
-        pasteAct->toolTip().prepend(tr("Paste"));
-    pasteAct->setToolTip(infoText);
-
-    infoText =
-        tr("<h4>Go to frame</h4> "
-           "<p>This will bring up a popup-menu at the bottom where you can choose "
-           "a frame you want to <em>go to</em>.</p>");
-    gotoFrameAct->setWhatsThis(infoText);
-    infoText =
-        gotoFrameAct->toolTip().prepend(tr("Go to frame"));
-    gotoFrameAct->setToolTip(infoText);
-*/
-    infoText =
-        tr("<h4>Configure Application</h4> "
-           "<p>This will opens a window where you can <em>configure</em> "
-           "the application with various settings.</p>");
-    generalAct->setWhatsThis(infoText);
-    infoText =
-        generalAct->toolTip().prepend(tr("Configure qStopMotion"));
-    generalAct->setToolTip(infoText);
-
-    infoText =
-        tr("<h4>Configure Project</h4> "
-           "<p>This will opens a window where you can <em>configure</em> "
-           "the project with various settings.</p>");
-    projectAct->setWhatsThis(infoText);
-    infoText =
-        projectAct->toolTip().prepend(tr("Configure qStopMotion"));
-    projectAct->setToolTip(infoText);
-
-
-    //Help menu
-    infoText =
-        tr("<h4>What's This</h4> "
-           "<p>This will give you a WhatsThis mouse cursor which can be used to "
-           "bring up helpful information like this.</p>");
-    whatsthisAct->setWhatsThis(infoText);
-    infoText =
-        whatsthisAct->toolTip().prepend(tr("What's This"));
-    whatsthisAct->setToolTip(infoText);
-
-    infoText =
-        tr("<h4>Help</h4> "
-           "<p>This button will bring up a dialog with the qStopMotion manual</p>");
-    helpAct->setWhatsThis(infoText);
-    infoText =
-        helpAct->toolTip().prepend(tr("Help"));
-    helpAct->setToolTip(infoText);
-
-    infoText =
-        tr("<h4>About Qt</h4> "
-           "<p>This will display a small information box where you can read "
-           "general information about the Qt library.</p>");
-    aboutQtAct->setWhatsThis(infoText);
-    infoText =
-        aboutAct->toolTip().prepend(tr("About Qt"));
-    aboutQtAct->setToolTip(infoText);
-
-    infoText =
-        tr("<h4>About</h4> "
-           "<p>This will display a small information box where you can read "
-           "general information as well as the names of the developers "
-           "behind this excellent piece of software.</p>");
-    aboutAct->setWhatsThis(infoText);
-    infoText =
-        aboutAct->toolTip().prepend(tr("About"));
-    aboutAct->setToolTip(infoText);
-
-
-    // Status bar
-    infoText =
-        tr("<h4>Project ID</h4><p>This area displays the id "
-           "of the currently active project</p>");
-    projectLabel->setToolTip(infoText);
-    projectLabel->setWhatsThis(infoText);
-    projectID->setToolTip(infoText);
-    projectID->setWhatsThis(infoText);
-
-    infoText =
-        tr("<h4>Scene ID</h4><p>This area displays the id "
-           "of the currently selected scene</p>");
-    sceneLabel->setToolTip(infoText);
-    sceneLabel->setWhatsThis(infoText);
-    sceneID->setToolTip(infoText);
-    sceneID->setWhatsThis(infoText);
-
-    infoText =
-        tr("<h4>Take ID</h4><p>This area displays the id "
-           "of the currently selected take</p>");
-    takeLabel->setToolTip(infoText);
-    takeLabel->setWhatsThis(infoText);
-    takeID->setToolTip(infoText);
-    takeID->setWhatsThis(infoText);
-
-    infoText =
-        tr("<h4>Exposure ID</h4><p>This area displays the id "
-           "of the currently selected exposure</p>");
-    exposureLabel->setToolTip(infoText);
-    exposureLabel->setWhatsThis(infoText);
-    exposureID->setToolTip(infoText);
-    exposureID->setWhatsThis(infoText);
-
-    //Various menues
-    infoText =
-        tr("<h4>FrameView</h4><p> In this area you can see the "
-           "selected frame. You can also play "
-           "animations in this window by pressing the "
-           "<b>Play</b> button.</p>");
-    frameView->setWhatsThis(infoText);
-/*
-    infoText =
-        tr("<h4>Go to frame menu</h4> "
-           "<p>Here you can specify a framenumber and the program will jump "
-           "to the specified frame</p> ");
-    gotoMenuWidget->setWhatsThis(infoText);
-*/
-    infoText =
-        tr("<h4>TimeLine</h4> "
-           "<p>In this area you can see the frames and scenes "
-           "in the animations and build the animation "
-           "by moving the them around.</p><p>You can "
-           "switch to the next and the previous frame "
-           "using the <b>arrow buttons</b> or <b>x</b> "
-           "and <b>z</b></p> ");
-    timeLine->setWhatsThis(infoText);
-}
-
-
 void MainWindowGUI::setMostRecentProject()
 {
     const QString newFirst = frontend->getProject()->getNewProjectFilePath();
@@ -2449,11 +2443,11 @@ void MainWindowGUI::setMostRecentProject()
 
 void MainWindowGUI::updateMostRecentMenu()
 {
-    mostRecentMenu->clear();
-    mostRecentMenu->setTitle(tr("Open &Recent"));
     PreferencesTool *pref = frontend->getPreferences();
     int ProjectFileIndex = 0;
     int MenuIndex = 0;
+
+    mostRecentMenu->clear();
 
     do {
         QString fileName(pref->getProject(ProjectFileIndex));

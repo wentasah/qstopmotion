@@ -134,24 +134,6 @@ public:
     const QString getImagePath() const;
 
     /**
-     * Use moveToImageDir!!!!!
-     *
-     * Moves sounds and images belonging to this Exposure into project directories.
-     * @param imageDir the image directory to move images into
-     * @param imageIndex a index describing the position of this Exposure relative
-     * to the other Exposures. E.g. 000005 if this Exposure is position five in the sequence
-     * of Exposures.
-     */
-    // void moveToProjectDir(const QString &imageDir, unsigned int imageIndex);
-
-    /**
-     * Moves the images to an image directory.
-     * @param directory the directory where the project files are stored
-     * @param imageIndex the index of the image which is used to set a filename
-     */
-    // void moveToImageDir(const QString &directory, unsigned int imageIndex);
-
-    /**
      * Moves the files belonging to this Exposure from the current directory
      * to the temporary directory.
      * @param isRecovery The project is in the recovery mode.

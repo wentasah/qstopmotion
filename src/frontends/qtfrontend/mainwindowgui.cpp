@@ -136,6 +136,7 @@ MainWindowGUI::MainWindowGUI(QApplication *stApp, Frontend *f)
     verticalSpin         = 5;
     horizontalGrid       = false;
     horizontalSpin       = 5;
+    gridColor.setNamedColor("#000000");     // RGB Black
 
     this->setObjectName("MainWindowGUI");
     stApp->installTranslator(&appTranslator);
@@ -478,7 +479,8 @@ void MainWindowGUI::retranslateHelpText()
 
 void MainWindowGUI::initialize()
 {
-    int  value;
+    int     value;
+    QString gridColorName;
 
     lastVisitedDir.clear();
 
@@ -568,6 +570,10 @@ void MainWindowGUI::initialize()
 
     if (pref->getIntegerPreference("preferences", "horizontalspin", horizontalSpin) == false) {
         horizontalSpin = 5;
+    }
+
+    if (pref->getStringPreference("preferences", "gridcolor", gridColorName) == true) {
+        gridColor.setNamedColor(gridColorName);
     }
 
     qDebug("MainWindowGUI::Constructor --> End");
@@ -697,6 +703,18 @@ int MainWindowGUI::getHorizontalSpin()
 void MainWindowGUI::setHorizontalSpin(int newSpin)
 {
     horizontalSpin = newSpin;
+}
+
+
+void MainWindowGUI::getGridColorRGB(int *r, int *g, int *b, int *a)
+{
+    gridColor.getRgb(r, g, b, a);
+}
+
+
+void MainWindowGUI::setGridColorRGB(int r, int g, int b, int a)
+{
+    gridColor.setRgb(r, g, b, a);
 }
 
 

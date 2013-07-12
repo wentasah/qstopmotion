@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2012 by                                                *
+ *  Copyright (C) 2005-2013 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -26,6 +26,7 @@
 
 #include <QtCore/QtDebug>
 
+#include <QtGui/QColorDialog>
 #include <QtGui/QGridLayout>
 #include <QtGui/QHeaderView>
 #include <QtGui/QInputDialog>
@@ -58,6 +59,9 @@ GeneralWidget::GeneralWidget(Frontend *f, QWidget *parent)
     actualHorizontalGrid  = false;
     horizontalGridSpin    = 0;
     actualHorizontalSpin  = 10;
+    gridColorLabel        = 0;
+    gridColorButton       = 0;
+    actualGridColor       = Qt::black;
 
     this->setObjectName("GeneralWidget");
 
@@ -149,11 +153,17 @@ void GeneralWidget::makeGUI()
     horizontalGridSpin->setFocusPolicy(Qt::NoFocus);
     horizontalGridSpin->setEnabled(false);
 
+    gridColorLabel = new QLabel(tr("Grid Color:"));
+    gridColorButton = new QPushButton(tr("Color"));
+    connect(gridColorButton,SIGNAL(clicked()), this, SLOT(clickedGridColorButton()));
+
     QGridLayout *gridLayout = new QGridLayout;
     gridLayout->addWidget(verticalGridCheck, 0, 0);
     gridLayout->addWidget(verticalGridSpin, 0, 1);
     gridLayout->addWidget(horizontalGridCheck, 1, 0);
     gridLayout->addWidget(horizontalGridSpin, 1, 1);
+    gridLayout->addWidget(gridColorLabel, 2, 0);
+    gridLayout->addWidget(gridColorButton, 2, 1);
     gridGroupBox->setLayout(gridLayout);
 
     tabLayout->setMargin(0);
@@ -177,6 +187,7 @@ void GeneralWidget::initialize()
     PreferencesTool *pref = frontend->getPreferences();
     int              value;
     QString          actualLocale;
+    QString          colorName;
     QVector<QString> locales = frontend->getLocales();
 
     pref->getStringPreference("preferences", "language", actualLocale);
@@ -225,6 +236,11 @@ void GeneralWidget::initialize()
     }
     actualHorizontalSpin = value;
     horizontalGridSpin->setValue(actualHorizontalSpin);
+
+    if (pref->getStringPreference("preferences", "gridcolor", colorName) == true) {
+        actualGridColor.setNamedColor(colorName);
+    }
+    gridColorButton->setText(actualGridColor.name());
 
     qDebug("GeneralWidget::initialize --> End");
 }
@@ -302,6 +318,15 @@ void GeneralWidget::apply()
         frontend->setHorizontalSpin(newHorizontalSpin);
         pref->setIntegerPreference("preferences", "horizontalspin", newHorizontalSpin);
         actualHorizontalSpin = newHorizontalSpin;
+    }
+
+    if (newGridColor != actualGridColor) {
+        // Grid color changed
+        int r, g, b, a;
+        newGridColor.getRgb(&r, &g, &b, &a);
+        frontend->setGridColorRGB(r, g, b, a);
+        pref->setStringPreference("preferences", "gridcolor", newGridColor.name());
+        actualGridColor = newGridColor;
     }
 
     qDebug("GeneralWidget::apply --> End");
@@ -383,4 +408,11 @@ void GeneralWidget::setHorizontalGridOn(int newState)
     else {
         horizontalGridSpin->setEnabled(false);
     }
+}
+
+
+void GeneralWidget::clickedGridColorButton()
+{
+    newGridColor = QColorDialog::getColor(actualGridColor);
+    gridColorButton->setText(newGridColor.name());
 }

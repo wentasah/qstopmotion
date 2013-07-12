@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2010-2012 by                                                *
+ *  Copyright (C) 2010-2013 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -118,6 +118,12 @@ private slots:
      */
     void setHorizontalGridOn(int newState);
 
+    /**
+     * Slot for notified the general tab when grid color button is clicked, so that
+     * general preferences can be updaten.
+     */
+    void clickedGridColorButton();
+
 private:
     Frontend     *frontend;
 
@@ -132,6 +138,8 @@ private:
     QSpinBox     *verticalGridSpin;
     QCheckBox    *horizontalGridCheck;
     QSpinBox     *horizontalGridSpin;
+    QLabel       *gridColorLabel;
+    QPushButton  *gridColorButton;
 
     int           actualLanguage;
     int           actualButtonFunction;
@@ -139,6 +147,8 @@ private:
     int           actualVerticalSpin;
     bool          actualHorizontalGrid;
     int           actualHorizontalSpin;
+    QColor        actualGridColor;
+    QColor        newGridColor;
 };
 
 #endif

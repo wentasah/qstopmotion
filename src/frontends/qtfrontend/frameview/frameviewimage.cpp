@@ -312,6 +312,7 @@ void FrameViewImage::paintEvent(QPaintEvent *)
 
     QPainter imagePainter(&outputImage);
     QPainter widgetPainter(this);
+    QColor   gridColor;
     QRect    widgetRect(this->rect());
     QSize    outputImageSize(outputImage.size());
     int      x = (widgetRect.width() - outputImageSize.width()) / 2;
@@ -365,6 +366,9 @@ void FrameViewImage::paintEvent(QPaintEvent *)
     switch (displayMode) {
     case liveImageMode:
     case playbackMode:
+        int r, g, b, a;
+        frontend->getGridColorRGB(&r, &g, &b, &a);
+        gridColor.setRgb(r, g, b, a);
         if (frontend->getVerticalGrid()) {
             // Draw a vertical grid on top of the image
 
@@ -374,6 +378,8 @@ void FrameViewImage::paintEvent(QPaintEvent *)
 
             x1 = y1 = 0;
             y2 = widgetRect.height();
+
+            widgetPainter.setPen(gridColor);
 
             for (int v = 0 ; v < verticalLines ; v++) {
                 x1 += vericalDistance;
@@ -391,6 +397,8 @@ void FrameViewImage::paintEvent(QPaintEvent *)
 
             x1 = y1 = 0;
             x2 = widgetRect.width();
+
+            widgetPainter.setPen(gridColor);
 
             for (int h = 0 ; h < horizontalLines ; h++) {
                 y1 += horizontalDistance;

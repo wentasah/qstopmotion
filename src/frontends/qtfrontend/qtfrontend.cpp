@@ -506,6 +506,18 @@ void QtFrontend::setHorizontalSpin(int newSpin)
 }
 
 
+void QtFrontend::getGridColorRGB(int *r, int *g, int *b, int *a)
+{
+    mw->getGridColorRGB(r, g, b, a);
+}
+
+
+void QtFrontend::setGridColorRGB(int r, int g, int b, int a)
+{
+    mw->setGridColorRGB(r, g, b, a);
+}
+
+
 void QtFrontend::showProgress(const QString &operation, unsigned int numOperations)
 {
     mw->showProgress(operation, numOperations);

@@ -236,6 +236,24 @@ public:
     void setHorizontalSpin(int newSpin);
 
     /**
+     * Get the RGB value of the color of the grid lines.
+     * @param r The red component of the color's RGB value.
+     * @param g The green component of the color's RGB value.
+     * @param b The blue component of the color's RGB value.
+     * @param a The alpha-channel component of the color's RGB value.
+     */
+    void getGridColorRGB(int *r, int *g, int *b, int *a);
+
+    /**
+     * Set the RGB value of the color of the grid lines.
+     * @param r The red component of the color's RGB value.
+     * @param g The green component of the color's RGB value.
+     * @param b The blue component of the color's RGB value.
+     * @param a The alpha-channel component of the color's RGB value.
+     */
+    void setGridColorRGB(int r, int g, int b, int a);
+
+    /**
      * Function for displaying progress on timeconsuming operations.
      * @param infoText the text to display to the user
      * @param numOperations the number of calculated operations to do

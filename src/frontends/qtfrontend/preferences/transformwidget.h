@@ -18,8 +18,8 @@
  *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                 *
  ******************************************************************************/
 
-#ifndef IMPORTWIDGET_H
-#define IMPORTWIDGET_H
+#ifndef TRANSFORMWIDGET_H
+#define TRANSFORMWIDGET_H
 
 #include "frontends/frontend.h"
 
@@ -42,7 +42,7 @@
  * The image import tab in the preferences menu
  * @author Ralf Lange
  */
-class ImportWidget : public QWidget
+class TransformWidget : public QWidget
 {
     Q_OBJECT
 public:
@@ -51,7 +51,7 @@ public:
      * @param f frontend of the application
      * @param parent the parent of the this widget
      */
-    ImportWidget(Frontend *f, bool type, QWidget *parent = 0);
+    TransformWidget(Frontend *f, bool type, QWidget *parent = 0);
 
     /**
      * Applies the settings in the import tab.
@@ -73,45 +73,24 @@ protected:
 
 private:
     /**
-     * Set the image grabber source in the combo box
-     * @param newSource The new image grabber source
+     * Set the adjustment in the adjustment box
+     * @param newAdjustment The new adjustment
      */
-    void setImageGrabberSource(int newSource);
+    void setAdjustment(int newAdjustment);
 
 private slots:
-    // image import preferences
+    // Transformation preferences
     /**
-     * Slot for notified the image import tab when the image grabber sources changes,
-     * so that image import preferences can be updated.
-     * @param index the new image grabber sources.
+     * Slot for notified the import tab when scale button is selected, so that
+     * import preferences can be updated.
      */
-    void changeImageGrabberSources(int index);
+    void setScaleButtonOn();
 
     /**
-     * Slot for notified the image import tab when the image format changes,
-     * so that image import preferences can be updated.
-     * @param index the new image format.
+     * Slot for notified the import tab when clip button is selected, so that
+     * import preferences can be updated.
      */
-    void changeImageFormat(int index);
-
-    /**
-     * Slot for notified the image import tab when the image quality changes,
-     * so that image import preferences can be updated.
-     */
-    void changeImageQuality();
-
-    /**
-     * Slot for notified the image import tab when the image size changes,
-     * so that image import preferences can be updated.
-     * @param index the new image size.
-     */
-    void changeImageSize(int index);
-
-    /**
-     * Slot for notified the image import tab when the live view fps changes,
-     * so that image import preferences can be updated.
-     */
-    void changeLiveViewFps();
+    void setClipButtonOn();
 
 private:
     Frontend     *frontend;
@@ -121,37 +100,25 @@ private:
      */
     bool          tabType;
 
-    QTextEdit    *infoText;
+    // Transformation preferences
+    QGroupBox    *transformPrefs;
+    QTextEdit    *transformText;
+    QRadioButton *scaleButton;
+    QRadioButton *clipButton;
+    bool          activeTransform;
 
-    QTableWidget *encoderTable;
-
-    // Grabber preferences
-    QGroupBox    *grabberPrefs;
-    QLabel       *grabberSourceLabel;
-    QComboBox    *grabberSourceCombo;
-    int           activeGrabberSource;
-
-    // Image preferences
-    QGroupBox    *imagePrefs;
-    QLabel       *imageFormatLabel;
-    QComboBox    *imageFormatCombo;
-    int           activeImageFormat;
-    QLabel       *imageQualityLabel;
-    QSlider      *imageQualitySlider;
-    int           activeImageQuality;
-    QLabel       *qualityMinimumLabel;
-    QLabel       *qualityMaximumLabel;
-    QLabel       *imageSizeLabel;
-    QComboBox    *imageSizeCombo;
-    int           activeImageSize;
-
-    // Live view preferences
-    QGroupBox    *liveViewPrefs;
-    QLabel       *liveViewFpsLabel;
-    QSlider      *liveViewFpsSlider;
-    int           activeLiveViewFps;
-    QLabel       *fpsMinimumLabel;
-    QLabel       *fpsMaximumLabel;
+    // Adjustment preferences
+    QGroupBox    *adjustmentPrefs;
+    QRadioButton *leftUpButton;
+    QRadioButton *centerUpButton;
+    QRadioButton *rightUpButton;
+    QRadioButton *leftMiddleButton;
+    QRadioButton *centerMiddleButton;
+    QRadioButton *rightMiddleButton;
+    QRadioButton *leftDownButton;
+    QRadioButton *centerDownButton;
+    QRadioButton *rightDownButton;
+    int           activeImageAdjustment;
 
     void makeGUI();
 

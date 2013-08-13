@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2012 by                                                *
+ *  Copyright (C) 2005-2013 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -34,11 +34,12 @@ GeneralDialog::GeneralDialog(Frontend *f, QWidget *parent)
 {
     qDebug("GeneralDialog::Constructor --> Start");
 
-    frontend           = f;
-    generalSettingsTab = 0;
-    projectValueTab    = 0;
-    imageImportTab     = 0;
-    videoExportTab     = 0;
+    frontend               = f;
+    generalSettingsTab     = 0;
+    projectValueTab        = 0;
+    imageImportTab         = 0;
+    imageTransformationTab = 0;
+    videoExportTab         = 0;
 
     tabWidget = new QTabWidget;
 
@@ -67,6 +68,7 @@ GeneralDialog::GeneralDialog(Frontend *f, QWidget *parent)
     makeGeneralSettingsTab();
     makeProjectValueTab();
     makeImageImportTab();
+    makeImageTransformTab();
     makeVideoExportTab();
 
     qDebug("GeneralDialog::Constructor --> End");
@@ -79,7 +81,7 @@ void GeneralDialog::makeGeneralSettingsTab()
 
     generalSettingsTab = new GeneralWidget(frontend);
     generalSettingsTab->initialize();
-    generalSettingsTab->setMinimumHeight(700);
+    generalSettingsTab->setMinimumHeight(400);
     tabWidget->addTab(generalSettingsTab, tr("&General Settings"));
 
     qDebug("GeneralDialog::makeGeneralSettingsTab --> End");
@@ -92,23 +94,10 @@ void GeneralDialog::makeProjectValueTab()
 
     projectValueTab = new ProjectWidget(frontend, true);
     projectValueTab->initialize();
-    projectValueTab->setMinimumHeight(700);
+    projectValueTab->setMinimumHeight(400);
     tabWidget->addTab(projectValueTab, tr("&New Project Values"));
 
     qDebug("GeneralDialog::makeProjectValueTab --> End");
-}
-
-
-void GeneralDialog::makeVideoExportTab()
-{
-    qDebug("GeneralDialog::makeVideoExportTab --> Start");
-
-    videoExportTab = new ExportWidget(frontend, true);
-    videoExportTab->initialize();
-    videoExportTab->setMinimumHeight(700);
-    tabWidget->addTab(videoExportTab, tr("Video &Export"));
-
-    qDebug("GeneralDialog::makeVideoExportTab --> End");
 }
 
 
@@ -118,10 +107,36 @@ void GeneralDialog::makeImageImportTab()
 
     imageImportTab = new ImportWidget(frontend, true);
     imageImportTab->initialize();
-    imageImportTab->setMinimumHeight(700);
-    tabWidget->addTab(imageImportTab, tr("&Image Import"));
+    imageImportTab->setMinimumHeight(400);
+    tabWidget->addTab(imageImportTab, tr("Image &Import"));
 
     qDebug("GeneralDialog::makeImageImportTab --> End");
+}
+
+
+void GeneralDialog::makeImageTransformTab()
+{
+    qDebug("GeneralDialog::makeImageTransformTab --> Start");
+
+    imageTransformationTab = new TransformWidget(frontend, true);
+    imageTransformationTab->initialize();
+    imageTransformationTab->setMinimumHeight(400);
+    tabWidget->addTab(imageTransformationTab, tr("Image &Transformation"));
+
+    qDebug("GeneralDialog::makeImageTransformTab --> End");
+}
+
+
+void GeneralDialog::makeVideoExportTab()
+{
+    qDebug("GeneralDialog::makeVideoExportTab --> Start");
+
+    videoExportTab = new ExportWidget(frontend, true);
+    videoExportTab->initialize();
+    videoExportTab->setMinimumHeight(400);
+    tabWidget->addTab(videoExportTab, tr("Video &Export"));
+
+    qDebug("GeneralDialog::makeVideoExportTab --> End");
 }
 
 
@@ -133,6 +148,7 @@ void GeneralDialog::apply()
     this->generalSettingsTab->apply();
     this->projectValueTab->apply();
     this->imageImportTab->apply();
+    this->imageTransformationTab->apply();
     this->videoExportTab->apply();
     frontend->getPreferences()->flushPreferences();
     this->setResult(QDialog::Accepted);
@@ -150,6 +166,7 @@ void GeneralDialog::close()
     this->generalSettingsTab->reset();
     this->projectValueTab->reset();
     this->imageImportTab->reset();
+    this->imageTransformationTab->reset();
     this->videoExportTab->reset();
     this->hide();
 
@@ -167,6 +184,7 @@ void GeneralDialog::finish(int result)
         generalSettingsTab->reset();
         projectValueTab->reset();
         imageImportTab->reset();
+        imageTransformationTab->reset();
         videoExportTab->reset();
     }
     this->hide();

@@ -1,7 +1,7 @@
 ###############################################################################
 # QtCreator file for the qStopMotion project                                  #
 # (c) Ralf Lange, longsoft.de                                                 #
-# Last update: 2013-04-07                                                     #
+# Last update: 2013-08-13                                                     #
 #                                                                             #
 # Please use CMake and the CMakeLists.txt file to build qStopMotion!          #
 ###############################################################################
@@ -56,6 +56,7 @@ HEADERS += src/config.h \
            src/frontends/qtfrontend/preferences/importwidget.h \
            src/frontends/qtfrontend/preferences/projectdialog.h \
            src/frontends/qtfrontend/preferences/projectwidget.h \
+           src/frontends/qtfrontend/preferences/transformwidget.h \
            src/frontends/qtfrontend/timeline/exposurethumbview.h \
            src/frontends/qtfrontend/timeline/thumbview.h \
            src/frontends/qtfrontend/timeline/timeline.h \
@@ -137,6 +138,7 @@ SOURCES += src/main.cpp \
            src/frontends/qtfrontend/preferences/importwidget.cpp \
            src/frontends/qtfrontend/preferences/projectdialog.cpp \
            src/frontends/qtfrontend/preferences/projectwidget.cpp \
+           src/frontends/qtfrontend/preferences/transformwidget.cpp \
            src/frontends/qtfrontend/timeline/exposurethumbview.cpp \
            src/frontends/qtfrontend/timeline/thumbview.cpp \
            src/frontends/qtfrontend/timeline/timeline.cpp \

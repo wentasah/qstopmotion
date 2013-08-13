@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2012 by                                                *
+ *  Copyright (C) 2005-2013 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -28,6 +28,7 @@
 // #include "frontends/qtfrontend/preferences/generalwidget.h"
 #include "frontends/qtfrontend/preferences/importwidget.h"
 #include "frontends/qtfrontend/preferences/projectwidget.h"
+#include "frontends/qtfrontend/preferences/transformwidget.h"
 
 #include <QtGui/QDialog>
 #include <QtGui/QPushButton>
@@ -51,18 +52,20 @@ public:
     ProjectDialog(Frontend *f, QWidget *parent = 0);
 
 private:
-    Frontend      *frontend;
-    // GeneralWidget *generalSettingsTab;
-    // ProjectWidget *projectValueTab;
-    ImportWidget  *imageImportTab;
-    ExportWidget  *videoExportTab;
-    QTabWidget    *tabWidget;
-    QPushButton   *applyButton;
-    QPushButton   *closeButton;
+    Frontend        *frontend;
+    // GeneralWidget   *generalSettingsTab;
+    // ProjectWidget   *projectValueTab;
+    ImportWidget    *imageImportTab;
+    TransformWidget *imageTransformationTab;
+    ExportWidget    *videoExportTab;
+    QTabWidget      *tabWidget;
+    QPushButton     *applyButton;
+    QPushButton     *closeButton;
 
     // void makeGeneralSettingsTab();
     // void makeProjectValueTab();
     void makeImageImportTab();
+    void makeImageTransformTab();
     void makeVideoExportTab();
 
 private slots:

@@ -1,7 +1,7 @@
 ###############################################################################
 # CMake file for the qStopMotion project                                      #
 # (c) Ralf Lange, longsoft.de                                                 #
-# Last update: 2013-06-05                                                     #
+# Last update: 2013-08-13                                                     #
 #                                                                             #
 # Usage:                                                                      #
 #   * Qt-Creator (Windows, Linux)                                             #
@@ -147,6 +147,7 @@ set(MOC_HEADERS
     src/frontends/qtfrontend/preferences/importwidget.h
     src/frontends/qtfrontend/preferences/projectdialog.h
     src/frontends/qtfrontend/preferences/projectwidget.h
+    src/frontends/qtfrontend/preferences/transformwidget.h
     src/frontends/qtfrontend/timeline/timeline.h
     src/frontends/qtfrontend/tooltabs/compositingtab.h
     src/frontends/qtfrontend/tooltabs/projecttab.h
@@ -227,6 +228,7 @@ set(SOURCES
     src/frontends/qtfrontend/preferences/importwidget.cpp
     src/frontends/qtfrontend/preferences/projectdialog.cpp
     src/frontends/qtfrontend/preferences/projectwidget.cpp
+    src/frontends/qtfrontend/preferences/transformwidget.cpp
     src/frontends/qtfrontend/timeline/timeline.cpp
     src/frontends/qtfrontend/timeline/exposurethumbview.cpp
     src/frontends/qtfrontend/timeline/thumbview.cpp

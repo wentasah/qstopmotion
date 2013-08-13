@@ -65,25 +65,6 @@ ImportWidget::ImportWidget(Frontend *f, bool type, QWidget *parent) : QWidget(pa
     imageSizeCombo           = 0;
     activeImageSize          = ImageGrabber::defaultSize;
 
-    // Transformation preferences
-    transformPrefs           = 0;
-    transformText            = 0;
-    scaleButton              = 0;
-    clipButton               = 0;
-
-    // Adjustment preferences
-    adjustmentPrefs          = 0;
-    leftUpButton             = 0;
-    centerUpButton           = 0;
-    rightUpButton            = 0;
-    leftMiddleButton         = 0;
-    centerMiddleButton       = 0;
-    rightMiddleButton        = 0;
-    leftDownButton           = 0;
-    centerDownButton         = 0;
-    rightDownButton          = 0;
-    activeImageAdjustment    = ImageGrabber::centerDown;
-
     // Live view preferences
     liveViewPrefs            = 0;
     liveViewFpsLabel         = 0;
@@ -218,144 +199,6 @@ void ImportWidget::makeGUI()
     imagePrefsLayout->addWidget(imageSizeCombo, 3, 1, Qt::AlignRight);
     imagePrefs->setLayout(imagePrefsLayout);
 
-    // Transformation preferences
-    transformPrefs = new QGroupBox;
-    transformPrefs->setMinimumSize(440, 300);
-    transformPrefs->setTitle(tr("Transformation settings"));
-
-    transformText = new QTextEdit;
-    transformText->setReadOnly(true);
-    if (tabType) {
-        transformText->setHtml(
-            "<p>" +
-            tr("Below you can set which image transformation should be used for "
-               "importing images to a new project. If you select "
-               "clip a part of the image set also the adjustment for cliping.") +
-            "</p>");
-    }
-    else {
-        transformText->setHtml(
-            "<p>" +
-            tr("Below you can set which image transformation should be used for "
-               "importing images to the currently active project. If you select "
-               "clip a part of the image set also the adjustment for cliping.") +
-            "</p>");
-    }
-
-    transformText->setMinimumWidth(440);
-    transformText->setMinimumHeight(75);
-    transformText->setMaximumHeight(90);
-    transformText->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-
-    scaleButton = new QRadioButton(tr("Scale the whole image"));
-    scaleButton->setChecked(true);
-    scaleButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-    connect(scaleButton, SIGNAL(clicked()), this, SLOT(setScaleButtonOn()));
-
-    clipButton = new QRadioButton(tr("Clip a part of the image"));
-    clipButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-    clipButton->setChecked(false);
-    connect(clipButton, SIGNAL(clicked()), this, SLOT(setClipButtonOn()));
-
-    adjustmentPrefs = new QGroupBox;
-    adjustmentPrefs->setMinimumSize(200, 100);
-    // adjustmentPrefs->setStyleSheet("border-width = 2px");
-    // adjustmentPrefs->setStyleSheet("border-color = black");
-    // adjustmentPrefs->setStyleSheet("border = 2px solid black");
-    // adjustmentPrefs->setStyle("plastique");
-    // QPalette p = adjustmentPrefs->palette();
-    // p.setColor(adjustmentPrefs->backgroundRole(), QColor(0, 255, 255));
-    // adjustmentPrefs->setPalette(p);
-    // adjustmentPrefs->setTitle(tr("Adjustment settings"));
-
-    leftUpButton = new QRadioButton();
-    leftUpButton->setChecked(false);
-    leftUpButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-
-    centerUpButton = new QRadioButton();
-    centerUpButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-    centerUpButton->setChecked(false);
-
-    rightUpButton = new QRadioButton();
-    rightUpButton->setChecked(false);
-    rightUpButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-
-    leftMiddleButton = new QRadioButton();
-    leftMiddleButton->setChecked(false);
-    leftMiddleButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-
-    centerMiddleButton = new QRadioButton();
-    centerMiddleButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-    centerMiddleButton->setChecked(false);
-
-    rightMiddleButton = new QRadioButton();
-    rightMiddleButton->setChecked(false);
-    rightMiddleButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-
-    leftDownButton = new QRadioButton();
-    leftDownButton->setChecked(false);
-    leftDownButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-
-    centerDownButton = new QRadioButton();
-    centerDownButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-    centerDownButton->setChecked(false);
-
-    rightDownButton = new QRadioButton();
-    rightDownButton->setChecked(false);
-    rightDownButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-
-    QVBoxLayout *adjustmentPrefsLayout = new QVBoxLayout;
-    QHBoxLayout *hbLayout = new QHBoxLayout;
-    hbLayout->addWidget(leftUpButton);
-    hbLayout->addStretch(1);
-    hbLayout->addWidget(centerUpButton);
-    hbLayout->addStretch(1);
-    hbLayout->addWidget(rightUpButton);
-    adjustmentPrefsLayout->addLayout(hbLayout);
-    adjustmentPrefsLayout->addStretch(1);
-
-    hbLayout = new QHBoxLayout;
-    hbLayout->addWidget(leftMiddleButton);
-    hbLayout->addStretch(1);
-    hbLayout->addWidget(centerMiddleButton);
-    hbLayout->addStretch(1);
-    hbLayout->addWidget(rightMiddleButton);
-    adjustmentPrefsLayout->addLayout(hbLayout);
-    adjustmentPrefsLayout->addStretch(1);
-
-    hbLayout = new QHBoxLayout;
-    hbLayout->addWidget(leftDownButton);
-    hbLayout->addStretch(1);
-    hbLayout->addWidget(centerDownButton);
-    hbLayout->addStretch(1);
-    hbLayout->addWidget(rightDownButton);
-    adjustmentPrefsLayout->addLayout(hbLayout);
-
-    adjustmentPrefs->setLayout(adjustmentPrefsLayout);
-
-    // Transform preferences
-    QVBoxLayout *transformPrefsLayout = new QVBoxLayout;
-    hbLayout = new QHBoxLayout;
-    hbLayout->setMargin(0);
-    hbLayout->setSpacing(0);
-    hbLayout->addStretch(1);
-
-    transformPrefsLayout->addLayout(hbLayout);
-    transformPrefsLayout->addWidget(transformText);
-    hbLayout = new QHBoxLayout;
-    hbLayout->addStretch(1);
-    hbLayout->addWidget(scaleButton);
-    hbLayout->addStretch(1);
-    hbLayout->addWidget(clipButton);
-    hbLayout->addStretch(1);
-    transformPrefsLayout->addLayout(hbLayout);
-    hbLayout = new QHBoxLayout;
-    hbLayout->addStretch(1);
-    hbLayout->addWidget(adjustmentPrefs);
-    hbLayout->addStretch(1);
-    transformPrefsLayout->addLayout(hbLayout);
-    transformPrefs->setLayout(transformPrefsLayout);
-
     // Live view preferences
     liveViewPrefs = new QGroupBox;
     liveViewPrefs->setTitle(tr("Live view settings"));
@@ -392,10 +235,10 @@ void ImportWidget::makeGUI()
     mainLayout->addWidget(infoText);
     mainLayout->addWidget(grabberPrefs);
     mainLayout->addWidget(imagePrefs);
-    mainLayout->addWidget(transformPrefs);
     mainLayout->addWidget(liveViewPrefs);
+    mainLayout->addStretch(1);
+
     setLayout(mainLayout);
-    // setMinimumHeight(500);
 
     qDebug("ImportWidget::makeGUI --> End");
 }
@@ -431,16 +274,6 @@ void ImportWidget::initialize()
         }
         activeImageSize = value;
 
-        if (pref->getIntegerPreference("preferences", "defaulttransformation", value) == false) {
-            value = false;
-        }
-        activeTransform = value;
-
-        if (pref->getIntegerPreference("preferences", "defaultimageadjustment", value) == false) {
-            value = ImageGrabber::centerDown;
-        }
-        activeImageAdjustment = value;
-
         if (pref->getIntegerPreference("preferences", "defaultliveviewfps", value) == false) {
             value = 20;
         }
@@ -452,8 +285,6 @@ void ImportWidget::initialize()
         activeImageFormat = frontend->getProject()->getImageFormat();
         activeImageQuality = frontend->getProject()->getImageQuality();
         activeImageSize = frontend->getProject()->getImageSize();
-        activeTransform = frontend->getProject()->getImageTransformation();
-        activeImageAdjustment = frontend->getProject()->getImageAdjustment();
         activeLiveViewFps = frontend->getProject()->getLiveViewFps();
     }
 
@@ -465,16 +296,6 @@ void ImportWidget::initialize()
     imageQualitySlider->setValue(activeImageQuality);
 
     imageSizeCombo->setCurrentIndex(activeImageSize);
-
-    // Transformation preferences
-    if (activeTransform) {
-        setScaleButtonOn();
-    }
-    else {
-        setClipButtonOn();
-    }
-
-    setAdjustment(activeImageAdjustment);
 
     liveViewFpsSlider->setValue(activeLiveViewFps);
 
@@ -550,52 +371,6 @@ void ImportWidget::apply()
         changings = true;
     }
 
-    if (clipButton->isChecked()) {
-        if (activeTransform) {
-            activeTransform = false;
-            changings = true;
-        }
-    }
-    else {
-        if (!activeTransform) {
-            activeTransform = true;
-            changings = true;
-        }
-    }
-
-    if (leftUpButton->isChecked()) {
-        index = ImageGrabber::leftUp;
-    }
-    if (centerUpButton->isChecked()) {
-        index = ImageGrabber::centerUp;
-    }
-    if (rightUpButton->isChecked()) {
-        index = ImageGrabber::rightUp;
-    }
-    if (leftMiddleButton->isChecked()) {
-        index = ImageGrabber::leftMiddle;
-    }
-    if (centerMiddleButton->isChecked()) {
-        index = ImageGrabber::centerMiddle;
-    }
-    if (rightMiddleButton->isChecked()) {
-        index = ImageGrabber::rightMiddle;
-    }
-    if (leftDownButton->isChecked()) {
-        index = ImageGrabber::leftDown;
-    }
-    if (centerDownButton->isChecked()) {
-        index = ImageGrabber::centerDown;
-    }
-    if (rightDownButton->isChecked()) {
-        index = ImageGrabber::rightDown;
-    }
-    if (activeImageAdjustment != index)
-    {
-        activeImageAdjustment = index;
-        changings = true;
-    }
-
     value = liveViewFpsSlider->value();
     if (activeLiveViewFps != value) {
         activeLiveViewFps = value;
@@ -609,8 +384,6 @@ void ImportWidget::apply()
             pref->setIntegerPreference("preferences", "defaultimageformat", activeImageFormat);
             pref->setIntegerPreference("preferences", "defaultimagequality", activeImageQuality);
             pref->setIntegerPreference("preferences", "defaultimagesize", activeImageSize);
-            pref->setIntegerPreference("preferences", "defaulttransformation", activeTransform);
-            pref->setIntegerPreference("preferences", "defaultimageadjustment", activeImageAdjustment);
             pref->setIntegerPreference("preferences", "defaultliveviewfps", activeLiveViewFps);
         }
         else {
@@ -619,8 +392,6 @@ void ImportWidget::apply()
             frontend->getProject()->setImageFormat(activeImageFormat);
             frontend->getProject()->setImageQuality(activeImageQuality);
             frontend->getProject()->setImageSize(activeImageSize);
-            frontend->getProject()->setImageTransformation(activeTransform);
-            frontend->getProject()->setImageAdjustment(activeImageAdjustment);
             frontend->getProject()->setLiveViewFps(activeLiveViewFps);
         }
     }
@@ -638,15 +409,6 @@ void ImportWidget::reset()
     enableQuality();
     imageQualitySlider->setValue(activeImageQuality);
     imageSizeCombo->setCurrentIndex(activeImageSize);
-    if (activeTransform)
-    {
-        setScaleButtonOn();
-    }
-    else
-    {
-        setClipButtonOn();
-    }
-    setAdjustment(activeImageAdjustment);
     liveViewFpsSlider->setValue(activeLiveViewFps);
 
     qDebug("ImportWidget::reset --> End");
@@ -679,44 +441,6 @@ void ImportWidget::setImageGrabberSource(int newSource)
     }
 
     qDebug() << "ImportWidget::setImageGrabberSource --> End";
-}
-
-
-void ImportWidget::setAdjustment(int newAdjustment)
-{
-    qDebug() << "ImportWidget::setAdjustment --> Start";
-
-    switch (newAdjustment) {
-    case ImageGrabber::leftUp:
-        leftUpButton->setChecked(true);
-        break;
-    case ImageGrabber::centerUp:
-        centerUpButton->setChecked(true);
-        break;
-    case ImageGrabber::rightUp:
-        rightUpButton->setChecked(true);
-        break;
-    case ImageGrabber::leftMiddle:
-        leftMiddleButton->setChecked(true);
-        break;
-    case ImageGrabber::centerMiddle:
-        centerMiddleButton->setChecked(true);
-        break;
-    case ImageGrabber::rightMiddle:
-        rightMiddleButton->setChecked(true);
-        break;
-    case ImageGrabber::leftDown:
-        leftDownButton->setChecked(true);
-        break;
-    case ImageGrabber::centerDown:
-        centerDownButton->setChecked(true);
-        break;
-    case ImageGrabber::rightDown:
-        rightDownButton->setChecked(true);
-        break;
-    }
-
-    qDebug() << "ImportWidget::setAdjustment --> End";
 }
 
 
@@ -787,44 +511,6 @@ void ImportWidget::changeImageSize(int /*index*/)
     // qDebug() << "ImportWidget::changeImageSize --> Start";
 
     // qDebug() << "ImportWidget::changeImageSize --> End";
-}
-
-
-void ImportWidget::setScaleButtonOn()
-{
-    scaleButton->setChecked(true);
-    clipButton->setChecked(false);
-
-    adjustmentPrefs->setEnabled(false);
-
-    leftUpButton->setEnabled(false);
-    centerUpButton->setEnabled(false);
-    rightUpButton->setEnabled(false);
-    leftMiddleButton->setEnabled(false);
-    centerMiddleButton->setEnabled(false);
-    rightMiddleButton->setEnabled(false);
-    leftDownButton->setEnabled(false);
-    centerDownButton->setEnabled(false);
-    rightDownButton->setEnabled(false);
-}
-
-
-void ImportWidget::setClipButtonOn()
-{
-    clipButton->setChecked(true);
-    scaleButton->setChecked(false);
-
-    adjustmentPrefs->setEnabled(true);
-
-    leftUpButton->setEnabled(true);
-    centerUpButton->setEnabled(true);
-    rightUpButton->setEnabled(true);
-    leftMiddleButton->setEnabled(true);
-    centerMiddleButton->setEnabled(true);
-    rightMiddleButton->setEnabled(true);
-    leftDownButton->setEnabled(true);
-    centerDownButton->setEnabled(true);
-    rightDownButton->setEnabled(true);
 }
 
 

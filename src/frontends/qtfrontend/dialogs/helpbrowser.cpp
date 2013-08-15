@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2011 by                                                *
+ *  Copyright (C) 2005-2013 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -22,6 +22,7 @@
 
 #include "helpbrowser.h"
 
+#include <QtCore/QFile>
 #include <QtCore/QUrl>
 #include <QtGui/QHBoxLayout>
 #include <QtGui/QVBoxLayout>
@@ -31,6 +32,8 @@ HelpBrowser::HelpBrowser(Frontend *f,
                          QWidget *parent)
     : QDialog(parent)
 {
+    QUrl url;
+
     frontend = f;
 
     this->setWindowTitle(tr("qStopMotion Help Browser"));
@@ -66,10 +69,25 @@ HelpBrowser::HelpBrowser(Frontend *f,
     mainLayout->addLayout(bottomLayout);
     this->setLayout(mainLayout);
 
-    QString manualFile(frontend->getManualDirName());
-    manualFile.append("/");
-    manualFile.append(QLatin1String("index.html"));
-    QUrl url = QUrl::fromLocalFile(manualFile);
+    QString activeLocale;
+    frontend->getPreferences()->getStringPreference("preferences", "language", activeLocale);
+    QString localeManualFile(frontend->getManualDirName());
+    // localeManualFile.append("/");
+    localeManualFile.append(activeLocale);
+    localeManualFile.append("/");
+    localeManualFile.append(QLatin1String("index.html"));
+
+    if (QFile::exists(localeManualFile)) {
+        // A translation of the manual for the selected language exists
+        url = QUrl::fromLocalFile(localeManualFile);
+    }
+    else {
+        // Use the english manual as default
+        QString defaultManualFile(frontend->getManualDirName());
+        defaultManualFile.append("/");
+        defaultManualFile.append(QLatin1String("index.html"));
+        url = QUrl::fromLocalFile(defaultManualFile);
+    }
 
     textBrowser->setSource(url);
 }

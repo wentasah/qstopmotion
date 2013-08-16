@@ -235,6 +235,11 @@ void MainWindowGUI::retranslateStrings()
         cameraControllerDialog->retranslateStrings();
     }
 
+    if (helpBrowser != NULL) {
+        delete helpBrowser;
+        helpBrowser = NULL;
+    }
+
     qDebug("MainWindowGUI::retranslateStrings --> End");
 }
 

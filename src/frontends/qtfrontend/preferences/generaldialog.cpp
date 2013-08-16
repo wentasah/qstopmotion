@@ -62,7 +62,7 @@ GeneralDialog::GeneralDialog(Frontend *f, QWidget *parent)
     mainLayout->addLayout(buttonLayout);
 
     setLayout(mainLayout);
-    setWindowTitle(tr("General Preferences"));
+    setWindowTitle(tr("qStopMotion Preferences"));
     setModal(false);
 
     makeGeneralSettingsTab();

@@ -68,6 +68,7 @@ MainWindowGUI::MainWindowGUI(QApplication *stApp, Frontend *f)
     saveAsAct            = 0;
     videoAct             = 0;
     cinelerraAct         = 0;
+    propertiesAct        = 0;
     quitAct              = 0;
     undoAct              = 0;
     redoAct              = 0;
@@ -83,8 +84,7 @@ MainWindowGUI::MainWindowGUI(QApplication *stApp, Frontend *f)
     cutAct               = 0;
     copyAct              = 0;
     pasteAct             = 0;
-    generalAct           = 0;
-    projectAct           = 0;
+    preferencesAct       = 0;
     whatsthisAct         = 0;
     undoViewAct          = 0;
     cameraControllerAct  = 0;
@@ -95,8 +95,7 @@ MainWindowGUI::MainWindowGUI(QApplication *stApp, Frontend *f)
     exportMenu           = 0;
     mostRecentMenu       = 0;
     editMenu             = 0;
-    settingsMenu         = 0;
-    viewMenu             = 0;
+    windowsMenu          = 0;
     helpMenu             = 0;
 
     sideBar              = 0;
@@ -178,6 +177,7 @@ void MainWindowGUI::retranslateStrings()
     saveAsAct->setText(tr("Save &As"));
     videoAct->setText(tr("Video"));
     cinelerraAct->setText(tr("Cinelerra"));
+    propertiesAct->setText(tr("Properties"));
     quitAct->setText(tr("&Quit"));
     undoAct->setText(tr("&Undo"));
     redoAct->setText(tr("Re&do"));
@@ -193,8 +193,7 @@ void MainWindowGUI::retranslateStrings()
     // cutAct->setText(tr("Cu&t"));
     // copyAct->setText(tr("&Copy"));
     // pasteAct->setText(tr("&Paste"));
-    generalAct->setText(tr("&Configure Application"));
-    projectAct->setText(tr("&Configure Project"));
+    preferencesAct->setText(tr("Preferences"));
     whatsthisAct->setText(tr("What's &This"));
     undoViewAct->setText(tr("&Undo stack"));
     cameraControllerAct->setText(tr("&Camera Controller"));
@@ -207,8 +206,7 @@ void MainWindowGUI::retranslateStrings()
     mostRecentMenu->setTitle(tr("Open &Recent"));
     exportMenu->setTitle(tr("&Export"));
     editMenu->setTitle(tr("&Edit"));
-    settingsMenu->setTitle(tr("&Settings"));
-    viewMenu->setTitle(tr("&View"));
+    windowsMenu->setTitle(tr("&Windows"));
     helpMenu->setTitle(tr("&Help"));
 
     updateMostRecentMenu();
@@ -245,7 +243,7 @@ void MainWindowGUI::retranslateHelpText()
 {
     QString infoText;
 
-    //File menu
+    // File menu
     infoText =
         tr("<h4>New</h4> "
            "<p>Creates a <em>new</em> project.</p>");
@@ -297,6 +295,15 @@ void MainWindowGUI::retranslateHelpText()
     cinelerraAct->setToolTip(infoText);
 
     infoText =
+        tr("<h4>Properties of the project</h4> "
+           "<p>This will opens a window where you can <em>change</em> "
+           "properties of the animation project.</p>");
+    propertiesAct->setWhatsThis(infoText);
+    infoText =
+        propertiesAct->toolTip().prepend(tr("Properties of the animation project"));
+    propertiesAct->setToolTip(infoText);
+
+    infoText =
         tr("<h4>Quit</h4> "
            "<p><em>Quits</em> the program.</p>");
     quitAct->setWhatsThis(infoText);
@@ -305,7 +312,7 @@ void MainWindowGUI::retranslateHelpText()
     quitAct->setToolTip(infoText);
 
 
-    //Edit menu
+    // Edit menu
     infoText =
         tr("<h4>Undo</h4> "
            "<p><em>Undoes</em> your last operation. You can press undo "
@@ -362,25 +369,18 @@ void MainWindowGUI::retranslateHelpText()
     gotoFrameAct->setToolTip(infoText);
 */
     infoText =
-        tr("<h4>Configure Application</h4> "
-           "<p>This will opens a window where you can <em>configure</em> "
-           "the application with various settings.</p>");
-    generalAct->setWhatsThis(infoText);
+        tr("<h4>Preferences of the application</h4> "
+           "<p>This will opens a window where you can <em>change</em> "
+           "the preferences of the application.</p>");
+    preferencesAct->setWhatsThis(infoText);
     infoText =
-        generalAct->toolTip().prepend(tr("Configure qStopMotion"));
-    generalAct->setToolTip(infoText);
-
-    infoText =
-        tr("<h4>Configure Project</h4> "
-           "<p>This will opens a window where you can <em>configure</em> "
-           "the project with various settings.</p>");
-    projectAct->setWhatsThis(infoText);
-    infoText =
-        projectAct->toolTip().prepend(tr("Configure qStopMotion"));
-    projectAct->setToolTip(infoText);
+        preferencesAct->toolTip().prepend(tr("Preferences of qStopMotion"));
+    preferencesAct->setToolTip(infoText);
 
 
-    //Help menu
+    // Windows menu
+
+    // Help menu
     infoText =
         tr("<h4>What's This</h4> "
            "<p>This will give you a WhatsThis mouse cursor which can be used to "
@@ -451,7 +451,7 @@ void MainWindowGUI::retranslateHelpText()
     exposureID->setToolTip(infoText);
     exposureID->setWhatsThis(infoText);
 
-    //Various menues
+    // Various menues
     infoText =
         tr("<h4>FrameView</h4><p> In this area you can see the "
            "selected frame. You can also play "
@@ -1570,31 +1570,31 @@ void MainWindowGUI::removeSound()
 }
 
 
-void MainWindowGUI::showGeneralDialog()
+void MainWindowGUI::showPreferencesDialog()
 {
-    GeneralDialog *generalDialog;
+    GeneralDialog *preferencesDialog;
 
-    generalDialog = new GeneralDialog(frontend);
-    int ret = generalDialog->exec();
+    preferencesDialog = new GeneralDialog(frontend);
+    int ret = preferencesDialog->exec();
     if (ret == QDialog::Rejected) {
         // The user canceled the input dialog
-        qDebug("MainWindowsGUI::showGeneralDialog --> End (cancel)");
+        qDebug("MainWindowsGUI::showPreferencesDialog --> End (cancel)");
     }
-    delete(generalDialog);
+    delete(preferencesDialog);
 }
 
 
-void MainWindowGUI::showProjectDialog()
+void MainWindowGUI::showPropertiesDialog()
 {
-    ProjectDialog *projectDialog;
+    ProjectDialog *propertiesDialog;
 
-    projectDialog = new ProjectDialog(frontend);
-    int ret = projectDialog->exec();
+    propertiesDialog = new ProjectDialog(frontend);
+    int ret = propertiesDialog->exec();
     if (ret == QDialog::Rejected) {
         // The user canceled the input dialog
-        qDebug("MainWindowsGUI::showProjectDialog --> End (cancel)");
+        qDebug("MainWindowsGUI::showPropertiesDialog --> End (cancel)");
     }
-    delete(projectDialog);
+    delete(propertiesDialog);
 }
 
 
@@ -1967,6 +1967,15 @@ void MainWindowGUI::createActions()
     cinelerraAct->setIconVisibleInMenu(true);
     connect(cinelerraAct, SIGNAL(triggered()), this, SLOT(exportToCinelerra()));
 
+    propertiesAct = new QAction(this);
+    iconFile.clear();
+    iconFile.append(frontend->getIconsDirName());
+    iconFile.append(QLatin1String("configure.png"));
+    propertiesAct->setIcon(QIcon(iconFile));
+    propertiesAct->setShortcut(ControlModifier + Key_P);
+    propertiesAct->setIconVisibleInMenu(true);
+    connect(propertiesAct, SIGNAL(triggered()), this, SLOT(showPropertiesDialog()));
+
     quitAct = new QAction(this);
     iconFile.clear();
     iconFile.append(frontend->getIconsDirName());
@@ -2105,26 +2114,16 @@ void MainWindowGUI::createActions()
     pasteAct->setEnabled(false);
     connect(pasteAct, SIGNAL(triggered()), this, SLOT(paste()));
 */
-    // Preferences menu
-    generalAct = new QAction(this);
+    preferencesAct = new QAction(this);
     iconFile.clear();
     iconFile.append(frontend->getIconsDirName());
     iconFile.append(QLatin1String("configure.png"));
-    generalAct->setIcon(QIcon(iconFile));
-    generalAct->setShortcut(ControlModifier + Key_P);
-    generalAct->setIconVisibleInMenu(true);
-    connect(generalAct, SIGNAL(triggered()), this, SLOT(showGeneralDialog()));
+    preferencesAct->setIcon(QIcon(iconFile));
+    preferencesAct->setShortcut(ControlModifier + Key_P);
+    preferencesAct->setIconVisibleInMenu(true);
+    connect(preferencesAct, SIGNAL(triggered()), this, SLOT(showPreferencesDialog()));
 
-    projectAct = new QAction(this);
-    iconFile.clear();
-    iconFile.append(frontend->getIconsDirName());
-    iconFile.append(QLatin1String("configure.png"));
-    projectAct->setIcon(QIcon(iconFile));
-    projectAct->setShortcut(ControlModifier + Key_P);
-    projectAct->setIconVisibleInMenu(true);
-    connect(projectAct, SIGNAL(triggered()), this, SLOT(showProjectDialog()));
-
-    // View menu
+    // Windows menu
     undoViewAct = new QAction(this);
     iconFile.clear();
     iconFile.append(frontend->getIconsDirName());
@@ -2200,6 +2199,8 @@ void MainWindowGUI::createMenus()
     fileMenu->addAction(saveAsAct);
     fileMenu->addMenu(exportMenu);
     fileMenu->addSeparator();
+    fileMenu->addAction(propertiesAct);
+    fileMenu->addSeparator();
     fileMenu->addAction(quitAct);
     menuBar()->addMenu(fileMenu);
 
@@ -2223,19 +2224,15 @@ void MainWindowGUI::createMenus()
     // editMenu->addAction(cutAct);
     // editMenu->addAction(copyAct);
     // editMenu->addAction(pasteAct);
+    editMenu->addSeparator();
+    editMenu->addAction(preferencesAct);
     menuBar()->addMenu(editMenu);
 
-    // Settings menu
-    settingsMenu = new QMenu(this);
-    settingsMenu->addAction(generalAct);
-    settingsMenu->addAction(projectAct);
-    menuBar()->addMenu(settingsMenu);
-
-    // View menu
-    viewMenu = new QMenu(this);
-    viewMenu->addAction(undoViewAct);
-    viewMenu->addAction(cameraControllerAct);
-    menuBar()->addMenu(viewMenu);
+    // Windows menu
+    windowsMenu = new QMenu(this);
+    windowsMenu->addAction(undoViewAct);
+    windowsMenu->addAction(cameraControllerAct);
+    menuBar()->addMenu(windowsMenu);
 
     // Help menu
     helpMenu = new QMenu(this);

@@ -62,7 +62,7 @@ ProjectDialog::ProjectDialog(Frontend *f, QWidget *parent)
     mainLayout->addLayout(buttonLayout);
 
     setLayout(mainLayout);
-    setWindowTitle(tr("Project Preferences"));
+    setWindowTitle(tr("Animation Project Properties"));
     setModal(false);
 
     // makeGeneralSettingsTab();

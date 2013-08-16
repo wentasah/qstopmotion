@@ -521,16 +521,16 @@ private slots:
     void removeSound();
 
     /**
-     * Brings up a general preferences dialog where the user can set
+     * Brings up a preferences dialog where the user can set
      * preferences for the application.
      */
-    void showGeneralDialog();
+    void showPreferencesDialog();
 
     /**
-     * Brings up a project preferences dialog where the user can set
-     * preferences for the project.
+     * Brings up a properties dialog where the user can set
+     * properties for the project.
      */
-    void showProjectDialog();
+    void showPropertiesDialog();
 
     /**
      * Show the undo view window.
@@ -597,6 +597,7 @@ private:
     ToolBar            *toolBar;
 
     // Actions
+    // File menu
     QAction *newAct;
     QAction *openAct;
     QAction *mostRecentAct;
@@ -607,7 +608,9 @@ private:
     QAction *saveAsAct;
     QAction *videoAct;
     QAction *cinelerraAct;
+    QAction *propertiesAct;
     QAction *quitAct;
+    // Edit menu
     QAction *undoAct;
     QAction *redoAct;
     QAction *insertSceneAct;
@@ -622,10 +625,11 @@ private:
     QAction *cutAct;
     QAction *copyAct;
     QAction *pasteAct;
-    QAction *generalAct;
-    QAction *projectAct;
+    QAction *preferencesAct;
+    // Windows menu
     QAction *undoViewAct;
     QAction *cameraControllerAct;
+    // Help menu
     QAction *whatsthisAct;
     QAction *aboutQtAct;
     QAction *aboutAct;
@@ -636,8 +640,7 @@ private:
     QMenu           *exportMenu;
     QMenu           *mostRecentMenu;
     QMenu           *editMenu;
-    QMenu           *settingsMenu;
-    QMenu           *viewMenu;
+    QMenu           *windowsMenu;
     QMenu           *helpMenu;
     QTabWidget      *sideBar;
 

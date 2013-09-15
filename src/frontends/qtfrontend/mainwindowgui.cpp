@@ -1264,46 +1264,66 @@ void MainWindowGUI::saveProject()
 
 void MainWindowGUI::saveProjectAs()
 {
-    QString file;
+    QString filePath;
 
     recordingTab->checkCameraOff();
 
     QFileDialog fileDialog(this, tr("Save As"), lastVisitedDir);
     QStringList filters;
+    int         ret;
+
     filters << QString(tr("Project (*.%1)")).arg(PreferencesTool::projectSuffix);
     //         << QString(tr("Archive (*.%2)")).arg(PreferencesTool::archiveSuffix);
     fileDialog.setFilters(filters);
     fileDialog.setAcceptMode(QFileDialog::AcceptSave);
     fileDialog.setFileMode(QFileDialog::AnyFile);
-    int ret = fileDialog.exec();
-    if (ret == QDialog::Accepted) {
-        QStringList openFiles = fileDialog.selectedFiles();
-        file.append(openFiles[0]);
-    }
 
-    if (!file.isEmpty()) {
-        if (!file.endsWith(PreferencesTool::projectSuffix)) {
-            file.append(".");
-            file.append(PreferencesTool::projectSuffix);
+    while (1) {
+        ret = fileDialog.exec();
+        if (ret == QDialog::Accepted) {
+            QStringList openFiles = fileDialog.selectedFiles();
+            filePath.append(openFiles[0]);
         }
-        if (file.indexOf('|') != -1) {
+
+        if (filePath.isEmpty()) {
+            return;
+        }
+        if (!filePath.endsWith(PreferencesTool::projectSuffix)) {
+            // Append the project suffix
+            filePath.append(".");
+            filePath.append(PreferencesTool::projectSuffix);
+        }
+        if (filePath.indexOf('|') != -1) {
+            // Remove all '|' characters
             frontend->showInformation(tr("Information"), tr("The character '|' is not allowed in the project file name and will be removed."));
-            file.remove('|');
+            filePath.remove('|');
         }
-        frontend->getProject()->saveProject(file.toLocal8Bit(), true);
-        QString path = frontend->getProject()->getNewProjectPath();
-        QString fileName = file.mid(file.lastIndexOf("/")+1);
+        // Only one project per directory is possible
+        QDir fileDirectory = QFileInfo(filePath).absoluteDir();
+        QString nameFilter("*.");
+        nameFilter.append(PreferencesTool::projectSuffix);
+        QStringList nameFilterList(nameFilter);
+        QStringList fileList = fileDirectory.entryList(nameFilterList);
+        if (fileList.count() == 0) {
+            break;
+        }
 
-        lastVisitedDir.clear();
-        lastVisitedDir.append(path);
-
-        path.append("/");
-        path.append(PreferencesTool::imageDirectory);
-        saveAct->setEnabled(true);
-        setMostRecentProject();
-
-        setWindowTitle("qStopMotion - " + fileName);
+        // User must select an other directory
+        frontend->showWarning(tr("Warning"), tr("The project directory must not contain more than one project file."));
+        filePath.clear();
     }
+
+    frontend->getProject()->saveProject(filePath.toLocal8Bit(), true);
+    QString fileDir = frontend->getProject()->getNewProjectPath();
+    QString fileName = filePath.mid(filePath.lastIndexOf("/")+1);
+
+    lastVisitedDir.clear();
+    lastVisitedDir.append(fileDir);
+
+    saveAct->setEnabled(true);
+    setMostRecentProject();
+
+    setWindowTitle("qStopMotion - " + fileName);
 }
 
 

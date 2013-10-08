@@ -1,7 +1,7 @@
 ###############################################################################
 # CMake file for the qStopMotion project                                      #
 # (c) Ralf Lange, longsoft.de                                                 #
-# Last update: 2013-08-13                                                     #
+# Last update: 2013-10-08                                                     #
 #                                                                             #
 # Usage:                                                                      #
 #   * Qt-Creator (Windows, Linux)                                             #
@@ -276,9 +276,10 @@ set(SOURCES
 ENDIF(UNIX)
 
 set(TRANSLATIONS
+    translations/qstopmotion_da.ts
     translations/qstopmotion_de.ts
     translations/qstopmotion_fr.ts
-    translations/qstopmotion_da.ts
+    translations/qstopmotion_se.ts
 #    translations/qstopmotion_br.ts
 #    translations/qstopmotion_cz.ts
 #    translations/qstopmotion_es.ts
@@ -291,7 +292,6 @@ set(TRANSLATIONS
 #    translations/qstopmotion_no_se.ts
 #    translations/qstopmotion_pt.ts
 #    translations/qstopmotion_ru.ts
-#    translations/qstopmotion_se.ts
 #    translations/qstopmotion_sl.ts
 #    translations/qstopmotion_tr.ts
 )

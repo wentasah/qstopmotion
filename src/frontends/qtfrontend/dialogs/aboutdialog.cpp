@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2012 by                                                *
+ *  Copyright (C) 2005-2013 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -79,13 +79,14 @@ AboutDialog::AboutDialog(Frontend *f,
                 "<p><b>" + tr("Translation") + "</b><br>"
                 "Norma Ludwig (" + tr("French") + " - qStopMotion)<br>"
                 "Guillaume B &lt;littletux@zarb.org&gt; (" + tr("French") + " - stopmotion for Linux)<br>"
+                "David Lamhauge &lt;davidlamhauge@gmail.com&gt; (" + tr("Danish") + ")<br>"
+                "David Rylander &lt;david@rylanderanimation.se&gt; (" + tr("Swedish") + ")<br>"
+                "Ralf Lange &lt;ralf.lange@longsoft.de&gt; (" + tr("German") + ")<br>"
                 /*
                 "George Helebrant &lt;helb@skatekralovice.com&gt; (" + tr("Czech") + ")<br>"
                 "Gorazd Bizjak and Matej Lavreni &lt;info@zapstudio.net&gt; (" + tr("Slovenian") + ")<br>"
-                "Martin Herweg &lt;m.herweg@gmx.de&gt; (" + tr("German") + ")<br>"
                 "José Jorge &lt;jjorge@free.fr&gt; (" + tr("Portuguese") + ")<br>"
                 "Manuel Quiñones &lt;manuel.por.aca@gmail.com&gt; (" + tr("Spanish") + ")<br>"
-                "David Hjelm &lt;dav.hjelm@spray.se&gt; (" + tr("Swedish") + ")<br>"
                 "Koray Löker &lt;loker@pardus.org.tr&gt; (" + tr("Turkish") + ")<br>"
                 "Diego Giordano &lt;fusion_machine@tin.it&gt; (" + tr("Italian") + ")<br>"
                 "Matteo Comisso &lt;teomatteo8.9@hotmail.it&gt; (" + tr("Italian") + ")<br>"

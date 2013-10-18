@@ -370,19 +370,146 @@ void FrameViewInterface::activateTake()
 
 QImage FrameViewInterface::clipAndScale(QImage image)
 {
-    QImage   outputImage;
+    QImage outputImage;
+    QImage clipImage;
 
     double destWidth = 0;
     double destHeight = 0;
     double imageWidth = image.width();
     double imageHeight = image.height();
-    double widthScale = imageWidth / frameViewWidth;
-    double heightScale = imageHeight / frameViewHeight;
+    double newImageWidth = 0;
+    double newImageHeight = 0;
+    double widthScale = 0;
+    double heightScale = 0;
     int    x = 0;
     int    y = 0;
+    int    trans = frontend->getProject()->getImageTransformation();
 
-    if (frontend->getProject()->getImageTransformation()) {
+    if (displayMode == liveImageMode) {
+        // Cliping and zooming is only necessary for live image mode
+
+        switch (frontend->getProject()->getVideoSize()) {
+        case ImageGrabber::qvgaSize:    // QVGA
+            destWidth = 320;
+            destHeight = 240;
+            break;
+        case ImageGrabber::vgaSize:     // VGA
+            destWidth = 640;
+            destHeight = 480;
+            break;
+        case ImageGrabber::svgaSize:    // SVGA
+            destWidth = 800;
+            destHeight = 600;
+            break;
+        case ImageGrabber::paldSize:    // PAL D
+            destWidth = 704;
+            destHeight = 576;
+            break;
+        case ImageGrabber::hdreadySize: // HD Ready
+            destWidth = 1280;
+            destHeight = 720;
+            break;
+        case ImageGrabber::fullhdSize:  // Full HD
+            destWidth = 1900;
+            destHeight = 1080;
+            break;
+        default: // Camera image size
+            destWidth = imageWidth;
+            destHeight = imageHeight;
+            break;
+        }
+
+        switch (trans) {
+        case 1:
+            // Clip the image to the output size
+
+            switch (frontend->getProject()->getImageAdjustment()) {
+            case ImageGrabber::leftUp:
+            case ImageGrabber::leftMiddle:
+            case ImageGrabber::leftDown:
+                x = 0;
+                break;
+            case ImageGrabber::centerUp:
+            case ImageGrabber::centerMiddle:
+            case ImageGrabber::centerDown:
+                x = (int)((imageWidth-destWidth)/2);
+                break;
+            case ImageGrabber::rightUp:
+            case ImageGrabber::rightMiddle:
+            case ImageGrabber::rightDown:
+                x = (int)(imageWidth-destWidth);
+                break;
+            }
+
+            switch (frontend->getProject()->getImageAdjustment()) {
+            case ImageGrabber::leftUp:
+            case ImageGrabber::centerUp:
+            case ImageGrabber::rightUp:
+                y = 0;
+                break;
+            case ImageGrabber::leftMiddle:
+            case ImageGrabber::centerMiddle:
+            case ImageGrabber::rightMiddle:
+                y = (int)((imageHeight-destHeight)/2);
+                break;
+            case ImageGrabber::leftDown:
+            case ImageGrabber::centerDown:
+            case ImageGrabber::rightDown:
+                y = (int)(imageHeight-destHeight);
+                break;
+            }
+
+            clipImage = image.copy(x, y, destWidth, destHeight);
+
+            widthScale = imageWidth / frameViewWidth;
+            heightScale = imageHeight / frameViewHeight;
+
+            if (widthScale > heightScale) {
+                outputImage = clipImage.scaledToWidth(frameViewWidth);
+            }
+            else {
+                outputImage = clipImage.scaledToHeight(frameViewHeight);
+            }
+
+            break;
+
+        case 2:
+            // Zoom the image
+
+            int zoomValue = frontend->getProject()->getZoomValue();
+
+            // 1. Step: Clip the image to the output size
+
+            newImageWidth = imageWidth - ((imageWidth - destWidth) * zoomValue / 100);
+            newImageHeight = imageHeight - ((imageHeight - destHeight) * zoomValue / 100);
+
+            x = (int)((imageWidth-newImageWidth)/2);
+            y = (int)((imageHeight-newImageHeight)/2);
+
+            clipImage = image.copy(x, y, newImageWidth, newImageHeight);
+
+            // 2. Step: Scale up the image
+
+            widthScale = newImageWidth / frameViewWidth;
+            heightScale = newImageHeight / frameViewHeight;
+
+            if (widthScale > heightScale) {
+                outputImage = clipImage.scaledToWidth(frameViewWidth);
+            }
+            else {
+                outputImage = clipImage.scaledToHeight(frameViewHeight);
+            }
+
+            break;
+        }
+    }
+    else {
+        // All other modes
+
         // Scale the image to the output size
+
+        widthScale = imageWidth / frameViewWidth;
+        heightScale = imageHeight / frameViewHeight;
 
         if (widthScale > heightScale) {
             outputImage = image.scaledToWidth(frameViewWidth);
@@ -390,85 +517,6 @@ QImage FrameViewInterface::clipAndScale(QImage image)
         else {
             outputImage = image.scaledToHeight(frameViewHeight);
         }
-
-        return outputImage;
-    }
-
-    // Clip the image to the output size
-    switch (frontend->getProject()->getImageSize()) {
-    case ImageGrabber::qvgaSize:    // QVGA
-        destWidth = 320;
-        destHeight = 240;
-        break;
-    case ImageGrabber::vgaSize:     // VGA
-        destWidth = 640;
-        destHeight = 480;
-        break;
-    case ImageGrabber::svgaSize:    // SVGA
-        destWidth = 800;
-        destHeight = 600;
-        break;
-    case ImageGrabber::paldSize:    // PAL D
-        destWidth = 704;
-        destHeight = 576;
-        break;
-    case ImageGrabber::hdreadySize: // HD Ready
-        destWidth = 1280;
-        destHeight = 720;
-        break;
-    case ImageGrabber::fullhdSize:  // Full HD
-        destWidth = 1900;
-        destHeight = 1080;
-        break;
-    default: // Camera image size
-        destWidth = imageWidth;
-        destHeight = imageHeight;
-        break;
-    }
-
-    switch (frontend->getProject()->getImageAdjustment()) {
-    case ImageGrabber::leftUp:
-    case ImageGrabber::leftMiddle:
-    case ImageGrabber::leftDown:
-        x = 0;
-        break;
-    case ImageGrabber::centerUp:
-    case ImageGrabber::centerMiddle:
-    case ImageGrabber::centerDown:
-        x = (int)((imageWidth-destWidth)/2);
-        break;
-    case ImageGrabber::rightUp:
-    case ImageGrabber::rightMiddle:
-    case ImageGrabber::rightDown:
-        x = (int)(imageWidth-destWidth);
-        break;
-    }
-
-    switch (frontend->getProject()->getImageAdjustment()) {
-    case ImageGrabber::leftUp:
-    case ImageGrabber::centerUp:
-    case ImageGrabber::rightUp:
-        y = 0;
-        break;
-    case ImageGrabber::leftMiddle:
-    case ImageGrabber::centerMiddle:
-    case ImageGrabber::rightMiddle:
-        y = (int)((imageHeight-destHeight)/2);
-        break;
-    case ImageGrabber::leftDown:
-    case ImageGrabber::centerDown:
-    case ImageGrabber::rightDown:
-        y = (int)(imageHeight-destHeight);
-        break;
-    }
-
-    QImage clipImage = image.copy(x, y, destWidth, destHeight);
-
-    if (widthScale > heightScale) {
-        outputImage = clipImage.scaledToWidth(frameViewWidth);
-    }
-    else {
-        outputImage = clipImage.scaledToHeight(frameViewHeight);
     }
 
     return outputImage;

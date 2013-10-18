@@ -254,16 +254,16 @@ public:
     void setImageSize(int newVS);
 
     /**
-     * Get the transformation flag of the project.
-     * @return Transformation flag.
+     * Get the transformation value of the project.
+     * @return Transformation value.
      */
-    bool getImageTransformation();
+    int getImageTransformation();
 
     /**
-     * Set the transformation flag of the project.
-     * @param newTransform The new transformation flag.
+     * Set the transformation value of the project.
+     * @param newTransform The new transformation value.
      */
-    void setImageTransformation(bool newTransform);
+    void setImageTransformation(int newTransform);
 
     /**
      * Get the image adjustment of the project.
@@ -276,6 +276,18 @@ public:
      * @param newIA The new image adjustment.
      */
     void setImageAdjustment(int newIA);
+
+    /**
+     * Get the zoom value of the project.
+     * @return Zoom value.
+     */
+    int getZoomValue();
+
+    /**
+     * Set the zoom value of the project.
+     * @param newZV The new zoom value.
+     */
+    void setZoomValue(int newZV);
 
     /**
      * Get the live view fps of the project.
@@ -924,15 +936,21 @@ private:
     int imageSize;
 
     /**
-     * true = scale the image to the output size
-     * false = clip the image to the output size according to the adjustment setting
+     * 0 = scale the image to the output size
+     * 1 = clip the image to the output size according to the adjustment setting
+     * 2 = zoom the image to the output size according to the zoom setting
      */
-    bool imageTransformation;
+    int imageTransformation;
 
     /**
      * Active image adjustment of the project.
      */
     int imageAdjustment;
+
+    /**
+     * Active zoom value of the project.
+     */
+    int zoomValue;
 
     /**
      * Active live view fps of the project.

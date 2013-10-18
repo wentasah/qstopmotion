@@ -47,6 +47,8 @@ TransformWidget::TransformWidget(Frontend *f, bool type, QWidget *parent) : QWid
     transformText            = 0;
     scaleButton              = 0;
     clipButton               = 0;
+    zoomButton               = 0;
+    activeTransform          = 0;
 
     // Adjustment preferences
     adjustmentPrefs          = 0;
@@ -60,6 +62,14 @@ TransformWidget::TransformWidget(Frontend *f, bool type, QWidget *parent) : QWid
     centerDownButton         = 0;
     rightDownButton          = 0;
     activeImageAdjustment    = ImageGrabber::centerDown;
+
+    // Zoomw preferences
+    zoomPrefs                = 0;
+    zoomLabel                = 0;
+    zoomSlider               = 0;
+    activeZoomValue          = 20;
+    zoomMinimumLabel         = 0;
+    zoomMaximumLabel         = 0;
 
     this->setObjectName("TransformWidget");
 
@@ -111,6 +121,11 @@ void TransformWidget::makeGUI()
     clipButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     clipButton->setChecked(false);
     connect(clipButton, SIGNAL(clicked()), this, SLOT(setClipButtonOn()));
+
+    zoomButton = new QRadioButton(tr("Zoom the image"));
+    zoomButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    zoomButton->setChecked(false);
+    connect(zoomButton, SIGNAL(clicked()), this, SLOT(setZoomButtonOn()));
 
     adjustmentPrefs = new QGroupBox;
     adjustmentPrefs->setMinimumSize(200, 100);
@@ -188,6 +203,37 @@ void TransformWidget::makeGUI()
 
     adjustmentPrefs->setLayout(adjustmentPrefsLayout);
 
+    // Zoom preferences
+    zoomPrefs = new QGroupBox;
+    zoomPrefs->setTitle(tr("Zoom settings"));
+
+    zoomLabel = new QLabel(tr("Zoom value:"));
+    zoomSlider = new QSlider();
+    zoomSlider->setMaximum(1);
+    zoomSlider->setMaximum(100);
+    zoomSlider->setOrientation(Qt::Horizontal);
+    zoomSlider->setMinimumWidth(300);
+    zoomSlider->setMaximumWidth(300);
+    zoomSlider->setTickPosition(QSlider::TicksBelow);
+    zoomSlider->setTickInterval(5);
+    zoomSlider->setSingleStep(5);
+    zoomSlider->setPageStep(20);
+    connect(zoomSlider, SIGNAL(sliderReleased()), this, SLOT(changeZoom()));
+    zoomMinimumLabel = new QLabel(tr("0%"));
+    zoomMaximumLabel = new QLabel(tr("100%"));
+
+    QHBoxLayout *zoomLayout = new QHBoxLayout;
+    zoomLayout->addWidget(zoomMinimumLabel, 0, Qt::AlignLeft);
+    zoomLayout->addStretch();
+    zoomLayout->addWidget(zoomMaximumLabel, 0, Qt::AlignRight);
+
+    QGridLayout *zoomPrefsLayout = new QGridLayout;
+    zoomPrefsLayout->setColumnStretch(0, 1);
+    zoomPrefsLayout->addWidget(zoomLabel, 1, 0, Qt::AlignLeft);
+    zoomPrefsLayout->addWidget(zoomSlider, 1, 1, Qt::AlignRight);
+    zoomPrefsLayout->addLayout(zoomLayout, 2, 1, Qt::AlignRight);
+    zoomPrefs->setLayout(zoomPrefsLayout);
+
     // Transform preferences
     QVBoxLayout *transformPrefsLayout = new QVBoxLayout;
     hbLayout = new QHBoxLayout;
@@ -203,12 +249,20 @@ void TransformWidget::makeGUI()
     hbLayout->addStretch(1);
     hbLayout->addWidget(clipButton);
     hbLayout->addStretch(1);
+    hbLayout->addWidget(zoomButton);
+    hbLayout->addStretch(1);
     transformPrefsLayout->addLayout(hbLayout);
     hbLayout = new QHBoxLayout;
     hbLayout->addStretch(1);
     hbLayout->addWidget(adjustmentPrefs);
     hbLayout->addStretch(1);
     transformPrefsLayout->addLayout(hbLayout);
+    hbLayout = new QHBoxLayout;
+    hbLayout->addStretch(1);
+    hbLayout->addWidget(zoomPrefs);
+    hbLayout->addStretch(1);
+    transformPrefsLayout->addLayout(hbLayout);
+    transformPrefsLayout->addStretch(1);
     transformPrefs->setLayout(transformPrefsLayout);
 
     // Widget layout
@@ -232,7 +286,7 @@ void TransformWidget::initialize()
     if (tabType) {
         // This is a general dialog tab
         if (pref->getIntegerPreference("preferences", "defaulttransformation", value) == false) {
-            value = false;
+            value = 0;
         }
         activeTransform = value;
 
@@ -240,22 +294,35 @@ void TransformWidget::initialize()
             value = ImageGrabber::centerDown;
         }
         activeImageAdjustment = value;
+
+        if (pref->getIntegerPreference("preferences", "defaultzoomvalue", value) == false) {
+            value = 25;
+        }
+        activeZoomValue = value;
     }
     else {
         // This is a project dialog tab
         activeTransform = frontend->getProject()->getImageTransformation();
         activeImageAdjustment = frontend->getProject()->getImageAdjustment();
+        activeZoomValue = frontend->getProject()->getZoomValue();
     }
 
     // Transformation preferences
-    if (activeTransform) {
+    switch (activeTransform) {
+    case 0:
         setScaleButtonOn();
-    }
-    else {
+        break;
+    case 1:
         setClipButtonOn();
+        break;
+    case 2:
+        setZoomButtonOn();
+        break;
     }
 
     setAdjustment(activeImageAdjustment);
+    zoomSlider->setValue(activeZoomValue);
+
 
     qDebug("TransformWidget::initialize --> End");
 }
@@ -277,18 +344,27 @@ void TransformWidget::apply()
 
     PreferencesTool *pref = frontend->getPreferences();
     int index;
+    int value;
     bool changings = false;
 
-    if (clipButton->isChecked()) {
-        if (activeTransform) {
-            activeTransform = false;
+    if (scaleButton->isChecked()) {
+        if (activeTransform != 0) {
+            activeTransform = 0;
             changings = true;
         }
     }
     else {
-        if (!activeTransform) {
-            activeTransform = true;
-            changings = true;
+        if (clipButton->isChecked()) {
+            if (activeTransform != 1) {
+                activeTransform = 1;
+                changings = true;
+            }
+        }
+        else {
+            if (activeTransform != 2) {
+                activeTransform = 2;
+                changings = true;
+            }
         }
     }
 
@@ -324,17 +400,25 @@ void TransformWidget::apply()
         activeImageAdjustment = index;
         changings = true;
     }
+    value = zoomSlider->value();
+    if (activeZoomValue != value) {
+        activeZoomValue = value;
+        changings = true;
+    }
+
 
     if (changings) {
         if (tabType) {
             // This is a general dialog tab
             pref->setIntegerPreference("preferences", "defaulttransformation", activeTransform);
             pref->setIntegerPreference("preferences", "defaultimageadjustment", activeImageAdjustment);
+            pref->setIntegerPreference("preferences", "defaultzoomvalue", activeZoomValue);
         }
         else {
             // This is a project dialog tab
             frontend->getProject()->setImageTransformation(activeTransform);
             frontend->getProject()->setImageAdjustment(activeImageAdjustment);
+            frontend->getProject()->setZoomValue(activeZoomValue);
         }
     }
 
@@ -346,15 +430,19 @@ void TransformWidget::reset()
 {
     qDebug("TransformWidget::reset --> Start");
 
-    if (activeTransform)
-    {
+    switch (activeTransform) {
+    case 0:
         setScaleButtonOn();
-    }
-    else
-    {
+        break;
+    case 1:
         setClipButtonOn();
+        break;
+    case 2:
+        setZoomButtonOn();
+        break;
     }
     setAdjustment(activeImageAdjustment);
+    zoomSlider->setValue(activeZoomValue);
 
     qDebug("TransformWidget::reset --> End");
 }
@@ -402,18 +490,10 @@ void TransformWidget::setScaleButtonOn()
 {
     scaleButton->setChecked(true);
     clipButton->setChecked(false);
+    zoomButton->setChecked(false);
 
-    adjustmentPrefs->setEnabled(false);
-
-    leftUpButton->setEnabled(false);
-    centerUpButton->setEnabled(false);
-    rightUpButton->setEnabled(false);
-    leftMiddleButton->setEnabled(false);
-    centerMiddleButton->setEnabled(false);
-    rightMiddleButton->setEnabled(false);
-    leftDownButton->setEnabled(false);
-    centerDownButton->setEnabled(false);
-    rightDownButton->setEnabled(false);
+    adjustmentPrefs->setVisible(false);
+    zoomPrefs->setVisible(false);
 }
 
 
@@ -421,16 +501,40 @@ void TransformWidget::setClipButtonOn()
 {
     clipButton->setChecked(true);
     scaleButton->setChecked(false);
+    zoomButton->setChecked(false);
 
-    adjustmentPrefs->setEnabled(true);
+    adjustmentPrefs->setVisible(true);
+    zoomPrefs->setVisible(false);
+}
 
-    leftUpButton->setEnabled(true);
-    centerUpButton->setEnabled(true);
-    rightUpButton->setEnabled(true);
-    leftMiddleButton->setEnabled(true);
-    centerMiddleButton->setEnabled(true);
-    rightMiddleButton->setEnabled(true);
-    leftDownButton->setEnabled(true);
-    centerDownButton->setEnabled(true);
-    rightDownButton->setEnabled(true);
+
+void TransformWidget::setZoomButtonOn()
+{
+    zoomButton->setChecked(true);
+    scaleButton->setChecked(false);
+    clipButton->setChecked(false);
+
+    adjustmentPrefs->setVisible(false);
+    zoomPrefs->setVisible(true);
+}
+
+
+void TransformWidget::changeZoom()
+{
+    qDebug() << "TransformWidget::changeZoom --> Start";
+
+    int value = zoomSlider->value();
+
+    if (activeZoomValue == value) {
+        return;
+    }
+
+    /*
+    if (!tabType) {
+        // Project settings are changed
+
+    }
+    */
+
+    qDebug() << "TransformWidget::changeZoom --> End";
 }

@@ -365,17 +365,17 @@ void DomainFacade::setImageSize(int newIS)
 }
 
 
-bool DomainFacade::getImageTransformation()
+int DomainFacade::getImageTransformation()
 {
     if (animationProject == NULL) {
         // If no project is active use scale
-        return true;
+        return 0;
     }
     return animationProject->getImageTransformation();
 }
 
 
-void DomainFacade::setImageTransformation(bool newTransform)
+void DomainFacade::setImageTransformation(int newTransform)
 {
     animationProject->setImageTransformation(newTransform);
 }
@@ -387,9 +387,21 @@ int DomainFacade::getImageAdjustment()
 }
 
 
-void DomainFacade::setImageAdjustment(int newA)
+void DomainFacade::setImageAdjustment(int newIA)
 {
-    animationProject->setImageAdjustment(newA);
+    animationProject->setImageAdjustment(newIA);
+}
+
+
+int DomainFacade::getZoomValue()
+{
+    return animationProject->getZoomValue();
+}
+
+
+void DomainFacade::setZoomValue(int newZV)
+{
+    animationProject->setZoomValue(newZV);
 }
 
 
@@ -765,7 +777,7 @@ void DomainFacade::setProjectSettingsToDefault()
     setImageSize(value);
 
     if (pref->getIntegerPreference("preferences", "defaulttransformation", value) == false) {
-        value = false;
+        value = 0;
     }
     setImageTransformation(value);
 

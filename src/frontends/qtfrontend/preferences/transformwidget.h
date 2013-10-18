@@ -82,15 +82,27 @@ private slots:
     // Transformation preferences
     /**
      * Slot for notified the import tab when scale button is selected, so that
-     * import preferences can be updated.
+     * image transformation preferences can be updated.
      */
     void setScaleButtonOn();
 
     /**
      * Slot for notified the import tab when clip button is selected, so that
-     * import preferences can be updated.
+     * image transformation preferences can be updated.
      */
     void setClipButtonOn();
+
+    /**
+     * Slot for notified the import tab when zoom button is selected, so that
+     * image transformation preferences can be updated.
+     */
+    void setZoomButtonOn();
+
+    /**
+     * Slot for notified the import tab when the zoom changes,
+     * so that image transformation preferences can be updated.
+     */
+    void changeZoom();
 
 private:
     Frontend     *frontend;
@@ -105,7 +117,8 @@ private:
     QTextEdit    *transformText;
     QRadioButton *scaleButton;
     QRadioButton *clipButton;
-    bool          activeTransform;
+    QRadioButton *zoomButton;
+    int           activeTransform;
 
     // Adjustment preferences
     QGroupBox    *adjustmentPrefs;
@@ -119,6 +132,14 @@ private:
     QRadioButton *centerDownButton;
     QRadioButton *rightDownButton;
     int           activeImageAdjustment;
+
+    // Zoom preferences
+    QGroupBox    *zoomPrefs;
+    QLabel       *zoomLabel;
+    QSlider      *zoomSlider;
+    int           activeZoomValue;
+    QLabel       *zoomMinimumLabel;
+    QLabel       *zoomMaximumLabel;
 
     void makeGUI();
 

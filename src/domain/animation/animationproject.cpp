@@ -58,6 +58,7 @@ AnimationProject::AnimationProject(Frontend* f)
     encoderApplication = 0;
     grabberSource      = 0;
     imageAdjustment    = 0;
+    zoomValue          = 25;
     imageFormat        = 0;
     imageQuality       = 100;
     imageSize          = 0;
@@ -305,13 +306,13 @@ void AnimationProject::setImageSize(int newIS)
 }
 
 
-bool AnimationProject::getImageTransformation()
+int AnimationProject::getImageTransformation()
 {
     return imageTransformation;
 }
 
 
-void AnimationProject::setImageTransformation(bool newTransform)
+void AnimationProject::setImageTransformation(int newTransform)
 {
     imageTransformation = newTransform;
     incSettingsChanges();
@@ -324,9 +325,22 @@ int AnimationProject::getImageAdjustment()
 }
 
 
-void AnimationProject::setImageAdjustment(int newA)
+void AnimationProject::setImageAdjustment(int newIA)
 {
-    imageAdjustment = newA;
+    imageAdjustment = newIA;
+    incSettingsChanges();
+}
+
+
+int AnimationProject::getZoomValue()
+{
+    return zoomValue;
+}
+
+
+void AnimationProject::setZoomValue(int newZV)
+{
+    zoomValue = newZV;
     incSettingsChanges();
 }
 
@@ -657,6 +671,10 @@ bool AnimationProject::readSettingsFromProject(QDomElement &settingsNode)
             QString tmp = currElement.text();
             imageAdjustment = tmp.toInt();
         }
+        else if (nodeName.compare("zoomvalue") == 0) {
+            QString tmp = currElement.text();
+            zoomValue = tmp.toInt();
+        }
         else if (nodeName.compare("liveviewfps") == 0) {
             QString tmp = currElement.text();
             liveViewFps = tmp.toInt();
@@ -766,7 +784,7 @@ bool AnimationProject::saveSettingsToProject(QDomDocument &doc, QDomElement &set
 
     // Save imageTransformation parameter
     QDomElement itElement = doc.createElement("imagetransformation");
-    QDomText itText = doc.createTextNode(QString("%1").arg((int)imageTransformation));
+    QDomText itText = doc.createTextNode(QString("%1").arg(imageTransformation));
     itElement.appendChild(itText);
     settingsNode.appendChild(itElement);
 
@@ -775,6 +793,12 @@ bool AnimationProject::saveSettingsToProject(QDomDocument &doc, QDomElement &set
     QDomText iaText = doc.createTextNode(QString("%1").arg(imageAdjustment));
     iaElement.appendChild(iaText);
     settingsNode.appendChild(iaElement);
+
+    // Save zoomValue parameter
+    QDomElement zvElement = doc.createElement("zoomvalue");
+    QDomText zvText = doc.createTextNode(QString("%1").arg(zoomValue));
+    zvElement.appendChild(zvText);
+    settingsNode.appendChild(zvElement);
 
     // Save liveViewFps parameter
     QDomElement lvfElement = doc.createElement("liveviewfps");

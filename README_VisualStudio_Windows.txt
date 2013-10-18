@@ -1,10 +1,10 @@
-Building qStopMotion using MS Visual Studio 2010
-Last Change: 2013-02-28
+Building qStopMotion using MS Visual Studio 2012
+Last Change: 2013-09-19
 
 1. Preparation of the development environment
 ================================================================================
 
-1.1 Install MS Visual Studio 2010 Express/Professional
+1.1 Install MS Visual Studio 2012 Express/Professional
 --------------------------------------------------------------------------------
 
 * Install in the default installation directory.
@@ -12,10 +12,10 @@ Last Change: 2013-02-28
 1.2 Qt for Windows and Visual Studio
 --------------------------------------------------------------------------------
 
-* Download Qt libraries 4.6.3 for Windows 32-bit (VS 2008) from qt-project.com/downloads
+* Download Qt libraries 4.6.4 for Windows 32-bit (VS 2008) from qt-project.com/downloads
 * Install in the Directory C:\Tools\Qt\...
 * Qt need write permissions to this directory during compilation and linking.
-* Add the binary directory to the path variable (e.g. C:\Tools\Qt\4.6.3\bin\).
+* Add the binary directory to the path variable (e.g. C:\Tools\Qt\4.6.4\bin\).
 
 1.3 Gstreamer
 --------------------------------------------------------------------------------
@@ -57,39 +57,79 @@ Last Change: 2013-02-28
 * Download NSIS from "http://nsis.sourceforge.net/Main_Page"
 * Install in the default installation directory.
 
-2. Building qStopMotion
-================================================================================
-
-2.1 Get the last version of the sources
+1.7 Install Mercurial SCM (Developers only)
 --------------------------------------------------------------------------------
 
-There are two possibilities, to get the source code:
+* Download the Mercurial install package from http://mercurial.selenic.com
+* Install in the default installation directory.
 
-2.1.1 Download the sources as a anonymous user
-* Download the latest version of the sources as a tar ball from
-  http://qstopmotion.hg.sourceforge.net:8000/hgroot/qstopmotion/qstopmotion
-* Extract the tar ball
+2. Access to the sources of qStopMotion
+================================================================================
 
-2.1.2 Use the Mercurial SCM as a registered developer
-* Registering as a developer on qstopmotion.sourceforge.net
-* Create a new directory for the work on qStopMotion
-* Move to the new directory
-* Start the TortoiseHG GUI
-* hg clone ssh://USERNAME@qstopmotion.hg.sourceforge.net/hgroot/qstopmotion/qstopmotion
-* A new directory 'qstopmotion' will be created containing the the last version
-  of the sources
+2.1 Download the sources (last release of qStopMotion)
+--------------------------------------------------------------------------------
 
-2.2 Create the Visual Studio Solution
+* Downoad qstopmotion-<version>-Source.zip or qstopmotion-<version>-Source.tar.Z
+  from http://sourceforge.net/projects/qstopmotion/files/
+
+2.2 Anonymous read only access to the repository (latest developer version)
+--------------------------------------------------------------------------------
+
+* hg clone http://hg.code.sf.net/p/qstopmotion/code qstopmotion
+
+2.3 Developer access to the repository (read and write access)
+--------------------------------------------------------------------------------
+
+2.3.1 Create a Source Forge account
+* Create a Source Forge account on https://sourceforge.net/user/registration
+* Add your account to the qStopMotion developers on http://sourceforge.net/projects/qstopmotion
+
+2.3.2 Create a .hgrc file
+* Create a .hgrc file in your home directory
+* Content of the file:
+    [ui]
+    username = Your Name <your eMail address>
+    [auth]
+    qstopmotion.prefix = https://hg.code.sf.net/p/qstopmotion/code
+    qstopmotion.username = <your Source Forge user name>
+    qstopmotion.password = <your Source Forge password>
+
+2.3.3 Create a local repository
+* hg clone https://hg.code.sf.net/p/qstopmotion/code qstopmotion
+
+3. Building qStopMotion
+================================================================================
+
+3.1 Add the ffmpeg encoder to the sources directory
+--------------------------------------------------------------------------------
+
+* Download the latest static version from http://ffmpeg.zeranoe.com/builds/
+* Unpack the 7z file to the qstopmotion directory
+* Rename the ffmpeg directory to 'ffmpeg'
+
+3.2 Add the qtruntime to the sources directory
+--------------------------------------------------------------------------------
+
+* Create a new directory qtruntime in the source directory
+* Copy QtCore4.dll, QtGui4.dll and QtXml.dll from Qt installation bin directory
+  to the new qtruntime directory
+* Copy QtCored4.dll, QtGuid4.dll and QtXmld.dll from Qt installation bin directory
+  to the new qtruntime directory
+* Copy the directory imageformats from Qt installation plugins directory
+  to the new qtruntime directory
+
+3.3 Create the Visual Studio Solution
 --------------------------------------------------------------------------------
 
 * Start the CMake GUI using the shortcut to the start script.
 * Select the directory with the cmakelist.txt file
 * Select the destination directory
 * Press the configure button
-* Select the generator "Visual Studio 10"
+* Select the generator "Visual Studio 11"
+  (the generator "Visual Studio 12" did not work in this time)
 * Press the generate button
 
-2.3 Build the application
+3.4 Build the application
 --------------------------------------------------------------------------------
 
 * Start MS Visual Studio
@@ -98,7 +138,7 @@ There are two possibilities, to get the source code:
 * Build | Build Solution
 * Locking for error and warning messages
 
-3. Installation
+4. Installation
 ================================================================================
 
 * Start MS Visual Studio with a administrator account
@@ -106,16 +146,8 @@ There are two possibilities, to get the source code:
 * Open the solution file (qstopmotion.sln)
 * Build the project "INSTALL"
 
-4. Starting qStopMotion
+5. Starting qStopMotion
 ================================================================================
 
 * Select the video source
 * Have fun.
-
-5. Create source documentation
-================================================================================
-
-5.1 Download and install Doxygen
---------------------------------------------------------------------------------
-
-* Download installer from ...

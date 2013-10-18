@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2010-2012 by                                                *
+ *  Copyright (C) 2010-2013 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -199,8 +199,10 @@ bool GstreamerDirectShowUsbGrabber::setUp()
 {
     qDebug() << "GstreamerDirectShowUsbGrabber::setUp --> Start";
 
+    int     imageWidth = 640;    // Default values are VGA
+    int     imageHeight = 480;
     GstBus *bus;
-    int videoSource = frontend->getProject()->getVideoSource();
+    int     videoSource = frontend->getProject()->getVideoSource();
     ImageGrabberDevice *videoDevice = frontend->getDevice(videoSource);
 
     GstCaps *src_filter = 0;
@@ -257,7 +259,42 @@ bool GstreamerDirectShowUsbGrabber::setUp()
     g_object_set(G_OBJECT(sink), "sync", FALSE, NULL);
 
     // Set default values for RGB.
-    gst_app_sink_set_caps(GST_APP_SINK(sink), gst_caps_new_simple("video/x-raw-rgb", NULL));
+    switch (frontend->getProject()->getImageSize()) {
+    case ImageGrabber::qvgaSize:    // QVGA
+        imageWidth = 320;
+        imageHeight = 240;
+        break;
+    case ImageGrabber::vgaSize:     // VGA
+        imageWidth = 640;
+        imageHeight = 480;
+        break;
+    case ImageGrabber::svgaSize:    // SVGA
+        imageWidth = 800;
+        imageHeight = 600;
+        break;
+    case ImageGrabber::paldSize:    // PAL D
+        imageWidth = 704;
+        imageHeight = 576;
+        break;
+    case ImageGrabber::hdreadySize: // HD Ready
+        imageWidth = 1280;
+        imageHeight = 720;
+        break;
+    case ImageGrabber::fullhdSize:  // Full HD
+        imageWidth = 1900;
+        imageHeight = 1080;
+        break;
+    default: // Camera image size
+        // imageWidth = imageWidth;
+        // imageHeight = imageHeight;
+        break;
+    }
+
+    // gst_app_sink_set_caps(GST_APP_SINK(sink), gst_caps_new_simple("video/x-raw-rgb", NULL));
+    gst_app_sink_set_caps(GST_APP_SINK(sink), gst_caps_new_simple("video/x-raw-rgb",
+                                                                  "width", G_TYPE_INT, imageWidth,
+                                                                  "height", G_TYPE_INT, imageHeight,
+                                                                  NULL));
     // The result on Windows is:
     // video/x-raw-rgb, width=(int)320, height=(int)240, framerate=(fraction)30/1, bpp=(int)24, depth=(int)24,
     // red_mask=(int)16711680, green_mask=(int)65280, blue_mask=(int)255, endianness=(int)4321

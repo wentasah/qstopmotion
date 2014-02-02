@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2010-2013 by                                                *
+ *  Copyright (C) 2010-2014 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -20,6 +20,7 @@
 
 #include "frameviewinterface.h"
 
+#include "domain/animation/animationproject.h"
 #include "technical/grabber/imagegrabber.h"
 
 #include <QtCore/QDir>
@@ -420,7 +421,21 @@ QImage FrameViewInterface::clipAndScale(QImage image)
         }
 
         switch (trans) {
-        case 1:
+        case AnimationProject::ScaleImage:
+            // Scale the image to the output size
+
+            widthScale = imageWidth / frameViewWidth;
+            heightScale = imageHeight / frameViewHeight;
+
+            if (widthScale > heightScale) {
+                outputImage = image.scaledToWidth(frameViewWidth);
+            }
+            else {
+                outputImage = image.scaledToHeight(frameViewHeight);
+            }
+
+            break;
+        case AnimationProject::ClipImage:
             // Clip the image to the output size
 
             switch (frontend->getProject()->getImageAdjustment()) {
@@ -473,7 +488,7 @@ QImage FrameViewInterface::clipAndScale(QImage image)
 
             break;
 
-        case 2:
+        case AnimationProject::ZoomImage:
             // Zoom the image
 
             int zoomValue = frontend->getProject()->getZoomValue();

@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2013 by                                                *
+ *  Copyright (C) 2005-2014 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -52,6 +52,12 @@ public:
         NoFile,
         InProjectPath,
         InTempPath,
+    };
+
+    enum ImageTransformationMode {
+        ScaleImage,      // Scale the image to the output size
+        ClipImage,       // Clip the image to the output size according to the adjustment setting
+        ZoomImage,       // Zoom the image to the output size according to the zoom setting
     };
 
     /**
@@ -936,9 +942,7 @@ private:
     int imageSize;
 
     /**
-     * 0 = scale the image to the output size
-     * 1 = clip the image to the output size according to the adjustment setting
-     * 2 = zoom the image to the output size according to the zoom setting
+     * Active image transformation mode
      */
     int imageTransformation;
 
@@ -1008,11 +1012,6 @@ private:
     unsigned int nextTotalExposureIndex;
 
     /**
-     * Number of sounds added to the model.
-     */
-    int soundsNumber;
-
-    /**
      * Number of unsaved changes in the settings
      */
     int settingsChanges;
@@ -1021,6 +1020,11 @@ private:
      * Number of unsaved changes in the animation
      */
     int animationChanges;
+
+    /**
+     * Number of sounds added to the model.
+     */
+    int soundsNumber;
 
     /**
      * Audio driver that can play sound.

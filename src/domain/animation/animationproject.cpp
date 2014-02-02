@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2013 by                                                *
+ *  Copyright (C) 2005-2014 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -35,40 +35,39 @@ AnimationProject::AnimationProject(Frontend* f)
 {
     qDebug("AnimationProject::Constructor --> Start");
 
-    frontend           = f;
-    serializer         = new ProjectSerializer(f);
+    frontend                 = f;
+    serializer               = new ProjectSerializer(f);
 
-    audioDriver        = NULL; //new OSSDriver("/dev/dsp");
+    recordingMode            = 0;
+    videoSource              = 0;
+    mixMode                  = 0;
+    mixCount                 = 0;
+    playbackCount            = 0;
 
-    activeSceneIndex   = -1;
-    nextSceneIndex     = 0;
-    soundsNumber       = -1;
-    nextTotalExposureIndex = 0;
+    encoderApplication       = 0;
+    grabberSource            = 0;
+    imageFormat              = 0;
+    imageQuality             = 100;
+    imageSize                = 0;
+    imageTransformation      = AnimationProject::ScaleImage;
+    imageAdjustment          = 0;
+    zoomValue                = 25;
+    liveViewFps              = 20;
+    videoFormat              = 0;
+    videoSize                = 0;
+    videoFps                 = 0;
 
-    recordingMode      = 0;
-    videoSource        = 0;
-    mixMode            = 0;
-    mixCount           = 0;
-    playbackCount      = 0;
-    videoFps           = 0;
+    useDefaultOutputFile     = 0;
+    unitMode                 = 0;
+    activeSceneIndex         = -1;
+    nextSceneIndex           = 0;
+    nextTotalExposureIndex   = 0;
 
-    unitMode           = 0;
-    grabberSource      = 0;
+    settingsChanges          = 0;
+    animationChanges         = 0;
 
-    encoderApplication = 0;
-    grabberSource      = 0;
-    imageAdjustment    = 0;
-    zoomValue          = 25;
-    imageFormat        = 0;
-    imageQuality       = 100;
-    imageSize          = 0;
-    videoFormat        = 0;
-    videoSize          = 0;
-    liveViewFps        = 20;
-
-    settingsChanges    = 0;
-    animationChanges   = 0;
-
+    soundsNumber             = -1;
+    audioDriver              = NULL; //new OSSDriver("/dev/dsp");
     isAudioDriverInitialized = false;
 
     qDebug("AnimationProject::Constructor --> End");

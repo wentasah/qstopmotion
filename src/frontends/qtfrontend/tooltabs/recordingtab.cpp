@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2010-2013 by                                                *
+ *  Copyright (C) 2010-2014 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -205,6 +205,7 @@ void RecordingTab::makeGUI()
 void RecordingTab::retranslateStrings()
 {
     recordingGroupBox->setTitle(tr("Recording"));
+    recordingModeCombo->clear();
     recordingModeCombo->addItem(tr("Single frame capture"));
     // recordingModeCombo->addItem(tr("Automated recording"));
 

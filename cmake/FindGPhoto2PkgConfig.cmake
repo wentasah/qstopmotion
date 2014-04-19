@@ -1,11 +1,11 @@
 ###############################################################################
 # CMake file to find the GStreamer files on the Linux platform.               #
 # (c) Ralf Lange, longsoft.de                                                 #
-# Last update: 2013-01-29                                                     #
+# Last update: 2013-11-04                                                     #
 #                                                                             #
 ###############################################################################
 #
-# Originally based on the findGStreamer.cmake from the KDE project
+# Originally based on the findGPHOTO2.cmake from the KDE project
 #
 # cmake macro to test if we use gphoto2
 #  GPHOTO2_FOUND - system has the GPHOTO2 library

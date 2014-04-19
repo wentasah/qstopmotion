@@ -1,7 +1,7 @@
 ###############################################################################
 # CMake file for the qStopMotion project                                      #
 # (c) Ralf Lange, longsoft.de                                                 #
-# Last update: 2013-10-08                                                     #
+# Last update: 2014-04-15                                                     #
 #                                                                             #
 # Usage:                                                                      #
 #   * Qt-Creator (Windows, Linux)                                             #
@@ -25,7 +25,7 @@
 
 project(qStopMotion)
 
-cmake_minimum_required(VERSION 2.6.2)
+cmake_minimum_required(VERSION 2.8.2)
 
 ###############################################################################
 # General project settings
@@ -34,8 +34,8 @@ cmake_minimum_required(VERSION 2.6.2)
 SET(CMAKE_PROJECT_NAME "qstopmotion")
 SET(QSTOPMOTION_HOMEPAGE "http://www.qstopmotion.org")
 SET(QSTOPMOTION_VERSION_MAJOR "1")
-SET(QSTOPMOTION_VERSION_MINOR "0")
-SET(QSTOPMOTION_VERSION_PATCH "1")
+SET(QSTOPMOTION_VERSION_MINOR "1")
+SET(QSTOPMOTION_VERSION_PATCH "0")
 
 SET(FILES_TO_TRANSLATE )
 
@@ -583,13 +583,13 @@ add_custom_target (translations_target DEPENDS ${QM_FILES})
 IF(WIN32)
     # The predefined windows installer path include the qstopmotion subdirectory
     
+    set(QSTOPMOTION_GENERALS_INSTALL_DIR ".")
     set(QSTOPMOTION_BIN_INSTALL_DIR "bin")
     set(QSTOPMOTION_GRAPHICS_INSTALL_DIR "graphics")
     set(QSTOPMOTION_GRAPHICS_ICONS_INSTALL_DIR "graphics/icons")
     set(QSTOPMOTION_GRAPHICS_PICTURES_INSTALL_DIR "graphics/pictures")
     set(QSTOPMOTION_MANUAL_INSTALL_DIR "manual")
     set(QSTOPMOTION_TRANSLATIONS_INSTALL_DIR "translations")
-    set(QSTOPMOTION_GENERALS_INSTALL_DIR ".")
     set(QSTOPMOTION_PIXMAP_INSTALL_DIR "pixmaps")
     set(QSTOPMOTION_ICONS_INSTALL_DIR "icons")
 
@@ -598,12 +598,12 @@ ELSE(WIN32)
     # The predefined RPM installer path is "/usr"
     # The predefined DEB installer path is "/usr"
 
+    set(QSTOPMOTION_GENERALS_INSTALL_DIR "share/qstopmotion")
     set(QSTOPMOTION_BIN_INSTALL_DIR "bin")
     set(QSTOPMOTION_GRAPHICS_INSTALL_DIR "share/qstopmotion/graphics")
     set(QSTOPMOTION_GRAPHICS_ICONS_INSTALL_DIR "share/qstopmotion/graphics/icons")
     set(QSTOPMOTION_GRAPHICS_PICTURES_INSTALL_DIR "share/qstopmotion/graphics/pictures")
     set(QSTOPMOTION_TRANSLATIONS_INSTALL_DIR "share/qstopmotion/translations")
-    set(QSTOPMOTION_GENERALS_INSTALL_DIR "share/qstopmotion")
     set(QSTOPMOTION_MANUAL_INSTALL_DIR "share/doc/qstopmotion")
     set(QSTOPMOTION_DESKTOP_INSTALL_DIR "share/applications")
     set(QSTOPMOTION_MENUFILE_INSTALL_DIR "share/menu")
@@ -800,13 +800,13 @@ SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "
     ClearErrors
     ReadEnvStr $R0 'OSSBUILD_GSTREAMER_DIR'
     IfErrors 0 found
-    IfFileExists $EXEDIR\\\\GStreamer-WinBuilds-GPL-x86.msi 0 download
-    CopyFiles $EXEDIR\\\\GStreamer-WinBuilds-GPL-x86.msi $INSTDIR\\\\GStreamer-WinBuilds-GPL-x86.msi
+    IfFileExists $EXEDIR\\\\GStreamer-WinBuilds-GPL-x86-Beta04-0.10.7.msi 0 download
+    CopyFiles $EXEDIR\\\\GStreamer-WinBuilds-GPL-x86.msi $INSTDIR\\\\GStreamer-WinBuilds-GPL-x86-Beta04-0.10.7.msi
     Goto install
     download:
-    NSISdl::download http://ossbuild.googlecode.com/files/GStreamer-WinBuilds-GPL-x86.msi $INSTDIR\\\\GStreamer-WinBuilds-GPL-x86.msi
+    NSISdl::download http://ossbuild.googlecode.com/files/GStreamer-WinBuilds-GPL-x86-Beta04-0.10.7.msi $INSTDIR\\\\GStreamer-WinBuilds-GPL-x86-Beta04-0.10.7.msi
     install:
-    ExecWait 'msiexec /i \\\"$INSTDIR\\\\GStreamer-WinBuilds-GPL-x86.msi\\\" '
+    ExecWait 'msiexec /i \\\"$INSTDIR\\\\GStreamer-WinBuilds-GPL-x86-Beta04-0.10.7.msi\\\" '
     found:
 ")
 
@@ -816,9 +816,9 @@ SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "
 # If the installer package is in the installation directory than the package was
 # installed by the qStopMotion installer. Than uninstall the package.
 SET(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "
-    IfFileExists $INSTDIR\\\\GStreamer-WinBuilds-GPL-x86.msi 0 keep
-    ExecWait 'msiexec /x \\\"$INSTDIR\\\\GStreamer-WinBuilds-GPL-x86.msi\\\" '
-    Delete \\\"$INSTDIR\\\\GStreamer-WinBuilds-GPL-x86.msi\\\"
+    IfFileExists $INSTDIR\\\\GStreamer-WinBuilds-GPL-x86-Beta04-0.10.7.msi 0 keep
+    ExecWait 'msiexec /x \\\"$INSTDIR\\\\GStreamer-WinBuilds-GPL-x86-Beta04-0.10.7.msi\\\" '
+    Delete \\\"$INSTDIR\\\\GStreamer-WinBuilds-GPL-x86-Beta04-0.10.7.msi\\\"
     keep:
 ")
 
@@ -847,7 +847,7 @@ SET(CPACK_DEBIAN_PACKAGE_PRIORITY "optional")
 
 
 # Options
-SET(CPACK_DEBIAN_PACKAGE_DEPENDS "libc6 (>=2.11), ffmpeg (>=0.5.2), gstreamer-tools (>=0.10.28), libqt4-core (>=4.6.2), libqt4-gui (>=4.6.2), libqt4-xml (>=4.6.2)")
+SET(CPACK_DEBIAN_PACKAGE_DEPENDS "libc6 (>=2.11), ffmpeg (>=0.8.9), gstreamer-tools (>=0.10.36), libqt4-core (>=4.8.2), libqt4-gui (>=4.8.2), libqt4-xml (>=4.8.2)")
 SET(CPACK_DEBIAN_PACKAGE_HOMEPAGE ${QSTOPMOTION_HOMEPAGE})
 # CPACK_DEBIAN_PACKAGE_SHLIBDEPS
 # SET(CPACK_DEBIAN_PACKAGE_DEBUG "ON")
@@ -879,7 +879,7 @@ SET(CPACK_RPM_PACKAGE_URL ${QSTOPMOTION_HOMEPAGE})
 # CPACK_RPM_PACKAGE_DESCRIPTION = CPACK_PACKAGE_DESCRIPTION_FILE
 # CPACK_RPM_COMPRESSION_TYPE
 # requireses must be in a aphabetic order
-SET(CPACK_RPM_PACKAGE_REQUIRES "glibc >= 2.14, ffmpeg >= 0.6, gstreamer >= 0.10.28, qt >= 4.6.2")
+SET(CPACK_RPM_PACKAGE_REQUIRES "glibc >= 2.14, ffmpeg >= 0.8.9, gstreamer >= 0.10.36, qt >= 4.8.2")
 # CPACK_RPM_PACKAGE_SUGGESTS
 # CPACK_RPM_PACKAGE_PROVIDES
 

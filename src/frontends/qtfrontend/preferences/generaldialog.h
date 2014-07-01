@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2013 by                                                *
+ *  Copyright (C) 2005-2014 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -11,7 +11,7 @@
  *                                                                            *
  *  This program is distributed in the hope that it will be useful,           *
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of            *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             *
+ *  MERCHANPageILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             *
  *  GNU General Public License for more details.                              *
  *                                                                            *
  *  You should have received a copy of the GNU General Public License         *
@@ -26,13 +26,13 @@
 #include "frontends/frontend.h"
 #include "frontends/qtfrontend/preferences/exportwidget.h"
 #include "frontends/qtfrontend/preferences/generalwidget.h"
+#include "frontends/qtfrontend/preferences/grabberwidget.h"
 #include "frontends/qtfrontend/preferences/importwidget.h"
 #include "frontends/qtfrontend/preferences/projectwidget.h"
 #include "frontends/qtfrontend/preferences/transformwidget.h"
 
 #include <QtGui/QDialog>
 #include <QtGui/QPushButton>
-#include <QtGui/QTabWidget>
 
 
 /**
@@ -53,22 +53,35 @@ public:
 
 private:
     Frontend        *frontend;
-    GeneralWidget   *generalSettingsTab;
-    ProjectWidget   *projectValueTab;
-    ImportWidget    *imageImportTab;
-    TransformWidget *imageTransformationTab;
-    ExportWidget    *videoExportTab;
-    QTabWidget      *tabWidget;
+
+    QTreeWidget     *pageTree;
+    QHBoxLayout     *pageLayout;
+
+    GeneralWidget   *generalSettingsPage;
+    ProjectWidget   *projectValuePage;
+    ImportWidget    *imageImportPage;
+    TransformWidget *imageTransformationPage;
+    ExportWidget    *videoExportPage;
+    GrabberWidget   *grabberSelectPage;
     QPushButton     *applyButton;
     QPushButton     *closeButton;
 
-    void makeGeneralSettingsTab();
-    void makeProjectValueTab();
-    void makeImageImportTab();
-    void makeImageTransformTab();
-    void makeVideoExportTab();
+    void makeGeneralSettingsPage();
+    void makeProjectValuePage();
+    void makeImageImportPage();
+    void makeImageTransformPage();
+    void makeVideoExportPage();
+    void makeGrabberSelectPage();
 
 private slots:
+    /**
+     * Click in the page tree
+     * @param pageItem The specified item is the item that was clicked, or 0 if no item was clicked.
+     * @param column The column is the item's column that was clicked.
+     */
+    void itemClicked(QTreeWidgetItem *pageItem,
+                     int column);
+
     void apply();
     void close();
     void finish(int result);

@@ -1,7 +1,7 @@
 ###############################################################################
 # QtCreator file for the qStopMotion project                                  #
 # (c) Ralf Lange, longsoft.de                                                 #
-# Last update: 2013-10-08                                                     #
+# Last update: 2014-04-19                                                     #
 #                                                                             #
 # Please use CMake and the CMakeLists.txt file to build qStopMotion!          #
 ###############################################################################
@@ -53,6 +53,7 @@ HEADERS += src/config.h \
            src/frontends/qtfrontend/preferences/exportwidget.h \
            src/frontends/qtfrontend/preferences/generaldialog.h \
            src/frontends/qtfrontend/preferences/generalwidget.h \
+           src/frontends/qtfrontend/preferences/grabberwidget.h \
            src/frontends/qtfrontend/preferences/importwidget.h \
            src/frontends/qtfrontend/preferences/projectdialog.h \
            src/frontends/qtfrontend/preferences/projectwidget.h \
@@ -135,6 +136,7 @@ SOURCES += src/main.cpp \
            src/frontends/qtfrontend/preferences/exportwidget.cpp \
            src/frontends/qtfrontend/preferences/generaldialog.cpp \
            src/frontends/qtfrontend/preferences/generalwidget.cpp \
+           src/frontends/qtfrontend/preferences/grabberwidget.cpp \
            src/frontends/qtfrontend/preferences/importwidget.cpp \
            src/frontends/qtfrontend/preferences/projectdialog.cpp \
            src/frontends/qtfrontend/preferences/projectwidget.cpp \

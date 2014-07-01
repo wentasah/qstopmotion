@@ -57,47 +57,62 @@
         <translation>Fransk</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="110"/>
+        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="82"/>
+        <source>Danish</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="83"/>
+        <source>Swedish</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="84"/>
+        <source>German</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="111"/>
         <source>&amp;Thanks To</source>
         <translation>&amp;Tak til</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="114"/>
+        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="115"/>
         <source>This program is distributed under the terms of the GPL v2.</source>
         <translation>Dette program er distribueret under reglerne for GPL v2.</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="120"/>
+        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="121"/>
         <source>&amp;Licence Agreement</source>
         <translation>&amp;Licensaftale</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="126"/>
+        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="127"/>
         <source>Qt runtime version: </source>
         <translation>Qt runtime version: </translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="129"/>
+        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="130"/>
         <source>Operating system name and version: </source>
         <translation>Operativsystem og version: </translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="181"/>
+        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="182"/>
         <source>Build time: %1 %2</source>
         <translation>Build tid: %1 %2</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="185"/>
+        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="186"/>
         <source>&amp;System Info</source>
         <translation>&amp;System Info</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="187"/>
+        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="188"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="200"/>
+        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="201"/>
         <source>About</source>
         <translation>Om</translation>
     </message>
@@ -105,18 +120,18 @@
 <context>
     <name>AnimationProject</name>
     <message>
-        <location filename="../src/domain/animation/animationproject.cpp" line="466"/>
+        <location filename="../src/domain/animation/animationproject.cpp" line="479"/>
         <source>Saving scenes to disk ...</source>
         <translation>Gemmer scener til disk ...</translation>
     </message>
     <message>
-        <location filename="../src/domain/animation/animationproject.cpp" line="1380"/>
-        <location filename="../src/domain/animation/animationproject.cpp" line="1387"/>
+        <location filename="../src/domain/animation/animationproject.cpp" line="1403"/>
+        <location filename="../src/domain/animation/animationproject.cpp" line="1410"/>
         <source>Add Sound</source>
         <translation>Tilføj lyd</translation>
     </message>
     <message>
-        <location filename="../src/domain/animation/animationproject.cpp" line="1381"/>
+        <location filename="../src/domain/animation/animationproject.cpp" line="1404"/>
         <source>Cannot open the selected audio file for reading.
 Check that you have the right permissions set.
 The animation will be runned without sound if you
@@ -127,7 +142,7 @@ Animationen vil blive spillet uden lyd,
 hvis du vælger afspil.</translation>
     </message>
     <message>
-        <location filename="../src/domain/animation/animationproject.cpp" line="1388"/>
+        <location filename="../src/domain/animation/animationproject.cpp" line="1411"/>
         <source>The selected audio file is not valid within the
 given audio format. The animation will be runned
 without sound if you choose to play.</source>
@@ -488,8 +503,8 @@ uden lyd hvis du vælger afspil.</translation>
     <name>DomainFacade</name>
     <message>
         <location filename="../src/domain/domainfacade.cpp" line="151"/>
-        <location filename="../src/domain/domainfacade.cpp" line="509"/>
-        <location filename="../src/domain/domainfacade.cpp" line="1263"/>
+        <location filename="../src/domain/domainfacade.cpp" line="521"/>
+        <location filename="../src/domain/domainfacade.cpp" line="1275"/>
         <source>Critical</source>
         <translation>Kritisk</translation>
     </message>
@@ -499,12 +514,12 @@ uden lyd hvis du vælger afspil.</translation>
         <translation>Kan ikke åbne historie filen og skrive post!</translation>
     </message>
     <message>
-        <location filename="../src/domain/domainfacade.cpp" line="510"/>
+        <location filename="../src/domain/domainfacade.cpp" line="522"/>
         <source>Can&apos;t open history file to recover project!</source>
         <translation>Kan ikke åbne historie filen og genskabe projekt!</translation>
     </message>
     <message>
-        <location filename="../src/domain/domainfacade.cpp" line="1264"/>
+        <location filename="../src/domain/domainfacade.cpp" line="1276"/>
         <source>Can&apos;t copy image to temp directory!</source>
         <translation>Kan ikke kopiere billede til midlertidig mappe!</translation>
     </message>
@@ -611,127 +626,127 @@ uden lyd hvis du vælger afspil.</translation>
 <context>
     <name>ExportWidget</name>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="92"/>
+        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="93"/>
         <source>Below you can set which program should be used for encoding a new project to a video file.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="99"/>
+        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="100"/>
         <source>Below you can set which program should be used for encoding the currently active project to a video file.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="110"/>
+        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="111"/>
         <source>Encoder settings</source>
         <translation type="unfinished">Encoder instillinger</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="112"/>
+        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="113"/>
         <source>Encoder Application:</source>
         <translation type="unfinished">Encoder Applikation:</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="117"/>
+        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="118"/>
         <source>ffmpeg</source>
         <translation type="unfinished">ffmpeg</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="119"/>
+        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="120"/>
         <source>Video Format:</source>
         <translation type="unfinished">Video Format:</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="124"/>
+        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="125"/>
         <source>AVI</source>
         <translation type="unfinished">AVI</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="125"/>
+        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="126"/>
         <source>MP4</source>
         <translation type="unfinished">MP4</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="127"/>
+        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="128"/>
         <source>Video Size:</source>
         <translation type="unfinished">Video Størrelse:</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="132"/>
+        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="133"/>
         <source>Frame Size</source>
         <translation type="unfinished">Billed størrelse</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="133"/>
+        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="134"/>
         <source>QVGA (320x240)</source>
         <translation type="unfinished">QVGA (320x240)</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="134"/>
+        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="135"/>
         <source>VGA (640x480)</source>
         <translation type="unfinished">VGA (640x480)</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="135"/>
+        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="136"/>
         <source>SVGA (800x600)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="136"/>
+        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="137"/>
         <source>PAL D (704x576)</source>
         <translation type="unfinished">PAL D (704x576)</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="137"/>
+        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="138"/>
         <source>HD Ready (1280x720)</source>
         <translation type="unfinished">HD Ready (1280x720)</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="138"/>
+        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="139"/>
         <source>Full HD (1900x1080)</source>
         <translation type="unfinished">Fuld HD (1900x1080) {1900x?}</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="140"/>
+        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="141"/>
         <source>Frames per Second:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="144"/>
+        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="145"/>
         <source>&lt;h4&gt;FPS chooser&lt;/h4&gt; &lt;p&gt;By changing the value in this chooser you set which speed the animation in the &lt;b&gt;FrameView&lt;/b&gt; should run at.&lt;/p&gt; &lt;p&gt;To start an animation press the &lt;b&gt;Run Animation&lt;/b&gt; button.&lt;/p&gt;</source>
         <translation type="unfinished">&lt;h4&gt;BPS vælger&lt;/h4&gt; &lt;p&gt;Ved at ændre værdien i dette felt, vælger du hastigheden som animationen i &lt;b&gt;Fremviseren&lt;/b&gt; vil køre med.&lt;/p&gt; &lt;p&gt;Start animationen ved at presse &lt;b&gt;Kør Animation&lt;/b&gt; knappen.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="164"/>
+        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="165"/>
         <source>Output file settings</source>
         <translation type="unfinished">Output fil indstillinger</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="167"/>
+        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="168"/>
         <source>Do you want to be asked for an output file everytime you choose to export?</source>
         <translation type="unfinished">Vil du spørges om output fil hver gang du vælger at eksportere en fil?</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="169"/>
+        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="170"/>
         <source>Yes</source>
         <translation type="unfinished">Ja</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="174"/>
+        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="175"/>
         <source>No</source>
         <translation type="unfinished">Nej</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="179"/>
+        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="180"/>
         <source>Set default output file:</source>
         <translation type="unfinished">Indstil standard output fil:</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="185"/>
+        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="186"/>
         <source>Browse</source>
         <translation type="unfinished">Gennemse</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="489"/>
+        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="491"/>
         <source>Choose output file</source>
         <translation type="unfinished">Vælg output fil</translation>
     </message>
@@ -829,44 +844,62 @@ uden lyd hvis du vælger afspil.</translation>
 <context>
     <name>GeneralDialog</name>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/generaldialog.cpp" line="46"/>
+        <location filename="../src/frontends/qtfrontend/preferences/generaldialog.cpp" line="59"/>
+        <source>Preferences</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontends/qtfrontend/preferences/generaldialog.cpp" line="67"/>
         <source>Apply</source>
         <translation type="unfinished">Anvend</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/generaldialog.cpp" line="50"/>
+        <location filename="../src/frontends/qtfrontend/preferences/generaldialog.cpp" line="71"/>
         <source>Close</source>
         <translation type="unfinished">Luk</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/generaldialog.cpp" line="65"/>
+        <location filename="../src/frontends/qtfrontend/preferences/generaldialog.cpp" line="86"/>
         <source>qStopMotion Preferences</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/generaldialog.cpp" line="85"/>
+        <location filename="../src/frontends/qtfrontend/preferences/generaldialog.cpp" line="110"/>
+        <source>General Settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontends/qtfrontend/preferences/generaldialog.cpp" line="131"/>
+        <source>New Project Values</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontends/qtfrontend/preferences/generaldialog.cpp" line="152"/>
+        <source>Image Import</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontends/qtfrontend/preferences/generaldialog.cpp" line="173"/>
+        <source>Image Transformation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontends/qtfrontend/preferences/generaldialog.cpp" line="194"/>
+        <source>Video Export</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontends/qtfrontend/preferences/generaldialog.cpp" line="216"/>
+        <source>Grabber</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>&amp;General Settings</source>
-        <translation type="unfinished">&amp;Generelle indstillinger</translation>
+        <translation type="obsolete">&amp;Generelle indstillinger</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/generaldialog.cpp" line="98"/>
-        <source>&amp;New Project Values</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/frontends/qtfrontend/preferences/generaldialog.cpp" line="111"/>
-        <source>Image &amp;Import</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/frontends/qtfrontend/preferences/generaldialog.cpp" line="124"/>
-        <source>Image &amp;Transformation</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/frontends/qtfrontend/preferences/generaldialog.cpp" line="137"/>
         <source>Video &amp;Export</source>
-        <translation type="unfinished">Video &amp;Eksport</translation>
+        <translation type="obsolete">Video &amp;Eksport</translation>
     </message>
 </context>
 <context>
@@ -895,53 +928,108 @@ uden lyd hvis du vælger afspil.</translation>
 <context>
     <name>GeneralWidget</name>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/generalwidget.cpp" line="82"/>
+        <location filename="../src/frontends/qtfrontend/preferences/generalwidget.cpp" line="80"/>
         <source>Language</source>
         <translation type="unfinished">Sprog</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/generalwidget.cpp" line="104"/>
+        <location filename="../src/frontends/qtfrontend/preferences/generalwidget.cpp" line="102"/>
         <source>Capture Button Functionality</source>
         <translation type="unfinished">Optageknap Funktionalitet</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/generalwidget.cpp" line="106"/>
+        <location filename="../src/frontends/qtfrontend/preferences/generalwidget.cpp" line="104"/>
         <source>Insert new frame bevor selected frame</source>
         <translation type="unfinished">Indsæt nyt billede før valgte billede</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/generalwidget.cpp" line="111"/>
+        <location filename="../src/frontends/qtfrontend/preferences/generalwidget.cpp" line="109"/>
         <source>Insert new frame after selected frame</source>
         <translation type="unfinished">Indsæt nyt billede efter valgte billede</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/generalwidget.cpp" line="116"/>
+        <location filename="../src/frontends/qtfrontend/preferences/generalwidget.cpp" line="114"/>
         <source>Append new frame at the end of the take</source>
         <translation type="unfinished">Tilføj nyt billede i slutningen af optagelsen</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/generalwidget.cpp" line="132"/>
+        <location filename="../src/frontends/qtfrontend/preferences/generalwidget.cpp" line="130"/>
         <source>Grid Functionality</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/generalwidget.cpp" line="134"/>
+        <location filename="../src/frontends/qtfrontend/preferences/generalwidget.cpp" line="132"/>
         <source>Vertical Lines</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/generalwidget.cpp" line="145"/>
+        <location filename="../src/frontends/qtfrontend/preferences/generalwidget.cpp" line="143"/>
         <source>Horizontal Lines</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/generalwidget.cpp" line="156"/>
+        <location filename="../src/frontends/qtfrontend/preferences/generalwidget.cpp" line="154"/>
         <source>Grid Color:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/generalwidget.cpp" line="157"/>
+        <location filename="../src/frontends/qtfrontend/preferences/generalwidget.cpp" line="155"/>
         <source>Color</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>GrabberWidget</name>
+    <message>
+        <location filename="../src/frontends/qtfrontend/preferences/grabberwidget.cpp" line="80"/>
+        <source>Below you can select which image grabber should be used for grabbing images from the camera. If available the controller can be used to control focus, zoom and other functionality.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontends/qtfrontend/preferences/grabberwidget.cpp" line="91"/>
+        <source>Grabber Functionality</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontends/qtfrontend/preferences/grabberwidget.cpp" line="93"/>
+        <source>GStreamer Video Test Source</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontends/qtfrontend/preferences/grabberwidget.cpp" line="96"/>
+        <source>GStreamer Video 4 Linux 2 Source</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontends/qtfrontend/preferences/grabberwidget.cpp" line="100"/>
+        <location filename="../src/frontends/qtfrontend/preferences/grabberwidget.cpp" line="110"/>
+        <location filename="../src/frontends/qtfrontend/preferences/grabberwidget.cpp" line="117"/>
+        <source>Camera Controller (Experimental)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontends/qtfrontend/preferences/grabberwidget.cpp" line="103"/>
+        <source>GStreamer DV1394 Source</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontends/qtfrontend/preferences/grabberwidget.cpp" line="106"/>
+        <source>GStreamer Direct Show USB Source</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontends/qtfrontend/preferences/grabberwidget.cpp" line="113"/>
+        <source>Gphoto2 Source (Experimental)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontends/qtfrontend/preferences/grabberwidget.cpp" line="313"/>
+        <source>Information</source>
+        <translation type="unfinished">Information</translation>
+    </message>
+    <message>
+        <location filename="../src/frontends/qtfrontend/preferences/grabberwidget.cpp" line="313"/>
+        <source>Pease restart qStopMotion to activate the changings!</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -975,7 +1063,7 @@ uden lyd hvis du vælger afspil.</translation>
 <context>
     <name>GstreamerV4L2Grabber</name>
     <message>
-        <location filename="../src/technical/grabber/gstreamerv4l2grabber.cpp" line="158"/>
+        <location filename="../src/technical/grabber/gstreamerv4l2grabber.cpp" line="159"/>
         <source>Device %1</source>
         <translation type="unfinished">Enhed %1</translation>
     </message>
@@ -1034,12 +1122,12 @@ dine grabber indstillinger i foretrukne menuen.</translation>
 <context>
     <name>ImageGrabberFacade</name>
     <message>
-        <location filename="../src/technical/grabber/imagegrabberfacade.cpp" line="188"/>
+        <location filename="../src/technical/grabber/imagegrabberfacade.cpp" line="223"/>
         <source>Check image grabber</source>
         <translation type="unfinished">Tjek billede grabber</translation>
     </message>
     <message>
-        <location filename="../src/technical/grabber/imagegrabberfacade.cpp" line="189"/>
+        <location filename="../src/technical/grabber/imagegrabberfacade.cpp" line="224"/>
         <source>Grabbing failed. This may happen if you try
 to grab from an invalid device. Please select
 another device on the recording tool tab.</source>
@@ -1570,7 +1658,7 @@ Tjek dine indstillinger i foretrukne menuen!</translation>
         <translation>qStopMotion - Undo stack</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1756"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1759"/>
         <source>English</source>
         <comment>This should be translated to the name of the language you are translating to, in that language. Example: English = Deutsch (Deutsch is &quot;German&quot; in German)</comment>
         <translation>Dansk</translation>
@@ -1749,12 +1837,12 @@ Tjek dine indstillinger i foretrukne menuen!</translation>
         <translation>&lt;h4&gt;Tidslinje&lt;/h4&gt; &lt;p&gt;I dette område kan du se billeder og scener i animationen og bygge animationen ved at flytte dem rundt.&lt;/p&gt;&lt;p&gt;Du kan skifte mellem foregående og kommende billede ved at bruge &lt;b&gt;pile-tasterne&lt;/b&gt; eller &lt;b&gt;x&lt;/b&gt; og &lt;b&gt;z&lt;/b&gt;&lt;/p&gt; </translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="2533"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="2536"/>
         <source>Unsaved changes</source>
         <translation>Ugemte ændringer</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="2534"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="2537"/>
         <source>There are unsaved changes. Do you want to save?</source>
         <translation>Der er ugemte ændringer. Ønsker du at gemme?</translation>
     </message>
@@ -1811,18 +1899,18 @@ Tjek dine indstillinger i foretrukne menuen!</translation>
 %4</translation>
     </message>
     <message>
-        <location filename="../src/technical/preferencestool.cpp" line="433"/>
-        <location filename="../src/technical/preferencestool.cpp" line="440"/>
+        <location filename="../src/technical/preferencestool.cpp" line="442"/>
+        <location filename="../src/technical/preferencestool.cpp" line="449"/>
         <source>Critical</source>
         <translation>Kritisk</translation>
     </message>
     <message>
-        <location filename="../src/technical/preferencestool.cpp" line="434"/>
+        <location filename="../src/technical/preferencestool.cpp" line="443"/>
         <source>Can&apos;t remove preferences backup file!</source>
         <translation>Kan ikke flytte foretrukne backup fil!</translation>
     </message>
     <message>
-        <location filename="../src/technical/preferencestool.cpp" line="441"/>
+        <location filename="../src/technical/preferencestool.cpp" line="450"/>
         <source>Can&apos;t copy preferences file to backup file!</source>
         <translation>Kan ikke kopiere foretrukne fil til backup fil!</translation>
     </message>
@@ -1830,34 +1918,43 @@ Tjek dine indstillinger i foretrukne menuen!</translation>
 <context>
     <name>ProjectDialog</name>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/projectdialog.cpp" line="46"/>
+        <location filename="../src/frontends/qtfrontend/preferences/projectdialog.cpp" line="59"/>
+        <source>Properties</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontends/qtfrontend/preferences/projectdialog.cpp" line="67"/>
         <source>Apply</source>
         <translation type="unfinished">Anvend</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/projectdialog.cpp" line="50"/>
+        <location filename="../src/frontends/qtfrontend/preferences/projectdialog.cpp" line="71"/>
         <source>Close</source>
         <translation type="unfinished">Luk</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/projectdialog.cpp" line="65"/>
+        <location filename="../src/frontends/qtfrontend/preferences/projectdialog.cpp" line="86"/>
         <source>Animation Project Properties</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/projectdialog.cpp" line="111"/>
-        <source>Image &amp;Import</source>
+        <location filename="../src/frontends/qtfrontend/preferences/projectdialog.cpp" line="150"/>
+        <source>Image Import</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/projectdialog.cpp" line="124"/>
-        <source>Image &amp;Transformation</source>
+        <location filename="../src/frontends/qtfrontend/preferences/projectdialog.cpp" line="171"/>
+        <source>Image Transformation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/projectdialog.cpp" line="137"/>
+        <location filename="../src/frontends/qtfrontend/preferences/projectdialog.cpp" line="192"/>
+        <source>Video Export</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Video &amp;Export</source>
-        <translation type="unfinished">Video &amp;Eksport</translation>
+        <translation type="obsolete">Video &amp;Eksport</translation>
     </message>
 </context>
 <context>
@@ -2111,67 +2208,67 @@ Tjek dine indstillinger i foretrukne menuen!</translation>
 <context>
     <name>ProjectWidget</name>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/projectwidget.cpp" line="78"/>
+        <location filename="../src/frontends/qtfrontend/preferences/projectwidget.cpp" line="74"/>
         <source>Recording</source>
         <translation type="unfinished">Optagelse</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/projectwidget.cpp" line="84"/>
+        <location filename="../src/frontends/qtfrontend/preferences/projectwidget.cpp" line="80"/>
         <source>Single frame capture</source>
         <translation type="unfinished">Enkelt billede optagelse</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/projectwidget.cpp" line="97"/>
+        <location filename="../src/frontends/qtfrontend/preferences/projectwidget.cpp" line="93"/>
         <source>Camera</source>
         <translation type="unfinished">Kamera</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/projectwidget.cpp" line="103"/>
+        <location filename="../src/frontends/qtfrontend/preferences/projectwidget.cpp" line="99"/>
         <source>Test Source</source>
         <translation type="unfinished">Test kilde</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/projectwidget.cpp" line="105"/>
+        <location filename="../src/frontends/qtfrontend/preferences/projectwidget.cpp" line="101"/>
         <source>USB Source</source>
         <translation type="unfinished">USB kilde</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/projectwidget.cpp" line="106"/>
+        <location filename="../src/frontends/qtfrontend/preferences/projectwidget.cpp" line="102"/>
         <source>FireWire Source</source>
         <translation type="unfinished">FireWire kilde</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/projectwidget.cpp" line="109"/>
+        <location filename="../src/frontends/qtfrontend/preferences/projectwidget.cpp" line="105"/>
         <source>DirectShow Source</source>
         <translation type="unfinished">DirectShow kilde</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/projectwidget.cpp" line="124"/>
+        <location filename="../src/frontends/qtfrontend/preferences/projectwidget.cpp" line="120"/>
         <source>Capture</source>
         <translation type="unfinished">Optag</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/projectwidget.cpp" line="130"/>
+        <location filename="../src/frontends/qtfrontend/preferences/projectwidget.cpp" line="126"/>
         <source>Mix</source>
         <translation type="unfinished">Miks</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/projectwidget.cpp" line="131"/>
+        <location filename="../src/frontends/qtfrontend/preferences/projectwidget.cpp" line="127"/>
         <source>Diff</source>
         <translation type="unfinished">Difference</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/projectwidget.cpp" line="132"/>
+        <location filename="../src/frontends/qtfrontend/preferences/projectwidget.cpp" line="128"/>
         <source>Playback</source>
         <translation type="unfinished">Afspil</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/projectwidget.cpp" line="133"/>
+        <location filename="../src/frontends/qtfrontend/preferences/projectwidget.cpp" line="129"/>
         <source>Number of images:</source>
         <translation type="unfinished">Antal billeder:</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/projectwidget.cpp" line="135"/>
+        <location filename="../src/frontends/qtfrontend/preferences/projectwidget.cpp" line="131"/>
         <source>&lt;h4&gt;Number of images&lt;/h4&gt; &lt;p&gt;By changing the value in this slidebar you can specify how many images backwards in the animation which should be mixed on top of the camera or if you are in playback mode: how many images to play. &lt;/p&gt; &lt;p&gt;By mixing the previous image(s) onto the camera you can more easily see how the next shot will be in relation to the other, therby making a smoother stop motion animation!&lt;/p&gt;</source>
         <translation type="unfinished">&lt;h4&gt;Antal billeder&lt;/h4&gt; &lt;p&gt;Ved at ændre på værdien her, kan du vælge hvor mange billeder bagud i animationen de skal vises, eller, hvis du er i Afspil mode: hvor mange billeder der skal afspilles. &lt;/p&gt; &lt;p&gt;Ved at mikse de forudgående billeder med det kameraet ser nu, kan du lettere se hvordan det næste billede bliver i relation til det forudgående, og derme lave noget bedre stop motion animation!&lt;/p&gt;</translation>
     </message>
@@ -2244,12 +2341,12 @@ sidst. Ønsker du at genoprette?</translation>
         <translation type="obsolete">Auto</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/tooltabs/recordingtab.cpp" line="211"/>
+        <location filename="../src/frontends/qtfrontend/tooltabs/recordingtab.cpp" line="212"/>
         <source>Camera</source>
         <translation>Kamera</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/tooltabs/recordingtab.cpp" line="213"/>
+        <location filename="../src/frontends/qtfrontend/tooltabs/recordingtab.cpp" line="214"/>
         <source>Capture</source>
         <translation>Optag</translation>
     </message>
@@ -2259,59 +2356,59 @@ sidst. Ønsker du at genoprette?</translation>
         <translation>Optagelse</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/tooltabs/recordingtab.cpp" line="208"/>
+        <location filename="../src/frontends/qtfrontend/tooltabs/recordingtab.cpp" line="209"/>
         <source>Single frame capture</source>
         <translation>Enkelt billede optagelse</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/tooltabs/recordingtab.cpp" line="215"/>
+        <location filename="../src/frontends/qtfrontend/tooltabs/recordingtab.cpp" line="216"/>
         <source>Mix</source>
         <translation>Miks</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/tooltabs/recordingtab.cpp" line="216"/>
+        <location filename="../src/frontends/qtfrontend/tooltabs/recordingtab.cpp" line="217"/>
         <source>Diff</source>
         <translation>Difference</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/tooltabs/recordingtab.cpp" line="217"/>
+        <location filename="../src/frontends/qtfrontend/tooltabs/recordingtab.cpp" line="218"/>
         <source>Playback</source>
         <translation>Afspil</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/tooltabs/recordingtab.cpp" line="229"/>
+        <location filename="../src/frontends/qtfrontend/tooltabs/recordingtab.cpp" line="230"/>
         <source>&lt;h4&gt;Toggle camera on/off (C)&lt;/h4&gt; &lt;p&gt;Click this button to toggle the camera on and off&lt;/p&gt; </source>
         <translation>&lt;h4&gt;Tænd/Sluk Kamera (C)&lt;/h4&gt; &lt;p&gt;Klik her for at tænde og slukke kameraet&lt;/p&gt; </translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/tooltabs/recordingtab.cpp" line="234"/>
+        <location filename="../src/frontends/qtfrontend/tooltabs/recordingtab.cpp" line="235"/>
         <source>Number of images:</source>
         <translation>Antal billeder:</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/tooltabs/recordingtab.cpp" line="236"/>
+        <location filename="../src/frontends/qtfrontend/tooltabs/recordingtab.cpp" line="237"/>
         <source>&lt;h4&gt;Number of images&lt;/h4&gt; &lt;p&gt;By changing the value in this slidebar you can specify how many images backwards in the animation which should be mixed on top of the camera or if you are in playback mode: how many images to play. &lt;/p&gt; &lt;p&gt;By mixing the previous image(s) onto the camera you can more easily see how the next shot will be in relation to the other, therby making a smoother stop motion animation!&lt;/p&gt;</source>
         <translation>&lt;h4&gt;Antal billeder&lt;/h4&gt; &lt;p&gt;Ved at ændre på værdien her, kan du vælge hvor mange billeder bagud i animationen de skal vises, eller, hvis du er i Afspil mode: hvor mange billeder der skal afspilles. &lt;/p&gt; &lt;p&gt;Ved at mikse de forudgående billeder med det kameraet ser nu, kan du lettere se hvordan det næste billede bliver i relation til det forudgående, og derme lave noget bedre stop motion animation!&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/tooltabs/recordingtab.cpp" line="462"/>
-        <location filename="../src/frontends/qtfrontend/tooltabs/recordingtab.cpp" line="468"/>
-        <location filename="../src/frontends/qtfrontend/tooltabs/recordingtab.cpp" line="474"/>
+        <location filename="../src/frontends/qtfrontend/tooltabs/recordingtab.cpp" line="463"/>
+        <location filename="../src/frontends/qtfrontend/tooltabs/recordingtab.cpp" line="469"/>
+        <location filename="../src/frontends/qtfrontend/tooltabs/recordingtab.cpp" line="475"/>
         <source>Information</source>
         <translation>Information</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/tooltabs/recordingtab.cpp" line="462"/>
+        <location filename="../src/frontends/qtfrontend/tooltabs/recordingtab.cpp" line="463"/>
         <source>No active project. Please create a new project or open an existing project.</source>
         <translation>Intet aktivt projekt. Opret venligst et projekt eller åbn et eksisterende projekt.</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/tooltabs/recordingtab.cpp" line="468"/>
+        <location filename="../src/frontends/qtfrontend/tooltabs/recordingtab.cpp" line="469"/>
         <source>No scene and no take selected. Please select a scene and a take on the project tab.</source>
         <translation>Ingen scene og ingen take valgt. Vælg venligst en scene og et take i projekt-fanen.</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/tooltabs/recordingtab.cpp" line="474"/>
+        <location filename="../src/frontends/qtfrontend/tooltabs/recordingtab.cpp" line="475"/>
         <source>No take selected. Please select a take on the project tab.</source>
         <translation>Ingen take valgt. Vælgt venligst et take i projekt-fanen.</translation>
     </message>
@@ -2434,28 +2531,53 @@ sidst. Ønsker du at genoprette?</translation>
 <context>
     <name>TransformWidget</name>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/transformwidget.cpp" line="79"/>
+        <location filename="../src/frontends/qtfrontend/preferences/transformwidget.cpp" line="114"/>
         <source>Transformation settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/transformwidget.cpp" line="86"/>
+        <location filename="../src/frontends/qtfrontend/preferences/transformwidget.cpp" line="92"/>
         <source>Below you can set which image transformation should be used for importing images to a new project. If you select clip a part of the image set also the adjustment for cliping.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/transformwidget.cpp" line="94"/>
+        <location filename="../src/frontends/qtfrontend/preferences/transformwidget.cpp" line="100"/>
         <source>Below you can set which image transformation should be used for importing images to the currently active project. If you select clip a part of the image set also the adjustment for cliping.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/transformwidget.cpp" line="105"/>
+        <location filename="../src/frontends/qtfrontend/preferences/transformwidget.cpp" line="116"/>
         <source>Scale the whole image</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/transformwidget.cpp" line="110"/>
+        <location filename="../src/frontends/qtfrontend/preferences/transformwidget.cpp" line="121"/>
         <source>Clip a part of the image</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontends/qtfrontend/preferences/transformwidget.cpp" line="126"/>
+        <source>Zoom the image</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontends/qtfrontend/preferences/transformwidget.cpp" line="209"/>
+        <source>Zoom settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontends/qtfrontend/preferences/transformwidget.cpp" line="211"/>
+        <source>Zoom value:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontends/qtfrontend/preferences/transformwidget.cpp" line="223"/>
+        <source>0%</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontends/qtfrontend/preferences/transformwidget.cpp" line="224"/>
+        <source>100%</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

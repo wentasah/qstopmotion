@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2010-2013 by                                                *
+ *  Copyright (C) 2010-2014 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -95,7 +95,6 @@ GphotoGrabber::GphotoGrabber(Frontend *f)
     }
     qDebug() << "GphotoGrabber::Constructor --> About: " << QString(about.text);
 
-
     QString rootDir;
     rootDir.append(frontend->getUserDirName());
     rootDir.append("/");
@@ -127,6 +126,8 @@ bool GphotoGrabber::initialization(QVector<ImageGrabberDevice*> &devices)
     qDebug("GphotoGrabber::initialization --> Start");
 
     GphotoController *deviceController = NULL;
+    PreferencesTool  *pref = frontend->getPreferences();
+    int               value;
 
     if (!isInitSuccess) {
         qDebug("GphotoGrabber::initialization --> End (Error)");
@@ -144,15 +145,21 @@ bool GphotoGrabber::initialization(QVector<ImageGrabberDevice*> &devices)
     devices.append(device);
 
     // Create grabber controller
-    deviceController = new GphotoController(0);
-    if (deviceController->init(device->getDeviceId()))
-    {
-        device->setController(deviceController);
+    if (pref->getIntegerPreference("preferences", "gstreamerdirectshowusbcontroller", value) == false) {
+        value = false;
     }
-    else
-    {
-        delete deviceController;
-        deviceController = NULL;
+    if ((int)true == value) {
+        deviceController = new GphotoController(0);
+        if (deviceController->init(device->getDeviceId()))
+        {
+            device->setController(deviceController);
+        }
+        else
+        {
+            delete deviceController;
+            deviceController = NULL;
+        }
+
     }
 
     isInitSuccess = true;
@@ -393,8 +400,8 @@ int GphotoGrabber::lookupWidget(CameraWidget  *widget,
                                 const char    *key,
                                 CameraWidget* *child)
 {
-    int ret;
-    CameraWidget* ch;
+    int           ret;
+    CameraWidget *ch;
 
     int childrenCount = gp_widget_count_children(widget);
     if (childrenCount < GP_OK) {
@@ -648,5 +655,3 @@ void GphotoGrabber::populateWithConfigs(CameraWidget *gphotoConfig)
 
     qDebug() << "GphotoGrabber::populateWithConfigs --> End";
 }
-
-

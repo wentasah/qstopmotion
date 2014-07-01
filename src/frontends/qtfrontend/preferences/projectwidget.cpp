@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2012 by                                                *
+ *  Copyright (C) 2005-2014 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -69,11 +69,7 @@ ProjectWidget::ProjectWidget(Frontend *f, bool type, QWidget *parent)
 
 void ProjectWidget::makeGUI()
 {
-    QVBoxLayout *tabLayout = new QVBoxLayout;
-
-    tabLayout->setMargin(0);
-    tabLayout->setSpacing(2);
-    // tabLayout->addStretch(1);
+    QVBoxLayout *mainLayout = new QVBoxLayout;
 
     recordingGroupBox = new QGroupBox(tr("Recording"));
     // recordingGroupBox->setFlat(true);
@@ -91,7 +87,7 @@ void ProjectWidget::makeGUI()
     recordingLayout->addWidget(recordingModeCombo);
     recordingLayout->addStretch(10);
     recordingGroupBox->setLayout(recordingLayout);
-    tabLayout->addWidget(recordingGroupBox);
+    mainLayout->addWidget(recordingGroupBox);
 
     if (tabType) {
         cameraGroupBox = new QGroupBox(tr("Camera"));
@@ -118,7 +114,7 @@ void ProjectWidget::makeGUI()
         cameraLayout->addWidget(videoSourceCombo);
         cameraLayout->addStretch(10);
         cameraGroupBox->setLayout(cameraLayout);
-        tabLayout->addWidget(cameraGroupBox);
+        mainLayout->addWidget(cameraGroupBox);
     }
 
     captureGroupBox = new QGroupBox(tr("Capture"));
@@ -157,7 +153,7 @@ void ProjectWidget::makeGUI()
     captureLayout->addWidget(mixCountSlider);
     captureLayout->addStretch(10);
     captureGroupBox->setLayout(captureLayout);
-    tabLayout->addWidget(captureGroupBox);
+    mainLayout->addWidget(captureGroupBox);
 
     /*
     autoGroupBox = new QGroupBox(tr("Auto"));
@@ -175,12 +171,12 @@ void ProjectWidget::makeGUI()
     QVBoxLayout *autoLayout = new QVBoxLayout;
     autoLayout->addWidget(unitModeCombo);
     autoGroupBox->setLayout(autoLayout);
-    // tabLayout->addWidget(autoGroupBox);
+    // mainLayout->addWidget(autoGroupBox);
     */
 
-    tabLayout->addStretch(1);
+    mainLayout->addStretch(1);
 
-    setLayout(tabLayout);
+    setLayout(mainLayout);
 
     qDebug("ProjectWidget::makeGUI --> End");
 }

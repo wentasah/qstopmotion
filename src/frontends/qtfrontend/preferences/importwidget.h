@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2013 by                                                *
+ *  Copyright (C) 2005-2014 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -73,7 +73,7 @@ protected:
 
 private:
     /**
-     * Set the image grabber source in the combo box
+     * Set the image grabber source in the combo box.
      * @param newSource The new image grabber source
      */
     void setImageGrabberSource(int newSource);

@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2010-2014 by                                                *
+ *  Copyright (C) 2014-2014 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -18,8 +18,8 @@
  *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                 *
  ******************************************************************************/
 
-#ifndef GENERALWIDGET_H
-#define GENERALWIDGET_H
+#ifndef GRABBERWIDGET_H
+#define GRABBERWIDGET_H
 
 #include "frontends/frontend.h"
 
@@ -43,7 +43,7 @@
  * The export tab in the preferences menu
  * @author Bjoern Erik Nilsen & Fredrik Berg Kjoelstad
  */
-class GeneralWidget : public QWidget
+class GrabberWidget : public QWidget
 {
     Q_OBJECT
 public:
@@ -53,7 +53,7 @@ public:
      * @param f frontend of the application
      * @param parent the parent of the this widget
      */
-    GeneralWidget(Frontend *f, QWidget *parent = 0);
+    GrabberWidget(Frontend *f, QWidget *parent = 0);
 
     /**
      * Applies the settings in the import tab.
@@ -81,74 +81,52 @@ protected:
 
 private slots:
     /**
-     * Slot for notified the application when the language changes.
-     * @param index the new language.
-     */
-    void changeLanguage(int index);
-
-    /**
-     * Slot for notified the general tab when bevor button is selected, so that
-     * general preferences can be updated.
-     */
-    void setBevorButtonOn();
-
-    /**
-     * Slot for notified the general tab when after button is selected, so that
-     * general preferences can be updated.
-     */
-    void setAfterButtonOn();
-
-    /**
-     * Slot for notified the general tab when append button is selected, so that
-     * general preferences can be updated.
-     */
-    void setAppendButtonOn();
-
-    /**
-     * Slot for notified the general tab when vertical grid is (de)selected, so that
-     * general preferences can be updated.
+     * Slot for notified the grabber tab when the state of the
+     * gstreamerV4L2Grabber checkbox are changed,
+     * so that general preferences can be updated.
      * @param newState The new state of the check box
      */
-    void changeVerticalGridState(int newState);
+    void changeGstreamerV4L2GrabberCheckState(int newState);
 
     /**
-     * Slot for notified the general tab when horizontal grid is (de)selected, so that
-     * general preferences can be updated.
+     * Slot for notified the grabber tab when the state of the
+     * gstreamerDirectShowUsbGrabber checkbox are changed,
+     * so that general preferences can be updated.
      * @param newState The new state of the check box
      */
-    void changeHorizontalGridState(int newState);
+    void changeGstreamerDirectShowUsbGrabberCheckState(int newState);
 
     /**
-     * Slot for notified the general tab when grid color button is clicked, so that
-     * general preferences can be updaten.
+     * Slot for notified the grabber tab when the state of the
+     * gphoto2Grabber checkbox are changed,
+     * so that general preferences can be updated.
+     * @param newState The new state of the check box
      */
-    void clickedGridColorButton();
+    void changeGphoto2GrabberCheckState(int newState);
 
 private:
     Frontend     *frontend;
 
-    QGroupBox    *languageGroupBox;
-    QComboBox    *languageCombo;
-    QGroupBox    *captureGroupBox;
-    QRadioButton *bevorButton;
-    QRadioButton *afterButton;
-    QRadioButton *appendButton;
-    QGroupBox    *gridGroupBox;
-    QCheckBox    *verticalGridCheck;
-    QSpinBox     *verticalGridSpin;
-    QCheckBox    *horizontalGridCheck;
-    QSpinBox     *horizontalGridSpin;
-    QLabel       *gridColorLabel;
-    QPushButton  *gridColorButton;
+    QTextEdit    *infoText;
 
-    int           actualLanguage;
-    int           actualButtonFunction;
-    bool          actualVerticalGrid;
-    int           actualVerticalSpin;
-    bool          actualHorizontalGrid;
-    int           actualHorizontalSpin;
-    QColor        actualGridColor;
-    QColor        newGridColor;
+    QGroupBox    *grabberGroupBox;
+    QCheckBox    *gstreamerVideoTestGrabberCheck;
+    QCheckBox    *gstreamerV4L2GrabberCheck;
+    QCheckBox    *gstreamerV4L2ControllerCheck;
+    QCheckBox    *gstreamerDv1394GrabberCheck;
+    QCheckBox    *gstreamerDirectShowUsbGrabberCheck;
+    QCheckBox    *gstreamerDirectShowUsbControllerCheck;
+    QCheckBox    *gphoto2GrabberCheck;
+    QCheckBox    *gphoto2ControllerCheck;
+
+    bool          actualGstreamerVideoTestGrabber;
+    bool          actualGstreamerV4L2Grabber;
+    bool          actualGstreamerV4L2Controller;
+    bool          actualGstreamerDv1394Grabber;
+    bool          actualGstreamerDirectShowUsbGrabber;
+    bool          actualGstreamerDirectShowUsbController;
+    bool          actualGphoto2Grabber;
+    bool          actualGphoto2Controller;
 };
 
 #endif

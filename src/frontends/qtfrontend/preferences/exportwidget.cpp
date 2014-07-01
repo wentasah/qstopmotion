@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2012 by                                                *
+ *  Copyright (C) 2005-2014 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -28,6 +28,7 @@
 #include "technical/videoencoder/videoencoder.h"
 
 #include <QtCore/QtDebug>
+
 #include <QtGui/QFileDialog>
 #include <QtGui/QGridLayout>
 #include <QtGui/QHeaderView>
@@ -187,13 +188,6 @@ void ExportWidget::makeGUI()
     browseOutputButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     connect(browseOutputButton, SIGNAL(clicked()), this, SLOT(browseOutputFiles()));
 
-    QVBoxLayout *mainLayout = new QVBoxLayout;
-    mainLayout->addWidget(infoText);
-    mainLayout->addWidget(encoderPrefs);
-    mainLayout->addWidget(outputPrefs);
-    mainLayout->addStretch(1);
-    setLayout(mainLayout);
-
     // Encoder preferences
     QGridLayout *encoderPrefsLayout = new QGridLayout;
     encoderPrefsLayout->addWidget(encoderApplicationLabel, 0, 0);
@@ -223,6 +217,14 @@ void ExportWidget::makeGUI()
         outputPrefsLayout->addLayout(hbLayout);
     }
     outputPrefs->setLayout(outputPrefsLayout);
+
+    QVBoxLayout *mainLayout = new QVBoxLayout;
+    mainLayout->addWidget(infoText);
+    mainLayout->addWidget(encoderPrefs);
+    mainLayout->addWidget(outputPrefs);
+    mainLayout->addStretch(1);
+
+    setLayout(mainLayout);
 
     qDebug("ExportWidget::makeGUI --> End");
 }

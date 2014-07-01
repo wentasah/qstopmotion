@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2013 by                                                *
+ *  Copyright (C) 2005-2014 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -77,8 +77,6 @@ void GeneralWidget::makeGUI()
     // iconPath.append(QLatin1String("/icons/"));
     // QString iconFile(iconPath);
 
-    QVBoxLayout *tabLayout = new QVBoxLayout;
-
     languageGroupBox = new QGroupBox(tr("Language"));
     // languageGroupBox->setFlat(true);
 
@@ -133,7 +131,7 @@ void GeneralWidget::makeGUI()
 
     verticalGridCheck = new QCheckBox(tr("Vertical Lines"));
     verticalGridCheck->setChecked(false);
-    connect(verticalGridCheck, SIGNAL(stateChanged(int)), this, SLOT(setVerticalGridOn(int)));
+    connect(verticalGridCheck, SIGNAL(stateChanged(int)), this, SLOT(changeVerticalGridState(int)));
 
     verticalGridSpin = new QSpinBox();
     verticalGridSpin->setMinimum(1);
@@ -144,7 +142,7 @@ void GeneralWidget::makeGUI()
 
     horizontalGridCheck = new QCheckBox(tr("Horizontal Lines"));
     horizontalGridCheck->setChecked(false);
-    connect(horizontalGridCheck, SIGNAL(stateChanged(int)), this, SLOT(setHorizontalGridOn(int)));
+    connect(horizontalGridCheck, SIGNAL(stateChanged(int)), this, SLOT(changeHorizontalGridState(int)));
 
     horizontalGridSpin = new QSpinBox();
     horizontalGridSpin->setMinimum(1);
@@ -166,15 +164,13 @@ void GeneralWidget::makeGUI()
     gridLayout->addWidget(gridColorButton, 2, 1);
     gridGroupBox->setLayout(gridLayout);
 
-    tabLayout->setMargin(0);
-    tabLayout->setSpacing(2);
-    // tabLayout->addStretch(1);
-    tabLayout->addWidget(languageGroupBox);
-    tabLayout->addWidget(captureGroupBox);
-    tabLayout->addWidget(gridGroupBox);
-    tabLayout->addStretch(1);
+    QVBoxLayout *mainLayout = new QVBoxLayout;
+    mainLayout->addWidget(languageGroupBox);
+    mainLayout->addWidget(captureGroupBox);
+    mainLayout->addWidget(gridGroupBox);
+    mainLayout->addStretch(1);
 
-    setLayout(tabLayout);
+    setLayout(mainLayout);
 
     qDebug("GeneralWidget::makeGUI --> End");
 }
@@ -389,7 +385,7 @@ void GeneralWidget::setAppendButtonOn()
 }
 
 
-void GeneralWidget::setVerticalGridOn(int newState)
+void GeneralWidget::changeVerticalGridState(int newState)
 {
     if (newState) {
         verticalGridSpin->setEnabled(true);
@@ -400,7 +396,7 @@ void GeneralWidget::setVerticalGridOn(int newState)
 }
 
 
-void GeneralWidget::setHorizontalGridOn(int newState)
+void GeneralWidget::changeHorizontalGridState(int newState)
 {
     if (newState) {
         horizontalGridSpin->setEnabled(true);

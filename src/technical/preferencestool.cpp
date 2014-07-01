@@ -342,6 +342,15 @@ void PreferencesTool::setBasicPreferenceDefaults()
     setIntegerPreference("preferences", "defaultvideosize", VideoEncoder::defaultSize);
     setIntegerPreference("preferences", "defaultvideofps", 12);
     setIntegerPreference("preferences", "defaultusedefaultoutputfile", false);
+    // Grabber defaults
+    setIntegerPreference("preferences", "gstreamervideotestgrabber", false);
+    setIntegerPreference("preferences", "gstreamerv4l2grabber", true);
+    setIntegerPreference("preferences", "gstreamerv4l2controller", false);
+    setIntegerPreference("preferences", "gstreamerdv1394grabber", false);
+    setIntegerPreference("preferences", "gstreamerdirectshowusbgrabber", true);
+    setIntegerPreference("preferences", "gstreamerdirectshowusbcontroller", false);
+    setIntegerPreference("preferences", "gphoto2grabber", false);
+    setIntegerPreference("preferences", "gphoto2controller", false);
 }
 
 

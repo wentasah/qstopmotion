@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2013 by                                                *
+ *  Copyright (C) 2005-2014 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -1689,12 +1689,13 @@ void MainWindowGUI::createTranslator(const QString &newLocale)
 {
     qDebug("MainWindowGUI::createTranslator --> Start");
 
+    PreferencesTool *pref = frontend->getPreferences();
     QString appTranslationFile("qstopmotion_");
     QString qtTranslationFile("qt_");
     QString qmPath(frontend->getTranslationsDirName());
     QString languagePref;
 
-    if (frontend->getPreferences()->getStringPreference("preferences", "language", languagePref) == false) {
+    if (pref->getStringPreference("preferences", "language", languagePref) == false) {
         languagePref.append(newLocale);
     }
     if (newLocale.isEmpty()) {
@@ -1709,6 +1710,8 @@ void MainWindowGUI::createTranslator(const QString &newLocale)
                 languagePref = QLatin1String("no_se");
             else
                 languagePref.truncate(2);
+
+            pref->setStringPreference("preferences", "language", languagePref);
         }
 
         appTranslationFile.append(languagePref);

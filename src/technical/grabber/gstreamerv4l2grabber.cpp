@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2010-2012 by                                                *
+ *  Copyright (C) 2010-2014 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -56,21 +56,22 @@ bool GstreamerV4L2Grabber::initialization(QVector<ImageGrabberDevice*> &devices)
 {
     qDebug("GstreamerV4L2Grabber::initialization --> Start");
 
-    const gchar *device_name = NULL;
-    GstElementFactory *srcfactory = NULL;
-    GstElement *src = NULL;
-    GObjectClass *klass = NULL;
-    GstPropertyProbe *probe = NULL;
-    const gchar *property_name = NULL;
-    const gchar *property_id = NULL;
-    const GParamSpec *spec_name = NULL;
-    const GParamSpec *spec_id = NULL;
-    GValueArray *values_name = NULL;
-    GValueArray *values_id = NULL;
-    int device_size;
-    ImageGrabberDevice *device = NULL;
+    const gchar           *device_name = NULL;
+    GstElementFactory     *srcfactory = NULL;
+    GstElement            *src = NULL;
+    GObjectClass          *klass = NULL;
+    GstPropertyProbe      *probe = NULL;
+    const gchar           *property_name = NULL;
+    const gchar           *property_id = NULL;
+    const GParamSpec      *spec_name = NULL;
+    const GParamSpec      *spec_id = NULL;
+    GValueArray           *values_name = NULL;
+    GValueArray           *values_id = NULL;
+    int                    device_size;
+    ImageGrabberDevice    *device = NULL;
     GrabberV4L2Controller *deviceController = NULL;
-
+    PreferencesTool       *pref = frontend->getPreferences();
+    int                    value;
 
     device_size = devices.size();
 
@@ -163,17 +164,21 @@ bool GstreamerV4L2Grabber::initialization(QVector<ImageGrabberDevice*> &devices)
                 devices.append(device);
 
                 // Create grabber controller
-                deviceController = new GrabberV4L2Controller(0);
-                if (deviceController->init(device->getDeviceId()))
-                {
-                    device->setController(deviceController);
+                if (pref->getIntegerPreference("preferences", "gstreamerdirectshowusbcontroller", value) == false) {
+                    value = false;
                 }
-                else
-                {
-                    delete deviceController;
-                    deviceController = NULL;
+                if ((int)true == value) {
+                    deviceController = new GrabberV4L2Controller(0);
+                    if (deviceController->init(device->getDeviceId()))
+                    {
+                        device->setController(deviceController);
+                    }
+                    else
+                    {
+                        delete deviceController;
+                        deviceController = NULL;
+                    }
                 }
-
 
                 qDebug() << "GstreamerV4L2Grabber::initialization --> device id " << i << " '" << devices[device_size]->getDeviceId() << "' (" << g_value_get_string(&value_id_string) << ")";
                 if (values_name != NULL) {
@@ -208,11 +213,10 @@ bool GstreamerV4L2Grabber::setUp()
 {
     qDebug() << "GstreamerV4L2Grabber::setUp --> Start";
 
-    GstBus *bus;
-    int videoSource = frontend->getProject()->getVideoSource();
+    GstBus             *bus;
+    int                 videoSource = frontend->getProject()->getVideoSource();
     ImageGrabberDevice *videoDevice = frontend->getDevice(videoSource);
-
-    GstCaps *src_filter = 0;
+    // GstCaps            *src_filter = 0;
 
     pipeline = gst_pipeline_new("video_pipeline");
 

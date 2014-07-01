@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2012 by                                                *
+ *  Copyright (C) 2005-2014 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -104,13 +104,13 @@ private slots:
     // Output file preferences
     /**
      * Slot for notified the export tab when yes button is selected, so that
-     * encoder preferences can be updaten.
+     * encoder preferences can be updated.
      */
     void setYesButtonOn();
 
     /**
      * Slot for notified the export tab when no button is selected, so that
-     * encoder preferences can be updaten.
+     * encoder preferences can be updated.
      */
     void setNoButtonOn();
 
@@ -123,7 +123,7 @@ private slots:
 
     /**
      * Slot for notified the export tab when browse output button is selected,
-     * so that encoder preferences can be updaten.
+     * so that encoder preferences can be updated.
      */
     void browseOutputFiles();
 

@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2013 by                                                *
+ *  Copyright (C) 2005-2014 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -73,7 +73,7 @@ protected:
 
 private:
     /**
-     * Set the adjustment in the adjustment box
+     * Set the adjustment in the adjustment box.
      * @param newAdjustment The new adjustment
      */
     void setAdjustment(int newAdjustment);
@@ -112,9 +112,10 @@ private:
      */
     bool          tabType;
 
+    QTextEdit    *infoText;
+
     // Transformation preferences
     QGroupBox    *transformPrefs;
-    QTextEdit    *transformText;
     QRadioButton *scaleButton;
     QRadioButton *clipButton;
     QRadioButton *zoomButton;

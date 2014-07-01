@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2012 by                                                *
+ *  Copyright (C) 2005-2014 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -31,6 +31,7 @@
 #include "technical/grabber/gstreamerv4l2grabber.h"
 #endif
 #include "technical/grabber/gstreamervideotestgrabber.h"
+#include "technical/preferencestool.h"
 
 #include <QtCore/QtDebug>
 
@@ -114,35 +115,69 @@ void ImageGrabberFacade::initialization()
 {
     qDebug("ImageGrabberFacade::initialization --> Start");
 
+    PreferencesTool *pref = frontend->getPreferences();
+    int              value;
+
     clearDevices();
 
-    gstreamerVideoTestGrabber = new GstreamerVideoTestGrabber(frontend);
-    if (gstreamerVideoTestGrabber->initialization(devices)) {
-        isInitialized = true;
+    // GStreamer video test device
+    if (pref->getIntegerPreference("preferences", "gstreamervideotestgrabber", value) == false) {
+        value = false;
+    }
+    if ((int)true == value) {
+        gstreamerVideoTestGrabber = new GstreamerVideoTestGrabber(frontend);
+        if (gstreamerVideoTestGrabber->initialization(devices)) {
+            isInitialized = true;
+        }
     }
 
 #ifdef Q_WS_X11
-    gstreamerV4L2Grabber = new GstreamerV4L2Grabber(frontend);
-    if (gstreamerV4L2Grabber->initialization(devices)) {
-        isInitialized = true;
+    // GStreamer video4linux2 device
+    if (pref->getIntegerPreference("preferences", "gstreamerv4l2grabber", value) == false) {
+        value = true;
     }
-    gstreamerDv1394Grabber = new GstreamerDv1394Grabber(frontend);
-    if (gstreamerDv1394Grabber->initialization(devices)) {
-        isInitialized = true;
+    if ((int)true == value) {
+        gstreamerV4L2Grabber = new GstreamerV4L2Grabber(frontend);
+        if (gstreamerV4L2Grabber->initialization(devices)) {
+            isInitialized = true;
+        }
+    }
+
+    // GStreamer dv1394 device
+    if (pref->getIntegerPreference("preferences", "gstreamerdv1394grabber", value) == false) {
+        value = false;
+    }
+    if ((int)true == value) {
+        gstreamerDv1394Grabber = new GstreamerDv1394Grabber(frontend);
+        if (gstreamerDv1394Grabber->initialization(devices)) {
+            isInitialized = true;
+        }
     }
 #endif
 
 #ifdef Q_WS_WIN
-    gstreamerDirectShowUsbGrabber = new GstreamerDirectShowUsbGrabber(frontend);
-    if (gstreamerDirectShowUsbGrabber->initialization(devices)) {
-        isInitialized = true;
+    // GStreamer directshow USB device
+    if (pref->getIntegerPreference("preferences", "gstreamerdirectshowusbgrabber", value) == false) {
+        value = true;
+    }
+    if ((int)true == value) {
+        gstreamerDirectShowUsbGrabber = new GstreamerDirectShowUsbGrabber(frontend);
+        if (gstreamerDirectShowUsbGrabber->initialization(devices)) {
+            isInitialized = true;
+        }
     }
 #endif
 
 #ifdef Q_WS_X11
-    gphotoGrabber = new GphotoGrabber(frontend);
-    if (gphotoGrabber->initialization(devices)) {
-        isInitialized = true;
+    // gphoto2 device
+    if (pref->getIntegerPreference("preferences", "gphoto2grabber", value) == false) {
+        value = false;
+    }
+    if ((int)true == value) {
+        gphotoGrabber = new GphotoGrabber(frontend);
+        if (gphotoGrabber->initialization(devices)) {
+            isInitialized = true;
+        }
     }
 #endif
 

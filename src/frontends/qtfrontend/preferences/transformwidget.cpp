@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2013 by                                                *
+ *  Copyright (C) 2005-2014 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -42,9 +42,10 @@ TransformWidget::TransformWidget(Frontend *f, bool type, QWidget *parent) : QWid
     frontend                 = f;
     tabType                  = type;
 
+    infoText                 = 0;
+
     // Transformation preferences
     transformPrefs           = 0;
-    transformText            = 0;
     scaleButton              = 0;
     clipButton               = 0;
     zoomButton               = 0;
@@ -83,15 +84,10 @@ void TransformWidget::makeGUI()
 {
     qDebug("TransformWidget::makeGUI --> Start");
 
-    // Transformation preferences
-    transformPrefs = new QGroupBox;
-    transformPrefs->setMinimumSize(440, 300);
-    transformPrefs->setTitle(tr("Transformation settings"));
-
-    transformText = new QTextEdit;
-    transformText->setReadOnly(true);
+    infoText = new QTextEdit;
+    infoText->setReadOnly(true);
     if (tabType) {
-        transformText->setHtml(
+        infoText->setHtml(
             "<p>" +
             tr("Below you can set which image transformation should be used for "
                "importing images to a new project. If you select "
@@ -99,7 +95,7 @@ void TransformWidget::makeGUI()
             "</p>");
     }
     else {
-        transformText->setHtml(
+        infoText->setHtml(
             "<p>" +
             tr("Below you can set which image transformation should be used for "
                "importing images to the currently active project. If you select "
@@ -107,10 +103,15 @@ void TransformWidget::makeGUI()
             "</p>");
     }
 
-    transformText->setMinimumWidth(440);
-    transformText->setMinimumHeight(75);
-    transformText->setMaximumHeight(90);
-    transformText->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    infoText->setMinimumWidth(440);
+    infoText->setMinimumHeight(100);
+    infoText->setMaximumHeight(100);
+    infoText->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+
+    // Transformation preferences
+    transformPrefs = new QGroupBox;
+    transformPrefs->setMinimumSize(440, 300);
+    transformPrefs->setTitle(tr("Transformation settings"));
 
     scaleButton = new QRadioButton(tr("Scale the whole image"));
     scaleButton->setChecked(true);
@@ -240,33 +241,37 @@ void TransformWidget::makeGUI()
     hbLayout->setMargin(0);
     hbLayout->setSpacing(0);
     hbLayout->addStretch(1);
+    transformPrefsLayout->addLayout(hbLayout);
 
-    transformPrefsLayout->addLayout(hbLayout);
-    transformPrefsLayout->addWidget(transformText);
-    hbLayout = new QHBoxLayout;
-    hbLayout->addStretch(1);
-    hbLayout->addWidget(scaleButton);
-    hbLayout->addStretch(1);
-    hbLayout->addWidget(clipButton);
-    hbLayout->addStretch(1);
-    hbLayout->addWidget(zoomButton);
-    hbLayout->addStretch(1);
-    transformPrefsLayout->addLayout(hbLayout);
+    QVBoxLayout *vbLayout;
+    vbLayout = new QVBoxLayout;
+    vbLayout->addStretch(1);
+    vbLayout->addWidget(scaleButton);
+    vbLayout->addStretch(1);
+    vbLayout->addWidget(clipButton);
+    vbLayout->addStretch(1);
+    vbLayout->addWidget(zoomButton);
+    vbLayout->addStretch(1);
+    transformPrefsLayout->addLayout(vbLayout);
+
     hbLayout = new QHBoxLayout;
     hbLayout->addStretch(1);
     hbLayout->addWidget(adjustmentPrefs);
     hbLayout->addStretch(1);
     transformPrefsLayout->addLayout(hbLayout);
+
     hbLayout = new QHBoxLayout;
     hbLayout->addStretch(1);
     hbLayout->addWidget(zoomPrefs);
     hbLayout->addStretch(1);
     transformPrefsLayout->addLayout(hbLayout);
+
     transformPrefsLayout->addStretch(1);
     transformPrefs->setLayout(transformPrefsLayout);
 
     // Widget layout
     QVBoxLayout *mainLayout = new QVBoxLayout;
+    mainLayout->addWidget(infoText);
     mainLayout->addWidget(transformPrefs);
     mainLayout->addStretch(1);
     setLayout(mainLayout);

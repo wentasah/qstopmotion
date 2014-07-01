@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2010-2013 by                                                *
+ *  Copyright (C) 2010-2014 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -20,7 +20,7 @@
 
 #include "gstreamerdirectshowusbgrabber.h"
 #include "technical/grabber/grabberdirectshowcontroller.h"
-
+#include "technical/preferencestool.h"
 #include "technical/util.h"
 
 #include <QtCore/QDir>
@@ -55,6 +55,9 @@ GstreamerDirectShowUsbGrabber::~GstreamerDirectShowUsbGrabber()
 bool GstreamerDirectShowUsbGrabber::initialization(QVector<ImageGrabberDevice*> &devices)
 {
     qDebug("GstreamerDirectShowUsbGrabber::initialization --> Start");
+
+    PreferencesTool *pref = frontend->getPreferences();
+    int              value;
 
     const gchar *device_name = NULL;
     GstElementFactory *srcfactory = NULL;
@@ -154,15 +157,20 @@ bool GstreamerDirectShowUsbGrabber::initialization(QVector<ImageGrabberDevice*> 
                 devices.append(device);
 
                 // Create grabber controller
-                deviceController = new GrabberDirectShowController(0);
-                if (deviceController->init(device->getDeviceId()))
-                {
-                    device->setController(deviceController);
+                if (pref->getIntegerPreference("preferences", "gstreamerdirectshowusbcontroller", value) == false) {
+                    value = false;
                 }
-                else
-                {
-                    delete deviceController;
-                    deviceController = NULL;
+                if ((int)true == value) {
+                    deviceController = new GrabberDirectShowController(0);
+                    if (deviceController->init(device->getDeviceId()))
+                    {
+                        device->setController(deviceController);
+                    }
+                    else
+                    {
+                        delete deviceController;
+                        deviceController = NULL;
+                    }
                 }
 
                 if (values_id != NULL) {

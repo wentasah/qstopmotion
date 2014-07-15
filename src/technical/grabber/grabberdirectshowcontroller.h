@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2012-2013 by                                                *
+ *  Copyright (C) 2012-2014 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -24,8 +24,6 @@
 #include "technical/grabber/grabbercontroller.h"
 
 #include <dshow.h>
-#include <Ks.h>				// Required by KsMedia.h
-#include <KsMedia.h>		// For KSPROPERTY_CAMERACONTROL_FLAGS_*
 
 /**
  * Interface to the controller of a device.
@@ -53,6 +51,24 @@ public:
      * @return True if initialization is successful.
      */
     bool init(const QString &id);
+
+    /**************************************************************************
+     **************************************************************************
+     * Camera resolution
+     **************************************************************************
+     **************************************************************************/
+
+    /**
+     * Get the active resolution of the controller.
+     * @return The index of the active resolution.
+     */
+    int getActiveResolution();
+
+    /**
+     * Set the active resolution of the controller.
+     * @param ac The index of the new active resolution.
+     */
+    void setActiveResolution(int ac);
 
     /**************************************************************************
      **************************************************************************
@@ -543,8 +559,10 @@ public:
     void setRoll(int r);
 
 private:
+    IBaseFilter      *pFilter;
     IAMCameraControl *pCameraControl;
     IAMVideoProcAmp  *pQualityControl;
+    IAMStreamConfig  *pStreamConfig;
 
     bool setControlCapabilities();
     bool setQualityCapabilities();

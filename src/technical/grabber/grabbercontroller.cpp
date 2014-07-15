@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2012-2012 by                                                *
+ *  Copyright (C) 2012-2014 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -32,6 +32,8 @@ GrabberController::GrabberController(int cap)
 
     controllerCap = cap;
 
+    resolutions.clear();
+
     qDebug("GrabberController::Constructor --> End");
 }
 
@@ -53,6 +55,35 @@ bool GrabberController::init(const QString &id)
 int GrabberController::getControllerCapabilities()
 {
     return controllerCap;
+}
+
+
+void GrabberController::addResolution(GrabberResolution r)
+{
+    resolutions.append(r);
+}
+
+/**************************************************************************
+ **************************************************************************
+ * Camera resolution
+ **************************************************************************
+ **************************************************************************/
+
+QVector<GrabberResolution> GrabberController::getResolutions()
+{
+    return resolutions;
+}
+
+
+int GrabberController::getActiveResolution()
+{
+    return -1;
+}
+
+
+void GrabberController::setActiveResolution(int /*ac*/)
+{
+    Q_ASSERT( 1 );
 }
 
 /**************************************************************************

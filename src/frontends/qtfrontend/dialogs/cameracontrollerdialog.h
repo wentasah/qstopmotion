@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2013 by                                                *
+ *  Copyright (C) 2005-2014 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -63,6 +63,21 @@ public:
     void initialize();
 
 private slots:
+    /**
+     * Slot for notified the camera controller when the resolution changes,
+     * so that resolution can be updated.
+     * @param index the new resolution value.
+     */
+    void changeResolution(int index);
+
+    /**
+     * Slot for notified the camera controller when the resolution changes,
+     * so that resolution can be updated.
+     * @param index the new resolution value.
+     * @param save If true than the new value is saved in the preferences file.
+     */
+    void changeResolution(int index, bool save);
+
     /**
      * Slot for notified the camera contoller when automatic brightness is changed, so that
      * camera contoller can be updaten.
@@ -573,6 +588,11 @@ private slots:
      */
     void changeRoll(int index, bool save);
 
+    /**
+     * Slot for notified the camera controller to reset to the default values.
+     */
+    void reset();
+
 private:
     /**
      * Fill the combobox with the values.
@@ -587,6 +607,11 @@ private:
     ImageGrabberDevice *grabberDevice;
     QString             deviceId;
     GrabberController  *grabberController;
+
+    QGroupBox    *resolutionGroupBox;
+
+    QLabel       *resolutionLabel;
+    QComboBox    *resolutionComboBox;
 
     QGroupBox    *qualityGroupBox;
     int           qualityCount;
@@ -681,6 +706,7 @@ private:
 
     QVBoxLayout  *mainLayout;
 
+    QPushButton  *resetButton;
     QPushButton  *closeButton;
 };
 

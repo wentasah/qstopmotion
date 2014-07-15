@@ -854,7 +854,7 @@ bool MainWindowGUI::startGrabber()
         frontend->hideProgress();
         frontend->showWarning(tr("Select image grabber"),
                               tr("You have to define an image grabber to use.\n"
-                                 "This can be set in the preferences menu."));
+                                 "This can be set on the recording tool tab."));
         return false;
     }
 

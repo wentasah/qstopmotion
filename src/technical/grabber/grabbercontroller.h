@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2012-2012 by                                                *
+ *  Copyright (C) 2012-2014 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -22,6 +22,7 @@
 #define GRABBERCONTROLLER_H
 
 #include "technical/grabber/grabbercontrolcapabilities.h"
+#include "technical/grabber/grabberresolution.h"
 
 #include <QtCore/QString>
 #include <QtCore/QVector>
@@ -70,6 +71,36 @@ public:
      * @return The capabilities of the controller.
      */
     int getControllerCapabilities();
+
+    /**
+     * Add a resolution to the controller.
+     * @param r The new grabber resolution.
+     */
+    void addResolution(GrabberResolution r);
+
+    /**************************************************************************
+     **************************************************************************
+     * Camera resolution
+     **************************************************************************
+     **************************************************************************/
+
+    /**
+     * Get the possible resolutions of the controller.
+     * @return The resolutions of the controller.
+     */
+    QVector<GrabberResolution> getResolutions();
+
+    /**
+     * Get the active resolution of the controller.
+     * @return The index of the active resolution.
+     */
+    virtual int getActiveResolution();
+
+    /**
+     * Set the active resolution of the controller.
+     * @param ac The index of the new active resolution.
+     */
+    virtual void setActiveResolution(int ac);
 
     /**************************************************************************
      **************************************************************************
@@ -663,6 +694,7 @@ public:
 
 private:
     int                         controllerCap;
+    QVector<GrabberResolution>  resolutions;
 
     // Video capabilities
     GrabberControlCapabilities  brightnessCapabilities;

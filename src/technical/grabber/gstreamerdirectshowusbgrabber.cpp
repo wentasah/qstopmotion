@@ -341,7 +341,24 @@ bool GstreamerDirectShowUsbGrabber::setUp()
     //---------------------------------------------------------------------
     // Link the elements in the bin
     //---------------------------------------------------------------------
+    /*
+    src_filter = gst_caps_new_simple ("video/x-raw-yuv",
+                                      // "width", G_TYPE_INT, 800,       // SVGA width
+                                      // "height", G_TYPE_INT, 600,      // SVGA height
+                                      "width", G_TYPE_INT, 640,       // VGA width
+                                      "height", G_TYPE_INT, 480,      // VGA height
+                                      // "width", G_TYPE_INT, 320,       // QVGA width
+                                      // "height", G_TYPE_INT, 240,      // QVGA height
+                                      "framerate", GST_TYPE_FRACTION, 15,
+                                      1, NULL);
 
+    if (!gst_element_link_filtered (source, filter1, src_filter)) {
+        qDebug() << "GstreamerVideoTestGrabber::setUp --> Fatal: Can't link the filter1 to source.";
+        return false;
+    }
+
+    gst_caps_unref (src_filter);
+    */
     if (!gst_element_link(source, filter1)) {
         qDebug() << "GstreamerDirectShowUsbGrabber::setUp --> Fatal: Can't link the filter1 to source.";
         return false;

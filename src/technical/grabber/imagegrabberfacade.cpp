@@ -221,9 +221,9 @@ void ImageGrabberFacade::init()
 
     if (!isGrabberInited()) {
         frontend->showWarning(tr("Check image grabber"),
-                              tr("Grabbing failed. This may happen if you try\n"
-                                 "to grab from an invalid device. Please select\n"
-                                 "another device on the recording tool tab."));
+                              tr("Image grabber initialization failed. This may happen \n"
+                                 "if you try to grab from an invalid device. Please\n"
+                                 "select another device on the recording tool tab."));
         return;
     }
 

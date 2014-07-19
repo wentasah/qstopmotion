@@ -18,32 +18,32 @@
  *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                 *
  ******************************************************************************/
 
-#include "grabberdirectshowcontroller.h"
+#include "directshowcontroller.h"
 #include "technical/preferencestool.h"
 
 #include <QtCore/QtDebug>
 
 /**************************************************************************
- * Default implementation of the grabber controller functions.
+ * Implementation of the controller using the Microsoft DirectShow API.
  **************************************************************************/
 
-GrabberDirectShowController::GrabberDirectShowController(int cap)
+DirectShowController::DirectShowController(int cap)
     : GrabberController(cap)
 {
-    qDebug("GrabberDirectShowController::Constructor --> Start");
+    qDebug("DirectShowController::Constructor --> Start");
 
     pFilter = NULL;
     pCameraControl = NULL;
     pQualityControl = NULL;
     pStreamConfig = NULL;
 
-    qDebug("GrabberDirectShowController::Constructor --> End");
+    qDebug("DirectShowController::Constructor --> End");
 }
 
 
-GrabberDirectShowController::~GrabberDirectShowController()
+DirectShowController::~DirectShowController()
 {
-    qDebug("GrabberDirectShowController::Destructor --> Start");
+    qDebug("DirectShowController::Destructor --> Start");
 /*
     if (NULL != pStreamConfig) {
         pStreamConfig->Release();
@@ -58,18 +58,18 @@ GrabberDirectShowController::~GrabberDirectShowController()
         pFilter->Release();
     }
 */
-    qDebug("GrabberDirectShowController::Destructor --> End");
+    qDebug("DirectShowController::Destructor --> End");
 }
 
 
-bool GrabberDirectShowController::init(const QString &id)
+bool DirectShowController::init(const QString &id)
 {
-    qDebug("GrabberDirectShowController::init --> Start");
+    qDebug("DirectShowController::init --> Start");
 
     bool     ret = false;
     HRESULT  hr;
 
-    qDebug("GrabberDirectShowController::init --> Enumerating video input devices ...\n");
+    qDebug("DirectShowController::init --> Enumerating video input devices ...\n");
 
     // Create the System Device Enumerator.
     ICreateDevEnum *pSysDevEnum = NULL;
@@ -79,7 +79,7 @@ bool GrabberDirectShowController::init(const QString &id)
                           IID_ICreateDevEnum,
                           (void **)&pSysDevEnum);
     if(FAILED(hr)) {
-        qDebug("GrabberDirectShowController::Constructor --> Error end: Unable to create system device enumerator.\n");
+        qDebug("DirectShowController::Constructor --> Error end: Unable to create system device enumerator.\n");
         return false;
     }
 
@@ -120,7 +120,7 @@ bool GrabberDirectShowController::init(const QString &id)
                 VariantClear(&varName);
 
                 // Display the name in your UI somehow.
-                qDebug() << "GrabberDirectShowController::init --> Found device: " << deviceId;
+                qDebug() << "DirectShowController::init --> Found device: " << deviceId;
             }
 
             if (0 != id.compare(deviceId)) {
@@ -172,7 +172,7 @@ bool GrabberDirectShowController::init(const QString &id)
                 }
             }
             else {
-                qDebug("GrabberDirectShowController::init --> ERROR: Unable to access IAMCameraControl interface.");
+                qDebug("DirectShowController::init --> ERROR: Unable to access IAMCameraControl interface.");
             }
 
             // Get a pointer to the IAMVideoProcAmp interface used to control the camera
@@ -183,7 +183,7 @@ bool GrabberDirectShowController::init(const QString &id)
                 }
             }
             else {
-                qDebug("GrabberDirectShowController::init --> ERROR: Unable to access IAMCameraControl interface.");
+                qDebug("DirectShowController::init --> ERROR: Unable to access IAMCameraControl interface.");
             }
 
             //---------------------------------------------------------
@@ -274,7 +274,7 @@ bool GrabberDirectShowController::init(const QString &id)
                         outputWidth = pVideoInfoHeader->bmiHeader.biWidth;
                         outputHeight = pVideoInfoHeader->bmiHeader.biHeight;
 
-                        qDebug() << "GrabberDirectShowController::init --> Resolution: " << outputWidth << ":" << outputHeight;
+                        qDebug() << "DirectShowController::init --> Resolution: " << outputWidth << ":" << outputHeight;
 
                         addResolution(GrabberResolution(pinId, outputWidth, outputHeight, connected));
                     }
@@ -301,15 +301,15 @@ bool GrabberDirectShowController::init(const QString &id)
     }
     pSysDevEnum->Release();
 
-    qDebug("GrabberDirectShowController::init --> End (Successful)");
+    qDebug("DirectShowController::init --> End (Successful)");
 
     return ret;
 }
 
 
-bool GrabberDirectShowController::setControlCapabilities()
+bool DirectShowController::setControlCapabilities()
 {
-    qDebug("GrabberDirectShowController::setCameraCapabilities --> Start");
+    qDebug("DirectShowController::setCameraCapabilities --> Start");
 
     long min;
     long max;
@@ -321,7 +321,7 @@ bool GrabberDirectShowController::setControlCapabilities()
     Sleep(1000);
     hr = pCameraControl->GetRange(CameraControl_Exposure, &min, &max, &step, &def, &flags);
     if (hr == S_OK) {
-        qDebug("GrabberDirectShowController::setCameraCapabilities --> Exposure control supported.");
+        qDebug("DirectShowController::setCameraCapabilities --> Exposure control supported.");
 
         getExposureCaps()->setMinimum(min);
         getExposureCaps()->setMaximum(max);
@@ -335,13 +335,13 @@ bool GrabberDirectShowController::setControlCapabilities()
         }
     }
     else {
-        qDebug("GrabberDirectShowController::setCameraCapabilities --> Exposure control not supported.");
+        qDebug("DirectShowController::setCameraCapabilities --> Exposure control not supported.");
     }
 
     Sleep(1000);
     hr = pCameraControl->GetRange(CameraControl_Zoom, &min, &max, &step, &def, &flags);
     if (hr == S_OK) {
-        qDebug("GrabberDirectShowController::setCameraCapabilities --> Zoom control supported.");
+        qDebug("DirectShowController::setCameraCapabilities --> Zoom control supported.");
 
         getZoomCaps()->setMinimum(min);
         getZoomCaps()->setMaximum(max);
@@ -355,13 +355,13 @@ bool GrabberDirectShowController::setControlCapabilities()
         }
     }
     else {
-        qDebug("GrabberDirectShowController::setCameraCapabilities --> Zoom control not supported.");
+        qDebug("DirectShowController::setCameraCapabilities --> Zoom control not supported.");
     }
 
     Sleep(1000);
     hr = pCameraControl->GetRange(CameraControl_Focus, &min, &max, &step, &def, &flags);
     if (hr == S_OK) {
-        qDebug("GrabberDirectShowController::setCameraCapabilities --> Focus control supported.");
+        qDebug("DirectShowController::setCameraCapabilities --> Focus control supported.");
 
         getFocusCaps()->setMinimum(min);
         getFocusCaps()->setMaximum(max);
@@ -375,13 +375,13 @@ bool GrabberDirectShowController::setControlCapabilities()
         }
     }
     else {
-        qDebug("GrabberDirectShowController::setCameraCapabilities --> Focus control not supported.");
+        qDebug("DirectShowController::setCameraCapabilities --> Focus control not supported.");
     }
 
     Sleep(1000);
     hr = pCameraControl->GetRange(CameraControl_Pan, &min, &max, &step, &def, &flags);
     if (hr == S_OK) {
-        qDebug("GrabberDirectShowController::setCameraCapabilities --> Pan control supported");
+        qDebug("DirectShowController::setCameraCapabilities --> Pan control supported");
 
         getPanCaps()->setMinimum(min);
         getPanCaps()->setMaximum(max);
@@ -390,13 +390,13 @@ bool GrabberDirectShowController::setControlCapabilities()
         getPanCaps()->setFlags(flags);
     }
     else {
-        qDebug("GrabberDirectShowController::setCameraCapabilities --> Pan control not supported");
+        qDebug("DirectShowController::setCameraCapabilities --> Pan control not supported");
     }
 
     Sleep(1000);
     hr = pCameraControl->GetRange(CameraControl_Tilt, &min, &max, &step, &def, &flags);
     if (hr == S_OK) {
-        qDebug("GrabberDirectShowController::setCameraCapabilities --> Tilt control supported");
+        qDebug("DirectShowController::setCameraCapabilities --> Tilt control supported");
 
         getTiltCaps()->setMinimum(min);
         getTiltCaps()->setMaximum(max);
@@ -405,13 +405,13 @@ bool GrabberDirectShowController::setControlCapabilities()
         getTiltCaps()->setFlags(flags);
     }
     else {
-        qDebug("GrabberDirectShowController::setCameraCapabilities --> Tilt control not supported");
+        qDebug("DirectShowController::setCameraCapabilities --> Tilt control not supported");
     }
 
     Sleep(1000);
     hr = pCameraControl->GetRange(CameraControl_Iris, &min, &max, &step, &def, &flags);
     if (hr == S_OK) {
-        qDebug("GrabberDirectShowController::setCameraCapabilities --> Iris control supported.");
+        qDebug("DirectShowController::setCameraCapabilities --> Iris control supported.");
 
         getIrisCaps()->setMinimum(min);
         getIrisCaps()->setMaximum(max);
@@ -425,13 +425,13 @@ bool GrabberDirectShowController::setControlCapabilities()
         }
     }
     else {
-        qDebug("GrabberDirectShowController::setCameraCapabilities --> Iris control not supported.");
+        qDebug("DirectShowController::setCameraCapabilities --> Iris control not supported.");
     }
 
     Sleep(1000);
     hr = pCameraControl->GetRange(CameraControl_Roll, &min, &max, &step, &def, &flags);
     if (hr == S_OK) {
-        qDebug("GrabberDirectShowController::setCameraCapabilities --> Roll control supported.");
+        qDebug("DirectShowController::setCameraCapabilities --> Roll control supported.");
 
         getRollCaps()->setMinimum(min);
         getRollCaps()->setMaximum(max);
@@ -445,18 +445,18 @@ bool GrabberDirectShowController::setControlCapabilities()
         }
     }
     else {
-        qDebug("GrabberDirectShowController::setCameraCapabilities --> Roll control not supported.");
+        qDebug("DirectShowController::setCameraCapabilities --> Roll control not supported.");
     }
 
-    qDebug("GrabberDirectShowController::setCameraCapabilities --> End");
+    qDebug("DirectShowController::setCameraCapabilities --> End");
 
     return true;
 }
 
 
-bool GrabberDirectShowController::setQualityCapabilities()
+bool DirectShowController::setQualityCapabilities()
 {
-    qDebug("GrabberDirectShowController::setQualityCapabilities --> Start");
+    qDebug("DirectShowController::setQualityCapabilities --> Start");
 
     long min;
     long max;
@@ -468,7 +468,7 @@ bool GrabberDirectShowController::setQualityCapabilities()
     Sleep(1000);
     hr = pQualityControl->GetRange(VideoProcAmp_Brightness, &min, &max, &step, &def, &flags);
     if (hr == S_OK) {
-        qDebug("GrabberDirectShowController::setQualityCapabilities --> Brightness control supported.");
+        qDebug("DirectShowController::setQualityCapabilities --> Brightness control supported.");
 
         getBrightnessCaps()->setMinimum(min);
         getBrightnessCaps()->setMaximum(max);
@@ -482,13 +482,13 @@ bool GrabberDirectShowController::setQualityCapabilities()
         }
     }
     else {
-        qDebug("GrabberDirectShowController::setQualityCapabilities --> Brightness control not supported.");
+        qDebug("DirectShowController::setQualityCapabilities --> Brightness control not supported.");
     }
 
     Sleep(1000);
     hr = pQualityControl->GetRange(VideoProcAmp_Contrast, &min, &max, &step, &def, &flags);
     if (hr == S_OK) {
-        qDebug("GrabberDirectShowController::setQualityCapabilities --> Contrast control supported.");
+        qDebug("DirectShowController::setQualityCapabilities --> Contrast control supported.");
 
         getContrastCaps()->setMinimum(min);
         getContrastCaps()->setMaximum(max);
@@ -502,13 +502,13 @@ bool GrabberDirectShowController::setQualityCapabilities()
         }
     }
     else {
-        qDebug("GrabberDirectShowController::setQualityCapabilities --> Contrast control not supported.");
+        qDebug("DirectShowController::setQualityCapabilities --> Contrast control not supported.");
     }
 
     Sleep(1000);
     hr = pQualityControl->GetRange(VideoProcAmp_Saturation, &min, &max, &step, &def, &flags);
     if (hr == S_OK) {
-        qDebug("GrabberDirectShowController::setQualityCapabilities --> Saturation control supported.");
+        qDebug("DirectShowController::setQualityCapabilities --> Saturation control supported.");
 
         getSaturationCaps()->setMinimum(min);
         getSaturationCaps()->setMaximum(max);
@@ -522,13 +522,13 @@ bool GrabberDirectShowController::setQualityCapabilities()
         }
     }
     else {
-        qDebug("GrabberDirectShowController::setQualityCapabilities --> Saturation control not supported.");
+        qDebug("DirectShowController::setQualityCapabilities --> Saturation control not supported.");
     }
 
     Sleep(1000);
     hr = pQualityControl->GetRange(VideoProcAmp_Hue, &min, &max, &step, &def, &flags);
     if (hr == S_OK) {
-        qDebug("GrabberDirectShowController::setQualityCapabilities --> Hue control supported.");
+        qDebug("DirectShowController::setQualityCapabilities --> Hue control supported.");
 
         getHueCaps()->setMinimum(min);
         getHueCaps()->setMaximum(max);
@@ -542,13 +542,13 @@ bool GrabberDirectShowController::setQualityCapabilities()
         }
     }
     else {
-        qDebug("GrabberDirectShowController::setQualityCapabilities --> Hue control not supported.");
+        qDebug("DirectShowController::setQualityCapabilities --> Hue control not supported.");
     }
 
     Sleep(1000);
     hr = pQualityControl->GetRange(VideoProcAmp_Gamma, &min, &max, &step, &def, &flags);
     if (hr == S_OK) {
-        qDebug("GrabberDirectShowController::setQualityCapabilities --> Gamma control supported.");
+        qDebug("DirectShowController::setQualityCapabilities --> Gamma control supported.");
 
         getGammaCaps()->setMinimum(min);
         getGammaCaps()->setMaximum(max);
@@ -562,13 +562,13 @@ bool GrabberDirectShowController::setQualityCapabilities()
         }
     }
     else {
-        qDebug("GrabberDirectShowController::setQualityCapabilities --> Gamma control not supported.");
+        qDebug("DirectShowController::setQualityCapabilities --> Gamma control not supported.");
     }
 
     Sleep(1000);
     hr = pQualityControl->GetRange(VideoProcAmp_Sharpness, &min, &max, &step, &def, &flags);
     if (hr == S_OK) {
-        qDebug("GrabberDirectShowController::setQualityCapabilities --> Sharpness control supported.");
+        qDebug("DirectShowController::setQualityCapabilities --> Sharpness control supported.");
 
         getSharpnessCaps()->setMinimum(min);
         getSharpnessCaps()->setMaximum(max);
@@ -582,13 +582,13 @@ bool GrabberDirectShowController::setQualityCapabilities()
         }
     }
     else {
-        qDebug("GrabberDirectShowController::setQualityCapabilities --> Sharpness control not supported.");
+        qDebug("DirectShowController::setQualityCapabilities --> Sharpness control not supported.");
     }
 
     Sleep(1000);
     hr = pQualityControl->GetRange(VideoProcAmp_BacklightCompensation, &min, &max, &step, &def, &flags);
     if (hr == S_OK) {
-        qDebug("GrabberDirectShowController::setQualityCapabilities --> Backlight Compensation control supported.");
+        qDebug("DirectShowController::setQualityCapabilities --> Backlight Compensation control supported.");
 
         getBacklightCaps()->setMinimum(min);
         getBacklightCaps()->setMaximum(max);
@@ -602,13 +602,13 @@ bool GrabberDirectShowController::setQualityCapabilities()
         }
     }
     else {
-        qDebug("GrabberDirectShowController::setQualityCapabilities --> Backlight Compensation control not supported.");
+        qDebug("DirectShowController::setQualityCapabilities --> Backlight Compensation control not supported.");
     }
 
     Sleep(1000);
     hr = pQualityControl->GetRange(VideoProcAmp_WhiteBalance, &min, &max, &step, &def, &flags);
     if (hr == S_OK) {
-        qDebug("GrabberDirectShowController::setQualityCapabilities --> White Balance control supported.");
+        qDebug("DirectShowController::setQualityCapabilities --> White Balance control supported.");
 
         getWhiteCaps()->setMinimum(min);
         getWhiteCaps()->setMaximum(max);
@@ -622,13 +622,13 @@ bool GrabberDirectShowController::setQualityCapabilities()
         }
     }
     else {
-        qDebug("GrabberDirectShowController::setQualityCapabilities --> White Balance control not supported.");
+        qDebug("DirectShowController::setQualityCapabilities --> White Balance control not supported.");
     }
 
     Sleep(1000);
     hr = pQualityControl->GetRange(VideoProcAmp_Gain, &min, &max, &step, &def, &flags);
     if (hr == S_OK) {
-        qDebug("GrabberDirectShowController::setQualityCapabilities --> Gain control supported.");
+        qDebug("DirectShowController::setQualityCapabilities --> Gain control supported.");
 
         getGainCaps()->setMinimum(min);
         getGainCaps()->setMaximum(max);
@@ -642,13 +642,13 @@ bool GrabberDirectShowController::setQualityCapabilities()
         }
     }
     else {
-        qDebug("GrabberDirectShowController::setQualityCapabilities --> Gain control not supported.");
+        qDebug("DirectShowController::setQualityCapabilities --> Gain control not supported.");
     }
 
     Sleep(1000);
     hr = pQualityControl->GetRange(VideoProcAmp_ColorEnable, &min, &max, &step, &def, &flags);
     if (hr == S_OK) {
-        qDebug("GrabberDirectShowController::setQualityCapabilities --> Color Enable control supported.");
+        qDebug("DirectShowController::setQualityCapabilities --> Color Enable control supported.");
 
         getColorCaps()->setMinimum(min);
         getColorCaps()->setMaximum(max);
@@ -662,10 +662,10 @@ bool GrabberDirectShowController::setQualityCapabilities()
         }
     }
     else {
-        qDebug("GrabberDirectShowController::setQualityCapabilities --> Color Enable control not supported.");
+        qDebug("DirectShowController::setQualityCapabilities --> Color Enable control not supported.");
     }
 
-    qDebug("GrabberDirectShowController::setQualityCapabilities --> End");
+    qDebug("DirectShowController::setQualityCapabilities --> End");
 
     return true;
 }
@@ -677,7 +677,7 @@ bool GrabberDirectShowController::setQualityCapabilities()
  **************************************************************************
  **************************************************************************/
 
-int GrabberDirectShowController::getActiveResolution()
+int DirectShowController::getActiveResolution()
 {
 
 
@@ -708,7 +708,7 @@ int GrabberDirectShowController::getActiveResolution()
             }
         }
         else {
-            qDebug("GrabberDirectShowController::getActiveResolution --> ERROR: Unable to access IAMStreamConfig interface.");
+            qDebug("DirectShowController::getActiveResolution --> ERROR: Unable to access IAMStreamConfig interface.");
             return -1;
         }
     }
@@ -726,7 +726,7 @@ int GrabberDirectShowController::getActiveResolution()
             activeWidth = pVideoInfoHeader->bmiHeader.biWidth;
             activeHeight = pVideoInfoHeader->bmiHeader.biHeight;
 
-            qDebug() << "GrabberDirectShowController::getActiveResolution --> active Resolution: " << activeWidth << ":" << activeHeight;
+            qDebug() << "DirectShowController::getActiveResolution --> active Resolution: " << activeWidth << ":" << activeHeight;
 
             // addResolution(GrabberResolution(pinId, outputWidth, outputHeight, connected));
         }
@@ -739,7 +739,7 @@ int GrabberDirectShowController::getActiveResolution()
 }
 
 
-void GrabberDirectShowController::setActiveResolution(int ac)
+void DirectShowController::setActiveResolution(int ac)
 {
 
     /* ========================================================================
@@ -770,7 +770,7 @@ void GrabberDirectShowController::setActiveResolution(int ac)
             }
         }
         else {
-            qDebug("GrabberDirectShowController::setActiveResolution --> ERROR: Unable to access IAMStreamConfig interface.");
+            qDebug("DirectShowController::setActiveResolution --> ERROR: Unable to access IAMStreamConfig interface.");
             return;
         }
     }
@@ -815,7 +815,7 @@ void GrabberDirectShowController::setActiveResolution(int ac)
  *  Values range from –10,000 to 10,000.
  **************************************************************************/
 
-bool GrabberDirectShowController::getAutomaticBrightness()
+bool DirectShowController::getAutomaticBrightness()
 {
     HRESULT hr = S_OK;
     long flags = 0L;
@@ -824,7 +824,7 @@ bool GrabberDirectShowController::getAutomaticBrightness()
     hr = pQualityControl->Get(VideoProcAmp_Brightness, &bright_value, &flags);
     Sleep(1000);
     if (hr != S_OK) {
-        qDebug() << "GrabberDirectShowController::getAutomaticBrightness --> ERROR: Unable to get Brightness property value. (Error 0x" << hr << ")";
+        qDebug() << "DirectShowController::getAutomaticBrightness --> ERROR: Unable to get Brightness property value. (Error 0x" << hr << ")";
         return false;
     }
 
@@ -836,7 +836,7 @@ bool GrabberDirectShowController::getAutomaticBrightness()
 }
 
 
-void GrabberDirectShowController::setAutomaticBrightness(bool ab)
+void DirectShowController::setAutomaticBrightness(bool ab)
 {
     HRESULT hr = S_OK;
     long flags = 0L;
@@ -853,12 +853,12 @@ void GrabberDirectShowController::setAutomaticBrightness(bool ab)
     hr = pQualityControl->Set(VideoProcAmp_Brightness, bright_value, flags);
     Sleep(1000);
     if (hr != S_OK) {
-        qDebug() << "GrabberDirectShowController::setAutomaticBrightness --> ERROR: Unable to set Brightness property value to " << ab << ". (Error 0x" << hr << ")";
+        qDebug() << "DirectShowController::setAutomaticBrightness --> ERROR: Unable to set Brightness property value to " << ab << ". (Error 0x" << hr << ")";
     }
 }
 
 
-int GrabberDirectShowController::getBrightness()
+int DirectShowController::getBrightness()
 {
     HRESULT hr = S_OK;
     long flags = 0L;
@@ -867,7 +867,7 @@ int GrabberDirectShowController::getBrightness()
     hr = pQualityControl->Get(VideoProcAmp_Brightness, &bright_value, &flags);
     Sleep(1000);
     if (hr != S_OK) {
-        qDebug() << "GrabberDirectShowController::getBrightness --> ERROR: Unable to get Brightness property value. (Error 0x" << hr << ")";
+        qDebug() << "DirectShowController::getBrightness --> ERROR: Unable to get Brightness property value. (Error 0x" << hr << ")";
         return -1;
     }
 
@@ -875,7 +875,7 @@ int GrabberDirectShowController::getBrightness()
 }
 
 
-void GrabberDirectShowController::setBrightness(int b)
+void DirectShowController::setBrightness(int b)
 {
     HRESULT hr = S_OK;
     long flags = VideoProcAmp_Flags_Manual;
@@ -884,7 +884,7 @@ void GrabberDirectShowController::setBrightness(int b)
     hr = pQualityControl->Set(VideoProcAmp_Brightness, (long)bright_value, flags);
     Sleep(1000);
     if (hr != S_OK) {
-        qDebug() << "GrabberDirectShowController::setBrightness --> ERROR: Unable to set Brightness property value to " << bright_value << ". (Error 0x" << hr << ")";
+        qDebug() << "DirectShowController::setBrightness --> ERROR: Unable to set Brightness property value to " << bright_value << ". (Error 0x" << hr << ")";
     }
 }
 
@@ -895,7 +895,7 @@ void GrabberDirectShowController::setBrightness(int b)
  *  Values range from 0 to 10,000.
  **************************************************************************/
 
-bool GrabberDirectShowController::getAutomaticContrast()
+bool DirectShowController::getAutomaticContrast()
 {
     HRESULT hr = S_OK;
     long flags = 0L;
@@ -904,7 +904,7 @@ bool GrabberDirectShowController::getAutomaticContrast()
     hr = pQualityControl->Get(VideoProcAmp_Contrast, &contrast_value, &flags);
     Sleep(1000);
     if (hr != S_OK) {
-        qDebug() << "GrabberDirectShowController::getAutomaticContrast --> ERROR: Unable to get Contrast property value. (Error 0x" << hr << ")";
+        qDebug() << "DirectShowController::getAutomaticContrast --> ERROR: Unable to get Contrast property value. (Error 0x" << hr << ")";
         return false;
     }
 
@@ -916,7 +916,7 @@ bool GrabberDirectShowController::getAutomaticContrast()
 }
 
 
-void GrabberDirectShowController::setAutomaticContrast(bool ac)
+void DirectShowController::setAutomaticContrast(bool ac)
 {
     HRESULT hr = S_OK;
     long flags = 0L;
@@ -933,12 +933,12 @@ void GrabberDirectShowController::setAutomaticContrast(bool ac)
     hr = pQualityControl->Set(VideoProcAmp_Contrast, contrast_value, flags);
     Sleep(1000);
     if (hr != S_OK) {
-        qDebug() << "GrabberDirectShowController::setAutomaticContrast --> ERROR: Unable to set Contrast property value to " << ac << ". (Error 0x" << hr << ")";
+        qDebug() << "DirectShowController::setAutomaticContrast --> ERROR: Unable to set Contrast property value to " << ac << ". (Error 0x" << hr << ")";
     }
 }
 
 
-int GrabberDirectShowController::getContrast()
+int DirectShowController::getContrast()
 {
     HRESULT hr = S_OK;
     long flags = 0L;
@@ -947,7 +947,7 @@ int GrabberDirectShowController::getContrast()
     hr = pQualityControl->Get(VideoProcAmp_Contrast, &contrast_value, &flags);
     Sleep(1000);
     if (hr != S_OK) {
-        qDebug() << "GrabberDirectShowController::getContrast --> ERROR: Unable to get Contrast property value. (Error 0x" << hr << ")";
+        qDebug() << "DirectShowController::getContrast --> ERROR: Unable to get Contrast property value. (Error 0x" << hr << ")";
         return -1;
     }
 
@@ -955,7 +955,7 @@ int GrabberDirectShowController::getContrast()
 }
 
 
-void GrabberDirectShowController::setContrast(int c)
+void DirectShowController::setContrast(int c)
 {
     HRESULT hr = S_OK;
     long flags = VideoProcAmp_Flags_Manual;
@@ -964,7 +964,7 @@ void GrabberDirectShowController::setContrast(int c)
     hr = pQualityControl->Set(VideoProcAmp_Contrast, contrast_value, flags);
     Sleep(1000);
     if (hr != S_OK) {
-        qDebug() << "GrabberDirectShowController::setContrast --> ERROR: Unable to set Contrast property value to " << contrast_value << ". (Error 0x" << hr << ")";
+        qDebug() << "DirectShowController::setContrast --> ERROR: Unable to set Contrast property value to " << contrast_value << ". (Error 0x" << hr << ")";
     }
 }
 
@@ -975,7 +975,7 @@ void GrabberDirectShowController::setContrast(int c)
  *  Values range from 0 to 10,000.
  **************************************************************************/
 
-bool GrabberDirectShowController::getAutomaticSaturation()
+bool DirectShowController::getAutomaticSaturation()
 {
     HRESULT hr = S_OK;
     long flags = 0L;
@@ -984,7 +984,7 @@ bool GrabberDirectShowController::getAutomaticSaturation()
     hr = pQualityControl->Get(VideoProcAmp_Saturation, &saturation_value, &flags);
     Sleep(1000);
     if (hr != S_OK) {
-        qDebug() << "GrabberDirectShowController::getAutomaticSaturation --> ERROR: Unable to get Saturation property value. (Error 0x" << hr << ")";
+        qDebug() << "DirectShowController::getAutomaticSaturation --> ERROR: Unable to get Saturation property value. (Error 0x" << hr << ")";
         return false;
     }
 
@@ -996,7 +996,7 @@ bool GrabberDirectShowController::getAutomaticSaturation()
 }
 
 
-void GrabberDirectShowController::setAutomaticSaturation(bool as)
+void DirectShowController::setAutomaticSaturation(bool as)
 {
     HRESULT hr = S_OK;
     long flags = 0L;
@@ -1013,12 +1013,12 @@ void GrabberDirectShowController::setAutomaticSaturation(bool as)
     hr = pQualityControl->Set(VideoProcAmp_Saturation, saturation_value, flags);
     Sleep(1000);
     if (hr != S_OK) {
-        qDebug() << "GrabberDirectShowController::setAutomaticSaturation --> ERROR: Unable to set Saturation property value to " << as << ". (Error 0x" << hr << ")";
+        qDebug() << "DirectShowController::setAutomaticSaturation --> ERROR: Unable to set Saturation property value to " << as << ". (Error 0x" << hr << ")";
     }
 }
 
 
-int GrabberDirectShowController::getSaturation()
+int DirectShowController::getSaturation()
 {
     HRESULT hr = S_OK;
     long flags = 0L;
@@ -1027,7 +1027,7 @@ int GrabberDirectShowController::getSaturation()
     hr = pQualityControl->Get(VideoProcAmp_Saturation, &saturation_value, &flags);
     Sleep(1000);
     if (hr != S_OK) {
-        qDebug() << "GrabberDirectShowController::getSaturation --> ERROR: Unable to get Saturation property value. (Error 0x" << hr << ")";
+        qDebug() << "DirectShowController::getSaturation --> ERROR: Unable to get Saturation property value. (Error 0x" << hr << ")";
         return -1;
     }
 
@@ -1035,7 +1035,7 @@ int GrabberDirectShowController::getSaturation()
 }
 
 
-void GrabberDirectShowController::setSaturation(int s)
+void DirectShowController::setSaturation(int s)
 {
     HRESULT hr = S_OK;
     long flags = VideoProcAmp_Flags_Manual;
@@ -1044,7 +1044,7 @@ void GrabberDirectShowController::setSaturation(int s)
     hr = pQualityControl->Set(VideoProcAmp_Saturation, saturation_value, flags);
     Sleep(1000);
     if (hr != S_OK) {
-        qDebug() << "GrabberDirectShowController::setSaturation --> ERROR: Unable to set Saturation property value to " << saturation_value << ". (Error 0x" << hr << ")";
+        qDebug() << "DirectShowController::setSaturation --> ERROR: Unable to set Saturation property value to " << saturation_value << ". (Error 0x" << hr << ")";
     }
 }
 
@@ -1055,7 +1055,7 @@ void GrabberDirectShowController::setSaturation(int s)
  *  Values range from –180,000 to 180,000.
  **************************************************************************/
 
-bool GrabberDirectShowController::getAutomaticHue()
+bool DirectShowController::getAutomaticHue()
 {
     HRESULT hr = S_OK;
     long flags = 0L;
@@ -1064,7 +1064,7 @@ bool GrabberDirectShowController::getAutomaticHue()
     hr = pQualityControl->Get(VideoProcAmp_Hue, &hue_value, &flags);
     Sleep(1000);
     if (hr != S_OK) {
-        qDebug() << "GrabberDirectShowController::getAutomaticHue --> ERROR: Unable to get Hue property value. (Error 0x" << hr << ")";
+        qDebug() << "DirectShowController::getAutomaticHue --> ERROR: Unable to get Hue property value. (Error 0x" << hr << ")";
         return false;
     }
 
@@ -1076,7 +1076,7 @@ bool GrabberDirectShowController::getAutomaticHue()
 }
 
 
-void GrabberDirectShowController::setAutomaticHue(bool ah)
+void DirectShowController::setAutomaticHue(bool ah)
 {
     HRESULT hr = S_OK;
     long flags = 0L;
@@ -1093,12 +1093,12 @@ void GrabberDirectShowController::setAutomaticHue(bool ah)
     hr = pQualityControl->Set(VideoProcAmp_Hue, hue_value, flags);
     Sleep(1000);
     if (hr != S_OK) {
-        qDebug() << "GrabberDirectShowController::setAutomaticHue --> ERROR: Unable to set Hue property value to " << ah << ". (Error 0x" << hr << ")";
+        qDebug() << "DirectShowController::setAutomaticHue --> ERROR: Unable to set Hue property value to " << ah << ". (Error 0x" << hr << ")";
     }
 }
 
 
-int GrabberDirectShowController::getHue()
+int DirectShowController::getHue()
 {
     HRESULT hr = S_OK;
     long flags = 0L;
@@ -1107,7 +1107,7 @@ int GrabberDirectShowController::getHue()
     hr = pQualityControl->Get(VideoProcAmp_Hue, &hue_value, &flags);
     Sleep(1000);
     if (hr != S_OK) {
-        qDebug() << "GrabberDirectShowController::getHue --> ERROR: Unable to get Hue property value. (Error 0x" << hr << ")";
+        qDebug() << "DirectShowController::getHue --> ERROR: Unable to get Hue property value. (Error 0x" << hr << ")";
         return -1;
     }
 
@@ -1115,7 +1115,7 @@ int GrabberDirectShowController::getHue()
 }
 
 
-void GrabberDirectShowController::setHue(int h)
+void DirectShowController::setHue(int h)
 {
     HRESULT hr = S_OK;
     long flags = VideoProcAmp_Flags_Manual;
@@ -1124,7 +1124,7 @@ void GrabberDirectShowController::setHue(int h)
     hr = pQualityControl->Set(VideoProcAmp_Hue, hue_value, flags);
     Sleep(1000);
     if (hr != S_OK) {
-        qDebug() << "GrabberDirectShowController::setHue --> ERROR: Unable to set Hue property value to " << hue_value << ". (Error 0x" << hr << ")";
+        qDebug() << "DirectShowController::setHue --> ERROR: Unable to set Hue property value to " << hue_value << ". (Error 0x" << hr << ")";
     }
 }
 
@@ -1135,7 +1135,7 @@ void GrabberDirectShowController::setHue(int h)
  *  Values range from 1 to 500.
  **************************************************************************/
 
-bool GrabberDirectShowController::getAutomaticGamma()
+bool DirectShowController::getAutomaticGamma()
 {
     HRESULT hr = S_OK;
     long flags = 0L;
@@ -1144,7 +1144,7 @@ bool GrabberDirectShowController::getAutomaticGamma()
     hr = pQualityControl->Get(VideoProcAmp_Gamma, &gamma_value, &flags);
     Sleep(1000);
     if (hr != S_OK) {
-        qDebug() << "GrabberDirectShowController::getAutomaticGamma --> ERROR: Unable to get Gamma property value. (Error 0x" << hr << ")";
+        qDebug() << "DirectShowController::getAutomaticGamma --> ERROR: Unable to get Gamma property value. (Error 0x" << hr << ")";
         return false;
     }
 
@@ -1156,7 +1156,7 @@ bool GrabberDirectShowController::getAutomaticGamma()
 }
 
 
-void GrabberDirectShowController::setAutomaticGamma(bool ag)
+void DirectShowController::setAutomaticGamma(bool ag)
 {
     HRESULT hr = S_OK;
     long flags = 0L;
@@ -1173,12 +1173,12 @@ void GrabberDirectShowController::setAutomaticGamma(bool ag)
     hr = pQualityControl->Set(VideoProcAmp_Gamma, gamma_value, flags);
     Sleep(1000);
     if (hr != S_OK) {
-        qDebug() << "GrabberDirectShowController::setAutomaticGamma --> ERROR: Unable to set Gamma property value to " << ag << ". (Error 0x" << hr << ")";
+        qDebug() << "DirectShowController::setAutomaticGamma --> ERROR: Unable to set Gamma property value to " << ag << ". (Error 0x" << hr << ")";
     }
 }
 
 
-int GrabberDirectShowController::getGamma()
+int DirectShowController::getGamma()
 {
     HRESULT hr = S_OK;
     long flags = 0L;
@@ -1187,7 +1187,7 @@ int GrabberDirectShowController::getGamma()
     hr = pQualityControl->Get(VideoProcAmp_Gamma, &gamma_value, &flags);
     Sleep(1000);
     if (hr != S_OK) {
-        qDebug() << "GrabberDirectShowController::getGamma --> ERROR: Unable to get Gamma property value. (Error 0x" << hr << ")";
+        qDebug() << "DirectShowController::getGamma --> ERROR: Unable to get Gamma property value. (Error 0x" << hr << ")";
         return -1;
     }
 
@@ -1195,7 +1195,7 @@ int GrabberDirectShowController::getGamma()
 }
 
 
-void GrabberDirectShowController::setGamma(int g)
+void DirectShowController::setGamma(int g)
 {
     HRESULT hr = S_OK;
     long flags = VideoProcAmp_Flags_Manual;
@@ -1204,7 +1204,7 @@ void GrabberDirectShowController::setGamma(int g)
     hr = pQualityControl->Set(VideoProcAmp_Gamma, gamma_value, flags);
     Sleep(1000);
     if (hr != S_OK) {
-        qDebug() << "GrabberDirectShowController::setGamma --> ERROR: Unable to set Gamma property value to " << gamma_value << ". (Error 0x" << hr << ")";
+        qDebug() << "DirectShowController::setGamma --> ERROR: Unable to set Gamma property value to " << gamma_value << ". (Error 0x" << hr << ")";
     }
 }
 
@@ -1215,7 +1215,7 @@ void GrabberDirectShowController::setGamma(int g)
  *  Values range from 0 to 100.
  **************************************************************************/
 
-bool GrabberDirectShowController::getAutomaticSharpness()
+bool DirectShowController::getAutomaticSharpness()
 {
     HRESULT hr = S_OK;
     long flags = 0L;
@@ -1224,7 +1224,7 @@ bool GrabberDirectShowController::getAutomaticSharpness()
     hr = pQualityControl->Get(VideoProcAmp_Sharpness, &sharpness_value, &flags);
     Sleep(1000);
     if (hr != S_OK) {
-        qDebug() << "GrabberDirectShowController::getAutomaticSharpness --> ERROR: Unable to get Sharpness property value. (Error 0x" << hr << ")";
+        qDebug() << "DirectShowController::getAutomaticSharpness --> ERROR: Unable to get Sharpness property value. (Error 0x" << hr << ")";
         return false;
     }
 
@@ -1236,7 +1236,7 @@ bool GrabberDirectShowController::getAutomaticSharpness()
 }
 
 
-void GrabberDirectShowController::setAutomaticSharpness(bool as)
+void DirectShowController::setAutomaticSharpness(bool as)
 {
     HRESULT hr = S_OK;
     long flags = 0L;
@@ -1253,12 +1253,12 @@ void GrabberDirectShowController::setAutomaticSharpness(bool as)
     hr = pQualityControl->Set(VideoProcAmp_Sharpness, sharpness_value, flags);
     Sleep(1000);
     if (hr != S_OK) {
-        qDebug() << "GrabberDirectShowController::setAutomaticSharpness --> ERROR: Unable to set Sharpness property value to " << as << ". (Error 0x" << hr << ")";
+        qDebug() << "DirectShowController::setAutomaticSharpness --> ERROR: Unable to set Sharpness property value to " << as << ". (Error 0x" << hr << ")";
     }
 }
 
 
-int GrabberDirectShowController::getSharpness()
+int DirectShowController::getSharpness()
 {
     HRESULT hr = S_OK;
     long flags = 0L;
@@ -1267,7 +1267,7 @@ int GrabberDirectShowController::getSharpness()
     hr = pQualityControl->Get(VideoProcAmp_Sharpness, &sharpness_value, &flags);
     Sleep(1000);
     if (hr != S_OK) {
-        qDebug() << "GrabberDirectShowController::getSharpness --> ERROR: Unable to get Sharpness property value. (Error 0x" << hr << ")";
+        qDebug() << "DirectShowController::getSharpness --> ERROR: Unable to get Sharpness property value. (Error 0x" << hr << ")";
         return -1;
     }
 
@@ -1275,7 +1275,7 @@ int GrabberDirectShowController::getSharpness()
 }
 
 
-void GrabberDirectShowController::setSharpness(int s)
+void DirectShowController::setSharpness(int s)
 {
     HRESULT hr = S_OK;
     long flags = VideoProcAmp_Flags_Manual;
@@ -1284,7 +1284,7 @@ void GrabberDirectShowController::setSharpness(int s)
     hr = pQualityControl->Set(VideoProcAmp_Sharpness, sharpness_value, flags);
     Sleep(1000);
     if (hr != S_OK) {
-        qDebug() << "GrabberDirectShowController::setSharpness --> ERROR: Unable to set Sharpness property value to " << sharpness_value << ". (Error 0x" << hr << ")";
+        qDebug() << "DirectShowController::setSharpness --> ERROR: Unable to set Sharpness property value to " << sharpness_value << ". (Error 0x" << hr << ")";
     }
 }
 
@@ -1295,7 +1295,7 @@ void GrabberDirectShowController::setSharpness(int s)
  *  Possible values are 0 (off) and 1 (on).
  **************************************************************************/
 
-bool GrabberDirectShowController::getAutomaticBacklight()
+bool DirectShowController::getAutomaticBacklight()
 {
     HRESULT hr = S_OK;
     long flags = 0L;
@@ -1304,7 +1304,7 @@ bool GrabberDirectShowController::getAutomaticBacklight()
     hr = pQualityControl->Get(VideoProcAmp_BacklightCompensation, &backlight_value, &flags);
     Sleep(1000);
     if (hr != S_OK) {
-        qDebug() << "GrabberDirectShowController::getAutomaticBacklight --> ERROR: Unable to get BacklightCompensation property value. (Error 0x" << hr << ")";
+        qDebug() << "DirectShowController::getAutomaticBacklight --> ERROR: Unable to get BacklightCompensation property value. (Error 0x" << hr << ")";
         return false;
     }
 
@@ -1316,7 +1316,7 @@ bool GrabberDirectShowController::getAutomaticBacklight()
 }
 
 
-void GrabberDirectShowController::setAutomaticBacklight(bool ab)
+void DirectShowController::setAutomaticBacklight(bool ab)
 {
     HRESULT hr = S_OK;
     long flags = 0L;
@@ -1333,12 +1333,12 @@ void GrabberDirectShowController::setAutomaticBacklight(bool ab)
     hr = pQualityControl->Set(VideoProcAmp_BacklightCompensation, backlight_value, flags);
     Sleep(1000);
     if (hr != S_OK) {
-        qDebug() << "GrabberDirectShowController::setAutomaticBacklight --> ERROR: Unable to set BacklightCompensation property value to " << ab << ". (Error 0x" << hr << ")";
+        qDebug() << "DirectShowController::setAutomaticBacklight --> ERROR: Unable to set BacklightCompensation property value to " << ab << ". (Error 0x" << hr << ")";
     }
 }
 
 
-int GrabberDirectShowController::getBacklight()
+int DirectShowController::getBacklight()
 {
     HRESULT hr = S_OK;
     long flags = 0L;
@@ -1347,7 +1347,7 @@ int GrabberDirectShowController::getBacklight()
     hr = pQualityControl->Get(VideoProcAmp_BacklightCompensation, &backlight_value, &flags);
     Sleep(1000);
     if (hr != S_OK) {
-        qDebug() << "GrabberDirectShowController::getBacklight --> ERROR: Unable to get BacklightCompensation property value. (Error 0x" << hr << ")";
+        qDebug() << "DirectShowController::getBacklight --> ERROR: Unable to get BacklightCompensation property value. (Error 0x" << hr << ")";
         return -1;
     }
 
@@ -1355,7 +1355,7 @@ int GrabberDirectShowController::getBacklight()
 }
 
 
-void GrabberDirectShowController::setBacklight(int b)
+void DirectShowController::setBacklight(int b)
 {
     HRESULT hr = S_OK;
     long flags = VideoProcAmp_Flags_Manual;
@@ -1364,7 +1364,7 @@ void GrabberDirectShowController::setBacklight(int b)
     hr = pQualityControl->Set(VideoProcAmp_BacklightCompensation, backlight_value, flags);
     Sleep(1000);
     if (hr != S_OK) {
-        qDebug() << "GrabberDirectShowController::setBacklight --> ERROR: Unable to set BacklightCompensation property value to " << backlight_value << ". (Error 0x" << hr << ")";
+        qDebug() << "DirectShowController::setBacklight --> ERROR: Unable to set BacklightCompensation property value to " << backlight_value << ". (Error 0x" << hr << ")";
     }
 }
 
@@ -1375,7 +1375,7 @@ void GrabberDirectShowController::setBacklight(int b)
  *  The range of values depends on the device.
  **************************************************************************/
 
-bool GrabberDirectShowController::getAutomaticWhite()
+bool DirectShowController::getAutomaticWhite()
 {
     HRESULT hr = S_OK;
     long flags = 0L;
@@ -1384,7 +1384,7 @@ bool GrabberDirectShowController::getAutomaticWhite()
     hr = pQualityControl->Get(VideoProcAmp_WhiteBalance, &white_value, &flags);
     Sleep(1000);
     if (hr != S_OK) {
-        qDebug() << "GrabberDirectShowController::getAutomaticWhite --> ERROR: Unable to get WhiteBalance property value. (Error 0x" << hr << ")";
+        qDebug() << "DirectShowController::getAutomaticWhite --> ERROR: Unable to get WhiteBalance property value. (Error 0x" << hr << ")";
         return false;
     }
 
@@ -1396,7 +1396,7 @@ bool GrabberDirectShowController::getAutomaticWhite()
 }
 
 
-void GrabberDirectShowController::setAutomaticWhite(bool aw)
+void DirectShowController::setAutomaticWhite(bool aw)
 {
     HRESULT hr = S_OK;
     long flags = 0L;
@@ -1413,12 +1413,12 @@ void GrabberDirectShowController::setAutomaticWhite(bool aw)
     hr = pQualityControl->Set(VideoProcAmp_WhiteBalance, white_value, flags);
     Sleep(1000);
     if (hr != S_OK) {
-        qDebug() << "GrabberDirectShowController::setAutomaticWhite --> ERROR: Unable to set WhiteBalance property value to " << aw << ". (Error 0x" << hr << ")";
+        qDebug() << "DirectShowController::setAutomaticWhite --> ERROR: Unable to set WhiteBalance property value to " << aw << ". (Error 0x" << hr << ")";
     }
 }
 
 
-int GrabberDirectShowController::getWhite()
+int DirectShowController::getWhite()
 {
     HRESULT hr = S_OK;
     long flags = 0L;
@@ -1427,7 +1427,7 @@ int GrabberDirectShowController::getWhite()
     hr = pQualityControl->Get(VideoProcAmp_WhiteBalance, &white_value, &flags);
     Sleep(1000);
     if (hr != S_OK) {
-        qDebug() << "GrabberDirectShowController::getWhite --> ERROR: Unable to get WhiteBalance property value. (Error 0x" << hr << ")";
+        qDebug() << "DirectShowController::getWhite --> ERROR: Unable to get WhiteBalance property value. (Error 0x" << hr << ")";
         return -1;
     }
 
@@ -1435,7 +1435,7 @@ int GrabberDirectShowController::getWhite()
 }
 
 
-void GrabberDirectShowController::setWhite(int w)
+void DirectShowController::setWhite(int w)
 {
     HRESULT hr = S_OK;
     long flags = VideoProcAmp_Flags_Manual;
@@ -1444,7 +1444,7 @@ void GrabberDirectShowController::setWhite(int w)
     hr = pQualityControl->Set(VideoProcAmp_WhiteBalance, white_value, flags);
     Sleep(1000);
     if (hr != S_OK) {
-        qDebug() << "GrabberDirectShowController::setWhite --> ERROR: Unable to set WhiteBalance property value to " << white_value << ". (Error 0x" << hr << ")";
+        qDebug() << "DirectShowController::setWhite --> ERROR: Unable to set WhiteBalance property value to " << white_value << ". (Error 0x" << hr << ")";
     }
 }
 
@@ -1455,7 +1455,7 @@ void GrabberDirectShowController::setWhite(int w)
  *  The range of values depends on the device.
  **************************************************************************/
 
-bool GrabberDirectShowController::getAutomaticGain()
+bool DirectShowController::getAutomaticGain()
 {
     HRESULT hr = S_OK;
     long flags = 0L;
@@ -1464,7 +1464,7 @@ bool GrabberDirectShowController::getAutomaticGain()
     hr = pQualityControl->Get(VideoProcAmp_Gain, &gain_value, &flags);
     Sleep(1000);
     if (hr != S_OK) {
-        qDebug() << "GrabberDirectShowController::getAutomaticGain --> ERROR: Unable to get Gain property value. (Error 0x" << hr << ")";
+        qDebug() << "DirectShowController::getAutomaticGain --> ERROR: Unable to get Gain property value. (Error 0x" << hr << ")";
         return false;
     }
 
@@ -1476,7 +1476,7 @@ bool GrabberDirectShowController::getAutomaticGain()
 }
 
 
-void GrabberDirectShowController::setAutomaticGain(bool ag)
+void DirectShowController::setAutomaticGain(bool ag)
 {
     HRESULT hr = S_OK;
     long flags = 0L;
@@ -1493,12 +1493,12 @@ void GrabberDirectShowController::setAutomaticGain(bool ag)
     hr = pQualityControl->Set(VideoProcAmp_Gain, gain_value, flags);
     Sleep(1000);
     if (hr != S_OK) {
-        qDebug() << "GrabberDirectShowController::setAutomaticGain --> ERROR: Unable to set Gain property value to " << ag << ". (Error 0x" << hr << ")";
+        qDebug() << "DirectShowController::setAutomaticGain --> ERROR: Unable to set Gain property value to " << ag << ". (Error 0x" << hr << ")";
     }
 }
 
 
-int GrabberDirectShowController::getGain()
+int DirectShowController::getGain()
 {
     HRESULT hr = S_OK;
     long flags = 0L;
@@ -1507,7 +1507,7 @@ int GrabberDirectShowController::getGain()
     hr = pQualityControl->Get(VideoProcAmp_Gain, &gain_value, &flags);
     Sleep(1000);
     if (hr != S_OK) {
-        qDebug() << "GrabberDirectShowController::getGain --> ERROR: Unable to get Gain property value. (Error 0x" << hr << ")";
+        qDebug() << "DirectShowController::getGain --> ERROR: Unable to get Gain property value. (Error 0x" << hr << ")";
         return -1;
     }
 
@@ -1515,7 +1515,7 @@ int GrabberDirectShowController::getGain()
 }
 
 
-void GrabberDirectShowController::setGain(int g)
+void DirectShowController::setGain(int g)
 {
     HRESULT hr = S_OK;
     long flags = VideoProcAmp_Flags_Manual;
@@ -1524,7 +1524,7 @@ void GrabberDirectShowController::setGain(int g)
     hr = pQualityControl->Set(VideoProcAmp_Gain, gain_value, flags);
     Sleep(1000);
     if (hr != S_OK) {
-        qDebug() << "GrabberDirectShowController::setGain --> ERROR: Unable to set Gain property value to " << gain_value << ". (Error 0x" << hr << ")";
+        qDebug() << "DirectShowController::setGain --> ERROR: Unable to set Gain property value to " << gain_value << ". (Error 0x" << hr << ")";
     }
 }
 
@@ -1535,7 +1535,7 @@ void GrabberDirectShowController::setGain(int g)
  *  The possible values are 0 (off) and 1 (on).
  **************************************************************************/
 
-bool GrabberDirectShowController::getAutomaticColor()
+bool DirectShowController::getAutomaticColor()
 {
     HRESULT hr = S_OK;
     long flags = 0L;
@@ -1544,7 +1544,7 @@ bool GrabberDirectShowController::getAutomaticColor()
     hr = pQualityControl->Get(VideoProcAmp_ColorEnable, &color_value, &flags);
     Sleep(1000);
     if (hr != S_OK) {
-        qDebug() << "GrabberDirectShowController::getAutomaticColor --> ERROR: Unable to get ColorEnable property value. (Error 0x" << hr << ")";
+        qDebug() << "DirectShowController::getAutomaticColor --> ERROR: Unable to get ColorEnable property value. (Error 0x" << hr << ")";
         return false;
     }
 
@@ -1556,7 +1556,7 @@ bool GrabberDirectShowController::getAutomaticColor()
 }
 
 
-void GrabberDirectShowController::setAutomaticColor(bool ac)
+void DirectShowController::setAutomaticColor(bool ac)
 {
     HRESULT hr = S_OK;
     long flags = 0L;
@@ -1573,12 +1573,12 @@ void GrabberDirectShowController::setAutomaticColor(bool ac)
     hr = pQualityControl->Set(VideoProcAmp_ColorEnable, color_value, flags);
     Sleep(1000);
     if (hr != S_OK) {
-        qDebug() << "GrabberDirectShowController::setAutomaticColor --> ERROR: Unable to set ColorEnable property value to " << ac << ". (Error 0x" << hr << ")";
+        qDebug() << "DirectShowController::setAutomaticColor --> ERROR: Unable to set ColorEnable property value to " << ac << ". (Error 0x" << hr << ")";
     }
 }
 
 
-int GrabberDirectShowController::getColor()
+int DirectShowController::getColor()
 {
     HRESULT hr = S_OK;
     long flags = 0L;
@@ -1587,7 +1587,7 @@ int GrabberDirectShowController::getColor()
     hr = pQualityControl->Get(VideoProcAmp_ColorEnable, &color_value, &flags);
     Sleep(1000);
     if (hr != S_OK) {
-        qDebug() << "GrabberDirectShowController::getColor --> ERROR: Unable to get ColorEnable property value. (Error 0x" << hr << ")";
+        qDebug() << "DirectShowController::getColor --> ERROR: Unable to get ColorEnable property value. (Error 0x" << hr << ")";
         return -1;
     }
 
@@ -1595,7 +1595,7 @@ int GrabberDirectShowController::getColor()
 }
 
 
-void GrabberDirectShowController::setColor(int c)
+void DirectShowController::setColor(int c)
 {
     HRESULT hr = S_OK;
     long flags = VideoProcAmp_Flags_Manual;
@@ -1604,7 +1604,7 @@ void GrabberDirectShowController::setColor(int c)
     hr = pQualityControl->Set(VideoProcAmp_ColorEnable, color_value, flags);
     Sleep(1000);
     if (hr != S_OK) {
-        qDebug() << "GrabberDirectShowController::setColor --> ERROR: Unable to set ColorEnable property value to " << color_value << ". (Error 0x" << hr << ")";
+        qDebug() << "DirectShowController::setColor --> ERROR: Unable to set ColorEnable property value to " << color_value << ". (Error 0x" << hr << ")";
     }
 }
 
@@ -1621,7 +1621,7 @@ void GrabberDirectShowController::setColor(int c)
  *  The value range from -x to +y, for example: -3 = 1/8s, -2 = 1/4s, -1 = 1/2s, 0 = 1s, 1 = 2s, 2 = 4s, ...
  **************************************************************************/
 
-bool GrabberDirectShowController::getAutomaticExposure()
+bool DirectShowController::getAutomaticExposure()
 {
     HRESULT hr = S_OK;
     long flags = 0L;
@@ -1630,7 +1630,7 @@ bool GrabberDirectShowController::getAutomaticExposure()
     hr = pCameraControl->Get(CameraControl_Exposure, &exposure_value, &flags);
     Sleep(1000);
     if (hr != S_OK) {
-        qDebug() << "GrabberDirectShowController::getAutomaticExposure --> ERROR: Unable to get Exposure property value. (Error 0x" << hr << ")";
+        qDebug() << "DirectShowController::getAutomaticExposure --> ERROR: Unable to get Exposure property value. (Error 0x" << hr << ")";
         return false;
     }
 
@@ -1642,7 +1642,7 @@ bool GrabberDirectShowController::getAutomaticExposure()
 }
 
 
-void GrabberDirectShowController::setAutomaticExposure(bool ae)
+void DirectShowController::setAutomaticExposure(bool ae)
 {
     HRESULT hr = S_OK;
     long flags = 0L;
@@ -1659,12 +1659,12 @@ void GrabberDirectShowController::setAutomaticExposure(bool ae)
     hr = pCameraControl->Set(CameraControl_Exposure, exposure_value, flags);
     Sleep(1000);
     if (hr != S_OK) {
-        qDebug() << "GrabberDirectShowController::setAutomaticExposure --> ERROR: Unable to set Exposure property value to " << ae << ". (Error 0x" << hr << ")";
+        qDebug() << "DirectShowController::setAutomaticExposure --> ERROR: Unable to set Exposure property value to " << ae << ". (Error 0x" << hr << ")";
     }
 }
 
 
-int GrabberDirectShowController::getExposure()
+int DirectShowController::getExposure()
 {
     HRESULT hr = S_OK;
     long flags = 0L;
@@ -1673,7 +1673,7 @@ int GrabberDirectShowController::getExposure()
     hr = pCameraControl->Get(CameraControl_Exposure, &exposure_value, &flags);
     Sleep(1000);
     if (hr != S_OK) {
-        qDebug() << "GrabberDirectShowController::getExposure --> ERROR: Unable to get Exposure property value. (Error 0x" << hr << ")";
+        qDebug() << "DirectShowController::getExposure --> ERROR: Unable to get Exposure property value. (Error 0x" << hr << ")";
         return -1;
     }
 
@@ -1681,7 +1681,7 @@ int GrabberDirectShowController::getExposure()
 }
 
 
-void GrabberDirectShowController::setExposure(int e)
+void DirectShowController::setExposure(int e)
 {
     HRESULT hr = 0;
     long flags = CameraControl_Flags_Manual;
@@ -1690,7 +1690,7 @@ void GrabberDirectShowController::setExposure(int e)
     hr = pCameraControl->Set(CameraControl_Exposure, exposure_value, flags);
     Sleep(1000);
     if (hr != S_OK) {
-        qDebug() << "GrabberDirectShowController::setExposure --> ERROR: Unable to set Exposure property value to " << exposure_value << ". (Error 0x" << hr << ")";
+        qDebug() << "DirectShowController::setExposure --> ERROR: Unable to set Exposure property value to " << exposure_value << ". (Error 0x" << hr << ")";
     }
 }
 
@@ -1701,7 +1701,7 @@ void GrabberDirectShowController::setExposure(int e)
  *  The value range from 10 to 600, and the default is spezific to the device.
  **************************************************************************/
 
-bool GrabberDirectShowController::getAutomaticZoom()
+bool DirectShowController::getAutomaticZoom()
 {
     HRESULT hr = S_OK;
     long flags = 0L;
@@ -1710,7 +1710,7 @@ bool GrabberDirectShowController::getAutomaticZoom()
     hr = pCameraControl->Get(CameraControl_Zoom, &zoom_value, &flags);
     Sleep(1000);
     if (hr != S_OK) {
-        qDebug() << "GrabberDirectShowController::getAutomaticZoom --> ERROR: Unable to get Zoom property value. (Error 0x" << hr << ")";
+        qDebug() << "DirectShowController::getAutomaticZoom --> ERROR: Unable to get Zoom property value. (Error 0x" << hr << ")";
         return false;
     }
 
@@ -1722,7 +1722,7 @@ bool GrabberDirectShowController::getAutomaticZoom()
 }
 
 
-void GrabberDirectShowController::setAutomaticZoom(bool az)
+void DirectShowController::setAutomaticZoom(bool az)
 {
     HRESULT hr = S_OK;
     long flags = 0L;
@@ -1739,11 +1739,11 @@ void GrabberDirectShowController::setAutomaticZoom(bool az)
     hr = pCameraControl->Set(CameraControl_Zoom, zoom_value, flags);
     Sleep(1000);
     if (hr != S_OK) {
-        qDebug() << "GrabberDirectShowController::setAutomaticZoom --> ERROR: Unable to set Zoom property value to " << az << ". (Error 0x" << hr << ")";
+        qDebug() << "DirectShowController::setAutomaticZoom --> ERROR: Unable to set Zoom property value to " << az << ". (Error 0x" << hr << ")";
     }
 }
 
-int GrabberDirectShowController::getZoom()
+int DirectShowController::getZoom()
 {
     HRESULT hr = S_OK;
     long flags = 0;
@@ -1752,7 +1752,7 @@ int GrabberDirectShowController::getZoom()
     hr = pCameraControl->Get(CameraControl_Zoom, &zoom_value, &flags);
     Sleep(1000);
     if (hr != S_OK) {
-        qDebug() << "GrabberDirectShowController::getZoom --> ERROR: Unable to get Zoom property value. (Error 0x" << hr << ")";
+        qDebug() << "DirectShowController::getZoom --> ERROR: Unable to get Zoom property value. (Error 0x" << hr << ")";
         return -1;
     }
 
@@ -1760,7 +1760,7 @@ int GrabberDirectShowController::getZoom()
 }
 
 
-void GrabberDirectShowController::setZoom(int z)
+void DirectShowController::setZoom(int z)
 {
     HRESULT hr = S_OK;
     long flags = CameraControl_Flags_Manual;
@@ -1769,7 +1769,7 @@ void GrabberDirectShowController::setZoom(int z)
     hr = pCameraControl->Set(CameraControl_Zoom, zoom_value, flags);
     Sleep(1000);
     if (hr != S_OK) {
-        qDebug() << "GrabberDirectShowController::setZoom --> ERROR: Unable to set Zoom property value to " << zoom_value << ". (Error 0x" << hr << ")";
+        qDebug() << "DirectShowController::setZoom --> ERROR: Unable to set Zoom property value to " << zoom_value << ". (Error 0x" << hr << ")";
     }
 }
 
@@ -1780,7 +1780,7 @@ void GrabberDirectShowController::setZoom(int z)
  *  The range and default value are spezific to the device.
  **************************************************************************/
 
-bool GrabberDirectShowController::getAutomaticFocus()
+bool DirectShowController::getAutomaticFocus()
 {
     HRESULT hr = S_OK;
     long flags = 0L;
@@ -1789,7 +1789,7 @@ bool GrabberDirectShowController::getAutomaticFocus()
     hr = pCameraControl->Get(CameraControl_Focus, &focus_value, &flags);
     Sleep(1000);
     if (hr != S_OK) {
-        qDebug() << "GrabberDirectShowController::getAutomaticFocus --> ERROR: Unable to get Focus property value. (Error 0x" << hr << ")";
+        qDebug() << "DirectShowController::getAutomaticFocus --> ERROR: Unable to get Focus property value. (Error 0x" << hr << ")";
         return false;
     }
 
@@ -1801,7 +1801,7 @@ bool GrabberDirectShowController::getAutomaticFocus()
 }
 
 
-void GrabberDirectShowController::setAutomaticFocus(bool af)
+void DirectShowController::setAutomaticFocus(bool af)
 {
     HRESULT hr = S_OK;
     long flags = 0L;
@@ -1818,11 +1818,11 @@ void GrabberDirectShowController::setAutomaticFocus(bool af)
     hr = pCameraControl->Set(CameraControl_Focus, focus_value, flags);
     Sleep(1000);
     if (hr != S_OK) {
-        qDebug() << "GrabberDirectShowController::setAutomaticFocus --> ERROR: Unable to set Focus property value to " << af << ". (Error 0x" << hr << ")";
+        qDebug() << "DirectShowController::setAutomaticFocus --> ERROR: Unable to set Focus property value to " << af << ". (Error 0x" << hr << ")";
     }
 }
 
-int GrabberDirectShowController::getFocus()
+int DirectShowController::getFocus()
 {
     HRESULT hr = S_OK;
     long flags = 0L;
@@ -1831,7 +1831,7 @@ int GrabberDirectShowController::getFocus()
     hr = pCameraControl->Get(CameraControl_Focus, &focus_value, &flags);
     Sleep(1000);
     if (hr != S_OK) {
-        qDebug() << "GrabberDirectShowController::getFocus --> ERROR: Unable to get Focus property value. (Error 0x" << hr << ")";
+        qDebug() << "DirectShowController::getFocus --> ERROR: Unable to get Focus property value. (Error 0x" << hr << ")";
         return -1;
     }
 
@@ -1839,7 +1839,7 @@ int GrabberDirectShowController::getFocus()
 }
 
 
-void GrabberDirectShowController::setFocus(int f)
+void DirectShowController::setFocus(int f)
 {
     HRESULT hr = S_OK;
     long flags = CameraControl_Flags_Manual;
@@ -1848,7 +1848,7 @@ void GrabberDirectShowController::setFocus(int f)
     hr = pCameraControl->Set(CameraControl_Focus, focus_value, flags);
     Sleep(1000);
     if (hr != S_OK) {
-        qDebug() << "GrabberDirectShowController::setFocus --> ERROR: Unable to set Focus property value to " << focus_value << ". (Error 0x" << hr << ")";
+        qDebug() << "DirectShowController::setFocus --> ERROR: Unable to set Focus property value to " << focus_value << ". (Error 0x" << hr << ")";
     }
 }
 
@@ -1859,7 +1859,7 @@ void GrabberDirectShowController::setFocus(int f)
  *  The value range from -180 to +180, and the default is zero.
  **************************************************************************/
 
-bool GrabberDirectShowController::getAutomaticPan()
+bool DirectShowController::getAutomaticPan()
 {
     HRESULT hr = S_OK;
     long flags = 0L;
@@ -1868,7 +1868,7 @@ bool GrabberDirectShowController::getAutomaticPan()
     hr = pCameraControl->Get(CameraControl_Pan, &pan_value, &flags);
     Sleep(1000);
     if (hr != S_OK) {
-        qDebug() << "GrabberDirectShowController::getAutomaticPan --> ERROR: Unable to get Pan property value. (Error 0x" << hr << ")";
+        qDebug() << "DirectShowController::getAutomaticPan --> ERROR: Unable to get Pan property value. (Error 0x" << hr << ")";
         return false;
     }
 
@@ -1880,7 +1880,7 @@ bool GrabberDirectShowController::getAutomaticPan()
 }
 
 
-void GrabberDirectShowController::setAutomaticPan(bool ap)
+void DirectShowController::setAutomaticPan(bool ap)
 {
     HRESULT hr = S_OK;
     long flags = 0L;
@@ -1897,12 +1897,12 @@ void GrabberDirectShowController::setAutomaticPan(bool ap)
     hr = pCameraControl->Set(CameraControl_Pan, pan_value, flags);
     Sleep(1000);
     if (hr != S_OK) {
-        qDebug() << "GrabberDirectShowController::setAutomaticPan --> ERROR: Unable to set Pan property value to " << ap << ". (Error 0x" << hr << ")";
+        qDebug() << "DirectShowController::setAutomaticPan --> ERROR: Unable to set Pan property value to " << ap << ". (Error 0x" << hr << ")";
     }
 }
 
 
-int GrabberDirectShowController::getPan()
+int DirectShowController::getPan()
 {
     HRESULT hr = S_OK;
     long flags = 0L;
@@ -1911,7 +1911,7 @@ int GrabberDirectShowController::getPan()
     hr = pCameraControl->Get(CameraControl_Pan, &pan_value, &flags);
     Sleep(1000);
     if (hr != S_OK) {
-        qDebug() << "GrabberDirectShowController::getPan --> ERROR: Unable to get Pan property value. (Error 0x" << hr << ")";
+        qDebug() << "DirectShowController::getPan --> ERROR: Unable to get Pan property value. (Error 0x" << hr << ")";
         return -1;
     }
 
@@ -1919,7 +1919,7 @@ int GrabberDirectShowController::getPan()
 }
 
 
-void GrabberDirectShowController::setPan(int p)
+void DirectShowController::setPan(int p)
 {
     HRESULT hr = S_OK;
     long flags = CameraControl_Flags_Manual;
@@ -1928,7 +1928,7 @@ void GrabberDirectShowController::setPan(int p)
     hr = pCameraControl->Set(CameraControl_Pan, pan_value, flags);
     Sleep(1000);
     if (hr != S_OK) {
-        qDebug() << "GrabberDirectShowController::setPan --> ERROR: Unable to set Pan property value to " << pan_value << ". (Error 0x" << hr << ")";
+        qDebug() << "DirectShowController::setPan --> ERROR: Unable to set Pan property value to " << pan_value << ". (Error 0x" << hr << ")";
     }
 }
 
@@ -1939,7 +1939,7 @@ void GrabberDirectShowController::setPan(int p)
  *  The value range from -180 to +180, and the default is zero.
  **************************************************************************/
 
-bool GrabberDirectShowController::getAutomaticTilt()
+bool DirectShowController::getAutomaticTilt()
 {
     HRESULT hr = S_OK;
     long flags = 0L;
@@ -1948,7 +1948,7 @@ bool GrabberDirectShowController::getAutomaticTilt()
     hr = pCameraControl->Get(CameraControl_Tilt, &tilt_value, &flags);
     Sleep(1000);
     if (hr != S_OK) {
-        qDebug() << "GrabberDirectShowController::getAutomaticTilt --> ERROR: Unable to get Tilt property value. (Error 0x" << hr << ")";
+        qDebug() << "DirectShowController::getAutomaticTilt --> ERROR: Unable to get Tilt property value. (Error 0x" << hr << ")";
         return false;
     }
 
@@ -1960,7 +1960,7 @@ bool GrabberDirectShowController::getAutomaticTilt()
 }
 
 
-void GrabberDirectShowController::setAutomaticTilt(bool at)
+void DirectShowController::setAutomaticTilt(bool at)
 {
     HRESULT hr = S_OK;
     long flags = 0L;
@@ -1977,12 +1977,12 @@ void GrabberDirectShowController::setAutomaticTilt(bool at)
     hr = pCameraControl->Set(CameraControl_Tilt, tilt_value, flags);
     Sleep(1000);
     if (hr != S_OK) {
-        qDebug() << "GrabberDirectShowController::setAutomaticTilt --> ERROR: Unable to set Tilt property value to " << at << ". (Error 0x" << hr << ")";
+        qDebug() << "DirectShowController::setAutomaticTilt --> ERROR: Unable to set Tilt property value to " << at << ". (Error 0x" << hr << ")";
     }
 }
 
 
-int GrabberDirectShowController::getTilt()
+int DirectShowController::getTilt()
 {
     HRESULT hr = S_OK;
     long flags = 0L;
@@ -1991,7 +1991,7 @@ int GrabberDirectShowController::getTilt()
     hr = pCameraControl->Get(CameraControl_Tilt, &tilt_value, &flags);
     Sleep(1000);
     if (hr != S_OK) {
-        qDebug() << "GrabberDirectShowController::getTilt --> ERROR: Unable to get Tilt property value. (Error 0x" << hr << ")";
+        qDebug() << "DirectShowController::getTilt --> ERROR: Unable to get Tilt property value. (Error 0x" << hr << ")";
         return -1;
     }
 
@@ -1999,7 +1999,7 @@ int GrabberDirectShowController::getTilt()
 }
 
 
-void GrabberDirectShowController::setTilt(int t)
+void DirectShowController::setTilt(int t)
 {
     HRESULT hr = S_OK;
     long flags = CameraControl_Flags_Manual;
@@ -2008,7 +2008,7 @@ void GrabberDirectShowController::setTilt(int t)
     hr = pCameraControl->Set(CameraControl_Tilt, tilt_value, flags);
     Sleep(1000);
     if (hr != S_OK) {
-        qDebug() << "GrabberDirectShowController::setTilt --> ERROR: Unable to set Zoom property value to " << tilt_value << ". (Error 0x" << hr << ")";
+        qDebug() << "DirectShowController::setTilt --> ERROR: Unable to set Zoom property value to " << tilt_value << ". (Error 0x" << hr << ")";
     }
 }
 /**************************************************************************
@@ -2018,7 +2018,7 @@ void GrabberDirectShowController::setTilt(int t)
  *  The value range in units of fstop * 10.
  **************************************************************************/
 
-bool GrabberDirectShowController::getAutomaticIris()
+bool DirectShowController::getAutomaticIris()
 {
     HRESULT hr = S_OK;
     long flags = 0L;
@@ -2027,7 +2027,7 @@ bool GrabberDirectShowController::getAutomaticIris()
     hr = pCameraControl->Get(CameraControl_Iris, &iris_value, &flags);
     Sleep(1000);
     if (hr != S_OK) {
-        qDebug() << "GrabberDirectShowController::getAutomaticIris --> ERROR: Unable to get Iris property value. (Error 0x" << hr << ")";
+        qDebug() << "DirectShowController::getAutomaticIris --> ERROR: Unable to get Iris property value. (Error 0x" << hr << ")";
         return false;
     }
 
@@ -2039,7 +2039,7 @@ bool GrabberDirectShowController::getAutomaticIris()
 }
 
 
-void GrabberDirectShowController::setAutomaticIris(bool ai)
+void DirectShowController::setAutomaticIris(bool ai)
 {
     HRESULT hr = S_OK;
     long flags = 0L;
@@ -2056,12 +2056,12 @@ void GrabberDirectShowController::setAutomaticIris(bool ai)
     hr = pCameraControl->Set(CameraControl_Iris, iris_value, flags);
     Sleep(1000);
     if (hr != S_OK) {
-        qDebug() << "GrabberDirectShowController::setAutomaticIris --> ERROR: Unable to set Iris property value to " << ai << ". (Error 0x" << hr << ")";
+        qDebug() << "DirectShowController::setAutomaticIris --> ERROR: Unable to set Iris property value to " << ai << ". (Error 0x" << hr << ")";
     }
 }
 
 
-int GrabberDirectShowController::getIris()
+int DirectShowController::getIris()
 {
     HRESULT hr = S_OK;
     long flags = 0L;
@@ -2070,7 +2070,7 @@ int GrabberDirectShowController::getIris()
     hr = pCameraControl->Get(CameraControl_Iris, &iris_value, &flags);
     Sleep(1000);
     if (hr != S_OK) {
-        qDebug() << "GrabberDirectShowController::getIris --> ERROR: Unable to get Iris property value. (Error 0x" << hr << ")";
+        qDebug() << "DirectShowController::getIris --> ERROR: Unable to get Iris property value. (Error 0x" << hr << ")";
         return -1;
     }
 
@@ -2078,7 +2078,7 @@ int GrabberDirectShowController::getIris()
 }
 
 
-void GrabberDirectShowController::setIris(int i)
+void DirectShowController::setIris(int i)
 {
     HRESULT hr = S_OK;
     long flags = CameraControl_Flags_Manual;
@@ -2087,7 +2087,7 @@ void GrabberDirectShowController::setIris(int i)
     hr = pCameraControl->Set(CameraControl_Iris, (long)iris_value, flags);
     Sleep(1000);
     if (hr != S_OK) {
-        qDebug() << "GrabberDirectShowController::setIris --> ERROR: Unable to set Iris property value to " << iris_value << ". (Error 0x" << hr << ")";
+        qDebug() << "DirectShowController::setIris --> ERROR: Unable to set Iris property value to " << iris_value << ". (Error 0x" << hr << ")";
     }
 }
 
@@ -2098,7 +2098,7 @@ void GrabberDirectShowController::setIris(int i)
  *  The value range from -180 to +180, and the default is zero.
  **************************************************************************/
 
-bool GrabberDirectShowController::getAutomaticRoll()
+bool DirectShowController::getAutomaticRoll()
 {
     HRESULT hr = S_OK;
     long flags = 0L;
@@ -2107,7 +2107,7 @@ bool GrabberDirectShowController::getAutomaticRoll()
     hr = pCameraControl->Get(CameraControl_Roll, &roll_value, &flags);
     Sleep(1000);
     if (hr != S_OK) {
-        qDebug() << "GrabberDirectShowController::getAutomaticRoll --> ERROR: Unable to get Roll property value. (Error 0x" << hr << ")";
+        qDebug() << "DirectShowController::getAutomaticRoll --> ERROR: Unable to get Roll property value. (Error 0x" << hr << ")";
         return false;
     }
 
@@ -2119,7 +2119,7 @@ bool GrabberDirectShowController::getAutomaticRoll()
 }
 
 
-void GrabberDirectShowController::setAutomaticRoll(bool ar)
+void DirectShowController::setAutomaticRoll(bool ar)
 {
     HRESULT hr = S_OK;
     long flags = 0L;
@@ -2136,12 +2136,12 @@ void GrabberDirectShowController::setAutomaticRoll(bool ar)
     hr = pCameraControl->Set(CameraControl_Roll, roll_value, flags);
     Sleep(1000);
     if (hr != S_OK) {
-        qDebug() << "GrabberDirectShowController::setAutomaticRoll --> ERROR: Unable to set Roll property value to " << ar << ". (Error 0x" << hr << ")";
+        qDebug() << "DirectShowController::setAutomaticRoll --> ERROR: Unable to set Roll property value to " << ar << ". (Error 0x" << hr << ")";
     }
 }
 
 
-int GrabberDirectShowController::getRoll()
+int DirectShowController::getRoll()
 {
     HRESULT hr = S_OK;
     long flags = 0L;
@@ -2150,7 +2150,7 @@ int GrabberDirectShowController::getRoll()
     hr = pCameraControl->Get(CameraControl_Roll, &roll_value, &flags);
     Sleep(1000);
     if (hr != S_OK) {
-        qDebug() << "GrabberDirectShowController::getRoll --> ERROR: Unable to get Roll property value. (Error 0x" << hr << ")";
+        qDebug() << "DirectShowController::getRoll --> ERROR: Unable to get Roll property value. (Error 0x" << hr << ")";
         return -1;
     }
 
@@ -2158,7 +2158,7 @@ int GrabberDirectShowController::getRoll()
 }
 
 
-void GrabberDirectShowController::setRoll(int r)
+void DirectShowController::setRoll(int r)
 {
     HRESULT hr = S_OK;
     long flags = CameraControl_Flags_Manual;
@@ -2167,6 +2167,6 @@ void GrabberDirectShowController::setRoll(int r)
     hr = pCameraControl->Set(CameraControl_Roll, roll_value, flags);
     Sleep(1000);
     if (hr != S_OK) {
-        qDebug() << "GrabberDirectShowController::setRoll --> ERROR: Unable to set Roll property value to " << roll_value << ". (Error 0x" << hr << ")";
+        qDebug() << "DirectShowController::setRoll --> ERROR: Unable to set Roll property value to " << roll_value << ". (Error 0x" << hr << ")";
     }
 }

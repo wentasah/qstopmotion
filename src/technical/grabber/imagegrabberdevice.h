@@ -43,23 +43,30 @@ public:
      * All possible video sources.
      */
     enum imageGrabberVideoSources {
-        testSource,                    // 0
-        video4LinuxSource,             // 1
-        ieee1394Source,                // 2
-        directShowUsbSource,           // 3
-        directShow1394Source,          // 4
-        gphoto2Source,                 // 5
+        noSource,                      // 0
+        testSource,                    // 1
+        video4LinuxSource,             // 2
+        ieee1394Source,                // 3
+        directShowUsbSource,           // 4
+        directShow1394Source,          // 5
+        gphoto2Source,                 // 6
+        mediaFoundationSource          // 7
     };
 
     /**
      * Video device capabilities
      */
     enum imageGrabberDeviceCapabilities {
-        video_x_none,
-        video_x_raw_rgb,
-        video_x_raw_yuv,
-        video_x_dv
+        video_x_none,                  // 0
+        video_x_raw_rgb,               // 1
+        video_x_raw_yuv,               // 2
+        video_x_dv                     // 3
     };
+
+    /**
+     * Default constructor of the object.
+     */
+    ImageGrabberDevice();
 
     /**
      * Constructs and initializes the object.
@@ -85,10 +92,22 @@ public:
     const QString getDeviceId();
 
     /**
+     * Set the id of the device.
+     * @param id The new id of the device.
+     */
+    void setDeviceId(const QString id);
+
+    /**
      * Get the name of the device.
      * @return The name of the device.
      */
     const QString getDeviceName();
+
+    /**
+     * Set the name of the device.
+     * @param name The new name of the device.
+     */
+    void setDeviceName(const QString name);
 
     /**
      * Get the source of the device.
@@ -97,10 +116,22 @@ public:
     imageGrabberVideoSources getDeviceSource();
 
     /**
+     * Set the source of the device.
+     * @param source The new source of the device.
+     */
+    void setDeviceSource(imageGrabberVideoSources source);
+
+    /**
      * Get the capability of the device.
      * @return The capability of the device.
      */
     imageGrabberDeviceCapabilities getDeviceCapability();
+
+    /**
+     * Set the capability of the device.
+     * @param cap The new capability of the device.
+     */
+    void setDeviceCapability(imageGrabberDeviceCapabilities cap);
 
     /**
      * Has the grabber a controller interface?

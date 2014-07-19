@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2012-2013 by                                                *
+ *  Copyright (C) 2012-2014 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -18,10 +18,11 @@
  *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                 *
  ******************************************************************************/
 
-#ifndef GRABBERV4L2CONTROLLER_H
-#define GRABBERV4L2CONTROLLER_H
+#ifndef GPHOTO_GPCONTROLLER_H
+#define GPHOTO_GPCONTROLLER_H
 
-#include <linux/videodev2.h>
+// Include files of the gphoto library
+#include <gphoto2/gphoto2.h>
 
 #include "technical/grabber/grabbercontroller.h"
 
@@ -34,7 +35,7 @@
  *
  * @author Ralf Lange
  */
-class GrabberV4L2Controller : public GrabberController
+class GphotoController : public GrabberController
 {
 public:
 
@@ -44,12 +45,12 @@ public:
      * Constructs and initializes the object.
      * @param caps The grabber controller capabilities.
      */
-    GrabberV4L2Controller(int caps);
+    GphotoController(int caps);
 
     /**
      * Destructor
      */
-    ~GrabberV4L2Controller();
+    ~GphotoController();
 
     /**
      * Initialize the grabber controller.
@@ -84,13 +85,13 @@ public:
      * Get the current brightness value of the device.
      * @return The current brightness value.
      */
-    int getBrightness();
+    // int getBrightness();
 
     /**
      * Set the brightness value of the device.
      * @param b The new brightness value
      */
-    void setBrightness(int b);
+    // void setBrightness(int b);
 
     /**************************************************************************
      * Contrast
@@ -112,13 +113,13 @@ public:
      * Get the current contrast value of the device.
      * @return The current contrast value.
      */
-    int getContrast();
+    // int getContrast();
 
     /**
      * Set the contrast value of the device.
      * @param c The new contrast value
      */
-    void setContrast(int c);
+    // void setContrast(int c);
 
     /**************************************************************************
      * Saturation
@@ -140,13 +141,13 @@ public:
      * Get the current saturation value of the device.
      * @return The current saturation value.
      */
-    int getSaturation();
+    // int getSaturation();
 
     /**
      * Set the saturation value of the device.
      * @param s The new saturation value
      */
-    void setSaturation(int s);
+    // void setSaturation(int s);
 
     /**************************************************************************
      * Hue
@@ -168,13 +169,13 @@ public:
      * Get the current hue value of the device.
      * @return The current hue value.
      */
-    int getHue();
+    // int getHue();
 
     /**
      * Set the hue value of the device.
      * @param h The new hue value
      */
-    void setHue(int h);
+    // void setHue(int h);
 
     /**************************************************************************
      * Gamma
@@ -196,13 +197,13 @@ public:
      * Get the current gamma value of the device.
      * @return The current gamma value.
      */
-    int getGamma();
+    // int getGamma();
 
     /**
      * Set the gamma value of the device.
      * @param g The new gamma value
      */
-    void setGamma(int g);
+    // void setGamma(int g);
 
     /**************************************************************************
      * Sharpness
@@ -224,13 +225,13 @@ public:
      * Get the current sharpness value of the device.
      * @return The current sharpness value.
      */
-    int getSharpness();
+    // int getSharpness();
 
     /**
      * Set the sharpness value of the device.
      * @param s The new sharpness value
      */
-    void setSharpness(int s);
+    // void setSharpness(int s);
 
     /**************************************************************************
      * Backlight Compensation
@@ -252,13 +253,13 @@ public:
      * Get the current backlight compensation value of the device.
      * @return The current backlight compensation value.
      */
-    int getBacklight();
+    // int getBacklight();
 
     /**
      * Set the backlight compensation value of the device.
      * @param b The new backlight compensation value
      */
-    void setBacklight(int b);
+    // void setBacklight(int b);
 
     /**************************************************************************
      * White Balance
@@ -280,13 +281,13 @@ public:
      * Get the current white balance value of the device.
      * @return The current white balance value.
      */
-    int getWhite();
+    // int getWhite();
 
     /**
      * Set the white balance value of the device.
      * @param w The new white balance value
      */
-    void setWhite(int w);
+    // void setWhite(int w);
 
     /**************************************************************************
      * Gain
@@ -308,13 +309,13 @@ public:
      * Get the current gain value of the device.
      * @return The current gain value.
      */
-    int getGain();
+    // int getGain();
 
     /**
      * Set the gain value of the device.
      * @param g The new gain value
      */
-    void setGain(int g);
+    // void setGain(int g);
 
     /**************************************************************************
      * Color Enable
@@ -336,13 +337,13 @@ public:
      * Get the current color enable value of the device.
      * @return The current color enable value.
      */
-    int getColor();
+    // int getColor();
 
     /**
      * Set the color enable value of the device.
      * @param c The new color enable value
      */
-    void setColor(int c);
+    // void setColor(int c);
 
     /**************************************************************************
      **************************************************************************
@@ -370,13 +371,13 @@ public:
      * Get the current exposure value of the device.
      * @return The current exposure value.
      */
-    int getExposure();
+    // int getExposure();
 
     /**
      * Set the exposure value of the device.
      * @param e The new exposure value
      */
-    void setExposure(int e);
+    // void setExposure(int e);
 
     /**************************************************************************
      * Zoom
@@ -426,13 +427,13 @@ public:
      * Get the current focus value of the device.
      * @return The current focus value.
      */
-    int getFocus();
+    // int getFocus();
 
     /**
      * Set the focus value of the device.
      * @param f The new focus value
      */
-    void setFocus(int f);
+    // void setFocus(int f);
 
     /**************************************************************************
      * Pan
@@ -547,30 +548,10 @@ public:
     // void setRoll(int r);
 
 private:
-    int                   fd;
-    struct v4l2_queryctrl queryctrl;
-    struct v4l2_querymenu querymenu;
 
 
-    // IAMCameraControl *pCameraControl;
-    // IAMVideoProcAmp *pQualityControl;
-
-    int query_ioctl(int hdevice, int current_ctrl, struct v4l2_queryctrl *ctrl);
-
-    /**
-     * ioctl with a number of retries in the case of failure
-     * @param fd Device descriptor
-     * @param IOCTL_X ioctl reference
-     * @param arg Pointer to ioctl data
-     * @return ioctl result
-     */
-    int xioctl(int fd, int IOCTL_X, void *arg);
-
-    void enumerate_menu();
     void getControlData(GrabberControlCapabilities *caps, long flags = GrabberController::controller_none);
     void getControlFlag(GrabberControlCapabilities *caps);
-    bool setBaseCapabilities();
-    bool setPrivateCapabilities();
     int  setCtrlValue(GrabberControlCapabilities *caps, int value);
     int  getCtrlValue(GrabberControlCapabilities *caps, int &value);
 

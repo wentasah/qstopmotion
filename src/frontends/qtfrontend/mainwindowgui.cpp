@@ -30,7 +30,7 @@
 #include "frontends/qtfrontend/frameview/frameviewimage.h"
 #include "technical/preferencestool.h"
 #include "technical/util.h"
-#include "technical/grabber/gstreamergrabber.h"
+#include "technical/grabber/gstreamer/gstgrabber.h"
 #include "technical/videoencoder/ffmpegencoder.h"
 
 #include <QtCore/QtDebug>

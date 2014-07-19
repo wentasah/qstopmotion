@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2012-2013 by                                                *
+ *  Copyright (C) 2012-2014 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -18,12 +18,13 @@
  *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                 *
  ******************************************************************************/
 
-#include "gphotocontroller.h"
+#include "gpcontroller.h"
 
 #include <QtCore/QtDebug>
 
 /**************************************************************************
- * Default implementation of the grabber controller functions.
+ * Implementation of the grabber controller functions using the
+ * gphoto2 library.
  **************************************************************************/
 
 GphotoController::GphotoController(int cap)

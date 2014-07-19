@@ -1,7 +1,7 @@
 ###############################################################################
 # CMake file for the qStopMotion project                                      #
 # (c) Ralf Lange, longsoft.de                                                 #
-# Last update: 2014-07-10                                                     #
+# Last update: 2014-07-18                                                     #
 #                                                                             #
 # Usage:                                                                      #
 #   * Qt-Creator (Windows, Linux)                                             #
@@ -88,16 +88,16 @@ set(HEADERS
 IF(WIN32)
 set(HEADERS
     ${HEADERS}
-    src/technical/grabber/grabberdirectshowcontroller.h
-    src/technical/grabber/windowsuvccontroller.h
+    src/technical/grabber/gstreamer/windows/directshowcontroller.h
+    src/technical/grabber/mediafoundation/mfcontroller.h
 )
 ENDIF(WIN32)
 
 IF(UNIX)
 set(HEADERS
     ${HEADERS}
-    src/technical/grabber/gphotocontroller.h
-    src/technical/grabber/grabberv4l2controller.h
+    src/technical/grabber/gphoto2/gpcontroller.h
+    src/technical/grabber/gstreamer/linux/v4l2controller.h
 )
 ENDIF(UNIX)
 
@@ -158,27 +158,28 @@ set(MOC_HEADERS
     src/technical/externalchangemonitor.h
     src/technical/preferenceselement.h
     src/technical/preferencestool.h
-    src/technical/grabber/gstreamerdevicegrabber.h
-    src/technical/grabber/gstreamergrabber.h
-    src/technical/grabber/gstreamervideotestgrabber.h
     src/technical/grabber/imagegrabber.h
     src/technical/grabber/imagegrabberfacade.h
+#     src/technical/grabber/gstreamer/gstdevicegrabber.h
+    src/technical/grabber/gstreamer/gstgrabber.h
+    src/technical/grabber/gstreamer/videotestgrabber.h
 )
 
 IF(WIN32)
 set(MOC_HEADERS
     ${MOC_HEADERS}
-    src/technical/grabber/gstreamerdirectshow1394grabber.h
-    src/technical/grabber/gstreamerdirectshowusbgrabber.h
+    src/technical/grabber/gstreamer/windows/directshow1394grabber.h
+    src/technical/grabber/gstreamer/windows/directshowusbgrabber.h
+    src/technical/grabber/mediafoundation/mfgrabber.h
 )
 ENDIF(WIN32)
 
 IF(UNIX)
 set(MOC_HEADERS
     ${MOC_HEADERS}
-    src/technical/grabber/gphotograbber.h
-    src/technical/grabber/gstreamerdv1394grabber.h
-    src/technical/grabber/gstreamerv4l2grabber.h
+    src/technical/grabber/gphoto2/gpgrabber.h
+    src/technical/grabber/gstreamer/linux/dv1394grabber.h
+    src/technical/grabber/gstreamer/linux/v4l2grabber.h
 )
 ENDIF(UNIX)
 
@@ -246,13 +247,13 @@ set(SOURCES
     src/technical/grabber/grabbercontrolcapabilities.cpp
     src/technical/grabber/grabbercontroller.cpp
     src/technical/grabber/grabberresolution.cpp
-    src/technical/grabber/gstreamerdevicegrabber.cpp
-    src/technical/grabber/gstreamergrabber.cpp
-    src/technical/grabber/gstreamervideotestgrabber.cpp
     src/technical/grabber/imagegrabber.cpp
     src/technical/grabber/imagegrabberdevice.cpp
     src/technical/grabber/imagegrabberfacade.cpp
     src/technical/grabber/imagegrabberthread.cpp
+#    src/technical/grabber/gstreamer/gstdevicegrabber.cpp
+    src/technical/grabber/gstreamer/gstgrabber.cpp
+    src/technical/grabber/gstreamer/videotestgrabber.cpp
     src/technical/videoencoder/ffmpegencoder.cpp
     src/technical/videoencoder/videoencoder.cpp
     src/technical/videoencoder/videoencoderfactory.cpp
@@ -261,21 +262,22 @@ set(SOURCES
 IF(WIN32)
 set(SOURCES
     ${SOURCES}
-    src/technical/grabber/grabberdirectshowcontroller.cpp
-    src/technical/grabber/gstreamerdirectshow1394grabber.cpp
-    src/technical/grabber/gstreamerdirectshowusbgrabber.cpp
-    src/technical/grabber/windowsuvccontroller.cpp
+    src/technical/grabber/gstreamer/windows/directshowcontroller.cpp
+    src/technical/grabber/gstreamer/windows/directshow1394grabber.cpp
+    src/technical/grabber/gstreamer/windows/directshowusbgrabber.cpp
+    src/technical/grabber/mediafoundation/mfcontroller.cpp
+    src/technical/grabber/mediafoundation/mfgrabber.cpp
 )
 ENDIF(WIN32)
 
 IF(UNIX)
 set(SOURCES
     ${SOURCES}
-    src/technical/grabber/gphotocontroller.cpp
-    src/technical/grabber/gphotograbber.cpp
-    src/technical/grabber/grabberv4l2controller.cpp
-    src/technical/grabber/gstreamerdv1394grabber.cpp
-    src/technical/grabber/gstreamerv4l2grabber.cpp
+    src/technical/grabber/gphoto2/gpcontroller.cpp
+    src/technical/grabber/gphoto2/gpgrabber.cpp
+    src/technical/grabber/gstreamer/linux/v4l2controller.cpp
+    src/technical/grabber/gstreamer/linux/dv1394grabber.cpp
+    src/technical/grabber/gstreamer/linux/v4l2grabber.cpp
 )
 ENDIF(UNIX)
 
@@ -395,9 +397,9 @@ ELSE(UNIX)
 ENDIF(UNIX)
 
 ###############################################################################
-# DirectShow support
+# Microsoft DirectShow support
 #
-# (Only Windows)
+# (Only Windows up to Windows 7)
 #
 # used libraries: strmiids.lib
 ###############################################################################
@@ -411,6 +413,29 @@ IF(WIN32)
 ELSE(WIN32)
 
     SET(DIRECTSHOW_LIBRARIES)
+
+ENDIF(WIN32)
+
+###############################################################################
+# Microsoft Media Foundation support
+#
+# (Only Windows form Windows Vista and newer)
+#
+# used libraries: evr.lib, mf.lib, mfplat.lib
+###############################################################################
+
+IF(WIN32)
+
+    SET(MEDIAFOUNDATION_LIBRARIES
+        evr.lib     # ???
+        mf.lib      # ???
+        mfplat.lib  # ???
+        mfuuid.lib  # ???
+    )
+
+ELSE(WIN32)
+
+    SET(MEDIAFOUNDATION_LIBRARIES)
 
 ENDIF(WIN32)
 
@@ -525,6 +550,7 @@ target_link_libraries(
     ${GPHOTO2_LIBRARIES}
     ${V4L2_LIBRARIES}
     ${DIRECTSHOW_LIBRARIES}
+    ${MEDIAFOUNDATION_LIBRARIES}
 )
 
 add_definitions(${QT_DEFINITIONS})

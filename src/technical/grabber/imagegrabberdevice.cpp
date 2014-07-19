@@ -22,6 +22,21 @@
 
 #include <QtCore/QtDebug>
 
+ImageGrabberDevice::ImageGrabberDevice()
+{
+    qDebug("ImageGrabberDevice::Constructor(Default) --> Start");
+
+    deviceId.clear();
+    deviceName.clear();
+    deviceSource = ImageGrabberDevice::noSource;
+    deviceCap = ImageGrabberDevice::video_x_none;
+
+    controller = NULL;
+
+    qDebug("ImageGrabberDevice::Constructor(Default) --> End");
+}
+
+
 ImageGrabberDevice::ImageGrabberDevice(const QString id,
                                  const QString name,
                                  imageGrabberVideoSources source,
@@ -29,7 +44,9 @@ ImageGrabberDevice::ImageGrabberDevice(const QString id,
 {
     qDebug("ImageGrabberDevice::Constructor --> Start");
 
+    deviceId.clear();
     deviceId.append(id);
+    deviceName.clear();
     deviceName.append(name);
     deviceSource = source;
     deviceCap = cap;
@@ -60,9 +77,21 @@ const QString ImageGrabberDevice::getDeviceId()
 }
 
 
+void ImageGrabberDevice::setDeviceId(const QString id)
+{
+    deviceId.append(id);
+}
+
+
 const QString ImageGrabberDevice::getDeviceName()
 {
     return deviceName;
+}
+
+
+void ImageGrabberDevice::setDeviceName(const QString name)
+{
+    deviceName.append(name);
 }
 
 
@@ -72,9 +101,21 @@ ImageGrabberDevice::imageGrabberVideoSources ImageGrabberDevice::getDeviceSource
 }
 
 
+void ImageGrabberDevice::setDeviceSource(ImageGrabberDevice::imageGrabberVideoSources source)
+{
+    deviceSource = source;
+}
+
+
 ImageGrabberDevice::imageGrabberDeviceCapabilities ImageGrabberDevice::getDeviceCapability()
 {
     return deviceCap;
+}
+
+
+void ImageGrabberDevice::setDeviceCapability(ImageGrabberDevice::imageGrabberDeviceCapabilities cap)
+{
+    deviceCap = cap;
 }
 
 

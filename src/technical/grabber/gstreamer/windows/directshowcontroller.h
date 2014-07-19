@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2012-2012 by                                                *
+ *  Copyright (C) 2012-2014 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -18,47 +18,39 @@
  *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                 *
  ******************************************************************************/
 
-#ifndef WINDOWSUVCCONTROLLER_H
-#define WINDOWSUVCCONTROLLER_H
+#ifndef GSTREAMER_WINDOWS_DIRECTSHOWCONTROLLER_H
+#define GSTREAMER_WINDOWS_DIRECTSHOWCONTROLLER_H
 
 #include "technical/grabber/grabbercontroller.h"
 
-#include <QtCore/QString>
-#include <QtCore/QVector>
-
+#include <dshow.h>
 
 /**
- * Controller of Windows UVC devices.
+ * Interface to the controller using Microsoft DirectShow API.
  *
  * @author Ralf Lange
  */
-class WindowsUvcController : public GrabberController
+class DirectShowController : public GrabberController
 {
 public:
 
     /**
      * Constructs and initializes the object.
-     * @param d The image grabber device of the controller.
      * @param caps The grabber controller capabilities.
      */
-    WindowsUvcController(int caps);
+    DirectShowController(int caps);
 
     /**
      * Destructor
      */
-    ~WindowsUvcController();
+    ~DirectShowController();
 
     /**
-     * Get the device of the controller.
-     * @return The device of the controller.
+     * Initialize the grabber controller.
+     * @param id The ID of the device.
+     * @return True if initialization is successful.
      */
-    // ImageGrabberDevice* getDevice();
-
-    /**
-     * Get the capabilities of the controller.
-     * @return The capabilities of the controller.
-     */
-    // int getControllerCapabilities();
+    bool init(const QString &id);
 
     /**************************************************************************
      **************************************************************************
@@ -70,17 +62,17 @@ public:
      * Get the active resolution of the controller.
      * @return The index of the active resolution.
      */
-    // int getActiveResolution();
+    int getActiveResolution();
 
     /**
      * Set the active resolution of the controller.
      * @param ac The index of the new active resolution.
      */
-    // void setActiveResolution(int ac);
+    void setActiveResolution(int ac);
 
     /**************************************************************************
      **************************************************************************
-     * Camera capabilities
+     * Camera quality capabilities
      **************************************************************************
      **************************************************************************/
 
@@ -89,436 +81,426 @@ public:
      **************************************************************************/
 
     /**
-     * Has the camera a brightness control capability?
-     * @return True if the camera has a brightness control apability.
+     * Get the current automatic brightness value of the device.
+     * @return True if the automatic brightness is on.
      */
-    // bool isBrightness();
+    bool getAutomaticBrightness();
 
     /**
-     * Get the maximum value of the brightness.
-     * @return The maximum value of the brightness.
+     * Set the automatic brightness value of the device.
+     * @param ab True if the automatic brightness will be switched on.
      */
-    // int getMaximumBrightness();
+    void setAutomaticBrightness(bool ab);
 
     /**
      * Get the current brightness value of the device.
      * @return The current brightness value.
      */
-    // int getBrightness();
+    int getBrightness();
 
     /**
      * Set the brightness value of the device.
      * @param b The new brightness value
      */
-    // void setBrightness(int b);
+    void setBrightness(int b);
 
     /**************************************************************************
      * Contrast
      **************************************************************************/
 
     /**
-     * Has the camera a contrast control capability?
-     * @return True if the camera has a contrast control apability.
+     * Get the current automatic contrast value of the device.
+     * @return True if the automatic contrast is on.
      */
-    // bool isContrast();
+    bool getAutomaticContrast();
 
     /**
-     * Get the maximum value of the contrast.
-     * @return The maximum value of the contrast.
+     * Set the automatic contrast value of the device.
+     * @param ac True if the automatic contrast will be switched on.
      */
-    // int getMaximumContrast();
+    void setAutomaticContrast(bool ac);
 
     /**
      * Get the current contrast value of the device.
      * @return The current contrast value.
      */
-    // int getContrast();
+    int getContrast();
 
     /**
      * Set the contrast value of the device.
      * @param c The new contrast value
      */
-    // void setContrast(int c);
+    void setContrast(int c);
 
     /**************************************************************************
      * Saturation
      **************************************************************************/
 
     /**
-     * Has the camera a saturation control capability?
-     * @return True if the camera has a saturation control apability.
+     * Get the current automatic saturation value of the device.
+     * @return True if the automatic saturation is on.
      */
-    // bool isSaturation();
+    bool getAutomaticSaturation();
 
     /**
-     * Get the maximum value of the saturation.
-     * @return The maximum value of the saturation.
+     * Set the automatic saturation value of the device.
+     * @param as True if the automatic saturation will be switched on.
      */
-    // int getMaximumSaturation();
+    void setAutomaticSaturation(bool as);
 
     /**
      * Get the current saturation value of the device.
      * @return The current saturation value.
      */
-    // int getSaturation();
+    int getSaturation();
 
     /**
      * Set the saturation value of the device.
      * @param s The new saturation value
      */
-    // void setSaturation(int s);
+    void setSaturation(int s);
 
     /**************************************************************************
      * Hue
      **************************************************************************/
 
     /**
-     * Has the camera a hue control capability?
-     * @return True if the camera has a hue control apability.
+     * Get the current automatic hue value of the device.
+     * @return True if the automatic hue is on.
      */
-    // bool isHue();
+    bool getAutomaticHue();
 
     /**
-     * Get the maximum value of the hue.
-     * @return The maximum value of the hue.
+     * Set the automatic hue value of the device.
+     * @param ah True if the automatic hue will be switched on.
      */
-    // int getMaximumHue();
+    void setAutomaticHue(bool ah);
 
     /**
      * Get the current hue value of the device.
      * @return The current hue value.
      */
-    // int getHue();
+    int getHue();
 
     /**
      * Set the hue value of the device.
      * @param h The new hue value
      */
-    // void setHue(int h);
+    void setHue(int h);
 
     /**************************************************************************
      * Gamma
      **************************************************************************/
 
     /**
-     * Has the camera a gamma control capability?
-     * @return True if the camera has a gamma control apability.
+     * Get the current automatic gamma value of the device.
+     * @return True if the automatic gamma is on.
      */
-    // bool isGamma();
+    bool getAutomaticGamma();
 
     /**
-     * Get the maximum value of the gamma.
-     * @return The maximum value of the gamma.
+     * Set the automatic gamma value of the device.
+     * @param ag True if the automatic gamma will be switched on.
      */
-    // int getMaximumGamma();
+    void setAutomaticGamma(bool ag);
 
     /**
      * Get the current gamma value of the device.
      * @return The current gamma value.
      */
-    // int getGamma();
+    int getGamma();
 
     /**
      * Set the gamma value of the device.
      * @param g The new gamma value
      */
-    // void setGamma(int g);
+    void setGamma(int g);
 
     /**************************************************************************
      * Sharpness
      **************************************************************************/
 
     /**
-     * Has the camera a sharpness control capability?
-     * @return True if the camera has a sharpness control apability.
+     * Get the current automatic sharpness value of the device.
+     * @return True if the automatic sharpness is on.
      */
-    // bool isSharpness();
+    bool getAutomaticSharpness();
 
     /**
-     * Get the maximum value of the sharpness.
-     * @return The maximum value of the sharpness.
+     * Set the automatic sharpness value of the device.
+     * @param as True if the automatic sharpness will be switched on.
      */
-    // int getMaximumSharpness();
+    void setAutomaticSharpness(bool as);
 
     /**
      * Get the current sharpness value of the device.
      * @return The current sharpness value.
      */
-    // int getSharpness();
+    int getSharpness();
 
     /**
      * Set the sharpness value of the device.
      * @param s The new sharpness value
      */
-    // void setSharpness(int s);
+    void setSharpness(int s);
 
     /**************************************************************************
      * Backlight Compensation
      **************************************************************************/
 
     /**
-     * Has the camera a backlight compensation control capability?
-     * @return True if the camera has a backlight compensation control apability.
+     * Get the current automatic backlight compensation value of the device.
+     * @return True if the automatic backlight compensation is on.
      */
-    // bool isBacklight();
+    bool getAutomaticBacklight();
 
     /**
-     * Get the maximum value of the backlight compensation.
-     * @return The maximum value of the backlight compensation.
+     * Set the automatic backlight compensation value of the device.
+     * @param ab True if the automatic backlight compensation will be switched on.
      */
-    // int getMaximumBacklight();
+    void setAutomaticBacklight(bool ab);
 
     /**
      * Get the current backlight compensation value of the device.
      * @return The current backlight compensation value.
      */
-    // int getBacklight();
+    int getBacklight();
 
     /**
      * Set the backlight compensation value of the device.
      * @param b The new backlight compensation value
      */
-    // void setBacklight(int b);
-
-    /**************************************************************************
-     * Exposure
-     **************************************************************************/
-
-    /**
-     * Has the camera a automatic exposure control capability?
-     * @return True if the camera has a automatic exposure control apability.
-     */
-    // bool isAutomaticExposure();
-
-    /**
-     * Get the current automatic exposure value of the device.
-     * @return True if the automatic exposure is on.
-     */
-    // bool getAutomaticExposure();
-
-    /**
-     * Set the automatic exposure value of the device.
-     * @param ae True if the automatic exposure will be switched on.
-     */
-    // void setAutomaticExposure(bool ae);
-
-    /**
-     * Has the camera a exposure control capability?
-     * @return True if the camera has a exposure control apability.
-     */
-    // bool isExposure();
-
-    /**
-     * Get the maximum value of the exposure.
-     * @return The maximum value of the exposure.
-     */
-    // int getMaximumExposure();
-
-    /**
-     * Get the current exposure value of the device.
-     * @return The current exposure value.
-     */
-    // int getExposure();
-
-    /**
-     * Set the exposure value of the device.
-     * @param e The new exposure value
-     */
-    // void setExposure(int e);
+    void setBacklight(int b);
 
     /**************************************************************************
      * White Balance
      **************************************************************************/
 
     /**
-     * Has the camera a automatic white balance control capability?
-     * @return True if the camera has a automatic white balance control apability.
-     */
-    // bool isAutomaticWhite();
-
-    /**
      * Get the current automatic white balance value of the device.
      * @return True if the automatic white balance is on.
      */
-    // bool getAutomaticWhite();
+    bool getAutomaticWhite();
 
     /**
      * Set the automatic white balance value of the device.
      * @param ae True if the automatic white balance will be switched on.
      */
-    // void setAutomaticWhite(bool ae);
-
-    /**
-     * Has the camera a white balance control capability?
-     * @return True if the camera has a white balance control apability.
-     */
-    // bool isWhite();
-
-    /**
-     * Get the maximum value of the white balance.
-     * @return The maximum value of the white balance.
-     */
-    // int getMaximumWhite();
+    void setAutomaticWhite(bool ae);
 
     /**
      * Get the current white balance value of the device.
      * @return The current white balance value.
      */
-    // int getWhite();
+    int getWhite();
 
     /**
      * Set the white balance value of the device.
      * @param w The new white balance value
      */
-    // void setWhite(int w);
+    void setWhite(int w);
+
+    /**************************************************************************
+     * Gain
+     **************************************************************************/
+
+    /**
+     * Get the current automatic gain value of the device.
+     * @return True if the automatic gain is on.
+     */
+    bool getAutomaticGain();
+
+    /**
+     * Set the automatic gain value of the device.
+     * @param ag True if the automatic gain will be switched on.
+     */
+    void setAutomaticGain(bool ag);
+
+    /**
+     * Get the current gain value of the device.
+     * @return The current gain value.
+     */
+    int getGain();
+
+    /**
+     * Set the gain value of the device.
+     * @param g The new gain value
+     */
+    void setGain(int g);
+
+    /**************************************************************************
+     * Color Enable
+     **************************************************************************/
+
+    /**
+     * Get the current automatic color enable value of the device.
+     * @return True if the automatic color enable is on.
+     */
+    bool getAutomaticColor();
+
+    /**
+     * Set the automatic color enable value of the device.
+     * @param ac True if the automatic color enable will be switched on.
+     */
+    void setAutomaticColor(bool ac);
+
+    /**
+     * Get the current color enable value of the device.
+     * @return The current color enable value.
+     */
+    int getColor();
+
+    /**
+     * Set the color enable value of the device.
+     * @param c The new color enable value
+     */
+    void setColor(int c);
+
+    /**************************************************************************
+     **************************************************************************
+     * Camera control capabilities
+     **************************************************************************
+     **************************************************************************/
+
+    /**************************************************************************
+     * Exposure
+     **************************************************************************/
+
+    /**
+     * Get the current automatic exposure value of the device.
+     * @return True if the automatic exposure is on.
+     */
+    bool getAutomaticExposure();
+
+    /**
+     * Set the automatic exposure value of the device.
+     * @param ae True if the automatic exposure will be switched on.
+     */
+    void setAutomaticExposure(bool ae);
+
+    /**
+     * Get the current exposure value of the device.
+     * @return The current exposure value.
+     */
+    int getExposure();
+
+    /**
+     * Set the exposure value of the device.
+     * @param e The new exposure value
+     */
+    void setExposure(int e);
 
     /**************************************************************************
      * Zoom
      **************************************************************************/
 
     /**
-     * Has the camera a automatic zoom control capability?
-     * @return True if the camera has a automatic zoom control apability.
-     */
-    // bool isAutomaticZoom();
-
-    /**
      * Get the current automatic zoom value of the device.
      * @return True if the automatic zoom is on.
      */
-    // bool getAutomaticZoom();
+    bool getAutomaticZoom();
 
     /**
      * Set the automatic zoom value of the device.
      * @param az True if the automatic zoom will be switched on.
      */
-    // void setAutomaticZoom(bool az);
-
-    /**
-     * Has the camera a zoom control capability?
-     * @return True if the camera has a zoom control apability.
-     */
-    // bool isZoom();
-
-    /**
-     * Get the maximum value of the zoom.
-     * @return The maximum value of the zoom.
-     */
-    // int getMaximumZoom();
+    void setAutomaticZoom(bool az);
 
     /**
      * Get the current zoom value of the device.
      * @return The current zoom value.
      */
-    // int getZoom();
+    int getZoom();
 
     /**
      * Set the zoom value of the device.
      * @param z The new zoom value
      */
-    // void setZoom(int z);
+    void setZoom(int z);
 
     /**************************************************************************
      * Focus
      **************************************************************************/
 
     /**
-     * Has the camera a automatic focus control capability?
-     * @return True if the camera has a automatic focus control apability.
-     */
-    // bool isAutomaticFocus();
-
-    /**
      * Get the current automatic focus value of the device.
      * @return True if the automatic focus is on.
      */
-    // bool getAutomaticFocus();
+    bool getAutomaticFocus();
 
     /**
      * Set the automatic focus value of the device.
      * @param af True if the automatic focus will be switched on.
      */
-    // void setAutomaticFocus(bool af);
-
-    /**
-     * Has the camera a focus control capability?
-     * @return True if the camera has a focus control apability.
-     */
-    // bool isFocus();
-
-    /**
-     * Get the maximum focus of the zoom.
-     * @return The maximum focus of the zoom.
-     */
-    // int getMaximumFocus();
+    void setAutomaticFocus(bool af);
 
     /**
      * Get the current focus value of the device.
      * @return The current focus value.
      */
-    // int getFocus();
+    int getFocus();
 
     /**
      * Set the focus value of the device.
      * @param f The new focus value
      */
-    // void setFocus(int f);
+    void setFocus(int f);
 
     /**************************************************************************
      * Pan
      **************************************************************************/
 
     /**
-     * Has the camera a pan control capability?
-     * @return True if the camera has a pan control apability.
+     * Get the current automatic pan value of the device.
+     * @return True if the automatic pan is on.
      */
-    // bool isPan();
+    bool getAutomaticPan();
 
     /**
-     * Get the maximum value of the pan.
-     * @return The maximum value of the pan.
+     * Set the automatic pan value of the device.
+     * @param ap True if the automatic pan will be switched on.
      */
-    // int getMaximumPan();
+    void setAutomaticPan(bool ap);
 
     /**
      * Get the current pan value of the device.
      * @return The current pan value.
      */
-    // int getPan();
+    int getPan();
 
     /**
      * Set the pan value of the device.
      * @param p The new pan value
      */
-    // void setPan(int p);
+    void setPan(int p);
 
     /**************************************************************************
      * Tilt
      **************************************************************************/
 
     /**
-     * Has the camera a tilt control capability?
-     * @return True if the camera has a tilt control apability.
+     * Get the current automatic tilt value of the device.
+     * @return True if the automatic tilt is on.
      */
-    // bool isTilt();
+    bool getAutomaticTilt();
 
     /**
-     * Get the maximum value of the tilt.
-     * @return The maximum value of the tilt.
+     * Set the automatic tilt value of the device.
+     * @param at True if the automatic tilt will be switched on.
      */
-    // int getMaximumTilt();
+    void setAutomaticTilt(bool at);
 
     /**
      * Get the current tilt value of the device.
      * @return The current tilt value.
      */
-    // int getTilt();
+    int getTilt();
 
     /**
      * Set the tilt value of the device.
      * @param t The new tilt value
      */
-    // void setTilt(int t);
+    void setTilt(int t);
 
     /**************************************************************************
      * Iris
@@ -528,25 +510,25 @@ public:
      * Get the current automatic iris value of the device.
      * @return True if the automatic iris is on.
      */
-    // bool getAutomaticIris();
+    bool getAutomaticIris();
 
     /**
      * Set the automatic iris value of the device.
      * @param ae True if the automatic iris will be switched on.
      */
-    // void setAutomaticIris(bool ae);
+    void setAutomaticIris(bool ae);
 
     /**
      * Get the current iris value of the device.
      * @return The current iris value.
      */
-    // int getIris();
+    int getIris();
 
     /**
      * Set the iris value of the device.
      * @param e The new iris value
      */
-    // void setIris(int e);
+    void setIris(int e);
 
     /**************************************************************************
      * Roll
@@ -556,27 +538,35 @@ public:
      * Get the current automatic roll value of the device.
      * @return True if the automatic roll is on.
      */
-    // bool getAutomaticRoll();
+    bool getAutomaticRoll();
 
     /**
      * Set the automatic roll value of the device.
      * @param ar True if the automatic roll will be switched on.
      */
-    // void setAutomaticRoll(bool ar);
+    void setAutomaticRoll(bool ar);
 
     /**
      * Get the current roll value of the device.
      * @return The current roll value.
      */
-    // int getRoll();
+    int getRoll();
 
     /**
      * Set the roll value of the device.
      * @param r The new roll value
      */
-    // void setRoll(int r);
+    void setRoll(int r);
 
 private:
+    IBaseFilter      *pFilter;
+    IAMCameraControl *pCameraControl;
+    IAMVideoProcAmp  *pQualityControl;
+    IAMStreamConfig  *pStreamConfig;
+
+    bool setControlCapabilities();
+    bool setQualityCapabilities();
+
 };
 
 #endif

@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2010-2012 by                                                *
+ *  Copyright (C) 2010-2014 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -18,22 +18,23 @@
  *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                 *
  ******************************************************************************/
 
-#ifndef GSTREAMERGRABBER_H
-#define GSTREAMERGRABBER_H
+#ifndef GSTREAMER_LINUX_DV1394GRABBER_H
+#define GSTREAMER_LINUX_DV1394GRABBER_H
 
-#include "technical/grabber/imagegrabber.h"
 #include "technical/grabber/imagegrabberdevice.h"
+#include "technical/grabber/gstreamer/gstgrabber.h"
+
 
 // Include files of the gstreamer library
 #include <gst/gst.h>
 
 
 /**
- * Base class for the different gstreamer grabbers.
+ * Video grabbers using the dv1394 library of Linux.
  *
  * @author Ralf Lange
  */
-class GstreamerGrabber : public ImageGrabber
+class GstreamerDv1394Grabber : public GstreamerGrabber
 {
     Q_OBJECT
 public:
@@ -42,77 +43,58 @@ public:
      * Initializes the member variables.
      * @param filePath path to the output file grabbed from a device
      */
-    GstreamerGrabber(Frontend *f);
+    GstreamerDv1394Grabber(Frontend *f);
 
     /**
      * Destructor
      */
-    ~GstreamerGrabber();
+    ~GstreamerDv1394Grabber();
 
     /**
-     * Initialization of the Command line grabber.
+     * Initialization of the Command line grabber
      * @param devices The vector of initialized devices.
-     * @return true on success, false otherwise.
+     * @return true on success, false otherwise
      */
-    virtual bool initialization(QVector<ImageGrabberDevice*> &devices) = 0;
+    bool initialization(QVector<ImageGrabberDevice*> &devices);
 
     /**
      * Starts the grabber if it is marked to be runned in deamon mode.
      * @return true on success, false otherwise
      */
-    virtual bool setUp() = 0;
-
-    /**
-     * Get the live image from the camera
-     */
-    const QImage getLiveImage();
-
-    /**
-     * Get the raw image from the camera
-     */
-    const QImage getRawImage();
-
-    /**
-     * Grabs one picture from the device.
-     * @return true on success, false otherwise
-     */
-    bool grab();
+    bool setUp();
 
     /**
      * Shut downs the grabber process either if it is runned in deamon
      * mode or "single grab" mode.
      * @return true on success, false otherwise
      */
-    virtual bool tearDown() = 0;
-
-protected:
-    /**
-     * Call back function for the message loop of gstreamer.
-     */
-    static gboolean bus_callback(GstBus     *bus,
-                                 GstMessage *message,
-                                 gpointer    data);
+    bool tearDown();
 
 private:
     /**
-     * Get the actual image from the gstreamer application interface.
+     * Pad to select the video stream from the demux to the decoder
      */
-    const QImage getImage();
+    static void on_pad_added (GstElement *element,
+                              GstPad     *pad,
+                              gpointer    data);
 
-protected:
-    GstElement *pipeline;
-    GstElement *source;
-    GstElement *filter1;
-    GstElement *filter2;
-    GstElement *sink;
+    /**
+     *
+     */
+    static void cb_typefound (GstElement *typefind,
+                              guint       probability,
+                              GstCaps    *caps,
+                              gpointer    data);
 
 private:
     int         activeSource;
     bool        isInitSuccess;
     bool        firstImage;
 
-    QImage liveImage;
-    QImage rawImage;
+    GstElement *filter3;
+    GstElement *queue1;
+    GstElement *queue2;
+
 };
 
 #endif

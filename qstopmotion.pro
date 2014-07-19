@@ -1,7 +1,7 @@
 ###############################################################################
 # QtCreator file for the qStopMotion project                                  #
 # (c) Ralf Lange, longsoft.de                                                 #
-# Last update: 2014-07-10                                                     #
+# Last update: 2014-07-16                                                     #
 #                                                                             #
 # Please use CMake and the CMakeLists.txt file to build qStopMotion!          #
 ###############################################################################
@@ -71,25 +71,25 @@ HEADERS += src/config.h \
            src/technical/util.h \
            src/technical/audio/audiodriver.h \
            src/technical/audio/audioformat.h \
-           src/technical/grabber/gphotocontroller.h \
-           src/technical/grabber/gphotograbber.h \
            src/technical/grabber/grabbercontrolcapabilities.h \
            src/technical/grabber/grabbercontroller.h \
            src/technical/grabber/grabberresolution.h \
-           src/technical/grabber/grabberdirectshowcontroller.h \
-           src/technical/grabber/grabberv4l2controller.h \
-           src/technical/grabber/gstreamerdevicegrabber.h \
-           src/technical/grabber/gstreamerdirectshow1394grabber.h \
-           src/technical/grabber/gstreamerdirectshowusbgrabber.h \
-           src/technical/grabber/gstreamerdv1394grabber.h \
-           src/technical/grabber/gstreamergrabber.h \
-           src/technical/grabber/gstreamerv4l2grabber.h \
-           src/technical/grabber/gstreamervideotestgrabber.h \
            src/technical/grabber/imagegrabber.h \
            src/technical/grabber/imagegrabberdevice.h \
            src/technical/grabber/imagegrabberfacade.h \
            src/technical/grabber/imagegrabberthread.h \
-           src/technical/grabber/windowsuvccontroller.h \
+           src/technical/grabber/gphoto2/gphotocontroller.h \
+           src/technical/grabber/gphoto2/gphotograbber.h \
+           src/technical/grabber/gstreamer/gstgrabber.h \
+           src/technical/grabber/gstreamer/videotestgrabber.h \
+           src/technical/grabber/gstreamer/linux/dv1394grabber.h \
+           src/technical/grabber/gstreamer/linux/v4l2controller.h \
+           src/technical/grabber/gstreamer/linux/v4l2grabber.h \
+           src/technical/grabber/gstreamer/windows/directshowcontroller.h \
+           src/technical/grabber/gstreamer/windows/directshow1394grabber.h \
+           src/technical/grabber/gstreamer/windows/directshowusbgrabber.h \
+           src/technical/grabber/mediafoundation/mfcontroller.h \
+           src/technical/grabber/mediafoundation/mfgrabber.h \
            src/technical/videoencoder/ffmpegencoder.h \
            src/technical/videoencoder/videoencoder.h \
            src/technical/videoencoder/videoencoderfactory.h
@@ -153,25 +153,25 @@ SOURCES += src/main.cpp \
            src/technical/preferenceselement.cpp \
            src/technical/preferencestool.cpp \
            src/technical/util.cpp \
-           src/technical/grabber/gphotocontroller.cpp \
-           src/technical/grabber/gphotograbber.cpp \
            src/technical/grabber/grabbercontrolcapabilities.cpp \
            src/technical/grabber/grabbercontroller.cpp \
            src/technical/grabber/grabberresolution.cpp \
-           src/technical/grabber/grabberdirectshowcontroller.cpp \
-           src/technical/grabber/grabberv4l2controller.cpp \
-           src/technical/grabber/gstreamerdevicegrabber.cpp \
-           src/technical/grabber/gstreamerdirectshow1394grabber.cpp \
-           src/technical/grabber/gstreamerdirectshowusbgrabber.cpp \
-           src/technical/grabber/gstreamerdv1394grabber.cpp \
-           src/technical/grabber/gstreamergrabber.cpp \
-           src/technical/grabber/gstreamerv4l2grabber.cpp \
-           src/technical/grabber/gstreamervideotestgrabber.cpp \
            src/technical/grabber/imagegrabber.cpp \
            src/technical/grabber/imagegrabberdevice.cpp \
            src/technical/grabber/imagegrabberfacade.cpp \
            src/technical/grabber/imagegrabberthread.cpp \
-           src/technical/grabber/windowsuvccontroller.cpp \
+           src/technical/grabber/gphoto2/gphotocontroller.cpp \
+           src/technical/grabber/gphoto2/gphotograbber.cpp \
+           src/technical/grabber/gstreamer/gstgrabber.cpp \
+           src/technical/grabber/gstreamer/videotestgrabber.cpp \
+           src/technical/grabber/gstreamer/linux/dv1394grabber.cpp \
+           src/technical/grabber/gstreamer/linux/v4l2controller.cpp \
+           src/technical/grabber/gstreamer/linux/v4l2grabber.cpp \
+           src/technical/grabber/gstreamer/windows/directshowcontroller.cpp \
+           src/technical/grabber/gstreamer/windows/directshow1394grabber.cpp \
+           src/technical/grabber/gstreamer/windows/directshowusbgrabber.cpp \
+           src/technical/grabber/mediafoundation/mfcontroller.cpp \
+           src/technical/grabber/mediafoundation/mfgrabber.cpp \
            src/technical/videoencoder/ffmpegencoder.cpp \
            src/technical/videoencoder/videoencoder.cpp \
            src/technical/videoencoder/videoencoderfactory.cpp

@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2010-2012 by                                                *
+ *  Copyright (C) 2010-2014 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -18,23 +18,22 @@
  *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                 *
  ******************************************************************************/
 
-#ifndef GSTREAMERVIDEOTESTGRABBER_H
-#define GSTREAMERVIDEOTESTGRABBER_H
+#ifndef GSTREAMER_WINDOWS_DIRECTSHOWUSBGRABBER_H
+#define GSTREAMER_WINDOWS_DIRECTSHOWUSBGRABBER_H
 
 #include "technical/grabber/imagegrabberdevice.h"
-#include "technical/grabber/gstreamergrabber.h"
+#include "technical/grabber/gstreamer/gstgrabber.h"
 
 // Include files of the gstreamer library
 #include <gst/gst.h>
 
 
 /**
- * Abstract class for the different video grabbers used by the VideoView
- * widgets.
+ * Video grabbers using gstreamer library and the DirectShow source.
  *
- * @author Bjoern Erik Nilsen & Fredrik Berg Kjoelstad
+ * @author Ralf Lange, Bjoern Erik Nilsen & Fredrik Berg Kjoelstad
  */
-class GstreamerVideoTestGrabber : public GstreamerGrabber
+class GstreamerDirectShowUsbGrabber : public GstreamerGrabber
 {
     Q_OBJECT
 public:
@@ -43,12 +42,12 @@ public:
      * Initializes the member variables.
      * @param filePath path to the output file grabbed from a device
      */
-    GstreamerVideoTestGrabber(Frontend *f);
+    GstreamerDirectShowUsbGrabber(Frontend *f);
 
     /**
      * Destructor
      */
-    ~GstreamerVideoTestGrabber();
+    ~GstreamerDirectShowUsbGrabber();
 
     /**
      * Initialization of the Command line grabber
@@ -69,6 +68,22 @@ public:
      * @return true on success, false otherwise
      */
     bool tearDown();
+
+private:
+    /**
+     * Pad to select the video stream from the demux to the decoder
+     */
+    static void on_pad_added (GstElement *element,
+                              GstPad     *pad,
+                              gpointer    data);
+
+    static void cb_typefound (GstElement *typefind,
+                              guint       probability,
+                              GstCaps    *caps,
+                              gpointer    data);
+
+    static gboolean link_elements_with_filter (GstElement *element1,
+                                               GstElement *element2);
 
 private:
 

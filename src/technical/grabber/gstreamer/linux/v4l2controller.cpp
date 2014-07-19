@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2012-2013 by                                                *
+ *  Copyright (C) 2012-2014 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -39,7 +39,7 @@
  *                                                                            *
  ******************************************************************************/
 
-#include "grabberv4l2controller.h"
+#include "v4l2controller.h"
 
 #include <sys/ioctl.h>
 #include <libv4l2.h>

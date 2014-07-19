@@ -18,8 +18,8 @@
  *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                 *
  ******************************************************************************/
 
-#include "gstreamerv4l2grabber.h"
-#include "technical/grabber/grabberv4l2controller.h"
+#include "v4l2grabber.h"
+#include "v4l2controller.h"
 
 #include "technical/util.h"
 

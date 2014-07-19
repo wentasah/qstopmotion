@@ -57,6 +57,22 @@ int WindowsUvcController::getControllerCapabilities()
 */
 /**************************************************************************
  **************************************************************************
+ * Camera resolution
+ **************************************************************************
+ **************************************************************************/
+/*
+int MfController::getActiveResolution()
+{
+    return -1;
+}
+
+
+void MfController::setActiveResolution(int ac)
+{
+}
+*/
+/**************************************************************************
+ **************************************************************************
  * Camera capabilities
  **************************************************************************
  **************************************************************************/
@@ -476,6 +492,72 @@ int GrabberController::getTilt()
 
 
 void GrabberController::setTilt(int t)
+{
+    Q_ASSERT( 1 );
+}
+*/
+/**************************************************************************
+ * Iris
+ **************************************************************************/
+/*
+GrabberControlCapabilities *GrabberController::getIrisCaps()
+{
+    return &irisCapabilities;
+}
+
+
+bool GrabberController::getAutomaticIris()
+{
+    return false;
+}
+
+
+void GrabberController::setAutomaticIris(bool ai)
+{
+    Q_ASSERT( 1 );
+}
+
+
+int GrabberController::getIris()
+{
+    return 0;
+}
+
+
+void GrabberController::setIris(int i)
+{
+    Q_ASSERT( 1 );
+}
+*/
+/**************************************************************************
+ * Roll
+ **************************************************************************/
+/*
+GrabberControlCapabilities *GrabberController::getRollCaps()
+{
+    return &rollCapabilities;
+}
+
+
+bool GrabberController::getAutomaticRoll()
+{
+    return false;
+}
+
+
+void GrabberController::setAutomaticRoll(bool ar)
+{
+    Q_ASSERT( 1 );
+}
+
+
+int GrabberController::getRoll()
+{
+    return 0;
+}
+
+
+void GrabberController::setRoll(int r)
 {
     Q_ASSERT( 1 );
 }

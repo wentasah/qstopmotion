@@ -31,7 +31,13 @@ Last Change: 2014-04-12
 * Install in the Directory C:\Tools\Qt\...
 * The installation of the MinGW runtime development tools is not necessary.
 
-1.4 GStreamer
+1.4 Python
+--------------------------------------------------------------------------------
+
+* Download Python Version 2.5.x, 2.6.x or 2.7.x from https://www.python.org/ 
+* Install in the default installation directory.
+
+1.5 GStreamer
 --------------------------------------------------------------------------------
 
 * Download GStreamer GPL from code.google.com/p/ossbuild/:
@@ -43,7 +49,7 @@ Last Change: 2014-04-12
 * Note: The Windows version of GStreamer from the GStreamer project
   (http://gstreamer.freedesktop.org/) are not supported!
 
-1.5 CMake 2.8.12 or newer
+1.6 CMake 2.8.12 or newer
 --------------------------------------------------------------------------------
 
 * Download CMake from "http://www.cmake.org/cmake/resources/software.html"
@@ -57,13 +63,13 @@ Last Change: 2014-04-12
     "C:\Program Files (x86)\CMake 2.8\bin\cmake-gui.exe"
 * Create a shortcut to the start script.
 
-1.6 NSIS 2.46
+1.7 NSIS 2.46
 --------------------------------------------------------------------------------
 
 * Download NSIS from "http://nsis.sourceforge.net/Main_Page"
 * Install in the default installation directory.
 
-1.7 Install Mercurial SCM (Developers only)
+1.8 Install Mercurial SCM (Developers only)
 --------------------------------------------------------------------------------
 
 * Download the Mercurial install package from http://mercurial.selenic.com

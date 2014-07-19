@@ -18,9 +18,9 @@
  *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                 *
  ******************************************************************************/
 
-#include "gphotograbber.h"
+#include "gpgrabber.h"
 
-#include "technical/grabber/gphotocontroller.h"
+#include "gpcontroller.h"
 #include "technical/grabber/imagegrabberdevice.h"
 #include "technical/util.h"
 

@@ -18,23 +18,22 @@
  *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                 *
  ******************************************************************************/
 
-#ifndef GSTREAMERV4L2GRABBER_H
-#define GSTREAMERV4L2GRABBER_H
+#ifndef GSTREAMER_VIDEOTESTGRABBER_H
+#define GSTREAMER_VIDEOTESTGRABBER_H
 
 #include "technical/grabber/imagegrabberdevice.h"
-#include "technical/grabber/gstreamergrabber.h"
+#include "technical/grabber/gstreamer/gstgrabber.h"
 
 // Include files of the gstreamer library
 #include <gst/gst.h>
 
 
 /**
- * Abstract class for the different video grabbers used by the VideoView
- * widgets.
+ * Video grabbers using the gestreamer library test source.
  *
- * @author Bjoern Erik Nilsen & Fredrik Berg Kjoelstad
+ * @author Ralf Lange
  */
-class GstreamerV4L2Grabber : public GstreamerGrabber
+class GstreamerVideoTestGrabber : public GstreamerGrabber
 {
     Q_OBJECT
 public:
@@ -43,12 +42,12 @@ public:
      * Initializes the member variables.
      * @param filePath path to the output file grabbed from a device
      */
-    GstreamerV4L2Grabber(Frontend *f);
+    GstreamerVideoTestGrabber(Frontend *f);
 
     /**
      * Destructor
      */
-    ~GstreamerV4L2Grabber();
+    ~GstreamerVideoTestGrabber();
 
     /**
      * Initialization of the Command line grabber

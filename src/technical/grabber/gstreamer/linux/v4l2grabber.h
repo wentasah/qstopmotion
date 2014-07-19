@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2010-2012 by                                                *
+ *  Copyright (C) 2010-2014 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -18,22 +18,22 @@
  *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                 *
  ******************************************************************************/
 
-#ifndef GSTREAMERDEVICEGRABBER_H
-#define GSTREAMERDEVICEGRABBER_H
+#ifndef GSTREAMERV4L2GRABBER_H
+#define GSTREAMERV4L2GRABBER_H
 
-#include "technical/grabber/imagegrabber.h"
+#include "technical/grabber/imagegrabberdevice.h"
+#include "technical/grabber/gstreamer/gstgrabber.h"
 
 // Include files of the gstreamer library
 #include <gst/gst.h>
 
 
 /**
- * Abstract class for the different video grabbers used by the VideoView
- * widgets.
+ * Video grabbers using the Video4Linux2 library.
  *
- * @author Bjoern Erik Nilsen & Fredrik Berg Kjoelstad
+ * @author Ralf Lange
  */
-class GstreamerDeviceGrabber : public ImageGrabber
+class GstreamerV4L2Grabber : public GstreamerGrabber
 {
     Q_OBJECT
 public:
@@ -42,12 +42,12 @@ public:
      * Initializes the member variables.
      * @param filePath path to the output file grabbed from a device
      */
-    GstreamerDeviceGrabber(Frontend *f);
+    GstreamerV4L2Grabber(Frontend *f);
 
     /**
      * Destructor
      */
-    ~GstreamerDeviceGrabber();
+    ~GstreamerV4L2Grabber();
 
     /**
      * Initialization of the Command line grabber
@@ -63,79 +63,13 @@ public:
     bool setUp();
 
     /**
-     * Get the live image from the camera
-     */
-    const QImage getLiveImage();
-
-    /**
-     * Get the raw image from the camera
-     */
-    const QImage getRawImage();
-
-    /**
-     * Grabs one picture from the device.
-     * @return true on success, false otherwise
-     */
-    bool grab();
-
-    /**
      * Shut downs the grabber process either if it is runned in deamon
      * mode or "single grab" mode.
      * @return true on success, false otherwise
      */
     bool tearDown();
 
-    /**
-     * Call back function for the message loop of gstreamer.
-     */
-    static gboolean bus_callback(GstBus     *bus,
-                                 GstMessage *message,
-                                 gpointer    data);
-
-    /**
-     * Pad to select the video stream from the demux to the decoder
-     */
-    static void on_pad_added (GstElement *element,
-                              GstPad     *pad,
-                              gpointer    data);
-
-    static void cb_typefound (GstElement *typefind,
-                              guint       probability,
-                              GstCaps    *caps,
-                              gpointer    data);
-
-    static gboolean link_elements_with_filter (GstElement *element1,
-                                               GstElement *element2);
-
 private:
-    /**
-     * Get the actual image from the gstreamer application interface
-     */
-    const QImage getImage();
-
-private:
-    int         activeSource;
-    bool        isInitSuccess;
-    bool        firstImage;
-
-    GstElement *pipeline;
-    GstElement *source;
-    GstElement *filter1;
-    GstElement *filter2;
-    GstElement *filter3;
-    GstElement *filter4;
-    GstElement *filter5;
-    GstElement *queue1;
-    GstElement *queue2;
-    GstElement *queue3;
-    GstElement *queue4;
-    GstElement *sink;
-    // GstBus     *bus;
-    // GMainLoop  *loop;
-
-    QString filePath;
-    QImage liveImage;
-    QImage rawImage;
 
 };
 

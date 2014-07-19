@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2010-2012 by                                                *
+ *  Copyright (C) 2010-2014 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -18,24 +18,22 @@
  *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                 *
  ******************************************************************************/
 
-#ifndef GSTREAMERDV1394GRABBER_H
-#define GSTREAMERDV1394GRABBER_H
+#ifndef GSTREAMER_GSTGRABBER_H
+#define GSTREAMER_GSTGRABBER_H
 
+#include "technical/grabber/imagegrabber.h"
 #include "technical/grabber/imagegrabberdevice.h"
-#include "technical/grabber/gstreamergrabber.h"
-
 
 // Include files of the gstreamer library
 #include <gst/gst.h>
 
 
 /**
- * Abstract class for the different video grabbers used by the VideoView
- * widgets.
+ * Base class for the different gstreamer grabbers.
  *
- * @author Bjoern Erik Nilsen & Fredrik Berg Kjoelstad
+ * @author Ralf Lange
  */
-class GstreamerDv1394Grabber : public GstreamerGrabber
+class GstreamerGrabber : public ImageGrabber
 {
     Q_OBJECT
 public:
@@ -44,58 +42,77 @@ public:
      * Initializes the member variables.
      * @param filePath path to the output file grabbed from a device
      */
-    GstreamerDv1394Grabber(Frontend *f);
+    GstreamerGrabber(Frontend *f);
 
     /**
      * Destructor
      */
-    ~GstreamerDv1394Grabber();
+    ~GstreamerGrabber();
 
     /**
-     * Initialization of the Command line grabber
+     * Initialization of the Command line grabber.
      * @param devices The vector of initialized devices.
-     * @return true on success, false otherwise
+     * @return true on success, false otherwise.
      */
-    bool initialization(QVector<ImageGrabberDevice*> &devices);
+    virtual bool initialization(QVector<ImageGrabberDevice*> &devices) = 0;
 
     /**
      * Starts the grabber if it is marked to be runned in deamon mode.
      * @return true on success, false otherwise
      */
-    bool setUp();
+    virtual bool setUp() = 0;
+
+    /**
+     * Get the live image from the camera
+     */
+    const QImage getLiveImage();
+
+    /**
+     * Get the raw image from the camera
+     */
+    const QImage getRawImage();
+
+    /**
+     * Grabs one picture from the device.
+     * @return true on success, false otherwise
+     */
+    bool grab();
 
     /**
      * Shut downs the grabber process either if it is runned in deamon
      * mode or "single grab" mode.
      * @return true on success, false otherwise
      */
-    bool tearDown();
+    virtual bool tearDown() = 0;
+
+protected:
+    /**
+     * Call back function for the message loop of gstreamer.
+     */
+    static gboolean bus_callback(GstBus     *bus,
+                                 GstMessage *message,
+                                 gpointer    data);
 
 private:
     /**
-     * Pad to select the video stream from the demux to the decoder
+     * Get the actual image from the gstreamer application interface.
      */
-    static void on_pad_added (GstElement *element,
-                              GstPad     *pad,
-                              gpointer    data);
+    const QImage getImage();
 
-    /**
-     *
-     */
-    static void cb_typefound (GstElement *typefind,
-                              guint       probability,
-                              GstCaps    *caps,
-                              gpointer    data);
+protected:
+    GstElement *pipeline;
+    GstElement *source;
+    GstElement *filter1;
+    GstElement *filter2;
+    GstElement *sink;
 
 private:
     int         activeSource;
     bool        isInitSuccess;
     bool        firstImage;
 
-    GstElement *filter3;
-    GstElement *queue1;
-    GstElement *queue2;
-
+    QImage liveImage;
+    QImage rawImage;
 };
 
 #endif

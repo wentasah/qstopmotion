@@ -145,14 +145,16 @@ bool GstreamerDv1394Grabber::initialization(QVector<ImageGrabberDevice*> &device
                         gst_object_unref(GST_OBJECT(src));
                         return false;
                     }
-                    device = new ImageGrabberDevice((const char*)g_value_get_string(&value_id_string),
+                    device = new ImageGrabberDevice(0,
+                                                    (const char*)g_value_get_string(&value_id_string),
                                                     (const char*)g_value_get_string(&value_name_string),
                                                     ImageGrabberDevice::ieee1394Source,
                                                     ImageGrabberDevice::video_x_none);
                 }
                 else {
                     // No device name
-                    device = new ImageGrabberDevice((const char*)g_value_get_string(&value_id_string),
+                    device = new ImageGrabberDevice(0,
+                                                    (const char*)g_value_get_string(&value_id_string),
                                                     QString(QApplication::translate("GstreamerDv1394Grabber", "Device %1")).arg(device_size),
                                                     ImageGrabberDevice::ieee1394Source,
                                                     ImageGrabberDevice::video_x_none);

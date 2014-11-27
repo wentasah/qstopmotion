@@ -59,7 +59,8 @@ bool GstreamerVideoTestGrabber::initialization(QVector<ImageGrabberDevice*> &dev
 
     qDebug() << "GstreamerVideoTestGrabber::initialization --> Add video test device";
 
-    device = new ImageGrabberDevice("",
+    device = new ImageGrabberDevice(0,
+                                    "",
                                     QApplication::translate("GstreamerVideoTestGrabber", "Video test device"),
                                     ImageGrabberDevice::testSource,
                                     ImageGrabberDevice::video_x_none);

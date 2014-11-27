@@ -571,6 +571,7 @@ private:
     void getControlFlag(GrabberControlCapabilities *caps);
     bool setBaseCapabilities();
     bool setPrivateCapabilities();
+    bool setResolutions();
     int  setCtrlValue(GrabberControlCapabilities *caps, int value);
     int  getCtrlValue(GrabberControlCapabilities *caps, int &value);
 

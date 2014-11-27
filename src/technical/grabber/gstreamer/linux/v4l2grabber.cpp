@@ -148,14 +148,16 @@ bool GstreamerV4L2Grabber::initialization(QVector<ImageGrabberDevice*> &devices)
                         gst_object_unref(GST_OBJECT(src));
                         return false;
                     }
-                    device = new ImageGrabberDevice((const char*)g_value_get_string(&value_id_string),
+                    device = new ImageGrabberDevice(0,
+                                                    (const char*)g_value_get_string(&value_id_string),
                                                     (const char*)g_value_get_string(&value_name_string),
                                                     ImageGrabberDevice::video4LinuxSource,
                                                     ImageGrabberDevice::video_x_none);
                 }
                 else {
                     // No device name
-                    device = new ImageGrabberDevice((const char*)g_value_get_string(&value_id_string),
+                    device = new ImageGrabberDevice(0,
+                                                    (const char*)g_value_get_string(&value_id_string),
                                                     QString(QApplication::translate("GstreamerV4L2Grabber", "Device %1")).arg(device_size),
                                                     ImageGrabberDevice::video4LinuxSource,
                                                     ImageGrabberDevice::video_x_none);
@@ -164,7 +166,7 @@ bool GstreamerV4L2Grabber::initialization(QVector<ImageGrabberDevice*> &devices)
                 devices.append(device);
 
                 // Create grabber controller
-                if (pref->getIntegerPreference("preferences", "gstreamerdirectshowusbcontroller", value) == false) {
+                if (pref->getIntegerPreference("preferences", "gstreamerv4l2controller", value) == false) {
                     value = false;
                 }
                 if ((int)true == value) {

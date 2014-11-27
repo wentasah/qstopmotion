@@ -178,10 +178,13 @@ protected:
     ImageGrabberThread *grabberThread;
 
     ImageGrabber *gstreamerVideoTestGrabber;
+
     ImageGrabber *gstreamerV4L2Grabber;
     ImageGrabber *gstreamerDv1394Grabber;
-    ImageGrabber *gstreamerDirectShowUsbGrabber;
     ImageGrabber *gphotoGrabber;
+
+    ImageGrabber *gstreamerDirectShowUsbGrabber;
+    ImageGrabber *mediaFoundationGrabber;
 
 };
 

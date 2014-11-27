@@ -117,6 +117,11 @@ bool GrabberV4L2Controller::init(const QString &id)
         return false;
     }
 
+    if (setResolutions() == false) {
+        qDebug() << "GrabberV4L2Controller::init --> Cannot enumerate resolutions (" << errno << ")";
+        return false;
+    }
+
     qDebug("GrabberV4L2Controller::init --> End (Successful)");
 
     return true;
@@ -604,6 +609,59 @@ bool GrabberV4L2Controller::setPrivateCapabilities()
     }
 
     qDebug("GrabberV4L2Controller::setPrivateCapabilities --> End");
+
+    return true;
+}
+
+
+bool GrabberV4L2Controller::setResolutions()
+{
+    qDebug("GrabberV4L2Controller::setResolutions --> Start");
+
+    enum v4l2_buf_type       type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+    struct v4l2_fmtdesc      fmt;
+    struct v4l2_frmsizeenum  frmsize;
+    // struct v4l2_frmivalenum  frmival;
+    unsigned int             outputWidth;
+    unsigned int             outputHeight;
+
+    fmt.index = 0;
+    fmt.type = type;
+
+    while (xioctl(fd, VIDIOC_ENUM_FMT, &fmt) >= 0) {
+        frmsize.pixel_format = fmt.pixelformat;
+        frmsize.index = 0;
+        while (xioctl(fd, VIDIOC_ENUM_FRAMESIZES, &frmsize) >= 0) {
+            switch (frmsize.type) {
+            case V4L2_FRMSIZE_TYPE_DISCRETE:
+                outputWidth = frmsize.discrete.width;
+                outputHeight = frmsize.discrete.height;
+                break;
+            case V4L2_FRMSIZE_TYPE_STEPWISE:
+                outputWidth = frmsize.stepwise.max_width;
+                outputHeight = frmsize.stepwise.max_height;
+                break;
+            case V4L2_FRMSIZE_TYPE_CONTINUOUS:
+                continue;
+                break;
+            default:
+                continue;
+                break;
+            }
+
+            addResolution(GrabberResolution(QString("%1").arg(fmt.index), outputWidth, outputHeight, /* QString((const char*)(fmt.description)), */ false));
+
+            frmsize.index++;
+        }
+
+        /*
+        qDebug() << "GrabberV4L2Controller::setResolutions --> Private Control: " << (char*)(queryctrl.name);
+        */
+
+        fmt.index++;
+    }
+
+    qDebug("GrabberV4L2Controller::setResolutions --> End");
 
     return true;
 }

@@ -1,7 +1,7 @@
 ###############################################################################
 # CMake file for the qStopMotion project                                      #
 # (c) Ralf Lange, longsoft.de                                                 #
-# Last update: 2014-07-18                                                     #
+# Last update: 2014-07-23                                                     #
 #                                                                             #
 # Usage:                                                                      #
 #   * Qt-Creator (Windows, Linux)                                             #
@@ -90,6 +90,7 @@ set(HEADERS
     ${HEADERS}
     src/technical/grabber/gstreamer/windows/directshowcontroller.h
     src/technical/grabber/mediafoundation/mfcontroller.h
+    src/technical/grabber/mediafoundation/mfutil.h
 )
 ENDIF(WIN32)
 
@@ -427,10 +428,11 @@ ENDIF(WIN32)
 IF(WIN32)
 
     SET(MEDIAFOUNDATION_LIBRARIES
-        evr.lib     # ???
-        mf.lib      # ???
-        mfplat.lib  # ???
-        mfuuid.lib  # ???
+        evr.lib          # ???
+        mf.lib           # ???
+        mfplat.lib       # ???
+        mfuuid.lib       # ???
+        mfreadwrite.lib  # Read and write media stream
     )
 
 ELSE(WIN32)

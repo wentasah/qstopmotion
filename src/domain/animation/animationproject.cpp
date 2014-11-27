@@ -57,7 +57,7 @@ AnimationProject::AnimationProject(Frontend* f)
     videoSize                = 0;
     videoFps                 = 0;
 
-    useDefaultOutputFile     = 0;
+    useDefaultOutputFile     = false;
     unitMode                 = 0;
     activeSceneIndex         = -1;
     nextSceneIndex           = 0;
@@ -697,7 +697,12 @@ bool AnimationProject::readSettingsFromProject(QDomElement &settingsNode)
         }
         else if (nodeName.compare("usedefaultoutputfile") == 0) {
             QString tmp = currElement.text();
-            useDefaultOutputFile = tmp.toInt();
+            if (1 == tmp.toInt()) {
+                useDefaultOutputFile = true;
+            }
+            else {
+                useDefaultOutputFile = false;
+            }
         }
         else if (nodeName.compare("defaultoutputfilename") == 0) {
             QString tmp = currElement.text();
@@ -833,7 +838,7 @@ bool AnimationProject::saveSettingsToProject(QDomDocument &doc, QDomElement &set
 
     // Save useDefaultOutputFile parameter
     QDomElement udofElement = doc.createElement("usedefaultoutputfile");
-    QDomText udofText = doc.createTextNode(QString("%1").arg((int)useDefaultOutputFile));
+    QDomText udofText = doc.createTextNode(QString("%1").arg((true == useDefaultOutputFile ? 1 : 0)));
     udofElement.appendChild(udofText);
     settingsNode.appendChild(udofElement);
 

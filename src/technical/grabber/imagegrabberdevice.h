@@ -70,12 +70,14 @@ public:
 
     /**
      * Constructs and initializes the object.
+     * @param index The index of the device.
      * @param id The id of the device.
      * @param name The name of the device.
      * @param source The source of the device.
      * @param cap The capability of the device.
      */
-    ImageGrabberDevice(const QString id,
+    ImageGrabberDevice(const int index,
+                       const QString id,
                        const QString name,
                        imageGrabberVideoSources source,
                        imageGrabberDeviceCapabilities cap);
@@ -84,6 +86,18 @@ public:
      * Destructor
      */
     ~ImageGrabberDevice();
+
+    /**
+     * Get the index of the device.
+     * @return The index of the device.
+     */
+    const int getDeviceIndex();
+
+    /**
+     * Set the index of the device.
+     * @param index The new index of the device.
+     */
+    void setDeviceIndex(const int index);
 
     /**
      * Get the id of the device.
@@ -152,13 +166,13 @@ public:
     void setController(GrabberController *c);
 
 private:
-    QString   deviceId;
-    // GSTValue *deviceIdValue;
-    QString   deviceName;
-    imageGrabberVideoSources deviceSource;
-    imageGrabberDeviceCapabilities deviceCap;
+    int                             deviceIndex;
+    QString                         deviceId;
+    QString                         deviceName;
+    imageGrabberVideoSources        deviceSource;
+    imageGrabberDeviceCapabilities  deviceCap;
 
-    GrabberController *controller;
+    GrabberController              *controller;
 
 };
 

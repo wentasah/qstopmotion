@@ -366,8 +366,14 @@ void ExportWidget::apply()
     }
 
     if (noButton->isChecked()) {
-        if (activeUseDefaultOutputFile) {
+        if (true == activeUseDefaultOutputFile) {
             activeUseDefaultOutputFile = false;
+            changings = true;
+        }
+    }
+    else {
+        if (false == activeUseDefaultOutputFile) {
+            activeUseDefaultOutputFile = true;
             changings = true;
         }
     }
@@ -386,7 +392,7 @@ void ExportWidget::apply()
             pref->setIntegerPreference("preferences", "defaultvideoformat", activeVideoFormat);
             pref->setIntegerPreference("preferences", "defaultvideosize", activeVideoSize);
             pref->setIntegerPreference("preferences", "defaultvideofps", activeVideoFps);
-            pref->setIntegerPreference("preferences", "defaultusedefaultoutputfile", activeUseDefaultOutputFile);
+            pref->setIntegerPreference("preferences", "defaultusedefaultoutputfile", (true == activeUseDefaultOutputFile ? 1 : 0));
         }
         else {
             // This is a project dialog tab

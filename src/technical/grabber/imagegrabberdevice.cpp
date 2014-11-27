@@ -37,13 +37,15 @@ ImageGrabberDevice::ImageGrabberDevice()
 }
 
 
-ImageGrabberDevice::ImageGrabberDevice(const QString id,
-                                 const QString name,
-                                 imageGrabberVideoSources source,
-                                 imageGrabberDeviceCapabilities cap)
+ImageGrabberDevice::ImageGrabberDevice(const int index,
+                                       const QString id,
+                                       const QString name,
+                                       imageGrabberVideoSources source,
+                                       imageGrabberDeviceCapabilities cap)
 {
     qDebug("ImageGrabberDevice::Constructor --> Start");
 
+    deviceIndex = index;
     deviceId.clear();
     deviceId.append(id);
     deviceName.clear();
@@ -68,6 +70,18 @@ ImageGrabberDevice::~ImageGrabberDevice()
     }
 
     qDebug("ImageGrabberDevice::Destructor --> End");
+}
+
+
+const int ImageGrabberDevice::getDeviceIndex()
+{
+    return deviceIndex;
+}
+
+
+void ImageGrabberDevice::setDeviceIndex(const int index)
+{
+    deviceIndex = index;
 }
 
 

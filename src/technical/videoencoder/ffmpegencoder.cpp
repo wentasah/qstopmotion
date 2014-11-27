@@ -87,9 +87,6 @@ const QString FfmpegEncoder::getStartCommand() const
 {
     QString          startCommand;
     QString          imagePath = animationProject->getNewImagePath();
-    PreferencesTool *pref = animationProject->getFrontend()->getPreferences();
-    int              videoSize = VideoEncoder::defaultSize;
-    int              videoFormat = VideoEncoder::noneFormat;
 
     // Prepare start command
     //
@@ -155,8 +152,7 @@ const QString FfmpegEncoder::getStartCommand() const
     startCommand.append(QString(" -r 25"));
 
     // Video size (default = Input size)
-    pref->getIntegerPreference("preferences", "videosize", videoSize);
-    switch(videoSize) {
+    switch(animationProject->getVideoSize()) {
     case VideoEncoder::qvgaSize:
         startCommand.append(" -s qvga");
         break;
@@ -175,21 +171,32 @@ const QString FfmpegEncoder::getStartCommand() const
     case VideoEncoder::fullhdSize:
         startCommand.append(" -s hd1080");
         break;
+    default:
+        // Default value is VGA output
+        startCommand.append(" -s vga");
+        break;
     }
 
     // Video format
-    pref->getIntegerPreference("preferences", "videoformat", videoFormat);
-    switch(videoFormat) {
+    switch(animationProject->getVideoFormat()) {
     case VideoEncoder::aviFormat:
         startCommand.append(" -f avi");
         break;
     case VideoEncoder::mp4Format:
         startCommand.append(" -f mp4");
         break;
+    default:
+        // Default value is AVI output
+        startCommand.append(" -f avi");
+        break;
     }
 
+    // Video quality
+    // 1 = excellent quality, 31 worst quality
+    startCommand.append(" -qscale:v 1");
+
     // Bit rate in bit/s (default = 200kb/s)
-    // startCommand.append(" -b 1800");
+    startCommand.append(" -b:v 1000k");
 
     // ===============================
     // Output file

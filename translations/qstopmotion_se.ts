@@ -355,17 +355,17 @@ without sound if you choose to play.</source>
         <translation type="unfinished">&amp;Stäng</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/cameracontrollerdialog.cpp" line="436"/>
+        <location filename="../src/frontends/qtfrontend/dialogs/cameracontrollerdialog.cpp" line="437"/>
         <source>Restore Camera Settings...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/cameracontrollerdialog.cpp" line="2009"/>
+        <location filename="../src/frontends/qtfrontend/dialogs/cameracontrollerdialog.cpp" line="2056"/>
         <source>Reset Camera Settings...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/cameracontrollerdialog.cpp" line="2009"/>
+        <location filename="../src/frontends/qtfrontend/dialogs/cameracontrollerdialog.cpp" line="2056"/>
         <source>Abort Reset</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1071,15 +1071,14 @@ without sound if you choose to play.</source>
 <context>
     <name>GstreamerDeviceGrabber</name>
     <message>
-        <location filename="../src/technical/grabber/gstreamerdevicegrabber.cpp" line="173"/>
         <source>Device %1</source>
-        <translation type="unfinished">Enhet %1</translation>
+        <translation type="obsolete">Enhet %1</translation>
     </message>
 </context>
 <context>
     <name>GstreamerDv1394Grabber</name>
     <message>
-        <location filename="../src/technical/grabber/gstreamerdv1394grabber.cpp" line="156"/>
+        <location filename="../src/technical/grabber/gstreamer/linux/dv1394grabber.cpp" line="158"/>
         <source>Device %1</source>
         <translation type="unfinished">Enhet %1</translation>
     </message>
@@ -1098,7 +1097,7 @@ without sound if you choose to play.</source>
 <context>
     <name>GstreamerV4L2Grabber</name>
     <message>
-        <location filename="../src/technical/grabber/gstreamerv4l2grabber.cpp" line="159"/>
+        <location filename="../src/technical/grabber/gstreamer/linux/v4l2grabber.cpp" line="161"/>
         <source>Device %1</source>
         <translation type="unfinished">Enhet %1</translation>
     </message>
@@ -1106,7 +1105,7 @@ without sound if you choose to play.</source>
 <context>
     <name>GstreamerVideoTestGrabber</name>
     <message>
-        <location filename="../src/technical/grabber/gstreamervideotestgrabber.cpp" line="63"/>
+        <location filename="../src/technical/grabber/gstreamer/videotestgrabber.cpp" line="64"/>
         <source>Video test device</source>
         <translation type="unfinished">Video testenhet</translation>
     </message>
@@ -1155,15 +1154,15 @@ your grabber settings in the preferences menu.</source>
 <context>
     <name>ImageGrabberFacade</name>
     <message>
-        <location filename="../src/technical/grabber/imagegrabberfacade.cpp" line="223"/>
+        <location filename="../src/technical/grabber/imagegrabberfacade.cpp" line="240"/>
         <source>Check image grabber</source>
         <translation type="unfinished">Kontrollera bildfångstenheten</translation>
     </message>
     <message>
-        <location filename="../src/technical/grabber/imagegrabberfacade.cpp" line="224"/>
-        <source>Grabbing failed. This may happen if you try
-to grab from an invalid device. Please select
-another device on the recording tool tab.</source>
+        <location filename="../src/technical/grabber/imagegrabberfacade.cpp" line="241"/>
+        <source>Image grabber initialization failed. This may happen 
+if you try to grab from an invalid device. Please
+select another device on the recording tool tab.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1330,7 +1329,6 @@ another device on the recording tool tab.</source>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="505"/>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="856"/>
         <source>You have to define an image grabber to use.
 This can be set in the preferences menu.</source>
         <translation>Du måste ange en bildfångstenhet att använda.
@@ -1554,6 +1552,12 @@ Detta kan anges i inställningsmenyn.</translation>
         <translation>Ansluter kamera...</translation>
     </message>
     <message>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="856"/>
+        <source>You have to define an image grabber to use.
+This can be set on the recording tool tab.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1010"/>
         <source>Existing Images</source>
         <translation type="unfinished"></translation>
@@ -1612,8 +1616,9 @@ Detta kan anges i inställningsmenyn.</translation>
     <message>
         <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1312"/>
         <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1342"/>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1406"/>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1432"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1380"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1415"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1442"/>
         <source>Warning</source>
         <translation>Varning</translation>
     </message>
@@ -1623,12 +1628,11 @@ Detta kan anges i inställningsmenyn.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1343"/>
         <source>Cannot find any registered encoder to be used for video export.
 This can be setted in the preferences menu.
 Export to video will not be possible until you
 have setted an encoder to use!</source>
-        <translation>Kan inte hitta någon registrerad kodare för videoexport.
+        <translation type="obsolete">Kan inte hitta någon registrerad kodare för videoexport.
 En sådan kan anges i inställningsmenyn.
 Videoexportering är inte möjligt förrän en videokodare är angiven!</translation>
     </message>
@@ -1645,41 +1649,39 @@ Videoexportering är inte möjligt förrän en videokodare är angiven!</transla
         <translation>MP4videor (*.mp4)</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1381"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1388"/>
         <source>Export to video file</source>
         <translation>Exportera till videofil</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1407"/>
         <source>No default output file name defined.
 Check your settings in the preferences menu!</source>
-        <translation>Inget förvalt videofilnamn att exportera till satt.
+        <translation type="obsolete">Inget förvalt videofilnamn att exportera till satt.
 Kontrollera dina inställningar i menyn!</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1433"/>
         <source>The registered encoder is not valid.
 Check your settings in the preferences menu!</source>
-        <translation>Den registrerade kodare är ogiltig.
+        <translation type="obsolete">Den registrerade kodare är ogiltig.
 Kontrollera dina inställningar i menyn!</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1441"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1451"/>
         <source>Exporting ...</source>
         <translation>Exporterar...</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1458"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1468"/>
         <source>Export to file</source>
         <translation>Exportera till fil</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1633"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1643"/>
         <source>qStopMotion - Undo stack</source>
         <translation>qStopMotion - Ångringslista</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1759"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1769"/>
         <source>English</source>
         <comment>This should be translated to the name of the language you are translating to, in that language. Example: English = Deutsch (Deutsch is &quot;German&quot; in German)</comment>
         <translation>Svenska</translation>
@@ -1864,12 +1866,40 @@ Kontrollera dina inställningar i menyn!</translation>
         <translation>&lt;h4&gt;Tidsaxel&lt;/h4&gt; &lt;p&gt;Här kan du se animationens bildrutor och scener. Du kan arrangera om sekvenser genom att flytta bilder.&lt;/p&gt;&lt;p&gt;Du kan växla mellan nästa och tidigare bildrutor med&lt;b&gt;piltangenterna&lt;/b&gt; eller &lt;b&gt;x&lt;/b&gt; och &lt;b&gt;z&lt;/b&gt;&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="2536"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1343"/>
+        <source>No encoder selected for the video export.
+This can be setted in the properties dialog of the project.
+Export to video will not be possible until you
+have setted an encoder to use!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1381"/>
+        <source>No video format selected for the video export.
+This can be setted in the properties dialog of the project.
+Export to video will not be possible until you
+have setted an video format to use!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1416"/>
+        <source>No default output file name defined.
+Check your settings in the properties dialo of the project!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1443"/>
+        <source>The selected encoder is not valid.
+Check your settings in the properties dialog of the project!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="2546"/>
         <source>Unsaved changes</source>
         <translation>Osparande ändringar</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="2537"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="2547"/>
         <source>There are unsaved changes. Do you want to save?</source>
         <translation>Det finns osparade ändringar. Vill du spara?</translation>
     </message>

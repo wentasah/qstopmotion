@@ -313,17 +313,17 @@ L&apos;animation est visualisée sans son si vous choisissez de le lire.</transl
         <translation>Exposition:</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/cameracontrollerdialog.cpp" line="436"/>
+        <location filename="../src/frontends/qtfrontend/dialogs/cameracontrollerdialog.cpp" line="437"/>
         <source>Restore Camera Settings...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/cameracontrollerdialog.cpp" line="2009"/>
+        <location filename="../src/frontends/qtfrontend/dialogs/cameracontrollerdialog.cpp" line="2056"/>
         <source>Reset Camera Settings...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/cameracontrollerdialog.cpp" line="2009"/>
+        <location filename="../src/frontends/qtfrontend/dialogs/cameracontrollerdialog.cpp" line="2056"/>
         <source>Abort Reset</source>
         <translation type="unfinished"></translation>
     </message>
@@ -928,15 +928,14 @@ L&apos;animation est visualisée sans son si vous choisissez de le lire.</transl
 <context>
     <name>GstreamerDeviceGrabber</name>
     <message>
-        <location filename="../src/technical/grabber/gstreamerdevicegrabber.cpp" line="173"/>
         <source>Device %1</source>
-        <translation>Périphérique %1</translation>
+        <translation type="obsolete">Périphérique %1</translation>
     </message>
 </context>
 <context>
     <name>GstreamerDv1394Grabber</name>
     <message>
-        <location filename="../src/technical/grabber/gstreamerdv1394grabber.cpp" line="156"/>
+        <location filename="../src/technical/grabber/gstreamer/linux/dv1394grabber.cpp" line="158"/>
         <source>Device %1</source>
         <translation>Périphérique %1</translation>
     </message>
@@ -955,7 +954,7 @@ L&apos;animation est visualisée sans son si vous choisissez de le lire.</transl
 <context>
     <name>GstreamerV4L2Grabber</name>
     <message>
-        <location filename="../src/technical/grabber/gstreamerv4l2grabber.cpp" line="159"/>
+        <location filename="../src/technical/grabber/gstreamer/linux/v4l2grabber.cpp" line="161"/>
         <source>Device %1</source>
         <translation>Périphérique %1</translation>
     </message>
@@ -963,7 +962,7 @@ L&apos;animation est visualisée sans son si vous choisissez de le lire.</transl
 <context>
     <name>GstreamerVideoTestGrabber</name>
     <message>
-        <location filename="../src/technical/grabber/gstreamervideotestgrabber.cpp" line="63"/>
+        <location filename="../src/technical/grabber/gstreamer/videotestgrabber.cpp" line="64"/>
         <source>Video test device</source>
         <translation>Périphérique de test vidéo</translation>
     </message>
@@ -1014,16 +1013,22 @@ paramètres de capture dans la fenêtre de préférences.</translation>
 <context>
     <name>ImageGrabberFacade</name>
     <message>
-        <location filename="../src/technical/grabber/imagegrabberfacade.cpp" line="223"/>
+        <location filename="../src/technical/grabber/imagegrabberfacade.cpp" line="240"/>
         <source>Check image grabber</source>
         <translation>Vérifier le périphérique</translation>
     </message>
     <message>
-        <location filename="../src/technical/grabber/imagegrabberfacade.cpp" line="224"/>
+        <location filename="../src/technical/grabber/imagegrabberfacade.cpp" line="241"/>
+        <source>Image grabber initialization failed. This may happen 
+if you try to grab from an invalid device. Please
+select another device on the recording tool tab.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Grabbing failed. This may happen if you try
 to grab from an invalid device. Please select
 another device on the recording tool tab.</source>
-        <translation>Saisie de l&apos;image échouée.Cela peut arriver si vous essayé de saisir d&apos;un périphérique non valide. Choisissez s&apos;il vous plaît un autre périphérique dans la tabulation d&apos;enregistrement.</translation>
+        <translation type="obsolete">Saisie de l&apos;image échouée.Cela peut arriver si vous essayé de saisir d&apos;un périphérique non valide. Choisissez s&apos;il vous plaît un autre périphérique dans la tabulation d&apos;enregistrement.</translation>
     </message>
 </context>
 <context>
@@ -1198,7 +1203,7 @@ another device on the recording tool tab.</source>
 <context>
     <name>MainWindowGUI</name>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1759"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1769"/>
         <source>English</source>
         <comment>This should be translated to the name of the language you are translating to, in that language. Example: English = Deutsch (Deutsch is &quot;German&quot; in German)</comment>
         <translation>Français</translation>
@@ -1404,17 +1409,51 @@ another device on the recording tool tab.</source>
         <translation>&lt;h4&gt;Cadre de prévisualisation&lt;/h4&gt;&lt;p&gt; Dans cette zone, vous pouvez voir l&apos;image sélectionnée. Vous pouvez aussi voir les animations en pressant le bouton &lt;b&gt;Lecture&lt;/b&gt;.&lt;/p&gt;</translation>
     </message>
     <message>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="856"/>
+        <source>You have to define an image grabber to use.
+This can be set on the recording tool tab.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1312"/>
         <source>The project directory must not contain more than one project file.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="2536"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1343"/>
+        <source>No encoder selected for the video export.
+This can be setted in the properties dialog of the project.
+Export to video will not be possible until you
+have setted an encoder to use!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1381"/>
+        <source>No video format selected for the video export.
+This can be setted in the properties dialog of the project.
+Export to video will not be possible until you
+have setted an video format to use!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1416"/>
+        <source>No default output file name defined.
+Check your settings in the properties dialo of the project!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1443"/>
+        <source>The selected encoder is not valid.
+Check your settings in the properties dialog of the project!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="2546"/>
         <source>Unsaved changes</source>
         <translation>Modifications non enregistrées</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="2537"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="2547"/>
         <source>There are unsaved changes. Do you want to save?</source>
         <translation>Il y a des modifications non enregistrées. Voulez-vous enregistrer ?</translation>
     </message>
@@ -1466,7 +1505,6 @@ another device on the recording tool tab.</source>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="505"/>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="856"/>
         <source>You have to define an image grabber to use.
 This can be set in the preferences menu.</source>
         <translation>Vous devez définir un périphérique de capture.
@@ -1590,12 +1628,11 @@ Ceci peut être fait dans la fenêtre de préférences.</translation>
         <translation type="obsolete">Projet (*.%1);;Archive (*.%2)</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1343"/>
         <source>Cannot find any registered encoder to be used for video export.
 This can be setted in the preferences menu.
 Export to video will not be possible until you
 have setted an encoder to use!</source>
-        <translation>Il n&apos;est pas possible de trouver un encodeur enregistré pour être utilisé pour l&apos;exportation de la vidéo.
+        <translation type="obsolete">Il n&apos;est pas possible de trouver un encodeur enregistré pour être utilisé pour l&apos;exportation de la vidéo.
 Ceci peut être situé dans la fenêtre de préférences.
 L&apos;exportation comme vidéo n&apos;est pas possible jusqu&apos;à ce que vous ayez installé un encodeur!</translation>
     </message>
@@ -1610,26 +1647,24 @@ L&apos;exportation comme vidéo n&apos;est pas possible jusqu&apos;à ce que vou
         <translation>Vidéos MP4 (*.mp4)</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1407"/>
         <source>No default output file name defined.
 Check your settings in the preferences menu!</source>
-        <translation>Ne pas definir un nom standard pour le fichier de sortie.
+        <translation type="obsolete">Ne pas definir un nom standard pour le fichier de sortie.
 Contrôlez les Paramètres dans le menu!</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1433"/>
         <source>The registered encoder is not valid.
 Check your settings in the preferences menu!</source>
-        <translation>L&apos;encodeur enregistré est non valide.
+        <translation type="obsolete">L&apos;encodeur enregistré est non valide.
 Veuillez vérifier les paramètres dans la fenêtre de préférences!</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1441"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1451"/>
         <source>Exporting ...</source>
         <translation>Exportation ...</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1633"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1643"/>
         <source>qStopMotion - Undo stack</source>
         <translation>qStopMotion - Annuler la liste de commandements</translation>
     </message>
@@ -1746,18 +1781,19 @@ Veuillez vérifier les paramètres dans la fenêtre de préférences!</translati
     <message>
         <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1312"/>
         <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1342"/>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1406"/>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1432"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1380"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1415"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1442"/>
         <source>Warning</source>
         <translation>Attention</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1381"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1388"/>
         <source>Export to video file</source>
         <translation>Exporter vers un fichier vidéo</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1458"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1468"/>
         <source>Export to file</source>
         <translation>Exporter vers un fichier</translation>
     </message>

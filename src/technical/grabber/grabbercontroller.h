@@ -72,17 +72,17 @@ public:
      */
     int getControllerCapabilities();
 
-    /**
-     * Add a resolution to the controller.
-     * @param r The new grabber resolution.
-     */
-    void addResolution(GrabberResolution r);
-
     /**************************************************************************
      **************************************************************************
      * Camera resolution
      **************************************************************************
      **************************************************************************/
+
+    /**
+     * Add a resolution to the controller.
+     * @param r The new grabber resolution.
+     */
+    void addResolution(GrabberResolution r);
 
     /**
      * Get the possible resolutions of the controller.

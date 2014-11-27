@@ -136,14 +136,16 @@ bool GstreamerDirectShow1394Grabber::initialization(QVector<ImageGrabberDevice*>
                         gst_object_unref(GST_OBJECT(src));
                         return false;
                     }
-                    device = new ImageGrabberDevice(g_value_get_string(&value_id_string),
+                    device = new ImageGrabberDevice(0,
+                                                    g_value_get_string(&value_id_string),
                                                     g_value_get_string(&value_name_string),
                                                     ImageGrabberDevice::directShowUsbSource,
                                                     ImageGrabberDevice::video_x_none);
                 }
                 else {
                     // No device id
-                    device = new ImageGrabberDevice(g_value_get_string(&value_name_string),
+                    device = new ImageGrabberDevice(0,
+                                                    g_value_get_string(&value_name_string),
                                                     g_value_get_string(&value_name_string),
                                                     ImageGrabberDevice::directShow1394Source,
                                                     ImageGrabberDevice::video_x_none);

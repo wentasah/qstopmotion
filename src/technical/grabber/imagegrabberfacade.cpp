@@ -24,6 +24,7 @@
 
 #ifdef Q_WS_WIN
 #include "technical/grabber/gstreamer/windows/directshowusbgrabber.h"
+#include "technical/grabber/mediafoundation/mfgrabber.h"
 #endif
 #ifdef Q_WS_X11
 #include "technical/grabber/gphoto2/gpgrabber.h"
@@ -50,8 +51,10 @@ ImageGrabberFacade::ImageGrabberFacade(Frontend *f)
     gstreamerVideoTestGrabber = NULL;
     gstreamerV4L2Grabber = NULL;
     gstreamerDv1394Grabber = NULL;
-    gstreamerDirectShowUsbGrabber = NULL;
     gphotoGrabber = NULL;
+
+    gstreamerDirectShowUsbGrabber = NULL;
+    mediaFoundationGrabber = NULL;
 
     qDebug("ImageGrabberFacade::Constructor --> End");
 }
@@ -75,13 +78,17 @@ ImageGrabberFacade::~ImageGrabberFacade()
         delete gstreamerDv1394Grabber;
         gstreamerDv1394Grabber = NULL;
     }
+    if (gphotoGrabber != NULL) {
+        delete gphotoGrabber;
+        gphotoGrabber = NULL;
+    }
     if (gstreamerDirectShowUsbGrabber != NULL) {
         delete gstreamerDirectShowUsbGrabber;
         gstreamerDirectShowUsbGrabber = NULL;
     }
-    if (gphotoGrabber != NULL) {
-        delete gphotoGrabber;
-        gphotoGrabber = NULL;
+    if (mediaFoundationGrabber != NULL) {
+        delete mediaFoundationGrabber;
+        mediaFoundationGrabber = NULL;
     }
 
     qDebug("ImageGrabberFacade::Destructor --> End");
@@ -166,6 +173,12 @@ void ImageGrabberFacade::initialization()
             isInitialized = true;
         }
     }
+
+    // Microsoft Media Foundation device
+    mediaFoundationGrabber = new MfGrabber(frontend);
+    if (mediaFoundationGrabber->initialization(devices)) {
+        isInitialized = true;
+    }
 #endif
 
 #ifdef Q_WS_X11
@@ -214,6 +227,10 @@ void ImageGrabberFacade::init()
         isInited = gphotoGrabber->setUp();
 
         break;
+    case ImageGrabberDevice::mediaFoundationSource:
+        isInited = mediaFoundationGrabber->setUp();
+
+        break;
     default:
 
         break;
@@ -257,6 +274,9 @@ void ImageGrabberFacade::finalize()
         break;
     case ImageGrabberDevice::gphoto2Source:
         gphotoGrabber->tearDown();
+        break;
+    case ImageGrabberDevice::mediaFoundationSource:
+        mediaFoundationGrabber->tearDown();
         break;
     default:
         break;
@@ -326,6 +346,9 @@ const QImage ImageGrabberFacade::getLiveImage()
     case ImageGrabberDevice::gphoto2Source:
         liveImage = gphotoGrabber->getLiveImage();
         break;
+    case ImageGrabberDevice::mediaFoundationSource:
+        liveImage = mediaFoundationGrabber->getLiveImage();
+        break;
     default:
         break;
     }
@@ -357,6 +380,9 @@ const QImage ImageGrabberFacade::getRawImage()
         break;
     case ImageGrabberDevice::gphoto2Source:
         rawImage = gphotoGrabber->getRawImage();
+        break;
+    case ImageGrabberDevice::mediaFoundationSource:
+        rawImage = mediaFoundationGrabber->getRawImage();
         break;
     default:
         break;

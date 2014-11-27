@@ -24,11 +24,12 @@
 #include "technical/grabber/imagegrabber.h"
 #include "technical/grabber/imagegrabberdevice.h"
 #include "technical/grabber/imagegrabberdevice.h"
-// #include "technical/grabber/gstreamergrabber.h"
 
 // Include files of the media foundation
-#include "mfapi.h"
-#include "mfidl.h"
+#include <mfapi.h>
+#include <mfidl.h>
+#include <mfreadwrite.h>
+#include <mferror.h>
 
 
 /**
@@ -93,6 +94,18 @@ private:
 
     HRESULT enumerateCaptureFormats(IMFMediaSource *pSource, ImageGrabberDevice *device);
 
+    HRESULT SetDeviceFormat(IMFMediaSource *pSource, DWORD dwFormatIndex);
+
+    QString GetGUIDNameConstNew(const GUID& guid);
+
+    // void getRawFrame(const uchar*& data, int& length);
+    void getRawFrame(const uchar*& data, int& w, int& h);
+
+    // HRESULT LogMediaType(IMFMediaType *pType);
+    // HRESULT LogAttributeValueByIndex(IMFAttributes *pAttr, DWORD index);
+
+    void ConvertAYUV_to_YUY2(const BYTE *, BYTE *, DWORD, DWORD, LONG, LONG);
+
     /**
      * Get the actual image from the gstreamer application interface.
      */
@@ -104,6 +117,14 @@ private:
 
     QImage liveImage;
     QImage rawImage;
+
+    IMFMediaSource  *mediaSource;
+    IMFSourceReader *sourceReader;
+
+    uchar* frameData;
+    int frameLength;
+    QSize frameSize;
+    QImage lastFrame;
 };
 
 #endif

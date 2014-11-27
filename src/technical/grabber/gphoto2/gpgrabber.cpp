@@ -138,7 +138,8 @@ bool GphotoGrabber::initialization(QVector<ImageGrabberDevice*> &devices)
 
     qDebug() << "GphotoGrabber::initialization --> Add video test device";
 
-    device = new ImageGrabberDevice("",
+    device = new ImageGrabberDevice(0,
+                                    "",
                                     QString("%1 %2").arg(manufacturer).arg(model),
                                     ImageGrabberDevice::gphoto2Source,
                                     ImageGrabberDevice::video_x_none);

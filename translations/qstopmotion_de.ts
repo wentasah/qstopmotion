@@ -315,17 +315,17 @@ wenn Sie abspielen wählen.</translation>
         <translation>Belichtung:</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/cameracontrollerdialog.cpp" line="436"/>
+        <location filename="../src/frontends/qtfrontend/dialogs/cameracontrollerdialog.cpp" line="437"/>
         <source>Restore Camera Settings...</source>
         <translation>Wiederhestellen der Kameraeinstellungen...</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/cameracontrollerdialog.cpp" line="2009"/>
+        <location filename="../src/frontends/qtfrontend/dialogs/cameracontrollerdialog.cpp" line="2056"/>
         <source>Reset Camera Settings...</source>
         <translation>Zurücksetzen der Kaeraeinstellungen...</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/cameracontrollerdialog.cpp" line="2009"/>
+        <location filename="../src/frontends/qtfrontend/dialogs/cameracontrollerdialog.cpp" line="2056"/>
         <source>Abort Reset</source>
         <translation>Zurücksetzen abbrechen</translation>
     </message>
@@ -957,15 +957,14 @@ wenn Sie abspielen wählen.</translation>
 <context>
     <name>GstreamerDeviceGrabber</name>
     <message>
-        <location filename="../src/technical/grabber/gstreamerdevicegrabber.cpp" line="173"/>
         <source>Device %1</source>
-        <translation>Gerät %1</translation>
+        <translation type="obsolete">Gerät %1</translation>
     </message>
 </context>
 <context>
     <name>GstreamerDv1394Grabber</name>
     <message>
-        <location filename="../src/technical/grabber/gstreamerdv1394grabber.cpp" line="156"/>
+        <location filename="../src/technical/grabber/gstreamer/linux/dv1394grabber.cpp" line="158"/>
         <source>Device %1</source>
         <translation>Gerät %1</translation>
     </message>
@@ -984,7 +983,7 @@ wenn Sie abspielen wählen.</translation>
 <context>
     <name>GstreamerV4L2Grabber</name>
     <message>
-        <location filename="../src/technical/grabber/gstreamerv4l2grabber.cpp" line="159"/>
+        <location filename="../src/technical/grabber/gstreamer/linux/v4l2grabber.cpp" line="161"/>
         <source>Device %1</source>
         <translation>Gerät %1</translation>
     </message>
@@ -992,7 +991,7 @@ wenn Sie abspielen wählen.</translation>
 <context>
     <name>GstreamerVideoTestGrabber</name>
     <message>
-        <location filename="../src/technical/grabber/gstreamervideotestgrabber.cpp" line="63"/>
+        <location filename="../src/technical/grabber/gstreamer/videotestgrabber.cpp" line="64"/>
         <source>Video test device</source>
         <translation>Video-Test-Gerät</translation>
     </message>
@@ -1043,16 +1042,24 @@ im Einstellungen-Menü.</translation>
 <context>
     <name>ImageGrabberFacade</name>
     <message>
-        <location filename="../src/technical/grabber/imagegrabberfacade.cpp" line="223"/>
+        <location filename="../src/technical/grabber/imagegrabberfacade.cpp" line="240"/>
         <source>Check image grabber</source>
         <translation>Überprüfe den Image Grabber</translation>
     </message>
     <message>
-        <location filename="../src/technical/grabber/imagegrabberfacade.cpp" line="224"/>
+        <location filename="../src/technical/grabber/imagegrabberfacade.cpp" line="241"/>
+        <source>Image grabber initialization failed. This may happen 
+if you try to grab from an invalid device. Please
+select another device on the recording tool tab.</source>
+        <translation>Initialisierung der Image Grabbers fehlgeschlagen. Dies kann passieren, wen man
+von einem gestörtem Gerät aufnehmen möchte. Bitte wähle
+ein anderes Gerät im Aufnahme-Tab.</translation>
+    </message>
+    <message>
         <source>Grabbing failed. This may happen if you try
 to grab from an invalid device. Please select
 another device on the recording tool tab.</source>
-        <translation>Bild aufnehmen fehlgeschlagen. Dies kann passieren, wen man
+        <translation type="obsolete">Bild aufnehmen fehlgeschlagen. Dies kann passieren, wen man
 von einem gestörtem Gerät aufnehmen möchte. Bitte wähle
 ein anderes Gerät im Aufnahme-Tab.</translation>
     </message>
@@ -1241,7 +1248,7 @@ im Einstellungen-Menü.</translation>
 <context>
     <name>MainWindowGUI</name>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1759"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1769"/>
         <source>English</source>
         <comment>This should be translated to the name of the language you are translating to, in that language. Example: English = Deutsch (Deutsch is &quot;German&quot; in German)</comment>
         <translation>Deutsch</translation>
@@ -1376,12 +1383,12 @@ im Einstellungen-Menü.</translation>
         <translation>&lt;h4&gt;Bildanzeige&lt;/h4&gt;&lt;p&gt; In diesem Bereich sehen sie das gewählte Bild. Hier laufen auch die Animationen ab, wenn sie  &lt;b&gt;Start&lt;/b&gt; drücken.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="2536"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="2546"/>
         <source>Unsaved changes</source>
         <translation>Nicht gespeicherte Änderungen</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="2537"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="2547"/>
         <source>There are unsaved changes. Do you want to save?</source>
         <translation>Es gibt ungespeicherte Änderungen. Möchten sie speichern?</translation>
     </message>
@@ -1445,10 +1452,9 @@ im Einstellungen-Menü.</translation>
         <translation>Das Zeichen &apos;|&apos; ist im Namen der Projektdatei nicht gestattet und wird entfernt.</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1407"/>
         <source>No default output file name defined.
 Check your settings in the preferences menu!</source>
-        <translation>Kein Standardnamen für die Ausgabedatei vorgegeben.
+        <translation type="obsolete">Kein Standardnamen für die Ausgabedatei vorgegeben.
 Überprüfen sie die Einstellungen im Einstellungsmenü!</translation>
     </message>
     <message>
@@ -1489,7 +1495,6 @@ Check your settings in the preferences menu!</source>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="505"/>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="856"/>
         <source>You have to define an image grabber to use.
 This can be set in the preferences menu.</source>
         <translation>Sie müsen im Einstellungs-Menü einen Videograbber auswählen.</translation>
@@ -1620,12 +1625,11 @@ This can be set in the preferences menu.</source>
         <translation type="obsolete">Abspeichern der Szenen auf die Festplatte ...</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1343"/>
         <source>Cannot find any registered encoder to be used for video export.
 This can be setted in the preferences menu.
 Export to video will not be possible until you
 have setted an encoder to use!</source>
-        <translation>Für den Video-Export konnte kein Encoder gefunden werden.
+        <translation type="obsolete">Für den Video-Export konnte kein Encoder gefunden werden.
 Sie können dies im Einstellungs-Menü ändern. Video-Export
 wird erst möglich, wenn sie einen Encoder eingestellt haben.
 Wollen sie dies nun tun ?</translation>
@@ -1641,19 +1645,18 @@ Wollen sie dies nun tun ?</translation>
         <translation>MP4 Filme (*.mp4)</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1433"/>
         <source>The registered encoder is not valid.
 Check your settings in the preferences menu!</source>
-        <translation>Der gewählte Encoder ist nicht gültig.
+        <translation type="obsolete">Der gewählte Encoder ist nicht gültig.
 Überprüfen sie die Einstellungen im Einstellungsmenü!</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1441"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1451"/>
         <source>Exporting ...</source>
         <translation>Exportieren ...</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1633"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1643"/>
         <source>qStopMotion - Undo stack</source>
         <translation>qStopMotion - Rückgängig Liste</translation>
     </message>
@@ -1802,10 +1805,18 @@ Check your settings in the preferences menu!</source>
         <translation>&lt;h4&gt;Bildleiste&lt;/h4&gt; &lt;p&gt;In diesem Bereich sehen sie Bilder und Szenen der Animation. Sie diese hin und herschieben.&lt;/p&gt;&lt;p&gt;Mit den &lt;b&gt;Pfeiltasten&lt;/b&gt; oder &lt;b&gt;x&lt;/b&gt; und &lt;b&gt;z&lt;/b&gt; navigieren sie ein Bild vor oder zurück&lt;/p&gt;</translation>
     </message>
     <message>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="856"/>
+        <source>You have to define an image grabber to use.
+This can be set on the recording tool tab.</source>
+        <translation>Sie müsen einen Image Grabber auswählen.
+Dies kann auf dem Aufnahme Tab erfolgen.</translation>
+    </message>
+    <message>
         <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1312"/>
         <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1342"/>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1406"/>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1432"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1380"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1415"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1442"/>
         <source>Warning</source>
         <translation>Warnung</translation>
     </message>
@@ -1815,12 +1826,48 @@ Check your settings in the preferences menu!</source>
         <translation>In jedem Projekt-Verzeichnis darf nur ein Projekt-Datei existieren.</translation>
     </message>
     <message>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1343"/>
+        <source>No encoder selected for the video export.
+This can be setted in the properties dialog of the project.
+Export to video will not be possible until you
+have setted an encoder to use!</source>
+        <translation>Für den Video-Export ist kein Encoder ausgewählt.
+Sie können dies im Eigenschaften-Dialog des Projekts ändern. Video-Export
+wird erst möglich, wenn sie einen Encoder ausgewählt haben.
+Wollen sie dies nun tun ?</translation>
+    </message>
+    <message>
         <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1381"/>
+        <source>No video format selected for the video export.
+This can be setted in the properties dialog of the project.
+Export to video will not be possible until you
+have setted an video format to use!</source>
+        <translation>Für den Video-Export ist kein Videoformat ausgewählt.
+Sie können dies im Eigenschaften-Dialog des Projekts ändern. Video-Export
+wird erst möglich, wenn sie ein Videoformat ausgewählt haben.
+Wollen sie dies nun tun ?</translation>
+    </message>
+    <message>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1388"/>
         <source>Export to video file</source>
         <translation>In Videodatei exportieren</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1458"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1416"/>
+        <source>No default output file name defined.
+Check your settings in the properties dialo of the project!</source>
+        <translation>Kein Standardnamen für die Ausgabedatei vorgegeben.
+Überprüfen sie die Einstellungen im Eigenschaften-Dialog des Projektes!</translation>
+    </message>
+    <message>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1443"/>
+        <source>The selected encoder is not valid.
+Check your settings in the properties dialog of the project!</source>
+        <translation>Der gewählte Encoder ist nicht gültig.
+Überprüfen sie die Einstellungen im Eigenschaften-Dialog des Projektes!</translation>
+    </message>
+    <message>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1468"/>
         <source>Export to file</source>
         <translation>In Datei exportieren</translation>
     </message>
@@ -2561,7 +2608,7 @@ Sie benötigen Rechte zum lesen, schreiben und ausführen im Verzeichnis .qstopm
     <message>
         <location filename="../src/frontends/qtfrontend/dialogs/startdialog.cpp" line="102"/>
         <source>Open and continue a existing project.</source>
-        <translation>Das letze Projekt öffnen und fortsetzen.</translation>
+        <translation>Öffnen und fortsetzen eines existierenden Projektes.</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/dialogs/startdialog.cpp" line="112"/>

@@ -1332,16 +1332,16 @@ void MainWindowGUI::exportToVideo()
     qDebug("MainWindowGUI::exportToVideo --> Start");
 
     VideoEncoder    *enc = NULL;
-    PreferencesTool *pref = frontend->getPreferences();
-    int              activeEncoderApplication = VideoEncoder::noneApplication;
-    int              useDefaultOutputFile = 0;
+    int              activeEncoderApplication;
+    int              useDefaultOutputFile;
 
     recordingTab->checkCameraOff();
 
-    if (pref->getIntegerPreference("preferences", "encoderapplication", activeEncoderApplication) == false) {
+    activeEncoderApplication = this->frontend->getProject()->getEncoderApplication();
+    if (activeEncoderApplication == VideoEncoder::noneApplication) {
         frontend->showWarning(tr("Warning"),
-                              tr("Cannot find any registered encoder to be used for video export.\n"
-                                 "This can be setted in the preferences menu.\n"
+                              tr("No encoder selected for the video export.\n"
+                                 "This can be setted in the properties dialog of the project.\n"
                                  "Export to video will not be possible until you\n"
                                  "have setted an encoder to use!"));
         return;
@@ -1359,14 +1359,14 @@ void MainWindowGUI::exportToVideo()
         return;
     }
 
-    pref->getIntegerPreference("preferences", "usedefaultoutputfile", useDefaultOutputFile);
+    useDefaultOutputFile = this->frontend->getProject()->getUseDefaultOutputFile();
     if (useDefaultOutputFile == 1) {
         QStringList  filters;
         QString      exportSuffix;
         QString      outputFile;
         int          videoFormat = VideoEncoder::noneFormat;
 
-        pref->getIntegerPreference("preferences", "videoformat", videoFormat);
+        videoFormat = this->frontend->getProject()->getVideoFormat();
         switch(videoFormat) {
         case VideoEncoder::aviFormat:
             filters << tr("AVI Videos (*.avi)");
@@ -1376,6 +1376,13 @@ void MainWindowGUI::exportToVideo()
             filters << tr("MP4 Videos (*.mp4)");
             exportSuffix.append("mp4");
             break;
+        case VideoEncoder::noneFormat:
+            frontend->showWarning(tr("Warning"),
+                                  tr("No video format selected for the video export.\n"
+                                     "This can be setted in the properties dialog of the project.\n"
+                                     "Export to video will not be possible until you\n"
+                                     "have setted an video format to use!"));
+            return;
         }
 
         QFileDialog fileDialog(this, tr("Export to video file"), lastVisitedDir);
@@ -1402,14 +1409,15 @@ void MainWindowGUI::exportToVideo()
         QString  outputFileName;
         int      videoFormat = VideoEncoder::noneFormat;
 
-        if (pref->getStringPreference("preferences", "defaultoutputfilename", outputFileName)) {
+        outputFileName = this->frontend->getProject()->getDefaultOutputFileName();
+        if (outputFileName.isEmpty()) {
             frontend->showWarning(tr("Warning"),
                                   tr("No default output file name defined.\n"
-                                     "Check your settings in the preferences menu!"));
+                                     "Check your settings in the properties dialo of the project!"));
             return;
         }
 
-        pref->getIntegerPreference("preferences", "videoformat", videoFormat);
+        videoFormat = this->frontend->getProject()->getVideoFormat();
         switch(videoFormat) {
         case VideoEncoder::aviFormat:
             if (outputFileName.indexOf(".avi") == -1) {
@@ -1430,8 +1438,8 @@ void MainWindowGUI::exportToVideo()
 
     if (!enc->isValid()) {
         frontend->showWarning(tr("Warning"),
-                              tr("The registered encoder is not valid.\n"
-                                 "Check your settings in the preferences menu!"));
+                              tr("The selected encoder is not valid.\n"
+                                 "Check your settings in the properties dialog of the project!"));
         delete enc;
         enc = NULL;
         return;

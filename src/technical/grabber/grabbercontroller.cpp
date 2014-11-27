@@ -57,17 +57,23 @@ int GrabberController::getControllerCapabilities()
     return controllerCap;
 }
 
-
-void GrabberController::addResolution(GrabberResolution r)
-{
-    resolutions.append(r);
-}
-
 /**************************************************************************
  **************************************************************************
  * Camera resolution
  **************************************************************************
  **************************************************************************/
+
+void GrabberController::addResolution(GrabberResolution r)
+{
+    for (int i = 0; i < resolutions.size(); i++) {
+        if ((r.getWidth() == resolutions[i].getWidth()) &&
+            (r.getHeight() == resolutions[i].getHeight())) {
+            return;
+        }
+    }
+    resolutions.append(r);
+}
+
 
 QVector<GrabberResolution> GrabberController::getResolutions()
 {

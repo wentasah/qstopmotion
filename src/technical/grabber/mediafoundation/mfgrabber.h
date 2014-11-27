@@ -96,15 +96,7 @@ private:
 
     HRESULT SetDeviceFormat(IMFMediaSource *pSource, DWORD dwFormatIndex);
 
-    QString GetGUIDNameConstNew(const GUID& guid);
-
-    // void getRawFrame(const uchar*& data, int& length);
     void getRawFrame(const uchar*& data, int& w, int& h);
-
-    // HRESULT LogMediaType(IMFMediaType *pType);
-    // HRESULT LogAttributeValueByIndex(IMFAttributes *pAttr, DWORD index);
-
-    void ConvertAYUV_to_YUY2(const BYTE *, BYTE *, DWORD, DWORD, LONG, LONG);
 
     /**
      * Get the actual image from the gstreamer application interface.
@@ -118,13 +110,17 @@ private:
     QImage liveImage;
     QImage rawImage;
 
-    IMFMediaSource  *mediaSource;
-    IMFSourceReader *sourceReader;
+    IMFMediaSource*  mediaSource;
+    IMFSourceReader* sourceReader;
 
-    uchar* frameData;
-    int frameLength;
-    QSize frameSize;
-    QImage lastFrame;
+    uchar*           frameData;
+    int              frameLength;
+    QSize            frameSize;
+    QImage           lastFrame;
+
+    UINT32           width;
+    UINT32           height;
+    LONG             stride;
 };
 
 #endif

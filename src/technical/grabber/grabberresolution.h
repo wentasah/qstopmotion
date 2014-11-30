@@ -34,38 +34,43 @@ class GrabberResolution
 public:
 
     /**
+     * Enum with all possible image output formats
+     */
+    enum resolutionFormat {
+        unknownFormat,         // Not supported format
+        rgb24Format,           // RGB24 format
+        rgb32Format,           // RGB32 format
+        argb32Format,          // ARGB32 format
+        ayuvFormat,            // AYUV format
+        yuv2Format,            // YUV2 format
+        uyvyFormat,            // UYVY format
+        yv12Format,            // YV12 format
+        nv12Format,            // NV12 format
+        i420Format,            // I420 format
+        mjpegFormat            // MJPEG format
+    };
+
+    /**
      * Default constructs and initializes the object.
      */
     GrabberResolution();
 
     /**
      * Constructs and initializes the object.
-     * @param i The ID of the resolution.
      * @param w The width of the resolution.
      * @param h The height of the resolution.
+     * @param f The image format of the resolution.
      * @param a Is the resolution active.
      */
-    GrabberResolution(const QString i,
-                      unsigned int  w,
+    GrabberResolution(unsigned int  w,
                       unsigned int  h,
+                      unsigned int  f,
                       bool          a);
 
     /**
      * Destructor
      */
     ~GrabberResolution();
-
-    /**
-     * Get the id of the resolution
-     * @return The id of the resolution.
-     */
-    const QString getId();
-
-    /**
-     * Set the id of the resolution
-     * @param i The new id of the resolution.
-     */
-    void setId(const QString i);
 
     /**
      * Get the width value of the resolution
@@ -92,16 +97,34 @@ public:
     void setHeight(unsigned int h);
 
     /**
+     * Get the image format of the resolution
+     * @return The image format of the resolution.
+     */
+    unsigned int getFormat();
+
+    /**
+     * Set the image format of the resolution
+     * @param f The new image format of the resolution.
+     */
+    void setFormat(unsigned int f);
+
+    /**
      * Is the resolution active?
      * @return True if active.
      */
     bool isActive();
 
+    /**
+     * Get the name of the resolution.
+     * @return The id of the resolution.
+     */
+    const QString getName();
+
 private:
 
-    QString       id;
     unsigned int  width;
     unsigned int  height;
+    unsigned int  format;
     bool          active;
 
 };

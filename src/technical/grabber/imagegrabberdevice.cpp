@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2011-2012 by                                                *
+ *  Copyright (C) 2011-2014 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -30,6 +30,8 @@ ImageGrabberDevice::ImageGrabberDevice()
     deviceName.clear();
     deviceSource = ImageGrabberDevice::noSource;
     deviceCap = ImageGrabberDevice::video_x_none;
+
+    resolutions.clear();
 
     controller = NULL;
 
@@ -132,6 +134,47 @@ void ImageGrabberDevice::setDeviceCapability(ImageGrabberDevice::imageGrabberDev
     deviceCap = cap;
 }
 
+/**************************************************************************
+ **************************************************************************
+ * Camera resolution
+ **************************************************************************
+ **************************************************************************/
+
+void ImageGrabberDevice::addResolution(GrabberResolution r)
+{
+    for (int i = 0; i < resolutions.size(); i++) {
+        if ((r.getWidth() == resolutions[i].getWidth()) &&
+            (r.getHeight() == resolutions[i].getHeight()) &&
+            (r.getFormat() == resolutions[i].getFormat())) {
+            return;
+        }
+    }
+    resolutions.append(r);
+}
+
+
+QVector<GrabberResolution> ImageGrabberDevice::getResolutions()
+{
+    return resolutions;
+}
+
+
+int ImageGrabberDevice::getActiveResolution()
+{
+    return -1;
+}
+
+
+void ImageGrabberDevice::setActiveResolution(int /*ac*/)
+{
+    Q_ASSERT( 1 );
+}
+
+/**************************************************************************
+ **************************************************************************
+ * Camera controller
+ **************************************************************************
+ **************************************************************************/
 
 bool ImageGrabberDevice::isController() const
 {
@@ -153,3 +196,4 @@ void ImageGrabberDevice::setController(GrabberController *c)
 {
     controller = c;
 }
+

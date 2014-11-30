@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2013 by                                                *
+ *  Copyright (C) 2005-2014 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -748,6 +748,12 @@ const QVector<QString> QtFrontend::getDeviceNames()
 }
 
 
+const QVector<QString> QtFrontend::getResolutionNames(int deviceIndex)
+{
+    return mw->getResolutionNames(deviceIndex);
+}
+
+
 const QImage QtFrontend::getLiveImage()
 {
     return mw->getLiveImage();
@@ -912,6 +918,24 @@ int QtFrontend::getVideoSource()
 bool QtFrontend::setVideoSource(int index)
 {
     return mw->setVideoSource(index);
+}
+
+
+int QtFrontend::getResolution()
+{
+    return mw->getResolution();
+}
+
+
+bool QtFrontend::setResolution(int index)
+{
+    return mw->setResolution(index);
+}
+
+
+const GrabberResolution QtFrontend::getResolution(int Index)
+{
+    return mw->getResolution(Index);
 }
 
 

@@ -82,10 +82,10 @@ int convert_ayuv_to_argb8_buffer(unsigned char *ayuv,
                                  long           stride);
 
 /**
- * Convert a buffer with YUV 4:2:2 (Microsoft YUV2) pixels to RGB 8bit.
+ * Convert a buffer with YUV 4:2:2 (Microsoft YUY2) pixels to RGB 8bit.
  *
- * @brief convert_yuv2_to_argb8_buffer
- * @param yuv2
+ * @brief convert_yuy2_to_argb8_buffer
+ * @param yuy2
  * @param argb8
  * @param width
  * @param height
@@ -93,7 +93,7 @@ int convert_ayuv_to_argb8_buffer(unsigned char *ayuv,
  * @param stride
  * @return
  */
-int convert_yuv2_to_argb8_buffer(unsigned char *yuv2,
+int convert_yuy2_to_argb8_buffer(unsigned char *yuy2,
                                  unsigned char *argb8,
                                  unsigned int   width,
                                  unsigned int   height,
@@ -122,8 +122,8 @@ int convert_uyvy_to_argb8_buffer(unsigned char *uyvy,
 /**
  * Convert a buffer with YUV 4:2:0 (Microsoft YV12) pixels to RGB 8bit.
  *
- * @brief convert_yuv2_to_argb8_buffer
- * @param yuv2
+ * @brief convert_yv12_to_argb8_buffer
+ * @param yv12
  * @param argb8
  * @param width
  * @param height
@@ -131,27 +131,63 @@ int convert_uyvy_to_argb8_buffer(unsigned char *uyvy,
  * @param stride
  * @return
  */
-int convert_yu12_to_argb8_buffer(unsigned char *y12,
-                                 unsigned char *u12,
-                                 unsigned char *v12,
+int convert_yv12_to_argb8_buffer(unsigned char *yv12,
                                  unsigned char *argb8,
                                  unsigned int   width,
                                  unsigned int   height,
                                  unsigned long  bufferLength,
                                  long           stride);
 
-// int convert_yuv2_to_rgb8_file(char *yuv2file, char *rgb8file, unsigned int width, unsigned int height);
+/**
+ * Convert a buffer with YUV 4:2:0 (Microsoft NV12) pixels to RGB 8bit.
+ *
+ * @brief convert_nv12_to_argb8_buffer
+ * @param nv12
+ * @param argb8
+ * @param width
+ * @param height
+ * @param bufferLength
+ * @param stride
+ * @return
+ */
+int convert_nv12_to_argb8_buffer(unsigned char *nv12,
+                                 unsigned char *argb8,
+                                 unsigned int   width,
+                                 unsigned int   height,
+                                 unsigned long  bufferLength,
+                                 long           stride);
+
+/**
+ * Convert a buffer with YUV 4:2:0 (Microsoft I420) pixels to RGB 8bit.
+ *
+ * @brief convert_i420_to_argb8_buffer
+ * @param i420
+ * @param argb8
+ * @param width
+ * @param height
+ * @param bufferLength
+ * @param stride
+ * @return
+ */
+int convert_i420_to_argb8_buffer(unsigned char *i420,
+                                 unsigned char *argb8,
+                                 unsigned int   width,
+                                 unsigned int   height,
+                                 unsigned long  bufferLength,
+                                 long           stride);
+
+// int convert_yuy2_to_rgb8_file(char *yuy2file, char *rgb8file, unsigned int width, unsigned int height);
 
 /******************************************************************************
- * Convert RGB 8bit to YUV2
+ * Convert RGB 8bit to YUV
  ******************************************************************************/
 
-int convert_rgb8_to_yuv2_pixel(int r8, int g8, int b8);
-int convert_rgb8_to_yuv2_buffer(unsigned char *rgb8,
-                                unsigned char *yuv2,
+int convert_rgb8_to_yuv_pixel(int r8, int g8, int b8);
+int convert_rgb8_to_yuy2_buffer(unsigned char *rgb8,
+                                unsigned char *yuy2,
                                 unsigned int width,
                                 unsigned int height);
-// int convert_rgb8_to_yuv2_file(char *rgb8file, char *yuv2file, unsigned int width, unsigned int height);
+// int convert_rgb8_to_yuy2_file(char *rgb8file, char *yuy2file, unsigned int width, unsigned int height);
 
 /******************************************************************************
  * Convert RGB 24bit to RGB 8bit

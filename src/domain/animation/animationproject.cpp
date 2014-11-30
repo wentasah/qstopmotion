@@ -40,6 +40,7 @@ AnimationProject::AnimationProject(Frontend* f)
 
     recordingMode            = 0;
     videoSource              = 0;
+    videoResolution          = -1;
     mixMode                  = 0;
     mixCount                 = 0;
     playbackCount            = 0;
@@ -190,6 +191,19 @@ int AnimationProject::getVideoSource() const
 void AnimationProject::setVideoSource(int newVideoSource)
 {
     videoSource = newVideoSource;
+    incSettingsChanges();
+}
+
+
+int AnimationProject::getResolution() const
+{
+    return videoResolution;
+}
+
+
+void AnimationProject::setResolution(int newResolution)
+{
+    videoResolution = newResolution;
     incSettingsChanges();
 }
 
@@ -627,6 +641,15 @@ bool AnimationProject::readSettingsFromProject(QDomElement &settingsNode)
                 setVideoSource(frontend->getVideoSource());
             }
         }
+        else if (nodeName.compare("videoresolution") == 0) {
+            QString tmp = currElement.text();
+            if (frontend->setResolution(tmp.toInt())) {
+                videoResolution = tmp.toInt();
+            }
+            else {
+                setResolution(frontend->getResolution());
+            }
+        }
         else if (nodeName.compare("mixmode") == 0) {
             QString tmp = currElement.text();
             mixMode = tmp.toInt();
@@ -735,6 +758,12 @@ bool AnimationProject::saveSettingsToProject(QDomDocument &doc, QDomElement &set
     QDomText videoSourceText = doc.createTextNode(QString("%1").arg(videoSource));
     videoSourceElement.appendChild(videoSourceText);
     settingsNode.appendChild(videoSourceElement);
+
+    // Save video resolution parameter
+    QDomElement resolutionElement = doc.createElement("videoresolution");
+    QDomText resolutionText = doc.createTextNode(QString("%1").arg(videoResolution));
+    resolutionElement.appendChild(resolutionText);
+    settingsNode.appendChild(resolutionElement);
 
     // Save mixing mode parameter
     QDomElement mixingModeElement = doc.createElement("mixmode");

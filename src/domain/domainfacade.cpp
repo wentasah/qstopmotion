@@ -257,6 +257,19 @@ void DomainFacade::setVideoSource(int newVideoSource)
 }
 
 
+int DomainFacade::getResolution()
+{
+    return animationProject->getResolution();
+}
+
+
+void DomainFacade::setResolution(int newResolution)
+{
+    animationProject->setResolution(newResolution);
+    frontend->setResolution(newResolution);
+}
+
+
 bool DomainFacade::convertImages(int newFormat, int newQuality)
 {
     return animationProject->convertImages(newFormat, newQuality);

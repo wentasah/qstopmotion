@@ -903,6 +903,12 @@ const QVector<QString> MainWindowGUI::getDeviceNames()
 }
 
 
+const QVector<QString> MainWindowGUI::getResolutionNames(int deviceIndex)
+{
+    return grabber->getResolutionNames(deviceIndex);
+}
+
+
 const QImage MainWindowGUI::getLiveImage()
 {
     return grabber->getLiveImage();
@@ -1001,6 +1007,43 @@ bool MainWindowGUI::setVideoSource(int index)
     }
 
     return true;
+}
+
+
+int MainWindowGUI::getResolution()
+{
+    return recordingTab->getResolution();
+}
+
+
+bool MainWindowGUI::setResolution(int index)
+{
+    if (recordingTab->setResolution(index) == false) {
+        return false;
+    }
+    /*
+    if (cameraControllerDialog != 0) {
+        if (cameraControllerDialog->isVisible()) {
+            cameraControllerDialog->reject();
+        }
+        delete cameraControllerDialog;
+        cameraControllerDialog = 0;
+    }
+
+    if (grabber->getDevice(index)->isController()) {
+        cameraControllerAct->setEnabled(true);
+    }
+    else {
+        cameraControllerAct->setEnabled(false);
+    }
+    */
+    return true;
+}
+
+
+const GrabberResolution MainWindowGUI::getResolution(int index)
+{
+    return grabber->getResolution(frontend->getProject()->getVideoSource(), index);
 }
 
 

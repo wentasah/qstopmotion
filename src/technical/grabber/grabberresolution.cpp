@@ -23,40 +23,26 @@
 
 GrabberResolution::GrabberResolution()
 {
-    id.clear();
     width   = 0;
     height  = 0;
     active  = false;
 }
 
 
-GrabberResolution::GrabberResolution(const QString i,
-                                     unsigned int  w,
+GrabberResolution::GrabberResolution(unsigned int  w,
                                      unsigned int  h,
+                                     unsigned int  f,
                                      bool          a)
 {
-    id.append(i);
     width   = w;
     height  = h;
+    format  = f;
     active  = a;
 }
 
 
 GrabberResolution::~GrabberResolution()
 {
-}
-
-
-const QString GrabberResolution::getId()
-{
-    return id;
-}
-
-
-void GrabberResolution::setId(const QString i)
-{
-    id.clear();
-    id.append(i);
 }
 
 
@@ -84,7 +70,59 @@ void GrabberResolution::setHeight(unsigned int h)
 }
 
 
+unsigned int GrabberResolution::getFormat()
+{
+    return format;
+}
+
+
+void GrabberResolution::setFormat(unsigned int f)
+{
+    format = f;
+}
+
+
 bool GrabberResolution::isActive()
 {
     return active;
+}
+
+
+const QString GrabberResolution::getName()
+{
+    QString formatName;
+
+    switch(format) {
+    case GrabberResolution::rgb24Format:
+        formatName.append("RGB24");
+        break;
+    case GrabberResolution::ayuvFormat:
+        formatName.append("AYUV");
+        break;
+    case GrabberResolution::yuv2Format:
+        formatName.append("YUV2");
+        break;
+    case GrabberResolution::uyvyFormat:
+        formatName.append("UYUY");
+        break;
+    case GrabberResolution::yv12Format:
+        formatName.append("YV12");
+        break;
+    case GrabberResolution::i420Format:
+        formatName.append("I420");
+        break;
+    case GrabberResolution::nv12Format:
+        formatName.append("NV12");
+        break;
+    case GrabberResolution::mjpegFormat:
+        formatName.append("MJPG");
+        break;
+    case GrabberResolution::unknownFormat:
+    default:
+        formatName.append("????");
+        break;
+    }
+    QString name = QString("%1 x %2 - %3").arg(width).arg(height).arg(formatName);
+
+    return name;
 }

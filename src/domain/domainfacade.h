@@ -201,6 +201,18 @@ public:
     void setVideoSource(int newVideoSource);
 
     /**
+     * Get the active video resolution of the project.
+     * @return active video resolution.
+     */
+    int getResolution();
+
+    /**
+     * Set the active video resolution of the project.
+     * @param newVideoSource the new active resolution.
+     */
+    void setResolution(int newResolution);
+
+    /**
      * Convert all images of the current project to a new image file format.
      * @param newFormat The new format of the images.
      * @param newQuality The new quality value of the images.

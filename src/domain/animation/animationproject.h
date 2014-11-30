@@ -160,6 +160,18 @@ public:
     void setVideoSource(int newVideoSource);
 
     /**
+     * Get the active video resolution of the project.
+     * @return active video resolution.
+     */
+    int getResolution() const;
+
+    /**
+     * Set the active video resolution of the project.
+     * @param newResolution the new active resolution.
+     */
+    void setResolution(int newResolution);
+
+    /**
      * Get the active mixing mode of the project.
      * @return active mixing mode.
      */
@@ -900,6 +912,11 @@ private:
      * Active video source of the project.
      */
     int videoSource;
+
+    /**
+     * Active video resolution of the project.
+     */
+    int videoResolution;
 
     /**
      * Active mixing mode of the project.

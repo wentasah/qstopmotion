@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2013 by                                                *
+ *  Copyright (C) 2005-2014 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -26,6 +26,7 @@
 #include "domain/domainfacade.h"
 #include "frontends/viewfacade.h"
 #include "technical/preferencestool.h"
+#include "technical/grabber/grabberresolution.h"
 #include "technical/grabber/imagegrabberdevice.h"
 
 #include <QtCore/QString>
@@ -361,6 +362,14 @@ public:
     virtual const QVector<QString> getDeviceNames() = 0;
 
     /**
+     * Abstract function to get the possible resolution names
+     * of the video device.
+     * @arg deviceIndex The index of the device.
+     * @return Vector with the resolution names.
+     */
+    virtual const QVector<QString> getResolutionNames(int deviceIndex) = 0;
+
+    /**
      * Abstract function to get the live image from the image grabber.
      * @return live image.
      */
@@ -459,6 +468,26 @@ public:
      * @return video source index
      */
     virtual int getVideoSource() = 0;
+
+    /**
+     * Set the video resolution index.
+     * @param index Index of the new video resolution
+     * @return true if the new index is set, false else.
+     */
+    virtual bool setResolution(int index) = 0;
+
+    /**
+     * Get the video resolution index.
+     * @return video resolution index
+     */
+    virtual int getResolution() = 0;
+
+    /**
+     * Get the video resolution object.
+     * @param index Index of the new video resolution
+     * @return video resolution object
+     */
+    virtual const GrabberResolution getResolution(int index) = 0;
 
     /**
      * Set the video source index.

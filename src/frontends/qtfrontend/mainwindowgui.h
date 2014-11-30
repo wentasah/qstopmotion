@@ -306,6 +306,14 @@ public:
     const QVector<QString> getDeviceNames();
 
     /**
+     * Get the possible resolution names
+     * of the video device.
+     * @param deviceIndex The index of the device.
+     * @return Vector with the resolution names.
+     */
+    const QVector<QString> getResolutionNames(int deviceIndex);
+
+    /**
      * Get the live image from the image grabber.
      * @return live image.
      */
@@ -359,6 +367,26 @@ public:
      * @return true if the new index is set, false else.
      */
     bool setVideoSource(int index);
+
+    /**
+     * Get the video resolution index.
+     * @return video resolution index
+     */
+    int getResolution();
+
+    /**
+     * Set the video resolution index.
+     * @param index Index of the new video resolution
+     * @return true if the new index is set, false else.
+     */
+    bool setResolution(int index);
+
+    /**
+     * Get the video resolution object.
+     * @param index Index of the new video resolution
+     * @return video resolution object
+     */
+    const GrabberResolution getResolution(int index);
 
     /**
      * Convert all images of the current project to a new image file format.

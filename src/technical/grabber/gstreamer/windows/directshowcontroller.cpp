@@ -18,6 +18,8 @@
  *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                 *
  ******************************************************************************/
 
+#include "technical/grabber/imagegrabberdevice.h"
+
 #include "directshowcontroller.h"
 #include "technical/preferencestool.h"
 
@@ -187,107 +189,6 @@ bool DirectShowController::init(const QString &id)
             }
 
             //---------------------------------------------------------
-            // Read the possible resolutions
-            //---------------------------------------------------------
-
-            // get an output pin from the filter
-            IEnumPins       *pPinEnum = NULL;
-            PIN_DIRECTION    ThisPinDir;
-            IEnumMediaTypes *pMediaTypeEnum = NULL;
-            AM_MEDIA_TYPE    UsedMediaType;
-            AM_MEDIA_TYPE   *pMediaType = NULL;
-            VIDEOINFOHEADER *pVideoInfoHeader = NULL;
-            IPin            *pCameraPin;
-            int              outputWidth;
-            int              outputHeight;
-            bool             connected;
-            // PIN_INFO         PinInfo;
-            LPWSTR           pPinId;
-            QString          pinId;
-
-            hr = pFilter->EnumPins(&pPinEnum);
-
-            if (FAILED(hr)) {
-                // Release the filter
-                pFilter->Release();
-
-                // Release the pFilter
-                pPropBag->Release();
-
-                // Relese the moniker
-                pMoniker->Release();
-
-                continue;
-            }
-
-            // Enumerate over the filter pins
-            while(S_OK == pPinEnum->Next(1, &pCameraPin, NULL)) {
-                pMediaTypeEnum = NULL;
-                connected = false;
-
-                pCameraPin->QueryDirection(&ThisPinDir);
-                if (ThisPinDir != PINDIR_OUTPUT) {
-                    pCameraPin->Release();
-                    continue;
-                }
-
-                hr = pCameraPin->ConnectionMediaType(&UsedMediaType);
-                if (S_OK == hr) {
-                    // The pin is connected and has a media type
-                    connected = true;
-                }
-
-                // hr = pCameraPin->QueryPinInfo(&PinInfo);
-                hr = pCameraPin->QueryId(&pPinId);
-                if (SUCCEEDED(hr)) {
-#ifdef UNICODE
-                  // LPWSTR Unicode to QString
-                  pinId = QString::fromWCharArray((const wchar_t*)pPinId, strlen(pPinId));
-#else
-                  // LPWSTR 8 bit to QString
-                  pinId = QString::fromLocal8Bit((const char*)pPinId);
-#endif
-                  // an reverse
-                  // std::wstring wstr = pinID.toStdWString();
-                  // LPWSTR ptr = wstr.c_str();
-
-                  CoTaskMemFree(pPinId);
-                }
-
-                hr = pCameraPin->EnumMediaTypes(&pMediaTypeEnum);
-                if (S_OK != hr) {
-                    pCameraPin->Release();
-                    continue;
-                }
-
-                // Enumerate over the media types
-                pMediaType = NULL;
-                pVideoInfoHeader = NULL;
-
-                while (S_OK == pMediaTypeEnum->Next(1, &pMediaType, NULL))
-                {
-                    if ((pMediaType->formattype == FORMAT_VideoInfo) &&
-                        (pMediaType->cbFormat >= sizeof(VIDEOINFOHEADER)) &&
-                        (pMediaType->pbFormat != NULL))
-                    {
-                        pVideoInfoHeader = (VIDEOINFOHEADER*)pMediaType->pbFormat;
-                        outputWidth = pVideoInfoHeader->bmiHeader.biWidth;
-                        outputHeight = pVideoInfoHeader->bmiHeader.biHeight;
-
-                        qDebug() << "DirectShowController::init --> Resolution: " << outputWidth << ":" << outputHeight;
-
-                        addResolution(GrabberResolution(pinId, outputWidth, outputHeight, connected));
-                    }
-                    // _DeleteMediaType(pMediaType);
-                }
-
-                pMediaTypeEnum->Release();
-                pCameraPin->Release();
-            }
-            // Release the pin enumerator
-            pPinEnum->Release();
-
-            //---------------------------------------------------------
             // Release the data structures
             //---------------------------------------------------------
 
@@ -304,6 +205,109 @@ bool DirectShowController::init(const QString &id)
     qDebug("DirectShowController::init --> End (Successful)");
 
     return ret;
+}
+
+
+bool DirectShowController::setResolutions(ImageGrabberDevice *device)
+{
+    qDebug("DirectShowController::setResolutions --> Start");
+
+    //---------------------------------------------------------
+    // Read the possible resolutions
+    //---------------------------------------------------------
+
+    // get an output pin from the filter
+    IEnumPins       *pPinEnum = NULL;
+    PIN_DIRECTION    ThisPinDir;
+    IEnumMediaTypes *pMediaTypeEnum = NULL;
+    AM_MEDIA_TYPE    UsedMediaType;
+    AM_MEDIA_TYPE   *pMediaType = NULL;
+    VIDEOINFOHEADER *pVideoInfoHeader = NULL;
+    IPin            *pCameraPin;
+    int              outputWidth;
+    int              outputHeight;
+    bool             connected;
+    // PIN_INFO         PinInfo;
+    LPWSTR           pPinId;
+    QString          pinId;
+    HRESULT          hr;
+
+    hr = pFilter->EnumPins(&pPinEnum);
+
+    if (FAILED(hr)) {
+        return false;
+    }
+
+    // Enumerate over the filter pins
+    while(S_OK == pPinEnum->Next(1, &pCameraPin, NULL)) {
+        pMediaTypeEnum = NULL;
+        connected = false;
+
+        pCameraPin->QueryDirection(&ThisPinDir);
+        if (ThisPinDir != PINDIR_OUTPUT) {
+            pCameraPin->Release();
+            continue;
+        }
+
+        hr = pCameraPin->ConnectionMediaType(&UsedMediaType);
+        if (S_OK == hr) {
+            // The pin is connected and has a media type
+            connected = true;
+        }
+
+        // hr = pCameraPin->QueryPinInfo(&PinInfo);
+        hr = pCameraPin->QueryId(&pPinId);
+        if (SUCCEEDED(hr)) {
+#ifdef UNICODE
+          // LPWSTR Unicode to QString
+          pinId = QString::fromWCharArray((const wchar_t*)pPinId, strlen(pPinId));
+#else
+          // LPWSTR 8 bit to QString
+          pinId = QString::fromLocal8Bit((const char*)pPinId);
+#endif
+          // an reverse
+          // std::wstring wstr = pinID.toStdWString();
+          // LPWSTR ptr = wstr.c_str();
+
+          CoTaskMemFree(pPinId);
+        }
+
+        hr = pCameraPin->EnumMediaTypes(&pMediaTypeEnum);
+        if (S_OK != hr) {
+            pCameraPin->Release();
+            continue;
+        }
+
+        // Enumerate over the media types
+        pMediaType = NULL;
+        pVideoInfoHeader = NULL;
+
+        while (S_OK == pMediaTypeEnum->Next(1, &pMediaType, NULL))
+        {
+            if ((pMediaType->formattype == FORMAT_VideoInfo) &&
+                (pMediaType->cbFormat >= sizeof(VIDEOINFOHEADER)) &&
+                (pMediaType->pbFormat != NULL))
+            {
+                pVideoInfoHeader = (VIDEOINFOHEADER*)pMediaType->pbFormat;
+                outputWidth = pVideoInfoHeader->bmiHeader.biWidth;
+                outputHeight = pVideoInfoHeader->bmiHeader.biHeight;
+
+                qDebug() << "DirectShowController::init --> Resolution: " << outputWidth << ":" << outputHeight;
+
+                device->addResolution(GrabberResolution(outputWidth, outputHeight, GrabberResolution::unknownFormat, connected));
+            }
+            // _DeleteMediaType(pMediaType);
+        }
+
+        pMediaTypeEnum->Release();
+        pCameraPin->Release();
+    }
+    // Release the pin enumerator
+    pPinEnum->Release();
+
+    qDebug("DirectShowController::setResolutions --> End");
+
+    return true;
 }
 
 
@@ -668,138 +672,6 @@ bool DirectShowController::setQualityCapabilities()
     qDebug("DirectShowController::setQualityCapabilities --> End");
 
     return true;
-}
-
-
-/**************************************************************************
- **************************************************************************
- * Camera resolution
- **************************************************************************
- **************************************************************************/
-
-int DirectShowController::getActiveResolution()
-{
-
-
-
-    /* ========================================================================
-     * R.L.: This code work not together with the gstreamer pipeline
-     *
-    HRESULT          hr = S_OK;
-    AM_MEDIA_TYPE   *pMediaType = NULL;
-    VIDEOINFOHEADER *pVideoInfoHeader = NULL;
-    int              activeWidth;
-    int              activeHeight;
-
-    if (NULL == pStreamConfig) {
-        //---------------------------------------------------------
-        // Save the stream configuration to handle resolution
-        //---------------------------------------------------------
-
-        // Get a pointer to the IAMStreamConfig interface used to control the camera resolution
-        hr = pFilter->QueryInterface(IID_IAMStreamConfig, (void **)&pStreamConfig);
-        if (S_OK == hr) {
-            AM_MEDIA_TYPE *pmt = NULL;
-            hr = pStreamConfig->GetFormat(&pmt);
-            if (SUCCEEDED(hr))
-            {
-                // Examine the media type for any information you need.
-                // DeleteMediaType(pmt);
-            }
-        }
-        else {
-            qDebug("DirectShowController::getActiveResolution --> ERROR: Unable to access IAMStreamConfig interface.");
-            return -1;
-        }
-    }
-
-    hr = pStreamConfig->GetFormat(&pMediaType);
-    if (SUCCEEDED(hr))
-    {
-        // Examine the media type for any information you need.
-
-        if ((pMediaType->formattype == FORMAT_VideoInfo) &&
-            (pMediaType->cbFormat >= sizeof(VIDEOINFOHEADER)) &&
-            (pMediaType->pbFormat != NULL))
-        {
-            pVideoInfoHeader = (VIDEOINFOHEADER*)pMediaType->pbFormat;
-            activeWidth = pVideoInfoHeader->bmiHeader.biWidth;
-            activeHeight = pVideoInfoHeader->bmiHeader.biHeight;
-
-            qDebug() << "DirectShowController::getActiveResolution --> active Resolution: " << activeWidth << ":" << activeHeight;
-
-            // addResolution(GrabberResolution(pinId, outputWidth, outputHeight, connected));
-        }
-        // DeleteMediaType(pmt);
-    }
-    *
-    * ======================================================================== */
-
-    return -1;
-}
-
-
-void DirectShowController::setActiveResolution(int ac)
-{
-
-    /* ========================================================================
-     * R.L.: This code work not together with the gstreamer pipeline
-     *
-    HRESULT hr = S_OK;
-    GrabberResolution  newResolution;
-    int iCount, iSize;
-    BYTE *pSCC = NULL;
-    AM_MEDIA_TYPE *pmt;
-
-    newResolution = getResolutions().at(ac);
-
-    if (NULL == pStreamConfig) {
-        //---------------------------------------------------------
-        // Save the stream configuration to handle resolution
-        //---------------------------------------------------------
-
-        // Get a pointer to the IAMStreamConfig interface used to control the camera resolution
-        hr = pFilter->QueryInterface(IID_IAMStreamConfig, (void **)&pStreamConfig);
-        if (S_OK == hr) {
-            AM_MEDIA_TYPE *pmt = NULL;
-            hr = pStreamConfig->GetFormat(&pmt);
-            if (SUCCEEDED(hr))
-            {
-                // Examine the media type for any information you need.
-                // DeleteMediaType(pmt);
-            }
-        }
-        else {
-            qDebug("DirectShowController::setActiveResolution --> ERROR: Unable to access IAMStreamConfig interface.");
-            return;
-        }
-    }
-
-    hr = pStreamConfig->GetNumberOfCapabilities(&iCount, &iSize);
-
-    pSCC = new BYTE[iSize];
-    if (pSCC == NULL)
-    {
-        // TODO: Out of memory error.
-    }
-
-    // Get the first format.
-    hr = pStreamConfig->GetStreamCaps(0, &pmt, pSCC);
-    if (hr == S_OK)
-    {
-        // TODO: Examine the format. If it's not suitable for some
-        // reason, call GetStreamCaps with the next index value (up
-        // to iCount). Otherwise, set the format:
-        hr = pStreamConfig->SetFormat(pmt);
-        if (FAILED(hr))
-        {
-            // TODO: Error handling.
-        }
-        // DeleteMediaType(pmt);
-    }
-    delete [] pSCC;
-    *
-    * ======================================================================== */
 }
 
 /**************************************************************************

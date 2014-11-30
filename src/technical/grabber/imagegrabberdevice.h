@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2011-2012 by                                                *
+ *  Copyright (C) 2011-2014 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -147,6 +147,42 @@ public:
      */
     void setDeviceCapability(imageGrabberDeviceCapabilities cap);
 
+    /**************************************************************************
+     **************************************************************************
+     * Camera resolution
+     **************************************************************************
+     **************************************************************************/
+
+    /**
+     * Add a resolution to the controller.
+     * @param r The new grabber resolution.
+     */
+    void addResolution(GrabberResolution r);
+
+    /**
+     * Get the possible resolutions of the controller.
+     * @return The resolutions of the controller.
+     */
+    QVector<GrabberResolution> getResolutions();
+
+    /**
+     * Get the active resolution of the controller.
+     * @return The index of the active resolution.
+     */
+    virtual int getActiveResolution();
+
+    /**
+     * Set the active resolution of the controller.
+     * @param ac The index of the new active resolution.
+     */
+    virtual void setActiveResolution(int ac);
+
+    /**************************************************************************
+     **************************************************************************
+     * Camera controller
+     **************************************************************************
+     **************************************************************************/
+
     /**
      * Has the grabber a controller interface?
      * @return True if there is a controller interface.
@@ -171,6 +207,8 @@ private:
     QString                         deviceName;
     imageGrabberVideoSources        deviceSource;
     imageGrabberDeviceCapabilities  deviceCap;
+
+    QVector<GrabberResolution>      resolutions;
 
     GrabberController              *controller;
 

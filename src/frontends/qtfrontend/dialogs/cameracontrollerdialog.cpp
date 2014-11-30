@@ -77,16 +77,6 @@ void CameraControllerDialog::makeGUI()
     // Enable help window for modal dialoges
     this->setAttribute(Qt::WA_GroupLeader);
 
-    resolutionGroupBox = new QGroupBox("resolutionGroupBox");
-    QVBoxLayout *resolutionLayout = new QVBoxLayout;
-    resolutionGroupBox->setLayout(resolutionLayout);
-
-    resolutionLabel = new QLabel("resolutionLabel");
-    resolutionComboBox = new QComboBox();
-    connect(resolutionComboBox, SIGNAL(activated(int)), this, SLOT(changeResolution(int)));
-    // resolutionLabel->hide();
-    // resolutionComboBox->hide();
-
     qualityGroupBox = new QGroupBox("qualityGroupBox");
     QVBoxLayout *qualityLayout = new QVBoxLayout;
     qualityGroupBox->setLayout(qualityLayout);
@@ -298,9 +288,6 @@ void CameraControllerDialog::makeGUI()
     mainLayout = new QVBoxLayout;
     // mainLayout->addLayout(topLayout);
 
-    resolutionLayout->addWidget(resolutionLabel);
-    resolutionLayout->addWidget(resolutionComboBox);
-
     qualityLayout->addWidget(brightnessCheckBox);
     qualityLayout->addWidget(brightnessLabel);
     qualityLayout->addWidget(brightnessComboBox);
@@ -356,7 +343,6 @@ void CameraControllerDialog::makeGUI()
     controlLayout->addWidget(rollComboBox);
     controlLayout->addStretch();
 
-    mainLayout->addWidget(resolutionGroupBox);
     mainLayout->addWidget(qualityGroupBox);
     mainLayout->addWidget(controlGroupBox);
     mainLayout->addLayout(bottomLayout);
@@ -371,10 +357,6 @@ void CameraControllerDialog::retranslateStrings()
     qDebug() << "CameraControllerDialog::retranslateStrings --> Start";
 
     setWindowTitle(tr("qStopMotion Camera Controller"));
-
-    resolutionGroupBox->setTitle(tr("Camera Resolution"));
-
-    resolutionLabel->setText(tr("Resolution:"));
 
     qualityGroupBox->setTitle(tr("Video Quality"));
 
@@ -438,51 +420,8 @@ void CameraControllerDialog::initialize()
     int                         width = 0;
     int                         height = 0;
     int                         resolutionIndex = -1;
-    int                         index;
 
     progress.setWindowModality(Qt::WindowModal);
-
-    for (index = 0; index < grabberController->getResolutions().size(); index++) {
-        resolution = grabberController->getResolutions().at(index);
-        resolutionComboBox->addItem(QString("%1 x %2").arg(resolution.getWidth()).arg(resolution.getHeight()));
-    }
-
-    if (preferences->getIntegerPreference(deviceId, "resolutionwidth", width) == true) {
-        if (preferences->getIntegerPreference(deviceId, "resolutionheight", height) == false) {
-            // Internal problem
-            qDebug() << "CameraControllerDialog::initialize --> Resolution height not found!";
-        }
-        // Search resolution in the list of possible resolutions
-        for (index = 0; index < grabberController->getResolutions().size(); index++) {
-            resolution = grabberController->getResolutions().at(index);
-            if ((resolution.getWidth() == width) &&
-                    (resolution.getHeight() == height)) {
-                resolutionIndex = index;
-                break;
-            }
-        }
-    }
-    if (-1 == resolutionIndex) {
-        // No predifined resolution - Use the maximum possible resolution
-        for (index = 0; index < grabberController->getResolutions().size(); index++) {
-            resolution = grabberController->getResolutions().at(index);
-            if (resolution.getWidth() < (unsigned int)width) {
-                continue;
-            }
-            if (resolution.getWidth() > (unsigned int)width) {
-                width = resolution.getWidth();
-                height = resolution.getHeight();
-                resolutionIndex = index;
-                continue;
-            }
-            if (resolution.getHeight() > (unsigned int)height) {
-                height = resolution.getHeight();
-                resolutionIndex = index;
-            }
-        }
-    }
-    grabberController->setActiveResolution(resolutionIndex);
-    resolutionComboBox->setCurrentIndex(resolutionIndex);
 
     progress.setValue(progressValue++);
     capabilities = grabberController->getBrightnessCaps();
@@ -1080,35 +1019,6 @@ void CameraControllerDialog::initialize()
     closeButton->setFocus();
 
     qDebug() << "CameraControllerDialog::initialize --> End";
-}
-
-
-void CameraControllerDialog::changeResolution(int index)
-{
-    changeResolution(index, true);
-}
-
-
-void CameraControllerDialog::changeResolution(int index, bool save)
-{
-    qDebug() << "CameraControllerDialog::changeResolution --> Start";
-
-    /*
-    PreferencesTool *preferences = frontend->getPreferences();
-
-    long value = grabberController->getBrightnessCaps()->getMinimum() + (index * stepBrightness);
-    long maxValue = grabberController->getBrightnessCaps()->getMaximum();
-
-    if (value > maxValue) {
-        value = maxValue;
-    }
-    grabberController->setBrightness(value);
-    if (save) {
-        preferences->setIntegerPreference(deviceId, "brightness", index);
-    }
-    */
-
-    qDebug() << "CameraControllerDialog::changeResolution --> End";
 }
 
 

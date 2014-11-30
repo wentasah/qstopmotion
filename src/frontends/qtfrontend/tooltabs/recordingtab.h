@@ -106,6 +106,19 @@ public:
     bool setVideoSource(int index);
 
     /**
+     * Get the video resolution index.
+     * @return video resolution index
+     */
+    int getResolution();
+
+    /**
+     * Set the video resolution index.
+     * @param index Index of the new video resolution
+     * @return true if the new index is set, false else.
+     */
+    bool setResolution(int index);
+
+    /**
      * Get the mix mode.
      * @return The mix mode.
      */
@@ -195,6 +208,13 @@ public slots:
     void changeVideoSource(int index);
 
     /**
+     * Slot for notified the camera controller when the resolution changes,
+     * so that resolution can be updated.
+     * @param index the new resolution value.
+     */
+    void changeResolution(int index);
+
+    /**
      * Slot for notified the recording tab when the camera button is pressed.
      */
     void cameraButtonClicked();
@@ -257,7 +277,11 @@ private:
     QComboBox   *recordingModeCombo;
 
     QGroupBox   *cameraGroupBox;
+    QLabel      *videoSourceLabel;
     QComboBox   *videoSourceCombo;
+    QLabel      *resolutionLabel;
+    QComboBox   *resolutionCombo;
+
     QPushButton *cameraButton;
 
     QGroupBox   *captureGroupBox;

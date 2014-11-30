@@ -119,6 +119,22 @@ public:
     const QVector<QString> getDeviceNames();
 
     /**
+     * Get the possible resolution names
+     * of the video device.
+     * @param deviceIndex The index of the device.
+     * @return Vector with the resolution names.
+     */
+    const QVector<QString> getResolutionNames(int deviceIndex);
+
+    /**
+     * Get the video resolution object.
+     * @param deviceIndex The index of the device.
+     * @param resIndex Index of the new video resolution
+     * @return video resolution object
+     */
+    const GrabberResolution getResolution(int deviceIndex, int resIndex);
+
+    /**
      * Checks if the grabber is initialized.
      * @return true if it is initialized, false otherwise
      */

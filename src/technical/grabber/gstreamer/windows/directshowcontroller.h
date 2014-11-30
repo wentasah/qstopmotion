@@ -52,23 +52,7 @@ public:
      */
     bool init(const QString &id);
 
-    /**************************************************************************
-     **************************************************************************
-     * Camera resolution
-     **************************************************************************
-     **************************************************************************/
-
-    /**
-     * Get the active resolution of the controller.
-     * @return The index of the active resolution.
-     */
-    int getActiveResolution();
-
-    /**
-     * Set the active resolution of the controller.
-     * @param ac The index of the new active resolution.
-     */
-    void setActiveResolution(int ac);
+    bool setResolutions(ImageGrabberDevice *device);
 
     /**************************************************************************
      **************************************************************************

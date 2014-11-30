@@ -58,6 +58,8 @@ public:
      */
     bool init(const QString &id);
 
+    bool setResolutions(ImageGrabberDevice *device);
+
     /**************************************************************************
      **************************************************************************
      * Camera quality capabilities
@@ -571,7 +573,6 @@ private:
     void getControlFlag(GrabberControlCapabilities *caps);
     bool setBaseCapabilities();
     bool setPrivateCapabilities();
-    bool setResolutions();
     int  setCtrlValue(GrabberControlCapabilities *caps, int value);
     int  getCtrlValue(GrabberControlCapabilities *caps, int &value);
 

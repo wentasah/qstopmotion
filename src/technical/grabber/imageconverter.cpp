@@ -16,16 +16,22 @@
  *  along with this program; if not, write to the                             *
  *  Free Software Foundation, Inc.,                                           *
  *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                 *
- *                                                                            *
- *  Based on:                                                                 *
- *  Convert between YUY2 (YUYV) and RGB.                                      *
- *  Copyright 2007 (c) Logitech. All Rights Reserved.                         *
  ******************************************************************************/
 
 #include <QtCore/QtDebug>
 
 /******************************************************************************
- * Convert YUV2 to RGB 8bit
+ * Destination Format is rgb32
+ *
+ * Memory layout rgb32:
+ *   +----+----+----+----+  +----+----+----+----+
+ *   | B0 | G0 | R0 | A0 |  | B1 | G1 | R1 | A1 |
+ *   +----+----+----+----+  +----+----+----+----+
+ *
+ ******************************************************************************/
+
+/******************************************************************************
+ * Convert YUV to RGB 32bit
  ******************************************************************************/
 
 /*
@@ -244,7 +250,7 @@ int convert_ayuv_to_argb8_buffer(unsigned char *ayuv, unsigned char *argb8, unsi
  *   | Y0 | U0 | Y1 | V0 |  | Y2 | U1 | Y3 | V1 |
  *   +----+----+----+----+  +----+----+----+----+
  */
-int convert_yuv2_to_argb8_buffer(unsigned char *yuv2, unsigned char *argb8, unsigned int width, unsigned int height, unsigned long bufferLength, long stride)
+int convert_yuy2_to_argb8_buffer(unsigned char *yuy2, unsigned char *argb8, unsigned int width, unsigned int height, unsigned long bufferLength, long stride)
 {
     unsigned int  in = 0;
     unsigned int  out = 0;
@@ -260,10 +266,10 @@ int convert_yuv2_to_argb8_buffer(unsigned char *yuv2, unsigned char *argb8, unsi
     if (!upsideDown) {
         for (in = 0; in < width * height * 2; in += 4) {
             pixel_16 =
-                yuv2[in + 3] << 24 |
-                yuv2[in + 2] << 16 |
-                yuv2[in + 1] <<  8 |
-                yuv2[in + 0];
+                yuy2[in + 3] << 24 |
+                yuy2[in + 2] << 16 |
+                yuy2[in + 1] <<  8 |
+                yuy2[in + 0];
 
             y0 = (pixel_16 & 0x000000ff);
             u  = (pixel_16 & 0x0000ff00) >>  8;
@@ -384,35 +390,269 @@ int convert_uyvy_to_argb8_buffer(unsigned char *uyvy, unsigned char *argb8, unsi
  *   |
  *   +----+----+----+----+----+----+----+----+
  */
-int convert_yv12_to_argb8_buffer(unsigned char *y12, unsigned char *v12, unsigned char *u12, unsigned char *argb8, unsigned int width, unsigned int height, unsigned long bufferLength, long stride)
+int convert_yv12_to_argb8_buffer(unsigned char *yv12, unsigned char *argb8, unsigned int width, unsigned int height, unsigned long bufferLength, long stride)
 {
-    unsigned int  k;
-    unsigned int  i;
+    unsigned int  out = 0;
+    unsigned int  yPos1, yPos2;
+    unsigned int  uPos;
+    unsigned int  vPos;
     unsigned char pixel_24[3];
     unsigned int  pixel_32;
-    int           y;
+    int           y0, y1, y2, y3;
     int           u;
     int           v;
     bool          upsideDown = (stride < 0);
 
     if (!upsideDown) {
-        for (unsigned int h = 0; h < height; h++) {
-            for (unsigned int w = 0; w < width; w++) {
-                k = h * width + w;
-                i = (h / 2) * (width / 2) + (w / 2);
+        for (unsigned int h = 0; h < height; h = h + 2) {
+            for (unsigned int w = 0; w < width; w = w + 2) {
+                yPos1 = h * width + w;
+                yPos2 = (h + 1) * width + w;
+                vPos = (height * width) + ((h / 2) * (width / 2) + (w / 2));
+                uPos = vPos + (height * width / 4);
 
-                y = y12[k];
-                u = u12[i];
-                v = v12[i];
+                y0 = yv12[yPos1];
+                y1 = yv12[yPos1+1];
+                y2 = yv12[yPos2];
+                y3 = yv12[yPos2+1];
+                u = yv12[uPos];
+                v = yv12[vPos];
 
-                pixel_32 = convert_yuv_to_rgb8_SDTV_pixel(y, u, v);
+                pixel_32 = convert_yuv_to_rgb8_SDTV_pixel(y0, u, v);
                 pixel_24[0] = (pixel_32 & 0x000000ff);
                 pixel_24[1] = (pixel_32 & 0x0000ff00) >> 8;
                 pixel_24[2] = (pixel_32 & 0x00ff0000) >> 16;
 
-                argb8[k + 0] = pixel_24[0];
-                argb8[k + 1] = pixel_24[1];
-                argb8[k + 2] = pixel_24[2];
+                argb8[out++] = 0xffU;        // A
+                argb8[out++] = pixel_24[0];  // R
+                argb8[out++] = pixel_24[1];  // G
+                argb8[out++] = pixel_24[2];  // B
+
+                pixel_32 = convert_yuv_to_rgb8_SDTV_pixel(y1, u, v);
+                pixel_24[0] = (pixel_32 & 0x000000ff);
+                pixel_24[1] = (pixel_32 & 0x0000ff00) >> 8;
+                pixel_24[2] = (pixel_32 & 0x00ff0000) >> 16;
+
+                argb8[out++] = 0xffU;        // A
+                argb8[out++] = pixel_24[0];  // R
+                argb8[out++] = pixel_24[1];  // G
+                argb8[out++] = pixel_24[2];  // B
+
+                pixel_32 = convert_yuv_to_rgb8_SDTV_pixel(y2, u, v);
+                pixel_24[0] = (pixel_32 & 0x000000ff);
+                pixel_24[1] = (pixel_32 & 0x0000ff00) >> 8;
+                pixel_24[2] = (pixel_32 & 0x00ff0000) >> 16;
+
+                argb8[out++] = 0xffU;        // A
+                argb8[out++] = pixel_24[0];  // R
+                argb8[out++] = pixel_24[1];  // G
+                argb8[out++] = pixel_24[2];  // B
+
+                pixel_32 = convert_yuv_to_rgb8_SDTV_pixel(y3, u, v);
+                pixel_24[0] = (pixel_32 & 0x000000ff);
+                pixel_24[1] = (pixel_32 & 0x0000ff00) >> 8;
+                pixel_24[2] = (pixel_32 & 0x00ff0000) >> 16;
+
+                argb8[out++] = 0xffU;        // A
+                argb8[out++] = pixel_24[0];  // R
+                argb8[out++] = pixel_24[1];  // G
+                argb8[out++] = pixel_24[2];  // B
+            }
+        }
+    }
+    else {
+        // Not supported
+        return -1;
+    }
+
+    return 0;
+}
+
+
+/*
+ * Memory layout i420:
+ *   +----+----+----+----+----+----+----+----+
+ *   | Y0 | Y1 | Y2 | Y3 |
+ *   +----+----+----+----+
+ *   |
+ *   |
+ *   |
+ *   +----+----+----+----+----+----+----+----+
+ *   | U0 | U1 |
+ *   +----+----+
+ *   |
+ *   |
+ *   |
+ *   +----+----+----+----+----+----+----+----+
+ *   | V0 | V1 |
+ *   +----+----+
+ *   |
+ *   |
+ *   |
+ *   +----+----+----+----+----+----+----+----+
+ */
+int convert_i420_to_argb8_buffer(unsigned char *i420, unsigned char *argb8, unsigned int width, unsigned int height, unsigned long bufferLength, long stride)
+{
+    unsigned int  out = 0;
+    unsigned int  yPos1, yPos2;
+    unsigned int  uPos;
+    unsigned int  vPos;
+    unsigned char pixel_24[3];
+    unsigned int  pixel_32;
+    int           y0, y1, y2, y3;
+    int           u;
+    int           v;
+    bool          upsideDown = (stride < 0);
+
+    if (!upsideDown) {
+        for (unsigned int h = 0; h < height; h = h + 2) {
+            for (unsigned int w = 0; w < width; w = w + 2) {
+                yPos1 = h * width + w;
+                yPos2 = (h + 1) * width + w;
+                uPos = (height * width) + ((h / 2) * (width / 2) + (w / 2));
+                vPos = uPos + (height * width / 4);
+
+                y0 = i420[yPos1];
+                y1 = i420[yPos1+1];
+                y2 = i420[yPos2];
+                y3 = i420[yPos2+1];
+                u = i420[uPos];
+                v = i420[vPos];
+
+                pixel_32 = convert_yuv_to_rgb8_SDTV_pixel(y0, u, v);
+                pixel_24[0] = (pixel_32 & 0x000000ff);
+                pixel_24[1] = (pixel_32 & 0x0000ff00) >> 8;
+                pixel_24[2] = (pixel_32 & 0x00ff0000) >> 16;
+
+                argb8[out++] = 0xffU;        // A
+                argb8[out++] = pixel_24[0];  // R
+                argb8[out++] = pixel_24[1];  // G
+                argb8[out++] = pixel_24[2];  // B
+
+                pixel_32 = convert_yuv_to_rgb8_SDTV_pixel(y1, u, v);
+                pixel_24[0] = (pixel_32 & 0x000000ff);
+                pixel_24[1] = (pixel_32 & 0x0000ff00) >> 8;
+                pixel_24[2] = (pixel_32 & 0x00ff0000) >> 16;
+
+                argb8[out++] = 0xffU;        // A
+                argb8[out++] = pixel_24[0];  // R
+                argb8[out++] = pixel_24[1];  // G
+                argb8[out++] = pixel_24[2];  // B
+
+                pixel_32 = convert_yuv_to_rgb8_SDTV_pixel(y2, u, v);
+                pixel_24[0] = (pixel_32 & 0x000000ff);
+                pixel_24[1] = (pixel_32 & 0x0000ff00) >> 8;
+                pixel_24[2] = (pixel_32 & 0x00ff0000) >> 16;
+
+                argb8[out++] = 0xffU;        // A
+                argb8[out++] = pixel_24[0];  // R
+                argb8[out++] = pixel_24[1];  // G
+                argb8[out++] = pixel_24[2];  // B
+
+                pixel_32 = convert_yuv_to_rgb8_SDTV_pixel(y3, u, v);
+                pixel_24[0] = (pixel_32 & 0x000000ff);
+                pixel_24[1] = (pixel_32 & 0x0000ff00) >> 8;
+                pixel_24[2] = (pixel_32 & 0x00ff0000) >> 16;
+
+                argb8[out++] = 0xffU;        // A
+                argb8[out++] = pixel_24[0];  // R
+                argb8[out++] = pixel_24[1];  // G
+                argb8[out++] = pixel_24[2];  // B
+            }
+        }
+    }
+    else {
+        // Not supported
+        return -1;
+    }
+
+    return 0;
+}
+
+
+/*
+ * Memory layout nv12:
+ *   +----+----+----+----+----+----+----+----+
+ *   | Y0 | Y1 | Y2 | Y3 |
+ *   +----+----+----+----+
+ *   |
+ *   |
+ *   |
+ *   +----+----+----+----+----+----+----+----+
+ *   | U0 | V0 | U1 | V1 |
+ *   +----+----+----+----+
+ *   |
+ *   |
+ *   |
+ *   +----+----+----+----+----+----+----+----+
+ */
+int convert_nv12_to_argb8_buffer(unsigned char *nv12, unsigned char *argb8, unsigned int width, unsigned int height, unsigned long bufferLength, long stride)
+{
+    unsigned int  out = 0;
+    unsigned int  yPos1, yPos2;
+    unsigned int  uPos;
+    unsigned int  vPos;
+    unsigned char pixel_24[3];
+    unsigned int  pixel_32;
+    int           y0, y1, y2, y3;
+    int           u;
+    int           v;
+    bool          upsideDown = (stride < 0);
+
+    if (!upsideDown) {
+        for (unsigned int h = 0; h < height; h = h + 2) {
+            for (unsigned int w = 0; w < width; w = w + 2) {
+                yPos1 = h * width + w;
+                yPos2 = (h + 1) * width + w;
+                uPos = (height * width) + ((h / 2) * (width / 2) + w);
+                vPos = uPos + 1;
+
+                y0 = nv12[yPos1];
+                y1 = nv12[yPos1+1];
+                y2 = nv12[yPos2];
+                y3 = nv12[yPos2+1];
+                u = nv12[uPos];
+                v = nv12[vPos];
+
+                pixel_32 = convert_yuv_to_rgb8_SDTV_pixel(y0, u, v);
+                pixel_24[0] = (pixel_32 & 0x000000ff);
+                pixel_24[1] = (pixel_32 & 0x0000ff00) >> 8;
+                pixel_24[2] = (pixel_32 & 0x00ff0000) >> 16;
+
+                argb8[out++] = 0xffU;        // A
+                argb8[out++] = pixel_24[0];  // R
+                argb8[out++] = pixel_24[1];  // G
+                argb8[out++] = pixel_24[2];  // B
+
+                pixel_32 = convert_yuv_to_rgb8_SDTV_pixel(y1, u, v);
+                pixel_24[0] = (pixel_32 & 0x000000ff);
+                pixel_24[1] = (pixel_32 & 0x0000ff00) >> 8;
+                pixel_24[2] = (pixel_32 & 0x00ff0000) >> 16;
+
+                argb8[out++] = 0xffU;        // A
+                argb8[out++] = pixel_24[0];  // R
+                argb8[out++] = pixel_24[1];  // G
+                argb8[out++] = pixel_24[2];  // B
+
+                pixel_32 = convert_yuv_to_rgb8_SDTV_pixel(y2, u, v);
+                pixel_24[0] = (pixel_32 & 0x000000ff);
+                pixel_24[1] = (pixel_32 & 0x0000ff00) >> 8;
+                pixel_24[2] = (pixel_32 & 0x00ff0000) >> 16;
+
+                argb8[out++] = 0xffU;        // A
+                argb8[out++] = pixel_24[0];  // R
+                argb8[out++] = pixel_24[1];  // G
+                argb8[out++] = pixel_24[2];  // B
+
+                pixel_32 = convert_yuv_to_rgb8_SDTV_pixel(y3, u, v);
+                pixel_24[0] = (pixel_32 & 0x000000ff);
+                pixel_24[1] = (pixel_32 & 0x0000ff00) >> 8;
+                pixel_24[2] = (pixel_32 & 0x00ff0000) >> 16;
+
+                argb8[out++] = 0xffU;        // A
+                argb8[out++] = pixel_24[0];  // R
+                argb8[out++] = pixel_24[1];  // G
+                argb8[out++] = pixel_24[2];  // B
             }
         }
     }
@@ -425,12 +665,12 @@ int convert_yv12_to_argb8_buffer(unsigned char *y12, unsigned char *v12, unsigne
 }
 
 /*
-int convert_yuv2_to_rgb8_file(char *yuv2file, char *rgb8file, unsigned int width, unsigned int height)
+int convert_yuy2_to_rgb8_file(char *yuy2file, char *rgb8file, unsigned int width, unsigned int height)
 {
     FILE *in, *out;
-    unsigned char *yuv2, *rgb8;
+    unsigned char *yuy2, *rgb8;
 
-    in = fopen(yuv2file, "rb");
+    in = fopen(yuy2file, "rb");
     if (!in) {
         return 1;
     }
@@ -440,8 +680,8 @@ int convert_yuv2_to_rgb8_file(char *yuv2file, char *rgb8file, unsigned int width
         return 1;
     }
 
-    yuv2 = malloc(width * height * 2);
-    if (yuv2 == NULL) {
+    yuy2 = malloc(width * height * 2);
+    if (yuy2 == NULL) {
         return 2;
     }
 
@@ -450,10 +690,10 @@ int convert_yuv2_to_rgb8_file(char *yuv2file, char *rgb8file, unsigned int width
         return 2;
     }
 
-    fread(yuv2, width * height * 2, 1, in);
+    fread(yuy2, width * height * 2, 1, in);
     fclose(in);
 
-    if (convert_yuv2_to_rgb8_buffer(yuv2, rgb8, width, height)) {
+    if (convert_yuy2_to_rgb8_buffer(yuy2, rgb8, width, height)) {
         return 3;
     }
 
@@ -464,10 +704,10 @@ int convert_yuv2_to_rgb8_file(char *yuv2file, char *rgb8file, unsigned int width
 }
 */
 /******************************************************************************
- * Convert RGB 8bit to YUV2
+ * Convert RGB 8bit to YUV
  ******************************************************************************/
 
-int convert_rgb8_to_yuv2_pixel(int r8, int g8, int b8)
+int convert_rgb8_to_yuv_pixel(int r8, int g8, int b8)
 {
     unsigned int pixel_32 = 0;
     unsigned char *pixel = (unsigned char *)&pixel_32;
@@ -493,44 +733,44 @@ int convert_rgb8_to_yuv2_pixel(int r8, int g8, int b8)
 }
 
 
-int convert_rgb8_to_yuv2_buffer(unsigned char *rgb8, unsigned char *yuv2, unsigned int width, unsigned int height)
+int convert_rgb8_to_yuy2_buffer(unsigned char *rgb8, unsigned char *yuy2, unsigned int width, unsigned int height)
 {
     unsigned int in, out = 0;
     unsigned int pixel_32;
     int y0, u0, v0, y1, u1, v1;
 
     for(in = 0; in < width * height * 3; in += 6) {
-        pixel_32 = convert_rgb8_to_yuv2_pixel(rgb8[in], rgb8[in + 1], rgb8[in + 2]);
+        pixel_32 = convert_rgb8_to_yuv_pixel(rgb8[in], rgb8[in + 1], rgb8[in + 2]);
         y0 = (pixel_32 & 0x000000ff);
         u0 = (pixel_32 & 0x0000ff00) >>  8;
         v0 = (pixel_32 & 0x00ff0000) >> 16;
 
-        pixel_32 = convert_rgb8_to_yuv2_pixel(rgb8[in + 3], rgb8[in + 4], rgb8[in + 5]);
+        pixel_32 = convert_rgb8_to_yuv_pixel(rgb8[in + 3], rgb8[in + 4], rgb8[in + 5]);
         y1 = (pixel_32 & 0x000000ff);
         u1 = (pixel_32 & 0x0000ff00) >>  8;
         v1 = (pixel_32 & 0x00ff0000) >> 16;
 
-        yuv2[out++] = y0;
-        yuv2[out++] = (u0 + u1) / 2;
-        yuv2[out++] = y1;
-        yuv2[out++] = (v0 + v1) / 2;
+        yuy2[out++] = y0;
+        yuy2[out++] = (u0 + u1) / 2;
+        yuy2[out++] = y1;
+        yuy2[out++] = (v0 + v1) / 2;
     }
 
     return 0;
 }
 
 /*
-int convert_rgb8_to_yuv2_file(char *rgb8file, char *yuv2file, unsigned int width, unsigned int height)
+int convert_rgb8_to_yuy2_file(char *rgb8file, char *yuy2file, unsigned int width, unsigned int height)
 {
     FILE *in, *out;
-    unsigned char *yuv2, *rgb8;
+    unsigned char *yuy2, *rgb8;
 
     in = fopen(rgb8file, "rb");
     if (!in) {
         return 1;
     }
 
-    out = fopen(yuv2file, "wb");
+    out = fopen(yuy2file, "wb");
     if (!out) {
         return 1;
     }
@@ -540,8 +780,8 @@ int convert_rgb8_to_yuv2_file(char *rgb8file, char *yuv2file, unsigned int width
         return 2;
     }
 
-    yuv2 = malloc(width * height * 2);
-    if (yuv2 == NULL) {
+    yuy2 = malloc(width * height * 2);
+    if (yuy2 == NULL) {
         return 2;
     }
 
@@ -549,11 +789,11 @@ int convert_rgb8_to_yuv2_file(char *rgb8file, char *yuv2file, unsigned int width
 
     fclose(in);
 
-    if (convert_rgb8_to_yuv2_buffer(rgb8, yuv2, width, height)) {
+    if (convert_rgb8_to_yuy2_buffer(rgb8, yuy2, width, height)) {
         return 3;
     }
 
-    fwrite(yuv2, width * height * 2, 1, out);
+    fwrite(yuy2, width * height * 2, 1, out);
 
     fclose(out);
 
@@ -561,39 +801,13 @@ int convert_rgb8_to_yuv2_file(char *rgb8file, char *yuv2file, unsigned int width
 }
 */
 /******************************************************************************
- * Convert RGB 24bit to RGB 8bit
+ * Convert RGB to RGB 8bit
  ******************************************************************************/
-/*
-int convert_rgb24_to_rgb8_pixel(int r24, int g24, int b24, bool upsideDown)
-{
-    unsigned int pixel_32 = 0;
-    unsigned char *pixel = (unsigned char *)&pixel_32;
-    int r8, g8, b8;
-
-    r8 = (int)(y + (1.370705 * (v-128)));
-    g8 = (int)(y - (0.698001 * (v-128)) - (0.337633 * (u-128)));
-    b8 = (int)(y + (1.732446 * (u-128)));
-
-    if (r8 > 255) r8 = 255;
-    if (g8 > 255) g8 = 255;
-    if (b8 > 255) b8 = 255;
-
-    if (r8 < 0) r8 = 0;
-    if (g8 < 0) g8 = 0;
-    if (b8 < 0) b8 = 0;
-
-    pixel[0] = r8 * 220 / 256;
-    pixel[1] = g8 * 220 / 256;
-    pixel[2] = b8 * 220 / 256;
-
-    return pixel_32;
-}
-*/
 
 /*
  * Memory layout rgb24:
  *   +----+----+----+  +----+----+----+
- *   | R0 | G0 | B0 |  | R1 | G1 | B1 |
+ *   | B0 | G0 | R0 |  | B1 | G1 | R1 |
  *   +----+----+----+  +----+----+----+
  */
 int convert_rgb24_to_argb8_buffer(unsigned char *rgb24, unsigned char *argb8, unsigned int width, unsigned int height, unsigned long bufferLength, long stride)
@@ -632,44 +846,46 @@ int convert_rgb24_to_argb8_buffer(unsigned char *rgb24, unsigned char *argb8, un
 }
 
 /*
-int convert_rgb24_to_rgb8_file(char *rgb24file, char *rgb8file, unsigned int width, unsigned int height)
+ * Memory layout rgb32:
+ *   +----+----+----+----+  +----+----+----+----+
+ *   | B0 | G0 | R0 | A0 |  | B1 | G1 | R1 | A1 |
+ *   +----+----+----+----+  +----+----+----+----+
+ */
+int convert_rgb32_to_argb8_buffer(unsigned char *rgb32, unsigned char *argb8, unsigned int width, unsigned int height, unsigned long bufferLength, long stride)
 {
-    FILE *in, *out;
-    unsigned char *rgb24, *rgb8;
+    unsigned char* dst = const_cast<unsigned char*>(argb8);
+    const unsigned char* const dstEnd = dst + bufferLength;
+    bool upsideDown = (stride < 0);
 
-    in = fopen(rgb24file, "rb");
-    if (!in) {
-        return 1;
+    if (!upsideDown) {
+        const unsigned char* src = rgb32;
+        while (dst < dstEnd) {
+            *dst++ = *src++;       // B
+            *dst++ = *src++;       // G
+            *dst++ = *src++;       // R
+            *dst++ = *src++;       // A
+        }
     }
-
-    out = fopen(rgb8file, "wb");
-    if (!out) {
-        return 1;
+    else {
+        stride = -stride;
+        if (stride != (width * 3)) {
+            return 0;
+        }
+        for (int scanLine = height - 1; scanLine >= 0; --scanLine) {
+            const unsigned char* src = rgb32 + scanLine * stride;
+            const unsigned char* const srcEnd = src + width * 3;
+            while (src < srcEnd) {
+                *dst++ = *src++;       // B
+                *dst++ = *src++;       // G
+                *dst++ = *src++;       // R
+                *dst++ = *src++;       // A
+            }
+        }
     }
-
-    rgb24 = malloc(width * height * 2);
-    if (rgb24 == NULL) {
-        return 2;
-    }
-
-    rgb8 = malloc(width * height * 3);
-    if (rgb8 == NULL) {
-        return 2;
-    }
-
-    fread(rgb24, width * height * 2, 1, in);
-    fclose(in);
-
-    if (convert_rgb24_to_rgb8_buffer(rgb24, rgb8, width, height)) {
-        return 3;
-    }
-
-    fwrite(rgb8, width * height * 3, 1, out);
-    fclose(out);
 
     return 0;
 }
-*/
+
 /******************************************************************************
  * Example
  ******************************************************************************/
@@ -696,10 +912,10 @@ int main(int argc, char **argv)
     outfile = argv[4];
 #ifdef RGB2YUV
     printf("RGB2YUY: %s => %s\n", infile, outfile);
-    ret = convert_rgb8_to_yuv2_file(infile, outfile, width, height);
+    ret = convert_rgb8_to_yuy2_file(infile, outfile, width, height);
 #else
     printf("YUV2RGB: %s => %s\n", infile, outfile);
-    ret = convert_yuv2_to_rgb8_file(infile, outfile, width, height);
+    ret = convert_yuy2_to_rgb8_file(infile, outfile, width, height);
 #endif
     if (ret == 0) {
         printf("Done.\n");
@@ -715,7 +931,7 @@ void MainWindow::paintEvent ( QPaintEvent * event )
 {
     QPainter Painter(this) ;
     read_frame();
-    convert_yuv2_to_rgb8_buffer((unsigned char *)buffers[JPEGindex].start,bufrgb8,320,240);
+    convert_yuy2_to_rgb8_buffer((unsigned char *)buffers[JPEGindex].start,bufrgb8,320,240);
     QImage img(bufrgb8,320,240,QImage::Format_RGB888);
     Painter.drawImage(0,0,img) ;
 

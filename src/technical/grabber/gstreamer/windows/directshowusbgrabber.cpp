@@ -167,6 +167,12 @@ bool GstreamerDirectShowUsbGrabber::initialization(QVector<ImageGrabberDevice*> 
                     if (deviceController->init(device->getDeviceId()))
                     {
                         device->setController(deviceController);
+
+                        if (deviceController->setResolutions(device) == false) {
+                            qDebug() << "GstreamerDirectShowUsbGrabber::initialization --> Cannot enumerate resolutions (" << errno << ")";
+                            // return false;
+                        }
+
                     }
                     else
                     {

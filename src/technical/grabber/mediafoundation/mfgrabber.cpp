@@ -49,13 +49,17 @@ MfGrabber::MfGrabber(Frontend *f)
 {
     qDebug("MfGrabber::Constructor --> Start (Empty)");
 
+    HRESULT hr;
+
     mediaSource = NULL;
     sourceReader = NULL;
 
     frameData = NULL;
     frameLength = 0;
 
-    HRESULT hr;
+    width = -1;
+    height = -1;
+    stride = -1;
 
     hr = MFStartup(MF_VERSION);
     if (!SUCCEEDED(hr)) {
@@ -87,17 +91,13 @@ bool MfGrabber::initialization(QVector<ImageGrabberDevice*> &devices)
 {
     qDebug("MfGrabber::initialization --> Start");
 
-    // PreferencesTool *pref = frontend->getPreferences();
-    // int              value;
-
-    HRESULT          hr = S_OK;
-    IMFAttributes   *pAttributes = NULL;
-    IMFActivate    **ppDevices = NULL;
-    UINT32           deviceCount;
-
+    HRESULT             hr = S_OK;
+    IMFAttributes*      pAttributes = NULL;
+    IMFActivate**       ppDevices = NULL;
+    UINT32              deviceCount;
     int                 device_size;
-    ImageGrabberDevice *device = NULL;
-    MfController       *deviceController = NULL;
+    ImageGrabberDevice* device = NULL;
+    MfController*       deviceController = NULL;
 
     device_size = devices.size();
 
@@ -193,18 +193,22 @@ bool MfGrabber::setUp()
 {
     qDebug() << "MfGrabber::setUp --> Start";
 
-    // int     imageWidth = 640;    // Default values are VGA
-    // int     imageHeight = 480;
-    int     videoSource = frontend->getProject()->getVideoSource();
-    ImageGrabberDevice *videoDevice = frontend->getDevice(videoSource);
+    int                 videoSource = frontend->getProject()->getVideoSource();
+    ImageGrabberDevice* videoDevice = frontend->getDevice(videoSource);
     int                 deviceIndex = videoDevice->getDeviceIndex();
+    HRESULT             hr = S_OK;
+    IMFAttributes*      devAttr = NULL;
+    IMFActivate**       camDevices = NULL;
+    UINT32              camCount = 0;
+    IMFMediaType*       mediaType = NULL;
+    IMFMediaType*       newMediaType = NULL;
+    DWORD               dwMediaTypeIndex = 0;
+    UINT32              typeWidth;
+    UINT32              typeHeight;
+    GUID                typeMajorType;
+    GUID                typeSubType;
+    int                 resIndex = -1;
 
-    HRESULT          hr = S_OK;
-    IMFAttributes   *devAttr = NULL;
-    IMFActivate    **camDevices = NULL;
-    UINT32           camCount = 0;
-    IMFMediaType    *mediaType = NULL;
-    GUID             subtype = { 0 };
 
     hr = MFCreateAttributes(&devAttr, 1);
     if (!SUCCEEDED(hr)) {
@@ -221,6 +225,7 @@ bool MfGrabber::setUp()
     hr = MFEnumDeviceSources(devAttr, &camDevices, &camCount);
     if (!SUCCEEDED(hr)) {
         qDebug() << "MfGrabber::setUp --> Cannot create the video capture device";
+        SafeRelease(&devAttr);
         return false;
     }
 
@@ -241,18 +246,6 @@ bool MfGrabber::setUp()
         SafeRelease(&mediaSource);
         return false;
     }
-//-----------------------------
-
-    IMFMediaType *type = NULL;
-    IMFMediaType *newMediaType = NULL;
-    DWORD         dwMediaTypeIndex = 0;
-    GUID          MajorType;
-    GUID          SubType;
-    UINT32        typeWidth;
-    UINT32        typeHeight;
-    LONG          typeStride;
-    UINT32        maxWidth = 0;
-    UINT32        maxHeight = 0;
 
     hr = MFCreateMediaType(&newMediaType);
     if (!SUCCEEDED(hr)) {
@@ -261,10 +254,17 @@ bool MfGrabber::setUp()
         return false;
     }
 
+    //-----------------------------
+    // Find usable MediaType
+    //-----------------------------
+
+    resIndex = frontend->getProject()->getResolution();
+    GrabberResolution resolution = frontend->getResolution(resIndex);
+
     while (SUCCEEDED(hr)) {
         hr = sourceReader->GetNativeMediaType((DWORD)MF_SOURCE_READER_FIRST_VIDEO_STREAM,
                                               dwMediaTypeIndex,
-                                              &type);
+                                              &mediaType);
         if (hr == MF_E_NO_MORE_TYPES) {
             hr = S_OK;
             break;
@@ -275,13 +275,10 @@ bool MfGrabber::setUp()
             return false;
         }
 
-        type->GetGUID(MF_MT_MAJOR_TYPE, &MajorType);
-        type->GetGUID(MF_MT_SUBTYPE, &SubType);
+        mediaType->GetGUID(MF_MT_MAJOR_TYPE, &typeMajorType);
+        mediaType->GetGUID(MF_MT_SUBTYPE, &typeSubType);
 
-        QString MajorTypeString = GetGUIDNameConst(MajorType);
-        QString SubTypeString = GetGUIDNameConst(SubType);
-
-        hr = MFGetAttributeSize(type, MF_MT_FRAME_SIZE, &typeWidth, &typeHeight);
+        hr = MFGetAttributeSize(mediaType, MF_MT_FRAME_SIZE, &typeWidth, &typeHeight);
         if (FAILED(hr)) {
             SafeRelease(&mediaType);
             SafeRelease(&sourceReader);
@@ -289,27 +286,74 @@ bool MfGrabber::setUp()
             return false;
         }
 
-        if (typeWidth > maxWidth) {
-            maxWidth = typeWidth;
-            maxHeight = typeHeight;
-
-            type->CopyAllItems(newMediaType);
+        if ((resolution.getWidth() == typeWidth) &&
+            (resolution.getHeight() == typeHeight)) {
+            switch (resolution.getFormat()) {
+            case GrabberResolution::rgb24Format:
+                if (typeSubType == MFVideoFormat_RGB24) {
+                    mediaType->CopyAllItems(newMediaType);
+                }
+                break;
+            case GrabberResolution::ayuvFormat:
+                if (typeSubType == MFVideoFormat_AYUV) {
+                    mediaType->CopyAllItems(newMediaType);
+                }
+                break;
+            case GrabberResolution::yuv2Format:
+                if (typeSubType == MFVideoFormat_YUY2) {
+                    mediaType->CopyAllItems(newMediaType);
+                }
+                break;
+            case GrabberResolution::uyvyFormat:
+                if (typeSubType == MFVideoFormat_UYVY) {
+                    mediaType->CopyAllItems(newMediaType);
+                }
+                break;
+            case GrabberResolution::yv12Format:
+                if (typeSubType == MFVideoFormat_YV12) {
+                    mediaType->CopyAllItems(newMediaType);
+                }
+                break;
+            case GrabberResolution::i420Format:
+                if (typeSubType == MFVideoFormat_I420) {
+                    mediaType->CopyAllItems(newMediaType);
+                }
+                break;
+            case GrabberResolution::nv12Format:
+                if (typeSubType == MFVideoFormat_NV12) {
+                    mediaType->CopyAllItems(newMediaType);
+                }
+                break;
+            case GrabberResolution::mjpegFormat:
+                if (typeSubType == MFVideoFormat_MJPG) {
+                    mediaType->CopyAllItems(newMediaType);
+                }
+                break;
+            }
         }
 
-        typeStride = (LONG)MFGetAttributeUINT32(type, MF_MT_DEFAULT_STRIDE, 1);
+
+        QString majorTypeString = GetGUIDNameConst(typeMajorType);
+        QString subTypeString = GetGUIDNameConst(typeSubType);
+
+        LONG typeStride = (LONG)MFGetAttributeUINT32(mediaType, MF_MT_DEFAULT_STRIDE, 1);
 
         qDebug() << "MfGrabber::setUp --> Media Type (" << dwMediaTypeIndex << "): "
-                 << MajorTypeString << " - " << SubTypeString
+                 << majorTypeString << " - " << subTypeString
                  << " Size: " << typeWidth << "x" << typeHeight
                  << " Stride: " << typeStride;
 
-        LogMediaType(type);
+        LogMediaType(mediaType);
 
-        SafeRelease(&type);
+
+        SafeRelease(&mediaType);
         dwMediaTypeIndex++;
     }
 
-    // Use the maximum possible frame size
+    //------------------------------
+    // Use the found media type
+    //------------------------------
+
     hr = sourceReader->SetCurrentMediaType((DWORD)MF_SOURCE_READER_FIRST_VIDEO_STREAM,
                                            NULL,
                                            newMediaType);
@@ -322,7 +366,6 @@ bool MfGrabber::setUp()
 
     SafeRelease(&newMediaType);
 
-//------------------------------
     hr = sourceReader->GetCurrentMediaType((DWORD)MF_SOURCE_READER_FIRST_VIDEO_STREAM,
                                            &mediaType);
     if (!SUCCEEDED(hr)) {
@@ -331,11 +374,21 @@ bool MfGrabber::setUp()
         return false;
     }
 
-    mediaType->GetGUID(MF_MT_MAJOR_TYPE, &MajorType);
-    mediaType->GetGUID(MF_MT_SUBTYPE, &SubType);
+    hr = mediaType->GetGUID(MF_MT_MAJOR_TYPE, &majorType);
+    if (!SUCCEEDED(hr)) {
+        SafeRelease(&mediaType);
+        SafeRelease(&sourceReader);
+        SafeRelease(&mediaSource);
+        return false;
+    }
 
-    QString MajorTypeString = GetGUIDNameConst(MajorType);
-    QString SubTypeString = GetGUIDNameConst(SubType);
+    hr = mediaType->GetGUID(MF_MT_SUBTYPE, &subType);
+    if (!SUCCEEDED(hr)) {
+        SafeRelease(&mediaType);
+        SafeRelease(&sourceReader);
+        SafeRelease(&mediaSource);
+        return false;
+    }
 
     hr = MFGetAttributeSize(mediaType, MF_MT_FRAME_SIZE, &width, &height);
     if (FAILED(hr)) {
@@ -345,40 +398,41 @@ bool MfGrabber::setUp()
         return false;
     }
 
-    LONG stride = (LONG)MFGetAttributeUINT32(mediaType, MF_MT_DEFAULT_STRIDE, 1);
+    stride = (LONG)MFGetAttributeUINT32(mediaType, MF_MT_DEFAULT_STRIDE, 1);
+
+    QString majorTypeString = GetGUIDNameConst(majorType);
+    QString subTypeString = GetGUIDNameConst(subType);
 
     qDebug() << "MfGrabber::setUp --> Current Media Type: "
-             << MajorTypeString << " - " << SubTypeString
+             << majorTypeString << " - " << subTypeString
              << " Size: " << width << "x" << height
              << " Stride: " << stride;
 
     LogMediaType(mediaType);
 
-    hr = mediaType->GetGUID(MF_MT_SUBTYPE, &subtype);
-    if (!SUCCEEDED(hr)) {
-        SafeRelease(&mediaType);
-        SafeRelease(&sourceReader);
-        SafeRelease(&mediaSource);
-        return false;
-    }
-
-    if (subtype == MFVideoFormat_YUY2) {
-        // SafeRelease(&sourceReader);
-        // SafeRelease(&mediaSource);
-        // return false;
+    if (subType == MFVideoFormat_RGB24) {
         return true;
     }
 
-    if (subtype != MFVideoFormat_RGB24) {
-        SafeRelease(&mediaType);
-        SafeRelease(&sourceReader);
-        SafeRelease(&mediaSource);
-        return false;
+    if (subType == MFVideoFormat_AYUV) {
+        return true;
     }
+
+    if (subType == MFVideoFormat_YUY2) {
+        return true;
+    }
+
+    if (subType == MFVideoFormat_I420) {
+        return true;
+    }
+
+    SafeRelease(&mediaType);
+    SafeRelease(&sourceReader);
+    SafeRelease(&mediaSource);
 
     qDebug() << "MfGrabber::setUp --> End";
 
-    return true;
+    return false;
 }
 
 bool MfGrabber::grab()
@@ -390,9 +444,7 @@ bool MfGrabber::grab()
 const QImage MfGrabber::getImage()
 {
     QImage      image;
-    int         w = -1;
-    int         h = -1;
-    const BYTE *data = NULL;
+    const BYTE* data = NULL;
     int         Tries = 10;
     int         a;
     int         r;
@@ -400,14 +452,15 @@ const QImage MfGrabber::getImage()
     int         b;
 
     while (data == NULL && --Tries) {
-        getRawFrame(data, w, h);
+        getRawFrame(data);
     }
 
-    if (data != NULL && w > 0 && h > 0) {
-        image = QImage(QSize(w, h), QImage::Format_ARGB32);
-        BYTE *dst = const_cast<BYTE*>(image.constBits());
-        const BYTE *src = const_cast<BYTE*>(data);
-        const BYTE* const srcEnd = src + w * h * 4;
+    if (data != NULL && width > 0 && height > 0) {
+        image = QImage(QSize(width, height), QImage::Format_ARGB32);
+        BYTE* dst = const_cast<BYTE*>(image.constBits());
+        const BYTE* src = const_cast<BYTE*>(data);
+        const BYTE* const srcEnd = src + width * height * 4;
+
         while (src < srcEnd) {
             a = *src++;
             r = *src++;
@@ -423,8 +476,6 @@ const QImage MfGrabber::getImage()
     if (firstImage) {
         firstImage = false;
     }
-
-    Q_ASSERT(image.isNull() == false);
 
     return image;
 }
@@ -456,7 +507,6 @@ bool MfGrabber::tearDown()
 
     SafeRelease(&sourceReader);
     SafeRelease(&mediaSource);
-    // SafeRelease(&mediaPlayer);
 
     qDebug() << "MfGrabber::tearDown --> End";
 
@@ -470,11 +520,8 @@ HRESULT MfGrabber::readDeviceInfo(IMFActivate *pActivate, unsigned int /*Num*/, 
 
     HRESULT hr = S_OK;
 
-    // vd_CurrentNumber = Num;
-
-    if(pActivate)
-    {
-        IMFMediaSource *pSource = NULL;
+    if (pActivate) {
+        IMFMediaSource* pSource = NULL;
         LPWSTR          FriendlyName = NULL;
         UINT32          cchLength;
 
@@ -489,9 +536,7 @@ HRESULT MfGrabber::readDeviceInfo(IMFActivate *pActivate, unsigned int /*Num*/, 
         device->setDeviceName(QString::fromUtf16((const ushort*)FriendlyName) + " (MMF)");
         device->setDeviceSource(ImageGrabberDevice::mediaFoundationSource);
 
-        hr = pActivate->ActivateObject(
-            __uuidof(IMFMediaSource),
-            (void**)&pSource );
+        hr = pActivate->ActivateObject(__uuidof(IMFMediaSource), (void**)&pSource );
         if (!SUCCEEDED(hr)) {
             // Error activating the source
 
@@ -512,7 +557,6 @@ HRESULT MfGrabber::readDeviceInfo(IMFActivate *pActivate, unsigned int /*Num*/, 
         if(FriendlyName) {
             CoTaskMemFree(FriendlyName);
         }
-
     }
 
     qDebug() << "MfGrabber::readDeviceInfo --> End";
@@ -526,17 +570,18 @@ HRESULT MfGrabber::enumerateCaptureFormats(IMFMediaSource *pSource, ImageGrabber
     qDebug() << "MfGrabber::enumerateCaptureFormats --> Start";
 
     HRESULT                    hr = S_OK;
-    IMFPresentationDescriptor *pPD = NULL;
-    IMFStreamDescriptor       *pSD = NULL;
-    IMFMediaTypeHandler       *pHandler = NULL;
-    IMFMediaType              *pType = NULL;
+    IMFPresentationDescriptor* pPD = NULL;
+    IMFStreamDescriptor*       pSD = NULL;
+    IMFMediaTypeHandler*       pHandler = NULL;
+    IMFMediaType*              pType = NULL;
+    BOOL                       fSelected;
+    DWORD                      cTypes = 0;
 
     hr = pSource->CreatePresentationDescriptor(&pPD);
     if (FAILED(hr)) {
         goto done;
     }
 
-    BOOL fSelected;
     hr = pPD->GetStreamDescriptorByIndex(0, &fSelected, &pSD);
     if (FAILED(hr)) {
         goto done;
@@ -547,7 +592,6 @@ HRESULT MfGrabber::enumerateCaptureFormats(IMFMediaSource *pSource, ImageGrabber
         goto done;
     }
 
-    DWORD cTypes = 0;
     hr = pHandler->GetMediaTypeCount(&cTypes);
     if (FAILED(hr)) {
         goto done;
@@ -557,8 +601,10 @@ HRESULT MfGrabber::enumerateCaptureFormats(IMFMediaSource *pSource, ImageGrabber
         PROPVARIANT  val;
         unsigned int outputWidth = 0;
         unsigned int outputHeight = 0;
+        unsigned int outputFormat = 0;
         QString      GUID_name;
-        UINT32       uHigh = 0, uLow = 0;
+        UINT32       uHigh = 0;
+        UINT32       uLow = 0;
 
         PropVariantInit(&val);
 
@@ -590,13 +636,40 @@ HRESULT MfGrabber::enumerateCaptureFormats(IMFMediaSource *pSource, ImageGrabber
 
         // GUID is in val.puuid
         GUID_name = GetGUIDNameConst(*val.puuid);
+        if (*val.puuid == MFVideoFormat_RGB24) {
+            outputFormat = GrabberResolution::rgb24Format;
+        }
+        else if (*val.puuid == MFVideoFormat_AYUV) {
+            outputFormat = GrabberResolution::ayuvFormat;
+        }
+        else if (*val.puuid == MFVideoFormat_YUY2) {
+            outputFormat = GrabberResolution::yuv2Format;
+        }
+        else if (*val.puuid == MFVideoFormat_UYVY) {
+            outputFormat = GrabberResolution::uyvyFormat;
+        }
+        else if (*val.puuid == MFVideoFormat_YV12) {
+            outputFormat = GrabberResolution::yv12Format;
+        }
+        else if (*val.puuid == MFVideoFormat_I420) {
+            outputFormat = GrabberResolution::i420Format;
+        }
+        else if (*val.puuid == MFVideoFormat_NV12) {
+            outputFormat = GrabberResolution::nv12Format;
+        }
+        // MJPEG is not supported!
+        // else if (*val.puuid == MFVideoFormat_MJPG) {
+        //     outputFormat = GrabberResolution::mjpegFormat;
+        // }
+        else {
+            qDebug() << "MfGrabber::enumerateCaptureFormats --> Not supported format (" << i << "): " << outputWidth << " x " << outputHeight << " [" << GUID_name << "]";
+            goto nextType;
+        }
 
+        device->addResolution(GrabberResolution(outputWidth, outputHeight, outputFormat, false));
+
+nextType:
         hr = PropVariantClear(&val);
-
-        qDebug() << "MfGrabber::enumerateCaptureFormats --> Format (" << i << "): " << outputWidth << " x " << outputHeight << " [" << GUID_name << "]";
-
-        // vd_CurrentFormats.push_back(MT);
-        device->getController()->addResolution(GrabberResolution(0, outputWidth, outputHeight, false));
 
         SafeRelease(&pType);
     }
@@ -617,10 +690,10 @@ HRESULT MfGrabber::SetDeviceFormat(IMFMediaSource *pSource, DWORD dwFormatIndex)
 {
     qDebug() << "MfGrabber::SetDeviceFormat --> Start";
 
-    IMFPresentationDescriptor *pPD = NULL;
-    IMFStreamDescriptor *pSD = NULL;
-    IMFMediaTypeHandler *pHandler = NULL;
-    IMFMediaType *pType = NULL;
+    IMFPresentationDescriptor* pPD = NULL;
+    IMFStreamDescriptor*       pSD = NULL;
+    IMFMediaTypeHandler*       pHandler = NULL;
+    IMFMediaType*              pType = NULL;
 
     HRESULT hr = pSource->CreatePresentationDescriptor(&pPD);
     if (FAILED(hr))
@@ -661,22 +734,18 @@ done:
 }
 
 
-void MfGrabber::getRawFrame(const uchar*& data, int& width, int& height)
+void MfGrabber::getRawFrame(const uchar*& data)
 {
     qDebug() << "MfGrabber::getRawFrame --> Start";
 
     HRESULT         hr = S_OK;
-    IMFMediaBuffer *buffer = NULL;
-    IMFSample      *sample = NULL;
-    GUID            subtype = { 0 };
-    IMFMediaType   *mediaType = NULL;
+    IMFMediaBuffer* buffer = NULL;
+    IMFSample*      sample = NULL;
     DWORD           dwFlags = 0x00000000U;
-    BYTE           *pixels = NULL;
+    BYTE*           pixels = NULL;
     DWORD           nPixels = 0;
 
     data = NULL;
-    width = -1;
-    height = -1;
 
     hr = sourceReader->ReadSample((DWORD)MF_SOURCE_READER_FIRST_VIDEO_STREAM,
                                   0,
@@ -689,25 +758,6 @@ void MfGrabber::getRawFrame(const uchar*& data, int& width, int& height)
         ((dwFlags & MF_SOURCE_READERF_ENDOFSTREAM) != 0)) {
         goto done;
     }
-
-    hr = sourceReader->GetCurrentMediaType((DWORD)MF_SOURCE_READER_FIRST_VIDEO_STREAM,
-                                           &mediaType);
-    if (FAILED(hr)) {
-        goto done;
-    }
-
-    hr = mediaType->GetGUID(MF_MT_SUBTYPE, &subtype);
-
-    hr = MFGetAttributeSize(mediaType, MF_MT_FRAME_SIZE, (UINT32*)&width, (UINT32*)&height);
-    if (FAILED(hr)) {
-        goto done;
-    }
-
-    if (width < 1 && height < 1) {
-        goto done;
-    }
-
-    LONG stride = (LONG)MFGetAttributeUINT32(mediaType, MF_MT_DEFAULT_STRIDE, 1);
 
     hr = sample->ConvertToContiguousBuffer(&buffer);
     if (FAILED(hr)) {
@@ -731,42 +781,53 @@ void MfGrabber::getRawFrame(const uchar*& data, int& width, int& height)
     }
     data = frameData;
 
-    if (subtype == MFVideoFormat_RGB24) {
+    if (subType == MFVideoFormat_RGB24) {
         // Read a image in RGB24 format ==> TextureFormat::Format_RGB_8
 
         convert_rgb24_to_argb8_buffer(pixels, frameData, width, height, nPixels, stride);
     }
-    if (subtype == MFVideoFormat_AYUV) {
+    if (subType == MFVideoFormat_AYUV) {
         // Read a image in AYUV (AYCbCr BT.601)
         // 4:4:4 Format, 32 Bits per Pixel
 
         convert_ayuv_to_argb8_buffer(pixels, frameData, width, height, nPixels, stride);
     }
-    if (subtype == MFVideoFormat_YUY2) {
+    if (subType == MFVideoFormat_YUY2) {
         // Read a image in YUY2 (YCbY2) format ==> TextureFormat::Format_YUY2
         // 4:2:2 Format, 16 Bits per Pixel
 
-        convert_yuv2_to_argb8_buffer(pixels, frameData, width, height, nPixels, stride);
+        convert_yuy2_to_argb8_buffer(pixels, frameData, width, height, nPixels, stride);
     }
-    if (subtype == MFVideoFormat_UYVY) {
+    if (subType == MFVideoFormat_UYVY) {
         // Read a image in UYVY (CbYCrY)
         // 4:2:2 Format, 16 Bits per Pixel
+
+        convert_uyvy_to_argb8_buffer(pixels, frameData, width, height, nPixels, stride);
     }
-    if (subtype == MFVideoFormat_YV12) {
+    if (subType == MFVideoFormat_YV12) {
         // Read a image in YV12 (YCr12)
         // 4:2:0 Format, 12 Bits per Pixel
 
-        // convert_yv12_to_argb8_buffer(pixels, frameData, width, height, nPixels, stride);
+        convert_yv12_to_argb8_buffer(pixels, frameData, width, height, nPixels, stride);
     }
-    if (subtype == MFVideoFormat_NV12) {
+    if (subType == MFVideoFormat_I420) {
+        // Read a image in I420 (YCr12)
+        // 4:2:0 Format, 12 Bits per Pixel
+
+        convert_i420_to_argb8_buffer(pixels, frameData, width, height, nPixels, stride);
+    }
+    if (subType == MFVideoFormat_NV12) {
         // Read a image in NV12 (NCr12)
         // 4:2:0 Format, 12 Bits per Pixel
+
+        convert_nv12_to_argb8_buffer(pixels, frameData, width, height, nPixels, stride);
     }
-    if (subtype == MFVideoFormat_MJPG) {
+    if (subType == MFVideoFormat_MJPG) {
         // Read a image in MJPG format
+
+        // Not supported!
     }
 
-    // MFVideoFormat_I420
     // MFVideoFormat_RGB32 ==> TextureFormat::Format_RGBA_8
     // MFVideoFormat_ARGB32
 

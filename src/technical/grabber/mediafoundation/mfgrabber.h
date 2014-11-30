@@ -96,7 +96,7 @@ private:
 
     HRESULT SetDeviceFormat(IMFMediaSource *pSource, DWORD dwFormatIndex);
 
-    void getRawFrame(const uchar*& data, int& w, int& h);
+    void getRawFrame(const uchar*& data);
 
     /**
      * Get the actual image from the gstreamer application interface.
@@ -121,6 +121,8 @@ private:
     UINT32           width;
     UINT32           height;
     LONG             stride;
+    GUID             majorType;
+    GUID             subType;
 };
 
 #endif

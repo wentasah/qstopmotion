@@ -310,6 +310,31 @@ const QVector<QString> ImageGrabberFacade::getDeviceNames()
 }
 
 
+const QVector<QString> ImageGrabberFacade::getResolutionNames(int deviceIndex)
+{
+    QVector<QString>           resNames;
+    ImageGrabberDevice*        device = devices[deviceIndex];
+    QVector<GrabberResolution> resolutions = device->getResolutions();
+    int                        resSize = resolutions.size();
+
+    for (int resIndex = 0 ; resIndex < resSize ; resIndex++) {
+        resNames.append(resolutions[resIndex].getName());
+    }
+
+    return resNames;
+}
+
+
+const GrabberResolution ImageGrabberFacade::getResolution(int deviceIndex, int resIndex)
+{
+    ImageGrabberDevice*        device = devices[deviceIndex];
+    QVector<GrabberResolution> resolutions = device->getResolutions();
+    int                        resSize = resolutions.size();
+
+    return resolutions[resIndex];
+}
+
+
 bool ImageGrabberFacade::isGrabberInitialized() const
 {
     return isInitialized;

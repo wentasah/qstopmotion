@@ -32,8 +32,6 @@ GrabberController::GrabberController(int cap)
 
     controllerCap = cap;
 
-    resolutions.clear();
-
     qDebug("GrabberController::Constructor --> End");
 }
 
@@ -55,41 +53,6 @@ bool GrabberController::init(const QString &id)
 int GrabberController::getControllerCapabilities()
 {
     return controllerCap;
-}
-
-/**************************************************************************
- **************************************************************************
- * Camera resolution
- **************************************************************************
- **************************************************************************/
-
-void GrabberController::addResolution(GrabberResolution r)
-{
-    for (int i = 0; i < resolutions.size(); i++) {
-        if ((r.getWidth() == resolutions[i].getWidth()) &&
-            (r.getHeight() == resolutions[i].getHeight())) {
-            return;
-        }
-    }
-    resolutions.append(r);
-}
-
-
-QVector<GrabberResolution> GrabberController::getResolutions()
-{
-    return resolutions;
-}
-
-
-int GrabberController::getActiveResolution()
-{
-    return -1;
-}
-
-
-void GrabberController::setActiveResolution(int /*ac*/)
-{
-    Q_ASSERT( 1 );
 }
 
 /**************************************************************************

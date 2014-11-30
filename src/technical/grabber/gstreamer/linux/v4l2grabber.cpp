@@ -174,6 +174,12 @@ bool GstreamerV4L2Grabber::initialization(QVector<ImageGrabberDevice*> &devices)
                     if (deviceController->init(device->getDeviceId()))
                     {
                         device->setController(deviceController);
+
+                        if (deviceController->setResolutions(device) == false) {
+                            qDebug() << "GstreamerV4L2Grabber::initialization --> Cannot enumerate resolutions (" << errno << ")";
+                            // return false;
+                        }
+
                     }
                     else
                     {

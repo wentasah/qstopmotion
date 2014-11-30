@@ -64,21 +64,6 @@ public:
 
 private slots:
     /**
-     * Slot for notified the camera controller when the resolution changes,
-     * so that resolution can be updated.
-     * @param index the new resolution value.
-     */
-    void changeResolution(int index);
-
-    /**
-     * Slot for notified the camera controller when the resolution changes,
-     * so that resolution can be updated.
-     * @param index the new resolution value.
-     * @param save If true than the new value is saved in the preferences file.
-     */
-    void changeResolution(int index, bool save);
-
-    /**
      * Slot for notified the camera contoller when automatic brightness is changed, so that
      * camera contoller can be updaten.
      * @param newState The new state of the check box
@@ -607,11 +592,6 @@ private:
     ImageGrabberDevice *grabberDevice;
     QString             deviceId;
     GrabberController  *grabberController;
-
-    QGroupBox    *resolutionGroupBox;
-
-    QLabel       *resolutionLabel;
-    QComboBox    *resolutionComboBox;
 
     QGroupBox    *qualityGroupBox;
     int           qualityCount;

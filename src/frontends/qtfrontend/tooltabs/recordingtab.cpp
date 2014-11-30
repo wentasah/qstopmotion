@@ -42,7 +42,10 @@ RecordingTab::RecordingTab(Frontend *f,
     recordingModeCombo     = 0;
 
     cameraGroupBox         = 0;
+    videoSourceLabel       = 0;
     videoSourceCombo       = 0;
+    resolutionLabel        = 0;
+    resolutionCombo        = 0;
     cameraButton           = 0;
 
     captureGroupBox        = 0;
@@ -113,12 +116,19 @@ void RecordingTab::makeGUI()
     cameraGroupBox = new QGroupBox("cameraGroupBox");
     // cameraGroupBox->setFlat(true);
 
+    videoSourceLabel = new QLabel("videoSourceLabel");
     videoSourceCombo = new QComboBox();
     videoSourceCombo->setFocusPolicy(Qt::NoFocus);
     connect(videoSourceCombo, SIGNAL(activated(int)), this, SLOT(changeVideoSource(int)));
     for (int deviceIndex = 0 ; deviceIndex < deviceSize ; deviceIndex++) {
         videoSourceCombo->addItem(deviceNames[deviceIndex]);
     }
+
+    resolutionLabel = new QLabel("resolutionLabel");
+    resolutionCombo = new QComboBox();
+    connect(resolutionCombo, SIGNAL(activated(int)), this, SLOT(changeResolution(int)));
+    // resolutionLabel->hide();
+    // resolutionCombo->hide();
 
     cameraButton = new QPushButton;
     iconFile.append(QLatin1String("cameraon.png"));
@@ -132,7 +142,11 @@ void RecordingTab::makeGUI()
     cameraLayout->setMargin(4);
     // cameraLayout->setSpacing(2);
     // cameraLayout->addStretch(1);
+    cameraLayout->addWidget(videoSourceLabel);
     cameraLayout->addWidget(videoSourceCombo);
+    cameraLayout->addWidget(resolutionLabel);
+    cameraLayout->addWidget(resolutionCombo);
+
     cameraLayout->addWidget(cameraButton);
     cameraLayout->addStretch(10);
     cameraGroupBox->setLayout(cameraLayout);
@@ -210,6 +224,8 @@ void RecordingTab::retranslateStrings()
     // recordingModeCombo->addItem(tr("Automated recording"));
 
     cameraGroupBox->setTitle(tr("Camera"));
+    videoSourceLabel->setText(tr("Video Source:"));
+    resolutionLabel->setText(tr("Resolution:"));
 
     captureGroupBox->setTitle(tr("Capture"));
     mixModeCombo->clear();
@@ -252,6 +268,48 @@ void RecordingTab::initialize()
     /*
     int videoSource = frontend->getProject()->getAnimationProject()->getVideoSource();
     this->videoSourceCombo->setCurrentIndex(videoSource);
+
+    for (index = 0; index < grabberController->getResolutions().size(); index++) {
+        resolution = grabberController->getResolutions().at(index);
+        resolutionComboBox->addItem(QString("%1 x %2").arg(resolution.getWidth()).arg(resolution.getHeight()));
+    }
+
+    if (preferences->getIntegerPreference(deviceId, "resolutionwidth", width) == true) {
+        if (preferences->getIntegerPreference(deviceId, "resolutionheight", height) == false) {
+            // Internal problem
+            qDebug() << "CameraControllerDialog::initialize --> Resolution height not found!";
+        }
+        // Search resolution in the list of possible resolutions
+        for (index = 0; index < grabberController->getResolutions().size(); index++) {
+            resolution = grabberController->getResolutions().at(index);
+            if ((resolution.getWidth() == width) &&
+                    (resolution.getHeight() == height)) {
+                resolutionIndex = index;
+                break;
+            }
+        }
+    }
+    if (-1 == resolutionIndex) {
+        // No predifined resolution - Use the maximum possible resolution
+        for (index = 0; index < grabberController->getResolutions().size(); index++) {
+            resolution = grabberController->getResolutions().at(index);
+            if (resolution.getWidth() < (unsigned int)width) {
+                continue;
+            }
+            if (resolution.getWidth() > (unsigned int)width) {
+                width = resolution.getWidth();
+                height = resolution.getHeight();
+                resolutionIndex = index;
+                continue;
+            }
+            if (resolution.getHeight() > (unsigned int)height) {
+                height = resolution.getHeight();
+                resolutionIndex = index;
+            }
+        }
+    }
+    grabberController->setActiveResolution(resolutionIndex);
+    resolutionComboBox->setCurrentIndex(resolutionIndex);
 
     int mixingMode = frontend->getProject()->getAnimationProject()->getMixingMode();
     changeMixingMode(mixingMode);
@@ -307,6 +365,41 @@ bool RecordingTab::setVideoSource(int index)
         return false;
     }
     videoSourceCombo->setCurrentIndex(index);
+
+    resolutionCombo->clear();
+    QVector<QString> resNames = frontend->getResolutionNames(index);
+    int resSize = resNames.size();
+    if (0 < resSize) {
+        for (int resIndex = 0 ; resIndex < resSize ; resIndex++) {
+            resolutionCombo->addItem(resNames[resIndex]);
+        }
+        resolutionCombo->setCurrentIndex(0);
+    }
+    else {
+        resolutionCombo->addItem(tr("Not Supported"));
+        resolutionCombo->setCurrentIndex(-1);
+    }
+
+    return true;
+}
+
+
+int RecordingTab::getResolution()
+{
+    return resolutionCombo->currentIndex();
+}
+
+
+bool RecordingTab::setResolution(int index)
+{
+    if (index < 0) {
+        return false;
+    }
+
+    if (index >= resolutionCombo->count()) {
+        return false;
+    }
+    resolutionCombo->setCurrentIndex(index);
 
     return true;
 }
@@ -450,6 +543,38 @@ void RecordingTab::changeVideoSource(int index)
     qDebug() << "RecordingTab::changeSource --> End";
 }
 
+
+void RecordingTab::changeResolution(int index)
+{
+    qDebug() << "RecordingTab::changeResolution --> Start";
+
+    frontend->getProject()->getAnimationProject()->setResolution(index);
+    frontend->setResolution(index);
+
+    qDebug() << "RecordingTab::changeResolution --> End";
+}
+
+/*
+void RecordingTab::changeResolution(int index, bool save)
+{
+    qDebug() << "RecordingTab::changeResolution --> Start";
+
+    PreferencesTool *preferences = frontend->getPreferences();
+
+    long value = grabberController->getBrightnessCaps()->getMinimum() + (index * stepBrightness);
+    long maxValue = grabberController->getBrightnessCaps()->getMaximum();
+
+    if (value > maxValue) {
+        value = maxValue;
+    }
+    grabberController->setBrightness(value);
+    if (save) {
+        preferences->setIntegerPreference(deviceId, "brightness", index);
+    }
+
+    qDebug() << "RecordingTab::changeResolution --> End";
+}
+*/
 
 void RecordingTab::cameraButtonClicked()
 {

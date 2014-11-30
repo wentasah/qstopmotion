@@ -39,6 +39,8 @@
  *                                                                            *
  ******************************************************************************/
 
+#include "technical/grabber/imagegrabberdevice.h"
+
 #include "v4l2controller.h"
 
 #include <sys/ioctl.h>
@@ -114,11 +116,6 @@ bool GrabberV4L2Controller::init(const QString &id)
 
     if (setPrivateCapabilities() == false) {
         qDebug() << "GrabberV4L2Controller::init --> Cannot enumerate private device capabilities (" << errno << ")";
-        return false;
-    }
-
-    if (setResolutions() == false) {
-        qDebug() << "GrabberV4L2Controller::init --> Cannot enumerate resolutions (" << errno << ")";
         return false;
     }
 
@@ -614,7 +611,7 @@ bool GrabberV4L2Controller::setPrivateCapabilities()
 }
 
 
-bool GrabberV4L2Controller::setResolutions()
+bool GrabberV4L2Controller::setResolutions(ImageGrabberDevice *device)
 {
     qDebug("GrabberV4L2Controller::setResolutions --> Start");
 
@@ -649,7 +646,7 @@ bool GrabberV4L2Controller::setResolutions()
                 break;
             }
 
-            addResolution(GrabberResolution(QString("%1").arg(fmt.index), outputWidth, outputHeight, /* QString((const char*)(fmt.description)), */ false));
+            device->addResolution(GrabberResolution(outputWidth, outputHeight, GrabberResolution::unknownFormat, false));
 
             frmsize.index++;
         }

@@ -91,6 +91,9 @@ bool MfGrabber::initialization(QVector<ImageGrabberDevice*> &devices)
 {
     qDebug("MfGrabber::initialization --> Start");
 
+    PreferencesTool *pref = frontend->getPreferences();
+    int              value;
+
     HRESULT             hr = S_OK;
     IMFAttributes*      pAttributes = NULL;
     IMFActivate**       ppDevices = NULL;
@@ -143,24 +146,24 @@ bool MfGrabber::initialization(QVector<ImageGrabberDevice*> &devices)
             device = new ImageGrabberDevice();
             device->setDeviceIndex(i);
 
-            // Add the Controller to the new device
-            deviceController = new MfController(0);
-            device->setController(deviceController);
-
             hr = readDeviceInfo(ppDevices[i], i, device);
             if (SUCCEEDED(hr)) {
                 // Add the new device to the device list
                 devices.append(device);
 
-                // Initalize the device controller
-                deviceController->init(device->getDeviceId());
+                // Add the Controller to the new device
+                if (pref->getIntegerPreference("preferences", "mediafoundationcontroller", value) == false) {
+                    value = false;
+                }
+                if ((int)true == value) {
+                    deviceController = new MfController(0);
+                    device->setController(deviceController);
+
+                    // Initalize the device controller
+                    deviceController->init(device->getDeviceId());
+                }
             }
             else {
-                // Delete the new device controller
-                delete deviceController;
-                deviceController = NULL;
-                device->setController(NULL);
-
                 // Delete the new device
                 delete device;
                 device = NULL;
@@ -446,10 +449,6 @@ const QImage MfGrabber::getImage()
     QImage      image;
     const BYTE* data = NULL;
     int         Tries = 10;
-    int         a;
-    int         r;
-    int         g;
-    int         b;
 
     while (data == NULL && --Tries) {
         getRawFrame(data);
@@ -462,14 +461,7 @@ const QImage MfGrabber::getImage()
         const BYTE* const srcEnd = src + width * height * 4;
 
         while (src < srcEnd) {
-            a = *src++;
-            r = *src++;
-            g = *src++;
-            b = *src++;
-            *dst++ = b;
-            *dst++ = g;
-            *dst++ = r;
-            *dst++ = a;
+            *dst++ = *src++;
         }
     }
 
@@ -784,43 +776,43 @@ void MfGrabber::getRawFrame(const uchar*& data)
     if (subType == MFVideoFormat_RGB24) {
         // Read a image in RGB24 format ==> TextureFormat::Format_RGB_8
 
-        convert_rgb24_to_argb8_buffer(pixels, frameData, width, height, nPixels, stride);
+        convert_rgb24_to_rgb32_buffer(pixels, frameData, width, height, nPixels, stride);
     }
     if (subType == MFVideoFormat_AYUV) {
         // Read a image in AYUV (AYCbCr BT.601)
         // 4:4:4 Format, 32 Bits per Pixel
 
-        convert_ayuv_to_argb8_buffer(pixels, frameData, width, height, nPixels, stride);
+        convert_ayuv_to_rgb32_buffer(pixels, frameData, width, height, nPixels, stride);
     }
     if (subType == MFVideoFormat_YUY2) {
         // Read a image in YUY2 (YCbY2) format ==> TextureFormat::Format_YUY2
         // 4:2:2 Format, 16 Bits per Pixel
 
-        convert_yuy2_to_argb8_buffer(pixels, frameData, width, height, nPixels, stride);
+        convert_yuy2_to_rgb32_buffer(pixels, frameData, width, height, nPixels, stride);
     }
     if (subType == MFVideoFormat_UYVY) {
         // Read a image in UYVY (CbYCrY)
         // 4:2:2 Format, 16 Bits per Pixel
 
-        convert_uyvy_to_argb8_buffer(pixels, frameData, width, height, nPixels, stride);
+        convert_uyvy_to_rgb32_buffer(pixels, frameData, width, height, nPixels, stride);
     }
     if (subType == MFVideoFormat_YV12) {
         // Read a image in YV12 (YCr12)
         // 4:2:0 Format, 12 Bits per Pixel
 
-        convert_yv12_to_argb8_buffer(pixels, frameData, width, height, nPixels, stride);
+        convert_yv12_to_rgb32_buffer(pixels, frameData, width, height, nPixels, stride);
     }
     if (subType == MFVideoFormat_I420) {
         // Read a image in I420 (YCr12)
         // 4:2:0 Format, 12 Bits per Pixel
 
-        convert_i420_to_argb8_buffer(pixels, frameData, width, height, nPixels, stride);
+        convert_i420_to_rgb32_buffer(pixels, frameData, width, height, nPixels, stride);
     }
     if (subType == MFVideoFormat_NV12) {
         // Read a image in NV12 (NCr12)
         // 4:2:0 Format, 12 Bits per Pixel
 
-        convert_nv12_to_argb8_buffer(pixels, frameData, width, height, nPixels, stride);
+        convert_nv12_to_rgb32_buffer(pixels, frameData, width, height, nPixels, stride);
     }
     if (subType == MFVideoFormat_MJPG) {
         // Read a image in MJPG format

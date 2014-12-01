@@ -149,7 +149,9 @@ void ImageGrabberFacade::initialization()
             isInitialized = true;
         }
     }
+#endif
 
+#ifdef Q_WS_X11
     // GStreamer dv1394 device
     if (pref->getIntegerPreference("preferences", "gstreamerdv1394grabber", value) == false) {
         value = false;
@@ -173,11 +175,18 @@ void ImageGrabberFacade::initialization()
             isInitialized = true;
         }
     }
+#endif
 
+#ifdef Q_WS_WIN
     // Microsoft Media Foundation device
-    mediaFoundationGrabber = new MfGrabber(frontend);
-    if (mediaFoundationGrabber->initialization(devices)) {
-        isInitialized = true;
+    if (pref->getIntegerPreference("preferences", "mediafoundationgrabber", value) == false) {
+        value = true;
+    }
+    if ((int)true == value) {
+        mediaFoundationGrabber = new MfGrabber(frontend);
+        if (mediaFoundationGrabber->initialization(devices)) {
+            isInitialized = true;
+        }
     }
 #endif
 

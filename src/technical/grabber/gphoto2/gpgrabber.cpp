@@ -146,7 +146,7 @@ bool GphotoGrabber::initialization(QVector<ImageGrabberDevice*> &devices)
     devices.append(device);
 
     // Create grabber controller
-    if (pref->getIntegerPreference("preferences", "gstreamerdirectshowusbcontroller", value) == false) {
+    if (pref->getIntegerPreference("preferences", "gphoto2controller", value) == false) {
         value = false;
     }
     if ((int)true == value) {

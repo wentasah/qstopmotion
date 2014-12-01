@@ -98,6 +98,14 @@ private slots:
 
     /**
      * Slot for notified the grabber tab when the state of the
+     * mediaFoundationGrabber checkbox are changed,
+     * so that general preferences can be updated.
+     * @param newState The new state of the check box
+     */
+    void changeMediaFoundationGrabberCheckState(int newState);
+
+    /**
+     * Slot for notified the grabber tab when the state of the
      * gphoto2Grabber checkbox are changed,
      * so that general preferences can be updated.
      * @param newState The new state of the check box
@@ -116,6 +124,8 @@ private:
     QCheckBox    *gstreamerDv1394GrabberCheck;
     QCheckBox    *gstreamerDirectShowUsbGrabberCheck;
     QCheckBox    *gstreamerDirectShowUsbControllerCheck;
+    QCheckBox    *mediaFoundationGrabberCheck;
+    QCheckBox    *mediaFoundationControllerCheck;
     QCheckBox    *gphoto2GrabberCheck;
     QCheckBox    *gphoto2ControllerCheck;
 
@@ -125,6 +135,8 @@ private:
     bool          actualGstreamerDv1394Grabber;
     bool          actualGstreamerDirectShowUsbGrabber;
     bool          actualGstreamerDirectShowUsbController;
+    bool          actualMediaFoundationGrabber;
+    bool          actualMediaFoundationController;
     bool          actualGphoto2Grabber;
     bool          actualGphoto2Controller;
 };

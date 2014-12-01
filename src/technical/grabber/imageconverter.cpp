@@ -18,8 +18,6 @@
  *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                 *
  ******************************************************************************/
 
-#include <QtCore/QtDebug>
-
 /******************************************************************************
  * Destination Format is rgb32
  *
@@ -29,6 +27,51 @@
  *   +----+----+----+----+  +----+----+----+----+
  *
  ******************************************************************************/
+
+/******************************************************************************
+ * Convert RGB 24bit to RGB 32bit
+ ******************************************************************************/
+
+/*
+ * Memory layout rgb24:
+ *   +----+----+----+  +----+----+----+
+ *   | B0 | G0 | R0 |  | B1 | G1 | R1 |
+ *   +----+----+----+  +----+----+----+
+ */
+int convert_rgb24_to_rgb32_buffer(unsigned char *rgb24, unsigned char *rgb32, unsigned int width, unsigned int height, unsigned long bufferLength, long stride)
+{
+    unsigned char* dst = const_cast<unsigned char*>(rgb32);
+    const unsigned char* const dstEnd = dst + bufferLength;
+    bool upsideDown = (stride < 0);
+
+    if (!upsideDown) {
+        const unsigned char* src = rgb24;
+        while (dst < dstEnd) {
+            *dst++ = 0xffU;        // A
+            *dst++ = *src++;       // R
+            *dst++ = *src++;       // G
+            *dst++ = *src++;       // B
+        }
+    }
+    else {
+        stride = -stride;
+        if (stride != (width * 3)) {
+            return 0;
+        }
+        for (int scanLine = height - 1; scanLine >= 0; --scanLine) {
+            const unsigned char* src = rgb24 + scanLine * stride;
+            const unsigned char* const srcEnd = src + width * 3;
+            while (src < srcEnd) {
+                *dst++ = 0xffU;        // A
+                *dst++ = *src++;       // R
+                *dst++ = *src++;       // G
+                *dst++ = *src++;       // B
+            }
+        }
+    }
+
+    return 0;
+}
 
 /******************************************************************************
  * Convert YUV to RGB 32bit
@@ -57,33 +100,23 @@ static const int FrCoefficientGU = (int)(-0.343 * FrPrecision + 0.5);
 static const int FrCoefficientGV = (int)(-0.711 * FrPrecision + 0.5);
 static const int FrCoefficientBU = (int)( 1.765 * FrPrecision + 0.5);
 
-int convert_yuv_to_rgb8_FR_pixel(int y, int u, int v)
+void convert_yuv_to_rgb_FR_pixel(int y, int u, int v, int& r, int& g, int& b)
 {
-    unsigned int pixel_32 = 0;
-    unsigned char *pixel = (unsigned char *)&pixel_32;
-    int r8, g8, b8;
+    r = (int)(FrCoefficientY * y + FrCoefficientRV * (v - 128));
+    g = (int)(FrCoefficientY * y + FrCoefficientGU * (u - 128) + FrCoefficientGV * (v - 128));
+    b = (int)(FrCoefficientY * y + FrCoefficientBU * (u - 128));
 
-    r8 = (int)(FrCoefficientY * y + FrCoefficientRV * (v - 128));
-    g8 = (int)(FrCoefficientY * y + FrCoefficientGU * (u - 128) + FrCoefficientGV * (v - 128));
-    b8 = (int)(FrCoefficientY * y + FrCoefficientBU * (u - 128));
+    r = (r + FrPrecision / 2) / FrPrecision;
+    g = (g + FrPrecision / 2) / FrPrecision;
+    b = (b + FrPrecision / 2) / FrPrecision;
 
-    r8 = (r8 + FrPrecision / 2) / FrPrecision;
-    g8 = (g8 + FrPrecision / 2) / FrPrecision;
-    b8 = (b8 + FrPrecision / 2) / FrPrecision;
+    if (r > 255) r = 255;
+    if (g > 255) g = 255;
+    if (b > 255) b = 255;
 
-    if (r8 > 255) r8 = 255;
-    if (g8 > 255) g8 = 255;
-    if (b8 > 255) b8 = 255;
-
-    if (r8 < 0) r8 = 0;
-    if (g8 < 0) g8 = 0;
-    if (b8 < 0) b8 = 0;
-
-    pixel[0] = r8;
-    pixel[1] = g8;
-    pixel[2] = b8;
-
-    return pixel_32;
+    if (r < 0) r = 0;
+    if (g < 0) g = 0;
+    if (b < 0) b = 0;
 }
 
 
@@ -110,33 +143,23 @@ static const int SdtvCoefficientGU = (int)(-0.391 * SdtvPrecision + 0.5);
 static const int SdtvCoefficientGV = (int)(-0.813 * SdtvPrecision + 0.5);
 static const int SdtvCoefficientBU = (int)( 2.018 * SdtvPrecision + 0.5);
 
-int convert_yuv_to_rgb8_SDTV_pixel(int y, int u, int v)
+void convert_yuv_to_rgb_SDTV_pixel(int y, int u, int v, int& r, int& g, int& b)
 {
-    unsigned int pixel_32 = 0;
-    unsigned char *pixel = (unsigned char *)&pixel_32;
-    int r8, g8, b8;
+    r = (int)(SdtvCoefficientY * (y - 16)                                 + SdtvCoefficientRV * (v - 128));
+    g = (int)(SdtvCoefficientY * (y - 16) + SdtvCoefficientGU * (u - 128) + SdtvCoefficientGV * (v - 128));
+    b = (int)(SdtvCoefficientY * (y - 16) + SdtvCoefficientBU * (u - 128));
 
-    r8 = (int)(SdtvCoefficientY * (y - 16)                                 + SdtvCoefficientRV * (v - 128));
-    g8 = (int)(SdtvCoefficientY * (y - 16) + SdtvCoefficientGU * (u - 128) + SdtvCoefficientGV * (v - 128));
-    b8 = (int)(SdtvCoefficientY * (y - 16) + SdtvCoefficientBU * (u - 128));
+    r = (r + SdtvPrecision / 2) / SdtvPrecision;
+    g = (g + SdtvPrecision / 2) / SdtvPrecision;
+    b = (b + SdtvPrecision / 2) / SdtvPrecision;
 
-    r8 = (r8 + SdtvPrecision / 2) / SdtvPrecision;
-    g8 = (g8 + SdtvPrecision / 2) / SdtvPrecision;
-    b8 = (b8 + SdtvPrecision / 2) / SdtvPrecision;
+    if (r > 255) r = 255;
+    if (g > 255) g = 255;
+    if (b > 255) b = 255;
 
-    if (r8 > 255) r8 = 255;
-    if (g8 > 255) g8 = 255;
-    if (b8 > 255) b8 = 255;
-
-    if (r8 < 0) r8 = 0;
-    if (g8 < 0) g8 = 0;
-    if (b8 < 0) b8 = 0;
-
-    pixel[0] = r8;
-    pixel[1] = g8;
-    pixel[2] = b8;
-
-    return pixel_32;
+    if (r < 0) r = 0;
+    if (g < 0) g = 0;
+    if (b < 0) b = 0;
 }
 
 /*
@@ -162,33 +185,23 @@ static const int HdtvCoefficientGU = (int)(-0.213 * HdtvPrecision + 0.5);
 static const int HdtvCoefficientGV = (int)(-0.533 * HdtvPrecision + 0.5);
 static const int HdtvCoefficientBU = (int)( 2.112 * HdtvPrecision + 0.5);
 
-int convert_yuv_to_rgb8_HDTV_pixel(int y, int u, int v)
+void convert_yuv_to_rgb_HDTV_pixel(int y, int u, int v, int& r, int& g, int& b)
 {
-    unsigned int pixel_32 = 0;
-    unsigned char *pixel = (unsigned char *)&pixel_32;
-    int r8, g8, b8;
+    r = (int)(HdtvCoefficientY * (y - 16) + HdtvCoefficientRV * (v - 128));
+    g = (int)(HdtvCoefficientY * (y - 16) + HdtvCoefficientGU * (u - 128) + HdtvCoefficientGV * (v - 128));
+    b = (int)(HdtvCoefficientY * (y - 16) + HdtvCoefficientBU * (u - 128));
 
-    r8 = (int)(HdtvCoefficientY * (y - 16) + HdtvCoefficientRV * (v - 128));
-    g8 = (int)(HdtvCoefficientY * (y - 16) + HdtvCoefficientGU * (u - 128) + HdtvCoefficientGV * (v - 128));
-    b8 = (int)(HdtvCoefficientY * (y - 16) + HdtvCoefficientBU * (u - 128));
+    r = (r + HdtvPrecision / 2) / HdtvPrecision;
+    g = (g + HdtvPrecision / 2) / HdtvPrecision;
+    b = (b + HdtvPrecision / 2) / HdtvPrecision;
 
-    r8 = (r8 + HdtvPrecision / 2) / HdtvPrecision;
-    g8 = (g8 + HdtvPrecision / 2) / HdtvPrecision;
-    b8 = (b8 + HdtvPrecision / 2) / HdtvPrecision;
+    if (r > 255) r = 255;
+    if (g > 255) g = 255;
+    if (b > 255) b = 255;
 
-    if (r8 > 255) r8 = 255;
-    if (g8 > 255) g8 = 255;
-    if (b8 > 255) b8 = 255;
-
-    if (r8 < 0) r8 = 0;
-    if (g8 < 0) g8 = 0;
-    if (b8 < 0) b8 = 0;
-
-    pixel[0] = r8;
-    pixel[1] = g8;
-    pixel[2] = b8;
-
-    return pixel_32;
+    if (r < 0) r = 0;
+    if (g < 0) g = 0;
+    if (b < 0) b = 0;
 }
 
 
@@ -198,41 +211,32 @@ int convert_yuv_to_rgb8_HDTV_pixel(int y, int u, int v)
  *   | V0 | U0 | Y0 | A0 |  | V1 | U1 | Y1 | A1 |
  *   +----+----+----+----+  +----+----+----+----+
  */
-int convert_ayuv_to_argb8_buffer(unsigned char *ayuv, unsigned char *argb8, unsigned int width, unsigned int height, unsigned long bufferLength, long stride)
+int convert_ayuv_to_rgb32_buffer(unsigned char *ayuv, unsigned char *rgb32, unsigned int width, unsigned int height, unsigned long bufferLength, long stride)
 {
     unsigned int  in = 0;
     unsigned int  out = 0;
-    unsigned int  pixel_16;
-    unsigned char pixel_24[3];
-    unsigned int  pixel_32;
     int           v;
     int           u;
     int           y;
     int           a;
+    int           r;
+    int           g;
+    int           b;
     bool          upsideDown = (stride < 0);
 
     if (!upsideDown) {
         for (in = 0; in < width * height * 2; in += 4) {
-            pixel_16 =
-                ayuv[in + 3] << 24 |
-                ayuv[in + 2] << 16 |
-                ayuv[in + 1] <<  8 |
-                ayuv[in + 0];
+            v = ayuv[in + 0];
+            u = ayuv[in + 1];
+            y = ayuv[in + 2];
+            a = ayuv[in + 3];
 
-            v = (pixel_16 & 0x000000ff);
-            u = (pixel_16 & 0x0000ff00) >>  8;
-            y = (pixel_16 & 0x00ff0000) >> 16;
-            a = (pixel_16 & 0xff000000) >> 24;
+            convert_yuv_to_rgb_SDTV_pixel(y, u, v, r, g, b);
 
-            pixel_32 = convert_yuv_to_rgb8_SDTV_pixel(y, u, v);
-            pixel_24[0] = (pixel_32 & 0x000000ff);
-            pixel_24[1] = (pixel_32 & 0x0000ff00) >> 8;
-            pixel_24[2] = (pixel_32 & 0x00ff0000) >> 16;
-
-            argb8[out++] = a;            // A
-            argb8[out++] = pixel_24[0];  // R
-            argb8[out++] = pixel_24[1];  // G
-            argb8[out++] = pixel_24[2];  // B
+            rgb32[out++] = b;      // B
+            rgb32[out++] = g;      // G
+            rgb32[out++] = r;      // R
+            rgb32[out++] = 0xffU;  // A
         }
     }
     else {
@@ -250,51 +254,39 @@ int convert_ayuv_to_argb8_buffer(unsigned char *ayuv, unsigned char *argb8, unsi
  *   | Y0 | U0 | Y1 | V0 |  | Y2 | U1 | Y3 | V1 |
  *   +----+----+----+----+  +----+----+----+----+
  */
-int convert_yuy2_to_argb8_buffer(unsigned char *yuy2, unsigned char *argb8, unsigned int width, unsigned int height, unsigned long bufferLength, long stride)
+int convert_yuy2_to_rgb32_buffer(unsigned char *yuy2, unsigned char *rgb32, unsigned int width, unsigned int height, unsigned long bufferLength, long stride)
 {
     unsigned int  in = 0;
     unsigned int  out = 0;
-    unsigned int  pixel_16;
-    unsigned char pixel_24[3];
-    unsigned int  pixel_32;
     int           y0;
     int           u;
     int           y1;
     int           v;
+    int           r;
+    int           g;
+    int           b;
     bool          upsideDown = (stride < 0);
 
     if (!upsideDown) {
         for (in = 0; in < width * height * 2; in += 4) {
-            pixel_16 =
-                yuy2[in + 3] << 24 |
-                yuy2[in + 2] << 16 |
-                yuy2[in + 1] <<  8 |
-                yuy2[in + 0];
+            y0 = yuy2[in + 0];
+            u  = yuy2[in + 1];
+            y1 = yuy2[in + 2];
+            v  = yuy2[in + 3];
 
-            y0 = (pixel_16 & 0x000000ff);
-            u  = (pixel_16 & 0x0000ff00) >>  8;
-            y1 = (pixel_16 & 0x00ff0000) >> 16;
-            v  = (pixel_16 & 0xff000000) >> 24;
+            convert_yuv_to_rgb_SDTV_pixel(y0, u, v, r, g, b);
 
-            pixel_32 = convert_yuv_to_rgb8_SDTV_pixel(y0, u, v);
-            pixel_24[0] = (pixel_32 & 0x000000ff);           // R
-            pixel_24[1] = (pixel_32 & 0x0000ff00) >> 8;      // G
-            pixel_24[2] = (pixel_32 & 0x00ff0000) >> 16;     // B
+            rgb32[out++] = b;      // B
+            rgb32[out++] = g;      // G
+            rgb32[out++] = r;      // R
+            rgb32[out++] = 0xffU;  // A
 
-            argb8[out++] = 0xffU;        // A
-            argb8[out++] = pixel_24[0];  // R
-            argb8[out++] = pixel_24[1];  // G
-            argb8[out++] = pixel_24[2];  // B
+            convert_yuv_to_rgb_SDTV_pixel(y1, u, v, r, g, b);
 
-            pixel_32 = convert_yuv_to_rgb8_SDTV_pixel(y1, u, v);
-            pixel_24[0] = (pixel_32 & 0x000000ff);
-            pixel_24[1] = (pixel_32 & 0x0000ff00) >> 8;
-            pixel_24[2] = (pixel_32 & 0x00ff0000) >> 16;
-
-            argb8[out++] = 0xffU;        // A
-            argb8[out++] = pixel_24[0];  // R
-            argb8[out++] = pixel_24[1];  // G
-            argb8[out++] = pixel_24[2];  // B
+            rgb32[out++] = b;      // B
+            rgb32[out++] = g;      // G
+            rgb32[out++] = r;      // R
+            rgb32[out++] = 0xffU;  // A
         }
     }
     else {
@@ -312,51 +304,39 @@ int convert_yuy2_to_argb8_buffer(unsigned char *yuy2, unsigned char *argb8, unsi
  *   | U0 | Y0 | V0 | Y1 |  | U1 | Y2 | V1 | Y3 |
  *   +----+----+----+----+  +----+----+----+----+
  */
-int convert_uyvy_to_argb8_buffer(unsigned char *uyvy, unsigned char *argb8, unsigned int width, unsigned int height, unsigned long bufferLength, long stride)
+int convert_uyvy_to_rgb32_buffer(unsigned char *uyvy, unsigned char *rgb32, unsigned int width, unsigned int height, unsigned long bufferLength, long stride)
 {
     unsigned int  in = 0;
     unsigned int  out = 0;
-    unsigned int  pixel_16;
-    unsigned char pixel_24[3];
-    unsigned int  pixel_32;
     int           y0;
     int           u;
     int           y1;
     int           v;
+    int           r;
+    int           g;
+    int           b;
     bool          upsideDown = (stride < 0);
 
     if (!upsideDown) {
         for (in = 0; in < width * height * 2; in += 4) {
-            pixel_16 =
-                uyvy[in + 3] << 24 |
-                uyvy[in + 2] << 16 |
-                uyvy[in + 1] <<  8 |
-                uyvy[in + 0];
+            u  = uyvy[in + 0];
+            y0 = uyvy[in + 1];
+            v  = uyvy[in + 2];
+            y1 = uyvy[in + 3];
 
-            u = (pixel_16 & 0x000000ff);
-            y0  = (pixel_16 & 0x0000ff00) >>  8;
-            v = (pixel_16 & 0x00ff0000) >> 16;
-            y1  = (pixel_16 & 0xff000000) >> 24;
+            convert_yuv_to_rgb_SDTV_pixel(y0, u, v, r, g, b);
 
-            pixel_32 = convert_yuv_to_rgb8_SDTV_pixel(y0, u, v);
-            pixel_24[0] = (pixel_32 & 0x000000ff);
-            pixel_24[1] = (pixel_32 & 0x0000ff00) >> 8;
-            pixel_24[2] = (pixel_32 & 0x00ff0000) >> 16;
+            rgb32[out++] = b;      // B
+            rgb32[out++] = g;      // G
+            rgb32[out++] = r;      // R
+            rgb32[out++] = 0xffU;  // A
 
-            argb8[out++] = 0xffU;        // A
-            argb8[out++] = pixel_24[0];  // R
-            argb8[out++] = pixel_24[1];  // G
-            argb8[out++] = pixel_24[2];  // B
+            convert_yuv_to_rgb_SDTV_pixel(y0, u, v, r, g, b);
 
-            pixel_32 = convert_yuv_to_rgb8_SDTV_pixel(y1, u, v);
-            pixel_24[0] = (pixel_32 & 0x000000ff);
-            pixel_24[1] = (pixel_32 & 0x0000ff00) >> 8;
-            pixel_24[2] = (pixel_32 & 0x00ff0000) >> 16;
-
-            argb8[out++] = 0xffU;        // A
-            argb8[out++] = pixel_24[0];  // R
-            argb8[out++] = pixel_24[1];  // G
-            argb8[out++] = pixel_24[2];  // B
+            rgb32[out++] = b;      // B
+            rgb32[out++] = g;      // G
+            rgb32[out++] = r;      // R
+            rgb32[out++] = 0xffU;  // A
         }
     }
     else {
@@ -390,17 +370,18 @@ int convert_uyvy_to_argb8_buffer(unsigned char *uyvy, unsigned char *argb8, unsi
  *   |
  *   +----+----+----+----+----+----+----+----+
  */
-int convert_yv12_to_argb8_buffer(unsigned char *yv12, unsigned char *argb8, unsigned int width, unsigned int height, unsigned long bufferLength, long stride)
+int convert_yv12_to_rgb32_buffer(unsigned char *yv12, unsigned char *rgb32, unsigned int width, unsigned int height, unsigned long bufferLength, long stride)
 {
     unsigned int  out = 0;
     unsigned int  yPos1, yPos2;
     unsigned int  uPos;
     unsigned int  vPos;
-    unsigned char pixel_24[3];
-    unsigned int  pixel_32;
     int           y0, y1, y2, y3;
     int           u;
     int           v;
+    int           r;
+    int           g;
+    int           b;
     bool          upsideDown = (stride < 0);
 
     if (!upsideDown) {
@@ -418,45 +399,33 @@ int convert_yv12_to_argb8_buffer(unsigned char *yv12, unsigned char *argb8, unsi
                 u = yv12[uPos];
                 v = yv12[vPos];
 
-                pixel_32 = convert_yuv_to_rgb8_SDTV_pixel(y0, u, v);
-                pixel_24[0] = (pixel_32 & 0x000000ff);
-                pixel_24[1] = (pixel_32 & 0x0000ff00) >> 8;
-                pixel_24[2] = (pixel_32 & 0x00ff0000) >> 16;
+                convert_yuv_to_rgb_SDTV_pixel(y0, u, v, r, g, b);
 
-                argb8[out++] = 0xffU;        // A
-                argb8[out++] = pixel_24[0];  // R
-                argb8[out++] = pixel_24[1];  // G
-                argb8[out++] = pixel_24[2];  // B
+                rgb32[out++] = b;      // B
+                rgb32[out++] = g;      // G
+                rgb32[out++] = r;      // R
+                rgb32[out++] = 0xffU;  // A
 
-                pixel_32 = convert_yuv_to_rgb8_SDTV_pixel(y1, u, v);
-                pixel_24[0] = (pixel_32 & 0x000000ff);
-                pixel_24[1] = (pixel_32 & 0x0000ff00) >> 8;
-                pixel_24[2] = (pixel_32 & 0x00ff0000) >> 16;
+                convert_yuv_to_rgb_SDTV_pixel(y0, u, v, r, g, b);
 
-                argb8[out++] = 0xffU;        // A
-                argb8[out++] = pixel_24[0];  // R
-                argb8[out++] = pixel_24[1];  // G
-                argb8[out++] = pixel_24[2];  // B
+                rgb32[out++] = b;      // B
+                rgb32[out++] = g;      // G
+                rgb32[out++] = r;      // R
+                rgb32[out++] = 0xffU;  // A
 
-                pixel_32 = convert_yuv_to_rgb8_SDTV_pixel(y2, u, v);
-                pixel_24[0] = (pixel_32 & 0x000000ff);
-                pixel_24[1] = (pixel_32 & 0x0000ff00) >> 8;
-                pixel_24[2] = (pixel_32 & 0x00ff0000) >> 16;
+                convert_yuv_to_rgb_SDTV_pixel(y0, u, v, r, g, b);
 
-                argb8[out++] = 0xffU;        // A
-                argb8[out++] = pixel_24[0];  // R
-                argb8[out++] = pixel_24[1];  // G
-                argb8[out++] = pixel_24[2];  // B
+                rgb32[out++] = b;      // B
+                rgb32[out++] = g;      // G
+                rgb32[out++] = r;      // R
+                rgb32[out++] = 0xffU;  // A
 
-                pixel_32 = convert_yuv_to_rgb8_SDTV_pixel(y3, u, v);
-                pixel_24[0] = (pixel_32 & 0x000000ff);
-                pixel_24[1] = (pixel_32 & 0x0000ff00) >> 8;
-                pixel_24[2] = (pixel_32 & 0x00ff0000) >> 16;
+                convert_yuv_to_rgb_SDTV_pixel(y0, u, v, r, g, b);
 
-                argb8[out++] = 0xffU;        // A
-                argb8[out++] = pixel_24[0];  // R
-                argb8[out++] = pixel_24[1];  // G
-                argb8[out++] = pixel_24[2];  // B
+                rgb32[out++] = b;      // B
+                rgb32[out++] = g;      // G
+                rgb32[out++] = r;      // R
+                rgb32[out++] = 0xffU;  // A
             }
         }
     }
@@ -491,17 +460,18 @@ int convert_yv12_to_argb8_buffer(unsigned char *yv12, unsigned char *argb8, unsi
  *   |
  *   +----+----+----+----+----+----+----+----+
  */
-int convert_i420_to_argb8_buffer(unsigned char *i420, unsigned char *argb8, unsigned int width, unsigned int height, unsigned long bufferLength, long stride)
+int convert_i420_to_rgb32_buffer(unsigned char *i420, unsigned char *rgb32, unsigned int width, unsigned int height, unsigned long bufferLength, long stride)
 {
     unsigned int  out = 0;
     unsigned int  yPos1, yPos2;
     unsigned int  uPos;
     unsigned int  vPos;
-    unsigned char pixel_24[3];
-    unsigned int  pixel_32;
     int           y0, y1, y2, y3;
     int           u;
     int           v;
+    int           r;
+    int           g;
+    int           b;
     bool          upsideDown = (stride < 0);
 
     if (!upsideDown) {
@@ -519,45 +489,33 @@ int convert_i420_to_argb8_buffer(unsigned char *i420, unsigned char *argb8, unsi
                 u = i420[uPos];
                 v = i420[vPos];
 
-                pixel_32 = convert_yuv_to_rgb8_SDTV_pixel(y0, u, v);
-                pixel_24[0] = (pixel_32 & 0x000000ff);
-                pixel_24[1] = (pixel_32 & 0x0000ff00) >> 8;
-                pixel_24[2] = (pixel_32 & 0x00ff0000) >> 16;
+                convert_yuv_to_rgb_SDTV_pixel(y0, u, v, r, g, b);
 
-                argb8[out++] = 0xffU;        // A
-                argb8[out++] = pixel_24[0];  // R
-                argb8[out++] = pixel_24[1];  // G
-                argb8[out++] = pixel_24[2];  // B
+                rgb32[out++] = b;      // B
+                rgb32[out++] = g;      // G
+                rgb32[out++] = r;      // R
+                rgb32[out++] = 0xffU;  // A
 
-                pixel_32 = convert_yuv_to_rgb8_SDTV_pixel(y1, u, v);
-                pixel_24[0] = (pixel_32 & 0x000000ff);
-                pixel_24[1] = (pixel_32 & 0x0000ff00) >> 8;
-                pixel_24[2] = (pixel_32 & 0x00ff0000) >> 16;
+                convert_yuv_to_rgb_SDTV_pixel(y0, u, v, r, g, b);
 
-                argb8[out++] = 0xffU;        // A
-                argb8[out++] = pixel_24[0];  // R
-                argb8[out++] = pixel_24[1];  // G
-                argb8[out++] = pixel_24[2];  // B
+                rgb32[out++] = b;      // B
+                rgb32[out++] = g;      // G
+                rgb32[out++] = r;      // R
+                rgb32[out++] = 0xffU;  // A
 
-                pixel_32 = convert_yuv_to_rgb8_SDTV_pixel(y2, u, v);
-                pixel_24[0] = (pixel_32 & 0x000000ff);
-                pixel_24[1] = (pixel_32 & 0x0000ff00) >> 8;
-                pixel_24[2] = (pixel_32 & 0x00ff0000) >> 16;
+                convert_yuv_to_rgb_SDTV_pixel(y0, u, v, r, g, b);
 
-                argb8[out++] = 0xffU;        // A
-                argb8[out++] = pixel_24[0];  // R
-                argb8[out++] = pixel_24[1];  // G
-                argb8[out++] = pixel_24[2];  // B
+                rgb32[out++] = b;      // B
+                rgb32[out++] = g;      // G
+                rgb32[out++] = r;      // R
+                rgb32[out++] = 0xffU;  // A
 
-                pixel_32 = convert_yuv_to_rgb8_SDTV_pixel(y3, u, v);
-                pixel_24[0] = (pixel_32 & 0x000000ff);
-                pixel_24[1] = (pixel_32 & 0x0000ff00) >> 8;
-                pixel_24[2] = (pixel_32 & 0x00ff0000) >> 16;
+                convert_yuv_to_rgb_SDTV_pixel(y0, u, v, r, g, b);
 
-                argb8[out++] = 0xffU;        // A
-                argb8[out++] = pixel_24[0];  // R
-                argb8[out++] = pixel_24[1];  // G
-                argb8[out++] = pixel_24[2];  // B
+                rgb32[out++] = b;      // B
+                rgb32[out++] = g;      // G
+                rgb32[out++] = r;      // R
+                rgb32[out++] = 0xffU;  // A
             }
         }
     }
@@ -586,17 +544,18 @@ int convert_i420_to_argb8_buffer(unsigned char *i420, unsigned char *argb8, unsi
  *   |
  *   +----+----+----+----+----+----+----+----+
  */
-int convert_nv12_to_argb8_buffer(unsigned char *nv12, unsigned char *argb8, unsigned int width, unsigned int height, unsigned long bufferLength, long stride)
+int convert_nv12_to_rgb32_buffer(unsigned char *nv12, unsigned char *rgb32, unsigned int width, unsigned int height, unsigned long bufferLength, long stride)
 {
     unsigned int  out = 0;
     unsigned int  yPos1, yPos2;
     unsigned int  uPos;
     unsigned int  vPos;
-    unsigned char pixel_24[3];
-    unsigned int  pixel_32;
     int           y0, y1, y2, y3;
     int           u;
     int           v;
+    int           r;
+    int           g;
+    int           b;
     bool          upsideDown = (stride < 0);
 
     if (!upsideDown) {
@@ -614,45 +573,33 @@ int convert_nv12_to_argb8_buffer(unsigned char *nv12, unsigned char *argb8, unsi
                 u = nv12[uPos];
                 v = nv12[vPos];
 
-                pixel_32 = convert_yuv_to_rgb8_SDTV_pixel(y0, u, v);
-                pixel_24[0] = (pixel_32 & 0x000000ff);
-                pixel_24[1] = (pixel_32 & 0x0000ff00) >> 8;
-                pixel_24[2] = (pixel_32 & 0x00ff0000) >> 16;
+                convert_yuv_to_rgb_SDTV_pixel(y0, u, v, r, g, b);
 
-                argb8[out++] = 0xffU;        // A
-                argb8[out++] = pixel_24[0];  // R
-                argb8[out++] = pixel_24[1];  // G
-                argb8[out++] = pixel_24[2];  // B
+                rgb32[out++] = b;      // B
+                rgb32[out++] = g;      // G
+                rgb32[out++] = r;      // R
+                rgb32[out++] = 0xffU;  // A
 
-                pixel_32 = convert_yuv_to_rgb8_SDTV_pixel(y1, u, v);
-                pixel_24[0] = (pixel_32 & 0x000000ff);
-                pixel_24[1] = (pixel_32 & 0x0000ff00) >> 8;
-                pixel_24[2] = (pixel_32 & 0x00ff0000) >> 16;
+                convert_yuv_to_rgb_SDTV_pixel(y0, u, v, r, g, b);
 
-                argb8[out++] = 0xffU;        // A
-                argb8[out++] = pixel_24[0];  // R
-                argb8[out++] = pixel_24[1];  // G
-                argb8[out++] = pixel_24[2];  // B
+                rgb32[out++] = b;      // B
+                rgb32[out++] = g;      // G
+                rgb32[out++] = r;      // R
+                rgb32[out++] = 0xffU;  // A
 
-                pixel_32 = convert_yuv_to_rgb8_SDTV_pixel(y2, u, v);
-                pixel_24[0] = (pixel_32 & 0x000000ff);
-                pixel_24[1] = (pixel_32 & 0x0000ff00) >> 8;
-                pixel_24[2] = (pixel_32 & 0x00ff0000) >> 16;
+                convert_yuv_to_rgb_SDTV_pixel(y0, u, v, r, g, b);
 
-                argb8[out++] = 0xffU;        // A
-                argb8[out++] = pixel_24[0];  // R
-                argb8[out++] = pixel_24[1];  // G
-                argb8[out++] = pixel_24[2];  // B
+                rgb32[out++] = b;      // B
+                rgb32[out++] = g;      // G
+                rgb32[out++] = r;      // R
+                rgb32[out++] = 0xffU;  // A
 
-                pixel_32 = convert_yuv_to_rgb8_SDTV_pixel(y3, u, v);
-                pixel_24[0] = (pixel_32 & 0x000000ff);
-                pixel_24[1] = (pixel_32 & 0x0000ff00) >> 8;
-                pixel_24[2] = (pixel_32 & 0x00ff0000) >> 16;
+                convert_yuv_to_rgb_SDTV_pixel(y0, u, v, r, g, b);
 
-                argb8[out++] = 0xffU;        // A
-                argb8[out++] = pixel_24[0];  // R
-                argb8[out++] = pixel_24[1];  // G
-                argb8[out++] = pixel_24[2];  // B
+                rgb32[out++] = b;      // B
+                rgb32[out++] = g;      // G
+                rgb32[out++] = r;      // R
+                rgb32[out++] = 0xffU;  // A
             }
         }
     }
@@ -664,50 +611,11 @@ int convert_nv12_to_argb8_buffer(unsigned char *nv12, unsigned char *argb8, unsi
     return 0;
 }
 
-/*
-int convert_yuy2_to_rgb8_file(char *yuy2file, char *rgb8file, unsigned int width, unsigned int height)
-{
-    FILE *in, *out;
-    unsigned char *yuy2, *rgb8;
-
-    in = fopen(yuy2file, "rb");
-    if (!in) {
-        return 1;
-    }
-
-    out = fopen(rgb8file, "wb");
-    if (!out) {
-        return 1;
-    }
-
-    yuy2 = malloc(width * height * 2);
-    if (yuy2 == NULL) {
-        return 2;
-    }
-
-    rgb8 = malloc(width * height * 3);
-    if (rgb8 == NULL) {
-        return 2;
-    }
-
-    fread(yuy2, width * height * 2, 1, in);
-    fclose(in);
-
-    if (convert_yuy2_to_rgb8_buffer(yuy2, rgb8, width, height)) {
-        return 3;
-    }
-
-    fwrite(rgb8, width * height * 3, 1, out);
-    fclose(out);
-
-    return 0;
-}
-*/
 /******************************************************************************
  * Convert RGB 8bit to YUV
  ******************************************************************************/
 
-int convert_rgb8_to_yuv_pixel(int r8, int g8, int b8)
+int convert_rgb_to_yuv_pixel(int r8, int g8, int b8)
 {
     unsigned int pixel_32 = 0;
     unsigned char *pixel = (unsigned char *)&pixel_32;
@@ -733,19 +641,19 @@ int convert_rgb8_to_yuv_pixel(int r8, int g8, int b8)
 }
 
 
-int convert_rgb8_to_yuy2_buffer(unsigned char *rgb8, unsigned char *yuy2, unsigned int width, unsigned int height)
+int convert_rgb24_to_yuy2_buffer(unsigned char *rgb24, unsigned char *yuy2, unsigned int width, unsigned int height)
 {
     unsigned int in, out = 0;
     unsigned int pixel_32;
     int y0, u0, v0, y1, u1, v1;
 
     for(in = 0; in < width * height * 3; in += 6) {
-        pixel_32 = convert_rgb8_to_yuv_pixel(rgb8[in], rgb8[in + 1], rgb8[in + 2]);
+        pixel_32 = convert_rgb_to_yuv_pixel(rgb24[in], rgb24[in + 1], rgb24[in + 2]);
         y0 = (pixel_32 & 0x000000ff);
         u0 = (pixel_32 & 0x0000ff00) >>  8;
         v0 = (pixel_32 & 0x00ff0000) >> 16;
 
-        pixel_32 = convert_rgb8_to_yuv_pixel(rgb8[in + 3], rgb8[in + 4], rgb8[in + 5]);
+        pixel_32 = convert_rgb_to_yuv_pixel(rgb24[in + 3], rgb24[in + 4], rgb24[in + 5]);
         y1 = (pixel_32 & 0x000000ff);
         u1 = (pixel_32 & 0x0000ff00) >>  8;
         v1 = (pixel_32 & 0x00ff0000) >> 16;
@@ -758,183 +666,3 @@ int convert_rgb8_to_yuy2_buffer(unsigned char *rgb8, unsigned char *yuy2, unsign
 
     return 0;
 }
-
-/*
-int convert_rgb8_to_yuy2_file(char *rgb8file, char *yuy2file, unsigned int width, unsigned int height)
-{
-    FILE *in, *out;
-    unsigned char *yuy2, *rgb8;
-
-    in = fopen(rgb8file, "rb");
-    if (!in) {
-        return 1;
-    }
-
-    out = fopen(yuy2file, "wb");
-    if (!out) {
-        return 1;
-    }
-
-    rgb8 = malloc(width * height * 3);
-    if (rgb8 == NULL) {
-        return 2;
-    }
-
-    yuy2 = malloc(width * height * 2);
-    if (yuy2 == NULL) {
-        return 2;
-    }
-
-    fread(rgb8, width * height * 3, 1, in);
-
-    fclose(in);
-
-    if (convert_rgb8_to_yuy2_buffer(rgb8, yuy2, width, height)) {
-        return 3;
-    }
-
-    fwrite(yuy2, width * height * 2, 1, out);
-
-    fclose(out);
-
-    return 0;
-}
-*/
-/******************************************************************************
- * Convert RGB to RGB 8bit
- ******************************************************************************/
-
-/*
- * Memory layout rgb24:
- *   +----+----+----+  +----+----+----+
- *   | B0 | G0 | R0 |  | B1 | G1 | R1 |
- *   +----+----+----+  +----+----+----+
- */
-int convert_rgb24_to_argb8_buffer(unsigned char *rgb24, unsigned char *argb8, unsigned int width, unsigned int height, unsigned long bufferLength, long stride)
-{
-    unsigned char* dst = const_cast<unsigned char*>(argb8);
-    const unsigned char* const dstEnd = dst + bufferLength;
-    bool upsideDown = (stride < 0);
-
-    if (!upsideDown) {
-        const unsigned char* src = rgb24;
-        while (dst < dstEnd) {
-            *dst++ = 0xffU;        // A
-            *dst++ = *src++;       // R
-            *dst++ = *src++;       // G
-            *dst++ = *src++;       // B
-        }
-    }
-    else {
-        stride = -stride;
-        if (stride != (width * 3)) {
-            return 0;
-        }
-        for (int scanLine = height - 1; scanLine >= 0; --scanLine) {
-            const unsigned char* src = rgb24 + scanLine * stride;
-            const unsigned char* const srcEnd = src + width * 3;
-            while (src < srcEnd) {
-                *dst++ = 0xffU;        // A
-                *dst++ = *src++;       // R
-                *dst++ = *src++;       // G
-                *dst++ = *src++;       // B
-            }
-        }
-    }
-
-    return 0;
-}
-
-/*
- * Memory layout rgb32:
- *   +----+----+----+----+  +----+----+----+----+
- *   | B0 | G0 | R0 | A0 |  | B1 | G1 | R1 | A1 |
- *   +----+----+----+----+  +----+----+----+----+
- */
-int convert_rgb32_to_argb8_buffer(unsigned char *rgb32, unsigned char *argb8, unsigned int width, unsigned int height, unsigned long bufferLength, long stride)
-{
-    unsigned char* dst = const_cast<unsigned char*>(argb8);
-    const unsigned char* const dstEnd = dst + bufferLength;
-    bool upsideDown = (stride < 0);
-
-    if (!upsideDown) {
-        const unsigned char* src = rgb32;
-        while (dst < dstEnd) {
-            *dst++ = *src++;       // B
-            *dst++ = *src++;       // G
-            *dst++ = *src++;       // R
-            *dst++ = *src++;       // A
-        }
-    }
-    else {
-        stride = -stride;
-        if (stride != (width * 3)) {
-            return 0;
-        }
-        for (int scanLine = height - 1; scanLine >= 0; --scanLine) {
-            const unsigned char* src = rgb32 + scanLine * stride;
-            const unsigned char* const srcEnd = src + width * 3;
-            while (src < srcEnd) {
-                *dst++ = *src++;       // B
-                *dst++ = *src++;       // G
-                *dst++ = *src++;       // R
-                *dst++ = *src++;       // A
-            }
-        }
-    }
-
-    return 0;
-}
-
-/******************************************************************************
- * Example
- ******************************************************************************/
-/*
-int main(int argc, char **argv)
-{
-    int ret = 0;
-    char *infile, *outfile;
-    unsigned int width, height;
-
-    if (argc < 5) {
-#ifdef RGB2YUV
-        fprintf(stderr, "Convert RGB images to YUY2 (YUYV).\n\n");
-#else
-        fprintf(stderr, "Convert YUY2 (YUYV) images to RGB.\n\n");
-#endif
-        fprintf(stderr, "Syntax: %s width height input output\n", argv[0]);
-        return 1;
-    }
-
-    width = atoi(argv[1]);
-    height = atoi(argv[2]);
-    infile = argv[3];
-    outfile = argv[4];
-#ifdef RGB2YUV
-    printf("RGB2YUY: %s => %s\n", infile, outfile);
-    ret = convert_rgb8_to_yuy2_file(infile, outfile, width, height);
-#else
-    printf("YUV2RGB: %s => %s\n", infile, outfile);
-    ret = convert_yuy2_to_rgb8_file(infile, outfile, width, height);
-#endif
-    if (ret == 0) {
-        printf("Done.\n");
-    } else {
-        printf("Failed (error = %d). Aborting.\n", ret);
-        return 1;
-    }
-
-    return 0;
-}
-
-void MainWindow::paintEvent ( QPaintEvent * event )
-{
-    QPainter Painter(this) ;
-    read_frame();
-    convert_yuy2_to_rgb8_buffer((unsigned char *)buffers[JPEGindex].start,bufrgb8,320,240);
-    QImage img(bufrgb8,320,240,QImage::Format_RGB888);
-    Painter.drawImage(0,0,img) ;
-
-    update();
-}
-*/

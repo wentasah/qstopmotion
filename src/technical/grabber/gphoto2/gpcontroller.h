@@ -25,6 +25,7 @@
 #include <gphoto2/gphoto2.h>
 
 #include "technical/grabber/grabbercontroller.h"
+#include "technical/grabber/gphoto2/gpgrabber.h"
 
 
 // set ioctl retries to 4 - linux uvc as increased timeout from 1000 to 3000 ms
@@ -54,10 +55,23 @@ public:
 
     /**
      * Initialize the grabber controller.
-     * @param id The ID of the device.
+     * @param ig The image grabber of the controller.
+     * @param igd The image grabber device of the controller.
      * @return True if initialization is successful.
      */
-    bool init(const QString &id);
+    bool initialization(ImageGrabber* ig, ImageGrabberDevice* igd);
+
+    /**
+     * Set up the controller.
+     * @return true on success, false otherwise
+     */
+    bool setUp();
+
+    /**
+     * Tear down the controller.
+     * @return true on success, false otherwise
+     */
+    bool tearDown();
 
     /**************************************************************************
      **************************************************************************
@@ -549,6 +563,8 @@ public:
 
 private:
 
+    GphotoGrabber*      grabber;
+    ImageGrabberDevice* grabberDevice;
 
     void getControlData(GrabberControlCapabilities *caps, long flags = GrabberController::controller_none);
     void getControlFlag(GrabberControlCapabilities *caps);

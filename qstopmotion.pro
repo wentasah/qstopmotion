@@ -1,7 +1,7 @@
 ###############################################################################
 # QtCreator file for the qStopMotion project                                  #
 # (c) Ralf Lange, longsoft.de                                                 #
-# Last update: 2014-11-17                                                     #
+# Last update: 2014-12-02                                                     #
 #                                                                             #
 # Please use CMake and the CMakeLists.txt file to build qStopMotion!          #
 ###############################################################################
@@ -175,6 +175,7 @@ SOURCES += src/main.cpp \
            src/technical/grabber/gstreamer/windows/directshowusbgrabber.cpp \
            src/technical/grabber/mediafoundation/mfcontroller.cpp \
            src/technical/grabber/mediafoundation/mfgrabber.cpp \
+           src/technical/grabber/mediafoundation/mfutil.cpp \
            src/technical/videoencoder/ffmpegencoder.cpp \
            src/technical/videoencoder/videoencoder.cpp \
            src/technical/videoencoder/videoencoderfactory.cpp

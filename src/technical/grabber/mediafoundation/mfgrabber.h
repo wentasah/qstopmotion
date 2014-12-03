@@ -23,7 +23,6 @@
 
 #include "technical/grabber/imagegrabber.h"
 #include "technical/grabber/imagegrabberdevice.h"
-#include "technical/grabber/imagegrabberdevice.h"
 
 // Include files of the media foundation
 #include <mfapi.h>
@@ -88,6 +87,8 @@ public:
      * @return true on success, false otherwise
      */
     bool tearDown();
+
+    IMFMediaSource* getSource();
 
 private:
     HRESULT readDeviceInfo(IMFActivate *pActivate, unsigned int Num, ImageGrabberDevice *device);

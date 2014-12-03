@@ -62,6 +62,18 @@ public:
      */
     void initialize();
 
+    /**
+     * Set up the controller.
+     * @return true on success, false otherwise
+     */
+    bool setUp();
+
+    /**
+     * Tear down the controller.
+     * @return true on success, false otherwise
+     */
+    bool tearDown();
+
 private slots:
     /**
      * Slot for notified the camera contoller when automatic brightness is changed, so that

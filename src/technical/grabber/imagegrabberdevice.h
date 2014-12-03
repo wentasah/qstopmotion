@@ -23,12 +23,13 @@
 
 #include "frontends/frontend.h"
 #include "technical/grabber/grabbercontroller.h"
+#include "technical/grabber/grabberresolution.h"
 
 #include <QtCore/QString>
 #include <QtCore/QVector>
 #include <QtGui/QImage>
 
-// class GrabberController;
+class GrabberController;
 
 /**
  * Class containing all the informations of a device.

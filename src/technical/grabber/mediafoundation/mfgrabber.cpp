@@ -87,6 +87,12 @@ MfGrabber::~MfGrabber()
 }
 
 
+IMFMediaSource* MfGrabber::getSource()
+{
+    return mediaSource;
+}
+
+
 bool MfGrabber::initialization(QVector<ImageGrabberDevice*> &devices)
 {
     qDebug("MfGrabber::initialization --> Start");
@@ -160,7 +166,7 @@ bool MfGrabber::initialization(QVector<ImageGrabberDevice*> &devices)
                     device->setController(deviceController);
 
                     // Initalize the device controller
-                    deviceController->init(device->getDeviceId());
+                    deviceController->initialization(this, device);
                 }
             }
             else {
@@ -168,6 +174,7 @@ bool MfGrabber::initialization(QVector<ImageGrabberDevice*> &devices)
                 delete device;
                 device = NULL;
             }
+            SafeRelease(&mediaSource);
 
             // vds_Devices.push_back(vd);
 
@@ -513,7 +520,6 @@ HRESULT MfGrabber::readDeviceInfo(IMFActivate *pActivate, unsigned int /*Num*/, 
     HRESULT hr = S_OK;
 
     if (pActivate) {
-        IMFMediaSource* pSource = NULL;
         LPWSTR          FriendlyName = NULL;
         UINT32          cchLength;
 
@@ -528,7 +534,7 @@ HRESULT MfGrabber::readDeviceInfo(IMFActivate *pActivate, unsigned int /*Num*/, 
         device->setDeviceName(QString::fromUtf16((const ushort*)FriendlyName) + " (MMF)");
         device->setDeviceSource(ImageGrabberDevice::mediaFoundationSource);
 
-        hr = pActivate->ActivateObject(__uuidof(IMFMediaSource), (void**)&pSource );
+        hr = pActivate->ActivateObject(__uuidof(IMFMediaSource), (void**)&mediaSource );
         if (!SUCCEEDED(hr)) {
             // Error activating the source
 
@@ -539,11 +545,9 @@ HRESULT MfGrabber::readDeviceInfo(IMFActivate *pActivate, unsigned int /*Num*/, 
             return hr;
         }
 
-        enumerateCaptureFormats(pSource, device);
+        enumerateCaptureFormats(mediaSource, device);
 
-        // buildLibraryofTypes();
-
-        SafeRelease(&pSource);
+        // SafeRelease(&mediaSource);
 
         // Frees allocated memory
         if(FriendlyName) {

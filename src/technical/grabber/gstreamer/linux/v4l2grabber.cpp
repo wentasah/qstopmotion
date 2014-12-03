@@ -171,7 +171,7 @@ bool GstreamerV4L2Grabber::initialization(QVector<ImageGrabberDevice*> &devices)
                 }
                 if ((int)true == value) {
                     deviceController = new GrabberV4L2Controller(0);
-                    if (deviceController->init(device->getDeviceId()))
+                    if (deviceController->initialization(this, device))
                     {
                         device->setController(deviceController);
 

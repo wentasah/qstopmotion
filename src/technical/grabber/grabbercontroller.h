@@ -23,9 +23,14 @@
 
 #include "technical/grabber/grabbercontrolcapabilities.h"
 #include "technical/grabber/grabberresolution.h"
+#include "technical/grabber/imagegrabberdevice.h"
+#include "technical/grabber/imagegrabber.h"
 
 #include <QtCore/QString>
 #include <QtCore/QVector>
+
+class ImageGrabber;
+class ImageGrabberDevice;
 
 /**
  * Interface to the controller of a device.
@@ -61,10 +66,23 @@ public:
 
     /**
      * Initialize the grabber controller.
-     * @param id The ID of the device.
+     * @param ig The image grabber of the controller.
+     * @param igd The image grabber device of the controller.
      * @return True if initialization is successful.
      */
-    bool init(const QString &id);
+    virtual bool initialization(ImageGrabber* ig, ImageGrabberDevice* igd) = 0;
+
+    /**
+     * Set up the controller.
+     * @return true on success, false otherwise
+     */
+    virtual bool setUp() = 0;
+
+    /**
+     * Tear down the controller.
+     * @return true on success, false otherwise
+     */
+    virtual bool tearDown() = 0;
 
     /**
      * Get the capabilities of the controller.

@@ -34,6 +34,8 @@ DirectShowController::DirectShowController(int cap)
 {
     qDebug("DirectShowController::Constructor --> Start");
 
+    grabber = NULL;
+    grabberDevice = NULL;
     pFilter = NULL;
     pCameraControl = NULL;
     pQualityControl = NULL;
@@ -64,12 +66,15 @@ DirectShowController::~DirectShowController()
 }
 
 
-bool DirectShowController::init(const QString &id)
+bool DirectShowController::initialization(ImageGrabber* ig, ImageGrabberDevice* igd)
 {
     qDebug("DirectShowController::init --> Start");
 
     bool     ret = false;
     HRESULT  hr;
+
+    grabber = (GstreamerDirectShowUsbGrabber*)ig;
+    grabberDevice = igd;
 
     qDebug("DirectShowController::init --> Enumerating video input devices ...\n");
 
@@ -125,7 +130,7 @@ bool DirectShowController::init(const QString &id)
                 qDebug() << "DirectShowController::init --> Found device: " << deviceId;
             }
 
-            if (0 != id.compare(deviceId)) {
+            if (0 != grabberDevice->getDeviceId().compare(deviceId)) {
                 // Release the properties
                 pPropBag->Release();
 
@@ -205,6 +210,22 @@ bool DirectShowController::init(const QString &id)
     qDebug("DirectShowController::init --> End (Successful)");
 
     return ret;
+}
+
+
+bool DirectShowController::setUp()
+{
+    qDebug() << "DirectShowController::setUp --> Start (Empty)";
+
+    return true;
+}
+
+
+bool DirectShowController::tearDown()
+{
+    qDebug() << "DirectShowController::tearDown --> Start (Empty)";
+
+    return true;
 }
 
 

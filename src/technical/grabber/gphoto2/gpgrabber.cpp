@@ -151,7 +151,7 @@ bool GphotoGrabber::initialization(QVector<ImageGrabberDevice*> &devices)
     }
     if ((int)true == value) {
         deviceController = new GphotoController(0);
-        if (deviceController->init(device->getDeviceId()))
+        if (deviceController->initialization(this, device))
         {
             device->setController(deviceController);
         }

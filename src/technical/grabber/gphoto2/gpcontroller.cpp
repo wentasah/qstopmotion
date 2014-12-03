@@ -32,6 +32,9 @@ GphotoController::GphotoController(int cap)
 {
     qDebug("GphotoController::Constructor --> Start");
 
+    grabber = NULL;
+    grabberDevice = NULL;
+
     qDebug("GphotoController::Constructor --> End");
 }
 
@@ -44,9 +47,12 @@ GphotoController::~GphotoController()
 }
 
 
-bool GphotoController::init(const QString &id)
+bool GphotoController::initialization(ImageGrabber* ig, ImageGrabberDevice* igd)
 {
     qDebug("GphotoController::init --> Start");
+
+    grabber = (GphotoGrabber*)ig;
+    grabberDevice = igd;
 
     // qDebug("GphotoController::init --> Open the device ...");
 
@@ -55,6 +61,22 @@ bool GphotoController::init(const QString &id)
     qDebug("GphotoController::init --> End (Not Successful)");
 
     return false;
+}
+
+
+bool GphotoController::setUp()
+{
+    qDebug() << "GphotoController::setUp --> Start (Empty)";
+
+    return true;
+}
+
+
+bool GphotoController::tearDown()
+{
+    qDebug() << "GphotoController::tearDown --> Start (Empty)";
+
+    return true;
 }
 
 

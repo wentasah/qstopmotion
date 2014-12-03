@@ -22,6 +22,8 @@
 #define GSTREAMER_WINDOWS_DIRECTSHOWCONTROLLER_H
 
 #include "technical/grabber/grabbercontroller.h"
+#include "technical/grabber/imagegrabberdevice.h"
+#include "technical/grabber/gstreamer/windows/directshowusbgrabber.h"
 
 #include <dshow.h>
 
@@ -47,10 +49,23 @@ public:
 
     /**
      * Initialize the grabber controller.
-     * @param id The ID of the device.
+     * @param ig The image grabber of the controller.
+     * @param igd The image grabber device of the controller.
      * @return True if initialization is successful.
      */
-    bool init(const QString &id);
+    bool initialization(ImageGrabber* ig, ImageGrabberDevice* igd);
+
+    /**
+     * Set up the controller.
+     * @return true on success, false otherwise
+     */
+    bool setUp();
+
+    /**
+     * Tear down the controller.
+     * @return true on success, false otherwise
+     */
+    bool tearDown();
 
     bool setResolutions(ImageGrabberDevice *device);
 
@@ -543,10 +558,12 @@ public:
     void setRoll(int r);
 
 private:
-    IBaseFilter      *pFilter;
-    IAMCameraControl *pCameraControl;
-    IAMVideoProcAmp  *pQualityControl;
-    IAMStreamConfig  *pStreamConfig;
+    GstreamerDirectShowUsbGrabber* grabber;
+    ImageGrabberDevice*            grabberDevice;
+    IBaseFilter*                   pFilter;
+    IAMCameraControl*              pCameraControl;
+    IAMVideoProcAmp*               pQualityControl;
+    IAMStreamConfig*               pStreamConfig;
 
     bool setControlCapabilities();
     bool setQualityCapabilities();

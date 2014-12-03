@@ -19,6 +19,7 @@
  ******************************************************************************/
 
 #include "mfcontroller.h"
+#include "mfutil.h"
 
 #include <QtCore/QtDebug>
 
@@ -30,270 +31,126 @@
 MfController::MfController(int cap)
     : GrabberController(cap)
 {
-    qDebug("MfController::Constructor --> Start (Empty)");
+    qDebug("MfController::Constructor --> Start");
 
-    // qDebug("MfController::Constructor --> End");
+    grabber = NULL;
+    grabberDevice = NULL;
+    cameraControl = NULL;
+    qualityControl = NULL;
+
+    qDebug("MfController::Constructor --> End");
 }
 
 
 MfController::~MfController()
 {
-    qDebug("MfController::Destructor --> Start (Empty)");
+    qDebug("MfController::Destructor --> Start");
+
+    SafeRelease(&qualityControl);
+    SafeRelease(&cameraControl);
 
     qDebug("MfController::Destructor --> End");
 }
 
 
-bool MfController::init(const QString &id)
+bool MfController::initialization(ImageGrabber* ig, ImageGrabberDevice* igd)
 {
     qDebug("MfController::init --> Start");
 
-    bool     ret = false;
-    /*
-    HRESULT  hr;
+    grabber = (MfGrabber*)ig;
+    grabberDevice = igd;
 
-    qDebug("MfController::init --> Enumerating video input devices ...\n");
+    bool            ret = false;
+    IMFMediaSource* mediaSource = grabber->getSource();
 
-    // Create the System Device Enumerator.
-    ICreateDevEnum *pSysDevEnum = NULL;
-    hr = CoCreateInstance(CLSID_SystemDeviceEnum,
-                          NULL,
-                          CLSCTX_INPROC_SERVER,
-                          IID_ICreateDevEnum,
-                          (void **)&pSysDevEnum);
-    if(FAILED(hr)) {
-        qDebug("MfController::Constructor --> Error end: Unable to create system device enumerator.\n");
+    if(NULL == mediaSource) {
         return false;
     }
 
-    // Obtain a class enumerator for the video input device category.
-    IEnumMoniker *pEnumCat = NULL;
-    hr = pSysDevEnum->CreateClassEnumerator(CLSID_VideoInputDeviceCategory, &pEnumCat, 0);
+    // unsigned int shift = sizeof(Parametr);
 
-    if (S_OK == hr) {
-        // Enumerate the monikers.
-        IMoniker *pMoniker = NULL;
-        ULONG cFetched;
-        while ((false == ret) && S_OK == (pEnumCat->Next(1, &pMoniker, &cFetched))) {
-            IPropertyBag *pPropBag;
-
-            hr = pMoniker->BindToStorage(NULL,
-                                         NULL,
-                                         IID_IPropertyBag,
-                                         (void **)&pPropBag);
-            if(FAILED(hr)) {
-                // Relese the moniker
-                pMoniker->Release();
-
-                continue;
-            }
-
-            //---------------------------------------------------------
-            // Read the device name
-            //---------------------------------------------------------
-
-            QString deviceId;
-            VARIANT varName;
-            VariantInit(&varName);
-
-            hr = pPropBag->Read(L"FriendlyName", &varName, NULL);
-
-            if (SUCCEEDED(hr)) {
-                deviceId = QString((QChar*)(varName.bstrVal), ::SysStringLen(varName.bstrVal));
-                VariantClear(&varName);
-
-                // Display the name in your UI somehow.
-                qDebug() << "MfController::init --> Found device: " << deviceId;
-            }
-
-            if (0 != id.compare(deviceId)) {
-                // Release the properties
-                pPropBag->Release();
-
-                // Relese the moniker
-                pMoniker->Release();
-
-                continue;
-            }
-
-            if (NULL != pFilter) {
-                // More than one moniker for the same device
-
-                // Release the properties
-                pPropBag->Release();
-
-                // Relese the moniker
-                pMoniker->Release();
-
-                continue;
-            }
-            // To create an instance of the filter, do the following:
-            hr = pMoniker->BindToObject(NULL,
-                                        NULL,
-                                        IID_IBaseFilter,
-                                        (void**)&pFilter);
-
-            if (FAILED(hr)) {
-                // Release the pFilter
-                pPropBag->Release();
-
-                // Relese the moniker
-                pMoniker->Release();
-
-                continue;
-            }
-
-            //---------------------------------------------------------
-            // Save the control capabilitries
-            //---------------------------------------------------------
-
-            // Get a pointer to the IAMCameraControl interface used to control the camera
-            hr = pFilter->QueryInterface(IID_IAMCameraControl, (void **)&pCameraControl);
-            if(S_OK == hr) {
-                if (setControlCapabilities()) {
-                    ret = true;
-                }
-            }
-            else {
-                qDebug("MfController::init --> ERROR: Unable to access IAMCameraControl interface.");
-            }
-
-            // Get a pointer to the IAMVideoProcAmp interface used to control the camera
-            hr = pFilter->QueryInterface(IID_IAMVideoProcAmp, (void **)&pQualityControl);
-            if(S_OK == hr) {
-                if (setQualityCapabilities()) {
-                    ret = true;
-                }
-            }
-            else {
-                qDebug("MfController::init --> ERROR: Unable to access IAMCameraControl interface.");
-            }
-
-            //---------------------------------------------------------
-            // Read the possible resolutions
-            //---------------------------------------------------------
-
-            // get an output pin from the filter
-            IEnumPins       *pPinEnum = NULL;
-            PIN_DIRECTION    ThisPinDir;
-            IEnumMediaTypes *pMediaTypeEnum = NULL;
-            AM_MEDIA_TYPE    UsedMediaType;
-            AM_MEDIA_TYPE   *pMediaType = NULL;
-            VIDEOINFOHEADER *pVideoInfoHeader = NULL;
-            IPin            *pCameraPin;
-            int              outputWidth;
-            int              outputHeight;
-            bool             connected;
-            // PIN_INFO         PinInfo;
-            LPWSTR           pPinId;
-            QString          pinId;
-
-            hr = pFilter->EnumPins(&pPinEnum);
-
-            if (FAILED(hr)) {
-                // Release the filter
-                pFilter->Release();
-
-                // Release the pFilter
-                pPropBag->Release();
-
-                // Relese the moniker
-                pMoniker->Release();
-
-                continue;
-            }
-
-            // Enumerate over the filter pins
-            while(S_OK == pPinEnum->Next(1, &pCameraPin, NULL)) {
-                pMediaTypeEnum = NULL;
-                connected = false;
-
-                pCameraPin->QueryDirection(&ThisPinDir);
-                if (ThisPinDir != PINDIR_OUTPUT) {
-                    pCameraPin->Release();
-                    continue;
-                }
-
-                hr = pCameraPin->ConnectionMediaType(&UsedMediaType);
-                if (S_OK == hr) {
-                    // The pin is connected and has a media type
-                    connected = true;
-                }
-
-                // hr = pCameraPin->QueryPinInfo(&PinInfo);
-                hr = pCameraPin->QueryId(&pPinId);
-                if (SUCCEEDED(hr)) {
-#ifdef UNICODE
-                  // LPWSTR Unicode to QString
-                  pinId = QString::fromWCharArray((const wchar_t*)pPinId, strlen(pPinId));
-#else
-                  // LPWSTR 8 bit to QString
-                  pinId = QString::fromLocal8Bit((const char*)pPinId);
-#endif
-                  // an reverse
-                  // std::wstring wstr = pinID.toStdWString();
-                  // LPWSTR ptr = wstr.c_str();
-
-                  CoTaskMemFree(pPinId);
-                }
-
-                hr = pCameraPin->EnumMediaTypes(&pMediaTypeEnum);
-                if (S_OK != hr) {
-                    pCameraPin->Release();
-                    continue;
-                }
-
-                // Enumerate over the media types
-                pMediaType = NULL;
-                pVideoInfoHeader = NULL;
-
-                while (S_OK == pMediaTypeEnum->Next(1, &pMediaType, NULL))
-                {
-                    if ((pMediaType->formattype == FORMAT_VideoInfo) &&
-                        (pMediaType->cbFormat >= sizeof(VIDEOINFOHEADER)) &&
-                        (pMediaType->pbFormat != NULL))
-                    {
-                        pVideoInfoHeader = (VIDEOINFOHEADER*)pMediaType->pbFormat;
-                        outputWidth = pVideoInfoHeader->bmiHeader.biWidth;
-                        outputHeight = pVideoInfoHeader->bmiHeader.biHeight;
-
-                        qDebug() << "MfController::init --> Resolution: " << outputWidth << ":" << outputHeight;
-
-                        addResolution(GrabberResolution(pinId, outputWidth, outputHeight, connected));
-                    }
-                    // _DeleteMediaType(pMediaType);
-                }
-
-                pMediaTypeEnum->Release();
-                pCameraPin->Release();
-            }
-            // Release the pin enumerator
-            pPinEnum->Release();
-
-            //---------------------------------------------------------
-            // Release the data structures
-            //---------------------------------------------------------
-
-            // Release the storage
-            pPropBag->Release();
-
-            // Relese the moniker
-            pMoniker->Release();
+    HRESULT hr = mediaSource->QueryInterface(IID_PPV_ARGS(&qualityControl));
+    if(S_OK == hr) {
+        if (setQualityCapabilities()) {
+            ret = true;
         }
-        pEnumCat->Release();
+        SafeRelease(&qualityControl);
     }
-    pSysDevEnum->Release();
-*/
+    else {
+        qDebug("MfController::init --> ERROR: Unable to access IAMCameraControl interface.");
+    }
+
+    hr = mediaSource->QueryInterface(IID_PPV_ARGS(&cameraControl));
+
+    if(S_OK == hr) {
+        if (setControlCapabilities()) {
+            ret = true;
+        }
+        SafeRelease(&cameraControl);
+    }
+    else {
+        qDebug("MfController::init --> ERROR: Unable to access IAMCameraControl interface.");
+    }
+
     qDebug("MfController::init --> End (Successful)");
 
     return ret;
 }
 
 
+bool MfController::setUp()
+{
+    qDebug() << "MfController::setUp --> Start";
+
+    bool            ret = false;
+    HRESULT         hr;
+    IMFMediaSource* mediaSource = grabber->getSource();
+
+    if(NULL == mediaSource) {
+        return false;
+    }
+
+    // unsigned int shift = sizeof(Parametr);
+
+    hr = mediaSource->QueryInterface(IID_PPV_ARGS(&qualityControl));
+    if(S_OK == hr) {
+        ret = true;
+    }
+    else {
+        qDebug("MfController::setUp --> ERROR: Unable to access IAMCameraControl interface.");
+    }
+
+    hr = mediaSource->QueryInterface(IID_PPV_ARGS(&cameraControl));
+    if(S_OK == hr) {
+        ret = true;
+    }
+    else {
+        qDebug("MfController::setUp --> ERROR: Unable to access IAMCameraControl interface.");
+    }
+
+    qDebug() << "MfController::setUp --> End";
+
+    return true;
+}
+
+
+bool MfController::tearDown()
+{
+    qDebug() << "MfController::tearDown --> Start";
+
+    SafeRelease(&qualityControl);
+    SafeRelease(&cameraControl);
+
+    qDebug() << "MfController::tearDown --> End";
+
+    return true;
+}
+
+
 bool MfController::setControlCapabilities()
 {
     qDebug("MfController::setCameraCapabilities --> Start");
-/*
+
     long min;
     long max;
     long step;
@@ -302,7 +159,7 @@ bool MfController::setControlCapabilities()
     HRESULT hr;
 
     Sleep(1000);
-    hr = pCameraControl->GetRange(CameraControl_Exposure, &min, &max, &step, &def, &flags);
+    hr = cameraControl->GetRange(CameraControl_Exposure, &min, &max, &step, &def, &flags);
     if (hr == S_OK) {
         qDebug("MfController::setCameraCapabilities --> Exposure control supported.");
 
@@ -322,7 +179,7 @@ bool MfController::setControlCapabilities()
     }
 
     Sleep(1000);
-    hr = pCameraControl->GetRange(CameraControl_Zoom, &min, &max, &step, &def, &flags);
+    hr = cameraControl->GetRange(CameraControl_Zoom, &min, &max, &step, &def, &flags);
     if (hr == S_OK) {
         qDebug("MfController::setCameraCapabilities --> Zoom control supported.");
 
@@ -342,7 +199,7 @@ bool MfController::setControlCapabilities()
     }
 
     Sleep(1000);
-    hr = pCameraControl->GetRange(CameraControl_Focus, &min, &max, &step, &def, &flags);
+    hr = cameraControl->GetRange(CameraControl_Focus, &min, &max, &step, &def, &flags);
     if (hr == S_OK) {
         qDebug("MfController::setCameraCapabilities --> Focus control supported.");
 
@@ -362,7 +219,7 @@ bool MfController::setControlCapabilities()
     }
 
     Sleep(1000);
-    hr = pCameraControl->GetRange(CameraControl_Pan, &min, &max, &step, &def, &flags);
+    hr = cameraControl->GetRange(CameraControl_Pan, &min, &max, &step, &def, &flags);
     if (hr == S_OK) {
         qDebug("MfController::setCameraCapabilities --> Pan control supported");
 
@@ -377,7 +234,7 @@ bool MfController::setControlCapabilities()
     }
 
     Sleep(1000);
-    hr = pCameraControl->GetRange(CameraControl_Tilt, &min, &max, &step, &def, &flags);
+    hr = cameraControl->GetRange(CameraControl_Tilt, &min, &max, &step, &def, &flags);
     if (hr == S_OK) {
         qDebug("MfController::setCameraCapabilities --> Tilt control supported");
 
@@ -392,7 +249,7 @@ bool MfController::setControlCapabilities()
     }
 
     Sleep(1000);
-    hr = pCameraControl->GetRange(CameraControl_Iris, &min, &max, &step, &def, &flags);
+    hr = cameraControl->GetRange(CameraControl_Iris, &min, &max, &step, &def, &flags);
     if (hr == S_OK) {
         qDebug("MfController::setCameraCapabilities --> Iris control supported.");
 
@@ -412,7 +269,7 @@ bool MfController::setControlCapabilities()
     }
 
     Sleep(1000);
-    hr = pCameraControl->GetRange(CameraControl_Roll, &min, &max, &step, &def, &flags);
+    hr = cameraControl->GetRange(CameraControl_Roll, &min, &max, &step, &def, &flags);
     if (hr == S_OK) {
         qDebug("MfController::setCameraCapabilities --> Roll control supported.");
 
@@ -430,7 +287,7 @@ bool MfController::setControlCapabilities()
     else {
         qDebug("MfController::setCameraCapabilities --> Roll control not supported.");
     }
-*/
+
     qDebug("MfController::setCameraCapabilities --> End");
 
     return true;
@@ -440,7 +297,7 @@ bool MfController::setControlCapabilities()
 bool MfController::setQualityCapabilities()
 {
     qDebug("MfController::setQualityCapabilities --> Start");
-/*
+
     long min;
     long max;
     long step;
@@ -449,7 +306,7 @@ bool MfController::setQualityCapabilities()
     HRESULT hr;
 
     Sleep(1000);
-    hr = pQualityControl->GetRange(VideoProcAmp_Brightness, &min, &max, &step, &def, &flags);
+    hr = qualityControl->GetRange(VideoProcAmp_Brightness, &min, &max, &step, &def, &flags);
     if (hr == S_OK) {
         qDebug("MfController::setQualityCapabilities --> Brightness control supported.");
 
@@ -469,7 +326,7 @@ bool MfController::setQualityCapabilities()
     }
 
     Sleep(1000);
-    hr = pQualityControl->GetRange(VideoProcAmp_Contrast, &min, &max, &step, &def, &flags);
+    hr = qualityControl->GetRange(VideoProcAmp_Contrast, &min, &max, &step, &def, &flags);
     if (hr == S_OK) {
         qDebug("MfController::setQualityCapabilities --> Contrast control supported.");
 
@@ -489,7 +346,7 @@ bool MfController::setQualityCapabilities()
     }
 
     Sleep(1000);
-    hr = pQualityControl->GetRange(VideoProcAmp_Saturation, &min, &max, &step, &def, &flags);
+    hr = qualityControl->GetRange(VideoProcAmp_Saturation, &min, &max, &step, &def, &flags);
     if (hr == S_OK) {
         qDebug("MfController::setQualityCapabilities --> Saturation control supported.");
 
@@ -509,7 +366,7 @@ bool MfController::setQualityCapabilities()
     }
 
     Sleep(1000);
-    hr = pQualityControl->GetRange(VideoProcAmp_Hue, &min, &max, &step, &def, &flags);
+    hr = qualityControl->GetRange(VideoProcAmp_Hue, &min, &max, &step, &def, &flags);
     if (hr == S_OK) {
         qDebug("MfController::setQualityCapabilities --> Hue control supported.");
 
@@ -529,7 +386,7 @@ bool MfController::setQualityCapabilities()
     }
 
     Sleep(1000);
-    hr = pQualityControl->GetRange(VideoProcAmp_Gamma, &min, &max, &step, &def, &flags);
+    hr = qualityControl->GetRange(VideoProcAmp_Gamma, &min, &max, &step, &def, &flags);
     if (hr == S_OK) {
         qDebug("MfController::setQualityCapabilities --> Gamma control supported.");
 
@@ -549,7 +406,7 @@ bool MfController::setQualityCapabilities()
     }
 
     Sleep(1000);
-    hr = pQualityControl->GetRange(VideoProcAmp_Sharpness, &min, &max, &step, &def, &flags);
+    hr = qualityControl->GetRange(VideoProcAmp_Sharpness, &min, &max, &step, &def, &flags);
     if (hr == S_OK) {
         qDebug("MfController::setQualityCapabilities --> Sharpness control supported.");
 
@@ -569,7 +426,7 @@ bool MfController::setQualityCapabilities()
     }
 
     Sleep(1000);
-    hr = pQualityControl->GetRange(VideoProcAmp_BacklightCompensation, &min, &max, &step, &def, &flags);
+    hr = qualityControl->GetRange(VideoProcAmp_BacklightCompensation, &min, &max, &step, &def, &flags);
     if (hr == S_OK) {
         qDebug("MfController::setQualityCapabilities --> Backlight Compensation control supported.");
 
@@ -589,7 +446,7 @@ bool MfController::setQualityCapabilities()
     }
 
     Sleep(1000);
-    hr = pQualityControl->GetRange(VideoProcAmp_WhiteBalance, &min, &max, &step, &def, &flags);
+    hr = qualityControl->GetRange(VideoProcAmp_WhiteBalance, &min, &max, &step, &def, &flags);
     if (hr == S_OK) {
         qDebug("MfController::setQualityCapabilities --> White Balance control supported.");
 
@@ -609,7 +466,7 @@ bool MfController::setQualityCapabilities()
     }
 
     Sleep(1000);
-    hr = pQualityControl->GetRange(VideoProcAmp_Gain, &min, &max, &step, &def, &flags);
+    hr = qualityControl->GetRange(VideoProcAmp_Gain, &min, &max, &step, &def, &flags);
     if (hr == S_OK) {
         qDebug("MfController::setQualityCapabilities --> Gain control supported.");
 
@@ -629,7 +486,7 @@ bool MfController::setQualityCapabilities()
     }
 
     Sleep(1000);
-    hr = pQualityControl->GetRange(VideoProcAmp_ColorEnable, &min, &max, &step, &def, &flags);
+    hr = qualityControl->GetRange(VideoProcAmp_ColorEnable, &min, &max, &step, &def, &flags);
     if (hr == S_OK) {
         qDebug("MfController::setQualityCapabilities --> Color Enable control supported.");
 
@@ -647,135 +504,10 @@ bool MfController::setQualityCapabilities()
     else {
         qDebug("MfController::setQualityCapabilities --> Color Enable control not supported.");
     }
-*/
+
     qDebug("MfController::setQualityCapabilities --> End");
 
     return true;
-}
-
-
-/**************************************************************************
- **************************************************************************
- * Camera resolution
- **************************************************************************
- **************************************************************************/
-
-int MfController::getActiveResolution()
-{
-    /*
-    HRESULT          hr = S_OK;
-    AM_MEDIA_TYPE   *pMediaType = NULL;
-    VIDEOINFOHEADER *pVideoInfoHeader = NULL;
-    int              activeWidth;
-    int              activeHeight;
-
-    if (NULL == pStreamConfig) {
-        //---------------------------------------------------------
-        // Save the stream configuration to handle resolution
-        //---------------------------------------------------------
-
-        // Get a pointer to the IAMStreamConfig interface used to control the camera resolution
-        hr = pFilter->QueryInterface(IID_IAMStreamConfig, (void **)&pStreamConfig);
-        if (S_OK == hr) {
-            AM_MEDIA_TYPE *pmt = NULL;
-            hr = pStreamConfig->GetFormat(&pmt);
-            if (SUCCEEDED(hr))
-            {
-                // Examine the media type for any information you need.
-                // DeleteMediaType(pmt);
-            }
-        }
-        else {
-            qDebug("MfController::getActiveResolution --> ERROR: Unable to access IAMStreamConfig interface.");
-            return -1;
-        }
-    }
-
-    hr = pStreamConfig->GetFormat(&pMediaType);
-    if (SUCCEEDED(hr))
-    {
-        // Examine the media type for any information you need.
-
-        if ((pMediaType->formattype == FORMAT_VideoInfo) &&
-            (pMediaType->cbFormat >= sizeof(VIDEOINFOHEADER)) &&
-            (pMediaType->pbFormat != NULL))
-        {
-            pVideoInfoHeader = (VIDEOINFOHEADER*)pMediaType->pbFormat;
-            activeWidth = pVideoInfoHeader->bmiHeader.biWidth;
-            activeHeight = pVideoInfoHeader->bmiHeader.biHeight;
-
-            qDebug() << "MfController::getActiveResolution --> active Resolution: " << activeWidth << ":" << activeHeight;
-
-            // addResolution(GrabberResolution(pinId, outputWidth, outputHeight, connected));
-        }
-
-
-
-        // DeleteMediaType(pmt);
-    }
-*/
-    return -1;
-}
-
-
-void MfController::setActiveResolution(int ac)
-{
-    /*
-    HRESULT hr = S_OK;
-    GrabberResolution  newResolution;
-    int iCount, iSize;
-    BYTE *pSCC = NULL;
-    AM_MEDIA_TYPE *pmt;
-
-    newResolution = getResolutions().at(ac);
-
-    if (NULL == pStreamConfig) {
-        //---------------------------------------------------------
-        // Save the stream configuration to handle resolution
-        //---------------------------------------------------------
-
-        // Get a pointer to the IAMStreamConfig interface used to control the camera resolution
-        hr = pFilter->QueryInterface(IID_IAMStreamConfig, (void **)&pStreamConfig);
-        if (S_OK == hr) {
-            AM_MEDIA_TYPE *pmt = NULL;
-            hr = pStreamConfig->GetFormat(&pmt);
-            if (SUCCEEDED(hr))
-            {
-                // Examine the media type for any information you need.
-                // DeleteMediaType(pmt);
-            }
-        }
-        else {
-            qDebug("MfController::getActiveResolution --> ERROR: Unable to access IAMStreamConfig interface.");
-            return;
-        }
-    }
-
-    hr = pStreamConfig->GetNumberOfCapabilities(&iCount, &iSize);
-
-    pSCC = new BYTE[iSize];
-    if (pSCC == NULL)
-    {
-        // TODO: Out of memory error.
-    }
-
-    // Get the first format.
-    hr = pStreamConfig->GetStreamCaps(0, &pmt, pSCC);
-    if (hr == S_OK)
-    {
-        // TODO: Examine the format. If it's not suitable for some
-        // reason, call GetStreamCaps with the next index value (up
-        // to iCount). Otherwise, set the format:
-        hr = pStreamConfig->SetFormat(pmt);
-        if (FAILED(hr))
-        {
-            // TODO: Error handling.
-        }
-        // DeleteMediaType(pmt);
-    }
-    delete [] pSCC;
-
-    */
 }
 
 /**************************************************************************
@@ -790,14 +522,14 @@ void MfController::setActiveResolution(int ac)
  *  http://msdn.microsoft.com/library/windows/desktop/dd407328.aspx:
  *  Values range from –10,000 to 10,000.
  **************************************************************************/
-/*
+
 bool MfController::getAutomaticBrightness()
 {
     HRESULT hr = S_OK;
     long flags = 0L;
     long bright_value = 0L;
 
-    hr = pQualityControl->Get(VideoProcAmp_Brightness, &bright_value, &flags);
+    hr = qualityControl->Get(VideoProcAmp_Brightness, &bright_value, &flags);
     Sleep(1000);
     if (hr != S_OK) {
         qDebug() << "MfController::getAutomaticBrightness --> ERROR: Unable to get Brightness property value. (Error 0x" << hr << ")";
@@ -826,7 +558,7 @@ void MfController::setAutomaticBrightness(bool ab)
         flags = VideoProcAmp_Flags_Manual;
     }
 
-    hr = pQualityControl->Set(VideoProcAmp_Brightness, bright_value, flags);
+    hr = qualityControl->Set(VideoProcAmp_Brightness, bright_value, flags);
     Sleep(1000);
     if (hr != S_OK) {
         qDebug() << "MfController::setAutomaticBrightness --> ERROR: Unable to set Brightness property value to " << ab << ". (Error 0x" << hr << ")";
@@ -840,7 +572,7 @@ int MfController::getBrightness()
     long flags = 0L;
     long bright_value = 0L;
 
-    hr = pQualityControl->Get(VideoProcAmp_Brightness, &bright_value, &flags);
+    hr = qualityControl->Get(VideoProcAmp_Brightness, &bright_value, &flags);
     Sleep(1000);
     if (hr != S_OK) {
         qDebug() << "MfController::getBrightness --> ERROR: Unable to get Brightness property value. (Error 0x" << hr << ")";
@@ -857,13 +589,13 @@ void MfController::setBrightness(int b)
     long flags = VideoProcAmp_Flags_Manual;
     long bright_value = b;
 
-    hr = pQualityControl->Set(VideoProcAmp_Brightness, (long)bright_value, flags);
+    hr = qualityControl->Set(VideoProcAmp_Brightness, (long)bright_value, flags);
     Sleep(1000);
     if (hr != S_OK) {
         qDebug() << "MfController::setBrightness --> ERROR: Unable to set Brightness property value to " << bright_value << ". (Error 0x" << hr << ")";
     }
 }
-*/
+
 /**************************************************************************
  * Contrast
  *
@@ -877,7 +609,7 @@ bool MfController::getAutomaticContrast()
     long flags = 0L;
     long contrast_value = 0L;
 
-    hr = pQualityControl->Get(VideoProcAmp_Contrast, &contrast_value, &flags);
+    hr = qualityControl->Get(VideoProcAmp_Contrast, &contrast_value, &flags);
     Sleep(1000);
     if (hr != S_OK) {
         qDebug() << "MfController::getAutomaticContrast --> ERROR: Unable to get Contrast property value. (Error 0x" << hr << ")";
@@ -906,13 +638,13 @@ void MfController::setAutomaticContrast(bool ac)
         flags = VideoProcAmp_Flags_Manual;
     }
 
-    hr = pQualityControl->Set(VideoProcAmp_Contrast, contrast_value, flags);
+    hr = qualityControl->Set(VideoProcAmp_Contrast, contrast_value, flags);
     Sleep(1000);
     if (hr != S_OK) {
         qDebug() << "MfController::setAutomaticContrast --> ERROR: Unable to set Contrast property value to " << ac << ". (Error 0x" << hr << ")";
     }
 }
-
+*/
 
 int MfController::getContrast()
 {
@@ -920,7 +652,7 @@ int MfController::getContrast()
     long flags = 0L;
     long contrast_value = 0L;
 
-    hr = pQualityControl->Get(VideoProcAmp_Contrast, &contrast_value, &flags);
+    hr = qualityControl->Get(VideoProcAmp_Contrast, &contrast_value, &flags);
     Sleep(1000);
     if (hr != S_OK) {
         qDebug() << "MfController::getContrast --> ERROR: Unable to get Contrast property value. (Error 0x" << hr << ")";
@@ -937,13 +669,13 @@ void MfController::setContrast(int c)
     long flags = VideoProcAmp_Flags_Manual;
     long contrast_value = c;
 
-    hr = pQualityControl->Set(VideoProcAmp_Contrast, contrast_value, flags);
+    hr = qualityControl->Set(VideoProcAmp_Contrast, contrast_value, flags);
     Sleep(1000);
     if (hr != S_OK) {
         qDebug() << "MfController::setContrast --> ERROR: Unable to set Contrast property value to " << contrast_value << ". (Error 0x" << hr << ")";
     }
 }
-*/
+
 /**************************************************************************
  * Saturation
  *
@@ -957,7 +689,7 @@ bool MfController::getAutomaticSaturation()
     long flags = 0L;
     long saturation_value = 0L;
 
-    hr = pQualityControl->Get(VideoProcAmp_Saturation, &saturation_value, &flags);
+    hr = qualityControl->Get(VideoProcAmp_Saturation, &saturation_value, &flags);
     Sleep(1000);
     if (hr != S_OK) {
         qDebug() << "MfController::getAutomaticSaturation --> ERROR: Unable to get Saturation property value. (Error 0x" << hr << ")";
@@ -986,13 +718,13 @@ void MfController::setAutomaticSaturation(bool as)
         flags = VideoProcAmp_Flags_Manual;
     }
 
-    hr = pQualityControl->Set(VideoProcAmp_Saturation, saturation_value, flags);
+    hr = qualityControl->Set(VideoProcAmp_Saturation, saturation_value, flags);
     Sleep(1000);
     if (hr != S_OK) {
         qDebug() << "MfController::setAutomaticSaturation --> ERROR: Unable to set Saturation property value to " << as << ". (Error 0x" << hr << ")";
     }
 }
-
+*/
 
 int MfController::getSaturation()
 {
@@ -1000,7 +732,7 @@ int MfController::getSaturation()
     long flags = 0L;
     long saturation_value = 0L;
 
-    hr = pQualityControl->Get(VideoProcAmp_Saturation, &saturation_value, &flags);
+    hr = qualityControl->Get(VideoProcAmp_Saturation, &saturation_value, &flags);
     Sleep(1000);
     if (hr != S_OK) {
         qDebug() << "MfController::getSaturation --> ERROR: Unable to get Saturation property value. (Error 0x" << hr << ")";
@@ -1017,13 +749,13 @@ void MfController::setSaturation(int s)
     long flags = VideoProcAmp_Flags_Manual;
     long saturation_value = s;
 
-    hr = pQualityControl->Set(VideoProcAmp_Saturation, saturation_value, flags);
+    hr = qualityControl->Set(VideoProcAmp_Saturation, saturation_value, flags);
     Sleep(1000);
     if (hr != S_OK) {
         qDebug() << "MfController::setSaturation --> ERROR: Unable to set Saturation property value to " << saturation_value << ". (Error 0x" << hr << ")";
     }
 }
-*/
+
 /**************************************************************************
  * Hue
  *
@@ -1037,7 +769,7 @@ bool MfController::getAutomaticHue()
     long flags = 0L;
     long hue_value;
 
-    hr = pQualityControl->Get(VideoProcAmp_Hue, &hue_value, &flags);
+    hr = qualityControl->Get(VideoProcAmp_Hue, &hue_value, &flags);
     Sleep(1000);
     if (hr != S_OK) {
         qDebug() << "MfController::getAutomaticHue --> ERROR: Unable to get Hue property value. (Error 0x" << hr << ")";
@@ -1066,13 +798,13 @@ void MfController::setAutomaticHue(bool ah)
         flags = VideoProcAmp_Flags_Manual;
     }
 
-    hr = pQualityControl->Set(VideoProcAmp_Hue, hue_value, flags);
+    hr = qualityControl->Set(VideoProcAmp_Hue, hue_value, flags);
     Sleep(1000);
     if (hr != S_OK) {
         qDebug() << "MfController::setAutomaticHue --> ERROR: Unable to set Hue property value to " << ah << ". (Error 0x" << hr << ")";
     }
 }
-
+*/
 
 int MfController::getHue()
 {
@@ -1080,7 +812,7 @@ int MfController::getHue()
     long flags = 0L;
     long hue_value = 0L;
 
-    hr = pQualityControl->Get(VideoProcAmp_Hue, &hue_value, &flags);
+    hr = qualityControl->Get(VideoProcAmp_Hue, &hue_value, &flags);
     Sleep(1000);
     if (hr != S_OK) {
         qDebug() << "MfController::getHue --> ERROR: Unable to get Hue property value. (Error 0x" << hr << ")";
@@ -1097,13 +829,13 @@ void MfController::setHue(int h)
     long flags = VideoProcAmp_Flags_Manual;
     long hue_value = h;
 
-    hr = pQualityControl->Set(VideoProcAmp_Hue, hue_value, flags);
+    hr = qualityControl->Set(VideoProcAmp_Hue, hue_value, flags);
     Sleep(1000);
     if (hr != S_OK) {
         qDebug() << "MfController::setHue --> ERROR: Unable to set Hue property value to " << hue_value << ". (Error 0x" << hr << ")";
     }
 }
-*/
+
 /**************************************************************************
  * Gamma
  *
@@ -1117,7 +849,7 @@ bool MfController::getAutomaticGamma()
     long flags = 0L;
     long gamma_value = 0L;
 
-    hr = pQualityControl->Get(VideoProcAmp_Gamma, &gamma_value, &flags);
+    hr = qualityControl->Get(VideoProcAmp_Gamma, &gamma_value, &flags);
     Sleep(1000);
     if (hr != S_OK) {
         qDebug() << "MfController::getAutomaticGamma --> ERROR: Unable to get Gamma property value. (Error 0x" << hr << ")";
@@ -1146,13 +878,13 @@ void MfController::setAutomaticGamma(bool ag)
         flags = VideoProcAmp_Flags_Manual;
     }
 
-    hr = pQualityControl->Set(VideoProcAmp_Gamma, gamma_value, flags);
+    hr = qualityControl->Set(VideoProcAmp_Gamma, gamma_value, flags);
     Sleep(1000);
     if (hr != S_OK) {
         qDebug() << "MfController::setAutomaticGamma --> ERROR: Unable to set Gamma property value to " << ag << ". (Error 0x" << hr << ")";
     }
 }
-
+*/
 
 int MfController::getGamma()
 {
@@ -1160,7 +892,7 @@ int MfController::getGamma()
     long flags = 0L;
     long gamma_value = 0L;
 
-    hr = pQualityControl->Get(VideoProcAmp_Gamma, &gamma_value, &flags);
+    hr = qualityControl->Get(VideoProcAmp_Gamma, &gamma_value, &flags);
     Sleep(1000);
     if (hr != S_OK) {
         qDebug() << "MfController::getGamma --> ERROR: Unable to get Gamma property value. (Error 0x" << hr << ")";
@@ -1177,13 +909,13 @@ void MfController::setGamma(int g)
     long flags = VideoProcAmp_Flags_Manual;
     long gamma_value = g;
 
-    hr = pQualityControl->Set(VideoProcAmp_Gamma, gamma_value, flags);
+    hr = qualityControl->Set(VideoProcAmp_Gamma, gamma_value, flags);
     Sleep(1000);
     if (hr != S_OK) {
         qDebug() << "MfController::setGamma --> ERROR: Unable to set Gamma property value to " << gamma_value << ". (Error 0x" << hr << ")";
     }
 }
-*/
+
 /**************************************************************************
  * Sharpness
  *
@@ -1197,7 +929,7 @@ bool MfController::getAutomaticSharpness()
     long flags = 0L;
     long sharpness_value = 0L;
 
-    hr = pQualityControl->Get(VideoProcAmp_Sharpness, &sharpness_value, &flags);
+    hr = qualityControl->Get(VideoProcAmp_Sharpness, &sharpness_value, &flags);
     Sleep(1000);
     if (hr != S_OK) {
         qDebug() << "MfController::getAutomaticSharpness --> ERROR: Unable to get Sharpness property value. (Error 0x" << hr << ")";
@@ -1226,13 +958,13 @@ void MfController::setAutomaticSharpness(bool as)
         flags = VideoProcAmp_Flags_Manual;
     }
 
-    hr = pQualityControl->Set(VideoProcAmp_Sharpness, sharpness_value, flags);
+    hr = qualityControl->Set(VideoProcAmp_Sharpness, sharpness_value, flags);
     Sleep(1000);
     if (hr != S_OK) {
         qDebug() << "MfController::setAutomaticSharpness --> ERROR: Unable to set Sharpness property value to " << as << ". (Error 0x" << hr << ")";
     }
 }
-
+*/
 
 int MfController::getSharpness()
 {
@@ -1240,7 +972,7 @@ int MfController::getSharpness()
     long flags = 0L;
     long sharpness_value = 0L;
 
-    hr = pQualityControl->Get(VideoProcAmp_Sharpness, &sharpness_value, &flags);
+    hr = qualityControl->Get(VideoProcAmp_Sharpness, &sharpness_value, &flags);
     Sleep(1000);
     if (hr != S_OK) {
         qDebug() << "MfController::getSharpness --> ERROR: Unable to get Sharpness property value. (Error 0x" << hr << ")";
@@ -1257,13 +989,13 @@ void MfController::setSharpness(int s)
     long flags = VideoProcAmp_Flags_Manual;
     long sharpness_value = s;
 
-    hr = pQualityControl->Set(VideoProcAmp_Sharpness, sharpness_value, flags);
+    hr = qualityControl->Set(VideoProcAmp_Sharpness, sharpness_value, flags);
     Sleep(1000);
     if (hr != S_OK) {
         qDebug() << "MfController::setSharpness --> ERROR: Unable to set Sharpness property value to " << sharpness_value << ". (Error 0x" << hr << ")";
     }
 }
-*/
+
 /**************************************************************************
  * Backlight Compensation
  *
@@ -1277,7 +1009,7 @@ bool MfController::getAutomaticBacklight()
     long flags = 0L;
     long backlight_value = 0L;
 
-    hr = pQualityControl->Get(VideoProcAmp_BacklightCompensation, &backlight_value, &flags);
+    hr = qualityControl->Get(VideoProcAmp_BacklightCompensation, &backlight_value, &flags);
     Sleep(1000);
     if (hr != S_OK) {
         qDebug() << "MfController::getAutomaticBacklight --> ERROR: Unable to get BacklightCompensation property value. (Error 0x" << hr << ")";
@@ -1306,13 +1038,13 @@ void MfController::setAutomaticBacklight(bool ab)
         flags = VideoProcAmp_Flags_Manual;
     }
 
-    hr = pQualityControl->Set(VideoProcAmp_BacklightCompensation, backlight_value, flags);
+    hr = qualityControl->Set(VideoProcAmp_BacklightCompensation, backlight_value, flags);
     Sleep(1000);
     if (hr != S_OK) {
         qDebug() << "MfController::setAutomaticBacklight --> ERROR: Unable to set BacklightCompensation property value to " << ab << ". (Error 0x" << hr << ")";
     }
 }
-
+*/
 
 int MfController::getBacklight()
 {
@@ -1320,7 +1052,7 @@ int MfController::getBacklight()
     long flags = 0L;
     long backlight_value = 0L;
 
-    hr = pQualityControl->Get(VideoProcAmp_BacklightCompensation, &backlight_value, &flags);
+    hr = qualityControl->Get(VideoProcAmp_BacklightCompensation, &backlight_value, &flags);
     Sleep(1000);
     if (hr != S_OK) {
         qDebug() << "MfController::getBacklight --> ERROR: Unable to get BacklightCompensation property value. (Error 0x" << hr << ")";
@@ -1337,13 +1069,13 @@ void MfController::setBacklight(int b)
     long flags = VideoProcAmp_Flags_Manual;
     long backlight_value = b;
 
-    hr = pQualityControl->Set(VideoProcAmp_BacklightCompensation, backlight_value, flags);
+    hr = qualityControl->Set(VideoProcAmp_BacklightCompensation, backlight_value, flags);
     Sleep(1000);
     if (hr != S_OK) {
         qDebug() << "MfController::setBacklight --> ERROR: Unable to set BacklightCompensation property value to " << backlight_value << ". (Error 0x" << hr << ")";
     }
 }
-*/
+
 /**************************************************************************
  * White Balance
  *
@@ -1357,7 +1089,7 @@ bool MfController::getAutomaticWhite()
     long flags = 0L;
     long white_value = 0L;
 
-    hr = pQualityControl->Get(VideoProcAmp_WhiteBalance, &white_value, &flags);
+    hr = qualityControl->Get(VideoProcAmp_WhiteBalance, &white_value, &flags);
     Sleep(1000);
     if (hr != S_OK) {
         qDebug() << "MfController::getAutomaticWhite --> ERROR: Unable to get WhiteBalance property value. (Error 0x" << hr << ")";
@@ -1386,13 +1118,13 @@ void MfController::setAutomaticWhite(bool aw)
         flags = VideoProcAmp_Flags_Manual;
     }
 
-    hr = pQualityControl->Set(VideoProcAmp_WhiteBalance, white_value, flags);
+    hr = qualityControl->Set(VideoProcAmp_WhiteBalance, white_value, flags);
     Sleep(1000);
     if (hr != S_OK) {
         qDebug() << "MfController::setAutomaticWhite --> ERROR: Unable to set WhiteBalance property value to " << aw << ". (Error 0x" << hr << ")";
     }
 }
-
+*/
 
 int MfController::getWhite()
 {
@@ -1400,7 +1132,7 @@ int MfController::getWhite()
     long flags = 0L;
     long white_value = 0L;
 
-    hr = pQualityControl->Get(VideoProcAmp_WhiteBalance, &white_value, &flags);
+    hr = qualityControl->Get(VideoProcAmp_WhiteBalance, &white_value, &flags);
     Sleep(1000);
     if (hr != S_OK) {
         qDebug() << "MfController::getWhite --> ERROR: Unable to get WhiteBalance property value. (Error 0x" << hr << ")";
@@ -1417,13 +1149,13 @@ void MfController::setWhite(int w)
     long flags = VideoProcAmp_Flags_Manual;
     long white_value = w;
 
-    hr = pQualityControl->Set(VideoProcAmp_WhiteBalance, white_value, flags);
+    hr = qualityControl->Set(VideoProcAmp_WhiteBalance, white_value, flags);
     Sleep(1000);
     if (hr != S_OK) {
         qDebug() << "MfController::setWhite --> ERROR: Unable to set WhiteBalance property value to " << white_value << ". (Error 0x" << hr << ")";
     }
 }
-*/
+
 /**************************************************************************
  * Gain
  *
@@ -1437,7 +1169,7 @@ bool MfController::getAutomaticGain()
     long flags = 0L;
     long gain_value = 0L;
 
-    hr = pQualityControl->Get(VideoProcAmp_Gain, &gain_value, &flags);
+    hr = qualityControl->Get(VideoProcAmp_Gain, &gain_value, &flags);
     Sleep(1000);
     if (hr != S_OK) {
         qDebug() << "MfController::getAutomaticGain --> ERROR: Unable to get Gain property value. (Error 0x" << hr << ")";
@@ -1466,13 +1198,13 @@ void MfController::setAutomaticGain(bool ag)
         flags = VideoProcAmp_Flags_Manual;
     }
 
-    hr = pQualityControl->Set(VideoProcAmp_Gain, gain_value, flags);
+    hr = qualityControl->Set(VideoProcAmp_Gain, gain_value, flags);
     Sleep(1000);
     if (hr != S_OK) {
         qDebug() << "MfController::setAutomaticGain --> ERROR: Unable to set Gain property value to " << ag << ". (Error 0x" << hr << ")";
     }
 }
-
+*/
 
 int MfController::getGain()
 {
@@ -1480,7 +1212,7 @@ int MfController::getGain()
     long flags = 0L;
     long gain_value = 0L;
 
-    hr = pQualityControl->Get(VideoProcAmp_Gain, &gain_value, &flags);
+    hr = qualityControl->Get(VideoProcAmp_Gain, &gain_value, &flags);
     Sleep(1000);
     if (hr != S_OK) {
         qDebug() << "MfController::getGain --> ERROR: Unable to get Gain property value. (Error 0x" << hr << ")";
@@ -1497,13 +1229,13 @@ void MfController::setGain(int g)
     long flags = VideoProcAmp_Flags_Manual;
     long gain_value = g;
 
-    hr = pQualityControl->Set(VideoProcAmp_Gain, gain_value, flags);
+    hr = qualityControl->Set(VideoProcAmp_Gain, gain_value, flags);
     Sleep(1000);
     if (hr != S_OK) {
         qDebug() << "MfController::setGain --> ERROR: Unable to set Gain property value to " << gain_value << ". (Error 0x" << hr << ")";
     }
 }
-*/
+
 /**************************************************************************
  * Color Enable
  *
@@ -1517,7 +1249,7 @@ bool MfController::getAutomaticColor()
     long flags = 0L;
     long color_value = 0L;
 
-    hr = pQualityControl->Get(VideoProcAmp_ColorEnable, &color_value, &flags);
+    hr = qualityControl->Get(VideoProcAmp_ColorEnable, &color_value, &flags);
     Sleep(1000);
     if (hr != S_OK) {
         qDebug() << "MfController::getAutomaticColor --> ERROR: Unable to get ColorEnable property value. (Error 0x" << hr << ")";
@@ -1546,13 +1278,13 @@ void MfController::setAutomaticColor(bool ac)
         flags = VideoProcAmp_Flags_Manual;
     }
 
-    hr = pQualityControl->Set(VideoProcAmp_ColorEnable, color_value, flags);
+    hr = qualityControl->Set(VideoProcAmp_ColorEnable, color_value, flags);
     Sleep(1000);
     if (hr != S_OK) {
         qDebug() << "MfController::setAutomaticColor --> ERROR: Unable to set ColorEnable property value to " << ac << ". (Error 0x" << hr << ")";
     }
 }
-
+*/
 
 int MfController::getColor()
 {
@@ -1560,7 +1292,7 @@ int MfController::getColor()
     long flags = 0L;
     long color_value = 0L;
 
-    hr = pQualityControl->Get(VideoProcAmp_ColorEnable, &color_value, &flags);
+    hr = qualityControl->Get(VideoProcAmp_ColorEnable, &color_value, &flags);
     Sleep(1000);
     if (hr != S_OK) {
         qDebug() << "MfController::getColor --> ERROR: Unable to get ColorEnable property value. (Error 0x" << hr << ")";
@@ -1577,13 +1309,13 @@ void MfController::setColor(int c)
     long flags = VideoProcAmp_Flags_Manual;
     long color_value = c;
 
-    hr = pQualityControl->Set(VideoProcAmp_ColorEnable, color_value, flags);
+    hr = qualityControl->Set(VideoProcAmp_ColorEnable, color_value, flags);
     Sleep(1000);
     if (hr != S_OK) {
         qDebug() << "MfController::setColor --> ERROR: Unable to set ColorEnable property value to " << color_value << ". (Error 0x" << hr << ")";
     }
 }
-*/
+
 /**************************************************************************
  **************************************************************************
  * Camera control capabilities
@@ -1596,14 +1328,14 @@ void MfController::setColor(int c)
  *  msdn.microsoft.com/de-de/library/aa925325.aspx:
  *  The value range from -x to +y, for example: -3 = 1/8s, -2 = 1/4s, -1 = 1/2s, 0 = 1s, 1 = 2s, 2 = 4s, ...
  **************************************************************************/
-/*
+
 bool MfController::getAutomaticExposure()
 {
     HRESULT hr = S_OK;
     long flags = 0L;
     long exposure_value = 0L;
 
-    hr = pCameraControl->Get(CameraControl_Exposure, &exposure_value, &flags);
+    hr = cameraControl->Get(CameraControl_Exposure, &exposure_value, &flags);
     Sleep(1000);
     if (hr != S_OK) {
         qDebug() << "MfController::getAutomaticExposure --> ERROR: Unable to get Exposure property value. (Error 0x" << hr << ")";
@@ -1632,7 +1364,7 @@ void MfController::setAutomaticExposure(bool ae)
         flags = CameraControl_Flags_Manual;
     }
 
-    hr = pCameraControl->Set(CameraControl_Exposure, exposure_value, flags);
+    hr = cameraControl->Set(CameraControl_Exposure, exposure_value, flags);
     Sleep(1000);
     if (hr != S_OK) {
         qDebug() << "MfController::setAutomaticExposure --> ERROR: Unable to set Exposure property value to " << ae << ". (Error 0x" << hr << ")";
@@ -1646,7 +1378,7 @@ int MfController::getExposure()
     long flags = 0L;
     long exposure_value = 0L;
 
-    hr = pCameraControl->Get(CameraControl_Exposure, &exposure_value, &flags);
+    hr = cameraControl->Get(CameraControl_Exposure, &exposure_value, &flags);
     Sleep(1000);
     if (hr != S_OK) {
         qDebug() << "MfController::getExposure --> ERROR: Unable to get Exposure property value. (Error 0x" << hr << ")";
@@ -1663,27 +1395,27 @@ void MfController::setExposure(int e)
     long flags = CameraControl_Flags_Manual;
     long exposure_value = e;
 
-    hr = pCameraControl->Set(CameraControl_Exposure, exposure_value, flags);
+    hr = cameraControl->Set(CameraControl_Exposure, exposure_value, flags);
     Sleep(1000);
     if (hr != S_OK) {
         qDebug() << "MfController::setExposure --> ERROR: Unable to set Exposure property value to " << exposure_value << ". (Error 0x" << hr << ")";
     }
 }
-*/
+
 /**************************************************************************
  * Zoom
  *
  *  msdn.microsoft.com/de-de/library/aa925325.aspx:
  *  The value range from 10 to 600, and the default is spezific to the device.
  **************************************************************************/
-/*
+
 bool MfController::getAutomaticZoom()
 {
     HRESULT hr = S_OK;
     long flags = 0L;
     long zoom_value = 0L;
 
-    hr = pCameraControl->Get(CameraControl_Zoom, &zoom_value, &flags);
+    hr = cameraControl->Get(CameraControl_Zoom, &zoom_value, &flags);
     Sleep(1000);
     if (hr != S_OK) {
         qDebug() << "MfController::getAutomaticZoom --> ERROR: Unable to get Zoom property value. (Error 0x" << hr << ")";
@@ -1712,7 +1444,7 @@ void MfController::setAutomaticZoom(bool az)
         flags = CameraControl_Flags_Manual;
     }
 
-    hr = pCameraControl->Set(CameraControl_Zoom, zoom_value, flags);
+    hr = cameraControl->Set(CameraControl_Zoom, zoom_value, flags);
     Sleep(1000);
     if (hr != S_OK) {
         qDebug() << "MfController::setAutomaticZoom --> ERROR: Unable to set Zoom property value to " << az << ". (Error 0x" << hr << ")";
@@ -1725,7 +1457,7 @@ int MfController::getZoom()
     long flags = 0;
     long zoom_value = 0L;
 
-    hr = pCameraControl->Get(CameraControl_Zoom, &zoom_value, &flags);
+    hr = cameraControl->Get(CameraControl_Zoom, &zoom_value, &flags);
     Sleep(1000);
     if (hr != S_OK) {
         qDebug() << "MfController::getZoom --> ERROR: Unable to get Zoom property value. (Error 0x" << hr << ")";
@@ -1742,27 +1474,27 @@ void MfController::setZoom(int z)
     long flags = CameraControl_Flags_Manual;
     long zoom_value = z;
 
-    hr = pCameraControl->Set(CameraControl_Zoom, zoom_value, flags);
+    hr = cameraControl->Set(CameraControl_Zoom, zoom_value, flags);
     Sleep(1000);
     if (hr != S_OK) {
         qDebug() << "MfController::setZoom --> ERROR: Unable to set Zoom property value to " << zoom_value << ". (Error 0x" << hr << ")";
     }
 }
-*/
+
 /**************************************************************************
  * Focus
  *
  *  msdn.microsoft.com/de-de/library/aa925325.aspx:
  *  The range and default value are spezific to the device.
  **************************************************************************/
-/*
+
 bool MfController::getAutomaticFocus()
 {
     HRESULT hr = S_OK;
     long flags = 0L;
     long focus_value = 0L;
 
-    hr = pCameraControl->Get(CameraControl_Focus, &focus_value, &flags);
+    hr = cameraControl->Get(CameraControl_Focus, &focus_value, &flags);
     Sleep(1000);
     if (hr != S_OK) {
         qDebug() << "MfController::getAutomaticFocus --> ERROR: Unable to get Focus property value. (Error 0x" << hr << ")";
@@ -1791,7 +1523,7 @@ void MfController::setAutomaticFocus(bool af)
         flags = CameraControl_Flags_Manual;
     }
 
-    hr = pCameraControl->Set(CameraControl_Focus, focus_value, flags);
+    hr = cameraControl->Set(CameraControl_Focus, focus_value, flags);
     Sleep(1000);
     if (hr != S_OK) {
         qDebug() << "MfController::setAutomaticFocus --> ERROR: Unable to set Focus property value to " << af << ". (Error 0x" << hr << ")";
@@ -1804,7 +1536,7 @@ int MfController::getFocus()
     long flags = 0L;
     long focus_value = 0L;
 
-    hr = pCameraControl->Get(CameraControl_Focus, &focus_value, &flags);
+    hr = cameraControl->Get(CameraControl_Focus, &focus_value, &flags);
     Sleep(1000);
     if (hr != S_OK) {
         qDebug() << "MfController::getFocus --> ERROR: Unable to get Focus property value. (Error 0x" << hr << ")";
@@ -1821,13 +1553,13 @@ void MfController::setFocus(int f)
     long flags = CameraControl_Flags_Manual;
     long focus_value = f;
 
-    hr = pCameraControl->Set(CameraControl_Focus, focus_value, flags);
+    hr = cameraControl->Set(CameraControl_Focus, focus_value, flags);
     Sleep(1000);
     if (hr != S_OK) {
         qDebug() << "MfController::setFocus --> ERROR: Unable to set Focus property value to " << focus_value << ". (Error 0x" << hr << ")";
     }
 }
-*/
+
 /**************************************************************************
  * Pan
  *
@@ -1841,7 +1573,7 @@ bool MfController::getAutomaticPan()
     long flags = 0L;
     long pan_value = 0L;
 
-    hr = pCameraControl->Get(CameraControl_Pan, &pan_value, &flags);
+    hr = cameraControl->Get(CameraControl_Pan, &pan_value, &flags);
     Sleep(1000);
     if (hr != S_OK) {
         qDebug() << "MfController::getAutomaticPan --> ERROR: Unable to get Pan property value. (Error 0x" << hr << ")";
@@ -1870,13 +1602,13 @@ void MfController::setAutomaticPan(bool ap)
         flags = CameraControl_Flags_Manual;
     }
 
-    hr = pCameraControl->Set(CameraControl_Pan, pan_value, flags);
+    hr = cameraControl->Set(CameraControl_Pan, pan_value, flags);
     Sleep(1000);
     if (hr != S_OK) {
         qDebug() << "MfController::setAutomaticPan --> ERROR: Unable to set Pan property value to " << ap << ". (Error 0x" << hr << ")";
     }
 }
-
+*/
 
 int MfController::getPan()
 {
@@ -1884,7 +1616,7 @@ int MfController::getPan()
     long flags = 0L;
     long pan_value = 0L;
 
-    hr = pCameraControl->Get(CameraControl_Pan, &pan_value, &flags);
+    hr = cameraControl->Get(CameraControl_Pan, &pan_value, &flags);
     Sleep(1000);
     if (hr != S_OK) {
         qDebug() << "MfController::getPan --> ERROR: Unable to get Pan property value. (Error 0x" << hr << ")";
@@ -1901,13 +1633,13 @@ void MfController::setPan(int p)
     long flags = CameraControl_Flags_Manual;
     long pan_value = p;
 
-    hr = pCameraControl->Set(CameraControl_Pan, pan_value, flags);
+    hr = cameraControl->Set(CameraControl_Pan, pan_value, flags);
     Sleep(1000);
     if (hr != S_OK) {
         qDebug() << "MfController::setPan --> ERROR: Unable to set Pan property value to " << pan_value << ". (Error 0x" << hr << ")";
     }
 }
-*/
+
 /**************************************************************************
  * Tilt
  *
@@ -1921,7 +1653,7 @@ bool MfController::getAutomaticTilt()
     long flags = 0L;
     long tilt_value = 0L;
 
-    hr = pCameraControl->Get(CameraControl_Tilt, &tilt_value, &flags);
+    hr = cameraControl->Get(CameraControl_Tilt, &tilt_value, &flags);
     Sleep(1000);
     if (hr != S_OK) {
         qDebug() << "MfController::getAutomaticTilt --> ERROR: Unable to get Tilt property value. (Error 0x" << hr << ")";
@@ -1950,13 +1682,13 @@ void MfController::setAutomaticTilt(bool at)
         flags = CameraControl_Flags_Manual;
     }
 
-    hr = pCameraControl->Set(CameraControl_Tilt, tilt_value, flags);
+    hr = cameraControl->Set(CameraControl_Tilt, tilt_value, flags);
     Sleep(1000);
     if (hr != S_OK) {
         qDebug() << "MfController::setAutomaticTilt --> ERROR: Unable to set Tilt property value to " << at << ". (Error 0x" << hr << ")";
     }
 }
-
+*/
 
 int MfController::getTilt()
 {
@@ -1964,7 +1696,7 @@ int MfController::getTilt()
     long flags = 0L;
     long tilt_value = 0L;
 
-    hr = pCameraControl->Get(CameraControl_Tilt, &tilt_value, &flags);
+    hr = cameraControl->Get(CameraControl_Tilt, &tilt_value, &flags);
     Sleep(1000);
     if (hr != S_OK) {
         qDebug() << "MfController::getTilt --> ERROR: Unable to get Tilt property value. (Error 0x" << hr << ")";
@@ -1981,27 +1713,27 @@ void MfController::setTilt(int t)
     long flags = CameraControl_Flags_Manual;
     long tilt_value = t;
 
-    hr = pCameraControl->Set(CameraControl_Tilt, tilt_value, flags);
+    hr = cameraControl->Set(CameraControl_Tilt, tilt_value, flags);
     Sleep(1000);
     if (hr != S_OK) {
         qDebug() << "MfController::setTilt --> ERROR: Unable to set Zoom property value to " << tilt_value << ". (Error 0x" << hr << ")";
     }
 }
-*/
+
 /**************************************************************************
  * Iris
  *
  *  msdn.microsoft.com/de-de/library/aa925325.aspx:
  *  The value range in units of fstop * 10.
  **************************************************************************/
-/*
+
 bool MfController::getAutomaticIris()
 {
     HRESULT hr = S_OK;
     long flags = 0L;
     long iris_value = 0L;
 
-    hr = pCameraControl->Get(CameraControl_Iris, &iris_value, &flags);
+    hr = cameraControl->Get(CameraControl_Iris, &iris_value, &flags);
     Sleep(1000);
     if (hr != S_OK) {
         qDebug() << "MfController::getAutomaticIris --> ERROR: Unable to get Iris property value. (Error 0x" << hr << ")";
@@ -2030,7 +1762,7 @@ void MfController::setAutomaticIris(bool ai)
         flags = CameraControl_Flags_Manual;
     }
 
-    hr = pCameraControl->Set(CameraControl_Iris, iris_value, flags);
+    hr = cameraControl->Set(CameraControl_Iris, iris_value, flags);
     Sleep(1000);
     if (hr != S_OK) {
         qDebug() << "MfController::setAutomaticIris --> ERROR: Unable to set Iris property value to " << ai << ". (Error 0x" << hr << ")";
@@ -2044,7 +1776,7 @@ int MfController::getIris()
     long flags = 0L;
     long iris_value = 0L;
 
-    hr = pCameraControl->Get(CameraControl_Iris, &iris_value, &flags);
+    hr = cameraControl->Get(CameraControl_Iris, &iris_value, &flags);
     Sleep(1000);
     if (hr != S_OK) {
         qDebug() << "MfController::getIris --> ERROR: Unable to get Iris property value. (Error 0x" << hr << ")";
@@ -2061,27 +1793,27 @@ void MfController::setIris(int i)
     long flags = CameraControl_Flags_Manual;
     long iris_value = i;
 
-    hr = pCameraControl->Set(CameraControl_Iris, (long)iris_value, flags);
+    hr = cameraControl->Set(CameraControl_Iris, (long)iris_value, flags);
     Sleep(1000);
     if (hr != S_OK) {
         qDebug() << "MfController::setIris --> ERROR: Unable to set Iris property value to " << iris_value << ". (Error 0x" << hr << ")";
     }
 }
-*/
+
 /**************************************************************************
  * Roll
  *
  *  msdn.microsoft.com/de-de/library/aa925325.aspx:
  *  The value range from -180 to +180, and the default is zero.
  **************************************************************************/
-/*
+
 bool MfController::getAutomaticRoll()
 {
     HRESULT hr = S_OK;
     long flags = 0L;
     long roll_value = 0L;
 
-    hr = pCameraControl->Get(CameraControl_Roll, &roll_value, &flags);
+    hr = cameraControl->Get(CameraControl_Roll, &roll_value, &flags);
     Sleep(1000);
     if (hr != S_OK) {
         qDebug() << "MfController::getAutomaticRoll --> ERROR: Unable to get Roll property value. (Error 0x" << hr << ")";
@@ -2110,7 +1842,7 @@ void MfController::setAutomaticRoll(bool ar)
         flags = CameraControl_Flags_Manual;
     }
 
-    hr = pCameraControl->Set(CameraControl_Roll, roll_value, flags);
+    hr = cameraControl->Set(CameraControl_Roll, roll_value, flags);
     Sleep(1000);
     if (hr != S_OK) {
         qDebug() << "MfController::setAutomaticRoll --> ERROR: Unable to set Roll property value to " << ar << ". (Error 0x" << hr << ")";
@@ -2124,7 +1856,7 @@ int MfController::getRoll()
     long flags = 0L;
     long roll_value = 0L;
 
-    hr = pCameraControl->Get(CameraControl_Roll, &roll_value, &flags);
+    hr = cameraControl->Get(CameraControl_Roll, &roll_value, &flags);
     Sleep(1000);
     if (hr != S_OK) {
         qDebug() << "MfController::getRoll --> ERROR: Unable to get Roll property value. (Error 0x" << hr << ")";
@@ -2141,10 +1873,9 @@ void MfController::setRoll(int r)
     long flags = CameraControl_Flags_Manual;
     long roll_value = r;
 
-    hr = pCameraControl->Set(CameraControl_Roll, roll_value, flags);
+    hr = cameraControl->Set(CameraControl_Roll, roll_value, flags);
     Sleep(1000);
     if (hr != S_OK) {
         qDebug() << "MfController::setRoll --> ERROR: Unable to set Roll property value to " << roll_value << ". (Error 0x" << hr << ")";
     }
 }
-*/

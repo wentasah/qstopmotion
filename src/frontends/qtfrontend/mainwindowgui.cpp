@@ -862,6 +862,10 @@ bool MainWindowGUI::startGrabber()
 
     frontend->clearMessage();
 
+    if (0 != cameraControllerDialog) {
+        cameraControllerDialog->setUp();
+    }
+
     qDebug("MainWindowGUI::on --> End");
     return true;
 }
@@ -870,6 +874,10 @@ bool MainWindowGUI::startGrabber()
 void MainWindowGUI::stopGrabber()
 {
     qDebug("MainWindowGUI::off --> Start");
+
+    if (0 != cameraControllerDialog) {
+        cameraControllerDialog->tearDown();
+    }
 
     frameView->cameraOff();
 

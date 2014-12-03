@@ -44,12 +44,6 @@ GrabberController::~GrabberController()
 }
 
 
-bool GrabberController::init(const QString &id)
-{
-    return true;
-}
-
-
 int GrabberController::getControllerCapabilities()
 {
     return controllerCap;

@@ -164,7 +164,7 @@ bool GstreamerDirectShowUsbGrabber::initialization(QVector<ImageGrabberDevice*> 
                 }
                 if ((int)true == value) {
                     deviceController = new DirectShowController(0);
-                    if (deviceController->init(device->getDeviceId()))
+                    if (deviceController->initialization(this, device))
                     {
                         device->setController(deviceController);
 

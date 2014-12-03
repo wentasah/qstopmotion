@@ -21,6 +21,7 @@
 #ifndef GSTREAMERV4L2GRABBER_H
 #define GSTREAMERV4L2GRABBER_H
 
+#include "technical/grabber/imagegrabber.h"
 #include "technical/grabber/imagegrabberdevice.h"
 #include "technical/grabber/gstreamer/gstgrabber.h"
 

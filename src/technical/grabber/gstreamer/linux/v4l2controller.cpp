@@ -62,8 +62,8 @@ GrabberV4L2Controller::GrabberV4L2Controller(int cap)
     fd = -1;
     errno = -1;
 
-    // pCameraControl = NULL;
-    // pQualityControl = NULL;
+    grabber = NULL;
+    grabberDevice = NULL;
 
     qDebug("GrabberV4L2Controller::Constructor --> End");
 }
@@ -84,23 +84,26 @@ GrabberV4L2Controller::~GrabberV4L2Controller()
 }
 
 
-bool GrabberV4L2Controller::init(const QString &id)
+bool GrabberV4L2Controller::initialization(ImageGrabber* ig, ImageGrabberDevice* igd)
 {
     qDebug("GrabberV4L2Controller::init --> Start");
 
+    grabber = (GstreamerV4L2Grabber*)ig;
+    grabberDevice = igd;
+
     qDebug("GrabberV4L2Controller::init --> Open the device ...");
 
-    fd = v4l2_open(id.toAscii(), O_RDWR | O_NONBLOCK, 0);
+    fd = v4l2_open(grabberDevice->getDeviceId().toAscii(), O_RDWR | O_NONBLOCK, 0);
     if (fd < 0)
     {
-        qDebug() << "GrabberV4L2Controller::init --> Error opening V4L2 interface for " << id;
+        qDebug() << "GrabberV4L2Controller::init --> Error opening V4L2 interface for " << grabberDevice->getDeviceId();
         v4l2_close(fd);
         return false;
     }
 
     // fd = open(id.toAscii(), O_RDWR | O_NONBLOCK);
     // if (fd < 0) {
-    //     qDebug() << "GrabberV4L2Controller::init --> Error opening standard interface for " << id;
+    //     qDebug() << "GrabberV4L2Controller::init --> Error opening standard interface for " << grabberDevice->getDeviceId();
     //     close(fd);
     //     return false;
     // }
@@ -120,6 +123,22 @@ bool GrabberV4L2Controller::init(const QString &id)
     }
 
     qDebug("GrabberV4L2Controller::init --> End (Successful)");
+
+    return true;
+}
+
+
+bool GrabberV4L2Controller::setUp()
+{
+    qDebug() << "GrabberV4L2Controller::setUp --> Start (Empty)";
+
+    return true;
+}
+
+
+bool GrabberV4L2Controller::tearDown()
+{
+    qDebug() << "GrabberV4L2Controller::tearDown --> Start (Empty)";
 
     return true;
 }

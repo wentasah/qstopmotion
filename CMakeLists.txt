@@ -1,7 +1,7 @@
 ###############################################################################
 # CMake file for the qStopMotion project                                      #
 # (c) Ralf Lange, longsoft.de                                                 #
-# Last update: 2014-11-17                                                     #
+# Last update: 2014-12-02                                                     #
 #                                                                             #
 # Usage:                                                                      #
 #   * Qt-Creator (Windows, Linux)                                             #
@@ -270,6 +270,7 @@ set(SOURCES
     src/technical/grabber/gstreamer/windows/directshowusbgrabber.cpp
     src/technical/grabber/mediafoundation/mfcontroller.cpp
     src/technical/grabber/mediafoundation/mfgrabber.cpp
+    src/technical/grabber/mediafoundation/mfutil.cpp
 )
 ENDIF(WIN32)
 

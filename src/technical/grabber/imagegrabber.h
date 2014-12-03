@@ -24,12 +24,14 @@
 #define IMAGEGRABBER_H
 
 #include "frontends/frontend.h"
+#include "technical/grabber/imagegrabberdevice.h"
 
 #include <QtCore/QObject>
 #include <QtCore/QString>
 #include <QtCore/QVector>
 #include <QtGui/QImage>
 
+class ImageGrabberDevice;
 
 /**
  * Abstract class for the different video grabbers used by the SDLVideoView

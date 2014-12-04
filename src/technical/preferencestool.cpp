@@ -348,7 +348,8 @@ void PreferencesTool::setBasicPreferenceDefaults()
     setIntegerPreference("preferences", "gstreamerv4l2controller", false);
     setIntegerPreference("preferences", "gstreamerdv1394grabber", false);
     setIntegerPreference("preferences", "gstreamerdirectshowusbgrabber", true);
-    setIntegerPreference("preferences", "gstreamerdirectshowusbcontroller", false);
+    setIntegerPreference("preferences", "mediafoundationgrabber", true);
+    setIntegerPreference("preferences", "mediafoundationcontroller", false);
     setIntegerPreference("preferences", "gphoto2grabber", false);
     setIntegerPreference("preferences", "gphoto2controller", false);
 }

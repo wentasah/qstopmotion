@@ -1,7 +1,7 @@
 ###############################################################################
 # QtCreator file for the qStopMotion project                                  #
 # (c) Ralf Lange, longsoft.de                                                 #
-# Last update: 2014-12-02                                                     #
+# Last update: 2014-12-04                                                     #
 #                                                                             #
 # Please use CMake and the CMakeLists.txt file to build qStopMotion!          #
 ###############################################################################
@@ -86,7 +86,6 @@ HEADERS += src/config.h \
            src/technical/grabber/gstreamer/linux/dv1394grabber.h \
            src/technical/grabber/gstreamer/linux/v4l2controller.h \
            src/technical/grabber/gstreamer/linux/v4l2grabber.h \
-           src/technical/grabber/gstreamer/windows/directshowcontroller.h \
            src/technical/grabber/gstreamer/windows/directshow1394grabber.h \
            src/technical/grabber/gstreamer/windows/directshowusbgrabber.h \
            src/technical/grabber/mediafoundation/mfcontroller.h \
@@ -170,7 +169,6 @@ SOURCES += src/main.cpp \
            src/technical/grabber/gstreamer/linux/dv1394grabber.cpp \
            src/technical/grabber/gstreamer/linux/v4l2controller.cpp \
            src/technical/grabber/gstreamer/linux/v4l2grabber.cpp \
-           src/technical/grabber/gstreamer/windows/directshowcontroller.cpp \
            src/technical/grabber/gstreamer/windows/directshow1394grabber.cpp \
            src/technical/grabber/gstreamer/windows/directshowusbgrabber.cpp \
            src/technical/grabber/mediafoundation/mfcontroller.cpp \

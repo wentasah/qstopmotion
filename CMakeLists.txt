@@ -1,7 +1,7 @@
 ###############################################################################
 # CMake file for the qStopMotion project                                      #
 # (c) Ralf Lange, longsoft.de                                                 #
-# Last update: 2014-12-02                                                     #
+# Last update: 2014-12-04                                                     #
 #                                                                             #
 # Usage:                                                                      #
 #   * Qt-Creator (Windows, Linux)                                             #
@@ -89,7 +89,6 @@ set(HEADERS
 IF(WIN32)
 set(HEADERS
     ${HEADERS}
-    src/technical/grabber/gstreamer/windows/directshowcontroller.h
     src/technical/grabber/mediafoundation/mfcontroller.h
     src/technical/grabber/mediafoundation/mfutil.h
 )
@@ -265,7 +264,6 @@ set(SOURCES
 IF(WIN32)
 set(SOURCES
     ${SOURCES}
-    src/technical/grabber/gstreamer/windows/directshowcontroller.cpp
     src/technical/grabber/gstreamer/windows/directshow1394grabber.cpp
     src/technical/grabber/gstreamer/windows/directshowusbgrabber.cpp
     src/technical/grabber/mediafoundation/mfcontroller.cpp

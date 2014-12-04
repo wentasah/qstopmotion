@@ -54,8 +54,6 @@ GrabberWidget::GrabberWidget(Frontend *f, QWidget *parent)
     actualGstreamerDv1394Grabber           = false;
     gstreamerDirectShowUsbGrabberCheck     = 0;
     actualGstreamerDirectShowUsbGrabber    = false;
-    gstreamerDirectShowUsbControllerCheck  = 0;
-    actualGstreamerDirectShowUsbController = false;
     mediaFoundationGrabberCheck            = 0;
     actualMediaFoundationGrabber           = false;
     mediaFoundationControllerCheck         = 0;
@@ -111,9 +109,6 @@ void GrabberWidget::makeGUI()
     gstreamerDirectShowUsbGrabberCheck->setChecked(false);
     connect(gstreamerDirectShowUsbGrabberCheck, SIGNAL(stateChanged(int)), this, SLOT(changeGstreamerDirectShowUsbGrabberCheckState(int)));
 
-    gstreamerDirectShowUsbControllerCheck = new QCheckBox(tr("Camera Controller (Experimental)"));
-    gstreamerDirectShowUsbControllerCheck->setChecked(false);
-
     mediaFoundationGrabberCheck = new QCheckBox(tr("Microsoft Media Foundation Source"));
     mediaFoundationGrabberCheck->setChecked(false);
     connect(mediaFoundationGrabberCheck, SIGNAL(stateChanged(int)), this, SLOT(changeMediaFoundationGrabberCheckState(int)));
@@ -136,11 +131,10 @@ void GrabberWidget::makeGUI()
     grabberLayout->addWidget(gstreamerV4L2ControllerCheck, 2, 1, 1, 1);
     grabberLayout->addWidget(gstreamerDv1394GrabberCheck, 3, 0, 1, 2);
     grabberLayout->addWidget(gstreamerDirectShowUsbGrabberCheck, 4, 0, 1, 2);
-    grabberLayout->addWidget(gstreamerDirectShowUsbControllerCheck, 5, 1, 1, 1);
-    grabberLayout->addWidget(mediaFoundationGrabberCheck, 6, 0, 1, 2);
-    grabberLayout->addWidget(mediaFoundationControllerCheck, 7, 1, 1, 1);
-    grabberLayout->addWidget(gphoto2GrabberCheck, 8, 0, 1, 2);
-    grabberLayout->addWidget(gphoto2ControllerCheck, 9, 1, 1, 1);
+    grabberLayout->addWidget(mediaFoundationGrabberCheck, 5, 0, 1, 2);
+    grabberLayout->addWidget(mediaFoundationControllerCheck, 6, 1, 1, 1);
+    grabberLayout->addWidget(gphoto2GrabberCheck, 7, 0, 1, 2);
+    grabberLayout->addWidget(gphoto2ControllerCheck, 8, 1, 1, 1);
     grabberGroupBox->setLayout(grabberLayout);
 
     QVBoxLayout *mainLayout = new QVBoxLayout;
@@ -206,15 +200,8 @@ void GrabberWidget::initialize()
     actualGstreamerDirectShowUsbGrabber = value;
     gstreamerDirectShowUsbGrabberCheck->setChecked(actualGstreamerDirectShowUsbGrabber);
     changeGstreamerDirectShowUsbGrabberCheckState(actualGstreamerDirectShowUsbGrabber);
-
-    if (pref->getIntegerPreference("preferences", "gstreamerdirectshowusbcontroller", value) == false) {
-        value = false;
-    }
-    actualGstreamerDirectShowUsbController = value;
-    gstreamerDirectShowUsbControllerCheck->setChecked(actualGstreamerDirectShowUsbController);
 #else
     gstreamerDirectShowUsbGrabberCheck->hide();
-    gstreamerDirectShowUsbControllerCheck->hide();
 #endif
 
 #ifdef Q_WS_WIN
@@ -316,14 +303,6 @@ void GrabberWidget::apply()
         changes = true;
     }
 
-    bool newGstreamerDirectShowUsbController = gstreamerDirectShowUsbControllerCheck->isChecked();
-    if (newGstreamerDirectShowUsbController != actualGstreamerDirectShowUsbController) {
-        // DirectShow USB controller changed
-        pref->setIntegerPreference("preferences", "gstreamerdirectshowusbcontroller", newGstreamerDirectShowUsbController);
-        actualGstreamerDirectShowUsbController = newGstreamerDirectShowUsbController;
-        changes = true;
-    }
-
     bool newMediaFoundationGrabber = mediaFoundationGrabberCheck->isChecked();
     if (newMediaFoundationGrabber != actualMediaFoundationGrabber) {
         // Media Foundation grabber changed
@@ -376,7 +355,6 @@ void GrabberWidget::reset()
     gstreamerDv1394GrabberCheck->setChecked(actualGstreamerDv1394Grabber);
 
     gstreamerDirectShowUsbGrabberCheck->setChecked(actualGstreamerDirectShowUsbGrabber);
-    gstreamerDirectShowUsbControllerCheck->setChecked(actualGstreamerDirectShowUsbController);
 
     mediaFoundationGrabberCheck->setChecked(actualMediaFoundationGrabber);
     mediaFoundationControllerCheck->setChecked(actualMediaFoundationController);
@@ -399,14 +377,8 @@ void GrabberWidget::changeGstreamerV4L2GrabberCheckState(int newState)
 }
 
 
-void GrabberWidget::changeGstreamerDirectShowUsbGrabberCheckState(int newState)
+void GrabberWidget::changeGstreamerDirectShowUsbGrabberCheckState(int /* newState */)
 {
-    if (newState) {
-        gstreamerDirectShowUsbControllerCheck->setEnabled(true);
-    }
-    else {
-        gstreamerDirectShowUsbControllerCheck->setEnabled(false);
-    }
 }
 
 

@@ -123,7 +123,6 @@ private:
     QCheckBox    *gstreamerV4L2ControllerCheck;
     QCheckBox    *gstreamerDv1394GrabberCheck;
     QCheckBox    *gstreamerDirectShowUsbGrabberCheck;
-    QCheckBox    *gstreamerDirectShowUsbControllerCheck;
     QCheckBox    *mediaFoundationGrabberCheck;
     QCheckBox    *mediaFoundationControllerCheck;
     QCheckBox    *gphoto2GrabberCheck;
@@ -134,7 +133,6 @@ private:
     bool          actualGstreamerV4L2Controller;
     bool          actualGstreamerDv1394Grabber;
     bool          actualGstreamerDirectShowUsbGrabber;
-    bool          actualGstreamerDirectShowUsbController;
     bool          actualMediaFoundationGrabber;
     bool          actualMediaFoundationController;
     bool          actualGphoto2Grabber;

@@ -19,7 +19,6 @@
  ******************************************************************************/
 
 #include "directshowusbgrabber.h"
-#include "directshowcontroller.h"
 #include "technical/preferencestool.h"
 #include "technical/util.h"
 
@@ -56,9 +55,6 @@ bool GstreamerDirectShowUsbGrabber::initialization(QVector<ImageGrabberDevice*> 
 {
     qDebug("GstreamerDirectShowUsbGrabber::initialization --> Start");
 
-    PreferencesTool *pref = frontend->getPreferences();
-    int              value;
-
     const gchar *device_name = NULL;
     GstElementFactory *srcfactory = NULL;
     GstElement *src = NULL;
@@ -72,7 +68,6 @@ bool GstreamerDirectShowUsbGrabber::initialization(QVector<ImageGrabberDevice*> 
     GValueArray *values_id = NULL;
     int device_size;
     ImageGrabberDevice *device = NULL;
-    DirectShowController *deviceController = NULL;
 
     device_size = devices.size();
 
@@ -157,29 +152,6 @@ bool GstreamerDirectShowUsbGrabber::initialization(QVector<ImageGrabberDevice*> 
                 }
                 // Add the device to the device list
                 devices.append(device);
-
-                // Create grabber controller
-                if (pref->getIntegerPreference("preferences", "gstreamerdirectshowusbcontroller", value) == false) {
-                    value = false;
-                }
-                if ((int)true == value) {
-                    deviceController = new DirectShowController(0);
-                    if (deviceController->initialization(this, device))
-                    {
-                        device->setController(deviceController);
-
-                        if (deviceController->setResolutions(device) == false) {
-                            qDebug() << "GstreamerDirectShowUsbGrabber::initialization --> Cannot enumerate resolutions (" << errno << ")";
-                            // return false;
-                        }
-
-                    }
-                    else
-                    {
-                        delete deviceController;
-                        deviceController = NULL;
-                    }
-                }
 
                 if (values_id != NULL) {
                     qDebug() << "GstreamerDirectShowUsbGrabber::initialization --> device id " << i << " '" << devices[device_size]->getDeviceId() << "' (" << g_value_get_string(&value_id_string) << ")";

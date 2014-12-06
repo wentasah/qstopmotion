@@ -590,6 +590,13 @@ private slots:
      */
     void reset();
 
+    /**
+     * Slot for notified the camera controller to close the dialog.
+     *
+     * @brief close
+     */
+    void close();
+
 private:
     /**
      * Fill the combobox with the values.

@@ -338,6 +338,12 @@ public:
     virtual bool startGrabber() = 0;
 
     /**
+     * Abstract function to checks if the grabber is inited.
+     * @return true if it is inited, false otherwise
+     */
+    virtual bool isGrabberInited() = 0;
+
+    /**
      * Abstract function to turns off the webcamera/video import mode.
      */
     virtual void stopGrabber() = 0;

@@ -846,7 +846,7 @@ void MainWindowGUI::startDialog()
 
 bool MainWindowGUI::startGrabber()
 {
-    qDebug("MainWindowGUI::on --> Start");
+    qDebug("MainWindowGUI::startGrabber --> Start");
 
     frontend->showMessage(tr("Connecting camera..."));
     grabber->init();
@@ -863,17 +863,31 @@ bool MainWindowGUI::startGrabber()
     frontend->clearMessage();
 
     if (0 != cameraControllerDialog) {
-        cameraControllerDialog->setUp();
+        if (!cameraControllerDialog->isHidden()) {
+            cameraControllerDialog->setUp();
+        }
     }
 
-    qDebug("MainWindowGUI::on --> End");
+    qDebug("MainWindowGUI::startGrabber --> End");
     return true;
+}
+
+
+bool MainWindowGUI::isGrabberInited()
+{
+    qDebug("MainWindowGUI::isGrabberInited --> Start");
+
+    bool ret = grabber->isGrabberInited();
+
+    qDebug("MainWindowGUI::isGrabberInited --> End");
+
+    return ret;
 }
 
 
 void MainWindowGUI::stopGrabber()
 {
-    qDebug("MainWindowGUI::off --> Start");
+    qDebug("MainWindowGUI::stopGrabber --> Start");
 
     if (0 != cameraControllerDialog) {
         cameraControllerDialog->tearDown();
@@ -883,7 +897,7 @@ void MainWindowGUI::stopGrabber()
 
     grabber->finalize();
 
-    qDebug("MainWindowGUI::off --> End");
+    qDebug("MainWindowGUI::stopGrabber --> End");
 }
 
 
@@ -1714,6 +1728,11 @@ void MainWindowGUI::showCameraControllerDialog()
                                             200, height());
     }
     cameraControllerDialog->show();
+
+    if (frontend->isGrabberInited()) {
+        cameraControllerDialog->setUp();
+    }
+
 }
 
 

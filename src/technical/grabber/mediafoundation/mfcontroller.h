@@ -50,6 +50,14 @@ public:
     ~MfController();
 
     /**
+     * Get the image grabber of the controller.
+     *
+     * @brief getImageGrabber
+     * @return The image grabber or null.
+     */
+    ImageGrabber* getImageGrabber();
+
+    /**
      * Initialize the grabber controller.
      * @param ig The image grabber of the controller.
      * @param igd The image grabber device of the controller.

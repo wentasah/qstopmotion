@@ -84,6 +84,12 @@ GrabberV4L2Controller::~GrabberV4L2Controller()
 }
 
 
+ImageGrabber* GrabberV4L2Controller::getImageGrabber()
+{
+    return grabber;
+}
+
+
 bool GrabberV4L2Controller::initialization(ImageGrabber* ig, ImageGrabberDevice* igd)
 {
     qDebug("GrabberV4L2Controller::init --> Start");

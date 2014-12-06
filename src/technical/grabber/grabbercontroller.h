@@ -65,6 +65,14 @@ public:
     virtual ~GrabberController();
 
     /**
+     * Get the image grabber of the controller.
+     *
+     * @brief getImageGrabber
+     * @return The image grabber or null.
+     */
+    virtual ImageGrabber* getImageGrabber() = 0;
+
+    /**
      * Initialize the grabber controller.
      * @param ig The image grabber of the controller.
      * @param igd The image grabber device of the controller.

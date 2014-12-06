@@ -373,6 +373,12 @@ public:
     bool startGrabber();
 
     /**
+     * Checks if the grabber is inited.
+     * @return true if it is inited, false otherwise
+     */
+    bool isGrabberInited();
+
+    /**
      * Turns off the webcamera/video import mode.
      */
     void stopGrabber();

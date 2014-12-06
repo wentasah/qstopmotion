@@ -47,6 +47,12 @@ GphotoController::~GphotoController()
 }
 
 
+ImageGrabber* GphotoController::getImageGrabber()
+{
+    return grabber;
+}
+
+
 bool GphotoController::initialization(ImageGrabber* ig, ImageGrabberDevice* igd)
 {
     qDebug("GphotoController::init --> Start");

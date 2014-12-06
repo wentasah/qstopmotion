@@ -711,9 +711,22 @@ bool QtFrontend::startGrabber()
 {
     bool ret;
 
-    qDebug("QtFrontend::on --> Start");
+    qDebug("QtFrontend::startGrabber --> Start");
 
     ret = mw->startGrabber();
+
+    qDebug("QtFrontend::startGrabber --> End");
+    return ret;
+}
+
+
+bool QtFrontend::isGrabberInited()
+{
+    bool ret;
+
+    qDebug("QtFrontend::on --> Start");
+
+    ret = mw->isGrabberInited();
 
     qDebug("QtFrontend::on --> End");
     return ret;
@@ -722,11 +735,11 @@ bool QtFrontend::startGrabber()
 
 void QtFrontend::stopGrabber()
 {
-    qDebug("QtFrontend::off --> Start");
+    qDebug("QtFrontend::stopGrabber --> Start");
 
     mw->stopGrabber();
 
-    qDebug("QtFrontend::off --> End");
+    qDebug("QtFrontend::stopGrabber --> End");
 }
 
 

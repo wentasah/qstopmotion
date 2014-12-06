@@ -278,7 +278,8 @@ void CameraControllerDialog::makeGUI()
     connect(resetButton, SIGNAL(clicked()), this, SLOT(reset()));
 
     closeButton = new QPushButton("closeButton");
-    connect(closeButton, SIGNAL(clicked()), this, SLOT(reject()));
+    // connect(closeButton, SIGNAL(clicked()), this, SLOT(reject()));
+    connect(closeButton, SIGNAL(clicked()), this, SLOT(close()));
 
     QHBoxLayout *bottomLayout = new QHBoxLayout;
     bottomLayout->addWidget(resetButton);
@@ -413,13 +414,7 @@ void CameraControllerDialog::initialize()
     GrabberControlCapabilities *capabilities;
     bool                        checked;
     int                         value;
-    int                         progressMax = 17;
-    int                         progressValue = 0;
-    QProgressDialog             progress(tr("Restore Camera Settings..."), QString(), 0, progressMax);
 
-    progress.setWindowModality(Qt::WindowModal);
-
-    progress.setValue(progressValue++);
     capabilities = grabberController->getBrightnessCaps();
     if (capabilities->isAutomatic()) {
         qualityCount++;
@@ -453,7 +448,6 @@ void CameraControllerDialog::initialize()
         brightnessComboBox->setCurrentIndex(value);
     }
 
-    progress.setValue(progressValue++);
     capabilities = grabberController->getContrastCaps();
     if (capabilities->isAutomatic()) {
         qualityCount++;
@@ -487,7 +481,6 @@ void CameraControllerDialog::initialize()
         contrastComboBox->setCurrentIndex(value);
     }
 
-    progress.setValue(progressValue++);
     capabilities = grabberController->getSaturationCaps();
     if (capabilities->isAutomatic()) {
         qualityCount++;
@@ -521,7 +514,6 @@ void CameraControllerDialog::initialize()
         saturationComboBox->setCurrentIndex(value);
     }
 
-    progress.setValue(progressValue++);
     capabilities = grabberController->getHueCaps();
     if (capabilities->isAutomatic()) {
         qualityCount++;
@@ -555,7 +547,6 @@ void CameraControllerDialog::initialize()
         hueComboBox->setCurrentIndex(value);
     }
 
-    progress.setValue(progressValue++);
     capabilities = grabberController->getGammaCaps();
     if (capabilities->isAutomatic()) {
         qualityCount++;
@@ -589,7 +580,6 @@ void CameraControllerDialog::initialize()
         gammaComboBox->setCurrentIndex(value);
     }
 
-    progress.setValue(progressValue++);
     capabilities = grabberController->getSharpnessCaps();
     if (capabilities->isAutomatic()) {
         qualityCount++;
@@ -623,7 +613,6 @@ void CameraControllerDialog::initialize()
         sharpnessComboBox->setCurrentIndex(value);
     }
 
-    progress.setValue(progressValue++);
     capabilities = grabberController->getBacklightCaps();
     if (capabilities->isAutomatic()) {
         qualityCount++;
@@ -657,7 +646,6 @@ void CameraControllerDialog::initialize()
         backlightComboBox->setCurrentIndex(value);
     }
 
-    progress.setValue(progressValue++);
     capabilities = grabberController->getWhiteCaps();
     if (capabilities->isAutomatic()) {
         qualityCount++;
@@ -691,7 +679,6 @@ void CameraControllerDialog::initialize()
         whiteComboBox->setCurrentIndex(value);
     }
 
-    progress.setValue(progressValue++);
     capabilities = grabberController->getGainCaps();
     if (capabilities->isAutomatic()) {
         qualityCount++;
@@ -725,7 +712,6 @@ void CameraControllerDialog::initialize()
         gainComboBox->setCurrentIndex(value);
     }
 
-    progress.setValue(progressValue++);
     capabilities = grabberController->getColorCaps();
     if (capabilities->isAutomatic()) {
         qualityCount++;
@@ -766,7 +752,6 @@ void CameraControllerDialog::initialize()
         qualityGroupBox->hide();
     }
 
-    progress.setValue(progressValue++);
     capabilities = grabberController->getExposureCaps();
     if (capabilities->isAutomatic()) {
         controlCount++;
@@ -800,7 +785,6 @@ void CameraControllerDialog::initialize()
         exposureComboBox->setCurrentIndex(value);
     }
 
-    progress.setValue(progressValue++);
     capabilities = grabberController->getZoomCaps();
     if (capabilities->isAutomatic()) {
         controlCount++;
@@ -834,7 +818,6 @@ void CameraControllerDialog::initialize()
         zoomComboBox->setCurrentIndex(value);
     }
 
-    progress.setValue(progressValue++);
     capabilities = grabberController->getFocusCaps();
     if (capabilities->isAutomatic()) {
         controlCount++;
@@ -868,7 +851,6 @@ void CameraControllerDialog::initialize()
         focusComboBox->setCurrentIndex(value);
     }
 
-    progress.setValue(progressValue++);
     capabilities = grabberController->getPanCaps();
     if (capabilities->isAutomatic()) {
         controlCount++;
@@ -902,7 +884,6 @@ void CameraControllerDialog::initialize()
         panComboBox->setCurrentIndex(value);
     }
 
-    progress.setValue(progressValue++);
     capabilities = grabberController->getTiltCaps();
     if (capabilities->isAutomatic()) {
         controlCount++;
@@ -936,7 +917,6 @@ void CameraControllerDialog::initialize()
         tiltComboBox->setCurrentIndex(value);
     }
 
-    progress.setValue(progressValue++);
     capabilities = grabberController->getIrisCaps();
     if (capabilities->isAutomatic()) {
         controlCount++;
@@ -970,7 +950,6 @@ void CameraControllerDialog::initialize()
         irisComboBox->setCurrentIndex(value);
     }
 
-    progress.setValue(progressValue++);
     capabilities = grabberController->getRollCaps();
     if (capabilities->isAutomatic()) {
         controlCount++;
@@ -1025,9 +1004,17 @@ bool CameraControllerDialog::setUp()
     GrabberControlCapabilities *capabilities;
     bool                        checked;
     int                         value;
+    int                         progressMax = 17;
+    int                         progressValue = 0;
+
+    QProgressDialog             progress(tr("Restore Camera Settings..."), QString(), 0, progressMax);
+
+    progress.setWindowModality(Qt::WindowModal);
+    progress.show();
 
     grabberController->setUp();
 
+    progress.setValue(progressValue++);
     capabilities = grabberController->getBrightnessCaps();
     if (capabilities->isAutomatic()) {
         brightnessCheckBox->setEnabled(true);
@@ -1053,6 +1040,7 @@ bool CameraControllerDialog::setUp()
         changeBrightness(value, false);
     }
 
+    progress.setValue(progressValue++);
     capabilities = grabberController->getContrastCaps();
     if (capabilities->isAutomatic()) {
         contrastCheckBox->setEnabled(true);
@@ -1078,6 +1066,7 @@ bool CameraControllerDialog::setUp()
         changeContrast(value, false);
     }
 
+    progress.setValue(progressValue++);
     capabilities = grabberController->getSaturationCaps();
     if (capabilities->isAutomatic()) {
         saturationCheckBox->setEnabled(true);
@@ -1103,6 +1092,7 @@ bool CameraControllerDialog::setUp()
         changeSaturation(value, false);
     }
 
+    progress.setValue(progressValue++);
     capabilities = grabberController->getHueCaps();
     if (capabilities->isAutomatic()) {
         hueCheckBox->setEnabled(true);
@@ -1128,6 +1118,7 @@ bool CameraControllerDialog::setUp()
         changeHue(value, false);
     }
 
+    progress.setValue(progressValue++);
     capabilities = grabberController->getGammaCaps();
     if (capabilities->isAutomatic()) {
         gammaCheckBox->setEnabled(true);
@@ -1153,6 +1144,7 @@ bool CameraControllerDialog::setUp()
         changeGamma(value, false);
     }
 
+    progress.setValue(progressValue++);
     capabilities = grabberController->getSharpnessCaps();
     if (capabilities->isAutomatic()) {
         sharpnessCheckBox->setEnabled(true);
@@ -1178,6 +1170,7 @@ bool CameraControllerDialog::setUp()
         changeSharpness(value, false);
     }
 
+    progress.setValue(progressValue++);
     capabilities = grabberController->getBacklightCaps();
     if (capabilities->isAutomatic()) {
         backlightCheckBox->setEnabled(true);
@@ -1203,6 +1196,7 @@ bool CameraControllerDialog::setUp()
         changeBacklight(value, false);
     }
 
+    progress.setValue(progressValue++);
     capabilities = grabberController->getWhiteCaps();
     if (capabilities->isAutomatic()) {
         whiteCheckBox->setEnabled(true);
@@ -1229,6 +1223,7 @@ bool CameraControllerDialog::setUp()
         changeWhite(value, false);
     }
 
+    progress.setValue(progressValue++);
     capabilities = grabberController->getGainCaps();
     if (capabilities->isAutomatic()) {
         gainCheckBox->setEnabled(true);
@@ -1254,6 +1249,7 @@ bool CameraControllerDialog::setUp()
         changeGain(value, false);
     }
 
+    progress.setValue(progressValue++);
     capabilities = grabberController->getColorCaps();
     if (capabilities->isAutomatic()) {
         colorCheckBox->setEnabled(true);
@@ -1279,6 +1275,7 @@ bool CameraControllerDialog::setUp()
         changeColor(value, false);
     }
 
+    progress.setValue(progressValue++);
     capabilities = grabberController->getExposureCaps();
     if (capabilities->isAutomatic()) {
         exposureCheckBox->setEnabled(true);
@@ -1304,6 +1301,7 @@ bool CameraControllerDialog::setUp()
         changeExposure(value, false);
     }
 
+    progress.setValue(progressValue++);
     capabilities = grabberController->getZoomCaps();
     if (capabilities->isAutomatic()) {
         zoomCheckBox->setEnabled(true);
@@ -1329,6 +1327,7 @@ bool CameraControllerDialog::setUp()
         changeZoom(value, false);
     }
 
+    progress.setValue(progressValue++);
     capabilities = grabberController->getFocusCaps();
     if (capabilities->isAutomatic()) {
         focusCheckBox->setEnabled(true);
@@ -1354,6 +1353,7 @@ bool CameraControllerDialog::setUp()
         changeFocus(value, false);
     }
 
+    progress.setValue(progressValue++);
     capabilities = grabberController->getPanCaps();
     if (capabilities->isAutomatic()) {
         panCheckBox->setEnabled(true);
@@ -1379,6 +1379,7 @@ bool CameraControllerDialog::setUp()
         changePan(value, false);
     }
 
+    progress.setValue(progressValue++);
     capabilities = grabberController->getTiltCaps();
     if (capabilities->isAutomatic()) {
         tiltCheckBox->setEnabled(true);
@@ -1404,6 +1405,7 @@ bool CameraControllerDialog::setUp()
         changeTilt(value, false);
     }
 
+    progress.setValue(progressValue++);
     capabilities = grabberController->getIrisCaps();
     if (capabilities->isAutomatic()) {
         irisCheckBox->setEnabled(true);
@@ -1429,6 +1431,7 @@ bool CameraControllerDialog::setUp()
         changeIris(value, false);
     }
 
+    progress.setValue(progressValue++);
     capabilities = grabberController->getRollCaps();
     if (capabilities->isAutomatic()) {
         rollCheckBox->setEnabled(true);
@@ -1453,6 +1456,9 @@ bool CameraControllerDialog::setUp()
         }
         changeRoll(value, false);
     }
+
+    progress.setValue(progressValue);
+    progress.hide();
 
     qDebug() << "CameraControllerDialog::setUp --> End";
 
@@ -2559,6 +2565,7 @@ void CameraControllerDialog::reset()
     QProgressDialog             progress(tr("Reset Camera Settings..."), tr("Abort Reset"), 0, progressMax);
 
     progress.setWindowModality(Qt::WindowModal);
+    progress.show();
 
     progress.setValue(progressValue++);
     if (progress.wasCanceled()) {
@@ -2748,6 +2755,23 @@ void CameraControllerDialog::reset()
     }
 
     progress.setValue(progressMax);
+    progress.hide();
 
     qDebug() << "CameraControllerDialog::reset --> End";
 }
+
+
+void CameraControllerDialog::close()
+{
+    qDebug("CameraControllerDialog::close --> Start");
+
+    setFocus();
+
+    // Disable the controlls an the tear down the grabber controller
+    tearDown();
+
+    this->hide();
+
+    qDebug("CameraControllerDialog::close --> End");
+}
+

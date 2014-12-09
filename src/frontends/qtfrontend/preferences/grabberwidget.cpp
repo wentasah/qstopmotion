@@ -156,11 +156,16 @@ void GrabberWidget::initialize()
     int              value;
 
     // GStreamer video test device
-    if (pref->getIntegerPreference("preferences", "gstreamervideotestgrabber", value) == false) {
-        value = false;
+    if (frontend->isGstreamerInstalled()) {
+        if (pref->getIntegerPreference("preferences", "gstreamervideotestgrabber", value) == false) {
+            value = false;
+        }
+        actualGstreamerVideoTestGrabber = value;
+        gstreamerVideoTestGrabberCheck->setChecked(actualGstreamerVideoTestGrabber);
     }
-    actualGstreamerVideoTestGrabber = value;
-    gstreamerVideoTestGrabberCheck->setChecked(actualGstreamerVideoTestGrabber);
+    else {
+        gstreamerVideoTestGrabberCheck->hide();
+    }
 
 #ifdef Q_WS_X11
     // GStreamer video4linux2 device
@@ -183,23 +188,33 @@ void GrabberWidget::initialize()
 
 #ifdef Q_WS_X11
     // GStreamer dv1394 device
-    if (pref->getIntegerPreference("preferences", "gstreamerdv1394grabber", value) == false) {
-        value = false;
+    if (frontend->isGstreamerInstalled()) {
+        if (pref->getIntegerPreference("preferences", "gstreamerdv1394grabber", value) == false) {
+            value = false;
+        }
+        actualGstreamerDv1394Grabber = value;
+        gstreamerDv1394GrabberCheck->setChecked(actualGstreamerDv1394Grabber);
     }
-    actualGstreamerDv1394Grabber = value;
-    gstreamerDv1394GrabberCheck->setChecked(actualGstreamerDv1394Grabber);
+    else {
+        gstreamerDv1394GrabberCheck->hide();
+    }
 #else
     gstreamerDv1394GrabberCheck->hide();
 #endif
 
 #ifdef Q_WS_WIN
-    // GStreamer dierctshow USB device
-    if (pref->getIntegerPreference("preferences", "gstreamerdirectshowusbgrabber", value) == false) {
-        value = true;
+    // GStreamer directshow USB device
+    if (frontend->isGstreamerInstalled()) {
+        if (pref->getIntegerPreference("preferences", "gstreamerdirectshowusbgrabber", value) == false) {
+            value = true;
+        }
+        actualGstreamerDirectShowUsbGrabber = value;
+        gstreamerDirectShowUsbGrabberCheck->setChecked(actualGstreamerDirectShowUsbGrabber);
+        changeGstreamerDirectShowUsbGrabberCheckState(actualGstreamerDirectShowUsbGrabber);
     }
-    actualGstreamerDirectShowUsbGrabber = value;
-    gstreamerDirectShowUsbGrabberCheck->setChecked(actualGstreamerDirectShowUsbGrabber);
-    changeGstreamerDirectShowUsbGrabberCheckState(actualGstreamerDirectShowUsbGrabber);
+    else {
+        gstreamerDirectShowUsbGrabberCheck->hide();
+    }
 #else
     gstreamerDirectShowUsbGrabberCheck->hide();
 #endif

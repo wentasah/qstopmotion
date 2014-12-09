@@ -743,6 +743,19 @@ void QtFrontend::stopGrabber()
 }
 
 
+bool QtFrontend::isGstreamerInstalled()
+{
+#ifdef Q_WS_WIN
+    QByteArray path = qgetenv("OSSBUILD_GSTREAMER_DIR");
+    if (path.isEmpty()) {
+        return false;
+    }
+#endif
+
+    return true;
+}
+
+
 const QVector<ImageGrabberDevice*> QtFrontend::getDevices()
 {
     return mw->getDevices();

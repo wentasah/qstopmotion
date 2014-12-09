@@ -384,6 +384,14 @@ public:
     void stopGrabber();
 
     /**
+     * Is the Gstreamer library installed on the operation system.
+     *
+     * @brief isGstreamerInstalled
+     * @return true if the library is installed.
+     */
+    bool isGstreamerInstalled();
+
+    /**
      * Get the possible video devices
      * @return Vector with the devices.
      */

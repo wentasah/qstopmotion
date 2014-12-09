@@ -128,13 +128,15 @@ void ImageGrabberFacade::initialization()
     clearDevices();
 
     // GStreamer video test device
-    if (pref->getIntegerPreference("preferences", "gstreamervideotestgrabber", value) == false) {
-        value = false;
-    }
-    if ((int)true == value) {
-        gstreamerVideoTestGrabber = new GstreamerVideoTestGrabber(frontend);
-        if (gstreamerVideoTestGrabber->initialization(devices)) {
-            isInitialized = true;
+    if (frontend->isGstreamerInstalled()) {
+        if (pref->getIntegerPreference("preferences", "gstreamervideotestgrabber", value) == false) {
+            value = false;
+        }
+        if ((int)true == value) {
+            gstreamerVideoTestGrabber = new GstreamerVideoTestGrabber(frontend);
+            if (gstreamerVideoTestGrabber->initialization(devices)) {
+                isInitialized = true;
+            }
         }
     }
 
@@ -166,13 +168,15 @@ void ImageGrabberFacade::initialization()
 
 #ifdef Q_WS_WIN
     // GStreamer directshow USB device
-    if (pref->getIntegerPreference("preferences", "gstreamerdirectshowusbgrabber", value) == false) {
-        value = true;
-    }
-    if ((int)true == value) {
-        gstreamerDirectShowUsbGrabber = new GstreamerDirectShowUsbGrabber(frontend);
-        if (gstreamerDirectShowUsbGrabber->initialization(devices)) {
-            isInitialized = true;
+    if (frontend->isGstreamerInstalled()) {
+        if (pref->getIntegerPreference("preferences", "gstreamerdirectshowusbgrabber", value) == false) {
+            value = true;
+        }
+        if ((int)true == value) {
+            gstreamerDirectShowUsbGrabber = new GstreamerDirectShowUsbGrabber(frontend);
+            if (gstreamerDirectShowUsbGrabber->initialization(devices)) {
+                isInitialized = true;
+            }
         }
     }
 #endif

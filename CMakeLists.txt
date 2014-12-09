@@ -1,7 +1,7 @@
 ###############################################################################
 # CMake file for the qStopMotion project                                      #
 # (c) Ralf Lange, longsoft.de                                                 #
-# Last update: 2014-12-04                                                     #
+# Last update: 2014-12-09                                                     #
 #                                                                             #
 # Usage:                                                                      #
 #   * Qt-Creator (Windows, Linux)                                             #
@@ -25,7 +25,7 @@
 
 project(qStopMotion)
 
-cmake_minimum_required(VERSION 2.8.2)
+cmake_minimum_required(VERSION 2.8.4)
 
 ###############################################################################
 # General project settings

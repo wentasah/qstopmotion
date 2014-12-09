@@ -278,12 +278,11 @@ void CameraControllerDialog::makeGUI()
     connect(resetButton, SIGNAL(clicked()), this, SLOT(reset()));
 
     closeButton = new QPushButton("closeButton");
-    // connect(closeButton, SIGNAL(clicked()), this, SLOT(reject()));
     connect(closeButton, SIGNAL(clicked()), this, SLOT(close()));
 
-    QHBoxLayout *bottomLayout = new QHBoxLayout;
+    QVBoxLayout *bottomLayout = new QVBoxLayout;
     bottomLayout->addWidget(resetButton);
-    bottomLayout->addStretch();
+    // bottomLayout->addStretch();
     bottomLayout->addWidget(closeButton);
 
     mainLayout = new QVBoxLayout;

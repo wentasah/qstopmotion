@@ -42,7 +42,7 @@ AnimationProject::AnimationProject(Frontend* f)
     videoSource              = 0;
     videoResolution          = -1;
     mixMode                  = 0;
-    mixCount                 = 0;
+    mixCount                 = 2;
     playbackCount            = 0;
 
     encoderApplication       = 0;
@@ -56,7 +56,7 @@ AnimationProject::AnimationProject(Frontend* f)
     liveViewFps              = 20;
     videoFormat              = 0;
     videoSize                = 0;
-    videoFps                 = 0;
+    videoFps                 = 12;
 
     useDefaultOutputFile     = false;
     unitMode                 = 0;
@@ -717,6 +717,9 @@ bool AnimationProject::readSettingsFromProject(QDomElement &settingsNode)
         else if (nodeName.compare("videofps") == 0) {
             QString tmp = currElement.text();
             videoFps = tmp.toInt();
+            if (videoFps == 0) {
+                videoFps = 12;
+            }
         }
         else if (nodeName.compare("usedefaultoutputfile") == 0) {
             QString tmp = currElement.text();

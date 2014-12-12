@@ -30,7 +30,6 @@
 #include "frontends/qtfrontend/frameview/frameviewimage.h"
 #include "technical/preferencestool.h"
 #include "technical/util.h"
-#include "technical/grabber/gstreamer/gstgrabber.h"
 #include "technical/videoencoder/ffmpegencoder.h"
 
 #include <QtCore/QtDebug>
@@ -1398,7 +1397,7 @@ void MainWindowGUI::exportToVideo()
 
     VideoEncoder    *enc = NULL;
     int              activeEncoderApplication;
-    int              useDefaultOutputFile;
+    bool             useDefaultOutputFile;
 
     recordingTab->checkCameraOff();
 
@@ -1425,7 +1424,7 @@ void MainWindowGUI::exportToVideo()
     }
 
     useDefaultOutputFile = this->frontend->getProject()->getUseDefaultOutputFile();
-    if (useDefaultOutputFile == 1) {
+    if (useDefaultOutputFile == false) {
         QStringList  filters;
         QString      exportSuffix;
         QString      outputFile;

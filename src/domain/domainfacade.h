@@ -273,18 +273,6 @@ public:
      **************************************************************************/
 
     /**
-     * Get the image grabber source index.
-     * @return image grabber source index
-     */
-    int getGrabberSource();
-
-    /**
-     * Set the image grabber source index.
-     * @param index Index of the new image grabber source
-     */
-    void setGrabberSource(int index);
-
-    /**
      * Get the image format of the project.
      * @return image format.
      */

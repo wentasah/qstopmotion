@@ -45,12 +45,6 @@ ImportWidget::ImportWidget(Frontend *f, bool type, QWidget *parent) : QWidget(pa
     infoText                 = 0;
     encoderTable             = 0;
 
-    // Grabber preferences
-    grabberPrefs             = 0;
-    grabberSourceLabel       = 0;
-    grabberSourceCombo       = 0;
-    activeGrabberSource      = ImageGrabberDevice::testSource;
-
     // Image preferences
     imagePrefs               = 0;
     imageFormatLabel         = 0;
@@ -106,37 +100,6 @@ void ImportWidget::makeGUI()
     infoText->setMinimumHeight(55);
     infoText->setMaximumHeight(60);
     infoText->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-
-    // Image grabber preferences
-    grabberPrefs = new QGroupBox;
-    grabberPrefs->setTitle(tr("Image grabber settings"));
-
-    grabberSourceLabel = new QLabel(tr("Image Grabber:"));
-    grabberSourceCombo = new QComboBox();
-    grabberSourceLabel->setBuddy(grabberSourceCombo);
-    grabberSourceCombo->setFocusPolicy(Qt::NoFocus);
-    grabberSourceCombo->setMinimumWidth(300);
-    grabberSourceCombo->setMaximumWidth(300);
-    connect(grabberSourceCombo, SIGNAL(activated(int)), this, SLOT(changeImageGrabberSources(int)));
-
-    grabberSourceCombo->addItem(tr("Test Source"));
-
-#ifdef Q_WS_X11
-    grabberSourceCombo->addItem(tr("Video 4 Linux (USB WebCam)"));
-    grabberSourceCombo->addItem(tr("IEEE 1394 (FireWire DigiCam)"));
-    grabberSourceCombo->addItem(tr("gphoto (USB Compact Camera)"));
-#endif
-
-#ifdef Q_WS_WIN
-    grabberSourceCombo->addItem(tr("Direct Show (USB WebCam)"));
-    grabberSourceCombo->addItem(tr("Direct Show (FireWire DigiCam)"));
-#endif
-
-    QGridLayout *grabberPrefsLayout = new QGridLayout;
-    grabberPrefsLayout->setColumnStretch(0, 1);
-    grabberPrefsLayout->addWidget(grabberSourceLabel, 0, 0, Qt::AlignLeft);
-    grabberPrefsLayout->addWidget(grabberSourceCombo, 0, 1, Qt::AlignRight);
-    grabberPrefs->setLayout(grabberPrefsLayout);
 
     // Image import preferences
     imagePrefs = new QGroupBox;
@@ -233,7 +196,6 @@ void ImportWidget::makeGUI()
     // Widget layout
     QVBoxLayout *mainLayout = new QVBoxLayout;
     mainLayout->addWidget(infoText);
-    mainLayout->addWidget(grabberPrefs);
     mainLayout->addWidget(imagePrefs);
     mainLayout->addWidget(liveViewPrefs);
     mainLayout->addStretch(1);
@@ -254,11 +216,6 @@ void ImportWidget::initialize()
     // Read eEncoder preferences
     if (tabType) {
         // This is a general dialog tab
-        if (pref->getIntegerPreference("preferences", "defaultgrabbersource", value) == false) {
-            value = ImageGrabberDevice::testSource;
-        }
-        activeGrabberSource = value;
-
         if (pref->getIntegerPreference("preferences", "defaultimageformat", value) == false) {
             value = ImageGrabber::jpegFormat;
         }
@@ -281,14 +238,11 @@ void ImportWidget::initialize()
     }
     else {
         // This is a project dialog tab
-        activeGrabberSource = frontend->getProject()->getGrabberSource();
         activeImageFormat = frontend->getProject()->getImageFormat();
         activeImageQuality = frontend->getProject()->getImageQuality();
         activeImageSize = frontend->getProject()->getImageSize();
         activeLiveViewFps = frontend->getProject()->getLiveViewFps();
     }
-
-    setImageGrabberSource(activeGrabberSource);
 
     imageFormatCombo->setCurrentIndex(activeImageFormat);
     enableQuality();
@@ -322,37 +276,6 @@ void ImportWidget::apply()
     int value;
     bool changings = false;
 
-    switch (grabberSourceCombo->currentIndex()) {
-    case 0:
-        index = ImageGrabberDevice::testSource;
-        break;
-    case 1:
-#ifdef Q_WS_X11
-        index = ImageGrabberDevice::video4LinuxSource;
-#endif
-#ifdef Q_WS_WIN
-        index = ImageGrabberDevice::directShowUsbSource;
-#endif
-        break;
-    case 2:
-#ifdef Q_WS_X11
-        index = ImageGrabberDevice::ieee1394Source;
-#endif
-#ifdef Q_WS_WIN
-        index = ImageGrabberDevice::directShow1394Source;
-#endif
-        break;
-    case 3:
-#ifdef Q_WS_X11
-        index = ImageGrabberDevice::gphoto2Source;
-#endif
-        break;
-    }
-    if (activeGrabberSource != index) {
-        activeGrabberSource = index;
-        changings = true;
-    }
-
     index = imageFormatCombo->currentIndex();
     if (activeImageFormat != index) {
         activeImageFormat = index;
@@ -380,7 +303,6 @@ void ImportWidget::apply()
     if (changings) {
         if (tabType) {
             // This is a general dialog tab
-            pref->setIntegerPreference("preferences", "defaultgrabbersource", activeGrabberSource);
             pref->setIntegerPreference("preferences", "defaultimageformat", activeImageFormat);
             pref->setIntegerPreference("preferences", "defaultimagequality", activeImageQuality);
             pref->setIntegerPreference("preferences", "defaultimagesize", activeImageSize);
@@ -388,7 +310,6 @@ void ImportWidget::apply()
         }
         else {
             // This is a project dialog tab
-            frontend->getProject()->setGrabberSource(activeGrabberSource);
             frontend->getProject()->setImageFormat(activeImageFormat);
             frontend->getProject()->setImageQuality(activeImageQuality);
             frontend->getProject()->setImageSize(activeImageSize);
@@ -404,7 +325,6 @@ void ImportWidget::reset()
 {
     qDebug("ImportWidget::reset --> Start");
 
-    setImageGrabberSource(activeGrabberSource);
     imageFormatCombo->setCurrentIndex(activeImageFormat);
     enableQuality();
     imageQualitySlider->setValue(activeImageQuality);
@@ -412,43 +332,6 @@ void ImportWidget::reset()
     liveViewFpsSlider->setValue(activeLiveViewFps);
 
     qDebug("ImportWidget::reset --> End");
-}
-
-
-void ImportWidget::setImageGrabberSource(int newSource)
-{
-    qDebug() << "ImportWidget::setImageGrabberSource --> Start";
-
-    switch (newSource) {
-    case ImageGrabberDevice::testSource:
-        grabberSourceCombo->setCurrentIndex(0);
-        break;
-    case ImageGrabberDevice::video4LinuxSource:
-        grabberSourceCombo->setCurrentIndex(1);
-        break;
-    case ImageGrabberDevice::ieee1394Source:
-        grabberSourceCombo->setCurrentIndex(2);
-        break;
-    case ImageGrabberDevice::gphoto2Source:
-        grabberSourceCombo->setCurrentIndex(3);
-        break;
-    case ImageGrabberDevice::directShowUsbSource:
-        grabberSourceCombo->setCurrentIndex(1);
-        break;
-    case ImageGrabberDevice::directShow1394Source:
-        grabberSourceCombo->setCurrentIndex(2);
-        break;
-    }
-
-    qDebug() << "ImportWidget::setImageGrabberSource --> End";
-}
-
-
-void ImportWidget::changeImageGrabberSources(int /*index*/)
-{
-    // qDebug() << "ImportWidget::changeImageGrabberSources --> Start";
-
-    // qDebug() << "ImportWidget::changeImageGrabberSources --> End";
 }
 
 

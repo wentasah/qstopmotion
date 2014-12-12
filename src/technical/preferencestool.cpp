@@ -33,7 +33,7 @@
 
 
 const QString PreferencesTool::applicationName = QLatin1String("qstopmotion");
-const QString PreferencesTool::applicationVersion = QLatin1String("1.1.0");
+const QString PreferencesTool::applicationVersion = QLatin1String("2.0.0 (Beta)");
 const QString PreferencesTool::preferencesVersion = QLatin1String("0.9");
 const QString PreferencesTool::preferencesSuffix = QLatin1String("qsmp");
 const QString PreferencesTool::preferencesName = QLatin1String("preferences");
@@ -325,12 +325,11 @@ void PreferencesTool::setBasicPreferenceDefaults()
     setIntegerPreference("preferences", "capturebutton", captureButtonAfter);
     // Project defaults
     setIntegerPreference("preferences", "defaultrecordingmode", 0);
-    setIntegerPreference("preferences", "defaultvideosource", 0);
+    setIntegerPreference("preferences", "defaultgrabbersource", 0);
     setIntegerPreference("preferences", "defaultmixmode", 0);
     setIntegerPreference("preferences", "defaultmixcount", 2);
     setIntegerPreference("preferences", "defaultplaybackcount", 5);
     // Image import defaults
-    setIntegerPreference("preferences", "defaultgrabbersource", ImageGrabberDevice::testSource);
     setIntegerPreference("preferences", "defaultimageformat", ImageGrabber::jpegFormat);
     setIntegerPreference("preferences", "defaultimagesize", ImageGrabber::defaultSize);
     setIntegerPreference("preferences", "defaulttransformation", true);

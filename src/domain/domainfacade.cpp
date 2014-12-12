@@ -243,7 +243,6 @@ void DomainFacade::setRecordingMode(int newRecordingMode)
     frontend->setRecordingMode(newRecordingMode);
 }
 
-
 int DomainFacade::getVideoSource()
 {
     return animationProject->getVideoSource();
@@ -328,19 +327,6 @@ void DomainFacade::setUnitMode(int newUnitMode)
 /**************************************************************************
  * Image import preferences
  **************************************************************************/
-
-int DomainFacade::getGrabberSource()
-{
-    return animationProject->getGrabberSource();
-}
-
-
-void DomainFacade::setGrabberSource(int newGrabberSource)
-{
-    animationProject->setGrabberSource(newGrabberSource);
-    // frontend->setGrabberSource(newGrabberSource);
-}
-
 
 int DomainFacade::getImageFormat()
 {
@@ -769,11 +755,6 @@ void DomainFacade::setProjectSettingsToDefault()
     setUnitMode(value);
 
     // Image import preferences
-    if (pref->getIntegerPreference("preferences", "defaultgrabbersource", value) == false) {
-        value = ImageGrabberDevice::testSource;
-    }
-    setGrabberSource(value);
-
     if (pref->getIntegerPreference("preferences", "defaultimageformat", value) == false) {
         value = ImageGrabber::jpegFormat;
     }

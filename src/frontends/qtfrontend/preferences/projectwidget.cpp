@@ -37,15 +37,17 @@ ProjectWidget::ProjectWidget(Frontend *f, bool type, QWidget *parent)
 {
     qDebug("ProjectWidget::Constructor --> Start");
 
+    Q_ASSERT(type == 1);   // Use this widget only in general dialog!
+
     frontend               = f;
     tabType                = type;
 
     recordingGroupBox      = 0;
     recordingModeCombo     = 0;
 
-    cameraGroupBox         = 0;
-    videoSourceCombo       = 0;
-    defaultVideoSource     = 0;
+    grabberGroupBox        = 0;
+    grabberSourceCombo     = 0;
+    defaultGrabberSource   = 0;
 
     captureGroupBox        = 0;
     mixModeCombo           = 0;
@@ -89,33 +91,32 @@ void ProjectWidget::makeGUI()
     recordingGroupBox->setLayout(recordingLayout);
     mainLayout->addWidget(recordingGroupBox);
 
-    if (tabType) {
-        cameraGroupBox = new QGroupBox(tr("Camera"));
-        // cameraGroupBox->setFlat(true);
+    grabberGroupBox = new QGroupBox;
+    grabberGroupBox->setTitle(tr("Image grabber settings"));
+    // grabberGroupBox->setFlat(true);
 
-        videoSourceCombo = new QComboBox();
-        videoSourceCombo->setFocusPolicy(Qt::NoFocus);
-        connect(videoSourceCombo, SIGNAL(activated(int)), this, SLOT(changeVideoSource(int)));
-        videoSourceCombo->addItem(tr("Test Source"));
+    grabberSourceCombo = new QComboBox();
+    grabberSourceCombo->setFocusPolicy(Qt::NoFocus);
+    connect(grabberSourceCombo, SIGNAL(activated(int)), this, SLOT(changeGrabberSource(int)));
 #ifdef Q_WS_X11
-        videoSourceCombo->addItem(tr("USB Source"));
-        videoSourceCombo->addItem(tr("FireWire Source"));
-#endif
-#ifdef Q_WS_WIN
-        videoSourceCombo->addItem(tr("DirectShow Source"));
-#endif
-#ifdef Q_WS_MAC
+    grabberSourceCombo->addItem(tr("Test Source"));
+    grabberSourceCombo->addItem(tr("Video 4 Linux (USB WebCam)"));
+    grabberSourceCombo->addItem(tr("IEEE 1394 (FireWire DigiCam)"));
+    grabberSourceCombo->addItem(tr("gphoto (USB Compact Camera)"));
 #endif
 
-        QVBoxLayout *cameraLayout = new QVBoxLayout;
-        // cameraLayout->setMargin(0);
-        // cameraLayout->setSpacing(2);
-        // cameraLayout->addStretch(1);
-        cameraLayout->addWidget(videoSourceCombo);
-        cameraLayout->addStretch(10);
-        cameraGroupBox->setLayout(cameraLayout);
-        mainLayout->addWidget(cameraGroupBox);
-    }
+#ifdef Q_WS_WIN
+    grabberSourceCombo->addItem(tr("Media Foundation"));
+#endif
+
+    QVBoxLayout *grabberLayout = new QVBoxLayout;
+    // grabberLayout->setMargin(0);
+    // grabberLayout->setSpacing(2);
+    // grabberLayout->addStretch(1);
+    grabberLayout->addWidget(grabberSourceCombo);
+    grabberLayout->addStretch(10);
+    grabberGroupBox->setLayout(grabberLayout);
+    mainLayout->addWidget(grabberGroupBox);
 
     captureGroupBox = new QGroupBox(tr("Capture"));
     // secondGroupBox->setFlat(true);
@@ -186,56 +187,43 @@ void ProjectWidget::initialize()
 {
     qDebug("ProjectWidget::initialize --> Start");
 
-    if (tabType) {
-        // The tab is used in gerneral dialog
-        PreferencesTool *pref = frontend->getPreferences();
-        int              value;
+    PreferencesTool *pref = frontend->getPreferences();
+    int              value;
 
-        if (pref->getIntegerPreference("preferences", "defaultrecordingmode", value) == false) {
-            value = 0;
-        }
-        defaultRecordingMode = value;
-
-        if (pref->getIntegerPreference("preferences", "defaultvideosource", value) == false) {
-            value = 0;
-        }
-        defaultVideoSource = value;
-
-        if (pref->getIntegerPreference("preferences", "defaultmixingmode", value) == false) {
-            value = 0;
-        }
-        defaultMixMode = value;
-
-        if (pref->getIntegerPreference("preferences", "defaultmixcount", value) == false) {
-            value = 0;
-        }
-        defaultMixCount = value;
-
-        if (pref->getIntegerPreference("preferences", "defaultplaybackcount", value) == false) {
-            value = 0;
-        }
-        defaultPlaybackCount = value;
-
-        // if (pref->getIntegerPreference("preferences", "defaultunitmode", value) == false) {
-        //     value = 0;
-        // }
-        // bdefaultUnitMode = value;
+    if (pref->getIntegerPreference("preferences", "defaultrecordingmode", value) == false) {
+        value = 0;
     }
-    else {
-        // The tab is used in project dialog
-        defaultRecordingMode = frontend->getRecordingMode();
-        defaultMixMode = frontend->getMixMode();
-        defaultMixCount = frontend->getMixCount();
-        defaultPlaybackCount = frontend->getPlaybackCount();
+    defaultRecordingMode = value;
+
+    if (pref->getIntegerPreference("preferences", "defaultgrabbersource", value) == false) {
+        value = 0;
     }
+    defaultGrabberSource = value;
+
+    if (pref->getIntegerPreference("preferences", "defaultmixingmode", value) == false) {
+        value = 0;
+    }
+    defaultMixMode = value;
+
+    if (pref->getIntegerPreference("preferences", "defaultmixcount", value) == false) {
+        value = 0;
+    }
+    defaultMixCount = value;
+
+    if (pref->getIntegerPreference("preferences", "defaultplaybackcount", value) == false) {
+        value = 0;
+    }
+    defaultPlaybackCount = value;
+
+    // if (pref->getIntegerPreference("preferences", "defaultunitmode", value) == false) {
+    //     value = 0;
+    // }
+    // bdefaultUnitMode = value;
 
     recordingModeCombo->setCurrentIndex(defaultRecordingMode);
     changeRecordingMode(defaultRecordingMode);
 
-    if (tabType) {
-        videoSourceCombo->setCurrentIndex(defaultVideoSource);
-        changeVideoSource(defaultVideoSource);
-    }
+    setImageGrabberSource(defaultGrabberSource);
 
     mixModeCombo->setCurrentIndex(defaultMixMode);
     changeMixMode(defaultMixMode);
@@ -252,8 +240,8 @@ void ProjectWidget::initialize()
     }
 
     /*
-        unitModeCombo->setCurrentIndex(defaultUnitMode);
-        changeUnitMode(defaultUnitMode);
+    unitModeCombo->setCurrentIndex(defaultUnitMode);
+    changeUnitMode(defaultUnitMode);
     */
 
     qDebug("ProjectWidget::initialize --> End");
@@ -274,17 +262,41 @@ void ProjectWidget::apply()
 {
     qDebug("ProjectWidget::apply --> Start");
 
+    int index;
     int newRecordingMode = recordingModeCombo->currentIndex();
+
     if (defaultRecordingMode != newRecordingMode) {
         defaultRecordingMode = newRecordingMode;
     }
 
-    if (tabType) {
-        int newVideoSource = videoSourceCombo->currentIndex();
-        if (defaultVideoSource != newVideoSource)
-        {
-            defaultVideoSource = newVideoSource;
-        }
+    switch (grabberSourceCombo->currentIndex()) {
+    case 0:
+#ifdef Q_WS_X11
+        index = ImageGrabberDevice::testSource;
+#endif
+#ifdef Q_WS_WIN
+        index = ImageGrabberDevice::mediaFoundationSource;
+#endif
+        break;
+    case 1:
+#ifdef Q_WS_X11
+        index = ImageGrabberDevice::video4LinuxSource;
+#endif
+        break;
+    case 2:
+#ifdef Q_WS_X11
+        index = ImageGrabberDevice::ieee1394Source;
+#endif
+        break;
+    case 3:
+#ifdef Q_WS_X11
+        index = ImageGrabberDevice::gphoto2Source;
+#endif
+        break;
+    }
+
+    if (defaultGrabberSource != index) {
+        defaultGrabberSource = index;
     }
 
     int newMixMode = mixModeCombo->currentIndex();
@@ -315,31 +327,14 @@ void ProjectWidget::apply()
         defaultUnitMode = newUnitMode;
     }
 */
-    if (tabType) {
-        // The tab is used in general dialog
+    PreferencesTool *pref = frontend->getPreferences();
 
-        PreferencesTool *pref = frontend->getPreferences();
-
-        pref->setIntegerPreference("preferences", "defaultrecordingmode", defaultRecordingMode);
-        pref->setIntegerPreference("preferences", "defaultvideosource", defaultVideoSource);
-        pref->setIntegerPreference("preferences", "defaultmixmode", defaultMixMode);
-        pref->setIntegerPreference("preferences", "defaultmixcount", defaultMixCount);
-        pref->setIntegerPreference("preferences", "defaultplaybackcount", defaultPlaybackCount);
-        // pref->setIntegerPreference("preferences", "defaultunitmode", defaultUnitMode);
-    }
-    else {
-        // The tab is used in project dialog
-
-        frontend->setRecordingMode(defaultRecordingMode);
-        frontend->setMixMode(defaultMixMode);
-        if (0 == defaultMixMode) {
-            frontend->setMixCount(defaultMixCount);
-        }
-        if (2 == defaultMixMode) {
-            frontend->setPlaybackCount(defaultPlaybackCount);
-        }
-        // frontend->setUnitMode(defaultUnitMode);
-    }
+    pref->setIntegerPreference("preferences", "defaultrecordingmode", defaultRecordingMode);
+    pref->setIntegerPreference("preferences", "defaultgrabbersource", defaultGrabberSource);
+    pref->setIntegerPreference("preferences", "defaultmixmode", defaultMixMode);
+    pref->setIntegerPreference("preferences", "defaultmixcount", defaultMixCount);
+    pref->setIntegerPreference("preferences", "defaultplaybackcount", defaultPlaybackCount);
+    // pref->setIntegerPreference("preferences", "defaultunitmode", defaultUnitMode);
 
     qDebug("ProjectWidget::apply --> End");
 }
@@ -351,9 +346,7 @@ void ProjectWidget::reset()
 
     changeRecordingMode(defaultRecordingMode);
 
-    if (tabType) {
-        changeVideoSource(defaultVideoSource);
-    }
+    changeGrabberSource(defaultGrabberSource);
 
     changeMixMode(defaultMixMode);
 
@@ -374,15 +367,41 @@ void ProjectWidget::reset()
 }
 
 
+void ProjectWidget::setImageGrabberSource(int newSource)
+{
+    qDebug() << "ImportWidget::setImageGrabberSource --> Start";
+
+    switch (newSource) {
+    case ImageGrabberDevice::testSource:
+        grabberSourceCombo->setCurrentIndex(0);
+        break;
+    case ImageGrabberDevice::video4LinuxSource:
+        grabberSourceCombo->setCurrentIndex(1);
+        break;
+    case ImageGrabberDevice::ieee1394Source:
+        grabberSourceCombo->setCurrentIndex(2);
+        break;
+    case ImageGrabberDevice::gphoto2Source:
+        grabberSourceCombo->setCurrentIndex(3);
+        break;
+    case ImageGrabberDevice::mediaFoundationSource:
+        grabberSourceCombo->setCurrentIndex(0);
+        break;
+    }
+
+    qDebug() << "ImportWidget::setImageGrabberSource --> End";
+}
+
+
 void ProjectWidget::changeRecordingMode(int index)
 {
     this->recordingModeCombo->setCurrentIndex(index);
 }
 
 
-void ProjectWidget::changeVideoSource(int index)
+void ProjectWidget::changeGrabberSource(int index)
 {
-    this->videoSourceCombo->setCurrentIndex(index);
+    this->grabberSourceCombo->setCurrentIndex(index);
 }
 
 

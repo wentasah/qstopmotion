@@ -607,6 +607,7 @@ void RecordingTab::cameraButtonClicked()
 
         if (cameraOn) {
             videoSourceCombo->setEnabled(false);
+            resolutionCombo->setEnabled(false);
 
             QString iconFile(frontend->getIconsDirName());
             iconFile.append(QLatin1String("cameraoff.png"));
@@ -643,6 +644,7 @@ void RecordingTab::cameraButtonClicked()
         cameraOn = false;
 
         videoSourceCombo->setEnabled(true);
+        resolutionCombo->setEnabled(true);
     }
 
     if (cameraOn) {

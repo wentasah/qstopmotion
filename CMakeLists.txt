@@ -1,7 +1,7 @@
 ###############################################################################
 # CMake file for the qStopMotion project                                      #
 # (c) Ralf Lange, longsoft.de                                                 #
-# Last update: 2014-12-09                                                     #
+# Last update: 2014-12-10                                                     #
 #                                                                             #
 # Usage:                                                                      #
 #   * Qt-Creator (Windows, Linux)                                             #
@@ -33,8 +33,8 @@ cmake_minimum_required(VERSION 2.8.4)
 
 SET(CMAKE_PROJECT_NAME "qstopmotion")
 SET(QSTOPMOTION_HOMEPAGE "http://www.qstopmotion.org")
-SET(QSTOPMOTION_VERSION_MAJOR "1")
-SET(QSTOPMOTION_VERSION_MINOR "1")
+SET(QSTOPMOTION_VERSION_MAJOR "2")
+SET(QSTOPMOTION_VERSION_MINOR "0")
 SET(QSTOPMOTION_VERSION_PATCH "0")
 
 SET(FILES_TO_TRANSLATE )
@@ -161,16 +161,11 @@ set(MOC_HEADERS
     src/technical/preferencestool.h
     src/technical/grabber/imagegrabber.h
     src/technical/grabber/imagegrabberfacade.h
-#     src/technical/grabber/gstreamer/gstdevicegrabber.h
-    src/technical/grabber/gstreamer/gstgrabber.h
-    src/technical/grabber/gstreamer/videotestgrabber.h
 )
 
 IF(WIN32)
 set(MOC_HEADERS
     ${MOC_HEADERS}
-    src/technical/grabber/gstreamer/windows/directshow1394grabber.h
-    src/technical/grabber/gstreamer/windows/directshowusbgrabber.h
     src/technical/grabber/mediafoundation/mfgrabber.h
 )
 ENDIF(WIN32)
@@ -179,6 +174,9 @@ IF(UNIX)
 set(MOC_HEADERS
     ${MOC_HEADERS}
     src/technical/grabber/gphoto2/gpgrabber.h
+#     src/technical/grabber/gstreamer/gstdevicegrabber.h
+    src/technical/grabber/gstreamer/gstgrabber.h
+    src/technical/grabber/gstreamer/videotestgrabber.h
     src/technical/grabber/gstreamer/linux/dv1394grabber.h
     src/technical/grabber/gstreamer/linux/v4l2grabber.h
 )
@@ -253,9 +251,6 @@ set(SOURCES
     src/technical/grabber/imagegrabberdevice.cpp
     src/technical/grabber/imagegrabberfacade.cpp
     src/technical/grabber/imagegrabberthread.cpp
-#    src/technical/grabber/gstreamer/gstdevicegrabber.cpp
-    src/technical/grabber/gstreamer/gstgrabber.cpp
-    src/technical/grabber/gstreamer/videotestgrabber.cpp
     src/technical/videoencoder/ffmpegencoder.cpp
     src/technical/videoencoder/videoencoder.cpp
     src/technical/videoencoder/videoencoderfactory.cpp
@@ -264,8 +259,6 @@ set(SOURCES
 IF(WIN32)
 set(SOURCES
     ${SOURCES}
-    src/technical/grabber/gstreamer/windows/directshow1394grabber.cpp
-    src/technical/grabber/gstreamer/windows/directshowusbgrabber.cpp
     src/technical/grabber/mediafoundation/mfcontroller.cpp
     src/technical/grabber/mediafoundation/mfgrabber.cpp
     src/technical/grabber/mediafoundation/mfutil.cpp
@@ -277,6 +270,8 @@ set(SOURCES
     ${SOURCES}
     src/technical/grabber/gphoto2/gpcontroller.cpp
     src/technical/grabber/gphoto2/gpgrabber.cpp
+    src/technical/grabber/gstreamer/gstgrabber.cpp
+    src/technical/grabber/gstreamer/videotestgrabber.cpp
     src/technical/grabber/gstreamer/linux/v4l2controller.cpp
     src/technical/grabber/gstreamer/linux/dv1394grabber.cpp
     src/technical/grabber/gstreamer/linux/v4l2grabber.cpp
@@ -331,15 +326,16 @@ set(DEBIAN_FILES
 ###############################################################################
 # GStreamer support
 #
+# (Only UNIX)
+#
 # used libraries: glib-2.0.lib, gobject-2.0.lib, gstreamer-0.10.lib, xml2.lib
 ###############################################################################
 
 IF(WIN32)
 
-    include(${CMAKE_SOURCE_DIR}/cmake/FindGStreamerOSSBUILD.cmake)
-    message("GSTREAMER_INCLUDE_DIR: ${GSTREAMER_INCLUDE_DIR}")
-    message("GSTREAMER_LIBRARIES: ${GSTREAMER_LIBRARIES}")
-    message("GSTREAMER_FOUND: ${GSTREAMER_FOUND}")
+    SET(GSTREAMER_INCLUDE_DIR)
+    SET(GSTREAMER_LIBRARIES)
+    SET(GSTREAMER_FOUND)
 
 ELSE(WIN32)
 
@@ -399,26 +395,6 @@ ELSE(UNIX)
 ENDIF(UNIX)
 
 ###############################################################################
-# Microsoft DirectShow support
-#
-# (Only Windows up to Windows 7)
-#
-# used libraries: strmiids.lib
-###############################################################################
-
-IF(WIN32)
-
-    SET(DIRECTSHOW_LIBRARIES
-        strmiids.lib      # ???
-    )
-
-ELSE(WIN32)
-
-    SET(DIRECTSHOW_LIBRARIES)
-
-ENDIF(WIN32)
-
-###############################################################################
 # Microsoft Media Foundation support
 #
 # (Only Windows form Windows Vista and newer)
@@ -434,6 +410,7 @@ IF(WIN32)
         mfplat.lib       # ???
         mfuuid.lib       # ???
         mfreadwrite.lib  # Read and write media stream
+#         strmiids.lib      # Old Direct Show library
     )
 
 ELSE(WIN32)
@@ -552,7 +529,6 @@ target_link_libraries(
     ${GSTREAMER_LIBRARIES}
     ${GPHOTO2_LIBRARIES}
     ${V4L2_LIBRARIES}
-    ${DIRECTSHOW_LIBRARIES}
     ${MEDIAFOUNDATION_LIBRARIES}
 )
 
@@ -821,39 +797,6 @@ SET(CPACK_NSIS_MENU_LINKS
     "manual/index.html" "qStopMotion Help"
     "http://www.qstopmotion.org" "qStopMotion Web Site"
 )
-
-# Additional installation command
-# Install the GStreamer OSS Build
-#
-# If the OSS environment string is set nothing is to do.
-# If the GStreamer installer is in the same directory as the qStopMotion installer
-# this one is used (CD installation).
-# Otherwise the GStreamer installer is downloaded from the OSS Build homepage.
-SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "
-    ClearErrors
-    ReadEnvStr $R0 'OSSBUILD_GSTREAMER_DIR'
-    IfErrors 0 found
-    IfFileExists $EXEDIR\\\\GStreamer-WinBuilds-GPL-x86-Beta04-0.10.7.msi 0 download
-    CopyFiles $EXEDIR\\\\GStreamer-WinBuilds-GPL-x86.msi $INSTDIR\\\\GStreamer-WinBuilds-GPL-x86-Beta04-0.10.7.msi
-    Goto install
-    download:
-    NSISdl::download http://ossbuild.googlecode.com/files/GStreamer-WinBuilds-GPL-x86-Beta04-0.10.7.msi $INSTDIR\\\\GStreamer-WinBuilds-GPL-x86-Beta04-0.10.7.msi
-    install:
-    ExecWait 'msiexec /i \\\"$INSTDIR\\\\GStreamer-WinBuilds-GPL-x86-Beta04-0.10.7.msi\\\" '
-    found:
-")
-
-# Additional uninstallation command
-# Uninstall the GStreamer OSS Build
-#
-# If the installer package is in the installation directory than the package was
-# installed by the qStopMotion installer. Than uninstall the package.
-SET(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "
-    IfFileExists $INSTDIR\\\\GStreamer-WinBuilds-GPL-x86-Beta04-0.10.7.msi 0 keep
-    ExecWait 'msiexec /x \\\"$INSTDIR\\\\GStreamer-WinBuilds-GPL-x86-Beta04-0.10.7.msi\\\" '
-    Delete \\\"$INSTDIR\\\\GStreamer-WinBuilds-GPL-x86-Beta04-0.10.7.msi\\\"
-    keep:
-")
 
 # SET(CPACK_NSIS_INSTALLED_ICON_NAME "qstopmotion.exe")
 # SET(CPACK_NSIS_DISPLAY_NAME "qStopMotion")

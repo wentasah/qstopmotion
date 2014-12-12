@@ -67,6 +67,12 @@ private:
      */
     void makeGUI();
 
+    /**
+     * Set the image grabber source in the combo box.
+     * @param newSource The new image grabber source
+     */
+    void setImageGrabberSource(int newSource);
+
 protected:
     // void resizeEvent(QResizeEvent *event);
 
@@ -83,7 +89,7 @@ private slots:
      * can be updated.
      * @param index the new viewing mode.
      */
-    void changeVideoSource(int index);
+    void changeGrabberSource(int index);
 
     /**
      * Slot for notified the default tab when the mix mode changes, so that widgets
@@ -115,8 +121,8 @@ private:
     QGroupBox   *recordingGroupBox;
     QComboBox   *recordingModeCombo;
 
-    QGroupBox   *cameraGroupBox;
-    QComboBox   *videoSourceCombo;
+    QGroupBox   *grabberGroupBox;
+    QComboBox   *grabberSourceCombo;
 
     QGroupBox   *captureGroupBox;
     QComboBox   *mixModeCombo;
@@ -127,7 +133,7 @@ private:
     // QComboBox   *unitModeCombo;
 
     int          defaultRecordingMode;
-    int          defaultVideoSource;
+    int          defaultGrabberSource;
     int          defaultMixMode;
     int          defaultMixCount;
     int          defaultPlaybackCount;

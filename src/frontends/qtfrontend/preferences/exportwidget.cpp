@@ -305,7 +305,7 @@ void ExportWidget::initialize()
     this->videoFpsChooser->setValue(activeVideoFps);
 
     // Output file preferences
-    if (activeUseDefaultOutputFile)
+    if (false == activeUseDefaultOutputFile)
     {
         setYesButtonOn();
     }

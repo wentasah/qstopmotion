@@ -71,22 +71,8 @@ public:
 protected:
     // void resizeEvent(QResizeEvent *event);
 
-private:
-    /**
-     * Set the image grabber source in the combo box.
-     * @param newSource The new image grabber source
-     */
-    void setImageGrabberSource(int newSource);
-
 private slots:
     // image import preferences
-    /**
-     * Slot for notified the image import tab when the image grabber sources changes,
-     * so that image import preferences can be updated.
-     * @param index the new image grabber sources.
-     */
-    void changeImageGrabberSources(int index);
-
     /**
      * Slot for notified the image import tab when the image format changes,
      * so that image import preferences can be updated.
@@ -124,12 +110,6 @@ private:
     QTextEdit    *infoText;
 
     QTableWidget *encoderTable;
-
-    // Grabber preferences
-    QGroupBox    *grabberPrefs;
-    QLabel       *grabberSourceLabel;
-    QComboBox    *grabberSourceCombo;
-    int           activeGrabberSource;
 
     // Image preferences
     QGroupBox    *imagePrefs;

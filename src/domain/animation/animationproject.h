@@ -148,13 +148,13 @@ public:
     void setRecordingMode(int newRecordingMode);
 
     /**
-     * Get the active video source of the project.
+     * Get the index of the active video source device of the project.
      * @return active video source.
      */
     int getVideoSource() const;
 
     /**
-     * Set the active video source of the project.
+     * Set the index of the active video source device of the project.
      * @param newVideoSource the new active source.
      */
     void setVideoSource(int newVideoSource);
@@ -222,18 +222,6 @@ public:
     /**************************************************************************
      * Image import preferences
      **************************************************************************/
-
-    /**
-     * Get the image grabber source index.
-     * @return image grabber source index
-     */
-    int getGrabberSource();
-
-    /**
-     * Set the image grabber source index.
-     * @param index Index of the new image grabber source
-     */
-    void setGrabberSource(int index);
 
     /**
      * Get the image format of the project.
@@ -909,7 +897,7 @@ private:
     int recordingMode;
 
     /**
-     * Active video source of the project.
+     * Index of the active video source device of the project.
      */
     int videoSource;
 
@@ -937,11 +925,6 @@ private:
      * Active encoder application of the project.
      */
     int encoderApplication;
-
-    /**
-     * Active grabber source of the project.
-     */
-    int grabberSource;
 
     /**
      * Active image format of the project.

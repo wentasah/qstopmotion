@@ -40,13 +40,12 @@ AnimationProject::AnimationProject(Frontend* f)
 
     recordingMode            = 0;
     videoSource              = 0;
-    videoResolution          = -1;
+    videoResolution          = 0;
     mixMode                  = 0;
     mixCount                 = 2;
     playbackCount            = 0;
 
     encoderApplication       = 0;
-    grabberSource            = 0;
     imageFormat              = 0;
     imageQuality             = 100;
     imageSize                = 0;
@@ -262,19 +261,6 @@ void AnimationProject::setUnitMode(int newUnitMode)
 /**************************************************************************
  * Image import preferences
  **************************************************************************/
-
-int AnimationProject::getGrabberSource()
-{
-    return grabberSource;
-}
-
-
-void AnimationProject::setGrabberSource(int newGrabberSource)
-{
-    grabberSource = newGrabberSource;
-    incSettingsChanges();
-}
-
 
 int AnimationProject::getImageFormat()
 {
@@ -635,10 +621,11 @@ bool AnimationProject::readSettingsFromProject(QDomElement &settingsNode)
         else if (nodeName.compare("videosource") == 0) {
             QString tmp = currElement.text();
             if (frontend->setVideoSource(tmp.toInt())) {
-                videoSource = tmp.toInt();
+                setVideoSource(tmp.toInt());
             }
             else {
                 setVideoSource(frontend->getVideoSource());
+                frontend->setVideoSource(getVideoSource());
             }
         }
         else if (nodeName.compare("videoresolution") == 0) {
@@ -669,10 +656,6 @@ bool AnimationProject::readSettingsFromProject(QDomElement &settingsNode)
             unitMode = tmp.toInt();
         }
         // Save image import parameter
-        else if (nodeName.compare("grabbersource") == 0) {
-            QString tmp = currElement.text();
-            grabberSource = tmp.toInt();
-        }
         else if (nodeName.compare("imageformat") == 0) {
             QString tmp = currElement.text();
             imageFormat = tmp.toInt();
@@ -793,12 +776,6 @@ bool AnimationProject::saveSettingsToProject(QDomDocument &doc, QDomElement &set
     settingsNode.appendChild(unitModeElement);
 
     // Save image import preferences
-
-    // Save grabberSource parameter
-    QDomElement gsElement = doc.createElement("grabbersource");
-    QDomText gsText = doc.createTextNode(QString("%1").arg(grabberSource));
-    gsElement.appendChild(gsText);
-    settingsNode.appendChild(gsElement);
 
     // Save imageFormat parameter
     QDomElement ifElement = doc.createElement("imageformat");

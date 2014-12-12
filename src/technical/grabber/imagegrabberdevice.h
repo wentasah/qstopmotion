@@ -43,15 +43,13 @@ public:
     /**
      * All possible video sources.
      */
-    enum imageGrabberVideoSources {
+    enum imageGrabberSources {
         noSource,                      // 0
         testSource,                    // 1
         video4LinuxSource,             // 2
         ieee1394Source,                // 3
-        directShowUsbSource,           // 4
-        directShow1394Source,          // 5
-        gphoto2Source,                 // 6
-        mediaFoundationSource          // 7
+        gphoto2Source,                 // 4
+        mediaFoundationSource          // 5
     };
 
     /**
@@ -80,7 +78,7 @@ public:
     ImageGrabberDevice(const int index,
                        const QString id,
                        const QString name,
-                       imageGrabberVideoSources source,
+                       imageGrabberSources source,
                        imageGrabberDeviceCapabilities cap);
 
     /**
@@ -128,13 +126,13 @@ public:
      * Get the source of the device.
      * @return The source of the device.
      */
-    imageGrabberVideoSources getDeviceSource();
+    imageGrabberSources getDeviceSource();
 
     /**
      * Set the source of the device.
      * @param source The new source of the device.
      */
-    void setDeviceSource(imageGrabberVideoSources source);
+    void setDeviceSource(imageGrabberSources source);
 
     /**
      * Get the capability of the device.
@@ -206,7 +204,7 @@ private:
     int                             deviceIndex;
     QString                         deviceId;
     QString                         deviceName;
-    imageGrabberVideoSources        deviceSource;
+    imageGrabberSources             deviceSource;
     imageGrabberDeviceCapabilities  deviceCap;
 
     QVector<GrabberResolution>      resolutions;

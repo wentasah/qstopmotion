@@ -18,13 +18,13 @@
  *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                 *
  ******************************************************************************/
 
-#ifndef GSTREAMER_LINUX_V4L2CONTROLLER_H
-#define GSTREAMER_LINUX_V4L2CONTROLLER_H
+#ifndef VIDEO4LINUX2_V4L2CONTROLLER_H
+#define VIDEO4LINUX2_V4L2CONTROLLER_H
 
 #include <linux/videodev2.h>
 
 #include "technical/grabber/grabbercontroller.h"
-#include "technical/grabber/gstreamer/linux/v4l2grabber.h"
+#include "technical/grabber/video4linux2/v4l2grabber.h"
 
 class ImageGrabberDevice;
 
@@ -577,8 +577,8 @@ private:
     struct v4l2_querymenu querymenu;
 
 
-    GstreamerV4L2Grabber* grabber;
-    ImageGrabberDevice*   grabberDevice;
+    V4L2Grabber*        grabber;
+    ImageGrabberDevice* grabberDevice;
 
     int query_ioctl(int hdevice, int current_ctrl, struct v4l2_queryctrl *ctrl);
 

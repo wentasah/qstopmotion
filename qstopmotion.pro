@@ -1,7 +1,7 @@
 ###############################################################################
 # QtCreator file for the qStopMotion project                                  #
 # (c) Ralf Lange, longsoft.de                                                 #
-# Last update: 2014-12-04                                                     #
+# Last update: 2014-12-13                                                     #
 #                                                                             #
 # Please use CMake and the CMakeLists.txt file to build qStopMotion!          #
 ###############################################################################
@@ -84,13 +84,14 @@ HEADERS += src/config.h \
            src/technical/grabber/gstreamer/gstgrabber.h \
            src/technical/grabber/gstreamer/videotestgrabber.h \
            src/technical/grabber/gstreamer/linux/dv1394grabber.h \
-           src/technical/grabber/gstreamer/linux/v4l2controller.h \
-           src/technical/grabber/gstreamer/linux/v4l2grabber.h \
+           src/technical/grabber/gstreamer/linux/usbgrabber.h \
            src/technical/grabber/gstreamer/windows/directshow1394grabber.h \
            src/technical/grabber/gstreamer/windows/directshowusbgrabber.h \
            src/technical/grabber/mediafoundation/mfcontroller.h \
            src/technical/grabber/mediafoundation/mfgrabber.h \
            src/technical/grabber/mediafoundation/mfutil.h \
+           src/technical/grabber/video4linux2/v4l2controller.h \
+           src/technical/grabber/video4linux2/v4l2grabber.h \
            src/technical/videoencoder/ffmpegencoder.h \
            src/technical/videoencoder/videoencoder.h \
            src/technical/videoencoder/videoencoderfactory.h
@@ -167,13 +168,14 @@ SOURCES += src/main.cpp \
            src/technical/grabber/gstreamer/gstgrabber.cpp \
            src/technical/grabber/gstreamer/videotestgrabber.cpp \
            src/technical/grabber/gstreamer/linux/dv1394grabber.cpp \
-           src/technical/grabber/gstreamer/linux/v4l2controller.cpp \
-           src/technical/grabber/gstreamer/linux/v4l2grabber.cpp \
+           src/technical/grabber/gstreamer/linux/usbgrabber.cpp \
            src/technical/grabber/gstreamer/windows/directshow1394grabber.cpp \
            src/technical/grabber/gstreamer/windows/directshowusbgrabber.cpp \
            src/technical/grabber/mediafoundation/mfcontroller.cpp \
            src/technical/grabber/mediafoundation/mfgrabber.cpp \
            src/technical/grabber/mediafoundation/mfutil.cpp \
+           src/technical/grabber/video4linux2/v4l2controller.cpp \
+           src/technical/grabber/video4linux2/v4l2grabber.cpp \
            src/technical/videoencoder/ffmpegencoder.cpp \
            src/technical/videoencoder/videoencoder.cpp \
            src/technical/videoencoder/videoencoderfactory.cpp

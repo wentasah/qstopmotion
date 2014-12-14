@@ -30,7 +30,8 @@
   #include "technical/grabber/gphoto2/gpgrabber.h"
   #include "technical/grabber/gstreamer/videotestgrabber.h"
   #include "technical/grabber/gstreamer/linux/dv1394grabber.h"
-  #include "technical/grabber/gstreamer/linux/v4l2grabber.h"
+  #include "technical/grabber/gstreamer/linux/usbgrabber.h"
+  #include "technical/grabber/video4linux2/v4l2grabber.h"
 #endif
 
 #include "technical/preferencestool.h"
@@ -53,6 +54,7 @@ ImageGrabberFacade::ImageGrabberFacade(Frontend *f)
     gstreamerV4L2Grabber = NULL;
     gstreamerDv1394Grabber = NULL;
     gphotoGrabber = NULL;
+    v4l2Grabber = NULL;
 
     mediaFoundationGrabber = NULL;
 
@@ -81,6 +83,10 @@ ImageGrabberFacade::~ImageGrabberFacade()
     if (gphotoGrabber != NULL) {
         delete gphotoGrabber;
         gphotoGrabber = NULL;
+    }
+    if (v4l2Grabber != NULL) {
+        delete v4l2Grabber;
+        v4l2Grabber = NULL;
     }
     if (mediaFoundationGrabber != NULL) {
         delete mediaFoundationGrabber;
@@ -164,6 +170,19 @@ void ImageGrabberFacade::initialization()
     }
 #endif
 
+#ifdef Q_WS_X11
+    // video4linux2 device
+    if (pref->getIntegerPreference("preferences", "v4l2grabber", value) == false) {
+        value = true;
+    }
+    if ((int)true == value) {
+        v4l2Grabber = new V4L2Grabber(frontend);
+        if (v4l2Grabber->initialization(devices)) {
+            isInitialized = true;
+        }
+    }
+#endif
+
 #ifdef Q_WS_WIN
     // Microsoft Media Foundation device
     if (pref->getIntegerPreference("preferences", "mediafoundationgrabber", value) == false) {
@@ -214,6 +233,10 @@ void ImageGrabberFacade::init()
         isInited = gstreamerDv1394Grabber->setUp();
 
         break;
+    case ImageGrabberDevice::video4Linux2Source:
+        isInited = v4l2Grabber->setUp();
+
+        break;
     case ImageGrabberDevice::gphoto2Source:
         isInited = gphotoGrabber->setUp();
 
@@ -258,6 +281,9 @@ void ImageGrabberFacade::finalize()
         break;
     case ImageGrabberDevice::ieee1394Source:
         gstreamerDv1394Grabber->tearDown();
+        break;
+    case ImageGrabberDevice::video4Linux2Source:
+        v4l2Grabber->tearDown();
         break;
     case ImageGrabberDevice::gphoto2Source:
         gphotoGrabber->tearDown();
@@ -351,6 +377,9 @@ const QImage ImageGrabberFacade::getLiveImage()
     case ImageGrabberDevice::ieee1394Source:
         liveImage = gstreamerDv1394Grabber->getLiveImage();
         break;
+    case ImageGrabberDevice::video4Linux2Source:
+        liveImage = v4l2Grabber->getLiveImage();
+        break;
     case ImageGrabberDevice::gphoto2Source:
         liveImage = gphotoGrabber->getLiveImage();
         break;
@@ -381,6 +410,9 @@ const QImage ImageGrabberFacade::getRawImage()
         break;
     case ImageGrabberDevice::ieee1394Source:
         rawImage = gstreamerDv1394Grabber->getRawImage();
+        break;
+    case ImageGrabberDevice::video4Linux2Source:
+        rawImage = v4l2Grabber->getRawImage();
         break;
     case ImageGrabberDevice::gphoto2Source:
         rawImage = gphotoGrabber->getRawImage();

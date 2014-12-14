@@ -94,7 +94,7 @@ bool GrabberV4L2Controller::initialization(ImageGrabber* ig, ImageGrabberDevice*
 {
     qDebug("GrabberV4L2Controller::init --> Start");
 
-    grabber = (GstreamerV4L2Grabber*)ig;
+    grabber = (V4L2Grabber*)ig;
     grabberDevice = igd;
 
     qDebug("GrabberV4L2Controller::init --> Open the device ...");

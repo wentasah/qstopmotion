@@ -48,8 +48,9 @@ public:
         testSource,                    // 1
         video4LinuxSource,             // 2
         ieee1394Source,                // 3
-        gphoto2Source,                 // 4
-        mediaFoundationSource          // 5
+        video4Linux2Source,            // 4
+        gphoto2Source,                 // 5
+        mediaFoundationSource          // 6
     };
 
     /**

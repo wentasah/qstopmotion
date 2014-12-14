@@ -48,12 +48,12 @@ GrabberWidget::GrabberWidget(Frontend *f, QWidget *parent)
     actualGstreamerVideoTestGrabber        = true;
     gstreamerV4L2GrabberCheck              = 0;
     actualGstreamerV4L2Grabber             = false;
-    gstreamerV4L2ControllerCheck           = 0;
-    actualGstreamerV4L2Controller          = false;
     gstreamerDv1394GrabberCheck            = 0;
     actualGstreamerDv1394Grabber           = false;
-    gstreamerDirectShowUsbGrabberCheck     = 0;
-    actualGstreamerDirectShowUsbGrabber    = false;
+    v4l2GrabberCheck                       = 0;
+    actualV4L2Grabber                      = false;
+    v4l2ControllerCheck                    = 0;
+    actualV4L2Controller                   = false;
     mediaFoundationGrabberCheck            = 0;
     actualMediaFoundationGrabber           = false;
     mediaFoundationControllerCheck         = 0;
@@ -97,17 +97,16 @@ void GrabberWidget::makeGUI()
 
     gstreamerV4L2GrabberCheck = new QCheckBox(tr("GStreamer Video 4 Linux 2 Source"));
     gstreamerV4L2GrabberCheck->setChecked(false);
-    connect(gstreamerV4L2GrabberCheck, SIGNAL(stateChanged(int)), this, SLOT(changeGstreamerV4L2GrabberCheckState(int)));
-
-    gstreamerV4L2ControllerCheck = new QCheckBox(tr("Camera Controller (Experimental)"));
-    gstreamerV4L2ControllerCheck->setChecked(false);
 
     gstreamerDv1394GrabberCheck = new QCheckBox(tr("GStreamer DV1394 Source"));
     gstreamerDv1394GrabberCheck->setChecked(false);
 
-    gstreamerDirectShowUsbGrabberCheck = new QCheckBox(tr("GStreamer Direct Show USB Source"));
-    gstreamerDirectShowUsbGrabberCheck->setChecked(false);
-    connect(gstreamerDirectShowUsbGrabberCheck, SIGNAL(stateChanged(int)), this, SLOT(changeGstreamerDirectShowUsbGrabberCheckState(int)));
+    v4l2GrabberCheck = new QCheckBox(tr("Video 4 Linux 2 Source"));
+    v4l2GrabberCheck->setChecked(false);
+    connect(v4l2GrabberCheck, SIGNAL(stateChanged(int)), this, SLOT(changeV4L2GrabberCheckState(int)));
+
+    v4l2ControllerCheck = new QCheckBox(tr("Camera Controller (Experimental)"));
+    v4l2ControllerCheck->setChecked(false);
 
     mediaFoundationGrabberCheck = new QCheckBox(tr("Microsoft Media Foundation Source"));
     mediaFoundationGrabberCheck->setChecked(false);
@@ -128,9 +127,9 @@ void GrabberWidget::makeGUI()
     grabberLayout->setColumnStretch(1, 1);
     grabberLayout->addWidget(gstreamerVideoTestGrabberCheck, 0, 0, 1, 2);
     grabberLayout->addWidget(gstreamerV4L2GrabberCheck, 1, 0, 1, 2);
-    grabberLayout->addWidget(gstreamerV4L2ControllerCheck, 2, 1, 1, 1);
-    grabberLayout->addWidget(gstreamerDv1394GrabberCheck, 3, 0, 1, 2);
-    grabberLayout->addWidget(gstreamerDirectShowUsbGrabberCheck, 4, 0, 1, 2);
+    grabberLayout->addWidget(gstreamerDv1394GrabberCheck, 2, 0, 1, 2);
+    grabberLayout->addWidget(v4l2GrabberCheck, 3, 0, 1, 2);
+    grabberLayout->addWidget(v4l2ControllerCheck, 4, 1, 1, 1);
     grabberLayout->addWidget(mediaFoundationGrabberCheck, 5, 0, 1, 2);
     grabberLayout->addWidget(mediaFoundationControllerCheck, 6, 1, 1, 1);
     grabberLayout->addWidget(gphoto2GrabberCheck, 7, 0, 1, 2);
@@ -155,6 +154,7 @@ void GrabberWidget::initialize()
     PreferencesTool *pref = frontend->getPreferences();
     int              value;
 
+#ifdef Q_WS_X11
     // GStreamer video test device
     if (frontend->isGstreamerInstalled()) {
         if (pref->getIntegerPreference("preferences", "gstreamervideotestgrabber", value) == false) {
@@ -166,24 +166,24 @@ void GrabberWidget::initialize()
     else {
         gstreamerVideoTestGrabberCheck->hide();
     }
+#else
+    gstreamerVideoTestGrabberCheck->hide();
+#endif
 
 #ifdef Q_WS_X11
     // GStreamer video4linux2 device
-    if (pref->getIntegerPreference("preferences", "gstreamerv4l2grabber", value) == false) {
-        value = true;
+    if (frontend->isGstreamerInstalled()) {
+        if (pref->getIntegerPreference("preferences", "gstreamerv4l2grabber", value) == false) {
+            value = true;
+        }
+        actualGstreamerV4L2Grabber = value;
+        gstreamerV4L2GrabberCheck->setChecked(actualGstreamerV4L2Grabber);
     }
-    actualGstreamerV4L2Grabber = value;
-    gstreamerV4L2GrabberCheck->setChecked(actualGstreamerV4L2Grabber);
-    changeGstreamerV4L2GrabberCheckState(actualGstreamerV4L2Grabber);
-
-    if (pref->getIntegerPreference("preferences", "gstreamerv4l2controller", value) == false) {
-        value = false;
+    else {
+        gstreamerV4L2GrabberCheck->hide();
     }
-    actualGstreamerV4L2Controller = value;
-    gstreamerV4L2ControllerCheck->setChecked(actualGstreamerV4L2Controller);
 #else
     gstreamerV4L2GrabberCheck->hide();
-    gstreamerV4L2ControllerCheck->hide();
 #endif
 
 #ifdef Q_WS_X11
@@ -202,21 +202,27 @@ void GrabberWidget::initialize()
     gstreamerDv1394GrabberCheck->hide();
 #endif
 
-#ifdef Q_WS_WIN
-    // GStreamer directshow USB device
-    if (frontend->isGstreamerInstalled()) {
-        if (pref->getIntegerPreference("preferences", "gstreamerdirectshowusbgrabber", value) == false) {
-            value = true;
-        }
-        actualGstreamerDirectShowUsbGrabber = value;
-        gstreamerDirectShowUsbGrabberCheck->setChecked(actualGstreamerDirectShowUsbGrabber);
-        changeGstreamerDirectShowUsbGrabberCheckState(actualGstreamerDirectShowUsbGrabber);
+#ifdef Q_WS_X11
+    // Video4linux2 device
+    if (pref->getIntegerPreference("preferences", "v4l2grabber", value) == false) {
+        value = true;
     }
-    else {
-        gstreamerDirectShowUsbGrabberCheck->hide();
+    actualV4L2Grabber = value;
+    v4l2GrabberCheck->setChecked(actualV4L2Grabber);
+    changeV4L2GrabberCheckState(actualV4L2Grabber);
+
+    if (pref->getIntegerPreference("preferences", "v4l2controller", value) == false) {
+        value = false;
     }
+    actualV4L2Controller = value;
+    v4l2ControllerCheck->setChecked(actualV4L2Controller);
+
+    // Temporary not enabled
+    v4l2GrabberCheck->setEnabled(false);
+    v4l2ControllerCheck->setEnabled(false);
 #else
-    gstreamerDirectShowUsbGrabberCheck->hide();
+    v4l2GrabberCheck->hide();
+    v4l2ControllerCheck->hide();
 #endif
 
 #ifdef Q_WS_WIN
@@ -294,14 +300,6 @@ void GrabberWidget::apply()
         changes = true;
     }
 
-    bool newGstreamerV4L2Controller = gstreamerV4L2ControllerCheck->isChecked();
-    if (newGstreamerV4L2Controller != actualGstreamerV4L2Controller) {
-        // Video 4 Linux 2 controller changed
-        pref->setIntegerPreference("preferences", "gstreamerv4l2controller", newGstreamerV4L2Controller);
-        actualGstreamerV4L2Controller = newGstreamerV4L2Controller;
-        changes = true;
-    }
-
     bool newGstreamerDv1394Grabber = gstreamerDv1394GrabberCheck->isChecked();
     if (newGstreamerDv1394Grabber != actualGstreamerDv1394Grabber) {
         // DV1394 grabber changed
@@ -310,11 +308,19 @@ void GrabberWidget::apply()
         changes = true;
     }
 
-    bool newGstreamerDirectShowUsbGrabber = gstreamerDirectShowUsbGrabberCheck->isChecked();
-    if (newGstreamerDirectShowUsbGrabber != actualGstreamerDirectShowUsbGrabber) {
-        // DirectShow USB grabber changed
-        pref->setIntegerPreference("preferences", "gstreamerdirectshowusbgrabber", newGstreamerDirectShowUsbGrabber);
-        actualGstreamerDirectShowUsbGrabber = newGstreamerDirectShowUsbGrabber;
+    bool newV4L2Grabber = v4l2GrabberCheck->isChecked();
+    if (newV4L2Grabber != actualV4L2Grabber) {
+        // Video 4 Linux 2 grabber changed
+        pref->setIntegerPreference("preferences", "v4l2grabber", newV4L2Grabber);
+        actualV4L2Grabber = newV4L2Grabber;
+        changes = true;
+    }
+
+    bool newV4L2Controller = v4l2ControllerCheck->isChecked();
+    if (newV4L2Controller != actualV4L2Controller) {
+        // Video 4 Linux 2 controller changed
+        pref->setIntegerPreference("preferences", "v4l2controller", newV4L2Controller);
+        actualV4L2Controller = newV4L2Controller;
         changes = true;
     }
 
@@ -365,11 +371,11 @@ void GrabberWidget::reset()
     gstreamerVideoTestGrabberCheck->setChecked(actualGstreamerVideoTestGrabber);
 
     gstreamerV4L2GrabberCheck->setChecked(actualGstreamerV4L2Grabber);
-    gstreamerV4L2ControllerCheck->setChecked(actualGstreamerV4L2Controller);
 
     gstreamerDv1394GrabberCheck->setChecked(actualGstreamerDv1394Grabber);
 
-    gstreamerDirectShowUsbGrabberCheck->setChecked(actualGstreamerDirectShowUsbGrabber);
+    v4l2GrabberCheck->setChecked(actualV4L2Grabber);
+    v4l2ControllerCheck->setChecked(actualV4L2Controller);
 
     mediaFoundationGrabberCheck->setChecked(actualMediaFoundationGrabber);
     mediaFoundationControllerCheck->setChecked(actualMediaFoundationController);
@@ -381,19 +387,14 @@ void GrabberWidget::reset()
 }
 
 
-void GrabberWidget::changeGstreamerV4L2GrabberCheckState(int newState)
+void GrabberWidget::changeV4L2GrabberCheckState(int newState)
 {
     if (newState) {
-        gstreamerV4L2ControllerCheck->setEnabled(true);
+        v4l2ControllerCheck->setEnabled(true);
     }
     else {
-        gstreamerV4L2ControllerCheck->setEnabled(false);
+        v4l2ControllerCheck->setEnabled(false);
     }
-}
-
-
-void GrabberWidget::changeGstreamerDirectShowUsbGrabberCheckState(int /* newState */)
-{
 }
 
 

@@ -18,8 +18,7 @@
  *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                 *
  ******************************************************************************/
 
-#include "v4l2grabber.h"
-#include "v4l2controller.h"
+#include "usbgrabber.h"
 
 #include "technical/util.h"
 
@@ -69,7 +68,6 @@ bool GstreamerV4L2Grabber::initialization(QVector<ImageGrabberDevice*> &devices)
     GValueArray           *values_id = NULL;
     int                    device_size;
     ImageGrabberDevice    *device = NULL;
-    GrabberV4L2Controller *deviceController = NULL;
     PreferencesTool       *pref = frontend->getPreferences();
     int                    value;
 
@@ -164,29 +162,6 @@ bool GstreamerV4L2Grabber::initialization(QVector<ImageGrabberDevice*> &devices)
                  }
                 // Add the device to the device list
                 devices.append(device);
-
-                // Create grabber controller
-                if (pref->getIntegerPreference("preferences", "gstreamerv4l2controller", value) == false) {
-                    value = false;
-                }
-                if ((int)true == value) {
-                    deviceController = new GrabberV4L2Controller(0);
-                    if (deviceController->initialization(this, device))
-                    {
-                        device->setController(deviceController);
-
-                        if (deviceController->setResolutions(device) == false) {
-                            qDebug() << "GstreamerV4L2Grabber::initialization --> Cannot enumerate resolutions (" << errno << ")";
-                            // return false;
-                        }
-
-                    }
-                    else
-                    {
-                        delete deviceController;
-                        deviceController = NULL;
-                    }
-                }
 
                 qDebug() << "GstreamerV4L2Grabber::initialization --> device id " << i << " '" << devices[device_size]->getDeviceId() << "' (" << g_value_get_string(&value_id_string) << ")";
                 if (values_name != NULL) {

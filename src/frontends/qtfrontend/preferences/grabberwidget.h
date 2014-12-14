@@ -82,19 +82,11 @@ protected:
 private slots:
     /**
      * Slot for notified the grabber tab when the state of the
-     * gstreamerV4L2Grabber checkbox are changed,
+     * v4l2Grabber checkbox are changed,
      * so that general preferences can be updated.
      * @param newState The new state of the check box
      */
-    void changeGstreamerV4L2GrabberCheckState(int newState);
-
-    /**
-     * Slot for notified the grabber tab when the state of the
-     * gstreamerDirectShowUsbGrabber checkbox are changed,
-     * so that general preferences can be updated.
-     * @param newState The new state of the check box
-     */
-    void changeGstreamerDirectShowUsbGrabberCheckState(int newState);
+    void changeV4L2GrabberCheckState(int newState);
 
     /**
      * Slot for notified the grabber tab when the state of the
@@ -120,9 +112,9 @@ private:
     QGroupBox    *grabberGroupBox;
     QCheckBox    *gstreamerVideoTestGrabberCheck;
     QCheckBox    *gstreamerV4L2GrabberCheck;
-    QCheckBox    *gstreamerV4L2ControllerCheck;
     QCheckBox    *gstreamerDv1394GrabberCheck;
-    QCheckBox    *gstreamerDirectShowUsbGrabberCheck;
+    QCheckBox    *v4l2GrabberCheck;
+    QCheckBox    *v4l2ControllerCheck;
     QCheckBox    *mediaFoundationGrabberCheck;
     QCheckBox    *mediaFoundationControllerCheck;
     QCheckBox    *gphoto2GrabberCheck;
@@ -130,9 +122,9 @@ private:
 
     bool          actualGstreamerVideoTestGrabber;
     bool          actualGstreamerV4L2Grabber;
-    bool          actualGstreamerV4L2Controller;
     bool          actualGstreamerDv1394Grabber;
-    bool          actualGstreamerDirectShowUsbGrabber;
+    bool          actualV4L2Grabber;
+    bool          actualV4L2Controller;
     bool          actualMediaFoundationGrabber;
     bool          actualMediaFoundationController;
     bool          actualGphoto2Grabber;

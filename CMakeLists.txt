@@ -1,7 +1,7 @@
 ###############################################################################
 # CMake file for the qStopMotion project                                      #
 # (c) Ralf Lange, longsoft.de                                                 #
-# Last update: 2014-12-10                                                     #
+# Last update: 2014-12-13                                                     #
 #                                                                             #
 # Usage:                                                                      #
 #   * Qt-Creator (Windows, Linux)                                             #
@@ -98,7 +98,7 @@ IF(UNIX)
 set(HEADERS
     ${HEADERS}
     src/technical/grabber/gphoto2/gpcontroller.h
-    src/technical/grabber/gstreamer/linux/v4l2controller.h
+    src/technical/grabber/video4linux2/v4l2controller.h
 )
 ENDIF(UNIX)
 
@@ -178,7 +178,8 @@ set(MOC_HEADERS
     src/technical/grabber/gstreamer/gstgrabber.h
     src/technical/grabber/gstreamer/videotestgrabber.h
     src/technical/grabber/gstreamer/linux/dv1394grabber.h
-    src/technical/grabber/gstreamer/linux/v4l2grabber.h
+    src/technical/grabber/gstreamer/linux/usbgrabber.h
+    src/technical/grabber/video4linux2/v4l2grabber.h
 )
 ENDIF(UNIX)
 
@@ -272,9 +273,10 @@ set(SOURCES
     src/technical/grabber/gphoto2/gpgrabber.cpp
     src/technical/grabber/gstreamer/gstgrabber.cpp
     src/technical/grabber/gstreamer/videotestgrabber.cpp
-    src/technical/grabber/gstreamer/linux/v4l2controller.cpp
     src/technical/grabber/gstreamer/linux/dv1394grabber.cpp
-    src/technical/grabber/gstreamer/linux/v4l2grabber.cpp
+    src/technical/grabber/gstreamer/linux/usbgrabber.cpp
+    src/technical/grabber/video4linux2/v4l2controller.cpp
+    src/technical/grabber/video4linux2/v4l2grabber.cpp
 )
 ENDIF(UNIX)
 

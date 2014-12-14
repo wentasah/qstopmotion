@@ -373,12 +373,11 @@ bool RecordingTab::setVideoSource(int index)
         for (int resIndex = 0 ; resIndex < resSize ; resIndex++) {
             resolutionCombo->addItem(resNames[resIndex]);
         }
-        resolutionCombo->setCurrentIndex(0);
     }
     else {
         resolutionCombo->addItem(tr("Not Supported"));
-        resolutionCombo->setCurrentIndex(-1);
     }
+    resolutionCombo->setCurrentIndex(0);
 
     return true;
 }

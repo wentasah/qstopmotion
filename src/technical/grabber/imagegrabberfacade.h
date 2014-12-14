@@ -161,6 +161,7 @@ protected:
     ImageGrabber *gstreamerV4L2Grabber;
     ImageGrabber *gstreamerDv1394Grabber;
     ImageGrabber *gphotoGrabber;
+    ImageGrabber *v4l2Grabber;
 
     ImageGrabber *mediaFoundationGrabber;
 

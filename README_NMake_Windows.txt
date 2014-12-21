@@ -14,9 +14,6 @@ Last Change: 2014-04-15
   debugging tools for windows.
 * Install in the default installation directory
   (C:\Program Files\Microsoft SDKs\Windows\v7.1).
-* Create a shortcut to "Windows SDK 7.1 Command Prompt".
-  - Open the properties of the shortcut.
-  - Add the following options to the command line: " /Release /x86".
 
 1.2 Qt for Windows and Visual Studio
 --------------------------------------------------------------------------------
@@ -26,39 +23,26 @@ Last Change: 2014-04-15
 * Qt need write permissions to this directory during compilation and linking.
 * Add the binary directory to the path variable (e.g. C:\Tools\Qt\4.8.2\bin\).
 
-1.3 GStreamer
+1.3 CMake 2.8.12
 --------------------------------------------------------------------------------
 
-* Download GStreamer GPL from code.google.com/p/ossbuild/:
-  GStreamer-WinBuilds-GPL-x86-Beta04-0.10.7.msi
-* Install in the default installation directory.
-* Download GStreamer SDK GPL from code.google.com/p/ossbuild/:
-  GStreamer-WinBuilds-SDK-GPL-x86-Beta04-0.10.7.msi
-* Install GGtreamer SDK GPL
-* Note: The Windows version of GStreamer from the GStreamer project
-  (http://gstreamer.freedesktop.org/) are not supported!
-
-1.4 CMake 2.8.12 or newer
---------------------------------------------------------------------------------
-
-* Download CMake from "http://www.cmake.org/cmake/resources/software.html"
+* Download CMake 2.8.12.x from "http://www.cmake.org/cmake/resources/software.html"
 * Add CMake to the system PATH for all users.
 * Install in the default installation directory.
 * Create a start script for CMake (C:\Tools\cmakestart.bat)
     rem Set the Visual Studion 10 environment variables
-    rem Usage : Setenv [/Debug | /Release][/x86 | /x64 | /ia64 ][/vista | /xp | /2003 | /2008 | /win7][-h | /?]
-    call "C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\SetEnv.cmd" /Release /x86
-    rem Start the CMake
+    call "C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\vcvarsall.bat"
+    rem Start CMake
     "C:\Program Files (x86)\CMake 2.8\bin\cmake-gui.exe"
 * Create a shortcut to the start script.
 
-1.5 Mercurial client (Version >= 1.4.1)
+1.4 Mercurial SCM (Developers only)
 --------------------------------------------------------------------------------
 
-* Download TortoiseHG from "http://tortoisehg.bitbucket.org/download/index.html"
+* Download Mercurial or TortoiseHG with Mercurial from "http://mercurial.selenic.com/downloads"
 * Install in the default installation directory.
 
-1.6 NSIS 2.46
+1.5 NSIS 2.46
 --------------------------------------------------------------------------------
 
 * Download NSIS from "http://nsis.sourceforge.net/Main_Page"
@@ -101,7 +85,25 @@ Last Change: 2014-04-15
 3. Building qStopMotion
 ================================================================================
 
-3.1 Create the NMake makefile
+3.1 Add the ffmpeg encoder to the sources directory
+--------------------------------------------------------------------------------
+
+* Download the latest static version from http://ffmpeg.zeranoe.com/builds/
+* Unpack the 7z file to the qstopmotion directory
+* Rename the ffmpeg directory to 'ffmpeg'
+
+3.2 Add the qtruntime to the sources directory
+--------------------------------------------------------------------------------
+
+* Create a new directory qtruntime in the source directory
+* Copy QtCore4.dll, QtGui4.dll and QtXml.dll from Qt installation bin directory
+  to the new qtruntime directory
+* Copy QtCored4.dll, QtGuid4.dll and QtXmld.dll from Qt installation bin directory
+  to the new qtruntime directory
+* Copy the directory imageformats from Qt installation plugins directory
+  to the new qtruntime directory
+
+3.3 Create the NMake makefile
 --------------------------------------------------------------------------------
 
 * Start the CMake GUI using the shortcut to the start script.
@@ -113,15 +115,17 @@ Last Change: 2014-04-15
 * Press the configure button.
 * Select the generator "NMake Makefiles".
 * Select the entry CPACK - CPACK_BINARY_NSIS.
+* Select the entry CPACK - CPACK_BINARY_ZIP.
+* Select the entry CPACK - CPACK_SOURCE_ZIP.
 * Press the configure button again.
 * Press the generate button.
 
-3.2 Build the application
+3.4 Build the application
 --------------------------------------------------------------------------------
 
-* Start the modifyed shortcut to the "windows SDK 7.1 Command Prompt".
+* Start the "Qt 4.8.4 Command Prompt".
 * Move to the new created destination directory.
-* call "nmake".
+* Call "nmake".
 * Locking for error and warning messages.
 
 4. Installation
@@ -142,22 +146,34 @@ Last Change: 2014-04-15
 6.1 Create the installer for qStopMotion
 --------------------------------------------------------------------------------
 
-* Start the modifyed shortcut to the "windows SDK 7.1 Command Prompt".
-* Call "nmake package"
-* A new installer with the name 'qstopmotion-x.y.z-win32.exe' will be created
-  in the destination directory
+* Start the "Qt 4.8.4 Command Prompt".
+* Move to the new created destination directory.
+* Call "nmake package".
+* The Windows installer with the name 'qstopmotion-x.y.z-win32.exe' will be
+  created in the destination directory.
+* The portable application with the name 'qstopmotion-x.y.z-win32.zip' will be
+  created in the destination directory.
 
-6.2 Test the new installer
+6.2 Test the installer
 --------------------------------------------------------------------------------
 
-* Copy the new installer to a temporary directory
-* Start the installer
-* Select the installation directory
+* Copy the new installer to a temporary directory.
+* Start the installer.
+* Select the installation directory.
+* Start qStopMotion in the Windows 'Start' menu.
 
-6.3 Create the source package
+6.3 Test the portable application
 --------------------------------------------------------------------------------
 
-* Start the modifyed shortcut to the "windows SDK 7.1 Command Prompt".
+* Unpack the zip file of the portable application to a temporary directory.
+* Move to the new directory and go to the 'bin' subdirectory.
+* Start the file 'qstopmotion.exe'.
+
+6.4 Create the source package
+--------------------------------------------------------------------------------
+
+* Start the "Qt 4.8.4 Command Prompt".
+* Move to the new created destination directory.
 * Call "nmake package_source"
 * A new zip package with the name 'qstopmotion-x.y.z-Source.zip' will be created
   in the destination directory

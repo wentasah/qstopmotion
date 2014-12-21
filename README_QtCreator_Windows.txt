@@ -1,5 +1,5 @@
 Building qStopMotion using Qt-Creator IDE on Windows with the Windows SDK as host
-Last Change: 2014-04-12
+Last Change: 2014-04-15
 
 1. Preparation of the development environment
 ================================================================================
@@ -18,10 +18,10 @@ Last Change: 2014-04-12
 1.2 Qt for Windows and Visual Studio
 --------------------------------------------------------------------------------
 
-* Download Qt libraries 4.8.2 for Windows 32-bit (VS 2010) from qt-project.com/downloads
+* Download Qt libraries 4.8.4 for Windows 32-bit (VS 2010) from qt-project.com/downloads
 * Install in the Directory C:\Tools\Qt\...
 * Qt need write permissions to this directory during compilation and linking.
-* Add the binary directory to the path variable (e.g. C:\Tools\Qt\4.8.2\bin\).
+* Add the binary directory to the path variable (e.g. C:\Tools\Qt\4.8.4\bin\).
 
 1.3 Download and install Qt-Creator for Windows
 --------------------------------------------------------------------------------
@@ -31,48 +31,29 @@ Last Change: 2014-04-12
 * Install in the Directory C:\Tools\Qt\...
 * The installation of the MinGW runtime development tools is not necessary.
 
-1.4 Python
+1.4 CMake 2.8.12
 --------------------------------------------------------------------------------
 
-* Download Python Version 2.5.x, 2.6.x or 2.7.x from https://www.python.org/ 
-* Install in the default installation directory.
-
-1.5 GStreamer
---------------------------------------------------------------------------------
-
-* Download GStreamer GPL from code.google.com/p/ossbuild/:
-  GStreamer-WinBuilds-GPL-x86-Beta04-0.10.7.msi
-* Install in the default installation directory.
-* Download GStreamer SDK GPL from code.google.com/p/ossbuild/:
-  GStreamer-WinBuilds-SDK-GPL-x86-Beta04-0.10.7.msi
-* Install GGtreamer SDK GPL
-* Note: The Windows version of GStreamer from the GStreamer project
-  (http://gstreamer.freedesktop.org/) are not supported!
-
-1.6 CMake 2.8.12 or newer
---------------------------------------------------------------------------------
-
-* Download CMake from "http://www.cmake.org/cmake/resources/software.html"
+* Download CMake 2.8.12.x from "http://www.cmake.org/cmake/resources/software.html"
 * Add CMake to the system PATH for all users.
 * Install in the default installation directory.
 * Create a start script for CMake (C:\Tools\cmakestart.bat)
     rem Set the Visual Studion 10 environment variables
-    rem Usage : Setenv [/Debug | /Release][/x86 | /x64 | /ia64 ][/vista | /xp | /2003 | /2008 | /win7][-h | /?]
-    call "C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\SetEnv.cmd" /Release /x86
-    rem Start the CMake
+    call "C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\vcvarsall.bat"
+    rem Start CMake
     "C:\Program Files (x86)\CMake 2.8\bin\cmake-gui.exe"
 * Create a shortcut to the start script.
 
-1.7 NSIS 2.46
+1.5 NSIS 2.46
 --------------------------------------------------------------------------------
 
 * Download NSIS from "http://nsis.sourceforge.net/Main_Page"
 * Install in the default installation directory.
 
-1.8 Install Mercurial SCM (Developers only)
+1.6 Mercurial SCM (Developers only)
 --------------------------------------------------------------------------------
 
-* Download the Mercurial install package from http://mercurial.selenic.com
+* Download Mercurial or TortoiseHG with Mercurial from "http://mercurial.selenic.com/downloads"
 * Install in the default installation directory.
 
 2. Access to the sources of qStopMotion
@@ -126,30 +107,29 @@ Last Change: 2014-04-12
 * Copy QtCore4.dll, QtGui4.dll and QtXml.dll from Qt installation bin directory
   to the new qtruntime directory
 * Copy QtCored4.dll, QtGuid4.dll and QtXmld.dll from Qt installation bin directory
-  to the new qtruntime directory
+  to the new qtruntime directory.
 * Copy the directory imageformats from Qt installation plugins directory
-  to the new qtruntime directory
+  to the new qtruntime directory.
 
 3.3 Build
 --------------------------------------------------------------------------------
 
-* Start Qt Creator using the shortcut to the start script.
+* Start Qt Creator.
+* Open the 'Options...' dialog in the 'Tools' menu and select 'Build & Run'.
+* In the tab 'Qt Versions' add a manual entry for the installed Qt version and
+  press the 'Apply' button.
+* In the tab 'Kits' select the entry 'Manual - Desktop (default)' and  select the
+  'Microsoft Visual C++ Compiler 10.0 (x86)' and the installed Qt version.
 * Open the CMakeLists.txt file as new project.
 * In the dialog of the CMake-Assistent press the 'Run CMake' button.
 * Ignore the CMake Warnings 'system runtime library file does not exist' messages.
 * If the 'Finisch' button is enabled press this button.
-* Build | Build Solution
-* Locking for error and warning messages
+* In the 'Build' menu select 'Build Project qStopMotion'
+* Locking for error and warning messages.
 
 3.4 Debugging
 --------------------------------------------------------------------------------
 
-* Start Qt Creator using the shortcut to the start script.
-* In the dialog of the CMake-Assistent press the 'Run CMake' button.
-* Ignore the CMake Warnings 'system runtime library file does not exist' messages.
-* If the 'Finisch' button is enabled press this button.
-* Open Options | Settings | Debugger
-* On the Cdb tab enable the CDB. Normaly the path to the debugger will find
-  automatically.
+* Start Qt Creator.
+* Build qStopMotion.
 * Start qStopMotion in debugging mode.
-

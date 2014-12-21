@@ -63,6 +63,14 @@ public:
     void newDeviceSet();
 
     /**
+     * Get the number of possible devices.
+     *
+     * @brief getDeviceCount
+     * @return Number of devices.
+     */
+    const int getDeviceCount();
+
+    /**
      * Get the possible video devices.
      * @return Vector with the devices.
      */

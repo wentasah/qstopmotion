@@ -156,18 +156,18 @@
 <context>
     <name>AnimationProject</name>
     <message>
-        <location filename="../src/domain/animation/animationproject.cpp" line="493"/>
+        <location filename="../src/domain/animation/animationproject.cpp" line="479"/>
         <source>Saving scenes to disk ...</source>
         <translation>Enregistrer les scènes sur le disque dur...</translation>
     </message>
     <message>
-        <location filename="../src/domain/animation/animationproject.cpp" line="1440"/>
-        <location filename="../src/domain/animation/animationproject.cpp" line="1447"/>
+        <location filename="../src/domain/animation/animationproject.cpp" line="1417"/>
+        <location filename="../src/domain/animation/animationproject.cpp" line="1424"/>
         <source>Add Sound</source>
         <translation>Ajouter le son</translation>
     </message>
     <message>
-        <location filename="../src/domain/animation/animationproject.cpp" line="1441"/>
+        <location filename="../src/domain/animation/animationproject.cpp" line="1418"/>
         <source>Cannot open the selected audio file for reading.
 Check that you have the right permissions set.
 The animation will be runned without sound if you
@@ -177,7 +177,7 @@ Veuillez vérifier si vous avez mis les bons droits d&apos;accès.
 L&apos;animation est visualisée sans son si vous choisissez de le lire.</translation>
     </message>
     <message>
-        <location filename="../src/domain/animation/animationproject.cpp" line="1448"/>
+        <location filename="../src/domain/animation/animationproject.cpp" line="1425"/>
         <source>The selected audio file is not valid within the
 given audio format. The animation will be runned
 without sound if you choose to play.</source>
@@ -467,8 +467,8 @@ L&apos;animation est visualisée sans son si vous choisissez de le lire.</transl
     <name>DomainFacade</name>
     <message>
         <location filename="../src/domain/domainfacade.cpp" line="151"/>
-        <location filename="../src/domain/domainfacade.cpp" line="534"/>
-        <location filename="../src/domain/domainfacade.cpp" line="1288"/>
+        <location filename="../src/domain/domainfacade.cpp" line="520"/>
+        <location filename="../src/domain/domainfacade.cpp" line="1269"/>
         <source>Critical</source>
         <translation>Problématique</translation>
     </message>
@@ -482,12 +482,12 @@ L&apos;animation est visualisée sans son si vous choisissez de le lire.</transl
         <translation>Le fichier histoire ne peut pas être ouvert pour ajouter une nouvelle entrée!</translation>
     </message>
     <message>
-        <location filename="../src/domain/domainfacade.cpp" line="535"/>
+        <location filename="../src/domain/domainfacade.cpp" line="521"/>
         <source>Can&apos;t open history file to recover project!</source>
         <translation>Le fichier histoire ne peut pas être ouvert pour récupérer le projet!</translation>
     </message>
     <message>
-        <location filename="../src/domain/domainfacade.cpp" line="1289"/>
+        <location filename="../src/domain/domainfacade.cpp" line="1270"/>
         <source>Can&apos;t copy image to temp directory!</source>
         <translation>L&apos;image ne peut pas être copié dans le dossier temporaire!</translation>
     </message>
@@ -883,39 +883,39 @@ L&apos;animation est visualisée sans son si vous choisissez de le lire.</transl
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/grabberwidget.cpp" line="102"/>
-        <location filename="../src/frontends/qtfrontend/preferences/grabberwidget.cpp" line="116"/>
-        <location filename="../src/frontends/qtfrontend/preferences/grabberwidget.cpp" line="123"/>
-        <source>Camera Controller (Experimental)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/frontends/qtfrontend/preferences/grabberwidget.cpp" line="105"/>
-        <source>GStreamer DV1394 Source</source>
+        <location filename="../src/frontends/qtfrontend/preferences/grabberwidget.cpp" line="104"/>
+        <source>Video 4 Linux 2 Source</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/grabberwidget.cpp" line="108"/>
-        <source>GStreamer Direct Show USB Source</source>
+        <location filename="../src/frontends/qtfrontend/preferences/grabberwidget.cpp" line="115"/>
+        <location filename="../src/frontends/qtfrontend/preferences/grabberwidget.cpp" line="122"/>
+        <source>Camera Controller (Experimental)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/grabberwidget.cpp" line="112"/>
+        <location filename="../src/frontends/qtfrontend/preferences/grabberwidget.cpp" line="101"/>
+        <source>GStreamer DV1394 Source</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontends/qtfrontend/preferences/grabberwidget.cpp" line="111"/>
         <source>Microsoft Media Foundation Source</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/grabberwidget.cpp" line="119"/>
+        <location filename="../src/frontends/qtfrontend/preferences/grabberwidget.cpp" line="118"/>
         <source>Gphoto2 Source (Experimental)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/grabberwidget.cpp" line="355"/>
+        <location filename="../src/frontends/qtfrontend/preferences/grabberwidget.cpp" line="361"/>
         <source>Information</source>
         <translation type="unfinished">Information</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/grabberwidget.cpp" line="355"/>
+        <location filename="../src/frontends/qtfrontend/preferences/grabberwidget.cpp" line="361"/>
         <source>Pease restart qStopMotion to activate the changings!</source>
         <translation type="unfinished"></translation>
     </message>
@@ -949,9 +949,9 @@ L&apos;animation est visualisée sans son si vous choisissez de le lire.</transl
 <context>
     <name>GstreamerV4L2Grabber</name>
     <message>
-        <location filename="../src/technical/grabber/gstreamer/linux/v4l2grabber.cpp" line="161"/>
+        <location filename="../src/technical/grabber/gstreamer/linux/usbgrabber.cpp" line="159"/>
         <source>Device %1</source>
-        <translation>Périphérique %1</translation>
+        <translation type="unfinished">Périphérique %1</translation>
     </message>
 </context>
 <context>
@@ -1008,12 +1008,23 @@ paramètres de capture dans la fenêtre de préférences.</translation>
 <context>
     <name>ImageGrabberFacade</name>
     <message>
-        <location filename="../src/technical/grabber/imagegrabberfacade.cpp" line="253"/>
+        <location filename="../src/technical/grabber/imagegrabberfacade.cpp" line="221"/>
+        <source>Check image sources</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/technical/grabber/imagegrabberfacade.cpp" line="222"/>
+        <source>No usable video image source found. Please
+connect on video device on the computer.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/technical/grabber/imagegrabberfacade.cpp" line="261"/>
         <source>Check image grabber</source>
         <translation>Vérifier le périphérique</translation>
     </message>
     <message>
-        <location filename="../src/technical/grabber/imagegrabberfacade.cpp" line="254"/>
+        <location filename="../src/technical/grabber/imagegrabberfacade.cpp" line="262"/>
         <source>Image grabber initialization failed. This may happen 
 if you try to grab from an invalid device. Please
 select another device on the recording tool tab.</source>
@@ -1029,152 +1040,144 @@ another device on the recording tool tab.</source>
 <context>
     <name>ImportWidget</name>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="93"/>
+        <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="87"/>
         <source>Below you can set which image sources should be used for importing images to a new project.</source>
         <translation>En dessous vous pouvez choisir quel périphérique doit être utilisé pour importer des images dans un nouveau projet.</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="100"/>
+        <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="94"/>
         <source>Below you can set which image sources should be used for importing images to the currently active project.</source>
         <translation>En dessous vous pouvez choisir quel périphérique doit être utilisé pour importer des images dans le projet activé.</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="112"/>
         <source>Image grabber settings</source>
-        <translation>Réglages du périphérique</translation>
+        <translation type="obsolete">Réglages du périphérique</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="114"/>
         <source>Image Grabber:</source>
-        <translation>Périphérique:</translation>
+        <translation type="obsolete">Périphérique:</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="122"/>
         <source>Test Source</source>
-        <translation>Mire de traînage</translation>
+        <translation type="obsolete">Mire de traînage</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="125"/>
         <source>Video 4 Linux (USB WebCam)</source>
-        <translation>Video 4 Linux (USB WebCam)</translation>
+        <translation type="obsolete">Video 4 Linux (USB WebCam)</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="126"/>
         <source>IEEE 1394 (FireWire DigiCam)</source>
-        <translation>IEEE 1394 (FireWire DigiCam)</translation>
+        <translation type="obsolete">IEEE 1394 (FireWire DigiCam)</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="131"/>
         <source>Direct Show (USB WebCam)</source>
-        <translation>Direct Show (USB WebCam)</translation>
+        <translation type="obsolete">Direct Show (USB WebCam)</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="132"/>
         <source>Direct Show (FireWire DigiCam)</source>
-        <translation>Direct Show (FireWire DigiCam)</translation>
+        <translation type="obsolete">Direct Show (FireWire DigiCam)</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="127"/>
         <source>gphoto (USB Compact Camera)</source>
-        <translation>gphoto (USB Appareil photographique compact)</translation>
+        <translation type="obsolete">gphoto (USB Appareil photographique compact)</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="143"/>
+        <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="106"/>
         <source>Image import settings</source>
         <translation>Réglages de l&apos;importation d&apos;une image</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="145"/>
+        <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="108"/>
         <source>Image Format:</source>
         <translation>Format d&apos;image:</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="152"/>
+        <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="115"/>
         <source>JPEG</source>
         <translation>JPEG</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="153"/>
+        <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="116"/>
         <source>TIFF</source>
         <translation>TIFF</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="154"/>
+        <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="117"/>
         <source>BMP</source>
         <translation>BMP</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="156"/>
+        <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="119"/>
         <source>Image Quality:</source>
         <translation>Qualité de l&apos;image:</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="168"/>
+        <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="131"/>
         <source>Min</source>
         <translation>Min</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="169"/>
+        <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="132"/>
         <source>Max</source>
         <translation>Max</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="171"/>
+        <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="134"/>
         <source>Image Size:</source>
         <translation>Grandeur d&apos;image:</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="178"/>
+        <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="141"/>
         <source>Default Grabber Size</source>
         <translation>Grandeur du périphérique</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="179"/>
+        <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="142"/>
         <source>QVGA (320x240)</source>
         <translation>QVGA (320x240)</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="180"/>
+        <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="143"/>
         <source>VGA (640x480)</source>
         <translation>VGA (640x480)</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="181"/>
+        <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="144"/>
         <source>SVGA (800x600)</source>
         <translation>SVGA (800x600)</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="182"/>
+        <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="145"/>
         <source>PAL D (704x576)</source>
         <translation>PAL D (704x576)</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="183"/>
+        <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="146"/>
         <source>HD Ready (1280x720)</source>
         <translation>HD Ready (1280x720)</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="184"/>
+        <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="147"/>
         <source>Full HD (1900x1080)</source>
         <translation>Full HD (1900x1080) {1900x?}</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="204"/>
+        <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="167"/>
         <source>Live view settings</source>
         <translation>Paramètres de l&apos;affichage en direct</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="206"/>
+        <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="169"/>
         <source>Frames per second:</source>
         <translation>Images par seconde:</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="218"/>
+        <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="181"/>
         <source>0.1</source>
         <translation>0.1</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="219"/>
+        <location filename="../src/frontends/qtfrontend/preferences/importwidget.cpp" line="182"/>
         <source>5.0</source>
         <translation>5.0</translation>
     </message>
@@ -1198,73 +1201,73 @@ another device on the recording tool tab.</source>
 <context>
     <name>MainWindowGUI</name>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1837"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1836"/>
         <source>English</source>
         <comment>This should be translated to the name of the language you are translating to, in that language. Example: English = Deutsch (Deutsch is &quot;German&quot; in German)</comment>
         <translation>Français</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="551"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="550"/>
         <source>Ready to rumble ;-)</source>
         <translation>Top, c&apos;est parti ;-)</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="174"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="173"/>
         <source>&amp;New</source>
         <translation>&amp;Nouveau</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="175"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="174"/>
         <source>&amp;Open</source>
         <translation>&amp;Ouvrir</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="262"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="261"/>
         <source>&lt;h4&gt;Open&lt;/h4&gt; &lt;p&gt;&lt;em&gt;Opens&lt;/em&gt; a qStopMotion project file.&lt;/p&gt;</source>
         <translation>&lt;h4&gt;Ouvrir&lt;/h4&gt; &lt;p&gt;&lt;em&gt;Ouvre&lt;/em&gt; un projet qStopMotion.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="176"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="175"/>
         <source>&amp;Save</source>
         <translation>&amp;Enregistrer</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="177"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="176"/>
         <source>Save &amp;As</source>
         <translation>Enregistrer &amp;sous</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="181"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="180"/>
         <source>&amp;Quit</source>
         <translation>&amp;Quitter</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="312"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="311"/>
         <source>&lt;h4&gt;Quit&lt;/h4&gt; &lt;p&gt;&lt;em&gt;Quits&lt;/em&gt; the program.&lt;/p&gt;</source>
         <translation>&lt;h4&gt;Quitter&lt;/h4&gt; &lt;p&gt;&lt;em&gt;Quitte&lt;/em&gt; le programme Stopmotion.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="205"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="204"/>
         <source>&amp;File</source>
         <translation>&amp;Fichier</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="182"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="181"/>
         <source>&amp;Undo</source>
         <translation>Annu&amp;ler</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="322"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="321"/>
         <source>&lt;h4&gt;Undo&lt;/h4&gt; &lt;p&gt;&lt;em&gt;Undoes&lt;/em&gt; your last operation. You can press undo several time to undo earlier operations.&lt;/p&gt;</source>
         <translation>&lt;h4&gt;Annuler&lt;/h4&gt; &lt;p&gt;&lt;em&gt;Annule&lt;/em&gt; la dernière action. Vous pouvez presser Annuler plusieurs fois pour annuler plusieurs actions.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="183"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="182"/>
         <source>Re&amp;do</source>
         <translation>Re&amp;faire</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="331"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="330"/>
         <source>&lt;h4&gt;Redo&lt;/h4&gt; &lt;p&gt;&lt;em&gt;Redoes&lt;/em&gt; your last operation. You can press redo several times to redo several operations.&lt;/p&gt;</source>
         <translation>&lt;h4&gt;Refaire&lt;/h4&gt; &lt;p&gt;&lt;em&gt;Refait&lt;/em&gt; la dernière action annulée. Vous pouvez presser Refaire plusieurs fois pour refaire plusieurs actions.&lt;/p&gt;</translation>
     </message>
@@ -1293,7 +1296,7 @@ another device on the recording tool tab.</source>
         <translation type="obsolete">&lt;h4&gt;Coller&lt;/h4&gt; &lt;p&gt;&lt;em&gt;Colle&lt;/em&gt; les images stockées dans le presse-papier à l&apos;emplacement sélectionné.&lt;/p&gt; &lt;p&gt;Vous pouvez copier / coller des images depuis d&apos;autres programmes et utiliser cette option pour les coller dans cette animation.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="208"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="207"/>
         <source>&amp;Edit</source>
         <translation>&amp;Édition</translation>
     </message>
@@ -1302,120 +1305,120 @@ another device on the recording tool tab.</source>
         <translation type="obsolete">&amp;Paramètres</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="197"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="196"/>
         <source>What&apos;s &amp;This</source>
         <translation>&amp;Qu&apos;est-ce que c&apos;est</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="390"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="389"/>
         <source>&lt;h4&gt;What&apos;s This&lt;/h4&gt; &lt;p&gt;This will give you a WhatsThis mouse cursor which can be used to bring up helpful information like this.&lt;/p&gt;</source>
         <translation>&lt;h4&gt;Qu&apos;est-ce que c&apos;est&lt;/h4&gt; &lt;p&gt;Ceci affiche un curseur de souris spécial qui peut être utilisé pour afficher des informations utiles comme celle-ci.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="202"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="201"/>
         <source>&amp;About</source>
         <translation>A &amp;propos</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="416"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="415"/>
         <source>&lt;h4&gt;About&lt;/h4&gt; &lt;p&gt;This will display a small information box where you can read general information as well as the names of the developers behind this excellent piece of software.&lt;/p&gt;</source>
         <translation>&lt;h4&gt;A propos&lt;/h4&gt; &lt;p&gt;Ceci affiche une petite fenêtre d&apos;information où vous pouvez lire des informations générales aussi bien que les noms des développeurs qui ont créé cet excellent logiciel.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="200"/>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="210"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="199"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="209"/>
         <source>&amp;Help</source>
         <translation>&amp;Aide</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="199"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="198"/>
         <source>&amp;Camera Controller</source>
         <translation>&amp;Commande de caméra</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="377"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="376"/>
         <source>&lt;h4&gt;Preferences of the application&lt;/h4&gt; &lt;p&gt;This will opens a window where you can &lt;em&gt;change&lt;/em&gt; the preferences of the application.&lt;/p&gt;</source>
         <translation>&lt;h4&gt;Paramètres de l&apos;application&lt;/h4&gt; &lt;p&gt;Cela ouvre une Fenêtre dans la quelle vous pouvez &lt;em&gt;changer&lt;/em&gt; les paramètres de l&apos;application.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="382"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="381"/>
         <source>Preferences of qStopMotion</source>
         <translation>Paramètres de qStopMotion</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1075"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1074"/>
         <source>Existing Images</source>
         <translation>Images existants</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1076"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1075"/>
         <source>There are some images in the open project. Do you want to convert the images to the new file format or quality?</source>
         <translation>Dans le projet ouvert il y a déjà des images. Voulez-vous convertir ces images en le nouveau format ou dans la nouvelle qualité?</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1255"/>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1340"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1254"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1339"/>
         <source>Project (*.%1)</source>
         <translation>Projet (*.%1)</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1363"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1362"/>
         <source>Information</source>
         <translation>Information</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1363"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1362"/>
         <source>The character &apos;|&apos; is not allowed in the project file name and will be removed.</source>
         <translation>Le caractère &apos;|&apos; est interdit dans le nom du fichier de projet et est effacé.</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="407"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="406"/>
         <source>&lt;h4&gt;About Qt&lt;/h4&gt; &lt;p&gt;This will display a small information box where you can read general information about the Qt library.&lt;/p&gt;</source>
         <translation>&lt;h4&gt;Concernant Qt&lt;/h4&gt; &lt;p&gt;Cela montre une petite boîte d&apos;information dans laquelle vous pouvez lire des informations générales sur la bibliothèque Qt.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="412"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="411"/>
         <source>About Qt</source>
         <translation>Concernant Qt</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="428"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="427"/>
         <source>&lt;h4&gt;Project ID&lt;/h4&gt;&lt;p&gt;This area displays the id of the currently active project&lt;/p&gt;</source>
         <translation>&lt;h4&gt;Description du projet&lt;/h4&gt;&lt;p&gt;Ce cadre montre la description du projet active&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="436"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="435"/>
         <source>&lt;h4&gt;Scene ID&lt;/h4&gt;&lt;p&gt;This area displays the id of the currently selected scene&lt;/p&gt;</source>
         <translation>&lt;h4&gt;Description de la scène&lt;/h4&gt;&lt;p&gt;Ce cadre montre la description de la scène active&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="444"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="443"/>
         <source>&lt;h4&gt;Take ID&lt;/h4&gt;&lt;p&gt;This area displays the id of the currently selected take&lt;/p&gt;</source>
         <translation>&lt;h4&gt;Description de la prise de vue&lt;/h4&gt;&lt;p&gt;Ce cadre montre la description de la prise de vue active&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="452"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="451"/>
         <source>&lt;h4&gt;Exposure ID&lt;/h4&gt;&lt;p&gt;This area displays the id of the currently selected exposure&lt;/p&gt;</source>
         <translation>&lt;h4&gt;Description de l&apos;image&lt;/h4&gt;&lt;p&gt;Ce cadre montre la description de l&apos;image active&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="461"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="460"/>
         <source>&lt;h4&gt;FrameView&lt;/h4&gt;&lt;p&gt; In this area you can see the selected frame. You can also play animations in this window by pressing the &lt;b&gt;Play&lt;/b&gt; button.&lt;/p&gt;</source>
         <translation>&lt;h4&gt;Cadre de prévisualisation&lt;/h4&gt;&lt;p&gt; Dans cette zone, vous pouvez voir l&apos;image sélectionnée. Vous pouvez aussi voir les animations en pressant le bouton &lt;b&gt;Lecture&lt;/b&gt;.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="856"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="855"/>
         <source>You have to define an image grabber to use.
 This can be set on the recording tool tab.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1377"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1376"/>
         <source>The project directory must not contain more than one project file.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1408"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1407"/>
         <source>No encoder selected for the video export.
 This can be setted in the properties dialog of the project.
 Export to video will not be possible until you
@@ -1423,7 +1426,7 @@ have setted an encoder to use!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1446"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1445"/>
         <source>No video format selected for the video export.
 This can be setted in the properties dialog of the project.
 Export to video will not be possible until you
@@ -1431,122 +1434,122 @@ have setted an video format to use!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1480"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1479"/>
         <source>No default output file name defined.
 Check your settings in the properties dialo of the project!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1506"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1505"/>
         <source>The selected encoder is not valid.
 Check your settings in the properties dialog of the project!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="2614"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="2613"/>
         <source>Unsaved changes</source>
         <translation>Modifications non enregistrées</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="2615"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="2614"/>
         <source>There are unsaved changes. Do you want to save?</source>
         <translation>Il y a des modifications non enregistrées. Voulez-vous enregistrer ?</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="178"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="177"/>
         <source>Video</source>
         <translation>Vidéo</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="207"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="206"/>
         <source>&amp;Export</source>
         <translation>&amp;Exporter</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="253"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="252"/>
         <source>&lt;h4&gt;New&lt;/h4&gt; &lt;p&gt;Creates a &lt;em&gt;new&lt;/em&gt; project.&lt;/p&gt;</source>
         <translation>&lt;h4&gt;Nouveau&lt;/h4&gt; &lt;p&gt;Crée un &lt;em&gt;nouveau&lt;/em&gt; projet.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="270"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="269"/>
         <source>&lt;h4&gt;Save&lt;/h4&gt; &lt;p&gt;&lt;em&gt;Saves&lt;/em&gt; the current animation as a qStopMotion project file. &lt;BR&gt;If this project has been saved before it will automaticly be saved to the previously selected file.&lt;/p&gt;</source>
         <translation>&lt;h4&gt;Enregistrer&lt;/h4&gt; &lt;p&gt;&lt;em&gt;Enregistre&lt;/em&gt; l&apos;animation courante sous forme de fichier projet qStopMotion. &lt;BR&gt;Si ce projet a été enregistré précédemment, il sera enregistré automatiquement dans le même fichier (écrasement).&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="280"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="279"/>
         <source>&lt;h4&gt;Save As&lt;/h4&gt; &lt;p&gt;&lt;em&gt;Saves&lt;/em&gt; the current animation as a qStopMotion project file.&lt;/p&gt;</source>
         <translation>&lt;h4&gt;Enregistrer sous&lt;/h4&gt; &lt;p&gt;&lt;em&gt;Enregistre&lt;/em&gt; l&apos;animation courante sous forme de fichier projet qStopMotion.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="289"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="288"/>
         <source>&lt;h4&gt;Video&lt;/h4&gt; &lt;p&gt;Exports the current project as &lt;em&gt;video&lt;/em&gt;.&lt;/p&gt;You will be given a wizard to guide you.</source>
         <translation>&lt;h4&gt;Vidéo&lt;/h4&gt; &lt;p&gt;Exporte le projet courant vers un fichier &lt;em&gt;vidéo&lt;/em&gt;.&lt;/p&gt;Vous aurez un assistant pour vous guider.</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="296"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="295"/>
         <source>&lt;h4&gt;Cinelerra&lt;/h4&gt; &lt;p&gt;Exports the current animation as a &lt;em&gt;cinelerra-cv&lt;/em&gt; project.&lt;/p&gt;You will be given a wizard to guide you.</source>
         <translation>&lt;h4&gt;Cinelerra&lt;/h4&gt; &lt;p&gt;Exporte l&apos;animation courante en tant que projet &lt;em&gt;cinelerra-cv&lt;/em&gt;.&lt;/p&gt;Vous aurez un assistant pour vous guider.</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="179"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="178"/>
         <source>Cinelerra</source>
         <translation>Cinelerra</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="504"/>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="855"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="503"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="854"/>
         <source>Select image grabber</source>
         <translation>Veuillez choisir un périphérique de capture</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="505"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="504"/>
         <source>You have to define an image grabber to use.
 This can be set in the preferences menu.</source>
         <translation>Vous devez définir un périphérique de capture.
 Ceci peut être fait dans la fenêtre de préférences.</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="184"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="183"/>
         <source>Insert Scene</source>
         <translation>Insérer la scène</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="185"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="184"/>
         <source>Add Scene</source>
         <translation>Ajouter la scène</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="186"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="185"/>
         <source>Remove Scene</source>
         <translation>Effacer la scène</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="187"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="186"/>
         <source>Insert Take</source>
         <translation>Insérer la prise de vue</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="188"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="187"/>
         <source>Add Take</source>
         <translation>Ajouter la prise de vue</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="189"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="188"/>
         <source>Remove Take</source>
         <translation>Effacer la prise de vue</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="190"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="189"/>
         <source>Insert Frames</source>
         <translation>Insérer l&apos;image</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="191"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="190"/>
         <source>Add Frames</source>
         <translation>Ajouter l&apos;image</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="192"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="191"/>
         <source>Remove Frames</source>
         <translation>Effacer l&apos;image</translation>
     </message>
@@ -1555,32 +1558,32 @@ Ceci peut être fait dans la fenêtre de préférences.</translation>
         <translation type="obsolete">&amp;Configurer qStopMotion</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="198"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="197"/>
         <source>&amp;Undo stack</source>
         <translation>&amp;Annuler la liste de commandements</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="201"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="200"/>
         <source>About &amp;Qt</source>
         <translation>Concernant &amp;Qt</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="215"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="214"/>
         <source>Project ID: </source>
         <translation>Description du projet: </translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="216"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="215"/>
         <source>Scene ID: </source>
         <translation>Description de la scène: </translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="217"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="216"/>
         <source>Take ID: </source>
         <translation>Description de la prise de vue: </translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="218"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="217"/>
         <source>Exposure ID: </source>
         <translation>Description de l&apos;image: </translation>
     </message>
@@ -1589,32 +1592,32 @@ Ceci peut être fait dans la fenêtre de préférences.</translation>
         <translation type="obsolete">&amp;Affichage</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="729"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="728"/>
         <source>Cancel</source>
         <translation>Annuler</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="851"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="850"/>
         <source>Connecting camera...</source>
         <translation>Connceter la caméra...</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1197"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1196"/>
         <source>The Project</source>
         <translation>Le projet</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1198"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1197"/>
         <source>Scene 001</source>
         <translation>Scène 001</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1199"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1198"/>
         <source>Take 01</source>
         <translation>Prise de vue 01</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1241"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1240"/>
         <source>qStopMotion - New Animation Project</source>
         <translation>qStopMotion - Nouveau projet d&apos;animation</translation>
     </message>
@@ -1632,12 +1635,12 @@ Ceci peut être situé dans la fenêtre de préférences.
 L&apos;exportation comme vidéo n&apos;est pas possible jusqu&apos;à ce que vous ayez installé un encodeur!</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1437"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1436"/>
         <source>AVI Videos (*.avi)</source>
         <translation>Vidéos AVI (*.avi)</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1441"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1440"/>
         <source>MP4 Videos (*.mp4)</source>
         <translation>Vidéos MP4 (*.mp4)</translation>
     </message>
@@ -1654,87 +1657,87 @@ Check your settings in the preferences menu!</source>
 Veuillez vérifier les paramètres dans la fenêtre de préférences!</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1514"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1513"/>
         <source>Exporting ...</source>
         <translation>Exportation ...</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1706"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1705"/>
         <source>qStopMotion - Undo stack</source>
         <translation>qStopMotion - Annuler la liste de commandements</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="206"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="205"/>
         <source>Open &amp;Recent</source>
         <translation>&amp;Récemment ouvert(s)</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="180"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="179"/>
         <source>Properties</source>
         <translation>Propriétés</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="196"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="195"/>
         <source>Preferences</source>
         <translation>Paramètres</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="209"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="208"/>
         <source>&amp;Windows</source>
         <translation>&amp;Fenêtre</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="223"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="222"/>
         <source>Recording</source>
         <translation>Enregistrement</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="225"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="224"/>
         <source>Project</source>
         <translation>Projet</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="258"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="257"/>
         <source>New project</source>
         <translation>Nouveau projet</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="266"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="265"/>
         <source>Open project</source>
         <translation>Ouvrir un projet</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="276"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="275"/>
         <source>Save project</source>
         <translation>Enregistrer le projet</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="285"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="284"/>
         <source>Save project As</source>
         <translation>Enregistrer le projet sous</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="303"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="302"/>
         <source>&lt;h4&gt;Properties of the project&lt;/h4&gt; &lt;p&gt;This will opens a window where you can &lt;em&gt;change&lt;/em&gt; properties of the animation project.&lt;/p&gt;</source>
         <translation>&lt;h4&gt;Propriétés du projet&lt;/h4&gt; &lt;p&gt;Cela ouvre une Fenêtre  dans laquelle vous pouvez&lt;em&gt;changer&lt;/em&gt; les propriétés du projet.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="308"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="307"/>
         <source>Properties of the animation project</source>
         <translation>Propriétés du projet d&apos;animation</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="316"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="315"/>
         <source>Quit</source>
         <translation>Quitter</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="327"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="326"/>
         <source>Undo</source>
         <translation>Annuler</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="336"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="335"/>
         <source>Redo</source>
         <translation>Refaire</translation>
     </message>
@@ -1759,56 +1762,56 @@ Veuillez vérifier les paramètres dans la fenêtre de préférences!</translati
         <translation type="obsolete">Configurer qStopMotion</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="395"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="394"/>
         <source>What&apos;s This</source>
         <translation>Qu&apos;est-ce que c&apos;est</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="422"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="421"/>
         <source>About</source>
         <translation>A propos</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="474"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="473"/>
         <source>&lt;h4&gt;TimeLine&lt;/h4&gt; &lt;p&gt;In this area you can see the frames and scenes in the animations and build the animation by moving the them around.&lt;/p&gt;&lt;p&gt;You can switch to the next and the previous frame using the &lt;b&gt;arrow buttons&lt;/b&gt; or &lt;b&gt;x&lt;/b&gt; and &lt;b&gt;z&lt;/b&gt;&lt;/p&gt; </source>
         <translation>&lt;h4&gt;Barre des images&lt;/h4&gt;</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1377"/>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1407"/>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1445"/>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1479"/>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1505"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1376"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1406"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1444"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1478"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1504"/>
         <source>Warning</source>
         <translation>Attention</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1453"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1452"/>
         <source>Export to video file</source>
         <translation>Exporter vers un fichier vidéo</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1531"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1530"/>
         <source>Export to file</source>
         <translation>Exporter vers un fichier</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="399"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="398"/>
         <source>&lt;h4&gt;Help&lt;/h4&gt; &lt;p&gt;This button will bring up a dialog with the qStopMotion manual&lt;/p&gt;</source>
         <translation>&lt;h4&gt;Aide&lt;/h4&gt; &lt;p&gt;Ce bouton affiche le manuel utilisateur de qStopMotion&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="403"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="402"/>
         <source>Help</source>
         <translation>Aide</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1253"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1252"/>
         <source>Choose project file</source>
         <translation>Veuillez choisir le fichier du projet</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1336"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1335"/>
         <source>Save As</source>
         <translation>Enregistrer sous</translation>
     </message>
@@ -1838,18 +1841,18 @@ Veuillez vérifier les paramètres dans la fenêtre de préférences!</translati
 %4</translation>
     </message>
     <message>
-        <location filename="../src/technical/preferencestool.cpp" line="443"/>
-        <location filename="../src/technical/preferencestool.cpp" line="450"/>
+        <location filename="../src/technical/preferencestool.cpp" line="442"/>
+        <location filename="../src/technical/preferencestool.cpp" line="449"/>
         <source>Critical</source>
         <translation>Problématique</translation>
     </message>
     <message>
-        <location filename="../src/technical/preferencestool.cpp" line="444"/>
+        <location filename="../src/technical/preferencestool.cpp" line="443"/>
         <source>Can&apos;t remove preferences backup file!</source>
         <translation>Il n&apos;est pas possible d&apos;effacer la copie de sécurité du fichier!</translation>
     </message>
     <message>
-        <location filename="../src/technical/preferencestool.cpp" line="451"/>
+        <location filename="../src/technical/preferencestool.cpp" line="450"/>
         <source>Can&apos;t copy preferences file to backup file!</source>
         <translation>Le fichier ne peut pas être enregistré comme copie de sécurité!</translation>
     </message>
@@ -2171,57 +2174,78 @@ Veuillez vérifier les paramètres dans la fenêtre de préférences!</translati
 <context>
     <name>ProjectWidget</name>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/projectwidget.cpp" line="74"/>
+        <location filename="../src/frontends/qtfrontend/preferences/projectwidget.cpp" line="76"/>
         <source>Recording</source>
         <translation>Enregistrement</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/projectwidget.cpp" line="80"/>
+        <location filename="../src/frontends/qtfrontend/preferences/projectwidget.cpp" line="82"/>
         <source>Single frame capture</source>
         <translation>Faire des photos</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/projectwidget.cpp" line="93"/>
         <source>Camera</source>
-        <translation>Caméra</translation>
+        <translation type="obsolete">Caméra</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/projectwidget.cpp" line="99"/>
+        <location filename="../src/frontends/qtfrontend/preferences/projectwidget.cpp" line="102"/>
         <source>Test Source</source>
         <translation>Mire de traînage</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/projectwidget.cpp" line="101"/>
         <source>USB Source</source>
-        <translation>Source USB</translation>
+        <translation type="obsolete">Source USB</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/projectwidget.cpp" line="102"/>
         <source>FireWire Source</source>
-        <translation>Source FireWire</translation>
+        <translation type="obsolete">Source FireWire</translation>
+    </message>
+    <message>
+        <source>DirectShow Source</source>
+        <translation type="obsolete">Source DirectShow</translation>
+    </message>
+    <message>
+        <location filename="../src/frontends/qtfrontend/preferences/projectwidget.cpp" line="95"/>
+        <source>Image grabber settings</source>
+        <translation type="unfinished">Réglages du périphérique</translation>
+    </message>
+    <message>
+        <location filename="../src/frontends/qtfrontend/preferences/projectwidget.cpp" line="103"/>
+        <source>Video 4 Linux (USB WebCam)</source>
+        <translation type="unfinished">Video 4 Linux (USB WebCam)</translation>
+    </message>
+    <message>
+        <location filename="../src/frontends/qtfrontend/preferences/projectwidget.cpp" line="104"/>
+        <source>IEEE 1394 (FireWire DigiCam)</source>
+        <translation type="unfinished">IEEE 1394 (FireWire DigiCam)</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/projectwidget.cpp" line="105"/>
-        <source>DirectShow Source</source>
-        <translation>Source DirectShow</translation>
+        <source>gphoto (USB Compact Camera)</source>
+        <translation type="unfinished">gphoto (USB Appareil photographique compact)</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/projectwidget.cpp" line="120"/>
+        <location filename="../src/frontends/qtfrontend/preferences/projectwidget.cpp" line="109"/>
+        <source>Media Foundation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontends/qtfrontend/preferences/projectwidget.cpp" line="121"/>
         <source>Capture</source>
         <translation>Prise de vue</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/projectwidget.cpp" line="126"/>
+        <location filename="../src/frontends/qtfrontend/preferences/projectwidget.cpp" line="127"/>
         <source>Mix</source>
         <translation>Mixer</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/projectwidget.cpp" line="127"/>
+        <location filename="../src/frontends/qtfrontend/preferences/projectwidget.cpp" line="128"/>
         <source>Diff</source>
         <translation>Différence</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/projectwidget.cpp" line="128"/>
+        <location filename="../src/frontends/qtfrontend/preferences/projectwidget.cpp" line="129"/>
         <source>Playback</source>
         <translation>Lecture</translation>
     </message>
@@ -2242,12 +2266,12 @@ Veuillez vérifier les paramètres dans la fenêtre de préférences!</translati
         <translation type="obsolete">Par heure</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/projectwidget.cpp" line="129"/>
+        <location filename="../src/frontends/qtfrontend/preferences/projectwidget.cpp" line="130"/>
         <source>Number of images:</source>
         <translation>Nombre d&apos;images :</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/projectwidget.cpp" line="131"/>
+        <location filename="../src/frontends/qtfrontend/preferences/projectwidget.cpp" line="132"/>
         <source>&lt;h4&gt;Number of images&lt;/h4&gt; &lt;p&gt;By changing the value in this slidebar you can specify how many images backwards in the animation which should be mixed on top of the camera or if you are in playback mode: how many images to play. &lt;/p&gt; &lt;p&gt;By mixing the previous image(s) onto the camera you can more easily see how the next shot will be in relation to the other, therby making a smoother stop motion animation!&lt;/p&gt;</source>
         <translation>&lt;h4&gt;Nombre d&apos;images&lt;/h4&gt; &lt;p&gt;En modifiant cette valeur vous pouvez régler combien d&apos;images précédentes sont insérées dans l&apos;image de la caméra ou dans le mode de la lecture, combien d&apos;images se jouent. &lt;/p&gt; &lt;p&gt; Ainsi, vous pouvez mieux voir comment l&apos;image prochain se situe par rapport aux images précédentes. Cela permet des enchaînements réguliers des mouvements.&lt;/p&gt;</translation>
     </message>
@@ -2278,19 +2302,19 @@ Il vous faut des droits d&apos;accès pour lire, écrire et exécuter dans ~/.qs
         <translation type="obsolete">qStopMotion</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="889"/>
+        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="898"/>
         <source>Recovery</source>
         <translation>Restauration</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="890"/>
+        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="899"/>
         <source>Something caused qStopmotion to exit abnormally
 last time it was runned. Do you want to recover?</source>
         <translation>Probablement qStopMotion n&apos;a pas été correctement terminé lors de le dernière séance.
 Voulez-vous restaurer la dernière séance?</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="641"/>
+        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="650"/>
         <source>&amp;Yes</source>
         <translation>&amp;Oui</translation>
     </message>
@@ -2314,19 +2338,19 @@ You need permission to read, write and execute on the .qstopmotion directory.</s
 Il vous faut des droits d&apos;accès pour lire, écrire et exécuter dans .qstopmotion</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="642"/>
+        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="651"/>
         <source>&amp;No</source>
         <translation>&amp;Non</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="662"/>
-        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="677"/>
-        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="692"/>
+        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="671"/>
+        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="686"/>
+        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="701"/>
         <source>&amp;OK</source>
         <translation>&amp;OK</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="898"/>
+        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="907"/>
         <source>qStopMotion - Recovered Project</source>
         <translation>qStopMotion - Projet restauré</translation>
     </message>
@@ -2402,29 +2426,29 @@ Il vous faut des droits d&apos;accès pour lire, écrire et exécuter dans .qsto
         <translation>&lt;h4&gt;Nombre d&apos;images&lt;/h4&gt; &lt;p&gt;En modifiant cette valeur vous pouvez régler combien d&apos;images précédentes sont insérées dans l&apos;image de la caméra ou dans le mode de la lecture, combien d&apos;images se jouent. &lt;/p&gt; &lt;p&gt; Ainsi, vous pouvez mieux voir comment l&apos;image prochain se situe par rapport aux images précédentes. Cela permet des enchaînements réguliers des mouvements.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/tooltabs/recordingtab.cpp" line="379"/>
+        <location filename="../src/frontends/qtfrontend/tooltabs/recordingtab.cpp" line="378"/>
         <source>Not Supported</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/tooltabs/recordingtab.cpp" line="588"/>
-        <location filename="../src/frontends/qtfrontend/tooltabs/recordingtab.cpp" line="594"/>
-        <location filename="../src/frontends/qtfrontend/tooltabs/recordingtab.cpp" line="600"/>
+        <location filename="../src/frontends/qtfrontend/tooltabs/recordingtab.cpp" line="587"/>
+        <location filename="../src/frontends/qtfrontend/tooltabs/recordingtab.cpp" line="593"/>
+        <location filename="../src/frontends/qtfrontend/tooltabs/recordingtab.cpp" line="599"/>
         <source>Information</source>
         <translation>Information</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/tooltabs/recordingtab.cpp" line="588"/>
+        <location filename="../src/frontends/qtfrontend/tooltabs/recordingtab.cpp" line="587"/>
         <source>No active project. Please create a new project or open an existing project.</source>
         <translation>Aucun projet est activé.S&apos;il vous plaît créez un nouveau projet ou ouvrez un projet existant.</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/tooltabs/recordingtab.cpp" line="594"/>
+        <location filename="../src/frontends/qtfrontend/tooltabs/recordingtab.cpp" line="593"/>
         <source>No scene and no take selected. Please select a scene and a take on the project tab.</source>
         <translation>Aucune scène ni une position sont selectionnées. S&apos;il vous plaît choisissez une scène et une position sur la tabulation du projet.</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/tooltabs/recordingtab.cpp" line="600"/>
+        <location filename="../src/frontends/qtfrontend/tooltabs/recordingtab.cpp" line="599"/>
         <source>No take selected. Please select a take on the project tab.</source>
         <translation>Aucune position est selectionnée. S&apos;il vous plaît choisissez une position sur la tabulation du projet.</translation>
     </message>

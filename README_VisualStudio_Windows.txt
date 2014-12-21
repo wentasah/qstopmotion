@@ -1,10 +1,10 @@
-Building qStopMotion using MS Visual Studio 2012
-Last Change: 2013-09-19
+Building qStopMotion using MS Visual Studio
+Last Change: 2014-12-15
 
 1. Preparation of the development environment
 ================================================================================
 
-1.1 Install MS Visual Studio 2012 Express/Professional
+1.1 Install MS Visual Studio 2010 Express/Professional
 --------------------------------------------------------------------------------
 
 * Install in the default installation directory.
@@ -12,55 +12,34 @@ Last Change: 2013-09-19
 1.2 Qt for Windows and Visual Studio
 --------------------------------------------------------------------------------
 
-* Download Qt libraries 4.6.4 for Windows 32-bit (VS 2008) from qt-project.com/downloads
+* Download Qt libraries 4.8.4 for Windows 32-bit (VS 2010) from qt-project.com/downloads
 * Install in the Directory C:\Tools\Qt\...
 * Qt need write permissions to this directory during compilation and linking.
-* Add the binary directory to the path variable (e.g. C:\Tools\Qt\4.6.4\bin\).
+* Add the binary directory to the path variable (e.g. C:\Tools\Qt\4.8.4\bin\).
 
-1.3 Gstreamer
+1.3 CMake 2.8.12
 --------------------------------------------------------------------------------
 
-* Download Gstreamer GPL from code.google.com/p/ossbuild/:
-  GStreamer-WinBuilds-GPL-x86.msi
-* Install in the Directory C:\Tools\OSSBuild\GStreamer\v0.10.6\...
-* Qt and the Visual Studio tools have problems with spaces in the path name in
-  the linking step.
-* Download Gstreamer SDK GPL from code.google.com/p/ossbuild/:
-  GStreamer-WinBuilds-SDK-GPL-x86.msi
-* Install Gstreamer SDK GPL
-
-1.4 CMake 2.8.x
---------------------------------------------------------------------------------
-
-* Download CMake from "http://www.cmake.org/cmake/resources/software.html"
+* Download CMake 2.8.12.x from "http://www.cmake.org/cmake/resources/software.html"
 * Add CMake to the system PATH for all users.
 * Install in the default installation directory.
 * Create a start script for CMake (C:\Tools\cmakestart.bat)
     rem Set the Visual Studion 10 environment variables
-    call "c:\Program Files\Microsoft Visual Studio 10.0\VC\vcvarsall.bat"
-    rem Start the CMake GUI
-    "C:\Program Files\CMake 2.8\bin\cmake-gui.exe"
+    call "C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\vcvarsall.bat"
+    rem Start CMake
+    "C:\Program Files (x86)\CMake 2.8\bin\cmake-gui.exe"
 * Create a shortcut to the start script.
 
-1.5 Mercurial client (Version >= 1.4.1)
---------------------------------------------------------------------------------
-
-* Download TortoiseHG from "http://tortoisehg.bitbucket.org/download/index.html".
-* Install in the default installation directory.
-* Download VisualHG, the Mercurial extension for Visual Studio, from
-  "http://visualhg.codeplex.com/".
-* Install in the default installation directory.
-
-1.6 NSIS 2.46
+1.4 NSIS 2.46
 --------------------------------------------------------------------------------
 
 * Download NSIS from "http://nsis.sourceforge.net/Main_Page"
 * Install in the default installation directory.
 
-1.7 Install Mercurial SCM (Developers only)
+1.5 Mercurial SCM (Developers only)
 --------------------------------------------------------------------------------
 
-* Download the Mercurial install package from http://mercurial.selenic.com
+* Download Mercurial or TortoiseHG with Mercurial from "http://mercurial.selenic.com/downloads"
 * Install in the default installation directory.
 
 2. Access to the sources of qStopMotion

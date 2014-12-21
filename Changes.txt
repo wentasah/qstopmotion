@@ -1,6 +1,20 @@
 Last Changes in the sources on qStopMotion
 ===============================================================================
 
+qStopMotion (2.0.0)
+  * Remove of the Gstreamer grabber from the Windows platform.
+  * On Windows qStopMotion can be started as an portable application.
+  * Video4Linux2 grabber on the Linux platform.
+  * Camera controller for the Video4Linux2 grabber.
+qStopMotion (1.1.0), Last Windows Gstreamer release
+  * Media Foundation grabber on the Windows platform.
+  * Camera controller dialog to control all posible camera features.
+  * Camera controller for the Media Foundation grabber.
+  * Gphoto2 greabber on the Linux platform (Experimental, not finished).
+  * Camera controller for the Gphoto2 grabber (Experimental, not finished).
+  * Update of the user interface. Preferences of the project in the file menue,
+    Properties of the application in the edit menu.
+  * Optional grid in the live image view.
 qStopMotion (1.0.1), Bugfix release
   * Fix Bugs
   * Full implementation of undo and redo functionality.

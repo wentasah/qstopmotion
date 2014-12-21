@@ -217,6 +217,13 @@ void ImageGrabberFacade::init()
 {
     qDebug() << "ImageGrabberFacade::init --> Start";
 
+    if (0 == getDeviceCount()) {
+        frontend->showWarning(tr("Check image sources"),
+                              tr("No usable video image source found. Please\n"
+                                 "connect on video device on the computer."));
+        return;
+    }
+
     int videoSource = frontend->getProject()->getVideoSource();
     ImageGrabberDevice *videoDevice = getDevice(videoSource);
 
@@ -296,6 +303,12 @@ void ImageGrabberFacade::finalize()
     }
 
     qDebug() << "ImageGrabberFacade::finalize --> End";
+}
+
+
+const int ImageGrabberFacade::getDeviceCount()
+{
+    return devices.count();
 }
 
 

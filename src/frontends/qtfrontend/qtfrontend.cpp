@@ -267,6 +267,12 @@ void QtFrontend::init()
 {
     qDebug("QtFrontend::init --> Start");
 
+    QString iconFile(getGraphicsDirName());
+    iconFile.append(QLatin1String("qstopmotion_logo_90.png"));
+    QSplashScreen *splash = new QSplashScreen;
+    splash->setPixmap(QPixmap(iconFile));
+    splash->show();
+
     // Need to call this here to get the locale for the language
     // which is used by the translator created in mainWindowGUI
     preferencesTool = new PreferencesTool(this);
@@ -320,6 +326,9 @@ void QtFrontend::init()
     // this->testMainWidget();
 
     mw->show();
+
+    splash->finish(mw);
+    delete splash;
 
     // this->testMainWidget();
 

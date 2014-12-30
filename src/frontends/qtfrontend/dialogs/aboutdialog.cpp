@@ -149,6 +149,15 @@ AboutDialog::AboutDialog(Frontend *f,
     case QSysInfo::WV_WINDOWS7:
         version.append("Windows 7 (6.1)");
         break;
+    case QSysInfo::WV_WINDOWS8:
+        version.append("Windows 8 (6.2)");
+        break;
+    case QSysInfo::WV_WINDOWS8_1:
+        version.append("Windows 8.1 (6.3)");
+        break;
+    default:
+        version.append(tr("Unknown Windows OS"));
+        break;
     }
 #endif
 #ifdef Q_WS_MAC
@@ -157,14 +166,26 @@ AboutDialog::AboutDialog(Frontend *f,
     case QSysInfo::MV_10_3:
         version.append("Mac OS X 10.3 (Panther)");
         break;
-    case QSysInfo::MV_10_3:
+    case QSysInfo::MV_10_4:
         version.append("Mac OS X 10.4 (Tiger)");
         break;
-    case QSysInfo::MV_10_3:
+    case QSysInfo::MV_10_5:
         version.append("Mac OS X 10.5 (Leopard)");
         break;
-    case QSysInfo::MV_10_3:
+    case QSysInfo::MV_10_6:
         version.append("Mac OS X 10.6 (Snowleopard)");
+        break;
+    case QSysInfo::MV_10_7:
+        version.append("Mac OS X 10.7 (Lion)");
+        break;
+    case QSysInfo::MV_10_8:
+        version.append("Mac OS X 10.8 (Mountainlion)");
+        break;
+    case QSysInfo::MV_10_9:
+        version.append("Mac OS X 10.9 (Mavericks)");
+        break;
+    default:
+        version.append(tr("Unknown Mac OS"));
         break;
     }
 #endif

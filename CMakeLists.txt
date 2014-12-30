@@ -1,7 +1,7 @@
 ###############################################################################
 # CMake file for the qStopMotion project                                      #
 # (c) Ralf Lange, longsoft.de                                                 #
-# Last update: 2014-12-13                                                     #
+# Last update: 2014-12-29                                                     #
 #                                                                             #
 # Usage:                                                                      #
 #   * Qt-Creator (Windows, Linux)                                             #
@@ -25,7 +25,7 @@
 
 project(qStopMotion)
 
-cmake_minimum_required(VERSION 2.8.4)
+cmake_minimum_required(VERSION 2.8.2)
 
 ###############################################################################
 # General project settings
@@ -849,7 +849,7 @@ SET(CPACK_RPM_PACKAGE_LICENSE "GPLv2")
 SET(CPACK_RPM_PACKAGE_GROUP "Applications/Multimedia")
 # CPACK_RPM_PACKAGE_VENDOR = CPACK_PACKAGE_VENDOR
 
-# CPACK_DEBIAN_PACKAGE_MAINTAINER = CPACK_PACKAGE_CONTACT
+# CPACK_RPM_PACKAGE_MAINTAINER = CPACK_PACKAGE_CONTACT
 
 # Options
 # SET(CPACK_RPM_PACKAGE_ARCHITECTURE "noarch")
@@ -868,6 +868,12 @@ SET(CPACK_RPM_PACKAGE_REQUIRES "glibc >= 2.14, ffmpeg >= 0.8.9, gstreamer >= 0.1
 # SET(CPACK_RPM_PRE_UNINSTALL_SCRIPT_FILE "pre_install.sh")
 # SET(CPACK_RPM_POST_UNINSTALL_SCRIPT_FILE "post_install.sh")
 
+# Prevent conflicts with the filesystem package
+SET(
+    CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION
+    "/usr/share/applications"
+    "/usr/share/pixmaps"
+)
 
 ###############################################################################
 # Activate packaging functionality

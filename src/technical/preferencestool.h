@@ -52,6 +52,11 @@ public:
     };
 
     /**
+     * Showname of the application
+     */
+    static const QString applicationShowName;
+
+    /**
      * Name of the application
      */
     static const QString applicationName;

@@ -1,7 +1,7 @@
 ###############################################################################
 # CMake file to find the Video4Linux2 files on the Linux platform.            #
 # (c) Ralf Lange, longsoft.de                                                 #
-# Last update: 2013-01-29                                                     #
+# Last update: 2014-12-28                                                     #
 #                                                                             #
 ###############################################################################
 #
@@ -12,15 +12,16 @@
 #
 ###############################################################################
 
-message("FindV4L2PkgConfig.cmake")
+MESSAGE("FindV4L2PkgConfig.cmake")
 
 FIND_PACKAGE(PkgConfig REQUIRED)
 PKG_CHECK_MODULES(PKG_V4L2 QUIET libv4l2)
 
 IF(PKG_V4L2_FOUND)
-    message("Package Video4Linux2 found!")
+    MESSAGE(STATUS "FOUND: Video4Linux2 !")
 ELSE(PKG_V4L2_FOUND)
-    message("Package Video4Linux2 not found!")
+    MESSAGE(SEND_ERROR "Not found: Video4Linux2 !")
+    RETURN()
 ENDIF(PKG_V4L2_FOUND)
 
 FIND_PATH(
@@ -56,4 +57,13 @@ find_package_handle_standard_args(
     V4L2_INCLUDE_DIR
 )
 
-MARK_AS_ADVANCED(V4L2_LIBRARIES V4L2_INCLUDE_DIRS)
+IF(PKG_V4L2_FOUND)
+    MESSAGE(STATUS "V4L2_LIBRARY: ${V4L2_LIBRARY}")
+    MESSAGE(STATUS "V4L2_INCLUDE_DIR: ${V4L2_INCLUDE_DIR}")
+ENDIF(PKG_V4L2_FOUND)
+
+MARK_AS_ADVANCED(
+    V4L2_LIBRARIES
+    V4L2_INCLUDE_DIRS
+)
+

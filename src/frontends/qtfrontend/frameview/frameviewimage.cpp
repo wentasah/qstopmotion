@@ -209,7 +209,9 @@ void FrameViewImage::nextAnimationFrame(int exposureIndex)
     exposure = frontend->getProject()->getExposure(activeSceneIndex, activeTakeIndex, exposureIndex);
 
     if (!exposure->isEmpty()) {
-        activeImage.load(exposure->getImagePath());
+        QImage nextImage;
+        nextImage.load(exposure->getImagePath());
+        activeImage = clipAndScale(nextImage);
         QPainter widgetPainter(this);
         widgetPainter.drawImage(0, 0, activeImage);
     }

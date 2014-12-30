@@ -1,7 +1,7 @@
 ###############################################################################
 # CMake file to find the GStreamer files on the Linux platform.               #
 # (c) Ralf Lange, longsoft.de                                                 #
-# Last update: 2013-01-29                                                     #
+# Last update: 2014-12-28                                                     #
 #                                                                             #
 ###############################################################################
 #
@@ -28,7 +28,7 @@
 #
 ###############################################################################
 
-message("FindGStreamerPkgConfig.cmake")
+MESSAGE("FindGStreamerPkgConfig.cmake")
 
 IF (GSTREAMER_INCLUDE_DIR AND GSTREAMER_LIBRARIES AND
     GSTREAMER_BASE_LIBRARY AND GSTREAMER_INTERFACE_LIBRARY AND
@@ -55,15 +55,22 @@ FIND_PACKAGE(PkgConfig REQUIRED)
 # don't make this check required - otherwise you can't use macro_optional_find_package on this one
 PKG_CHECK_MODULES(PKG_GSTREAMER gstreamer-0.10)
 
-message("PKG_GSTREAMER_VERSION: ${PKG_GSTREAMER_VERSION}")
-message("PKG_GSTREAMER_INCLUDE_DIRS: ${PKG_GSTREAMER_INCLUDE_DIRS}")
-message("PKG_GSTREAMER_LIBRARY_DIRS: ${PKG_GSTREAMER_LIBRARY_DIRS}")
-message("PKG_GSTREAMER_LIBRARIES: ${PKG_GSTREAMER_LIBRARIES}")
-message("PKG_GSTREAMER_STATIC_LIBRARIES: ${PKG_GSTREAMER_STATIC_LIBRARIES}")
-message("PKG_GSTREAMER_CFLAGS: ${PKG_GSTREAMER_CFLAGS}")
+MESSAGE("PKG_GSTREAMER_VERSION: ${PKG_GSTREAMER_VERSION}")
+MESSAGE("PKG_GSTREAMER_INCLUDE_DIRS: ${PKG_GSTREAMER_INCLUDE_DIRS}")
+MESSAGE("PKG_GSTREAMER_LIBRARY_DIRS: ${PKG_GSTREAMER_LIBRARY_DIRS}")
+MESSAGE("PKG_GSTREAMER_LIBRARIES: ${PKG_GSTREAMER_LIBRARIES}")
+MESSAGE("PKG_GSTREAMER_STATIC_LIBRARIES: ${PKG_GSTREAMER_STATIC_LIBRARIES}")
+MESSAGE("PKG_GSTREAMER_CFLAGS: ${PKG_GSTREAMER_CFLAGS}")
 
-SET(GSTREAMER_VERSION ${PKG_GSTREAMER_VERSION})
-SET(GSTREAMER_DEFINITIONS ${PKG_GSTREAMER_CFLAGS})
+SET(
+    GSTREAMER_VERSION
+    ${PKG_GSTREAMER_VERSION}
+)
+
+SET(
+    GSTREAMER_DEFINITIONS
+    ${PKG_GSTREAMER_CFLAGS}
+)
 
 FIND_PATH(
     GSTREAMER_INCLUDE_DIR
@@ -134,23 +141,25 @@ ENDIF (GSTREAMER_APP_LIBRARY)
 IF (GSTREAMER_INCLUDE_DIR AND GSTREAMER_LIBRARIES AND
     GSTREAMER_BASE_LIBRARY AND GSTREAMER_INTERFACE_LIBRARY AND
     GSTREAMER_APP_LIBRARY)
-   SET(
-       GSTREAMER_FOUND
-       TRUE
-   )
-   SET(
-       GSTREAMER_LIBRARIES
-       ${GSTREAMER_LIBRARIES}
-       gstinterfaces-0.10
-       gstapp-0.10
-   )
+    SET(
+        GSTREAMER_FOUND
+        TRUE
+    )
+    MESSAGE(STATUS "Found: GStreamer ${GSTREAMER_VERSION} !")
+    SET(
+        GSTREAMER_LIBRARIES
+        ${GSTREAMER_LIBRARIES}
+        gstinterfaces-0.10
+        gstapp-0.10
+    )
 ELSE (GSTREAMER_INCLUDE_DIR AND GSTREAMER_LIBRARIES AND
       GSTREAMER_BASE_LIBRARY AND GSTREAMER_INTERFACE_LIBRARY AND
       GSTREAMER_APP_LIBRARY)
-   SET(
-       GSTREAMER_FOUND
-       FALSE
-   )
+    SET(
+        GSTREAMER_FOUND
+        FALSE
+    )
+    MESSAGE(SEND_ERROR "Not found: GStreamer !")
 ENDIF (GSTREAMER_INCLUDE_DIR AND GSTREAMER_LIBRARIES AND
        GSTREAMER_BASE_LIBRARY AND GSTREAMER_INTERFACE_LIBRARY AND
        GSTREAMER_APP_LIBRARY)

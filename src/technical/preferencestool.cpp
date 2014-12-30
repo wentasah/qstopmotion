@@ -32,6 +32,7 @@
 #include <QtXml/QDomText>
 
 
+const QString PreferencesTool::applicationShowName = QLatin1String("qStopMotion");
 const QString PreferencesTool::applicationName = QLatin1String("qstopmotion");
 const QString PreferencesTool::applicationVersion = QLatin1String("2.0.0 (Beta)");
 const QString PreferencesTool::preferencesVersion = QLatin1String("0.9");

@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2010-2013 by                                                *
+ *  Copyright (C) 2010-2014 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -319,6 +319,10 @@ void ToolBar::runAnimation()
             playButton->setChecked(true);
             playButton->toggle();
             exposureIndex = frontend->getProject()->getActiveExposureIndex();
+            if (exposureIndex == (exposureCount - 1)) {
+                // Nothing to play, start at the beginning
+                exposureIndex = 0;
+            }
             frontend->showMessage(tr("Running animation"), 0);
             runAnimationTimer->start(1000 / fps);
             runAnimationTimer->setSingleShot(false);
@@ -533,9 +537,9 @@ void ToolBar::playNextFrame()
             frontend->nextAnimationFrame(exposureIndex);
         }
         else {
-            if (exposureIndex < exposureCount - 1) {
-                exposureIndex++;
+            if (exposureIndex < exposureCount) {
                 frontend->nextAnimationFrame(exposureIndex);
+                exposureIndex++;
             }
             else {
                 this->stopAnimation();

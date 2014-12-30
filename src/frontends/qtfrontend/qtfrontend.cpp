@@ -268,10 +268,12 @@ void QtFrontend::init()
     qDebug("QtFrontend::init --> Start");
 
     QString iconFile(getGraphicsDirName());
-    iconFile.append(QLatin1String("qstopmotion_logo_90.png"));
+    iconFile.append(QLatin1String("qstopmotion_splash_screen.png"));
     QSplashScreen *splash = new QSplashScreen;
     splash->setPixmap(QPixmap(iconFile));
     splash->show();
+    Qt::Alignment bottomRight = Qt::AlignBottom | Qt::AlignRight;
+    splash->showMessage(PreferencesTool::applicationShowName + " - " + PreferencesTool::applicationVersion, bottomRight, Qt::black);
 
     // Need to call this here to get the locale for the language
     // which is used by the translator created in mainWindowGUI

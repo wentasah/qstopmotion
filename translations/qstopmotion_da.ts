@@ -72,6 +72,11 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="85"/>
+        <source>Czech</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="111"/>
         <source>&amp;Thanks To</source>
         <translation>&amp;Tak til</translation>
@@ -97,22 +102,32 @@
         <translation>Operativsystem og version: </translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="182"/>
+        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="159"/>
+        <source>Unknown Windows OS</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="188"/>
+        <source>Unknown Mac OS</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="203"/>
         <source>Build time: %1 %2</source>
         <translation>Build tid: %1 %2</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="186"/>
+        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="207"/>
         <source>&amp;System Info</source>
         <translation>&amp;System Info</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="188"/>
+        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="209"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="201"/>
+        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="222"/>
         <source>About</source>
         <translation>Om</translation>
     </message>
@@ -1907,20 +1922,20 @@ Check your settings in the properties dialog of the project!</source>
 <context>
     <name>PreferencesTool</name>
     <message>
-        <location filename="../src/technical/preferencestool.cpp" line="113"/>
-        <location filename="../src/technical/preferencestool.cpp" line="117"/>
+        <location filename="../src/technical/preferencestool.cpp" line="114"/>
+        <location filename="../src/technical/preferencestool.cpp" line="118"/>
         <source>DOM Parser</source>
         <translation>DOM Parser</translation>
     </message>
     <message>
-        <location filename="../src/technical/preferencestool.cpp" line="114"/>
+        <location filename="../src/technical/preferencestool.cpp" line="115"/>
         <source>Couldn&apos;t open XML file:
 %1</source>
         <translation>Kunne ikke åbne XML fil:
 %1</translation>
     </message>
     <message>
-        <location filename="../src/technical/preferencestool.cpp" line="118"/>
+        <location filename="../src/technical/preferencestool.cpp" line="119"/>
         <source>Parse error at line %1, column %2:
 %3
 %4</source>
@@ -1929,18 +1944,18 @@ Check your settings in the properties dialog of the project!</source>
 %4</translation>
     </message>
     <message>
-        <location filename="../src/technical/preferencestool.cpp" line="442"/>
-        <location filename="../src/technical/preferencestool.cpp" line="449"/>
+        <location filename="../src/technical/preferencestool.cpp" line="443"/>
+        <location filename="../src/technical/preferencestool.cpp" line="450"/>
         <source>Critical</source>
         <translation>Kritisk</translation>
     </message>
     <message>
-        <location filename="../src/technical/preferencestool.cpp" line="443"/>
+        <location filename="../src/technical/preferencestool.cpp" line="444"/>
         <source>Can&apos;t remove preferences backup file!</source>
         <translation>Kan ikke flytte foretrukne backup fil!</translation>
     </message>
     <message>
-        <location filename="../src/technical/preferencestool.cpp" line="450"/>
+        <location filename="../src/technical/preferencestool.cpp" line="451"/>
         <source>Can&apos;t copy preferences file to backup file!</source>
         <translation>Kan ikke kopiere foretrukne fil til backup fil!</translation>
     </message>
@@ -2351,36 +2366,36 @@ You need permission to read, write and execute on the .qstopmotion directory.</s
 Du behøver ret til at læse, skrive og eksekvere i .qstopmotion mappen.</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="650"/>
+        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="652"/>
         <source>&amp;Yes</source>
         <translation>&amp;Ja</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="651"/>
+        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="653"/>
         <source>&amp;No</source>
         <translation>&amp;Nej</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="671"/>
-        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="686"/>
-        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="701"/>
+        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="673"/>
+        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="688"/>
+        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="703"/>
         <source>&amp;OK</source>
         <translation>&amp;OK</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="898"/>
+        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="900"/>
         <source>Recovery</source>
         <translation>Genopretning</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="899"/>
+        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="901"/>
         <source>Something caused qStopmotion to exit abnormally
 last time it was runned. Do you want to recover?</source>
         <translation>Noget fik qStopmotion til at stoppe uregelmæssigt
 sidst. Ønsker du at genoprette?</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="907"/>
+        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="909"/>
         <source>qStopMotion - Recovered Project</source>
         <translation>qStopMotion - Genopret Projekt</translation>
     </message>
@@ -2558,7 +2573,7 @@ sidst. Ønsker du at genoprette?</translation>
 <context>
     <name>ToolBar</name>
     <message>
-        <location filename="../src/frontends/qtfrontend/toolbar.cpp" line="322"/>
+        <location filename="../src/frontends/qtfrontend/toolbar.cpp" line="326"/>
         <source>Running animation</source>
         <translation>Kører animation</translation>
     </message>

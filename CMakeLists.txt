@@ -1,7 +1,7 @@
 ###############################################################################
 # CMake file for the qStopMotion project                                      #
 # (c) Ralf Lange, longsoft.de                                                 #
-# Last update: 2014-12-29                                                     #
+# Last update: 2015-01-01                                                     #
 #                                                                             #
 # Usage:                                                                      #
 #   * Qt-Creator (Windows, Linux)                                             #
@@ -825,7 +825,7 @@ SET(CPACK_DEBIAN_PACKAGE_PRIORITY "optional")
 
 
 # Options
-SET(CPACK_DEBIAN_PACKAGE_DEPENDS "libc6 (>=2.11), ffmpeg (>=0.8.9), gstreamer-tools (>=0.10.36), libqt4-core (>=4.8.2), libqt4-gui (>=4.8.2), libqt4-xml (>=4.8.2)")
+SET(CPACK_DEBIAN_PACKAGE_DEPENDS "libc6 (>=2.11), ffmpeg (>=0.8.9), gstreamer0.10-plugins-base (>=0.10.36), libqtcore4 (>=4.8.2), libqtgui4 (>=4.8.2), libqt4-xml (>=4.8.2), libv4l (>=0.8.8), libgphoto2 (>=2.4.14)")
 SET(CPACK_DEBIAN_PACKAGE_HOMEPAGE ${QSTOPMOTION_HOMEPAGE})
 # CPACK_DEBIAN_PACKAGE_SHLIBDEPS
 # SET(CPACK_DEBIAN_PACKAGE_DEBUG "ON")
@@ -857,7 +857,7 @@ SET(CPACK_RPM_PACKAGE_URL ${QSTOPMOTION_HOMEPAGE})
 # CPACK_RPM_PACKAGE_DESCRIPTION = CPACK_PACKAGE_DESCRIPTION_FILE
 # CPACK_RPM_COMPRESSION_TYPE
 # requireses must be in a aphabetic order
-SET(CPACK_RPM_PACKAGE_REQUIRES "glibc >= 2.14, ffmpeg >= 0.8.9, gstreamer >= 0.10.36, qt >= 4.8.2")
+SET(CPACK_RPM_PACKAGE_REQUIRES "glibc >= 2.14, ffmpeg >= 0.8.9, gstreamer >= 0.10.36, qt >= 4.8.2, libv4l >= 1.0.0, libgphoto2 >= 2.4.14")
 # CPACK_RPM_PACKAGE_SUGGESTS
 # CPACK_RPM_PACKAGE_PROVIDES
 

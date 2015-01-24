@@ -25,8 +25,9 @@
         <translation>Übersetzung</translation>
     </message>
     <message>
+        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="85"/>
         <source>Czech</source>
-        <translation type="obsolete">Tschechich</translation>
+        <translation>Tschechisch</translation>
     </message>
     <message>
         <source>Slovenian</source>
@@ -69,22 +70,32 @@
         <translation>&amp;Lizenzabkommen</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="182"/>
+        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="159"/>
+        <source>Unknown Windows OS</source>
+        <translation>Unbekanntes Windows OS</translation>
+    </message>
+    <message>
+        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="188"/>
+        <source>Unknown Mac OS</source>
+        <translation>Unbekanntes Mac OS</translation>
+    </message>
+    <message>
+        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="203"/>
         <source>Build time: %1 %2</source>
         <translation>Erstellungszeitpunkt: %1 %2</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="186"/>
+        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="207"/>
         <source>&amp;System Info</source>
         <translation>&amp;Systeminformation</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="188"/>
+        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="209"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="201"/>
+        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="222"/>
         <source>About</source>
         <translation>Info</translation>
     </message>
@@ -1910,20 +1921,20 @@ Check your settings in the properties dialog of the project!</source>
 <context>
     <name>PreferencesTool</name>
     <message>
-        <location filename="../src/technical/preferencestool.cpp" line="113"/>
-        <location filename="../src/technical/preferencestool.cpp" line="117"/>
+        <location filename="../src/technical/preferencestool.cpp" line="114"/>
+        <location filename="../src/technical/preferencestool.cpp" line="118"/>
         <source>DOM Parser</source>
         <translation>DOM Parser</translation>
     </message>
     <message>
-        <location filename="../src/technical/preferencestool.cpp" line="114"/>
+        <location filename="../src/technical/preferencestool.cpp" line="115"/>
         <source>Couldn&apos;t open XML file:
 %1</source>
         <translation>XML Datei kann nicht geöffnet werden:
 %1</translation>
     </message>
     <message>
-        <location filename="../src/technical/preferencestool.cpp" line="118"/>
+        <location filename="../src/technical/preferencestool.cpp" line="119"/>
         <source>Parse error at line %1, column %2:
 %3
 %4</source>
@@ -1932,18 +1943,18 @@ Check your settings in the properties dialog of the project!</source>
 %4</translation>
     </message>
     <message>
-        <location filename="../src/technical/preferencestool.cpp" line="442"/>
-        <location filename="../src/technical/preferencestool.cpp" line="449"/>
+        <location filename="../src/technical/preferencestool.cpp" line="443"/>
+        <location filename="../src/technical/preferencestool.cpp" line="450"/>
         <source>Critical</source>
         <translation>Kritisch</translation>
     </message>
     <message>
-        <location filename="../src/technical/preferencestool.cpp" line="443"/>
+        <location filename="../src/technical/preferencestool.cpp" line="444"/>
         <source>Can&apos;t remove preferences backup file!</source>
         <translation>Sicherheitskopie der Einstellungsdatei kann nicht gelöscht werden!</translation>
     </message>
     <message>
-        <location filename="../src/technical/preferencestool.cpp" line="450"/>
+        <location filename="../src/technical/preferencestool.cpp" line="451"/>
         <source>Can&apos;t copy preferences file to backup file!</source>
         <translation>Einstellungsdatei kann nicht in Sicherungskopie kopiert werden!</translation>
     </message>
@@ -2393,12 +2404,12 @@ Sie benötigen Rechte zum lesen, schreiben und ausführen im Verzeichnis ~/.qsto
         <translation type="obsolete">qStopMotion</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="898"/>
+        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="900"/>
         <source>Recovery</source>
         <translation>Wiederherstellung</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="899"/>
+        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="901"/>
         <source>Something caused qStopmotion to exit abnormally
 last time it was runned. Do you want to recover?</source>
         <translation>Es sieht so aus, als wurde qStopmotion bei der letzten Nutzung nicht
@@ -2436,24 +2447,24 @@ You need permission to read, write and execute on the .qstopmotion directory.</s
 Sie benötigen Rechte zum lesen, schreiben und ausführen im Verzeichnis .qstopmotion</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="650"/>
+        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="652"/>
         <source>&amp;Yes</source>
         <translation>&amp;Ja</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="651"/>
+        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="653"/>
         <source>&amp;No</source>
         <translation>&amp;Nein</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="671"/>
-        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="686"/>
-        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="701"/>
+        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="673"/>
+        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="688"/>
+        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="703"/>
         <source>&amp;OK</source>
         <translation>&amp;OK</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="907"/>
+        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="909"/>
         <source>qStopMotion - Recovered Project</source>
         <translation>qStopMotion - Wiederhergestelltes Projekt</translation>
     </message>
@@ -2702,7 +2713,7 @@ Sie benötigen Rechte zum lesen, schreiben und ausführen im Verzeichnis .qstopm
 <context>
     <name>ToolBar</name>
     <message>
-        <location filename="../src/frontends/qtfrontend/toolbar.cpp" line="322"/>
+        <location filename="../src/frontends/qtfrontend/toolbar.cpp" line="326"/>
         <source>Running animation</source>
         <translation>Animation abspielen</translation>
     </message>

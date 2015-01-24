@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2014 by                                                *
+ *  Copyright (C) 2005-2015 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -82,8 +82,8 @@ AboutDialog::AboutDialog(Frontend *f,
                 "David Lamhauge &lt;davidlamhauge@gmail.com&gt; (" + tr("Danish") + ")<br>"
                 "David Rylander &lt;david@rylanderanimation.se&gt; (" + tr("Swedish") + ")<br>"
                 "Ralf Lange &lt;ralf.lange@longsoft.de&gt; (" + tr("German") + ")<br>"
+                "Pavel Fric &lt;pavelfric@seznam.cz&gt; (" + tr("Czech") + ")<br>"
                 /*
-                "George Helebrant &lt;helb@skatekralovice.com&gt; (" + tr("Czech") + ")<br>"
                 "Gorazd Bizjak and Matej Lavreni &lt;info@zapstudio.net&gt; (" + tr("Slovenian") + ")<br>"
                 "José Jorge &lt;jjorge@free.fr&gt; (" + tr("Portuguese") + ")<br>"
                 "Manuel Quiñones &lt;manuel.por.aca@gmail.com&gt; (" + tr("Spanish") + ")<br>"

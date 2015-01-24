@@ -8,8 +8,10 @@ REQUIREMENTS
 ------------
 You need the following libraries installed to use qStopMotion:
     - Qt4
-    - gtreamer (Linux only)
     - ffmpeg
+    - gtreamer (Linux only)
+    - gphoto2 (Linux only)
+    - video4linux2 (Linux only)
 
 
 INSTALLATION

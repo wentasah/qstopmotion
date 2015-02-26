@@ -97,9 +97,9 @@ QtFrontend::~QtFrontend()
 
 bool QtFrontend::checkApplicationDirectory(char *binDirName)
 {
-    qDebug("QtFrontend::checkApplicationDirectory --> Start");
+    qDebug() << "QtFrontend::checkApplicationDirectory --> Start";
 
-    qDebug() << "QtFrontend::checkApplicationDirectory --> Call command: " << binDirName;
+    qDebug() << "QtFrontend::checkApplicationDirectory --> Call command:" << binDirName;
 
     bool hasCorrectPermissions = true;
     QDir homeDir = QDir::home();
@@ -154,7 +154,7 @@ bool QtFrontend::checkApplicationDirectory(char *binDirName)
     if (pathLength == -1)
     {
         QString command = Util::checkCommand(binDirName);
-        qDebug() << "QtFrontend::checkApplicationDirectory --> Check command: " << command;
+        qDebug() << "QtFrontend::checkApplicationDirectory --> Check command:" << command;
         absoluteAppName = Util::convertPathFromOsSpecific(QString(command));
         pathLength = absoluteAppName.lastIndexOf("/bin/");
     }
@@ -183,8 +183,8 @@ bool QtFrontend::checkApplicationDirectory(char *binDirName)
         pathLength = absoluteAppName.lastIndexOf("/");
         appBinDirName.append(absoluteAppName.left(pathLength + 1));
     }
-    qDebug("QtFrontend::checkApplicationDirectory --> Application Direcory: " + appApplicationDirName);
-    qDebug("QtFrontend::checkApplicationDirectory --> Application Binary Direcory: " + appBinDirName);
+    qDebug() << "QtFrontend::checkApplicationDirectory --> Application Direcory:" << appApplicationDirName;
+    qDebug() << "QtFrontend::checkApplicationDirectory --> Application Binary Direcory:" << appBinDirName;
 
 #ifdef Q_WS_WIN
     // Windows version
@@ -239,9 +239,9 @@ bool QtFrontend::checkApplicationDirectory(char *binDirName)
 
 #endif
 
-    qDebug("QtFrontend::checkApplicationDirectory --> Application Manual Direcory: " + appManualDirName);
-    qDebug("QtFrontend::checkApplicationDirectory --> Application Translations Direcory: " + appTranslationsDirName);
-    qDebug("QtFrontend::checkApplicationDirectory --> Application Graphics Direcory: " + appGraphicsDirName);
+    qDebug() << "QtFrontend::checkApplicationDirectory --> Application Manual Direcory:" << appManualDirName;
+    qDebug() << "QtFrontend::checkApplicationDirectory --> Application Translations Direcory:" << appTranslationsDirName;
+    qDebug() << "QtFrontend::checkApplicationDirectory --> Application Graphics Direcory:" << appGraphicsDirName;
 
 
     otherDirName.clear();
@@ -249,16 +249,16 @@ bool QtFrontend::checkApplicationDirectory(char *binDirName)
     otherDirName.append(PreferencesTool::iconsDirectory);
     otherDirName.append(QLatin1String("/"));
     appIconsDirName.append(otherDirName.toLatin1());
-    qDebug("QtFrontend::checkApplicationDirectory --> Application Icon Direcory: " + appIconsDirName);
+    qDebug() << "QtFrontend::checkApplicationDirectory --> Application Icon Direcory:" << appIconsDirName;
 
     otherDirName.clear();
     otherDirName.append(appGraphicsDirName);
     otherDirName.append(PreferencesTool::picturesDirectory);
     otherDirName.append(QLatin1String("/"));
     appPicturesDirName.append(otherDirName.toLatin1());
-    qDebug("QtFrontend::checkApplicationDirectory --> Application Pictures Direcory: " + appPicturesDirName);
+    qDebug() << "QtFrontend::checkApplicationDirectory --> Application Pictures Direcory:" << appPicturesDirName;
 
-    qDebug("QtFrontend::checkApplicationDirectory --> End");
+    qDebug() << "QtFrontend::checkApplicationDirectory --> End";
     return 0;
 }
 

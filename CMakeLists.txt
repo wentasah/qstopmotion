@@ -1,7 +1,7 @@
 ###############################################################################
 # CMake file for the qStopMotion project                                      #
 # (c) Ralf Lange, longsoft.de                                                 #
-# Last update: 2015-01-01                                                     #
+# Last update: 2015-02-07                                                     #
 #                                                                             #
 # Usage:                                                                      #
 #   * Qt-Creator (Windows, Linux)                                             #
@@ -739,6 +739,22 @@ SET(CPACK_PACKAGE_VERSION_PATCH "${QSTOPMOTION_VERSION_PATCH}")
 SET(CPACK_TOPLEVEL_TAG "/user")
 # CPACK_PACKAGE_VERSION - generated from major, minor, patch
 
+IF(UNIX)
+    # Try to find architecture
+    execute_process (COMMAND uname -m OUTPUT_VARIABLE CPACK_PACKAGE_ARCHITECTURE)
+    string (STRIP "${CPACK_PACKAGE_ARCHITECTURE}" CPACK_PACKAGE_ARCHITECTURE)
+    # Try to find distro name and distro-specific arch
+    execute_process (COMMAND lsb_release -is OUTPUT_VARIABLE LSB_ID)
+    execute_process (COMMAND lsb_release -rs OUTPUT_VARIABLE LSB_RELEASE)
+    string (STRIP "${LSB_ID}" LSB_ID)
+    string (STRIP "${LSB_RELEASE}" LSB_RELEASE)
+    set (LSB_DISTRIB "${LSB_ID}${LSB_RELEASE}")
+    if (NOT LSB_DISTRIB)
+    set (LSB_DISTRIB "unix")
+    endif (NOT LSB_DISTRIB)
+    set (CPACK_SYSTEM_NAME "${LSB_DISTRIB}-${CPACK_PACKAGE_ARCHITECTURE}")
+ENDIF(UNIX)
+
 ###############################################################################
 # Source Packages
 ###############################################################################
@@ -814,6 +830,16 @@ SET(CPACK_NSIS_CONTACT ${CPACK_PACKAGE_VENDOR})
 # DEB package - Linux only (Debian, OpenSuse, Ubuntu, ...)
 ###############################################################################
 
+IF ("${LSB_DISTRIB}" MATCHES "Ubuntu|Debian")
+    # We need to alter the architecture names as per distro rules
+    IF ("${CPACK_PACKAGE_ARCHITECTURE}" MATCHES "i[3-6]86")
+        SET (CPACK_PACKAGE_ARCHITECTURE i386)
+    ENDIF ("${CPACK_PACKAGE_ARCHITECTURE}" MATCHES "i[3-6]86")
+    IF ("${CPACK_PACKAGE_ARCHITECTURE}" MATCHES "x86_64")
+        SET (CPACK_PACKAGE_ARCHITECTURE amd64)
+    ENDIF ("${CPACK_PACKAGE_ARCHITECTURE}" MATCHES "x86_64")
+ENDIF ("${LSB_DISTRIB}" MATCHES "Ubuntu|Debian")
+
 # Mandatory
 # CPACK_DEBIAN_PACKAGE_NAME = CPACK_PACKAGE_NAME
 # CPACK_DEBIAN_PACKAGE_VERSION = CPACK_PACKAGE_VERSION
@@ -823,9 +849,25 @@ SET(CPACK_NSIS_CONTACT ${CPACK_PACKAGE_VENDOR})
 SET(CPACK_DEBIAN_PACKAGE_SECTION "graphics")
 SET(CPACK_DEBIAN_PACKAGE_PRIORITY "optional")
 
-
 # Options
-SET(CPACK_DEBIAN_PACKAGE_DEPENDS "libc6 (>=2.11), ffmpeg (>=0.8.9), gstreamer0.10-plugins-base (>=0.10.36), libqtcore4 (>=4.8.2), libqtgui4 (>=4.8.2), libqt4-xml (>=4.8.2), libv4l (>=0.8.8), libgphoto2 (>=2.4.14)")
+
+# Set the dependencies based on the distro version
+# thus only one package is build you must list here *any* depending libraries,
+# even if they are only used in one module
+# IF ("${LSB_DISTRIB}" MATCHES "Debian5.*")
+#     SET (CPACK_DEBIAN_PACKAGE_DEPENDS " ")
+# ENDIF ("${LSB_DISTRIB}" MATCHES "Debian5.*")
+# IF ("${LSB_DISTRIB}" MATCHES "Debian6.*")
+#     SET (CPACK_DEBIAN_PACKAGE_DEPENDS " ")
+# ENDIF ("${LSB_DISTRIB}" MATCHES "Debian6.*")
+# IF ("${LSB_DISTRIB}" MATCHES "Debian7.*")
+#     SET (CPACK_DEBIAN_PACKAGE_DEPENDS " ") # if build with no plugins
+# ENDIF ("${LSB_DISTRIB}" MATCHES "Debian7.*")
+# IF (NOT CPACK_DEBIAN_PACKAGE_DEPENDS)
+#     MESSAGE ("WARNING: ${LSB_DISTRIB} not supported yet.\nPlease set deps in CMakeLists.txt before packaging.")
+# ENDIF (NOT CPACK_DEBIAN_PACKAGE_DEPENDS)
+SET(CPACK_DEBIAN_PACKAGE_DEPENDS "libc6 (>=2.11), ffmpeg (>=0.8.9), gstreamer0.10-plugins-base (>=0.10.36), libqtcore4 (>=4.8.2), libqtgui4 (>=4.8.2), libqt4-xml (>=4.8.2), libv4l (>=0.8.8), libgphoto2 (>=2.4.14), libgphoto2-port0 (>=2.4.14)")
+
 SET(CPACK_DEBIAN_PACKAGE_HOMEPAGE ${QSTOPMOTION_HOMEPAGE})
 # CPACK_DEBIAN_PACKAGE_SHLIBDEPS
 # SET(CPACK_DEBIAN_PACKAGE_DEBUG "ON")

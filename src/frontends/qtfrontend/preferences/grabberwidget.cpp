@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2014-2014 by                                                *
+ *  Copyright (C) 2014-2015 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -203,7 +203,7 @@ void GrabberWidget::initialize()
 #endif
 
 #ifdef Q_WS_X11
-    // Video4linux2 device
+    // Video4Linux2 device
     if (pref->getIntegerPreference("preferences", "v4l2grabber", value) == false) {
         value = true;
     }
@@ -218,8 +218,8 @@ void GrabberWidget::initialize()
     v4l2ControllerCheck->setChecked(actualV4L2Controller);
 
     // Temporary not enabled
-    v4l2GrabberCheck->setEnabled(false);
-    v4l2ControllerCheck->setEnabled(false);
+    // v4l2GrabberCheck->setEnabled(false);
+    // v4l2ControllerCheck->setEnabled(false);
 #else
     v4l2GrabberCheck->hide();
     v4l2ControllerCheck->hide();

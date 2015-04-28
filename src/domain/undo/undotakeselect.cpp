@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2012 by                                                *
+ *  Copyright (C) 2005-2015 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -53,11 +53,11 @@ void UndoTakeSelect::undo()
     facade->getView()->notifyActivateTake();
     if (0 <= oldTakeIndex) {
         Take *activeTake = animationProject->getActiveTake();
-        frontend->setTakeID(activeTake->getDescription().toAscii());
+        frontend->setTakeID(activeTake->getDescription());
         int activeExposureIndex = activeTake->getActiveExposureIndex();
         if (0 <= activeExposureIndex) {
             facade->getView()->notifyActivateExposure();
-            frontend->setExposureID(activeTake->getExposure(activeExposureIndex)->getId().toAscii());
+            frontend->setExposureID(activeTake->getExposure(activeExposureIndex)->getId());
         }
         else {
             frontend->setExposureID("---");
@@ -69,7 +69,7 @@ void UndoTakeSelect::undo()
 
     animationProject->decAnimationChanges();
 
-    facade->writeHistoryEntry(QString("undo"));
+    facade->writeHistoryEntry(QLatin1String("undo"));
     undoFlag = TRUE;
 
     qDebug("UndoTakeSelect::undo --> End");
@@ -87,11 +87,11 @@ void UndoTakeSelect::redo()
     facade->getView()->notifyActivateTake();
     if (0 <= newTakeIndex) {
         Take *activeTake = animationProject->getActiveTake();
-        frontend->setTakeID(activeTake->getDescription().toAscii());
+        frontend->setTakeID(activeTake->getDescription());
         int activeExposureIndex = activeTake->getActiveExposureIndex();
         if (0 <= activeExposureIndex) {
             facade->getView()->notifyActivateExposure();
-            frontend->setExposureID(activeTake->getExposure(activeExposureIndex)->getId().toAscii());
+            frontend->setExposureID(activeTake->getExposure(activeExposureIndex)->getId());
         }
         else {
             frontend->setExposureID("---");
@@ -104,13 +104,16 @@ void UndoTakeSelect::redo()
     animationProject->incAnimationChanges();
 
     if (undoFlag) {
-        facade->writeHistoryEntry(QString("redo"));
+        facade->writeHistoryEntry(QLatin1String("redo"));
         undoFlag = FALSE;
     }
     else {
-        facade->writeHistoryEntry(QString("redoTakeSelect|%1|%2|%3|%4")
-                                  .arg(oldSceneIndex).arg(oldTakeIndex)
-                                  .arg(newSceneIndex).arg(newTakeIndex));
+        facade->writeHistoryEntry(QString("%1|%2|%3|%4|%5")
+                                  .arg(QLatin1String("redoTakeSelect"))
+                                  .arg(oldSceneIndex)
+                                  .arg(oldTakeIndex)
+                                  .arg(newSceneIndex)
+                                  .arg(newTakeIndex));
     }
 
     qDebug("UndoTakeSelect::redo --> End");

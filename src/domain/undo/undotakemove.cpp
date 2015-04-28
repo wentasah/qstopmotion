@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2012 by                                                *
+ *  Copyright (C) 2005-2015 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -48,7 +48,7 @@ void UndoTakeMove::undo()
     qDebug("UndoTakeMove::undo --> Start");
 
 
-    facade->writeHistoryEntry(QString("undo"));
+    facade->writeHistoryEntry(QLatin1String("undo"));
     undoFlag = TRUE;
 
     qDebug("UndoTakeMove::undo --> Start");
@@ -65,13 +65,16 @@ void UndoTakeMove::redo()
     animationProject->incAnimationChanges();
 
     if (undoFlag) {
-        facade->writeHistoryEntry(QString("redo"));
+        facade->writeHistoryEntry(QLatin1String("redo"));
         undoFlag = FALSE;
     }
     else {
-        facade->writeHistoryEntry(QString("redoTakeMove|%1|%2|%3|%4")
-                                  .arg(fromSceneIndex).arg(fromTakeIndex)
-                                  .arg(toSceneIndex).arg(toTakeIndex));
+        facade->writeHistoryEntry(QString("%1|%2|%3|%4|%5")
+                                  .arg(QLatin1String("redoTakeMove"))
+                                  .arg(fromSceneIndex)
+                                  .arg(fromTakeIndex)
+                                  .arg(toSceneIndex)
+                                  .arg(toTakeIndex));
     }
 
     qDebug("UndoTakeMove::redo --> Start");

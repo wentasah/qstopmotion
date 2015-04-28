@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2012 by                                                *
+ *  Copyright (C) 2005-2015 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -61,7 +61,7 @@ void UndoTakeInsert::undo()
 
     animationProject->decAnimationChanges();
 
-    facade->writeHistoryEntry(QString("undo"));
+    facade->writeHistoryEntry(QLatin1String("undo"));
 
     qDebug("UndoTakeInsert::undo --> End");
 }
@@ -77,8 +77,10 @@ void UndoTakeInsert::redo()
         // First call of the redo function after creation of the undo object
         animationProject->insertTake(sceneIndex, takeIndex, takeDescription);
 
-        facade->writeHistoryEntry(QString("redoTakeInsert|%1|%2|%3")
-                                  .arg(sceneIndex).arg(takeIndex)
+        facade->writeHistoryEntry(QString("%1|%2|%3|%4")
+                                  .arg(QLatin1String("redoTakeInsert"))
+                                  .arg(sceneIndex)
+                                  .arg(takeIndex)
                                   .arg(takeDescription));
     }
     else {
@@ -86,7 +88,7 @@ void UndoTakeInsert::redo()
         animationProject->insertTake(sceneIndex, takeIndex, take);
         take = NULL;
 
-        facade->writeHistoryEntry(QString("redo"));
+        facade->writeHistoryEntry(QLatin1String("redo"));
     }
 
     facade->getView()->notifyInsertTake(sceneIndex, takeIndex);

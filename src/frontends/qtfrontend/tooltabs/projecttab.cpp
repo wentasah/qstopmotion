@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2010-2013 by                                                *
+ *  Copyright (C) 2010-2015 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -399,7 +399,7 @@ void ProjectTab::initialize()
         int idx = 0;
 
         for (int i = 0; i < numEncoders; ++i) {
-            QString id(QString("encoder%1").arg(i));
+            QString id(QString("%1%2").arg(QLatin1String("encoder")).arg(i));
             QString name;
             QString desc;
             QString start;
@@ -488,9 +488,9 @@ void ProjectTab::apply()
     int numEncoders = encoderTable->rowCount();
     if (numEncoders > 0) {
         pref->setNumberEncoders(numEncoders);
-        pref->setActiveEncoder(QString("encoder%1").arg(encoderTable->currentRow()));
+        pref->setActiveEncoder(QString("%1%2").arg(QLatin1String("encoder")).arg(encoderTable->currentRow()));
         for (int i = 0; i < numEncoders; ++i) {
-            pref->setEncoder(QString("encoder%1").arg(i),
+            pref->setEncoder(QString("%1%2").arg(QLatin1String("encoder")).arg(i),
                              encoderTable->item(i, 0)->text(),
                              encoderTable->item(i, 1)->text(),
                              startEncoderStrings[i],

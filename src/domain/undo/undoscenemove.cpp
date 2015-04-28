@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2012 by                                                *
+ *  Copyright (C) 2005-2015 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -48,7 +48,7 @@ void UndoSceneMove::undo()
 
     animationProject->decAnimationChanges();
 
-    facade->writeHistoryEntry(QString("undo"));
+    facade->writeHistoryEntry(QLatin1String("undo"));
     undoFlag = TRUE;
 
     qDebug("UndoSceneMove::undo --> Start");
@@ -65,11 +65,14 @@ void UndoSceneMove::redo()
     animationProject->incAnimationChanges();
 
     if (undoFlag) {
-        facade->writeHistoryEntry(QString("redo"));
+        facade->writeHistoryEntry(QLatin1String("redo"));
         undoFlag = FALSE;
     }
     else {
-        facade->writeHistoryEntry(QString("redoSceneMove|%1|%2").arg(fromSceneIndex).arg(toSceneIndex));
+        facade->writeHistoryEntry(QString("%1|%2|%3")
+                                  .arg(QLatin1String("redoSceneMove"))
+                                  .arg(fromSceneIndex)
+                                  .arg(toSceneIndex));
     }
 
     qDebug("UndoSceneMove::redo --> Start");

@@ -27,7 +27,7 @@
     <message>
         <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="85"/>
         <source>Czech</source>
-        <translation type="unfinished">Tchèque</translation>
+        <translation>Tchèque</translation>
     </message>
     <message>
         <source>Slovenian</source>
@@ -72,12 +72,12 @@
     <message>
         <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="159"/>
         <source>Unknown Windows OS</source>
-        <translation type="unfinished"></translation>
+        <translation>Windows OS inconnu</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="188"/>
         <source>Unknown Mac OS</source>
-        <translation type="unfinished"></translation>
+        <translation>Mac OS inconnu</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="203"/>
@@ -123,7 +123,7 @@
     <message>
         <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="82"/>
         <source>Danish</source>
-        <translation type="unfinished"></translation>
+        <translation>Danois</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="115"/>
@@ -143,7 +143,7 @@
     <message>
         <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="84"/>
         <source>German</source>
-        <translation type="unfinished">Allemand</translation>
+        <translation>Allemand</translation>
     </message>
     <message>
         <source>Portuguese</source>
@@ -156,7 +156,7 @@
     <message>
         <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="83"/>
         <source>Swedish</source>
-        <translation type="unfinished">Suède</translation>
+        <translation>Suède</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="68"/>
@@ -316,17 +316,17 @@ L&apos;animation est visualisée sans son si vous choisissez de le lire.</transl
     <message>
         <location filename="../src/frontends/qtfrontend/dialogs/cameracontrollerdialog.cpp" line="1009"/>
         <source>Restore Camera Settings...</source>
-        <translation type="unfinished"></translation>
+        <translation>Restaurer les paramètres de caméra</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/dialogs/cameracontrollerdialog.cpp" line="2564"/>
         <source>Reset Camera Settings...</source>
-        <translation type="unfinished"></translation>
+        <translation>Réinitialiser les paramètres de caméra</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/dialogs/cameracontrollerdialog.cpp" line="2564"/>
         <source>Abort Reset</source>
-        <translation type="unfinished"></translation>
+        <translation>Annuler Réinitialisation</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/dialogs/cameracontrollerdialog.cpp" line="363"/>
@@ -401,7 +401,7 @@ L&apos;animation est visualisée sans son si vous choisissez de le lire.</transl
     <message>
         <location filename="../src/frontends/qtfrontend/dialogs/cameracontrollerdialog.cpp" line="401"/>
         <source>&amp;Reset to Default</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Reinitialisation par défaut</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/dialogs/cameracontrollerdialog.cpp" line="402"/>
@@ -738,7 +738,7 @@ L&apos;animation est visualisée sans son si vous choisissez de le lire.</transl
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/generaldialog.cpp" line="61"/>
         <source>Preferences</source>
-        <translation type="unfinished">Paramètres</translation>
+        <translation>Paramètres</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/generaldialog.cpp" line="69"/>
@@ -753,32 +753,32 @@ L&apos;animation est visualisée sans son si vous choisissez de le lire.</transl
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/generaldialog.cpp" line="112"/>
         <source>General Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Paramètres générales</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/generaldialog.cpp" line="133"/>
         <source>New Project Values</source>
-        <translation type="unfinished"></translation>
+        <translation>Valeurs d&apos;un nouveau projet</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/generaldialog.cpp" line="154"/>
         <source>Image Import</source>
-        <translation type="unfinished"></translation>
+        <translation>Importer une image</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/generaldialog.cpp" line="175"/>
         <source>Image Transformation</source>
-        <translation type="unfinished"></translation>
+        <translation>transformation d&apos;une image</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/generaldialog.cpp" line="196"/>
         <source>Video Export</source>
-        <translation type="unfinished"></translation>
+        <translation>Exporter une vidéo</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/generaldialog.cpp" line="218"/>
         <source>Grabber</source>
-        <translation type="unfinished"></translation>
+        <translation>Périphérique</translation>
     </message>
     <message>
         <source>General Preferences</source>
@@ -913,7 +913,7 @@ L&apos;animation est visualisée sans son si vous choisissez de le lire.</transl
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/grabberwidget.cpp" line="111"/>
         <source>Microsoft Media Foundation Source</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/grabberwidget.cpp" line="118"/>
@@ -923,7 +923,7 @@ L&apos;animation est visualisée sans son si vous choisissez de le lire.</transl
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/grabberwidget.cpp" line="361"/>
         <source>Information</source>
-        <translation type="unfinished">Information</translation>
+        <translation>Information</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/grabberwidget.cpp" line="361"/>
@@ -962,7 +962,7 @@ L&apos;animation est visualisée sans son si vous choisissez de le lire.</transl
     <message>
         <location filename="../src/technical/grabber/gstreamer/linux/usbgrabber.cpp" line="159"/>
         <source>Device %1</source>
-        <translation type="unfinished">Périphérique %1</translation>
+        <translation>Périphérique %1</translation>
     </message>
 </context>
 <context>
@@ -1021,7 +1021,7 @@ paramètres de capture dans la fenêtre de préférences.</translation>
     <message>
         <location filename="../src/technical/grabber/imagegrabberfacade.cpp" line="221"/>
         <source>Check image sources</source>
-        <translation type="unfinished"></translation>
+        <translation>Vérifier le périphérique</translation>
     </message>
     <message>
         <location filename="../src/technical/grabber/imagegrabberfacade.cpp" line="222"/>
@@ -1215,7 +1215,7 @@ another device on the recording tool tab.</source>
         <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1836"/>
         <source>English</source>
         <comment>This should be translated to the name of the language you are translating to, in that language. Example: English = Deutsch (Deutsch is &quot;German&quot; in German)</comment>
-        <translation>Français</translation>
+        <translation>Francais</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="550"/>
@@ -1873,7 +1873,7 @@ Veuillez vérifier les paramètres dans la fenêtre de préférences!</translati
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/projectdialog.cpp" line="61"/>
         <source>Properties</source>
-        <translation type="unfinished">Propriétés</translation>
+        <translation>Propriétés</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/projectdialog.cpp" line="69"/>
@@ -1893,17 +1893,17 @@ Veuillez vérifier les paramètres dans la fenêtre de préférences!</translati
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/projectdialog.cpp" line="152"/>
         <source>Image Import</source>
-        <translation type="unfinished"></translation>
+        <translation>Importer une image</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/projectdialog.cpp" line="173"/>
         <source>Image Transformation</source>
-        <translation type="unfinished"></translation>
+        <translation>Transformation d&apos;une image</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/projectdialog.cpp" line="194"/>
         <source>Video Export</source>
-        <translation type="unfinished"></translation>
+        <translation>Exporter une vidéo</translation>
     </message>
     <message>
         <source>Project Preferences</source>
@@ -2218,22 +2218,22 @@ Veuillez vérifier les paramètres dans la fenêtre de préférences!</translati
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/projectwidget.cpp" line="95"/>
         <source>Image grabber settings</source>
-        <translation type="unfinished">Réglages du périphérique</translation>
+        <translation>Réglages du périphérique</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/projectwidget.cpp" line="103"/>
         <source>Video 4 Linux (USB WebCam)</source>
-        <translation type="unfinished">Video 4 Linux (USB WebCam)</translation>
+        <translation>Video 4 Linux (USB WebCam)</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/projectwidget.cpp" line="104"/>
         <source>IEEE 1394 (FireWire DigiCam)</source>
-        <translation type="unfinished">IEEE 1394 (FireWire DigiCam)</translation>
+        <translation>IEEE 1394 (FireWire DigiCam)</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/projectwidget.cpp" line="105"/>
         <source>gphoto (USB Compact Camera)</source>
-        <translation type="unfinished">gphoto (USB Appareil photographique compact)</translation>
+        <translation>gphoto (USB Appareil photographique compact)</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/projectwidget.cpp" line="109"/>
@@ -2404,12 +2404,12 @@ Il vous faut des droits d&apos;accès pour lire, écrire et exécuter dans .qsto
     <message>
         <location filename="../src/frontends/qtfrontend/tooltabs/recordingtab.cpp" line="227"/>
         <source>Video Source:</source>
-        <translation type="unfinished"></translation>
+        <translation>Source vidéo</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/tooltabs/recordingtab.cpp" line="228"/>
         <source>Resolution:</source>
-        <translation type="unfinished"></translation>
+        <translation>Résolution</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/tooltabs/recordingtab.cpp" line="232"/>
@@ -2439,7 +2439,7 @@ Il vous faut des droits d&apos;accès pour lire, écrire et exécuter dans .qsto
     <message>
         <location filename="../src/frontends/qtfrontend/tooltabs/recordingtab.cpp" line="378"/>
         <source>Not Supported</source>
-        <translation type="unfinished"></translation>
+        <translation>Pas soutenu</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/tooltabs/recordingtab.cpp" line="587"/>
@@ -2625,27 +2625,27 @@ Il vous faut des droits d&apos;accès pour lire, écrire et exécuter dans .qsto
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/transformwidget.cpp" line="126"/>
         <source>Zoom the image</source>
-        <translation type="unfinished"></translation>
+        <translation>Zoomer l&apos;image</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/transformwidget.cpp" line="209"/>
         <source>Zoom settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Paramètres de zoom</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/transformwidget.cpp" line="211"/>
         <source>Zoom value:</source>
-        <translation type="unfinished"></translation>
+        <translation>Valeur de zoom</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/transformwidget.cpp" line="223"/>
         <source>0%</source>
-        <translation type="unfinished">0%</translation>
+        <translation>0%</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/transformwidget.cpp" line="224"/>
         <source>100%</source>
-        <translation type="unfinished">100%</translation>
+        <translation>100%</translation>
     </message>
 </context>
 <context>

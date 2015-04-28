@@ -22,18 +22,29 @@
 #define IMAGECONVERTER_H
 
 /******************************************************************************
- * Convert RGB 24bit to RGB 32bit
+ * Convert RGB 24bit to XBGR 32bit
  ******************************************************************************/
 
-int convert_rgb24_to_rgb32_buffer(unsigned char *rgb24,
-                                  unsigned char *rgb32,
-                                  unsigned int   width,
-                                  unsigned int   height,
-                                  unsigned long  bufferLength,
-                                  long           stride);
+int convert_rgb24_to_xbgr32_buffer(unsigned char *rgb24,
+                                   unsigned char *xbgr32,
+                                   unsigned int   width,
+                                   unsigned int   height,
+                                   unsigned long  bufferLength,
+                                   long           stride);
 
 /******************************************************************************
- * Convert YUV to RGB 32bit
+ * Convert BGR 24bit to XBGR 32bit
+ ******************************************************************************/
+
+int convert_bgr24_to_xbgr32_buffer(unsigned char *bgr24,
+                                   unsigned char *xbgr32,
+                                   unsigned int   width,
+                                   unsigned int   height,
+                                   unsigned long  bufferLength,
+                                   long           stride);
+
+/******************************************************************************
+ * Convert YUV to XBGR 32bit
  ******************************************************************************/
 
 /**
@@ -79,118 +90,118 @@ void convert_yuv_to_rgb_SDTV_pixel(int y, int u, int v, int& r, int& g, int& b);
 int convert_yuv_to_rgb8_HDTV_pixel(int y, int u, int v);
 
 /**
- * Convert a buffer with YUV 4:4:4 (Microsoft AYUV) pixels to RGB 8bit.
+ * Convert a buffer with YUV 4:4:4 (Microsoft AYUV) pixels to ABGR 32bit.
  *
- * @brief convert_ayuv_to_rgb32_buffer
+ * @brief convert_ayuv_to_abgr32_buffer
  * @param ayuv
- * @param rgb32
+ * @param abgr32
  * @param width
  * @param height
  * @param bufferLength
  * @param stride
  * @return
  */
-int convert_ayuv_to_rgb32_buffer(unsigned char *ayuv,
-                                 unsigned char *rgb32,
-                                 unsigned int   width,
-                                 unsigned int   height,
-                                 unsigned long  bufferLength,
-                                 long           stride);
+int convert_ayuv_to_abgr32_buffer(unsigned char *ayuv,
+                                  unsigned char *abgr32,
+                                  unsigned int   width,
+                                  unsigned int   height,
+                                  unsigned long  bufferLength,
+                                  long           stride);
 
 /**
- * Convert a buffer with YUV 4:2:2 (Microsoft YUY2) pixels to RGB 8bit.
+ * Convert a buffer with YUV 4:2:2 (Microsoft YUY2) pixels to XBGR 32bit.
  *
- * @brief convert_yuy2_to_rgb32_buffer
+ * @brief convert_yuy2_to_xbgr32_buffer
  * @param yuy2
- * @param rgb32
+ * @param xbgr32
  * @param width
  * @param height
  * @param bufferLength
  * @param stride
  * @return
  */
-int convert_yuy2_to_rgb32_buffer(unsigned char *yuy2,
-                                 unsigned char *rgb32,
-                                 unsigned int   width,
-                                 unsigned int   height,
-                                 unsigned long  bufferLength,
-                                 long           stride);
+int convert_yuy2_to_xbgr32_buffer(unsigned char *yuy2,
+                                  unsigned char *xbgr32,
+                                  unsigned int   width,
+                                  unsigned int   height,
+                                  unsigned long  bufferLength,
+                                  long           stride);
 
 /**
- * Convert a buffer with YUV 4:2:2 (Microsoft UYVY) pixels to RGB 8bit.
+ * Convert a buffer with YUV 4:2:2 (Microsoft UYVY) pixels to XBGR 32bit.
  *
- * @brief convert_uyvy_to_rgb32_buffer
+ * @brief convert_uyvy_to_xbgr32_buffer
  * @param uyvy
- * @param rgb32
+ * @param xbgr32
  * @param width
  * @param height
  * @param bufferLength
  * @param stride
  * @return
  */
-int convert_uyvy_to_rgb32_buffer(unsigned char *uyvy,
-                                 unsigned char *rgb32,
-                                 unsigned int   width,
-                                 unsigned int   height,
-                                 unsigned long  bufferLength,
-                                 long           stride);
+int convert_uyvy_to_xbgr32_buffer(unsigned char *uyvy,
+                                  unsigned char *xbgr32,
+                                  unsigned int   width,
+                                  unsigned int   height,
+                                  unsigned long  bufferLength,
+                                  long           stride);
 
 /**
- * Convert a buffer with YUV 4:2:0 (Microsoft YV12) pixels to RGB 8bit.
+ * Convert a buffer with YUV 4:2:0 (Microsoft YV12) pixels to XBGR 32bit.
  *
- * @brief convert_yv12_to_rgb32_buffer
+ * @brief convert_yv12_to_xbgr32_buffer
  * @param yv12
- * @param rgb32
+ * @param xbgr32
  * @param width
  * @param height
  * @param bufferLength
  * @param stride
  * @return
  */
-int convert_yv12_to_rgb32_buffer(unsigned char *yv12,
-                                 unsigned char *rgb32,
-                                 unsigned int   width,
-                                 unsigned int   height,
-                                 unsigned long  bufferLength,
-                                 long           stride);
+int convert_yv12_to_xbgr32_buffer(unsigned char *yv12,
+                                  unsigned char *xbgr32,
+                                  unsigned int   width,
+                                  unsigned int   height,
+                                  unsigned long  bufferLength,
+                                  long           stride);
 
 /**
- * Convert a buffer with YUV 4:2:0 (Microsoft NV12) pixels to RGB 8bit.
+ * Convert a buffer with YUV 4:2:0 (Microsoft NV12) pixels to XBGR 32bit.
  *
- * @brief convert_nv12_to_rgb32_buffer
+ * @brief convert_nv12_to_xbgr32_buffer
  * @param nv12
- * @param rgb32
+ * @param xbgr32
  * @param width
  * @param height
  * @param bufferLength
  * @param stride
  * @return
  */
-int convert_nv12_to_rgb32_buffer(unsigned char *nv12,
-                                 unsigned char *rgb32,
-                                 unsigned int   width,
-                                 unsigned int   height,
-                                 unsigned long  bufferLength,
-                                 long           stride);
+int convert_nv12_to_xbgr32_buffer(unsigned char *nv12,
+                                  unsigned char *xbgr32,
+                                  unsigned int   width,
+                                  unsigned int   height,
+                                  unsigned long  bufferLength,
+                                  long           stride);
 
 /**
- * Convert a buffer with YUV 4:2:0 (Microsoft I420) pixels to RGB 8bit.
+ * Convert a buffer with YUV 4:2:0 (Microsoft I420) pixels to XBGR 32bit.
  *
- * @brief convert_i420_to_rgb32_buffer
+ * @brief convert_i420_to_xbgr32_buffer
  * @param i420
- * @param rgb32
+ * @param xbgr32
  * @param width
  * @param height
  * @param bufferLength
  * @param stride
  * @return
  */
-int convert_i420_to_rgb32_buffer(unsigned char *i420,
-                                 unsigned char *rgb32,
-                                 unsigned int   width,
-                                 unsigned int   height,
-                                 unsigned long  bufferLength,
-                                 long           stride);
+int convert_i420_to_xbgr32_buffer(unsigned char *i420,
+                                  unsigned char *rgb32,
+                                  unsigned int   width,
+                                  unsigned int   height,
+                                  unsigned long  bufferLength,
+                                  long           stride);
 
 /******************************************************************************
  * Convert RGB 24bit to YUV

@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2012 by                                                *
+ *  Copyright (C) 2005-2015 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -60,7 +60,7 @@ void UndoProjectNew::undo()
     frontend->setExposureID("---");
     frontend->setToolBarState(ToolBar::toolBarCameraOff);
 
-    facade->writeHistoryEntry(QString("undo"));
+    facade->writeHistoryEntry(QLatin1String("undo"));
 
     qDebug("UndoProjectNew::undo --> End");
 }
@@ -77,18 +77,20 @@ void UndoProjectNew::redo()
         facade->newProject(projectDescription);
         facade->setProjectSettingsToDefault();
 
-        facade->writeHistoryEntry(QString("redoProjectNew|%1").arg(projectDescription));
+        facade->writeHistoryEntry(QString("%1|%2")
+                                  .arg(QLatin1String("redoProjectNew"))
+                                  .arg(projectDescription));
     }
     else {
         // Call of the redo function after a undo call
         facade->newProject(project);
         project = NULL;
 
-        facade->writeHistoryEntry(QString("redo"));
+        facade->writeHistoryEntry(QLatin1String("redo"));
     }
 
     facade->getView()->notifyNewProject();
-    frontend->setProjectID(facade->getProjectDescription().toAscii());
+    frontend->setProjectID(facade->getProjectDescription());
     frontend->setSceneID("---");
     frontend->setTakeID("---");
     frontend->setExposureID("---");

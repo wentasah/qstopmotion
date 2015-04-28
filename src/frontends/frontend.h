@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2014 by                                                *
+ *  Copyright (C) 2005-2015 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -78,55 +78,55 @@ public:
      * Abstract function for getting the application directory
      * @return the application directory name string
      */
-    virtual const char* getUserDirName() = 0;
+    virtual const QString getUserDirName() = 0;
 
     /**
      * Abstract function for getting the temporary directory
      * @return the temporary directory name string
      */
-    virtual const char* getTempDirName() = 0;
+    virtual const QString getTempDirName() = 0;
 
     /**
      * Abstract function for getting the application directory
      * @return the application directory name string
      */
-    virtual const char* getApplicationDirName() = 0;
+    virtual const QString getApplicationDirName() = 0;
 
     /**
      * Abstract function for getting the binary directory
      * @return the binary directory name string
      */
-    virtual const char* getBinDirName() = 0;
+    virtual const QString getBinDirName() = 0;
 
     /**
      * Abstract function for getting the manual directory
      * @return the manual directory name string
      */
-    virtual const char* getManualDirName() = 0;
+    virtual const QString getManualDirName() = 0;
 
     /**
      * Abstract function for getting the translations directory
      * @return the translations directory name string
      */
-    virtual const char* getTranslationsDirName() = 0;
+    virtual const QString getTranslationsDirName() = 0;
 
     /**
      * Abstract function for getting the graphics directory
      * @return the graphics directory name string
      */
-    virtual const char* getGraphicsDirName() = 0;
+    virtual const QString getGraphicsDirName() = 0;
 
     /**
      * Abstract function for getting the icons directory
      * @return the icons directory name string
      */
-    virtual const char* getIconsDirName() = 0;
+    virtual const QString getIconsDirName() = 0;
 
     /**
      * Abstract function for getting the pictures directory
      * @return the pictures directory name string
      */
-    virtual const char* getPicturesDirName() = 0;
+    virtual const QString getPicturesDirName() = 0;
 
     /**
      * Abstract function for getting all possible GUI languages
@@ -257,31 +257,31 @@ public:
      * Abstract function for changing the information to display to the user
      * @param infoText the text to display to the user
      */
-    virtual void setProgressInfo(const char *infoText) = 0;
+    virtual void setProgressInfo(const QString infoText) = 0;
 
     /**
      * Abstract function for changing the prozess id in the status bar
      * @param id the id to display in the status bar
      */
-    virtual void setProjectID(const char *id) = 0;
+    virtual void setProjectID(const QString id) = 0;
 
     /**
      * Abstract function for changing the scene id in the status bar
      * @param id the id to display in the status bar
      */
-    virtual void setSceneID(const char *id) = 0;
+    virtual void setSceneID(const QString id) = 0;
 
     /**
      * Abstract function for changing the take id in the status bar
      * @param id the id to display in the status bar
      */
-    virtual void setTakeID(const char *id) = 0;
+    virtual void setTakeID(const QString id) = 0;
 
     /**
      * Abstract function for changing the exposure id in the status bar
      * @param id the id to display in the status bar
      */
-    virtual void setExposureID(const char *id) = 0;
+    virtual void setExposureID(const QString id) = 0;
 
     /**
      * Abstract function for checking if the user has aborted the operation

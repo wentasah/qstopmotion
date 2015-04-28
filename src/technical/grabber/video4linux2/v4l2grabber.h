@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2010-2014 by                                                *
+ *  Copyright (C) 2010-2015 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -24,6 +24,10 @@
 #include "technical/grabber/imagegrabber.h"
 #include "technical/grabber/imagegrabberdevice.h"
 
+// Include files of v4l2
+#include <linux/videodev2.h>
+
+#define N_BUFFERS 2
 
 /**
  * Video grabbers using the Video4Linux2 library.
@@ -82,17 +86,55 @@ public:
      */
     bool tearDown();
 
+    /**
+     * @brief getFd
+     * @return The file descriptor of the open device.
+     */
+    int getFd();
+
 private:
+    bool readDeviceInfo(int fd, ImageGrabberDevice *device);
+
+    bool enumerateCaptureFormats(int fd, ImageGrabberDevice *device);
+
+    // bool SetDeviceFormat(int fd, int dwFormatIndex);
+
+    /**
+     * ioctl with a number of retries in the case of failure
+     * @param fd Device descriptor
+     * @param IOCTL_X ioctl reference
+     * @param arg Pointer to ioctl data
+     * @return ioctl result
+     */
+    int xioctl(int fd, int IOCTL_X, void *arg);
+
     /**
      * Get the actual image from the gstreamer application interface.
      */
     const QImage getImage();
 
 private:
+    struct buffer {
+            void    *start;
+            size_t   length;
+    };
+
     int         activeSource;
     bool        isInitSuccess;
     bool        firstImage;
 
+    /**
+     * V4L2 file handle
+     */
+    int                  fd;
+    unsigned int         width;
+    unsigned int         height;
+    struct v4l2_format   format;
+    unsigned char*       dst_buf;
+    unsigned char*       frameData;
+    v4l2_buffer          buf;
+    struct buffer        buffers[N_BUFFERS];
+	  
     QImage liveImage;
     QImage rawImage;
 };

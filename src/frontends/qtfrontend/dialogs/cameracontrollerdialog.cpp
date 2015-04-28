@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2014 by                                                *
+ *  Copyright (C) 2005-2015 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -39,8 +39,8 @@ CameraControllerDialog::CameraControllerDialog(Frontend *f,
     frontend = f;
     grabberDevice = device;
     deviceId = grabberDevice->getDeviceId();
-    deviceId.remove(QChar(' '));   // Remove all spaces (Windows)
-    deviceId.remove(QChar('/'));   // Remove all slashs (Linux)
+    deviceId.remove(QLatin1Char(' '));   // Remove all spaces (Windows)
+    deviceId.remove(QLatin1Char('/'));   // Remove all slashs (Linux)
     grabberController = device->getController();
     stepBrightness = -1;
     stepContrast = -1;

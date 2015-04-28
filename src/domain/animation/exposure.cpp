@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2013 by                                                *
+ *  Copyright (C) 2005-2015 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -182,7 +182,9 @@ void Exposure::moveToTemp(bool isRecovery)
     fromImagePath.append(theFrame);
 
     // creates a new image name
-    QString toImageName(QString("tmp_%1%2").arg(Exposure::tempNumber)
+    QString toImageName(QString("%1%2%3")
+                        .arg(QLatin1String("tmp_"))
+                        .arg(Exposure::tempNumber)
                         .arg(fromImagePath.mid(fromImagePath.lastIndexOf('.'))));
     Exposure::tempNumber++;
 
@@ -227,7 +229,9 @@ void Exposure::copyToTemp()
     fromImagePath.append(theFrame);
 
     // creates a new image name
-    QString toImageName(QString("tmp_%1%2").arg(Exposure::tempNumber)
+    QString toImageName(QString("%1%2%3")
+                        .arg(QLatin1String("tmp_"))
+                        .arg(Exposure::tempNumber)
                         .arg(fromImagePath.mid(fromImagePath.lastIndexOf('.'))));
     Exposure::tempNumber++;
 
@@ -368,7 +372,7 @@ bool Exposure::readDataFromProject(QDomElement &exposureNode)
 {
     // qDebug("Exposure::readDataFromProject --> Start");
 
-    id.append(exposureNode.attributeNode(QString("id")).value());
+    id.append(exposureNode.attributeNode(QLatin1String("id")).value());
 
     QDomElement currNode = exposureNode.firstChildElement();
 

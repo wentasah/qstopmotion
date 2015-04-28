@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2012 by                                                *
+ *  Copyright (C) 2005-2015 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -73,7 +73,7 @@ void UndoExposureRemove::undo()
 
     animationProject->decAnimationChanges();
 
-    facade->writeHistoryEntry(QString("undo"));
+    facade->writeHistoryEntry(QLatin1String("undo"));
 
     qDebug("UndoExposureRemove::undo --> End");
 }
@@ -95,11 +95,14 @@ void UndoExposureRemove::redo()
         // Call of the redo function after a undo call
         undoFlag = FALSE;
 
-        facade->writeHistoryEntry(QString("redo"));
+        facade->writeHistoryEntry(QLatin1String("redo"));
     }
     else {
-        facade->writeHistoryEntry(QString("redoExposureRemove|%1|%2|%3")
-                                  .arg(sceneIndex).arg(takeIndex).arg(exposureIndex));
+        facade->writeHistoryEntry(QString("%1|%2|%3|%4")
+                                  .arg(QLatin1String("redoExposureRemove"))
+                                  .arg(sceneIndex)
+                                  .arg(takeIndex)
+                                  .arg(exposureIndex));
     }
 
     qDebug("UndoExposureRemove::redo --> End");

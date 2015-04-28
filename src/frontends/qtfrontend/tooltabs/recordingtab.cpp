@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2010-2014 by                                                *
+ *  Copyright (C) 2010-2015 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -271,7 +271,10 @@ void RecordingTab::initialize()
 
     for (index = 0; index < grabberController->getResolutions().size(); index++) {
         resolution = grabberController->getResolutions().at(index);
-        resolutionComboBox->addItem(QString("%1 x %2").arg(resolution.getWidth()).arg(resolution.getHeight()));
+        resolutionComboBox->addItem(QString("%1%2%3")
+                                    .arg(resolution.getWidth())
+                                    .arg(QLatin1String(" x "))
+                                    .arg(resolution.getHeight()));
     }
 
     if (preferences->getIntegerPreference(deviceId, "resolutionwidth", width) == true) {
@@ -487,9 +490,9 @@ void RecordingTab::apply()
     int numEncoders = encoderTable->rowCount();
     if (numEncoders > 0) {
         pref->setNumberEncoders(numEncoders);
-        pref->setActiveEncoder(QString("encoder%1").arg(encoderTable->currentRow()));
+        pref->setActiveEncoder(QString("%1%2").arg(QLatin1String("encoder")).arg(encoderTable->currentRow()));
         for (int i = 0; i < numEncoders; ++i) {
-            pref->setEncoder(QString("encoder%1").arg(i),
+            pref->setEncoder(QString("%1%2").arg(QLatin1String("encoder")).arg(i),
                              encoderTable->item(i, 0)->text(),
                              encoderTable->item(i, 1)->text(),
                              startEncoderStrings[i],

@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2012 by                                                *
+ *  Copyright (C) 2005-2015 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -229,7 +229,7 @@ void ExposureThumbView::contentsDropped(QDropEvent * /* event */)
 {
     qDebug("ExposureThumbView::contentsDropped --> Start");
 
-    timeLine->getFrontend()->showInformation("Not Implemented", QString("ExposureThumbView::contentsDropped not implemented."));
+    timeLine->getFrontend()->showInformation("Not Implemented", "ExposureThumbView::contentsDropped not implemented.");
 
     /*
     if ((event->source() != 0) && (timeLine->getMovingScene() == -1)) {

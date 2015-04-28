@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2012 by                                                *
+ *  Copyright (C) 2005-2015 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -63,7 +63,7 @@ void UndoSceneRemove::undo()
 
     animationProject->decAnimationChanges();
 
-    facade->writeHistoryEntry(QString("undo"));
+    facade->writeHistoryEntry(QLatin1String("undo"));
     undoFlag = TRUE;
 
     qDebug("UndoSceneRemove::undo --> End");
@@ -83,11 +83,13 @@ void UndoSceneRemove::redo()
     facade->getView()->notifyRemoveScene(sceneIndex);
 
     if (undoFlag) {
-        facade->writeHistoryEntry(QString("redo"));
+        facade->writeHistoryEntry(QLatin1String("redo"));
         undoFlag = FALSE;
     }
     else {
-        facade->writeHistoryEntry(QString("redoSceneRemove|%1").arg(sceneIndex));
+        facade->writeHistoryEntry(QString("%1|%2")
+                                  .arg(QLatin1String("redoSceneRemove"))
+                                  .arg(sceneIndex));
     }
 
     qDebug("UndoSceneRemove::redo --> End");

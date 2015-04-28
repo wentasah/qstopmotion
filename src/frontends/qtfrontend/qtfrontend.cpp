@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2014 by                                                *
+ *  Copyright (C) 2005-2015 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -52,6 +52,15 @@ QtFrontend::QtFrontend(int &argc, char **argv)
         stApp->setAttribute(Qt::AA_NativeWindows);
     #endif
     */
+
+#if QT_VERSION<0x050000
+    // der Codec der Quelltexte ist UTF-8,
+    // Die Standardkonvertierung von char* in Unicode geht jedoch von Latin-1 aus (bis QT4.8):
+    QTextCodec::setCodecForTr(QTextCodec::codecForName("UTF-8"));       // für tr()
+    QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8")); // const char* in QString
+    QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF-8"));   // für locale
+#endif
+
 
     qDebug("QtFrontend::Constructor --> End");
 }
@@ -141,12 +150,12 @@ bool QtFrontend::checkApplicationDirectory(char *binDirName)
 
     userDirName.append(homeDir.absolutePath());
 
-    appUserDirName.append(userDirName.toLatin1());
+    appUserDirName.append(userDirName);
     userDirName.append(QLatin1String("/"));
 
     otherDirName.append(userDirName);
     otherDirName.append(PreferencesTool::tempDirectory);
-    appTempDirName.append(otherDirName.toLatin1());
+    appTempDirName.append(otherDirName);
 
     QString absoluteAppName = Util::convertPathFromOsSpecific(QString(binDirName));
     int pathLength = absoluteAppName.lastIndexOf("/bin/");
@@ -174,7 +183,7 @@ bool QtFrontend::checkApplicationDirectory(char *binDirName)
         otherDirName.clear();
         otherDirName.append(appApplicationDirName);
         otherDirName.append(QLatin1String("bin/"));
-        appBinDirName.append(otherDirName.toLatin1());
+        appBinDirName.append(otherDirName);
     }
     else
     {
@@ -193,19 +202,19 @@ bool QtFrontend::checkApplicationDirectory(char *binDirName)
     otherDirName.append(appApplicationDirName);
     otherDirName.append(PreferencesTool::manualDirectory);
     otherDirName.append(QLatin1String("/"));
-    appManualDirName.append(otherDirName.toLatin1());
+    appManualDirName.append(otherDirName);
 
     otherDirName.clear();
     otherDirName.append(appApplicationDirName);
     otherDirName.append(PreferencesTool::translationsDirectory);
     otherDirName.append(QLatin1String("/"));
-    appTranslationsDirName.append(otherDirName.toLatin1());
+    appTranslationsDirName.append(otherDirName);
 
     otherDirName.clear();
     otherDirName.append(appApplicationDirName);
     otherDirName.append(PreferencesTool::graphicsDirectory);
     otherDirName.append(QLatin1String("/"));
-    appGraphicsDirName.append(otherDirName.toLatin1());
+    appGraphicsDirName.append(otherDirName);
 
 #else
     // Linux and Apple OS X version
@@ -217,7 +226,7 @@ bool QtFrontend::checkApplicationDirectory(char *binDirName)
     otherDirName.append(QLatin1String("/"));
     // otherDirName.append(PreferencesTool::manualDirectory);
     // otherDirName.append(QLatin1String("/"));
-    appManualDirName.append(otherDirName.toLatin1());
+    appManualDirName.append(otherDirName);
 
     otherDirName.clear();
     otherDirName.append(appApplicationDirName);
@@ -226,7 +235,7 @@ bool QtFrontend::checkApplicationDirectory(char *binDirName)
     otherDirName.append(QLatin1String("/"));
     otherDirName.append(PreferencesTool::translationsDirectory);
     otherDirName.append(QLatin1String("/"));
-    appTranslationsDirName.append(otherDirName.toLatin1());
+    appTranslationsDirName.append(otherDirName);
 
     otherDirName.clear();
     otherDirName.append(appApplicationDirName);
@@ -235,7 +244,7 @@ bool QtFrontend::checkApplicationDirectory(char *binDirName)
     otherDirName.append(QLatin1String("/"));
     otherDirName.append(PreferencesTool::graphicsDirectory);
     otherDirName.append(QLatin1String("/"));
-    appGraphicsDirName.append(otherDirName.toLatin1());
+    appGraphicsDirName.append(otherDirName);
 
 #endif
 
@@ -248,14 +257,14 @@ bool QtFrontend::checkApplicationDirectory(char *binDirName)
     otherDirName.append(appGraphicsDirName);
     otherDirName.append(PreferencesTool::iconsDirectory);
     otherDirName.append(QLatin1String("/"));
-    appIconsDirName.append(otherDirName.toLatin1());
+    appIconsDirName.append(otherDirName);
     qDebug() << "QtFrontend::checkApplicationDirectory --> Application Icon Direcory:" << appIconsDirName;
 
     otherDirName.clear();
     otherDirName.append(appGraphicsDirName);
     otherDirName.append(PreferencesTool::picturesDirectory);
     otherDirName.append(QLatin1String("/"));
-    appPicturesDirName.append(otherDirName.toLatin1());
+    appPicturesDirName.append(otherDirName);
     qDebug() << "QtFrontend::checkApplicationDirectory --> Application Pictures Direcory:" << appPicturesDirName;
 
     qDebug() << "QtFrontend::checkApplicationDirectory --> End";
@@ -391,57 +400,57 @@ PreferencesTool* QtFrontend::getPreferences()
 }
 
 
-const char* QtFrontend::getUserDirName()
+const QString QtFrontend::getUserDirName()
 {
-    return this->appUserDirName.constData();
+    return this->appUserDirName;
 }
 
 
-const char* QtFrontend::getTempDirName()
+const QString QtFrontend::getTempDirName()
 {
-    return this->appTempDirName.constData();
+    return this->appTempDirName;
 }
 
 
-const char* QtFrontend::getApplicationDirName()
+const QString QtFrontend::getApplicationDirName()
 {
-    return this->appApplicationDirName.constData();
+    return this->appApplicationDirName;
 }
 
 
-const char* QtFrontend::getBinDirName()
+const QString QtFrontend::getBinDirName()
 {
-    return this->appBinDirName.constData();
+    return this->appBinDirName;
 }
 
 
-const char* QtFrontend::getManualDirName()
+const QString QtFrontend::getManualDirName()
 {
-    return this->appManualDirName.constData();
+    return this->appManualDirName;
 }
 
 
-const char* QtFrontend::getTranslationsDirName()
+const QString QtFrontend::getTranslationsDirName()
 {
-    return this->appTranslationsDirName.constData();
+    return this->appTranslationsDirName;
 }
 
 
-const char* QtFrontend::getGraphicsDirName()
+const QString QtFrontend::getGraphicsDirName()
 {
-    return this->appGraphicsDirName.constData();
+    return this->appGraphicsDirName;
 }
 
 
-const char* QtFrontend::getIconsDirName()
+const QString QtFrontend::getIconsDirName()
 {
-    return this->appIconsDirName.constData();
+    return this->appIconsDirName;
 }
 
 
-const char* QtFrontend::getPicturesDirName()
+const QString QtFrontend::getPicturesDirName()
 {
-    return this->appPicturesDirName.constData();
+    return this->appPicturesDirName;
 }
 
 
@@ -553,7 +562,7 @@ void QtFrontend::increaseProgress()
 }
 
 
-void QtFrontend::setProgressInfo(const char *infoText)
+void QtFrontend::setProgressInfo(const QString infoText)
 {
     mw->setProgressInfo(infoText);
 }
@@ -571,27 +580,27 @@ void QtFrontend::clearMessage()
 }
 
 
-void QtFrontend::setProjectID(const char *id)
+void QtFrontend::setProjectID(const QString id)
 {
-    mw->setProjectID(QString(id));
+    mw->setProjectID(id);
 }
 
 
-void QtFrontend::setSceneID(const char *id)
+void QtFrontend::setSceneID(const QString id)
 {
-    mw->setSceneID(QString(id));
+    mw->setSceneID(id);
 }
 
 
-void QtFrontend::setTakeID(const char *id)
+void QtFrontend::setTakeID(const QString id)
 {
-    mw->setTakeID(QString(id));
+    mw->setTakeID(id);
 }
 
 
-void QtFrontend::setExposureID(const char *id)
+void QtFrontend::setExposureID(const QString id)
 {
-    mw->setExposureID(QString(id));
+    mw->setExposureID(id);
 }
 
 

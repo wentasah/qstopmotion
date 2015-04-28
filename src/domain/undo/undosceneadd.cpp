@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2012 by                                                *
+ *  Copyright (C) 2005-2015 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -56,7 +56,7 @@ void UndoSceneAdd::undo()
 
     animationProject->decAnimationChanges();
 
-    facade->writeHistoryEntry(QString("undo"));
+    facade->writeHistoryEntry(QLatin1String("undo"));
 
     qDebug("UndoSceneAdd::undo --> End");
 }
@@ -72,15 +72,17 @@ void UndoSceneAdd::redo()
         // First call of the redo function after creation of the undo object
         animationProject->addScene(sceneDescription);
 
-        facade->writeHistoryEntry(QString("redoSceneAdd|%1|%2")
-                                  .arg(sceneIndex).arg(sceneDescription));
+        facade->writeHistoryEntry(QString("%1|%2|%3")
+                                  .arg(QLatin1String("redoSceneAdd"))
+                                  .arg(sceneIndex)
+                                  .arg(sceneDescription));
     }
     else {
         // Call of the redo function after a undo call
         animationProject->addScene(scene);
         scene = NULL;
 
-        facade->writeHistoryEntry(QString("redo"));
+        facade->writeHistoryEntry(QLatin1String("redo"));
     }
 
     facade->getView()->notifyAddScene(sceneIndex);

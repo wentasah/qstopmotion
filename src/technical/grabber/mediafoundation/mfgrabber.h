@@ -91,7 +91,7 @@ public:
     IMFMediaSource* getSource();
 
 private:
-    HRESULT readDeviceInfo(IMFActivate *pActivate, unsigned int Num, ImageGrabberDevice *device);
+    HRESULT readDeviceInfo(IMFActivate *pActivate, ImageGrabberDevice *device);
 
     HRESULT enumerateCaptureFormats(IMFMediaSource *pSource, ImageGrabberDevice *device);
 

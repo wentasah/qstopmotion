@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2012 by                                                *
+ *  Copyright (C) 2005-2015 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -55,7 +55,7 @@ void UndoExposureSelect::undo()
     animationProject->setActiveExposureIndex(oldExposureIndex);
     if (0 <= oldExposureIndex) {
         Exposure *activeExposure = animationProject->getActiveExposure();
-        frontend->setExposureID(activeExposure->getId().toAscii());
+        frontend->setExposureID(activeExposure->getId());
     }
     else {
         frontend->setExposureID("---");
@@ -64,7 +64,7 @@ void UndoExposureSelect::undo()
 
     animationProject->decAnimationChanges();
 
-    facade->writeHistoryEntry(QString("undo"));
+    facade->writeHistoryEntry(QLatin1String("undo"));
     undoFlag = TRUE;
 
     qDebug("UndoExposureSelect::undo --> End");
@@ -81,7 +81,7 @@ void UndoExposureSelect::redo()
     animationProject->setActiveExposureIndex(newExposureIndex);
     if (0 <= newExposureIndex) {
         Exposure *activeExposure = animationProject->getActiveExposure();
-        frontend->setExposureID(activeExposure->getId().toAscii());
+        frontend->setExposureID(activeExposure->getId());
     }
     else {
         frontend->setExposureID("---");
@@ -91,13 +91,18 @@ void UndoExposureSelect::redo()
     animationProject->incAnimationChanges();
 
     if (undoFlag) {
-        facade->writeHistoryEntry(QString("redo"));
+        facade->writeHistoryEntry(QLatin1String("redo"));
         undoFlag = FALSE;
     }
     else {
-        facade->writeHistoryEntry(QString("redoExposureSelect|%1|%2|%3|%4|%5|%6")
-                                  .arg(oldSceneIndex).arg(oldTakeIndex).arg(oldExposureIndex)
-                                  .arg(newSceneIndex).arg(newTakeIndex).arg(newExposureIndex));
+        facade->writeHistoryEntry(QString("%1|%2|%3|%4|%5|%6|%7")
+                                  .arg(QLatin1String("redoExposureSelect"))
+                                  .arg(oldSceneIndex)
+                                  .arg(oldTakeIndex)
+                                  .arg(oldExposureIndex)
+                                  .arg(newSceneIndex)
+                                  .arg(newTakeIndex)
+                                  .arg(newExposureIndex));
     }
 
     qDebug("UndoExposureSelect::redo --> End");

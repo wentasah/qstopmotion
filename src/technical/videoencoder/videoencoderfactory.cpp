@@ -23,6 +23,7 @@
 #include "videoencoderfactory.h"
 
 #include <QtCore/QtDebug>
+#include <QtCore/QTextCodec>
 
 
 VideoEncoderFactory::VideoEncoderFactory(Frontend *f)

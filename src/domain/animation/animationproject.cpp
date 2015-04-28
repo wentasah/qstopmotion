@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2014 by                                                *
+ *  Copyright (C) 2005-2015 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -967,7 +967,7 @@ void AnimationProject::addScene(const QString &sceneDescription)
 
     Scene *scene = new Scene(this);
 
-    scene->setId(QString("%1").arg(nextSceneIndex, 3, 10, QChar('0')));
+    scene->setId(QString("%1").arg(nextSceneIndex, 3, 10, QLatin1Char('0')));
     this->nextSceneIndex++;
 
     if (!sceneDescription.isEmpty()) {
@@ -999,7 +999,7 @@ void AnimationProject::insertScene(int sceneIndex, const QString &sceneDescripti
 
     Scene *scene = new Scene(this);
 
-    scene->setId(QString("%1").arg(nextSceneIndex, 3, 10, QChar('0')));
+    scene->setId(QString("%1").arg(nextSceneIndex, 3, 10, QLatin1Char('0')));
     this->nextSceneIndex++;
 
     if (!sceneDescription.isEmpty()) {
@@ -1088,7 +1088,7 @@ bool AnimationProject::readScenesFromProject(QDomElement &animationNode)
 
     QString activeSceneId;
 
-    description.append(animationNode.attributeNode(QString("descr")).value());
+    description.append(animationNode.attributeNode(QLatin1String("descr")).value());
 
     QDomElement currElement = animationNode.firstChildElement();
 
@@ -1180,21 +1180,21 @@ bool AnimationProject::saveScenesToProject(QDomDocument &doc, QDomElement &anima
             Scene *scene = scenes[sceneIndex];
 
             // Create a new id for the scene
-            scene->setId(QString("%1").arg((sceneIndex), 3, 10, QChar('0')));
+            scene->setId(QString("%1").arg((sceneIndex), 3, 10, QLatin1Char('0')));
 
             unsigned int takeSize = scene->getTakeSize();
             for (unsigned int takeIndex = 0; takeIndex < takeSize; ++takeIndex) {
                 Take *take = scene->getTake(takeIndex);
 
                 // Create a new id for the take
-                take->setId(QString("%1").arg((takeIndex), 2, 10, QChar('0')));
+                take->setId(QString("%1").arg((takeIndex), 2, 10, QLatin1Char('0')));
 
                 unsigned int exposureSize = take->getExposureSize();
                 for (unsigned int exposureIndex = 0; exposureIndex < exposureSize; ++exposureIndex) {
                     Exposure *exposure = take->getExposure(exposureIndex);
 
                     // Create a new id for the Exposure
-                    exposure->setId(QString("%1").arg((exposureIndex), 4, 10, QChar('0')));
+                    exposure->setId(QString("%1").arg((exposureIndex), 4, 10, QLatin1Char('0')));
 
                     // Create a new file name for the frame
 
@@ -1295,21 +1295,21 @@ bool AnimationProject::saveAsScenesToProject(QDomDocument &doc, QDomElement &ani
         Scene *scene = scenes[sceneIndex];
 
         // Create a new id for the scene
-        scene->setId(QString("%1").arg((sceneIndex), 3, 10, QChar('0')));
+        scene->setId(QString("%1").arg((sceneIndex), 3, 10, QLatin1Char('0')));
 
         unsigned int takeSize = scene->getTakeSize();
         for (unsigned int takeIndex = 0; takeIndex < takeSize; ++takeIndex) {
             Take *take = scene->getTake(takeIndex);
 
             // Create a new id for the take
-            take->setId(QString("%1").arg((takeIndex), 2, 10, QChar('0')));
+            take->setId(QString("%1").arg((takeIndex), 2, 10, QLatin1Char('0')));
 
             unsigned int exposureSize = take->getExposureSize();
             for (unsigned int exposureIndex = 0; exposureIndex < exposureSize; ++exposureIndex) {
                 Exposure *exposure = take->getExposure(exposureIndex);
 
                 // Create a new id for the Exposure
-                exposure->setId(QString("%1").arg((exposureIndex), 4, 10, QChar('0')));
+                exposure->setId(QString("%1").arg((exposureIndex), 4, 10, QLatin1Char('0')));
 
                 // Create a new file name for the frame
 

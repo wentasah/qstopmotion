@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2012-2014 by                                                *
+ *  Copyright (C) 2012-2015 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -54,62 +54,55 @@
  * Default implementation of the grabber controller functions.
  **************************************************************************/
 
-GrabberV4L2Controller::GrabberV4L2Controller(int cap)
+V4L2Controller::V4L2Controller(int cap)
     : GrabberController(cap)
 {
-    qDebug("GrabberV4L2Controller::Constructor --> Start");
+    qDebug("V4L2Controller::Constructor --> Start");
 
-    fd = -1;
-    errno = -1;
+    // errno = -1;
 
     grabber = NULL;
     grabberDevice = NULL;
 
-    qDebug("GrabberV4L2Controller::Constructor --> End");
+    qDebug("V4L2Controller::Constructor --> End");
 }
 
 
-GrabberV4L2Controller::~GrabberV4L2Controller()
+V4L2Controller::~V4L2Controller()
 {
-    qDebug("GrabberV4L2Controller::Destructor --> Start (Empty)");
+    qDebug("V4L2Controller::Destructor --> Start (Empty)");
 
-    if (fd >= 0) {
-        // Close the device file
-        v4l2_close(fd);
-        // close(fd);
-        fd = -1;
-    }
-
-    qDebug("GrabberV4L2Controller::Destructor --> End");
+    // qDebug("V4L2Controller::Destructor --> End");
 }
 
 
-ImageGrabber* GrabberV4L2Controller::getImageGrabber()
+ImageGrabber* V4L2Controller::getImageGrabber()
 {
     return grabber;
 }
 
 
-bool GrabberV4L2Controller::initialization(ImageGrabber* ig, ImageGrabberDevice* igd)
+bool V4L2Controller::initialization(ImageGrabber* ig, ImageGrabberDevice* igd)
 {
-    qDebug("GrabberV4L2Controller::init --> Start");
+    qDebug("V4L2Controller::initialization --> Start");
 
     grabber = (V4L2Grabber*)ig;
     grabberDevice = igd;
 
-    qDebug("GrabberV4L2Controller::init --> Open the device ...");
+    qDebug("V4L2Controller::initialization --> Open the device ...");
 
-    fd = v4l2_open(grabberDevice->getDeviceId().toAscii(), O_RDWR | O_NONBLOCK, 0);
+    // fd = v4l2_open(grabberDevice->getDeviceId().toAscii(), O_RDWR | O_NONBLOCK, 0);
+    fd = grabber->getFd();
     if (fd < 0)
     {
-        qDebug() << "GrabberV4L2Controller::init --> Error opening V4L2 interface for " << grabberDevice->getDeviceId();
+        qDebug() << "V4L2Controller::initialization --> No open grabber!";
         v4l2_close(fd);
         return false;
     }
 
-    // fd = open(id.toAscii(), O_RDWR | O_NONBLOCK);
+    // fd = open(grabberDevice->getDeviceId().toAscii(), O_RDWR | O_NONBLOCK);
     // if (fd < 0) {
-    //     qDebug() << "GrabberV4L2Controller::init --> Error opening standard interface for " << grabberDevice->getDeviceId();
+    //     qDebug() << "V4L2Controller::initialization --> Error opening standard interface for " << grabberDevice->getDeviceId();
     //     close(fd);
     //     return false;
     // }
@@ -119,32 +112,32 @@ bool GrabberV4L2Controller::initialization(ImageGrabber* ig, ImageGrabberDevice*
     memset (&queryctrl, 0, sizeof (queryctrl));
 
     if (setBaseCapabilities() == false) {
-        qDebug() << "GrabberV4L2Controller::init --> Cannot enumerate base device capabilities (" << errno << ")";
+        qDebug() << "V4L2Controller::initialization --> Cannot enumerate base device capabilities (" << errno << ")";
         return false;
     }
 
     if (setPrivateCapabilities() == false) {
-        qDebug() << "GrabberV4L2Controller::init --> Cannot enumerate private device capabilities (" << errno << ")";
+        qDebug() << "V4L2Controller::initialization --> Cannot enumerate private device capabilities (" << errno << ")";
         return false;
     }
 
-    qDebug("GrabberV4L2Controller::init --> End (Successful)");
+    qDebug("V4L2Controller::initialization --> End (Successful)");
 
     return true;
 }
 
 
-bool GrabberV4L2Controller::setUp()
+bool V4L2Controller::setUp()
 {
-    qDebug() << "GrabberV4L2Controller::setUp --> Start (Empty)";
+    qDebug() << "V4L2Controller::setUp --> Start (Empty)";
 
     return true;
 }
 
 
-bool GrabberV4L2Controller::tearDown()
+bool V4L2Controller::tearDown()
 {
-    qDebug() << "GrabberV4L2Controller::tearDown --> Start (Empty)";
+    qDebug() << "V4L2Controller::tearDown --> Start (Empty)";
 
     return true;
 }
@@ -153,7 +146,7 @@ bool GrabberV4L2Controller::tearDown()
 /*
  * don't use xioctl for control query when using V4L2_CTRL_FLAG_NEXT_CTRL
  */
-int GrabberV4L2Controller::query_ioctl(int hdevice, int current_ctrl, struct v4l2_queryctrl *ctrl)
+int V4L2Controller::query_ioctl(int hdevice, int current_ctrl, struct v4l2_queryctrl *ctrl)
 {
     int ret = 0;
     int tries = 4;
@@ -170,9 +163,9 @@ int GrabberV4L2Controller::query_ioctl(int hdevice, int current_ctrl, struct v4l
 }
 
 
-int GrabberV4L2Controller::xioctl(int fd, int IOCTL_X, void *arg)
+int V4L2Controller::xioctl(int fd, int IOCTL_X, void *arg)
 {
-    // qDebug("GrabberV4L2Controller::xioctl --> Start");
+    // qDebug("V4L2Controller::xioctl --> Start");
 
     int ret = 0;
     int tries = IOCTL_RETRY;
@@ -183,34 +176,34 @@ int GrabberV4L2Controller::xioctl(int fd, int IOCTL_X, void *arg)
              ((errno == EINTR) || (errno == EAGAIN) || (errno == ETIMEDOUT)));
 
     if (ret && (tries <= 0)) {
-        qDebug() << "GrabberV4L2Controller::xioctl --> ioctl (" << IOCTL_X << ") retried " << IOCTL_RETRY << " times - giving up: " << strerror(errno) << ")";
+        qDebug() << "V4L2Controller::xioctl --> ioctl (" << IOCTL_X << ") retried " << IOCTL_RETRY << " times - giving up: " << strerror(errno) << ")";
     }
 
-    // qDebug("GrabberV4L2Controller::xioctl --> End");
+    // qDebug("V4L2Controller::xioctl --> End");
     return (ret);
 }
 
 
-void GrabberV4L2Controller::enumerate_menu ()
+void V4L2Controller::enumerate_menu ()
 {
-    qDebug("GrabberV4L2Controller::enumerate_menu --> Start");
+    qDebug("V4L2Controller::enumerate_menu --> Start");
 
-    qDebug("GrabberV4L2Controller::enumerate_menu --> Menu items:");
+    qDebug("V4L2Controller::enumerate_menu --> Menu items:");
 
     memset (&querymenu, 0, sizeof (querymenu));
     querymenu.id = queryctrl.id;
 
     for (querymenu.index = queryctrl.minimum; querymenu.index <= queryctrl.maximum; querymenu.index++) {
         if (0 == xioctl (fd, VIDIOC_QUERYMENU, &querymenu)) {
-            qDebug() << "GrabberV4L2Controller::enumerate_menu --> Item: " << (char*)(querymenu.name);
+            qDebug() << "V4L2Controller::enumerate_menu --> Item: " << (char*)(querymenu.name);
         }
     }
 
-    qDebug("GrabberV4L2Controller::enumerate_menu --> End");
+    qDebug("V4L2Controller::enumerate_menu --> End");
 }
 
 
-void GrabberV4L2Controller::getControlData(GrabberControlCapabilities *caps, long flags)
+void V4L2Controller::getControlData(GrabberControlCapabilities *caps, long flags)
 {
     caps->setControlId(queryctrl.id);
     caps->setControlType(queryctrl.type);
@@ -235,13 +228,13 @@ void GrabberV4L2Controller::getControlData(GrabberControlCapabilities *caps, lon
     case V4L2_CTRL_TYPE_STRING:
     // case V4L2_CTRL_TYPE_BITMASK:   // Not defined on Debian systems
     default:
-        qDebug() << "GrabberV4L2Controller::setCameraCapabilities --> Not supported control type";
+        qDebug() << "V4L2Controller::setCameraCapabilities --> Not supported control type";
         break;
     }
 }
 
 
-void GrabberV4L2Controller::getControlFlag(GrabberControlCapabilities *caps)
+void V4L2Controller::getControlFlag(GrabberControlCapabilities *caps)
 {
     int                 ret = 0;
     struct v4l2_control ctrl;
@@ -262,9 +255,9 @@ void GrabberV4L2Controller::getControlFlag(GrabberControlCapabilities *caps)
 }
 
 
-bool GrabberV4L2Controller::setBaseCapabilities()
+bool V4L2Controller::setBaseCapabilities()
 {
-    qDebug("GrabberV4L2Controller::setBaseCapabilities --> Start");
+    qDebug("V4L2Controller::setBaseCapabilities --> Start");
 
     int                         ret = 0;
     int                         currentctrl = 0;
@@ -276,7 +269,7 @@ bool GrabberV4L2Controller::setBaseCapabilities()
     if (ret == 0) {
         // The driver supports the V4L2_CTRL_FLAG_NEXT_CTRL flag
 
-        qDebug("GrabberV4L2Controller::setBaseCapabilities --> Start V4L2_CTRL_FLAG_NEXT_CTRL");
+        qDebug("V4L2Controller::setBaseCapabilities --> Start V4L2_CTRL_FLAG_NEXT_CTRL");
 
         queryctrl.id = 0 | V4L2_CTRL_FLAG_NEXT_CTRL;
         currentctrl = 0;
@@ -300,11 +293,11 @@ bool GrabberV4L2Controller::setBaseCapabilities()
             currentctrl = queryctrl.id;
 
             if (queryctrl.flags & V4L2_CTRL_FLAG_DISABLED) {
-                qDebug() << "GrabberV4L2Controller::setBaseCapabilities --> Disabling control " << queryctrl.id;
+                qDebug() << "V4L2Controller::setBaseCapabilities --> Disabling control " << queryctrl.id;
                 goto next_control;
             }
 
-            qDebug() << "GrabberV4L2Controller::setBaseCapabilities --> Base Control: " << (char*)(queryctrl.name);
+            qDebug() << "V4L2Controller::setBaseCapabilities --> Base Control: " << (char*)(queryctrl.name);
 
             if (queryctrl.type == V4L2_CTRL_TYPE_MENU) {
                 // This is a menu control
@@ -448,7 +441,7 @@ bool GrabberV4L2Controller::setBaseCapabilities()
                 caps->setControlClass(caps->getControlId() & 0xFFFF0000);
                 break;
             default:
-                qDebug() << "GrabberV4L2Controller::setBaseCapabilities --> Not Supported Base Control: " << (char*)(queryctrl.name) << " (" << queryctrl.id << ")" << (queryctrl.id & 0xFFFF0000);
+                qDebug() << "V4L2Controller::setBaseCapabilities --> Not Supported Base Control: " << (char*)(queryctrl.name) << " (" << queryctrl.id << ")" << (queryctrl.id & 0xFFFF0000);
             }
 
 
@@ -457,14 +450,14 @@ next_control:
 
         }
 
-        qDebug("GrabberV4L2Controller::setBaseCapabilities --> End V4L2_CTRL_FLAG_NEXT_CTRL");
+        qDebug("V4L2Controller::setBaseCapabilities --> End V4L2_CTRL_FLAG_NEXT_CTRL");
 
         return true;
     }
 
     // The driver not supports the V4L2_CTRL_FLAG_NEXT_CTRL flag
 
-    qDebug("GrabberV4L2Controller::setBaseCapabilities --> Start V4L2_CID_BASE");
+    qDebug("V4L2Controller::setBaseCapabilities --> Start V4L2_CID_BASE");
 
     for (currentctrl = V4L2_CID_BASE; currentctrl < V4L2_CID_LASTP1; currentctrl++) {
         queryctrl.id = currentctrl;
@@ -477,7 +470,7 @@ next_control:
             continue;
         }
 
-        qDebug() << "GrabberV4L2Controller::setBaseCapabilities --> Base Control: " << (char*)(queryctrl.name);
+        qDebug() << "V4L2Controller::setBaseCapabilities --> Base Control: " << (char*)(queryctrl.name);
 
         if (queryctrl.type == V4L2_CTRL_TYPE_MENU) {
             // This is a menu control
@@ -556,22 +549,22 @@ next_control:
             caps->setControlClass(V4L2_CTRL_CLASS_USER);
             break;
         default:
-            qDebug() << "GrabberV4L2Controller::setBaseCapabilities --> Not Supported Base Control: " << (char*)(queryctrl.name) << " (" << queryctrl.id << ")" << (queryctrl.id & 0xFFFF0000);
+            qDebug() << "V4L2Controller::setBaseCapabilities --> Not Supported Base Control: " << (char*)(queryctrl.name) << " (" << queryctrl.id << ")" << (queryctrl.id & 0xFFFF0000);
         }
 
     }
 
-    qDebug("GrabberV4L2Controller::setBaseCapabilities --> End V4L2_CID_BASE");
+    qDebug("V4L2Controller::setBaseCapabilities --> End V4L2_CID_BASE");
 
-    qDebug("GrabberV4L2Controller::setBaseCapabilities --> End");
+    qDebug("V4L2Controller::setBaseCapabilities --> End");
 
     return true;
 }
 
 
-bool GrabberV4L2Controller::setPrivateCapabilities()
+bool V4L2Controller::setPrivateCapabilities()
 {
-    qDebug("GrabberV4L2Controller::setPrivateCapabilities --> Start");
+    qDebug("V4L2Controller::setPrivateCapabilities --> Start");
 
     int ret = 0;
 
@@ -584,7 +577,7 @@ bool GrabberV4L2Controller::setPrivateCapabilities()
             continue;
         }
 
-        qDebug() << "GrabberV4L2Controller::setPrivateCapabilities --> Private Control: " << (char*)(queryctrl.name);
+        qDebug() << "V4L2Controller::setPrivateCapabilities --> Private Control: " << (char*)(queryctrl.name);
 /*
         caps = NULL;
         flags = GrabberControlCapabilities::control_none;
@@ -621,7 +614,7 @@ bool GrabberV4L2Controller::setPrivateCapabilities()
             caps->setControlClass(V4L2_CTRL_CLASS_USER);
             break;
         default:
-            qDebug() << "GrabberV4L2Controller::setPrivateCapabilities --> Not Supported Private Control: " << (char*)(queryctrl.name);
+            qDebug() << "V4L2Controller::setPrivateCapabilities --> Not Supported Private Control: " << (char*)(queryctrl.name);
         }
 */
         if (queryctrl.type == V4L2_CTRL_TYPE_MENU) {
@@ -630,71 +623,17 @@ bool GrabberV4L2Controller::setPrivateCapabilities()
 
     }
 
-    qDebug("GrabberV4L2Controller::setPrivateCapabilities --> End");
+    qDebug("V4L2Controller::setPrivateCapabilities --> End");
 
     return true;
 }
-
-
-bool GrabberV4L2Controller::setResolutions(ImageGrabberDevice *device)
-{
-    qDebug("GrabberV4L2Controller::setResolutions --> Start");
-
-    enum v4l2_buf_type       type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
-    struct v4l2_fmtdesc      fmt;
-    struct v4l2_frmsizeenum  frmsize;
-    // struct v4l2_frmivalenum  frmival;
-    unsigned int             outputWidth;
-    unsigned int             outputHeight;
-
-    fmt.index = 0;
-    fmt.type = type;
-
-    while (xioctl(fd, VIDIOC_ENUM_FMT, &fmt) >= 0) {
-        frmsize.pixel_format = fmt.pixelformat;
-        frmsize.index = 0;
-        while (xioctl(fd, VIDIOC_ENUM_FRAMESIZES, &frmsize) >= 0) {
-            switch (frmsize.type) {
-            case V4L2_FRMSIZE_TYPE_DISCRETE:
-                outputWidth = frmsize.discrete.width;
-                outputHeight = frmsize.discrete.height;
-                break;
-            case V4L2_FRMSIZE_TYPE_STEPWISE:
-                outputWidth = frmsize.stepwise.max_width;
-                outputHeight = frmsize.stepwise.max_height;
-                break;
-            case V4L2_FRMSIZE_TYPE_CONTINUOUS:
-                continue;
-                break;
-            default:
-                continue;
-                break;
-            }
-
-            device->addResolution(GrabberResolution(outputWidth, outputHeight, GrabberResolution::unknownFormat, false));
-
-            frmsize.index++;
-        }
-
-        /*
-        qDebug() << "GrabberV4L2Controller::setResolutions --> Private Control: " << (char*)(queryctrl.name);
-        */
-
-        fmt.index++;
-    }
-
-    qDebug("GrabberV4L2Controller::setResolutions --> End");
-
-    return true;
-}
-
 
 /*
  * sets the value for control id
  */
-int GrabberV4L2Controller::setCtrlValue(GrabberControlCapabilities *caps, int value)
+int V4L2Controller::setCtrlValue(GrabberControlCapabilities *caps, int value)
 {
-    qDebug("GrabberV4L2Controller::setCtrlValue --> Start");
+    qDebug("V4L2Controller::setCtrlValue --> Start");
 
     int ret = 0;
 
@@ -731,14 +670,14 @@ int GrabberV4L2Controller::setCtrlValue(GrabberControlCapabilities *caps, int va
         ctrls.controls = &ctrl;
         ret = xioctl(fd, VIDIOC_S_EXT_CTRLS, &ctrls);
         if (ret) {
-            qDebug() << "GrabberV4L2Controller::setCtrlValue --> control id: " << ctrl.id << " failed to set (error " << ret << ")";
+            qDebug() << "V4L2Controller::setCtrlValue --> control id: " << ctrl.id << " failed to set (error " << ret << ")";
         }
     }
 
     // update real value
     // get_ctrl(hdevice, control_list, id, NULL);
 
-    qDebug("GrabberV4L2Controller::setCtrlValue --> End");
+    qDebug("V4L2Controller::setCtrlValue --> End");
     return (ret);
 }
 
@@ -746,9 +685,9 @@ int GrabberV4L2Controller::setCtrlValue(GrabberControlCapabilities *caps, int va
  * Gets the value for control id
  * and updates control flags and widgets
  */
-int GrabberV4L2Controller::getCtrlValue(GrabberControlCapabilities *caps, int &value)
+int V4L2Controller::getCtrlValue(GrabberControlCapabilities *caps, int &value)
 {
-    qDebug("GrabberV4L2Controller::setCtrlValue --> Start");
+    qDebug("V4L2Controller::setCtrlValue --> Start");
 
     int ret = 0;
 
@@ -760,7 +699,7 @@ int GrabberV4L2Controller::getCtrlValue(GrabberControlCapabilities *caps, int &v
         ctrl.value = 0;
         ret = xioctl(fd, VIDIOC_G_CTRL, &ctrl);
         if (ret) {
-            qDebug() << "GrabberV4L2Controller::setCtrlValue --> control id: " << ctrl.id << " failed to get value (error " << ret << ")";
+            qDebug() << "V4L2Controller::setCtrlValue --> control id: " << ctrl.id << " failed to get value (error " << ret << ")";
         }
         else {
             value = ctrl.value;
@@ -784,7 +723,7 @@ int GrabberV4L2Controller::getCtrlValue(GrabberControlCapabilities *caps, int &v
         ctrls.controls = &ctrl;
         ret = xioctl(fd, VIDIOC_G_EXT_CTRLS, &ctrls);
         if (ret) {
-            qDebug() << "GrabberV4L2Controller::setCtrlValue --> control id: " << ctrl.id << " failed to get value (error " << ret << ")";
+            qDebug() << "V4L2Controller::setCtrlValue --> control id: " << ctrl.id << " failed to get value (error " << ret << ")";
         }
         else {
             switch(caps->getControlType()) {
@@ -807,7 +746,7 @@ int GrabberV4L2Controller::getCtrlValue(GrabberControlCapabilities *caps, int &v
     // update_ctrl_flags(control_list, id);
     // update_widget_state(control_list, all_data);
 
-    qDebug("GrabberV4L2Controller::setCtrlValue --> End");
+    qDebug("V4L2Controller::setCtrlValue --> End");
     return (ret);
 }
 
@@ -821,310 +760,310 @@ int GrabberV4L2Controller::getCtrlValue(GrabberControlCapabilities *caps, int &v
  * Brightness
  **************************************************************************/
 /*
-bool GrabberV4L2Controller::getAutomaticBrightness()
+bool V4L2Controller::getAutomaticBrightness()
 {
     return false;
 }
 
 
-void GrabberV4L2Controller::setAutomaticBrightness(bool ab)
+void V4L2Controller::setAutomaticBrightness(bool ab)
 {
     Q_ASSERT( 1 );
 }
 */
 
-int GrabberV4L2Controller::getBrightness()
+int V4L2Controller::getBrightness()
 {
     return 0;
 }
 
 
-void GrabberV4L2Controller::setBrightness(int b)
+void V4L2Controller::setBrightness(int b)
 {
-    qDebug("GrabberV4L2Controller::setBrightness --> Start");
+    qDebug("V4L2Controller::setBrightness --> Start");
 
     setCtrlValue(getBrightnessCaps(), b);
 
-    qDebug("GrabberV4L2Controller::setBrightness --> End");
+    qDebug("V4L2Controller::setBrightness --> End");
 }
 
 /**************************************************************************
  * Contrast
  **************************************************************************/
 /*
-bool GrabberV4L2Controller::getAutomaticContrast()
+bool V4L2Controller::getAutomaticContrast()
 {
     return false;
 }
 
 
-void GrabberV4L2Controller::setAutomaticContrast(bool ac)
+void V4L2Controller::setAutomaticContrast(bool ac)
 {
     Q_ASSERT( 1 );
 }
 */
 
-int GrabberV4L2Controller::getContrast()
+int V4L2Controller::getContrast()
 {
     return 0;
 }
 
 
-void GrabberV4L2Controller::setContrast(int c)
+void V4L2Controller::setContrast(int c)
 {
-    qDebug("GrabberV4L2Controller::setContrast --> Start");
+    qDebug("V4L2Controller::setContrast --> Start");
 
     setCtrlValue(getContrastCaps(), c);
 
-    qDebug("GrabberV4L2Controller::setContrast --> End");
+    qDebug("V4L2Controller::setContrast --> End");
 }
 
 /**************************************************************************
  * Saturation
  **************************************************************************/
 /*
-bool GrabberV4L2Controller::getAutomaticSaturation()
+bool V4L2Controller::getAutomaticSaturation()
 {
     return false;
 }
 
 
-void GrabberV4L2Controller::setAutomaticSaturation(bool as)
+void V4L2Controller::setAutomaticSaturation(bool as)
 {
     Q_ASSERT( 1 );
 }
 */
 
-int GrabberV4L2Controller::getSaturation()
+int V4L2Controller::getSaturation()
 {
     return 0;
 }
 
 
-void GrabberV4L2Controller::setSaturation(int s)
+void V4L2Controller::setSaturation(int s)
 {
-    qDebug("GrabberV4L2Controller::setSaturation --> Start");
+    qDebug("V4L2Controller::setSaturation --> Start");
 
     setCtrlValue(getSaturationCaps(), s);
 
-    qDebug("GrabberV4L2Controller::setSaturation --> End");
+    qDebug("V4L2Controller::setSaturation --> End");
 }
 
 /**************************************************************************
  * Hue
  **************************************************************************/
 /*
-bool GrabberV4L2Controller::getAutomaticHue()
+bool V4L2Controller::getAutomaticHue()
 {
     return false;
 }
 
 
-void GrabberV4L2Controller::setAutomaticHue(bool ah)
+void V4L2Controller::setAutomaticHue(bool ah)
 {
     Q_ASSERT( 1 );
 }
 */
 
-int GrabberV4L2Controller::getHue()
+int V4L2Controller::getHue()
 {
     return 0;
 }
 
 
-void GrabberV4L2Controller::setHue(int h)
+void V4L2Controller::setHue(int h)
 {
-    qDebug("GrabberV4L2Controller::setHue --> Start");
+    qDebug("V4L2Controller::setHue --> Start");
 
     setCtrlValue(getHueCaps(), h);
 
-    qDebug("GrabberV4L2Controller::setHue --> End");
+    qDebug("V4L2Controller::setHue --> End");
 }
 
 /**************************************************************************
  * Gamma
  **************************************************************************/
 /*
-bool GrabberV4L2Controller::getAutomaticGamma()
+bool V4L2Controller::getAutomaticGamma()
 {
     return false;
 }
 
 
-void GrabberV4L2Controller::setAutomaticGamma(bool ag)
+void V4L2Controller::setAutomaticGamma(bool ag)
 {
     Q_ASSERT( 1 );
 }
 */
 
-int GrabberV4L2Controller::getGamma()
+int V4L2Controller::getGamma()
 {
     return 0;
 }
 
 
-void GrabberV4L2Controller::setGamma(int g)
+void V4L2Controller::setGamma(int g)
 {
-    qDebug("GrabberV4L2Controller::setGamma --> Start");
+    qDebug("V4L2Controller::setGamma --> Start");
 
     setCtrlValue(getGammaCaps(), g);
 
-    qDebug("GrabberV4L2Controller::setGamma --> End");
+    qDebug("V4L2Controller::setGamma --> End");
 }
 
 /**************************************************************************
  * Sharpness
  **************************************************************************/
 /*
-bool GrabberV4L2Controller::getAutomaticSharpness()
+bool V4L2Controller::getAutomaticSharpness()
 {
     return false;
 }
 
 
-void GrabberV4L2Controller::setAutomaticSharpness(bool as)
+void V4L2Controller::setAutomaticSharpness(bool as)
 {
     Q_ASSERT( 1 );
 }
 */
 
-int GrabberV4L2Controller::getSharpness()
+int V4L2Controller::getSharpness()
 {
     return 0;
 }
 
 
-void GrabberV4L2Controller::setSharpness(int s)
+void V4L2Controller::setSharpness(int s)
 {
-    qDebug("GrabberV4L2Controller::setSharpness --> Start");
+    qDebug("V4L2Controller::setSharpness --> Start");
 
     setCtrlValue(getSharpnessCaps(), s);
 
-    qDebug("GrabberV4L2Controller::setSharpness --> End");
+    qDebug("V4L2Controller::setSharpness --> End");
 }
 
 /**************************************************************************
  * Backlight Compensation
  **************************************************************************/
 /*
-bool GrabberV4L2Controller::getAutomaticBacklight()
+bool V4L2Controller::getAutomaticBacklight()
 {
     return false;
 }
 
 
-void GrabberV4L2Controller::setAutomaticBacklight(bool ab)
+void V4L2Controller::setAutomaticBacklight(bool ab)
 {
     Q_ASSERT( 1 );
 }
 */
 
-int GrabberV4L2Controller::getBacklight()
+int V4L2Controller::getBacklight()
 {
     return 0;
 }
 
 
-void GrabberV4L2Controller::setBacklight(int b)
+void V4L2Controller::setBacklight(int b)
 {
-    qDebug("GrabberV4L2Controller::setBacklight --> Start");
+    qDebug("V4L2Controller::setBacklight --> Start");
 
     setCtrlValue(getBacklightCaps(), b);
 
-    qDebug("GrabberV4L2Controller::setBacklight --> End");
+    qDebug("V4L2Controller::setBacklight --> End");
 }
 
 /**************************************************************************
  * White Balance
  **************************************************************************/
 /*
-bool GrabberV4L2Controller::getAutomaticWhite()
+bool V4L2Controller::getAutomaticWhite()
 {
     return false;
 }
 
 
-void GrabberV4L2Controller::setAutomaticWhite(bool aw)
+void V4L2Controller::setAutomaticWhite(bool aw)
 {
     Q_ASSERT( 1 );
 }
 */
 
-int GrabberV4L2Controller::getWhite()
+int V4L2Controller::getWhite()
 {
     return 0;
 }
 
 
-void GrabberV4L2Controller::setWhite(int w)
+void V4L2Controller::setWhite(int w)
 {
-    qDebug("GrabberV4L2Controller::setWhite --> Start");
+    qDebug("V4L2Controller::setWhite --> Start");
 
     setCtrlValue(getWhiteCaps(), w);
 
-    qDebug("GrabberV4L2Controller::setWhite --> End");
+    qDebug("V4L2Controller::setWhite --> End");
 }
 
 /**************************************************************************
  * Gain
  **************************************************************************/
 /*
-bool GrabberV4L2Controller::getAutomaticGain()
+bool V4L2Controller::getAutomaticGain()
 {
     return false;
 }
 
 
-void GrabberV4L2Controller::setAutomaticGain(bool ag)
+void V4L2Controller::setAutomaticGain(bool ag)
 {
     Q_ASSERT( 1 );
 }
 */
 
-int GrabberV4L2Controller::getGain()
+int V4L2Controller::getGain()
 {
     return 0;
 }
 
 
-void GrabberV4L2Controller::setGain(int g)
+void V4L2Controller::setGain(int g)
 {
-    qDebug("GrabberV4L2Controller::setGain --> Start");
+    qDebug("V4L2Controller::setGain --> Start");
 
     setCtrlValue(getGainCaps(), g);
 
-    qDebug("GrabberV4L2Controller::setGain --> End");
+    qDebug("V4L2Controller::setGain --> End");
 }
 
 /**************************************************************************
  * Color Enable
  **************************************************************************/
 /*
-bool GrabberV4L2Controller::getAutomaticColor()
+bool V4L2Controller::getAutomaticColor()
 {
     return false;
 }
 
 
-void GrabberV4L2Controller::setAutomaticColor(bool ac)
+void V4L2Controller::setAutomaticColor(bool ac)
 {
     Q_ASSERT( 1 );
 }
 */
 
-int GrabberV4L2Controller::getColor()
+int V4L2Controller::getColor()
 {
     return 0;
 }
 
 
-void GrabberV4L2Controller::setColor(int c)
+void V4L2Controller::setColor(int c)
 {
-    qDebug("GrabberV4L2Controller::setColor --> Start");
+    qDebug("V4L2Controller::setColor --> Start");
 
     setCtrlValue(getColorCaps(), c);
 
-    qDebug("GrabberV4L2Controller::setColor --> End");
+    qDebug("V4L2Controller::setColor --> End");
 }
 
 /**************************************************************************
@@ -1137,50 +1076,50 @@ void GrabberV4L2Controller::setColor(int c)
  * Exposure
  **************************************************************************/
 /*
-bool GrabberV4L2Controller::getAutomaticExposure()
+bool V4L2Controller::getAutomaticExposure()
 {
     return false;
 }
 
 
-void GrabberV4L2Controller::setAutomaticExposure(bool ae)
+void V4L2Controller::setAutomaticExposure(bool ae)
 {
     Q_ASSERT( 1 );
 }
 */
 
-int GrabberV4L2Controller::getExposure()
+int V4L2Controller::getExposure()
 {
     return 0;
 }
 
 
-void GrabberV4L2Controller::setExposure(int e)
+void V4L2Controller::setExposure(int e)
 {
-    qDebug("GrabberV4L2Controller::setExposure --> Start");
+    qDebug("V4L2Controller::setExposure --> Start");
 
     setCtrlValue(getExposureCaps(), e);
 
-    qDebug("GrabberV4L2Controller::setExposure --> End");
+    qDebug("V4L2Controller::setExposure --> End");
 }
 
 /**************************************************************************
  * Zoom
  **************************************************************************/
 /*
-bool GrabberV4L2Controller::getAutomaticZoom()
+bool V4L2Controller::getAutomaticZoom()
 {
     return false;
 }
 
 
-void GrabberV4L2Controller::setAutomaticZoom(bool az)
+void V4L2Controller::setAutomaticZoom(bool az)
 {
     Q_ASSERT( 1 );
 }
 */
 
-int GrabberV4L2Controller::getZoom()
+int V4L2Controller::getZoom()
 {
     int value = 0;
 
@@ -1190,71 +1129,71 @@ int GrabberV4L2Controller::getZoom()
 }
 
 
-void GrabberV4L2Controller::setZoom(int z)
+void V4L2Controller::setZoom(int z)
 {
-    qDebug("GrabberV4L2Controller::setZoom --> Start");
+    qDebug("V4L2Controller::setZoom --> Start");
 
     setCtrlValue(getZoomCaps(), z);
 
     setCtrlValue(getZoomCaps(), z);
 
-    qDebug("GrabberV4L2Controller::setZoom --> End");
+    qDebug("V4L2Controller::setZoom --> End");
 }
 
 /**************************************************************************
  * Focus
  **************************************************************************/
 /*
-bool GrabberV4L2Controller::getAutomaticFocus()
+bool V4L2Controller::getAutomaticFocus()
 {
     return false;
 }
 
 
-void GrabberV4L2Controller::setAutomaticFocus(bool af)
+void V4L2Controller::setAutomaticFocus(bool af)
 {
     Q_ASSERT( 1 );
 }
 */
 
-int GrabberV4L2Controller::getFocus()
+int V4L2Controller::getFocus()
 {
     return 0;
 }
 
 
-void GrabberV4L2Controller::setFocus(int f)
+void V4L2Controller::setFocus(int f)
 {
-    qDebug("GrabberV4L2Controller::setFocus --> Start");
+    qDebug("V4L2Controller::setFocus --> Start");
 
     setCtrlValue(getFocusCaps(), f);
 
-    qDebug("GrabberV4L2Controller::setFocus --> End");
+    qDebug("V4L2Controller::setFocus --> End");
 }
 
 /**************************************************************************
  * Pan
  **************************************************************************/
 /*
-bool GrabberV4L2Controller::getAutomaticPan()
+bool V4L2Controller::getAutomaticPan()
 {
     return false;
 }
 
 
-void GrabberV4L2Controller::setAutomaticPan(bool ap)
+void V4L2Controller::setAutomaticPan(bool ap)
 {
     Q_ASSERT( 1 );
 }
 
 
-int GrabberV4L2Controller::getPan()
+int V4L2Controller::getPan()
 {
     return 0;
 }
 
 
-void GrabberV4L2Controller::setPan(int p)
+void V4L2Controller::setPan(int p)
 {
     Q_ASSERT( 1 );
 }
@@ -1263,25 +1202,25 @@ void GrabberV4L2Controller::setPan(int p)
  * Tilt
  **************************************************************************/
 /*
-bool GrabberV4L2Controller::getAutomaticTilt()
+bool V4L2Controller::getAutomaticTilt()
 {
     return false;
 }
 
 
-void GrabberV4L2Controller::setAutomaticTilt(bool at)
+void V4L2Controller::setAutomaticTilt(bool at)
 {
     Q_ASSERT( 1 );
 }
 
 
-int GrabberV4L2Controller::getTilt()
+int V4L2Controller::getTilt()
 {
     return 0;
 }
 
 
-void GrabberV4L2Controller::setTilt(int t)
+void V4L2Controller::setTilt(int t)
 {
     Q_ASSERT( 1 );
 }
@@ -1290,25 +1229,25 @@ void GrabberV4L2Controller::setTilt(int t)
  * Iris
  **************************************************************************/
 /*
-bool GrabberV4L2Controller::getAutomaticIris()
+bool V4L2Controller::getAutomaticIris()
 {
     return false;
 }
 
 
-void GrabberV4L2Controller::setAutomaticIris(bool ae)
+void V4L2Controller::setAutomaticIris(bool ae)
 {
     Q_ASSERT( 1 );
 }
 
 
-bool GrabberV4L2Controller::isIris()
+bool V4L2Controller::isIris()
 {
     return false;
 }
 
 
-void GrabberV4L2Controller::setIris(int e)
+void V4L2Controller::setIris(int e)
 {
     Q_ASSERT( 1 );
 }
@@ -1317,25 +1256,25 @@ void GrabberV4L2Controller::setIris(int e)
  * Roll
  **************************************************************************/
 /*
-bool GrabberV4L2Controller::getAutomaticRoll()
+bool V4L2Controller::getAutomaticRoll()
 {
     return false;
 }
 
 
-void GrabberV4L2Controller::setAutomaticRoll(bool ar)
+void V4L2Controller::setAutomaticRoll(bool ar)
 {
     Q_ASSERT( 1 );
 }
 
 
-bool GrabberV4L2Controller::isRoll()
+bool V4L2Controller::isRoll()
 {
     return false;
 }
 
 
-void GrabberV4L2Controller::setRoll(int e)
+void V4L2Controller::setRoll(int e)
 {
     Q_ASSERT( 1 );
 }

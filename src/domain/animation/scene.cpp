@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2013 by                                                *
+ *  Copyright (C) 2005-2015 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -141,8 +141,8 @@ bool Scene::readDataFromProject(QDomElement &sceneNode)
 
     QString activeTakeId;
 
-    id.append(sceneNode.attributeNode(QString("id")).value());
-    description.append(sceneNode.attributeNode(QString("descr")).value());
+    id.append(sceneNode.attributeNode(QLatin1String("id")).value());
+    description.append(sceneNode.attributeNode(QLatin1String("descr")).value());
 
     QDomElement currElement = sceneNode.firstChildElement();
 
@@ -338,7 +338,7 @@ void Scene::addTake(const QString &takeDescription)
 
     Take *take = new Take(this);
 
-    take->setId(QString("%1").arg(nextTakeIndex, 2, 10, QChar('0')));
+    take->setId(QString("%1").arg(nextTakeIndex, 2, 10, QLatin1Char('0')));
     nextTakeIndex++;
 
     if (!takeDescription.isEmpty()) {
@@ -369,7 +369,7 @@ void Scene::insertTake(int takeIndex, const QString &takeDescription)
 
     Take *take = new Take(this);
 
-    take->setId(QString("%1").arg(nextTakeIndex, 2, 10, QChar('0')));
+    take->setId(QString("%1").arg(nextTakeIndex, 2, 10, QLatin1Char('0')));
     nextTakeIndex++;
 
     if (!takeDescription.isEmpty()) {
@@ -628,8 +628,10 @@ int Scene::addSound(const QString & /*filename*/, const QString & /*soundname*/)
     if (QFile::exists(filename) == 0) {
         // Create a new path
         QString imgId(getImageId());
-        QString newSoundPath(QString("%1%2_snd_%3%4").arg(tempPath)
+        QString newSoundPath(QString("%1%2%3%4%5")
+                             .arg(tempPath)
                              .arg(imgId)
+                             .arg(QLatin1String("_snd_"))
                              .arg(++soundNum)
                              .arg(filename.mid(filename.lastIndexOf('.'))));
 
@@ -741,9 +743,11 @@ void Scene::moveToSoundDir(const QString &directory)
         QString soundPath = f->getSoundPath();
 
         // Create a new sound path
-        QString newSoundPath(QString("%1/%2_snd_%3%4")
+        QString newSoundPath(QString("%1%2%3%4%5%6")
                              .arg(directory)
+                             .arg(QLatin1String("/"))
                              .arg(this->id)
+                             .arg(QLatin1String("_snd_"))
                              .arg(++soundsNumber)
                              .arg(soundPath.mid(soundPath.lastIndexOf('.'))));
 
@@ -779,8 +783,9 @@ bool Scene::readSoundFromProject(QDomElement &soundNode)
 
         if (nodeName.compare("clip") == 0) {
             // The node is a sound file
-            QString soundFile(QString("%1/%2")
+            QString soundFile(QString("%1%2%3")
                               .arg(soundPath)
+                              .arg(QLatin1String("/"))
                               .arg(currElement.text()));
             QString soundName = currElement.attribute("descr", NULL);
             addSound(soundFile, soundName);

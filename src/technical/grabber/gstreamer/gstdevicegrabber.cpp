@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2010-2014 by                                                *
+ *  Copyright (C) 2010-2015 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -48,7 +48,6 @@ GstreamerDeviceGrabber::GstreamerDeviceGrabber(Frontend *f)
     filter2 = 0;
     filter3 = 0;
     filter4 = 0;
-    filter5 = 0;
     queue1 = 0;
     queue2 = 0;
     queue3 = 0;
@@ -276,19 +275,7 @@ bool GstreamerDeviceGrabber::setUp()
         qDebug() << "GstreamerDeviceGrabber::setUp --> Fatal: Can't create the filter4.";
         return false;
     }
-    /*
-    filter5 = gst_element_factory_make("jpegenc", "filter5=jpegenc");
-    if (!filter5) {
-        qDebug() << "GstreamerDeviceGrabber::setUp --> Fatal: Can't create the filter5.";
-        return false;
-    }
-    sink = gst_element_factory_make("multifilesink", "sink=multifilesink");
-    if (!sink) {
-        qDebug() << "GstreamerDeviceGrabber::setUp --> Fatal: Can't create the sink.";
-        return false;
-    }
-    g_object_set(G_OBJECT (sink), "location", filePath.toLatin1().constData(), NULL);
-    */
+
     sink = gst_element_factory_make("appsink", NULL);
     if (!sink) {
         qDebug() << "GstreamerDeviceGrabber::setUp --> Fatal: Can't create the application sink.";
@@ -339,12 +326,6 @@ bool GstreamerDeviceGrabber::setUp()
         qDebug() << "GstreamerDeviceGrabber::setUp --> Fatal: Can't add the filter1 to the bin.";
         return false;
     }
-    /*
-    if (!gst_bin_add(GST_BIN (pipeline), filter5)) {
-        qDebug() << "GstreamerDeviceGrabber::setUp --> Fatal: Can't add the filter2 to the bin.";
-        return false;
-    }
-    */
     if (!gst_bin_add(GST_BIN (pipeline), sink)) {
         qDebug() << "GstreamerDeviceGrabber::setUp --> Fatal: Can't add the sink to the bin.";
         return false;
@@ -381,16 +362,6 @@ bool GstreamerDeviceGrabber::setUp()
         qDebug() << "GstreamerDeviceGrabber::setUp --> Fatal: Can't link the filter4.";
         return false;
     }
-    /*
-    if (!gst_element_link(filter4, filter5)) {
-        qDebug() << "GstreamerDeviceGrabber::setUp --> Fatal: Can't link the filter5.";
-        return false;
-    }
-    if (!gst_element_link(filter5, sink)) {
-        qDebug() << "GstreamerDeviceGrabber::setUp --> Fatal: Can't link the sink to filter5.";
-        return false;
-    }
-    */
     if (!gst_element_link(filter4, sink)) {
         qDebug() << "GstreamerDeviceGrabber::setUp --> Fatal: Can't link the sink to filter4.";
         return false;

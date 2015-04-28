@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2014 by                                                *
+ *  Copyright (C) 2005-2015 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -385,7 +385,7 @@ const QString PreferencesTool::getProject(int index)
     QDomElement project = projectsElement.firstChildElement();
     while (!project.isNull()) {
         QString nodeName = project.nodeName();
-        if (nodeName.compare(QString("project")) == 0) {
+        if (nodeName.compare(QLatin1String("project")) == 0) {
             runIndex++;
             if (runIndex != index) {
                 project = project.nextSiblingElement();
@@ -394,7 +394,7 @@ const QString PreferencesTool::getProject(int index)
             QDomElement file = project.firstChildElement();
             while (!file.isNull()) {
                 QString fileName = file.nodeName();
-                if (fileName.compare(QString("file")) == 0)
+                if (fileName.compare(QLatin1String("file")) == 0)
                     return(file.text());
                 file = file.nextSiblingElement();
             }
@@ -412,11 +412,11 @@ bool PreferencesTool::removeProject(const QString &filename)
     QDomElement project = projectsElement.firstChildElement();
     while (!project.isNull()) {
         QString nodeName = project.nodeName();
-        if (nodeName.compare(QString("project")) == 0) {
+        if (nodeName.compare(QLatin1String("project")) == 0) {
             QDomElement file = project.firstChildElement();
             while (!file.isNull()) {
                 QString fileName = file.nodeName();
-                if (fileName.compare(QString("file")) == 0) {
+                if (fileName.compare(QLatin1String("file")) == 0) {
                     if (filename.compare(file.text()) == 0) {
                         projectsElement.removeChild(project);
                         return(true);

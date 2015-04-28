@@ -1855,8 +1855,7 @@ Export to video will not be possible until you
 have setted an encoder to use!</source>
         <translation>Für den Video-Export ist kein Encoder ausgewählt.
 Sie können dies im Eigenschaften-Dialog des Projekts ändern. Video-Export
-wird erst möglich, wenn sie einen Encoder ausgewählt haben.
-Wollen sie dies nun tun ?</translation>
+wird erst möglich, wenn sie einen Encoder ausgewählt haben.</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1445"/>
@@ -1866,8 +1865,7 @@ Export to video will not be possible until you
 have setted an video format to use!</source>
         <translation>Für den Video-Export ist kein Videoformat ausgewählt.
 Sie können dies im Eigenschaften-Dialog des Projekts ändern. Video-Export
-wird erst möglich, wenn sie ein Videoformat ausgewählt haben.
-Wollen sie dies nun tun ?</translation>
+wird erst möglich, wenn sie ein Videoformat ausgewählt haben.</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1452"/>
@@ -2329,7 +2327,7 @@ Check your settings in the properties dialog of the project!</source>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/projectwidget.cpp" line="109"/>
         <source>Media Foundation</source>
-        <translation></translation>
+        <translation>Media Foundation</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/projectwidget.cpp" line="121"/>

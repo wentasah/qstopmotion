@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2014-2014 by                                                *
+ *  Copyright (C) 2014-2015 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -93,8 +93,8 @@ const QString GrabberResolution::getName()
     QString formatName;
 
     switch(format) {
-    case GrabberResolution::rgb24Format:
-        formatName.append("RGB24");
+    case GrabberResolution::bgr24Format:
+        formatName.append("BGR24");
         break;
     case GrabberResolution::ayuvFormat:
         formatName.append("AYUV");
@@ -122,7 +122,12 @@ const QString GrabberResolution::getName()
         formatName.append("????");
         break;
     }
-    QString name = QString("%1 x %2 - %3").arg(width).arg(height).arg(formatName);
+    QString name = QString("%1%2%3%4%5")
+                   .arg(width)
+                   .arg(QLatin1String(" x "))
+                   .arg(height)
+                   .arg(QLatin1String(" - "))
+                   .arg(formatName);
 
     return name;
 }

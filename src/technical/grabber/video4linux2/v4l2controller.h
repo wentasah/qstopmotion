@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2012-2014 by                                                *
+ *  Copyright (C) 2012-2015 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -21,10 +21,11 @@
 #ifndef VIDEO4LINUX2_V4L2CONTROLLER_H
 #define VIDEO4LINUX2_V4L2CONTROLLER_H
 
-#include <linux/videodev2.h>
-
 #include "technical/grabber/grabbercontroller.h"
 #include "technical/grabber/video4linux2/v4l2grabber.h"
+
+// Include files of v4l2
+#include <linux/videodev2.h>
 
 class ImageGrabberDevice;
 
@@ -36,22 +37,20 @@ class ImageGrabberDevice;
  *
  * @author Ralf Lange
  */
-class GrabberV4L2Controller : public GrabberController
+class V4L2Controller : public GrabberController
 {
 public:
-
-    // static struct uvc_xu_control_mapping xu_mappings[];
 
     /**
      * Constructs and initializes the object.
      * @param caps The grabber controller capabilities.
      */
-    GrabberV4L2Controller(int caps);
+    V4L2Controller(int caps);
 
     /**
      * Destructor
      */
-    ~GrabberV4L2Controller();
+    ~V4L2Controller();
 
     /**
      * Get the image grabber of the controller.
@@ -80,8 +79,6 @@ public:
      * @return true on success, false otherwise
      */
     bool tearDown();
-
-    bool setResolutions(ImageGrabberDevice *device);
 
     /**************************************************************************
      **************************************************************************
@@ -572,13 +569,13 @@ public:
     // void setRoll(int r);
 
 private:
-    int                   fd;
-    struct v4l2_queryctrl queryctrl;
-    struct v4l2_querymenu querymenu;
-
 
     V4L2Grabber*        grabber;
     ImageGrabberDevice* grabberDevice;
+
+    int                   fd;
+    struct v4l2_queryctrl queryctrl;
+    struct v4l2_querymenu querymenu;
 
     int query_ioctl(int hdevice, int current_ctrl, struct v4l2_queryctrl *ctrl);
 

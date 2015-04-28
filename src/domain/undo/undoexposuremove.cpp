@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2012 by                                                *
+ *  Copyright (C) 2005-2015 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -55,7 +55,7 @@ void UndoExposureMove::undo()
     qDebug("UndoExposureMove::undo --> Start");
 
 
-    facade->writeHistoryEntry(QString("undo"));
+    facade->writeHistoryEntry(QLatin1String("undo"));
     undoFlag = TRUE;
 
     qDebug("UndoExposureMove::undo --> End");
@@ -82,12 +82,17 @@ void UndoExposureMove::redo()
     animationProject->setUnsavedChanges();
 
     if (undoFlag) {
-        facade->writeHistoryEntry(QString("redo"));
+        facade->writeHistoryEntry(QLatin1String("redo"));
         undoFlag = FALSE;
     }
     else {
-        facade->writeHistoryEntry(QString("redoExposureMove|%1|%2|%3|%4|%5|%6").arg(fromSceneIndex).arg(fromTakeIndex)
-                                  .arg(fromExposureIndex).arg(toSceneIndex).arg(toTakeIndex).arg(toExposureIndex));
+        facade->writeHistoryEntry(QString("%1|%2|%3|%4|%5|%6|%7")
+                                  .arg(QLatin1String("redoExposureMove")
+                                  .arg(fromSceneIndex).arg(fromTakeIndex)
+                                  .arg(fromExposureIndex)
+                                  .arg(toSceneIndex)
+                                  .arg(toTakeIndex)
+                                  .arg(toExposureIndex));
     }
 
     qDebug("UndoExposureMove::redo --> End");

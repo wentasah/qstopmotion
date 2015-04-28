@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2014 by                                                *
+ *  Copyright (C) 2005-2015 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -757,7 +757,7 @@ void MainWindowGUI::increaseProgress()
 }
 
 
-void MainWindowGUI::setProgressInfo(const char *infoText)
+void MainWindowGUI::setProgressInfo(const QString infoText)
 {
     if (progressDialog) {
         progressDialog->setLabelText(infoText);
@@ -1377,7 +1377,7 @@ void MainWindowGUI::saveProjectAs()
         filePath.clear();
     }
 
-    frontend->getProject()->saveProject(filePath.toLocal8Bit(), true);
+    frontend->getProject()->saveProject(filePath, true);
     QString fileDir = frontend->getProject()->getNewProjectPath();
     QString fileName = filePath.mid(filePath.lastIndexOf("/")+1);
 

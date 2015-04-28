@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2014-2014 by                                                *
+ *  Copyright (C) 2014-2015 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *

@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2013 by                                                *
+ *  Copyright (C) 2005-2015 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -141,8 +141,8 @@ bool Take::readDataFromProject(QDomElement &takeNode)
 
     QString activeExposureId;
 
-    id.append(takeNode.attributeNode(QString("id")).value());
-    description.append(takeNode.attributeNode(QString("descr")).value());
+    id.append(takeNode.attributeNode(QLatin1String("id")).value());
+    description.append(takeNode.attributeNode(QLatin1String("descr")).value());
 
     QDomElement currElement = takeNode.firstChildElement();
 
@@ -339,7 +339,7 @@ void Take::addExposure(const QString &fileName, int location)
 
     Exposure *newExposure = new Exposure(this, fileName, location);
 
-    newExposure->setId(QString("%1").arg(nextExposureIndex, 4, 10, QChar('0')));
+    newExposure->setId(QString("%1").arg(nextExposureIndex, 4, 10, QLatin1Char('0')));
     nextExposureIndex++;
 
     exposures.append(newExposure);
@@ -367,7 +367,7 @@ void Take::insertExposure(int exposureIndex, const QString &fileName, int locati
 
     Exposure *newExposure = new Exposure(this, fileName, location);
 
-    newExposure->setId(QString("%1").arg(nextExposureIndex, 4, 10, QChar('0')));
+    newExposure->setId(QString("%1").arg(nextExposureIndex, 4, 10, QLatin1Char('0')));
     nextExposureIndex++;
 
     exposures.insert(exposureIndex, newExposure);

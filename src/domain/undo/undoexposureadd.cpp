@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2012 by                                                *
+ *  Copyright (C) 2005-2015 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -68,7 +68,7 @@ void UndoExposureAdd::undo()
 
     animationProject->decAnimationChanges();
 
-    facade->writeHistoryEntry(QString("undo"));
+    facade->writeHistoryEntry(QLatin1String("undo"));
 
     qDebug("UndoExposureAdd::undo --> End");
 }
@@ -84,7 +84,8 @@ void UndoExposureAdd::redo()
         // First call of the redo function after creation of the undo object
         animationProject->addExposure(sceneIndex, takeIndex, fileName, AnimationProject::InTempPath);
 
-        facade->writeHistoryEntry(QString("redoExposureAdd|%1|%2|%3|%4")
+        facade->writeHistoryEntry(QString("%1|%2|%3|%4|%5")
+                                  .arg(QLatin1String("redoExposureAdd"))
                                   .arg(sceneIndex).arg(takeIndex).arg(exposureIndex)
                                   .arg(fileName));
     }
@@ -93,7 +94,7 @@ void UndoExposureAdd::redo()
         animationProject->addExposure(sceneIndex, takeIndex, exposure);
         exposure = NULL;
 
-        facade->writeHistoryEntry(QString("redo"));
+        facade->writeHistoryEntry(QLatin1String("redo"));
     }
 
     facade->getView()->notifyAddExposure(sceneIndex, takeIndex, exposureIndex);

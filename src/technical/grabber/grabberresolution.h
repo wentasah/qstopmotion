@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2014-2014 by                                                *
+ *  Copyright (C) 2014-2015 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -38,9 +38,9 @@ public:
      */
     enum resolutionFormat {
         unknownFormat,         // Not supported format
-        rgb24Format,           // RGB24 format
-        rgb32Format,           // RGB32 format
-        argb32Format,          // ARGB32 format
+        bgr24Format,           // BGR24 format
+        xbgr32Format,          // XBGR32 format
+        abgr32Format,          // ABGR32 format
         ayuvFormat,            // AYUV format
         yuv2Format,            // YUV2 format
         uyvyFormat,            // UYVY format

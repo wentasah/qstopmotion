@@ -1,7 +1,7 @@
 ###############################################################################
 # CMake file for the qStopMotion project                                      #
 # (c) Ralf Lange, longsoft.de                                                 #
-# Last update: 2015-02-07                                                     #
+# Last update: 2015-02-27                                                     #
 #                                                                             #
 # Usage:                                                                      #
 #   * Qt-Creator (Windows, Linux)                                             #
@@ -748,11 +748,11 @@ IF(UNIX)
     execute_process (COMMAND lsb_release -rs OUTPUT_VARIABLE LSB_RELEASE)
     string (STRIP "${LSB_ID}" LSB_ID)
     string (STRIP "${LSB_RELEASE}" LSB_RELEASE)
-    set (LSB_DISTRIB "${LSB_ID}${LSB_RELEASE}")
-    if (NOT LSB_DISTRIB)
-    set (LSB_DISTRIB "unix")
-    endif (NOT LSB_DISTRIB)
-    set (CPACK_SYSTEM_NAME "${LSB_DISTRIB}-${CPACK_PACKAGE_ARCHITECTURE}")
+    SET (LSB_DISTRIB "${LSB_ID}${LSB_RELEASE}")
+    IF (NOT LSB_DISTRIB)
+    SET (LSB_DISTRIB "unix")
+    ENDIF (NOT LSB_DISTRIB)
+    SET (CPACK_SYSTEM_NAME "${LSB_DISTRIB}-${CPACK_PACKAGE_ARCHITECTURE}")
 ENDIF(UNIX)
 
 ###############################################################################
@@ -838,6 +838,7 @@ IF ("${LSB_DISTRIB}" MATCHES "Ubuntu|Debian")
     IF ("${CPACK_PACKAGE_ARCHITECTURE}" MATCHES "x86_64")
         SET (CPACK_PACKAGE_ARCHITECTURE amd64)
     ENDIF ("${CPACK_PACKAGE_ARCHITECTURE}" MATCHES "x86_64")
+    SET (CPACK_SYSTEM_NAME "${LSB_DISTRIB}-${CPACK_PACKAGE_ARCHITECTURE}")
 ENDIF ("${LSB_DISTRIB}" MATCHES "Ubuntu|Debian")
 
 # Mandatory

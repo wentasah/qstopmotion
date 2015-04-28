@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2014 by                                                *
+ *  Copyright (C) 2005-2015 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -113,55 +113,55 @@ public:
      * Getting the application directory
      * @return the application directory name string
      */
-    const char* getUserDirName();
+    const QString getUserDirName();
 
     /**
      * Getting the temporary directory
      * @return the temporary directory name string
      */
-    const char* getTempDirName();
+    const QString getTempDirName();
 
     /**
      * Function for getting the application directory
      * @return the application directory name string
      */
-    const char* getApplicationDirName();
+    const QString getApplicationDirName();
 
     /**
      * Function for getting the binary directory
      * @return the binary directory name string
      */
-    const char* getBinDirName();
+    const QString getBinDirName();
 
     /**
      * Function for getting the manual directory
      * @return the manual directory name string
      */
-    const char* getManualDirName();
+    const QString getManualDirName();
 
     /**
      * Function for getting the translations directory
      * @return the translations directory name string
      */
-    const char* getTranslationsDirName();
+    const QString getTranslationsDirName();
 
     /**
      * Function for getting the graphics directory
      * @return the graphics directory name string
      */
-    const char* getGraphicsDirName();
+    const QString getGraphicsDirName();
 
     /**
      * Function for getting the icons directory
      * @return the icons directory name string
      */
-    const char* getIconsDirName();
+    const QString getIconsDirName();
 
     /**
      * Function for getting the pictures directory
      * @return the pictures directory name string
      */
-    const char* getPicturesDirName();
+    const QString getPicturesDirName();
 
     /**
      * Getting all possible GUI languages
@@ -280,7 +280,7 @@ public:
      * Function for changing the information to display to the user
      * @param infoText the text to display to the user
      */
-    void setProgressInfo(const char *infoText);
+    void setProgressInfo(const QString infoText);
 
     /**
      * Display a message in the status bar.
@@ -305,25 +305,25 @@ public:
      * Function for changing the project id in the status bar
      * @param id the id to display in the status bar
      */
-    void setProjectID(const char *id);
+    void setProjectID(const QString id);
 
     /**
      * Function for changing the scene id in the status bar
      * @param id the id to display in the status bar
      */
-    void setSceneID(const char *id);
+    void setSceneID(const QString id);
 
     /**
      * Function for changing the take id in the status bar
      * @param id the id to display in the status bar
      */
-    void setTakeID(const char *id);
+    void setTakeID(const QString id);
 
     /**
      * Function for changing the exposure id in the status bar
      * @param id the id to display in the status bar
      */
-    void setExposureID(const char *id);
+    void setExposureID(const QString id);
 
     /**
      * Function for processing Qt events. This is useful on timeconsuming
@@ -628,15 +628,15 @@ private:
     DomainFacade    *domainFacade;
     ViewFacade      *viewFacade;
     PreferencesTool *preferencesTool;
-    QByteArray       appUserDirName;
-    QByteArray       appTempDirName;
-    QByteArray       appApplicationDirName;
-    QByteArray       appBinDirName;
-    QByteArray       appManualDirName;
-    QByteArray       appTranslationsDirName;
-    QByteArray       appGraphicsDirName;
-    QByteArray       appIconsDirName;
-    QByteArray       appPicturesDirName;
+    QString          appUserDirName;
+    QString          appTempDirName;
+    QString          appApplicationDirName;
+    QString          appBinDirName;
+    QString          appManualDirName;
+    QString          appTranslationsDirName;
+    QString          appGraphicsDirName;
+    QString          appIconsDirName;
+    QString          appPicturesDirName;
 
     void initializePreferences();
     void setDefaultPreferences();

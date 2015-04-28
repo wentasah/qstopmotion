@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2013 by                                                *
+ *  Copyright (C) 2005-2015 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -875,7 +875,9 @@ void DomainFacade::saveProject(const QString &projectPath, bool saveAs)
     if (ret) {
         clearUndoStack();
         removeHistoryFile();
-        writeHistoryEntry(QString("redoProjectOpen|%1").arg(projectPath));
+        writeHistoryEntry(QString("%1%2")
+                          .arg(QLatin1String("redoProjectOpen|"))
+                          .arg(projectPath));
     }
 
     qDebug("DomainFacade::saveProject --> End");
@@ -1233,7 +1235,10 @@ const QString DomainFacade::copyToTemp(const QImage &rawImage)
     qDebug("DomainFacade::copyToTemp --> Start");
 
     // creates a new image name
-    QString toImageName(QString("tmp_%1.").arg(Exposure::tempNumber));
+    QString toImageName(QString("%1%2%3")
+                        .arg(QLatin1String("tmp_"))
+                        .arg(Exposure::tempNumber)
+                        .arg(QLatin1String(".")));
     switch (animationProject->getImageFormat()) {
     case ImageGrabber::jpegFormat:
         toImageName.append(PreferencesTool::jpegSuffix);

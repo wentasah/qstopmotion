@@ -25,6 +25,7 @@
 #include "technical/util.h"
 
 #include <QtCore/QtDebug>
+#include <QtCore/QTextCodec>
 #include <QtGui/QMessageBox>
 #include <QtGui/QTextCursor>
 

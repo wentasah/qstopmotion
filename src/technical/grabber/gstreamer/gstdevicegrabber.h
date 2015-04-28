@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2010-2014 by                                                *
+ *  Copyright (C) 2010-2015 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -123,7 +123,6 @@ private:
     GstElement *filter2;
     GstElement *filter3;
     GstElement *filter4;
-    GstElement *filter5;
     GstElement *queue1;
     GstElement *queue2;
     GstElement *queue3;

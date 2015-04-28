@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2010-2013 by                                                *
+ *  Copyright (C) 2010-2015 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -56,7 +56,7 @@ void ViewTab::makeGUI()
 
     QVBoxLayout *tabLayout = new QVBoxLayout;
 
-    firstGroupBox = new QGroupBox(QString("firstGroupBox"));
+    firstGroupBox = new QGroupBox(QLatin1String("firstGroupBox"));
     // firstGroupBox->setFlat(true);
 
     firstIcon = new QLabel();
@@ -86,7 +86,7 @@ void ViewTab::makeGUI()
     firstLayout->addStretch(10);
     firstGroupBox->setLayout(firstLayout);
 
-    secondGroupBox = new QGroupBox(QString("secondGroupBox"));
+    secondGroupBox = new QGroupBox(QLatin1String("secondGroupBox"));
     // secondGroupBox->setFlat(true);
 
     secondButton = new QPushButton;
@@ -107,7 +107,7 @@ void ViewTab::makeGUI()
     secondLayout->addStretch(10);
     secondGroupBox->setLayout(secondLayout);
 
-    thirdGroupBox = new QGroupBox(QString("thirdGroupBox"));
+    thirdGroupBox = new QGroupBox(QLatin1String("thirdGroupBox"));
     // thirdGroupBox->setFlat(true);
 
     thirdButton = new QPushButton;
@@ -174,7 +174,7 @@ void ViewTab::initialize()
         int idx = 0;
 
         for (int i = 0; i < numEncoders; ++i) {
-            QString id(QString("encoder%1").arg(i));
+            QString id(QString("%1%2").arg(QLatin1String("encoder")).arg(i));
             QString name;
             QString desc;
             QString start;
@@ -225,9 +225,9 @@ void ViewTab::apply()
     int numEncoders = encoderTable->rowCount();
     if (numEncoders > 0) {
         pref->setNumberEncoders(numEncoders);
-        pref->setActiveEncoder(QString("encoder%1").arg(encoderTable->currentRow()));
+        pref->setActiveEncoder(QString("%1%2").arg(QLatin1String("encoder")).arg(encoderTable->currentRow()));
         for (int i = 0; i < numEncoders; ++i) {
-            pref->setEncoder(QString("encoder%1").arg(i),
+            pref->setEncoder(QString("%1%2").arg(QLatin1String("encoder")).arg(i),
                              encoderTable->item(i, 0)->text(),
                              encoderTable->item(i, 1)->text(),
                              startEncoderStrings[i],

@@ -47,7 +47,7 @@
 MfGrabber::MfGrabber(Frontend *f)
     : ImageGrabber(f)
 {
-    qDebug("MfGrabber::Constructor --> Start (Empty)");
+    qDebug("MfGrabber::Constructor --> Start");
 
     HRESULT hr;
 
@@ -73,7 +73,7 @@ MfGrabber::MfGrabber(Frontend *f)
 
 MfGrabber::~MfGrabber()
 {
-    qDebug("MfGrabber::Destructor --> Start (Empty)");
+    qDebug("MfGrabber::Destructor --> Start");
 
     HRESULT hr;
 
@@ -152,7 +152,7 @@ bool MfGrabber::initialization(QVector<ImageGrabberDevice*> &devices)
             device = new ImageGrabberDevice();
             device->setDeviceIndex(i);
 
-            hr = readDeviceInfo(ppDevices[i], i, device);
+            hr = readDeviceInfo(ppDevices[i], device);
             if (SUCCEEDED(hr)) {
                 // Add the new device to the device list
                 devices.append(device);
@@ -299,7 +299,7 @@ bool MfGrabber::setUp()
         if ((resolution.getWidth() == typeWidth) &&
             (resolution.getHeight() == typeHeight)) {
             switch (resolution.getFormat()) {
-            case GrabberResolution::rgb24Format:
+            case GrabberResolution::bgr24Format:
                 if (typeSubType == MFVideoFormat_RGB24) {
                     mediaType->CopyAllItems(newMediaType);
                 }
@@ -513,7 +513,7 @@ bool MfGrabber::tearDown()
 }
 
 
-HRESULT MfGrabber::readDeviceInfo(IMFActivate *pActivate, unsigned int /*Num*/, ImageGrabberDevice *device)
+HRESULT MfGrabber::readDeviceInfo(IMFActivate *pActivate, ImageGrabberDevice *device)
 {
     qDebug() << "MfGrabber::readDeviceInfo --> Start";
 
@@ -633,7 +633,7 @@ HRESULT MfGrabber::enumerateCaptureFormats(IMFMediaSource *pSource, ImageGrabber
         // GUID is in val.puuid
         GUID_name = GetGUIDNameConst(*val.puuid);
         if (*val.puuid == MFVideoFormat_RGB24) {
-            outputFormat = GrabberResolution::rgb24Format;
+            outputFormat = GrabberResolution::bgr24Format;
         }
         else if (*val.puuid == MFVideoFormat_AYUV) {
             outputFormat = GrabberResolution::ayuvFormat;
@@ -780,43 +780,43 @@ void MfGrabber::getRawFrame(const uchar*& data)
     if (subType == MFVideoFormat_RGB24) {
         // Read a image in RGB24 format ==> TextureFormat::Format_RGB_8
 
-        convert_rgb24_to_rgb32_buffer(pixels, frameData, width, height, nPixels, stride);
+        convert_bgr24_to_xbgr32_buffer(pixels, frameData, width, height, nPixels, stride);
     }
     if (subType == MFVideoFormat_AYUV) {
         // Read a image in AYUV (AYCbCr BT.601)
         // 4:4:4 Format, 32 Bits per Pixel
 
-        convert_ayuv_to_rgb32_buffer(pixels, frameData, width, height, nPixels, stride);
+        convert_ayuv_to_abgr32_buffer(pixels, frameData, width, height, nPixels, stride);
     }
     if (subType == MFVideoFormat_YUY2) {
         // Read a image in YUY2 (YCbY2) format ==> TextureFormat::Format_YUY2
         // 4:2:2 Format, 16 Bits per Pixel
 
-        convert_yuy2_to_rgb32_buffer(pixels, frameData, width, height, nPixels, stride);
+        convert_yuy2_to_xbgr32_buffer(pixels, frameData, width, height, nPixels, stride);
     }
     if (subType == MFVideoFormat_UYVY) {
         // Read a image in UYVY (CbYCrY)
         // 4:2:2 Format, 16 Bits per Pixel
 
-        convert_uyvy_to_rgb32_buffer(pixels, frameData, width, height, nPixels, stride);
+        convert_uyvy_to_xbgr32_buffer(pixels, frameData, width, height, nPixels, stride);
     }
     if (subType == MFVideoFormat_YV12) {
         // Read a image in YV12 (YCr12)
         // 4:2:0 Format, 12 Bits per Pixel
 
-        convert_yv12_to_rgb32_buffer(pixels, frameData, width, height, nPixels, stride);
+        convert_yv12_to_xbgr32_buffer(pixels, frameData, width, height, nPixels, stride);
     }
     if (subType == MFVideoFormat_I420) {
         // Read a image in I420 (YCr12)
         // 4:2:0 Format, 12 Bits per Pixel
 
-        convert_i420_to_rgb32_buffer(pixels, frameData, width, height, nPixels, stride);
+        convert_i420_to_xbgr32_buffer(pixels, frameData, width, height, nPixels, stride);
     }
     if (subType == MFVideoFormat_NV12) {
         // Read a image in NV12 (NCr12)
         // 4:2:0 Format, 12 Bits per Pixel
 
-        convert_nv12_to_rgb32_buffer(pixels, frameData, width, height, nPixels, stride);
+        convert_nv12_to_xbgr32_buffer(pixels, frameData, width, height, nPixels, stride);
     }
     if (subType == MFVideoFormat_MJPG) {
         // Read a image in MJPG format

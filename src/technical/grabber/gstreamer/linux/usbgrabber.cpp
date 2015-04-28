@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2010-2014 by                                                *
+ *  Copyright (C) 2010-2015 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -147,15 +147,15 @@ bool GstreamerV4L2Grabber::initialization(QVector<ImageGrabberDevice*> &devices)
                         return false;
                     }
                     device = new ImageGrabberDevice(0,
-                                                    (const char*)g_value_get_string(&value_id_string),
-                                                    (const char*)g_value_get_string(&value_name_string),
+                                                    QLatin1String((const char*)g_value_get_string(&value_id_string)),
+                                                    QLatin1String((const char*)g_value_get_string(&value_name_string)),
                                                     ImageGrabberDevice::video4LinuxSource,
                                                     ImageGrabberDevice::video_x_none);
                 }
                 else {
                     // No device name
                     device = new ImageGrabberDevice(0,
-                                                    (const char*)g_value_get_string(&value_id_string),
+                                                    QLatin1String((const char*)g_value_get_string(&value_id_string)),
                                                     QString(QApplication::translate("GstreamerV4L2Grabber", "Device %1")).arg(device_size),
                                                     ImageGrabberDevice::video4LinuxSource,
                                                     ImageGrabberDevice::video_x_none);

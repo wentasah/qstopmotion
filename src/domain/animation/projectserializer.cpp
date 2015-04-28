@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2012 by                                                *
+ *  Copyright (C) 2005-2015 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -211,6 +211,8 @@ void ProjectSerializer::saveDOMToFile(const QDomDocument &doc)
 
 void ProjectSerializer::setNewProjectFilePath(const QString &pfp)
 {
+    qDebug("ProjectSerializer::setNewProjectFilePath --> Start");
+
     Q_ASSERT(!pfp.isEmpty());
 
     if(newProjectFilePath.compare(pfp) == 0) {
@@ -244,12 +246,14 @@ void ProjectSerializer::setNewProjectFilePath(const QString &pfp)
     newArchiveFilePath.append(pfp);
     newArchiveFilePath.replace(PreferencesTool::projectSuffix, PreferencesTool::archiveSuffix);
 
-    newImagePath.append(QString("%1/%2")
+    newImagePath.append(QString("%1%2%3")
                         .arg(newProjectPath)
+                        .arg(QLatin1String("/"))
                         .arg(PreferencesTool::imageDirectory));
 
-    newSoundPath.append(QString("%1/%2")
+    newSoundPath.append(QString("%1%2%3")
                         .arg(newProjectPath)
+                        .arg(QLatin1String("/"))
                         .arg(PreferencesTool::soundDirectory));
 
     if (!QFile::exists(newProjectPath)) {
@@ -283,6 +287,8 @@ void ProjectSerializer::setNewProjectFilePath(const QString &pfp)
                                          tr("Can't change permissions of the sound directory!"));
         }
     }
+
+    qDebug("ProjectSerializer::setNewProjectFilePath --> End");
 }
 
 

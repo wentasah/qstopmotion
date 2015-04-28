@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2012 by                                                *
+ *  Copyright (C) 2005-2015 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -33,10 +33,14 @@ const QString Util::checkCommand(const QString &command)
 
 #ifdef Q_WS_WIN
     // Windows version
-    QString tmp(QString("where %1").arg(command));
+    QString tmp(QString("%1%2")
+                .arg(QLatin1String("where "))
+                .arg(command));
 #else
     // Linux and Apple OS X version
-    QString tmp(QString("which %1").arg(command));
+    QString tmp(QString("%1%2")
+                .arg(QLatin1String("which "))
+                .arg(command));
 #endif
 
     QProcess which;
@@ -79,6 +83,21 @@ const QString Util::convertPathToOsSpecific(const QString &path)
             newPath.append("\\");
         }
     }
+
+    QString newPath2("");
+    for (int index = 0 ; index < newPath.length() ; index++) {
+        QChar unicodeChar = newPath[index];
+        int   intChar = unicodeChar.unicode();
+        int   version = unicodeChar.unicodeVersion();
+        if (intChar >= 128) {
+            newPath2.append(QString("&#%1;").arg(intChar));
+        }
+        else {
+            newPath2.append(unicodeChar);
+        }
+    }
+
+
     return newPath;
 #else
     // Linux and Apple OS X version

@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2012 by                                                *
+ *  Copyright (C) 2005-2015 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -68,7 +68,7 @@ void UndoExposureInsert::undo()
 
     animationProject->decAnimationChanges();
 
-    facade->writeHistoryEntry(QString("undo"));
+    facade->writeHistoryEntry(QLatin1String("undo"));
 
     qDebug("UndoExposureInsert::undo --> End");
 }
@@ -85,7 +85,8 @@ void UndoExposureInsert::redo()
         animationProject->insertExposure(sceneIndex, takeIndex, exposureIndex,
                                          fileName, AnimationProject::InTempPath);
 
-        facade->writeHistoryEntry(QString("redoExposureInsert|%1|%2|%3|%4")
+        facade->writeHistoryEntry(QString("%1|%2|%3|%4|%5")
+                                  .arg(QLatin1String("redoExposureInsert"))
                                   .arg(sceneIndex).arg(takeIndex).arg(exposureIndex)
                                   .arg(fileName));
     }
@@ -95,7 +96,7 @@ void UndoExposureInsert::redo()
                                          exposure);
         exposure = NULL;
 
-        facade->writeHistoryEntry(QString("redo"));
+        facade->writeHistoryEntry(QLatin1String("redo"));
     }
 
     facade->getView()->notifyInsertExposure(sceneIndex, takeIndex, exposureIndex);

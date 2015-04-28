@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2014 by                                                *
+ *  Copyright (C) 2005-2015 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -220,7 +220,7 @@ public:
      * Function for changing the information to display to the user
      * @param infoText the text to display to the user
      */
-    void setProgressInfo(const char *infoText);
+    void setProgressInfo(const QString infoText);
 
     /**
      * Function for checking if the user has aborted the operation

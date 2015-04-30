@@ -240,6 +240,7 @@ void ExportWidget::initialize()
     // Read eEncoder preferences
     if (tabType) {
         // This is a general dialog tab
+
         if (pref->getIntegerPreference("preferences", "defaultencoderapplication", value) == false) {
             value = VideoEncoder::noneApplication;
         }
@@ -261,9 +262,14 @@ void ExportWidget::initialize()
         activeVideoFps = value;
 
         if (pref->getIntegerPreference("preferences", "defaultusedefaultoutputfile", value) == false) {
-            value = false;
+            value = 0;
         }
-        activeUseDefaultOutputFile = value;
+        if (0 == value) {
+            activeUseDefaultOutputFile = false;
+        }
+        else {
+            activeUseDefaultOutputFile = true;
+        }
     }
     else {
         // This is a project dialog tab
@@ -305,13 +311,13 @@ void ExportWidget::initialize()
     this->videoFpsChooser->setValue(activeVideoFps);
 
     // Output file preferences
-    if (false == activeUseDefaultOutputFile)
+    if (true == activeUseDefaultOutputFile)
     {
-        setYesButtonOn();
+        setNoButtonOn();
     }
     else
     {
-        setNoButtonOn();
+        setYesButtonOn();
     }
 
     defaultOutputEdit->setText(activeDefaultOutputFileName);
@@ -366,14 +372,14 @@ void ExportWidget::apply()
     }
 
     if (noButton->isChecked()) {
-        if (true == activeUseDefaultOutputFile) {
-            activeUseDefaultOutputFile = false;
+        if (false == activeUseDefaultOutputFile) {
+            activeUseDefaultOutputFile = true;
             changings = true;
         }
     }
     else {
-        if (false == activeUseDefaultOutputFile) {
-            activeUseDefaultOutputFile = true;
+        if (true == activeUseDefaultOutputFile) {
+            activeUseDefaultOutputFile = false;
             changings = true;
         }
     }

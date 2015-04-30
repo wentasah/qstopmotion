@@ -363,9 +363,10 @@ public:
     /**
      * Function to run a external command
      * @param command command to run
+     * @param arguments arguments for the command
      * @return return value of the command
      */
-    int runExternalCommand(const QString &command);
+    int runExternalCommand(const QString &command, const QStringList &arguments);
 
     /**
      * Turns on the webcamera/video import mode.

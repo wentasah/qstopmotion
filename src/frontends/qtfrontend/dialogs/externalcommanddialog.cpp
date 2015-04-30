@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2012 by                                                *
+ *  Copyright (C) 2005-2015 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -78,7 +78,7 @@ ExternalCommandDialog::ExternalCommandDialog(QWidget *parent)
 }
 
 
-void ExternalCommandDialog::run(const QString &command)
+void ExternalCommandDialog::run(const QString &command, const QStringList &arguments)
 {
     qDebug("ExternalCommandDialog::run --> Start");
 
@@ -86,7 +86,7 @@ void ExternalCommandDialog::run(const QString &command)
     qDebug("ExternalCommandDialog::run --> Command");
     qDebug() << osCommand;
 
-    process->start(osCommand);
+    process->start(osCommand, arguments);
 
     qDebug("ExternalCommandDialog::run --> End");
 

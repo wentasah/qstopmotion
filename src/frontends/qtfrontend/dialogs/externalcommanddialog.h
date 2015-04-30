@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2011 by                                                *
+ *  Copyright (C) 2005-2015 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -35,10 +35,11 @@
 
 class ExternalCommandDialog : public QWidget
 {
-    Q_OBJECT;
+    Q_OBJECT
+
 public:
     ExternalCommandDialog(QWidget *parent = 0);
-    void run(const QString &command);
+    void run(const QString &command, const QStringList &arguments);
 
 private slots:
     void readFromStandardOutput();

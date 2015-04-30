@@ -58,11 +58,10 @@ public:
     const QString getCommand();
 
     /**
-     * Gets the command line registered by the user in the preferences menu.
-     * This is the command which should be used to start the encoder.
-     * @return the start command
+     * Gets the arguments for the encoder.
+     * @return the encoder argument list
      */
-    const QString getStartCommand() const;
+    const QStringList getEncoderArguments() const;
 
 private:
     AnimationProject *animationProject;

@@ -88,7 +88,6 @@ const QString Util::convertPathToOsSpecific(const QString &path)
     for (int index = 0 ; index < newPath.length() ; index++) {
         QChar unicodeChar = newPath[index];
         int   intChar = unicodeChar.unicode();
-        int   version = unicodeChar.unicodeVersion();
         if (intChar >= 128) {
             newPath2.append(QString("&#%1;").arg(intChar));
         }

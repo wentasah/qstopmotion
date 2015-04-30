@@ -621,7 +621,7 @@ bool AnimationProject::readSettingsFromProject(QDomElement &settingsNode)
         else if (nodeName.compare("videosource") == 0) {
             QString tmp = currElement.text();
             if (frontend->setVideoSource(tmp.toInt())) {
-                setVideoSource(tmp.toInt());
+                videoSource = tmp.toInt();
             }
             else {
                 setVideoSource(frontend->getVideoSource());

@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2012 by                                                *
+ *  Copyright (C) 2005-2015 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -24,6 +24,7 @@
 #define VIDEOENCODER_H
 
 #include <QString>
+#include <QStringList>
 
 /**
  * Class for gathering information needed to export a qstopmotion project to
@@ -78,11 +79,10 @@ public:
     const QString getEncoderCommand() const;
 
     /**
-     * Gets the command line registered by the user in the preferences menu.
-     * This is the command which should be used to start the encoder.
-     * @return the start command
+     * Gets the arguments for the encoder.
+     * @return the encoder argument list
      */
-    virtual const QString getStartCommand() const = 0;
+    virtual const QStringList getEncoderArguments() const = 0;
 
     /**
      * Gets the command line registerd by the user in the preferences menu.

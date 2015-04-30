@@ -30,6 +30,13 @@
 #include <QtCore/QString>
 
 
+/**
+ * Prepare start command
+ *
+ * ffmpeg [[infile options][-i infile]]... {[outfile options] outfile}...
+ *
+ * see: http://www.ffmpeg.org/ffmpeg-doc.html
+ */
 FfmpegEncoder::FfmpegEncoder(AnimationProject *ap)
 {
     animationProject = ap;
@@ -83,31 +90,20 @@ FfmpegEncoder::~FfmpegEncoder()
 }
 
 
-const QString FfmpegEncoder::getStartCommand() const
+const QStringList FfmpegEncoder::getEncoderArguments() const
 {
-    QString          startCommand;
+    QStringList      arguments;
     QString          imagePath = animationProject->getNewImagePath();
-
-    // Prepare start command
-    //
-    // ffmpeg [[infile options][-i infile]]... {[outfile options] outfile}...
-    //
-    // see: http://www.ffmpeg.org/ffmpeg-doc.html
-    //
-
-    // Encoder
-    startCommand.append(QLatin1String("\""));
-    startCommand.append(getEncoderCommand());
-    startCommand.append(QLatin1String("\""));
+    QString          imageFiles = QString("");
+    QString          outputFile = QString("");
 
     // ===============================
     // Input options
     // ===============================
 
     // Input frame rate (default = 25)
-    startCommand.append(QString("%1%2")
-                        .arg(QLatin1String(" -r "))
-                        .arg(animationProject->getVideoFps()));
+    arguments << QLatin1String("-r");
+    arguments << QString("%1").arg(animationProject->getVideoFps());
 
     // ===============================
     // Input files
@@ -115,28 +111,29 @@ const QString FfmpegEncoder::getStartCommand() const
 
     // Input file name
     if (!imagePath.isEmpty()) {
-        startCommand.append(QLatin1String(" -i "));
-        startCommand.append(QLatin1String("\""));
-        startCommand.append(imagePath);
-        startCommand.append(QLatin1String("/"));
-        startCommand.append(QLatin1String("%6d."));
+        arguments << QLatin1String("-i");
+        // imageFiles.append(QLatin1String("\""));
+        imageFiles.append(imagePath);
+        imageFiles.append(QLatin1String("/"));
+        imageFiles.append(QLatin1String("%6d."));
         switch (animationProject->getImageFormat()) {
         case ImageGrabber::jpegFormat:
-            startCommand.append(PreferencesTool::jpegSuffix);
+            imageFiles.append(PreferencesTool::jpegSuffix);
             break;
         case ImageGrabber::tiffFormat:
-            startCommand.append(PreferencesTool::tiffSuffix);
+            imageFiles.append(PreferencesTool::tiffSuffix);
             break;
         case ImageGrabber::bmpFormat:
-            startCommand.append(PreferencesTool::bmpSuffix);
+            imageFiles.append(PreferencesTool::bmpSuffix);
             break;
         }
-        startCommand.append(QLatin1String("\""));
+        // imageFiles.append(QLatin1String("\""));
+        arguments << imageFiles;
     }
     else
     {
         // Error, empty image path
-        return QString();
+        return QStringList();
     }
 
     // ===============================
@@ -144,70 +141,77 @@ const QString FfmpegEncoder::getStartCommand() const
     // ===============================
 
     // Use target option
+    // arguments << QLatin1String("-target"));
+    //
     // vcd.mpg
-    // startCommand.append(QLatin1String(" -target vcd"));
+    // arguments << QLatin1String("vcd"));
     // pal-vcd
-    // startCommand.append(QLatin1String(" -target pal-vcd"));
+    // arguments << QLatin1String("pal-vcd"));
 
     // Use individual format options
     //Output frame rate (default = 25)
-    startCommand.append(QLatin1String(" -r 25"));
+    arguments << QLatin1String("-r");
+    arguments << QLatin1String("25");
 
     // Video size (default = Input size)
+    arguments << QLatin1String("-s");
     switch(animationProject->getVideoSize()) {
     case VideoEncoder::qvgaSize:
-        startCommand.append(QLatin1String(" -s qvga"));
+        arguments << QLatin1String("qvga");
         break;
     case VideoEncoder::vgaSize:
-        startCommand.append(QLatin1String(" -s vga"));
+        arguments << QLatin1String("vga");
         break;
     case VideoEncoder::svgaSize:
-        startCommand.append(QLatin1String(" -s svga"));
+        arguments << QLatin1String("svga");
         break;
     case VideoEncoder::paldSize:
-        startCommand.append(QLatin1String(" -s 4cif"));
+        arguments << QLatin1String("4cif");
         break;
     case VideoEncoder::hdreadySize:
-        startCommand.append(QLatin1String(" -s hd720"));
+        arguments << QLatin1String("hd720");
         break;
     case VideoEncoder::fullhdSize:
-        startCommand.append(QLatin1String(" -s hd1080"));
+        arguments << QLatin1String("hd1080");
         break;
     default:
         // Default value is VGA output
-        startCommand.append(QLatin1String(" -s vga"));
+        arguments << QLatin1String("vga");
         break;
     }
 
     // Video format
+    arguments << QLatin1String("-f");
     switch(animationProject->getVideoFormat()) {
     case VideoEncoder::aviFormat:
-        startCommand.append(QLatin1String(" -f avi"));
+        arguments << QLatin1String("avi");
         break;
     case VideoEncoder::mp4Format:
-        startCommand.append(QLatin1String(" -f mp4"));
+        arguments << QLatin1String("mp4");
         break;
     default:
         // Default value is AVI output
-        startCommand.append(QLatin1String(" -f avi"));
+        arguments << QLatin1String("avi");
         break;
     }
 
     // Video quality
     // 1 = excellent quality, 31 worst quality
-    startCommand.append(QLatin1String(" -qscale:v 1"));
+    arguments << QLatin1String("-qscale:v");
+    arguments << QLatin1String("1");
 
     // Bit rate in bit/s (default = 200kb/s)
-    startCommand.append(QLatin1String(" -b:v 1000k"));
+    arguments << QLatin1String("-b:v");
+    arguments << QLatin1String("1000k");
 
     // ===============================
     // Output file
     // ===============================
 
-    startCommand.append(QLatin1String(" "));
-    startCommand.append(QLatin1String("\""));
-    startCommand.append(this->getOutputFile());
-    startCommand.append(QLatin1String("\""));
+    // outputFile.append(QLatin1String("\""));
+    outputFile.append(this->getOutputFile());
+    // outputFile.append(QLatin1String("\""));
+    arguments << outputFile;
 
-    return startCommand;
+    return arguments;
 }

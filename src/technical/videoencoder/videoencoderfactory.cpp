@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2010 by                                                *
+ *  Copyright (C) 2005-2015 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -42,13 +42,14 @@ const QString VideoEncoderFactory::createVideoFile(VideoEncoder *encoder)
 {
     qDebug("VideoEncoderFactory::createVideoFile --> Start");
 
-    QString startCommand = encoder->getStartCommand();
+    QString command = encoder->getEncoderCommand();
+    QStringList arguments = encoder->getEncoderArguments();
 
     qDebug("VideoEncoderFactory::createVideoFile --> Command:");
-    qDebug() << startCommand;
+    qDebug() << command << arguments;
 
-    if (!startCommand.isEmpty()) {
-        if (startEncoder(startCommand) == 0) {
+    if (!command.isEmpty()) {
+        if (frontend->runExternalCommand(command, arguments) == 0) {
             qDebug("VideoEncoderFactory::createVideoFile --> End (Done)");
             return encoder->getOutputFile();
         }
@@ -56,10 +57,4 @@ const QString VideoEncoderFactory::createVideoFile(VideoEncoder *encoder)
 
     qDebug("VideoEncoderFactory::createVideoFile --> End (Nothing)");
     return QString();
-}
-
-
-int VideoEncoderFactory::startEncoder(const QString &command)
-{
-    return frontend->runExternalCommand(command);
 }

@@ -1,7 +1,7 @@
 ###############################################################################
 # QtCreator file for the qStopMotion project                                  #
 # (c) Ralf Lange, longsoft.de                                                 #
-# Last update: 2015-01-20                                                     #
+# Last update: 2015-05-12                                                     #
 #                                                                             #
 # Please use CMake and the CMakeLists.txt file to build qStopMotion!          #
 ###############################################################################
@@ -93,6 +93,7 @@ HEADERS += src/config.h \
            src/technical/grabber/video4linux2/v4l2controller.h \
            src/technical/grabber/video4linux2/v4l2grabber.h \
            src/technical/videoencoder/ffmpegencoder.h \
+           src/technical/videoencoder/libavencoder.h \
            src/technical/videoencoder/videoencoder.h \
            src/technical/videoencoder/videoencoderfactory.h
 
@@ -177,6 +178,7 @@ SOURCES += src/main.cpp \
            src/technical/grabber/video4linux2/v4l2controller.cpp \
            src/technical/grabber/video4linux2/v4l2grabber.cpp \
            src/technical/videoencoder/ffmpegencoder.cpp \
+           src/technical/videoencoder/libavencoder.cpp \
            src/technical/videoencoder/videoencoder.cpp \
            src/technical/videoencoder/videoencoderfactory.cpp
 

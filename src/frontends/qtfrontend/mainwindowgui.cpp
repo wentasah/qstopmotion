@@ -31,6 +31,7 @@
 #include "technical/preferencestool.h"
 #include "technical/util.h"
 #include "technical/videoencoder/ffmpegencoder.h"
+#include "technical/videoencoder/libavencoder.h"
 
 #include <QtCore/QtDebug>
 #include <QtGui/QFileDialog>
@@ -1417,7 +1418,9 @@ void MainWindowGUI::exportToVideo()
         enc = new FfmpegEncoder(this->frontend->getProject()->getAnimationProject());
 
         break;
-    case VideoEncoder::mencoderApplication:
+    case VideoEncoder::libavApplication:
+        enc = new LibavEncoder(this->frontend->getProject()->getAnimationProject());
+
         break;
     default:
         return;

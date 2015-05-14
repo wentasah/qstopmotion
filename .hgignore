@@ -13,6 +13,7 @@ syntax: glob
 Thumbs.db
 
 ffmpeg/*
+libav/*
 qtruntime/*
 
 # switch to regexp syntax.

@@ -1,7 +1,7 @@
 ###############################################################################
 # CMake file for the qStopMotion project                                      #
 # (c) Ralf Lange, longsoft.de                                                 #
-# Last update: 2015-02-27                                                     #
+# Last update: 2015-05-13                                                     #
 #                                                                             #
 # Usage:                                                                      #
 #   * Qt-Creator (Windows, Linux)                                             #
@@ -82,6 +82,7 @@ set(HEADERS
     src/technical/grabber/imagegrabberdevice.h
     src/technical/grabber/imagegrabberthread.h
     src/technical/videoencoder/ffmpegencoder.h
+    src/technical/videoencoder/libavencoder.h
     src/technical/videoencoder/videoencoder.h
     src/technical/videoencoder/videoencoderfactory.h
 )
@@ -253,6 +254,7 @@ set(SOURCES
     src/technical/grabber/imagegrabberfacade.cpp
     src/technical/grabber/imagegrabberthread.cpp
     src/technical/videoencoder/ffmpegencoder.cpp
+    src/technical/videoencoder/libavencoder.cpp
     src/technical/videoencoder/videoencoder.cpp
     src/technical/videoencoder/videoencoderfactory.cpp
 )
@@ -839,6 +841,25 @@ IF ("${LSB_DISTRIB}" MATCHES "Ubuntu|Debian")
         SET (CPACK_PACKAGE_ARCHITECTURE amd64)
     ENDIF ("${CPACK_PACKAGE_ARCHITECTURE}" MATCHES "x86_64")
     SET (CPACK_SYSTEM_NAME "${LSB_DISTRIB}-${CPACK_PACKAGE_ARCHITECTURE}")
+
+    # Set the dependencies based on the distro version
+    # thus only one package is build you must list here *any* depending libraries,
+    # even if they are only used in one module
+    IF ("${LSB_DISTRIB}" MATCHES "Ubuntu12.04")
+        SET(CPACK_DEBIAN_PACKAGE_DEPENDS "libc6 (>=2.11), ffmpeg (>=0.8.9), gstreamer0.10-plugins-base (>=0.10.36), libqtcore4 (>=4.8.1), libqtgui4 (>=4.8.1), libqt4-xml (>=4.8.1), libv4l-0 (>=0.8.6), libgphoto2-2 (>=2.4.11), libgphoto2-port0 (>=2.4.11)")
+    ENDIF ("${LSB_DISTRIB}" MATCHES "Ubuntu12.04")
+    IF ("${LSB_DISTRIB}" MATCHES "Ubuntu14.04")
+        SET(CPACK_DEBIAN_PACKAGE_DEPENDS "libc6 (>=2.11), libavbin0 (>=7-1), gstreamer0.10-plugins-base (>=0.10.36), libqtcore4 (>=4.8.1), libqtgui4 (>=4.8.1), libqt4-xml (>=4.8.1), libv4l-0 (>=0.8.6), libgphoto2-2 (>=2.4.14), libgphoto2-port0 (>=2.4.14)")
+    ENDIF ("${LSB_DISTRIB}" MATCHES "Ubuntu14.04")
+    IF ("${LSB_DISTRIB}" MATCHES "Debian6.*")
+        SET(CPACK_DEBIAN_PACKAGE_DEPENDS "libc6 (>=2.11), ffmpeg (>=0.8.9), gstreamer0.10-plugins-base (>=0.10.36), libqtcore4 (>=4.8.2), libqtgui4 (>=4.8.2), libqt4-xml (>=4.8.2), libv4l (>=0.8.8), libgphoto2 (>=2.4.14), libgphoto2-port0 (>=2.4.14)")
+    ENDIF ("${LSB_DISTRIB}" MATCHES "Debian6.*")
+    IF ("${LSB_DISTRIB}" MATCHES "Debian7.*")
+        SET(CPACK_DEBIAN_PACKAGE_DEPENDS "libc6 (>=2.11), ffmpeg (>=0.8.9), gstreamer0.10-plugins-base (>=0.10.36), libqtcore4 (>=4.8.2), libqtgui4 (>=4.8.2), libqt4-xml (>=4.8.2), libv4l (>=0.8.8), libgphoto2 (>=2.4.14), libgphoto2-port0 (>=2.4.14)")
+    ENDIF ("${LSB_DISTRIB}" MATCHES "Debian7.*")
+    IF (NOT CPACK_DEBIAN_PACKAGE_DEPENDS)
+        MESSAGE ("WARNING: ${LSB_DISTRIB} not supported yet.\nPlease set deps in CMakeLists.txt before packaging.")
+    ENDIF (NOT CPACK_DEBIAN_PACKAGE_DEPENDS)
 ENDIF ("${LSB_DISTRIB}" MATCHES "Ubuntu|Debian")
 
 # Mandatory
@@ -851,23 +872,6 @@ SET(CPACK_DEBIAN_PACKAGE_SECTION "graphics")
 SET(CPACK_DEBIAN_PACKAGE_PRIORITY "optional")
 
 # Options
-
-# Set the dependencies based on the distro version
-# thus only one package is build you must list here *any* depending libraries,
-# even if they are only used in one module
-# IF ("${LSB_DISTRIB}" MATCHES "Debian5.*")
-#     SET (CPACK_DEBIAN_PACKAGE_DEPENDS " ")
-# ENDIF ("${LSB_DISTRIB}" MATCHES "Debian5.*")
-# IF ("${LSB_DISTRIB}" MATCHES "Debian6.*")
-#     SET (CPACK_DEBIAN_PACKAGE_DEPENDS " ")
-# ENDIF ("${LSB_DISTRIB}" MATCHES "Debian6.*")
-# IF ("${LSB_DISTRIB}" MATCHES "Debian7.*")
-#     SET (CPACK_DEBIAN_PACKAGE_DEPENDS " ") # if build with no plugins
-# ENDIF ("${LSB_DISTRIB}" MATCHES "Debian7.*")
-# IF (NOT CPACK_DEBIAN_PACKAGE_DEPENDS)
-#     MESSAGE ("WARNING: ${LSB_DISTRIB} not supported yet.\nPlease set deps in CMakeLists.txt before packaging.")
-# ENDIF (NOT CPACK_DEBIAN_PACKAGE_DEPENDS)
-SET(CPACK_DEBIAN_PACKAGE_DEPENDS "libc6 (>=2.11), ffmpeg (>=0.8.9), gstreamer0.10-plugins-base (>=0.10.36), libqtcore4 (>=4.8.2), libqtgui4 (>=4.8.2), libqt4-xml (>=4.8.2), libv4l (>=0.8.8), libgphoto2 (>=2.4.14), libgphoto2-port0 (>=2.4.14)")
 
 SET(CPACK_DEBIAN_PACKAGE_HOMEPAGE ${QSTOPMOTION_HOMEPAGE})
 # CPACK_DEBIAN_PACKAGE_SHLIBDEPS
@@ -927,4 +931,3 @@ INCLUDE(CPack)
 ###############################################################################
 # "this is the end"
 ###############################################################################
-

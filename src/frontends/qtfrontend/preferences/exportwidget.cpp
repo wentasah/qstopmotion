@@ -116,6 +116,7 @@ void ExportWidget::makeGUI()
     encoderApplicationCombo->setFocusPolicy(Qt::NoFocus);
     connect(encoderApplicationCombo, SIGNAL(activated(int)), this, SLOT(changeEncoderApplication(int)));
     encoderApplicationCombo->addItem(tr("ffmpeg"));
+    encoderApplicationCombo->addItem(tr("libav"));
 
     videoFormatLabel = new QLabel(tr("Video Format:"));
     videoFormatCombo = new QComboBox();

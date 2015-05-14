@@ -40,7 +40,7 @@ public:
      */
     enum encoderApplication {
         ffmpegApplication,
-        mencoderApplication,
+        libavApplication,
         noneApplication
     };
 

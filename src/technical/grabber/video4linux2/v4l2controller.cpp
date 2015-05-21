@@ -43,7 +43,7 @@
 
 #include "v4l2controller.h"
 
-#include <sys/ioctl.h>
+// #include <sys/ioctl.h>
 #include <libv4l2.h>
 #include <fcntl.h>
 #include <errno.h>
@@ -176,7 +176,7 @@ int V4L2Controller::xioctl(int fd, int IOCTL_X, void *arg)
              ((errno == EINTR) || (errno == EAGAIN) || (errno == ETIMEDOUT)));
 
     if (ret && (tries <= 0)) {
-        qDebug() << "V4L2Controller::xioctl --> ioctl (" << IOCTL_X << ") retried " << IOCTL_RETRY << " times - giving up: " << strerror(errno) << ")";
+        qDebug() << "V4L2Controller::xioctl --> v4l2_ioctl (" << IOCTL_X << ") retried " << IOCTL_RETRY << " times - giving up: " << strerror(errno) << ")";
     }
 
     // qDebug("V4L2Controller::xioctl --> End");

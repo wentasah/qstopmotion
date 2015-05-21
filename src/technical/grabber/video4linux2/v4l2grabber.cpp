@@ -29,7 +29,7 @@
 #include <QtCore/QtGlobal>
 #include <QtGui/QApplication>
 
-#include <sys/ioctl.h>
+// #include <sys/ioctl.h>
 #include <sys/mman.h>
 #include <libv4l2.h>
 #include <fcntl.h>
@@ -243,13 +243,13 @@ bool V4L2Grabber::setUp()
             goto Error;
         }
 
-        // buffers[i].start = (void*)mmap(NULL, buf.length, PROT_READ | PROT_WRITE, MAP_SHARED, fd, buf.m.offset);
+        buffers[i].length = buf.length;
+        // buffers[i].start = mmap(NULL, buf.length, PROT_READ | PROT_WRITE, MAP_SHARED, fd, buf.m.offset);
         buffers[i].start = (void*)v4l2_mmap(0, buf.length, PROT_READ | PROT_WRITE, MAP_SHARED, fd, buf.m.offset);
         if (buffers[i].start == MAP_FAILED) {
             qDebug() << "V4L2Grabber::setUp --> Error: Unable to map buffer (" << strerror(errno) << ")";  // Error see mmap man page
             goto Error;
         }
-        buffers[i].length = buf.length;
     }
     
     for (unsigned int i = 0; i < N_BUFFERS; ++i) {
@@ -304,22 +304,26 @@ const QImage V4L2Grabber::getImage()
     qDebug() << "V4L2Grabber::getImage --> Start";
     
     // Dequeue a buffer.
-    ret = ioctl(fd, VIDIOC_DQBUF, &buf);
+    memset(&buf, 0, sizeof(struct v4l2_buffer));
+    buf.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+    buf.memory = V4L2_MEMORY_MMAP;
+
+    ret = xioctl(fd, VIDIOC_DQBUF, &buf);
     if (ret < 0) {
         qDebug() << "V4L2Grabber::getImage --> Error: Unable to dequeue buffer (" << errno << ")";
         return image;
     }
 
     unsigned char*  pixels = NULL;
-    // unsigned int    nBytes = buf.bytesused;
-    unsigned int    nBytes = buf.length;
+    unsigned int    nBytes = 0;
 
-    pixels = (unsigned char*)malloc(nBytes);
-    memcpy(pixels, buffers[buf.index].start, nBytes);
-    
     // Save the image.
     if (format.fmt.pix.pixelformat == V4L2_PIX_FMT_BGR24) {
         // Read a image in RGB24 format ==> TextureFormat::Format_RGB_8
+
+        nBytes = buf.bytesused;
+        pixels = (unsigned char*)malloc(nBytes);
+        memcpy(pixels, buffers[buf.index].start, nBytes);
 
         convert_bgr24_to_xbgr32_buffer(pixels, frameData, width, height, nBytes, 0L);
     }
@@ -327,17 +331,29 @@ const QImage V4L2Grabber::getImage()
         // Read a image in AYUV (AYCbCr BT.601)
         // 4:4:4 Format, 32 Bits per Pixel
 
-    //     convert_ayuv_to_abgr32_buffer(pixels, frameData, width, height, nBytes, 0L);
+        // nBytes = buf.bytesused;
+        // pixels = (unsigned char*)malloc(nBytes);
+        // memcpy(pixels, buffers[buf.index].start, nBytes);
+
+        // convert_ayuv_to_abgr32_buffer(pixels, frameData, width, height, nBytes, 0L);
     // }
     if (format.fmt.pix.pixelformat == V4L2_PIX_FMT_YUYV) {
         // Read a image in YUY2 (YCbY2) format ==> TextureFormat::Format_YUY2
         // 4:2:2 Format, 16 Bits per Pixel
+
+        nBytes = buf.bytesused;
+        pixels = (unsigned char*)malloc(nBytes);
+        memcpy(pixels, buffers[buf.index].start, nBytes);
 
         convert_yuy2_to_xbgr32_buffer(pixels, frameData, width, height, nBytes, 0L);
     }
     if (format.fmt.pix.pixelformat == V4L2_PIX_FMT_UYVY) {
         // Read a image in UYVY (CbYCrY)
         // 4:2:2 Format, 16 Bits per Pixel
+
+        nBytes = buf.bytesused;
+        pixels = (unsigned char*)malloc(nBytes);
+        memcpy(pixels, buffers[buf.index].start, nBytes);
 
         convert_uyvy_to_xbgr32_buffer(pixels, frameData, width, height, nBytes, 0L);
     }
@@ -346,23 +362,51 @@ const QImage V4L2Grabber::getImage()
         // Read a image in YV12 (YCr12)
         // 4:2:0 Format, 12 Bits per Pixel
 
+        nBytes = buf.bytesused;
+        pixels = (unsigned char*)malloc(nBytes);
+        memcpy(pixels, buffers[buf.index].start, nBytes);
+
         convert_yv12_to_xbgr32_buffer(pixels, frameData, width, height, nBytes, 0L);
     }
 #endif
-    if (format.fmt.pix.pixelformat == V4L2_PIX_FMT_YUV420M) {
+    if (format.fmt.pix.pixelformat == V4L2_PIX_FMT_YUV420) {
         // Read a image in I420 (YCr12)
         // 4:2:0 Format, 12 Bits per Pixel
 
+        nBytes = buf.bytesused;
+        pixels = (unsigned char*)malloc(nBytes);
+        memcpy(pixels, buffers[buf.index].start, nBytes);
+
         convert_i420_to_xbgr32_buffer(pixels, frameData, width, height, nBytes, 0L);
     }
+#ifdef V4L2_PIX_FMT_NV12M
     if (format.fmt.pix.pixelformat == V4L2_PIX_FMT_NV12M) {
         // Read a image in NV12 (NCr12)
         // 4:2:0 Format, 12 Bits per Pixel
+
+        nBytes = buf.bytesused;
+        pixels = (unsigned char*)malloc(nBytes);
+        memcpy(pixels, buffers[buf.index].start, nBytes);
+
+        convert_nv12_to_xbgr32_buffer(pixels, frameData, width, height, nBytes, 0L);
+    }
+#endif
+    if (format.fmt.pix.pixelformat == V4L2_PIX_FMT_NV12) {
+        // Read a image in NV12 (NCr12)
+        // 4:2:0 Format, 12 Bits per Pixel
+
+        nBytes = buf.bytesused;
+        pixels = (unsigned char*)malloc(nBytes);
+        memcpy(pixels, buffers[buf.index].start, nBytes);
 
         convert_nv12_to_xbgr32_buffer(pixels, frameData, width, height, nBytes, 0L);
     }
     if (format.fmt.pix.pixelformat == V4L2_PIX_FMT_MJPEG) {
         // Read a image in MJPG format
+
+        // nBytes = buf.bytesused;
+        // pixels = (unsigned char*)malloc(nBytes);
+        // memcpy(pixels, buffers[buf.index].start, nBytes);
 
         // Not supported!
 
@@ -375,7 +419,7 @@ const QImage V4L2Grabber::getImage()
     }
 
     // Requeue the buffer.
-    ret = ioctl(fd, VIDIOC_QBUF, &buf);
+    ret = xioctl(fd, VIDIOC_QBUF, &buf);
     if (ret < 0) {
         qDebug() << "V4L2Grabber::getImage --> Error: Unable to requeue buffer (" << errno << ")";
         return image;
@@ -470,7 +514,7 @@ bool V4L2Grabber::readDeviceInfo(int fd, ImageGrabberDevice *device)
 
     struct v4l2_capability   video_cap;     // include/linux/videodev.h
 
-    if(ioctl(fd, VIDIOC_QUERYCAP, &video_cap) == -1) {
+    if(xioctl(fd, VIDIOC_QUERYCAP, &video_cap) == -1) {
         qDebug() << "V4L2Grabber::initialization --> Error: Can't get capabilities";
         return false;
     }

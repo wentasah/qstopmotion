@@ -169,12 +169,16 @@ bool V4L2Grabber::setUp()
         pixelFormat = V4L2_PIX_FMT_YVU420M;
         break;
 #endif
+#ifdef V4L2_PIX_FMT_YUV420M
     case GrabberResolution::i420Format:
         pixelFormat = V4L2_PIX_FMT_YUV420M;
         break;
+#endif
+#ifdef V4L2_PIX_FMT_NV12M
     case GrabberResolution::nv12Format:
         pixelFormat = V4L2_PIX_FMT_NV12M;
         break;
+#endif
     default:
         goto Error;
     }
@@ -602,12 +606,16 @@ bool V4L2Grabber::enumerateCaptureFormats(int fd, ImageGrabberDevice *device)
               device->addResolution(GrabberResolution(outputWidth, outputHeight, GrabberResolution::yv12Format, false));
               break;
 #endif
+#ifdef V4L2_PIX_FMT_YUV420M
             case V4L2_PIX_FMT_YUV420M:
               device->addResolution(GrabberResolution(outputWidth, outputHeight, GrabberResolution::i420Format, false));
               break;
+#endif
+#ifdef V4L2_PIX_FMT_NV12M
             case V4L2_PIX_FMT_NV12M:
               device->addResolution(GrabberResolution(outputWidth, outputHeight, GrabberResolution::nv12Format, false));
               break;
+#endif
             default:
               device->addResolution(GrabberResolution(outputWidth, outputHeight, GrabberResolution::unknownFormat, false));
               break;

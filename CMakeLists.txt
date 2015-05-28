@@ -1,7 +1,7 @@
 ###############################################################################
 # CMake file for the qStopMotion project                                      #
 # (c) Ralf Lange, longsoft.de                                                 #
-# Last update: 2015-05-13                                                     #
+# Last update: 2015-05-28                                                     #
 #                                                                             #
 # Usage:                                                                      #
 #   * Qt-Creator (Windows, Linux)                                             #
@@ -904,7 +904,7 @@ SET(CPACK_RPM_PACKAGE_URL ${QSTOPMOTION_HOMEPAGE})
 # CPACK_RPM_PACKAGE_DESCRIPTION = CPACK_PACKAGE_DESCRIPTION_FILE
 # CPACK_RPM_COMPRESSION_TYPE
 # requireses must be in a aphabetic order
-SET(CPACK_RPM_PACKAGE_REQUIRES "glibc >= 2.14, ffmpeg >= 0.8.9, gstreamer >= 0.10.36, qt >= 4.8.2, libv4l >= 1.0.0, libgphoto2 >= 2.4.14")
+SET(CPACK_RPM_PACKAGE_REQUIRES "glibc >= 2.12, ffmpeg >= 0.8.9, gstreamer >= 0.10.29, qt >= 4.6.2, libv4l >= 0.6.3, libgphoto2 >= 2.4.7")
 # CPACK_RPM_PACKAGE_SUGGESTS
 # CPACK_RPM_PACKAGE_PROVIDES
 

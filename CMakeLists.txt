@@ -1,7 +1,7 @@
 ###############################################################################
 # CMake file for the qStopMotion project                                      #
 # (c) Ralf Lange, longsoft.de                                                 #
-# Last update: 2015-06-03                                                     #
+# Last update: 2015-06-11                                                     #
 #                                                                             #
 # Usage:                                                                      #
 #   * Qt-Creator (Windows, Linux)                                             #
@@ -37,7 +37,7 @@ SET(CMAKE_PROJECT_NAME "qstopmotion")
 SET(QSTOPMOTION_HOMEPAGE "http://www.qstopmotion.org")
 SET(QSTOPMOTION_VERSION_MAJOR "2")
 SET(QSTOPMOTION_VERSION_MINOR "0")
-SET(QSTOPMOTION_VERSION_PATCH "0")
+SET(QSTOPMOTION_VERSION_PATCH "1")
 
 SET(FILES_TO_TRANSLATE )
 
@@ -571,6 +571,7 @@ IF(WIN32)
     file(COPY ${GENERAL_FILES} DESTINATION ".")
 
     file(COPY ffmpeg DESTINATION ".")
+    file(COPY libav DESTINATION ".")
 
     file(COPY qtruntime DESTINATION ".")
 
@@ -757,6 +758,13 @@ IF(WIN32)
         DIRECTORY ffmpeg
         DESTINATION ${QSTOPMOTION_GENERALS_INSTALL_DIR}
     )
+
+    # installation of libav
+    install(
+        DIRECTORY libav
+        DESTINATION ${QSTOPMOTION_GENERALS_INSTALL_DIR}
+    )
+
     # installation of Qt runtime
     install(
         DIRECTORY qtruntime/
@@ -866,25 +874,29 @@ ENDIF(UNIX)
 ###############################################################################
 
 IF(WIN32)
-    # Exclude only Mercurial SMC files
+    # Exclude:
+    # * Mercurial SMC files
     SET(
         CPACK_SOURCE_IGNORE_FILES
         "${CPACK_SOURCE_IGNORE_FILES}"
         "${PROJECT_SOURCE_DIR}/.hg/"
         "${PROJECT_SOURCE_DIR}/.hgtags"
     )
-
 ELSE(WIN32)
-    # Exclude Mercurial SMC files, ffmpeg Windows binarys and Qt Windows runtime
+    # Exclude:
+    # * Mercurial SMC files
+    # * ffmpeg Windows binaries
+    # * libav Windows binaries
+    # * Qt Windows runtime
     SET(
         CPACK_SOURCE_IGNORE_FILES
         "${CPACK_SOURCE_IGNORE_FILES}"
         "${PROJECT_SOURCE_DIR}/.hg/"
-        "${PROJECT_SOURCE_DIR}/ffmpeg/"
-        "${PROJECT_SOURCE_DIR}/qtruntime/"
         "${PROJECT_SOURCE_DIR}/.hgtags"
+        "${PROJECT_SOURCE_DIR}/ffmpeg/"
+        "${PROJECT_SOURCE_DIR}/libav/"
+        "${PROJECT_SOURCE_DIR}/qtruntime/"
     )
-
 ENDIF(WIN32)
 
 ###############################################################################

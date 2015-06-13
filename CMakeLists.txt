@@ -1,7 +1,7 @@
 ###############################################################################
 # CMake file for the qStopMotion project                                      #
 # (c) Ralf Lange, longsoft.de                                                 #
-# Last update: 2015-06-11                                                     #
+# Last update: 2015-06-12                                                     #
 #                                                                             #
 # Usage:                                                                      #
 #   * Qt-Creator (Windows, Linux)                                             #
@@ -997,7 +997,7 @@ IF ("${LSB_DISTRIB}" MATCHES "Ubuntu|Debian")
     IF ("${LSB_DISTRIB}" MATCHES "Ubuntu14.04")
         SET(
             CPACK_DEBIAN_PACKAGE_DEPENDS
-            "libc6 (>=2.11), libavbin0 (>=7-1), gstreamer0.10-plugins-base (>=0.10.36), libqtcore4 (>=4.8.1), libqtgui4 (>=4.8.1), libqt4-xml (>=4.8.1), libv4l-0 (>=0.8.6), libgphoto2-2 (>=2.4.14), libgphoto2-port0 (>=2.4.14)"
+            "libc6 (>=2.11), libavbin0 (>=7-1), gstreamer0.10-plugins-base (>=0.10.36), libqtcore4 (>=4.8.1), libqtgui4 (>=4.8.1), libqt4-xml (>=4.8.1), libv4l-0 (>=0.8.6), libgphoto2-6 (>=2.5.3)"
         )
     ENDIF ("${LSB_DISTRIB}" MATCHES "Ubuntu14.04")
     IF ("${LSB_DISTRIB}" MATCHES "Debian6.*")
@@ -1015,7 +1015,7 @@ IF ("${LSB_DISTRIB}" MATCHES "Ubuntu|Debian")
     IF ("${LSB_DISTRIB}" MATCHES "Debian8.*")
         SET(
             CPACK_DEBIAN_PACKAGE_DEPENDS
-            "libc6 (>=2.11), libav-tools (>=6:11.3), gstreamer0.10-plugins-base (>=0.10.36), libqtcore4 (>=4.8.2), libqtgui4 (>=4.8.2), libqt4-xml (>=4.8.2), libv4l-0 (>=0.8.8), libgphoto2-6 (>=2.5.4)"
+            "libc6 (>=2.11), libav-tools (>=6:11.3), gstreamer0.10-plugins-base (>=0.10.36), libqtcore4 (>=4.8.2), libqtgui4 (>=4.8.2), libqt4-xml (>=4.8.2), libv4l-0 (>=0.8.8), libgphoto2-6 (>=2.5.3)"
         )
     ENDIF ("${LSB_DISTRIB}" MATCHES "Debian8.*")
     IF (NOT CPACK_DEBIAN_PACKAGE_DEPENDS)

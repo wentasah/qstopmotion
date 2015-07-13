@@ -121,7 +121,7 @@ void RecordingTab::makeGUI()
     videoSourceCombo->setFocusPolicy(Qt::NoFocus);
     connect(videoSourceCombo, SIGNAL(activated(int)), this, SLOT(changeVideoSource(int)));
     for (int deviceIndex = 0 ; deviceIndex < deviceSize ; deviceIndex++) {
-        videoSourceCombo->addItem(deviceNames[deviceIndex]);
+        videoSourceCombo->addItem(deviceNames[deviceIndex].toLatin1());
     }
 
     resolutionLabel = new QLabel("resolutionLabel");

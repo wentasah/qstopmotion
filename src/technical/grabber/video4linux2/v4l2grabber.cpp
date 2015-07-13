@@ -70,6 +70,7 @@ bool V4L2Grabber::initialization(QVector<ImageGrabberDevice*> &devices)
 
     PreferencesTool *pref = frontend->getPreferences();
     int              value;
+    int              deviceCount = 0;
 
     // Enumerate over all /dev/videoN (N = 0...x, x big enought)
     for (int i = 0; i < 10; i++) {
@@ -93,6 +94,7 @@ bool V4L2Grabber::initialization(QVector<ImageGrabberDevice*> &devices)
         if (ret) {
             // Add the new device to the device list
             devices.append(device);
+            deviceCount++;
 
             // Add the Controller to the new device
             if (pref->getIntegerPreference("preferences", "v4l2controller", value) == false) {
@@ -119,9 +121,15 @@ bool V4L2Grabber::initialization(QVector<ImageGrabberDevice*> &devices)
 
     qDebug() << "V4L2Grabber::initialization --> device count: " << devices.size();
 
+    if (0 == deviceCount) {
+        qDebug("V4L2Grabber::initialization --> End (false)");
+
+        return false;
+    }
+
     qDebug("V4L2Grabber::initialization --> End (true)");
 
-    return false;
+    return true;
 }
 
 

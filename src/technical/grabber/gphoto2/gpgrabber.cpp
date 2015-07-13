@@ -167,7 +167,8 @@ bool GphotoGrabber::initialization(QVector<ImageGrabberDevice*> &devices)
 
     qDebug() << "GphotoGrabber::initialization --> device count: " << devices.size();
 
-    qDebug("GphotoGrabber::initialization --> End");
+    qDebug("GphotoGrabber::initialization --> End (true)");
+
     return true;
 }
 

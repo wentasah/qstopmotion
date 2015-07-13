@@ -99,6 +99,7 @@ bool MfGrabber::initialization(QVector<ImageGrabberDevice*> &devices)
 
     PreferencesTool *pref = frontend->getPreferences();
     int              value;
+    int              deviceCount = 0;
 
     HRESULT             hr = S_OK;
     IMFAttributes*      pAttributes = NULL;
@@ -156,6 +157,7 @@ bool MfGrabber::initialization(QVector<ImageGrabberDevice*> &devices)
             if (SUCCEEDED(hr)) {
                 // Add the new device to the device list
                 devices.append(device);
+                deviceCount++;
 
                 // Add the Controller to the new device
                 if (pref->getIntegerPreference("preferences", "mediafoundationcontroller", value) == false) {
@@ -192,6 +194,12 @@ bool MfGrabber::initialization(QVector<ImageGrabberDevice*> &devices)
     }
 
     qDebug() << "MfGrabber::initialization --> device count: " << devices.size();
+
+    if (0 == deviceCount) {
+        qDebug("MfGrabber::initialization --> End (false)");
+
+        return false;
+    }
 
     qDebug("MfGrabber::initialization --> End (true)");
 

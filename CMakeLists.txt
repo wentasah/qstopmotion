@@ -31,7 +31,9 @@ cmake_minimum_required(VERSION 2.8.2)
 # General project settings
 ###############################################################################
 
-SET(CMAKE_BUILD_TYPE "Release")
+IF(NOT DEFINED CMAKE_BUILD_TYPE)
+    SET(CMAKE_BUILD_TYPE "Release")
+ENDIF(NOT DEFINED CMAKE_BUILD_TYPE)
 
 SET(CMAKE_PROJECT_NAME "qstopmotion")
 SET(QSTOPMOTION_HOMEPAGE "http://www.qstopmotion.org")

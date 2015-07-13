@@ -1,7 +1,12 @@
 Last Changes in the sources on qStopMotion
 ===============================================================================
 
-qStopMotion (2.0.0)
+qStopMotion (2.0.1)
+  * Update the DEB package generation. Fix most of the lintian messages.
+  * Update the RPM package generation.
+  * Video4Linux2 grabber can handle BGR image format.
+  * Add libav as the second encoder application.
+qStopMotion (2.0.0 (Beta))
   * Remove of the Gstreamer grabber from the Windows platform.
   * On Windows qStopMotion can be started as an portable application.
   * Video4Linux2 grabber on the Linux platform.

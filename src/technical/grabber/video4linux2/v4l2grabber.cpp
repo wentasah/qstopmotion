@@ -431,7 +431,8 @@ const QImage V4L2Grabber::getImage()
 
     // Create image
     image = QImage(QSize(width, height), (QImage::Format)imageFormat);
-    unsigned char* dst = const_cast<unsigned char*>(image.constBits());
+    unsigned char* dst = const_cast<unsigned char*>(image.bits());        // Up to Qt 4.6.x
+    // unsigned char* dst = const_cast<unsigned char*>(image.constBits());   // From Qt 4.7
     const unsigned char* src = const_cast<unsigned char*>(frameData);
     const unsigned char* const srcEnd = src + width * height * 4;
 

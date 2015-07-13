@@ -1,7 +1,7 @@
 ###############################################################################
 # CMake file for the qStopMotion project                                      #
 # (c) Ralf Lange, longsoft.de                                                 #
-# Last update: 2015-05-13                                                     #
+# Last update: 2015-06-12                                                     #
 #                                                                             #
 # Usage:                                                                      #
 #   * Qt-Creator (Windows, Linux)                                             #
@@ -31,11 +31,13 @@ cmake_minimum_required(VERSION 2.8.2)
 # General project settings
 ###############################################################################
 
+SET(CMAKE_BUILD_TYPE "Release")
+
 SET(CMAKE_PROJECT_NAME "qstopmotion")
 SET(QSTOPMOTION_HOMEPAGE "http://www.qstopmotion.org")
 SET(QSTOPMOTION_VERSION_MAJOR "2")
 SET(QSTOPMOTION_VERSION_MINOR "0")
-SET(QSTOPMOTION_VERSION_PATCH "0")
+SET(QSTOPMOTION_VERSION_PATCH "1")
 
 SET(FILES_TO_TRANSLATE )
 
@@ -65,7 +67,8 @@ ENDIF(CMAKE_BUILD_TYPE STREQUAL "Release")
 ###############################################################################
 
 # add all header files of the project to HEADERS
-set(HEADERS
+SET(
+    HEADERS
     src/frontends/observer.h
     src/frontends/frontend.h
     src/frontends/viewfacade.h
@@ -88,23 +91,26 @@ set(HEADERS
 )
 
 IF(WIN32)
-set(HEADERS
-    ${HEADERS}
-    src/technical/grabber/mediafoundation/mfcontroller.h
-    src/technical/grabber/mediafoundation/mfutil.h
-)
+    SET(
+        HEADERS
+        ${HEADERS}
+        src/technical/grabber/mediafoundation/mfcontroller.h
+        src/technical/grabber/mediafoundation/mfutil.h
+    )
 ENDIF(WIN32)
 
 IF(UNIX)
-set(HEADERS
-    ${HEADERS}
-    src/technical/grabber/gphoto2/gpcontroller.h
-    src/technical/grabber/video4linux2/v4l2controller.h
-)
+    SET(
+        HEADERS
+        ${HEADERS}
+        src/technical/grabber/gphoto2/gpcontroller.h
+        src/technical/grabber/video4linux2/v4l2controller.h
+    )
 ENDIF(UNIX)
 
 # add all header files of the project to MOC to MOC_HEADERS
-set(MOC_HEADERS
+SET(
+    MOC_HEADERS
     src/domain/domainfacade.h
     src/domain/animation/animationproject.h
     src/domain/animation/exposure.h
@@ -165,27 +171,30 @@ set(MOC_HEADERS
 )
 
 IF(WIN32)
-set(MOC_HEADERS
-    ${MOC_HEADERS}
-    src/technical/grabber/mediafoundation/mfgrabber.h
-)
+    SET(
+        MOC_HEADERS
+        ${MOC_HEADERS}
+        src/technical/grabber/mediafoundation/mfgrabber.h
+    )
 ENDIF(WIN32)
 
 IF(UNIX)
-set(MOC_HEADERS
-    ${MOC_HEADERS}
-    src/technical/grabber/gphoto2/gpgrabber.h
-#     src/technical/grabber/gstreamer/gstdevicegrabber.h
-    src/technical/grabber/gstreamer/gstgrabber.h
-    src/technical/grabber/gstreamer/videotestgrabber.h
-    src/technical/grabber/gstreamer/linux/dv1394grabber.h
-    src/technical/grabber/gstreamer/linux/usbgrabber.h
-    src/technical/grabber/video4linux2/v4l2grabber.h
-)
+    SET(
+        MOC_HEADERS
+        ${MOC_HEADERS}
+        src/technical/grabber/gphoto2/gpgrabber.h
+        # src/technical/grabber/gstreamer/gstdevicegrabber.h
+        src/technical/grabber/gstreamer/gstgrabber.h
+        src/technical/grabber/gstreamer/videotestgrabber.h
+        src/technical/grabber/gstreamer/linux/dv1394grabber.h
+        src/technical/grabber/gstreamer/linux/usbgrabber.h
+        src/technical/grabber/video4linux2/v4l2grabber.h
+    )
 ENDIF(UNIX)
 
 # add all source files to SOURCES
-set(SOURCES
+SET(
+    SOURCES
     src/main.cpp
     src/domain/domainfacade.cpp
     src/domain/animation/animationproject.cpp
@@ -260,29 +269,32 @@ set(SOURCES
 )
 
 IF(WIN32)
-set(SOURCES
-    ${SOURCES}
-    src/technical/grabber/mediafoundation/mfcontroller.cpp
-    src/technical/grabber/mediafoundation/mfgrabber.cpp
-    src/technical/grabber/mediafoundation/mfutil.cpp
-)
+    SET(
+        SOURCES
+        ${SOURCES}
+        src/technical/grabber/mediafoundation/mfcontroller.cpp
+        src/technical/grabber/mediafoundation/mfgrabber.cpp
+        src/technical/grabber/mediafoundation/mfutil.cpp
+    )
 ENDIF(WIN32)
 
 IF(UNIX)
-set(SOURCES
-    ${SOURCES}
-    src/technical/grabber/gphoto2/gpcontroller.cpp
-    src/technical/grabber/gphoto2/gpgrabber.cpp
-    src/technical/grabber/gstreamer/gstgrabber.cpp
-    src/technical/grabber/gstreamer/videotestgrabber.cpp
-    src/technical/grabber/gstreamer/linux/dv1394grabber.cpp
-    src/technical/grabber/gstreamer/linux/usbgrabber.cpp
-    src/technical/grabber/video4linux2/v4l2controller.cpp
-    src/technical/grabber/video4linux2/v4l2grabber.cpp
-)
+    SET(
+        SOURCES
+        ${SOURCES}
+        src/technical/grabber/gphoto2/gpcontroller.cpp
+        src/technical/grabber/gphoto2/gpgrabber.cpp
+        src/technical/grabber/gstreamer/gstgrabber.cpp
+        src/technical/grabber/gstreamer/videotestgrabber.cpp
+        src/technical/grabber/gstreamer/linux/dv1394grabber.cpp
+        src/technical/grabber/gstreamer/linux/usbgrabber.cpp
+        src/technical/grabber/video4linux2/v4l2controller.cpp
+        src/technical/grabber/video4linux2/v4l2grabber.cpp
+    )
 ENDIF(UNIX)
 
-set(TRANSLATIONS
+SET(
+    TRANSLATIONS
     translations/qstopmotion_da.ts
     translations/qstopmotion_de.ts
     translations/qstopmotion_fr.ts
@@ -303,28 +315,35 @@ set(TRANSLATIONS
 #    translations/qstopmotion_tr.ts
 )
 
-set(PIXMAP_FILES
-    qstopmotion.png       # RPM Icon is installed in a separate step
-    qstopmotion.xpm       # DEB Icon is installed in a separate step
-)
-
-set(GENERAL_FILES
+SET(
+    GENERAL_FILES
     AUTHORS               # The authors
     README.txt            # The readme for the users
     COPYING               # GPL2 License
     Changes.txt           # Change log
 )
 
-set(UNIX_FILES
-    qstopmotion.desktop   # .desktop is installed in a separate step Unix systems
-    qstopmotion.mime      # ???
-#     qstopmotion.1         # Linux man page
+SET(
+    UNIX_FILES
+    linux/qstopmotion.desktop   # .desktop is installed in a separate step Unix systems
+    linux/qstopmotion.mime      # ???
+    linux/qstopmotion.1         # Linux man page
+    linux/qstopmotion.1.gz      # Linux man page compressed
 )
 
-set(DEBIAN_FILES
-    debian/changelog             # changelog file
-    debian/copyright             # copyright file
-    debian/qstopmotion.menu      # .menu is installed in a separate step for Debian systems
+SET(
+    DEB_FILES
+    deb/qstopmotion.xpm       # DEB Icon is installed in a separate step
+    deb/changelog             # DEB changelog file
+    deb/changelog.gz          # DEB changelog file compressed
+    deb/copyright             # DEB copyright file
+    deb/qstopmotion.menu      # DEB .menu is installed in a separate step for Debian systems
+    deb/postinst              # DEB post installation script file, call update-menus
+)
+
+SET(
+    RPM_FILES
+    rpm/qstopmotion.png       # RPM Icon is installed in a separate step
 )
 
 ###############################################################################
@@ -407,20 +426,17 @@ ENDIF(UNIX)
 ###############################################################################
 
 IF(WIN32)
-
-    SET(MEDIAFOUNDATION_LIBRARIES
+    SET(
+        MEDIAFOUNDATION_LIBRARIES
         evr.lib          # ???
         mf.lib           # ???
         mfplat.lib       # ???
         mfuuid.lib       # ???
         mfreadwrite.lib  # Read and write media stream
-#         strmiids.lib      # Old Direct Show library
+        # strmiids.lib      # Old Direct Show library
     )
-
 ELSE(WIN32)
-
     SET(MEDIAFOUNDATION_LIBRARIES)
-
 ENDIF(WIN32)
 
 ###############################################################################
@@ -555,6 +571,7 @@ IF(WIN32)
     file(COPY ${GENERAL_FILES} DESTINATION ".")
 
     file(COPY ffmpeg DESTINATION ".")
+    file(COPY libav DESTINATION ".")
 
     file(COPY qtruntime DESTINATION ".")
 
@@ -567,8 +584,8 @@ ELSE(WIN32)
     file(COPY ${ICON_FILES} DESTINATION "share/qstopmotion/")
     file(COPY ${GENERAL_FILES} DESTINATION "share/qstopmotion/")
     file(COPY ${UNIX_FILES} DESTINATION "share/qstopmotion/")
-    file(COPY ${DEBIAN_FILES} DESTINATION "share/qstopmotion/debian/")
-    file(COPY ${FEDORA_FILES} DESTINATION "share/qstopmotion/rpm/")
+    file(COPY ${DEB_FILES} DESTINATION "share/qstopmotion/deb/")
+    file(COPY ${RPM_FILES} DESTINATION "share/qstopmotion/rpm/")
 
 ENDIF(WIN32)
 
@@ -622,6 +639,7 @@ ELSE(WIN32)
     set(QSTOPMOTION_MENUFILE_INSTALL_DIR "share/menu")
     set(QSTOPMOTION_PIXMAP_INSTALL_DIR "share/pixmaps")
     set(QSTOPMOTION_ICONS_INSTALL_DIR "share/icons")
+    set(QSTOPMOTION_MAN1_INSTALL_DIR "share/man/man1")
 
 ENDIF(WIN32)
 
@@ -629,12 +647,6 @@ ENDIF(WIN32)
 install(
     TARGETS qstopmotion
     RUNTIME DESTINATION ${QSTOPMOTION_BIN_INSTALL_DIR}
-)
-
-# installation of the general-purpose files
-install(
-    FILES ${GENERAL_FILES}
-    DESTINATION ${QSTOPMOTION_GENERALS_INSTALL_DIR}
 )
 
 # installation of the content of the grapics directory
@@ -655,11 +667,22 @@ install(
     DESTINATION ${QSTOPMOTION_TRANSLATIONS_INSTALL_DIR}
 )
 
+# installation only on Windows systems
+IF(WIN32)
+    message("Special task for deb package!")
+    
+    # installation of the general-purpose files
+    install(
+        FILES ${GENERAL_FILES}
+        DESTINATION ${QSTOPMOTION_GENERALS_INSTALL_DIR}
+    )
+ENDIF(WIN32)
+
 # installation only on UNIX systems
 IF(UNIX)
     # installation of the general unix files
     install(
-        FILES ${UNIX_FILES}
+        FILES "linux/qstopmotion.mime"
         DESTINATION ${QSTOPMOTION_GENERALS_INSTALL_DIR}
     )
 
@@ -669,34 +692,64 @@ IF(UNIX)
         DESTINATION ${QSTOPMOTION_ICONS_INSTALL_DIR}
     )
 
-    # installation of the icon file
-    install(
-        FILES "qstopmotion.png"
-        DESTINATION ${QSTOPMOTION_PIXMAP_INSTALL_DIR}
-    )
-
     # installation of the .desktop file
     install(
-        FILES "qstopmotion.desktop"
+        FILES "linux/qstopmotion.desktop"
         DESTINATION ${QSTOPMOTION_DESKTOP_INSTALL_DIR}
+    )
+
+    # installation of the .1.gz file
+    install(
+        FILES "linux/qstopmotion.1.gz"
+        DESTINATION ${QSTOPMOTION_MAN1_INSTALL_DIR}
     )
 ENDIF(UNIX)
 
-# installation on DEBIAN systems
+# installation on DEB systems
 IF(CPACK_BINARY_DEB)
-    message("Special task for Debian package!")
+    message("Special task for deb package!")
+    
     # installation of the icon file
     install(
-        FILES "debian/qstopmotion.xpm"
+        FILES "deb/qstopmotion.xpm"
         DESTINATION ${QSTOPMOTION_PIXMAP_INSTALL_DIR}
     )
 
     # installation of the .menufile file
     install(
-        FILES "debian/qstopmotion.menu"
+        FILES "deb/qstopmotion.menu"
         DESTINATION ${QSTOPMOTION_MENUFILE_INSTALL_DIR}
     )
+
+    # installation of the changelog file
+    install(
+        FILES "deb/changelog.gz"
+        DESTINATION ${QSTOPMOTION_MANUAL_INSTALL_DIR}
+    )
+
+    # installation of the copyright file
+    install(
+        FILES "deb/copyright"
+        DESTINATION ${QSTOPMOTION_MANUAL_INSTALL_DIR}
+    )
 ENDIF(CPACK_BINARY_DEB)
+
+# installation on RPM systems
+IF(CPACK_BINARY_RPM)
+    message("Special task for rpm package!")
+    
+    # installation of the general-purpose files
+    install(
+        FILES ${GENERAL_FILES}
+        DESTINATION ${QSTOPMOTION_GENERALS_INSTALL_DIR}
+    )
+
+    # installation of the icon file
+    install(
+        FILES "rpm/qstopmotion.png"
+        DESTINATION ${QSTOPMOTION_PIXMAP_INSTALL_DIR}
+    )
+ENDIF(CPACK_BINARY_RPM)
 
 # installation on Windows systems
 IF(WIN32)
@@ -705,6 +758,13 @@ IF(WIN32)
         DIRECTORY ffmpeg
         DESTINATION ${QSTOPMOTION_GENERALS_INSTALL_DIR}
     )
+
+    # installation of libav
+    install(
+        DIRECTORY libav
+        DESTINATION ${QSTOPMOTION_GENERALS_INSTALL_DIR}
+    )
+
     # installation of Qt runtime
     install(
         DIRECTORY qtruntime/
@@ -724,21 +784,67 @@ ENDIF(WIN32)
 # General packaging settings
 ###############################################################################
 
-SET(CPACK_PACKAGE_NAME "qstopmotion")
-SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "qStopMotion is a program to create stop motion animations.")
-SET(CPACK_PACKAGE_VENDOR "Ralf Lange, qstopmotion.org")
-SET(CPACK_PACKAGE_CONTACT "Ralf.Lange@qstopmotion.org")
-SET(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_CURRENT_SOURCE_DIR}/README.txt")
-SET(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/COPYING")
-SET(CPACK_PACKAGE_ICON "${CMAKE_CURRENT_SOURCE_DIR}\\\\graphics\\\\qstopmotion_logo_installer.bmp")
-SET(CPACK_PACKAGE_INSTALL_DIRECTORY "qStopMotion ${QSTOPMOTION_VERSION_MAJOR}.${QSTOPMOTION_VERSION_MINOR}.${QSTOPMOTION_VERSION_PATCH}")
-SET(CPACK_PACKAGE_EXECUTABLES "qstopmotion" "qStopMotion")
-SET(CPACK_STRIP_FILES "qstopmotion")
-SET(CPACK_SOURCE_STRIP_FILES "")
-SET(CPACK_PACKAGE_VERSION_MAJOR "${QSTOPMOTION_VERSION_MAJOR}")
-SET(CPACK_PACKAGE_VERSION_MINOR "${QSTOPMOTION_VERSION_MINOR}")
-SET(CPACK_PACKAGE_VERSION_PATCH "${QSTOPMOTION_VERSION_PATCH}")
-SET(CPACK_TOPLEVEL_TAG "/user")
+SET(
+    CPACK_PACKAGE_NAME
+    "qstopmotion"
+)
+SET(
+    CPACK_PACKAGE_DESCRIPTION_SUMMARY
+    "Create stop motion animations"
+)
+SET(
+    CPACK_PACKAGE_VENDOR
+    "Ralf Lange, qstopmotion.org"
+)
+SET(
+    CPACK_PACKAGE_CONTACT
+    "Ralf Lange <ralf.lange@qstopmotion.org>"
+)
+SET(
+    CPACK_PACKAGE_DESCRIPTION_FILE
+    "${CMAKE_CURRENT_SOURCE_DIR}/README.txt"
+)
+SET(
+    CPACK_RESOURCE_FILE_LICENSE
+    "${CMAKE_CURRENT_SOURCE_DIR}/COPYING"
+)
+SET(
+    CPACK_PACKAGE_ICON
+    "${CMAKE_CURRENT_SOURCE_DIR}\\\\graphics\\\\qstopmotion_logo_installer.bmp"
+)
+SET(
+    CPACK_PACKAGE_INSTALL_DIRECTORY
+    "qStopMotion ${QSTOPMOTION_VERSION_MAJOR}.${QSTOPMOTION_VERSION_MINOR}.${QSTOPMOTION_VERSION_PATCH}"
+)
+SET(
+    CPACK_PACKAGE_EXECUTABLES
+    "qstopmotion"
+    "qStopMotion"
+)
+SET(
+    CPACK_STRIP_FILES
+    "qstopmotion"
+)
+SET(
+    CPACK_SOURCE_STRIP_FILES
+    ""
+)
+SET(
+    CPACK_PACKAGE_VERSION_MAJOR
+    "${QSTOPMOTION_VERSION_MAJOR}"
+)
+SET(
+    CPACK_PACKAGE_VERSION_MINOR
+    "${QSTOPMOTION_VERSION_MINOR}"
+)
+SET(
+    CPACK_PACKAGE_VERSION_PATCH
+    "${QSTOPMOTION_VERSION_PATCH}"
+)
+SET(
+    CPACK_TOPLEVEL_TAG
+    "/user"
+)
 # CPACK_PACKAGE_VERSION - generated from major, minor, patch
 
 IF(UNIX)
@@ -752,9 +858,15 @@ IF(UNIX)
     string (STRIP "${LSB_RELEASE}" LSB_RELEASE)
     SET (LSB_DISTRIB "${LSB_ID}${LSB_RELEASE}")
     IF (NOT LSB_DISTRIB)
-    SET (LSB_DISTRIB "unix")
+        SET(
+            LSB_DISTRIB
+            "unix"
+        )
     ENDIF (NOT LSB_DISTRIB)
-    SET (CPACK_SYSTEM_NAME "${LSB_DISTRIB}-${CPACK_PACKAGE_ARCHITECTURE}")
+    SET(
+        CPACK_SYSTEM_NAME
+        "${LSB_DISTRIB}-${CPACK_PACKAGE_ARCHITECTURE}"
+    )
 ENDIF(UNIX)
 
 ###############################################################################
@@ -762,25 +874,29 @@ ENDIF(UNIX)
 ###############################################################################
 
 IF(WIN32)
-    # Exclude only Mercurial SMC files
+    # Exclude:
+    # * Mercurial SMC files
     SET(
         CPACK_SOURCE_IGNORE_FILES
         "${CPACK_SOURCE_IGNORE_FILES}"
         "${PROJECT_SOURCE_DIR}/.hg/"
         "${PROJECT_SOURCE_DIR}/.hgtags"
     )
-
 ELSE(WIN32)
-    # Exclude Mercurial SMC files, ffmpeg Windows binarys and Qt Windows runtime
+    # Exclude:
+    # * Mercurial SMC files
+    # * ffmpeg Windows binaries
+    # * libav Windows binaries
+    # * Qt Windows runtime
     SET(
         CPACK_SOURCE_IGNORE_FILES
         "${CPACK_SOURCE_IGNORE_FILES}"
         "${PROJECT_SOURCE_DIR}/.hg/"
-        "${PROJECT_SOURCE_DIR}/ffmpeg/"
-        "${PROJECT_SOURCE_DIR}/qtruntime/"
         "${PROJECT_SOURCE_DIR}/.hgtags"
+        "${PROJECT_SOURCE_DIR}/ffmpeg/"
+        "${PROJECT_SOURCE_DIR}/libav/"
+        "${PROJECT_SOURCE_DIR}/qtruntime/"
     )
-
 ENDIF(WIN32)
 
 ###############################################################################
@@ -788,7 +904,10 @@ ENDIF(WIN32)
 ###############################################################################
 
 # Installing Microsoft run time libraries in the same directory as the executables
-SET(CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS_SKIP TRUE)
+SET(
+    CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS_SKIP
+    TRUE
+)
 INCLUDE(InstallRequiredSystemLibraries)
 INSTALL(
     PROGRAMS ${CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS}
@@ -799,8 +918,14 @@ INSTALL(
 # sure there is at least one set of four (4) backlasshes.
   
 # Set the icons for the installer and the uninstaller
-SET(CPACK_NSIS_MUI_ICON "${CMAKE_CURRENT_SOURCE_DIR}/graphics/qstopmotion.ico")
-SET(CPACK_NSIS_MUI_UNIICON "${CMAKE_CURRENT_SOURCE_DIR}/graphics/qstopmotion.ico")
+SET(
+    CPACK_NSIS_MUI_ICON
+    "${CMAKE_CURRENT_SOURCE_DIR}/graphics/qstopmotion.ico"
+)
+SET(
+    CPACK_NSIS_MUI_UNIICON
+    "${CMAKE_CURRENT_SOURCE_DIR}/graphics/qstopmotion.ico"
+)
 # Set the project name on the first page
 # Use CPACK_PACKAGE_INSTALL_DIRECTORY
 # Set the bitmap for the second and following pages
@@ -808,9 +933,15 @@ SET(CPACK_NSIS_MUI_UNIICON "${CMAKE_CURRENT_SOURCE_DIR}/graphics/qstopmotion.ico
 # Set the licence text for the second page
 # Use CPACK_RESOURCE_FILE_LICENSE
 # Enable modify path environment variable on third page
-SET(CPACK_NSIS_MODIFY_PATH ON)
+SET(
+    CPACK_NSIS_MODIFY_PATH
+    ON
+)
 # Set the executable name for the desktop icon on third page
-SET(CPACK_CREATE_DESKTOP_LINKS qstopmotion)
+SET(
+    CPACK_CREATE_DESKTOP_LINKS
+    qstopmotion
+)
 # Create shortcuts in the start menu
 # Use CPACK_PACKAGE_EXECUTABLES
 SET(CPACK_NSIS_MENU_LINKS
@@ -823,7 +954,10 @@ SET(CPACK_NSIS_MENU_LINKS
 # SET(CPACK_NSIS_PACKAGE_NAME "qStopMotion")
 # SET(CPACK_NSIS_HELP_LINK "http:\\\\\\\\www.qstopmotion.org")
 # SET(CPACK_NSIS_URL_INFO_ABOUT "http:\\\\\\\\www.longsoft.de")
-SET(CPACK_NSIS_CONTACT ${CPACK_PACKAGE_VENDOR})
+SET(
+    CPACK_NSIS_CONTACT
+    ${CPACK_PACKAGE_VENDOR}
+)
 
 # Run the application on the finish page
 # SET(CPACK_NSIS_MUI_FINISHPAGE_RUN "qstopmotion.exe"
@@ -835,41 +969,85 @@ SET(CPACK_NSIS_CONTACT ${CPACK_PACKAGE_VENDOR})
 IF ("${LSB_DISTRIB}" MATCHES "Ubuntu|Debian")
     # We need to alter the architecture names as per distro rules
     IF ("${CPACK_PACKAGE_ARCHITECTURE}" MATCHES "i[3-6]86")
-        SET (CPACK_PACKAGE_ARCHITECTURE i386)
+        SET(
+            CPACK_PACKAGE_ARCHITECTURE
+            "i386"
+        )
     ENDIF ("${CPACK_PACKAGE_ARCHITECTURE}" MATCHES "i[3-6]86")
     IF ("${CPACK_PACKAGE_ARCHITECTURE}" MATCHES "x86_64")
-        SET (CPACK_PACKAGE_ARCHITECTURE amd64)
+        SET(
+            CPACK_PACKAGE_ARCHITECTURE
+            "amd64"
+        )
     ENDIF ("${CPACK_PACKAGE_ARCHITECTURE}" MATCHES "x86_64")
-    SET (CPACK_SYSTEM_NAME "${LSB_DISTRIB}-${CPACK_PACKAGE_ARCHITECTURE}")
+    SET(
+        CPACK_SYSTEM_NAME
+        "${LSB_DISTRIB}-${CPACK_PACKAGE_ARCHITECTURE}"
+    )
 
     # Set the dependencies based on the distro version
     # thus only one package is build you must list here *any* depending libraries,
     # even if they are only used in one module
     IF ("${LSB_DISTRIB}" MATCHES "Ubuntu12.04")
-        SET(CPACK_DEBIAN_PACKAGE_DEPENDS "libc6 (>=2.11), ffmpeg (>=0.8.9), gstreamer0.10-plugins-base (>=0.10.36), libqtcore4 (>=4.8.1), libqtgui4 (>=4.8.1), libqt4-xml (>=4.8.1), libv4l-0 (>=0.8.6), libgphoto2-2 (>=2.4.11), libgphoto2-port0 (>=2.4.11)")
+        SET(
+            CPACK_DEBIAN_PACKAGE_DEPENDS
+            "libc6 (>=2.11), ffmpeg (>=0.8.9), gstreamer0.10-plugins-base (>=0.10.36), libqtcore4 (>=4.8.1), libqtgui4 (>=4.8.1), libqt4-xml (>=4.8.1), libv4l-0 (>=0.8.6), libgphoto2-2 (>=2.4.11), libgphoto2-port0 (>=2.4.11)"
+        )
     ENDIF ("${LSB_DISTRIB}" MATCHES "Ubuntu12.04")
     IF ("${LSB_DISTRIB}" MATCHES "Ubuntu14.04")
-        SET(CPACK_DEBIAN_PACKAGE_DEPENDS "libc6 (>=2.11), libavbin0 (>=7-1), gstreamer0.10-plugins-base (>=0.10.36), libqtcore4 (>=4.8.1), libqtgui4 (>=4.8.1), libqt4-xml (>=4.8.1), libv4l-0 (>=0.8.6), libgphoto2-2 (>=2.4.14), libgphoto2-port0 (>=2.4.14)")
+        SET(
+            CPACK_DEBIAN_PACKAGE_DEPENDS
+            "libc6 (>=2.11), libavbin0 (>=7-1), gstreamer0.10-plugins-base (>=0.10.36), libqtcore4 (>=4.8.1), libqtgui4 (>=4.8.1), libqt4-xml (>=4.8.1), libv4l-0 (>=0.8.6), libgphoto2-6 (>=2.5.3)"
+        )
     ENDIF ("${LSB_DISTRIB}" MATCHES "Ubuntu14.04")
     IF ("${LSB_DISTRIB}" MATCHES "Debian6.*")
-        SET(CPACK_DEBIAN_PACKAGE_DEPENDS "libc6 (>=2.11), ffmpeg (>=0.8.9), gstreamer0.10-plugins-base (>=0.10.36), libqtcore4 (>=4.8.2), libqtgui4 (>=4.8.2), libqt4-xml (>=4.8.2), libv4l-0 (>=0.8.8), libgphoto2-2 (>=2.4.14), libgphoto2-port0 (>=2.4.14)")
+        SET(
+            CPACK_DEBIAN_PACKAGE_DEPENDS
+            "libc6 (>=2.11), ffmpeg (>=0.8.9), gstreamer0.10-plugins-base (>=0.10.36), libqtcore4 (>=4.8.2), libqtgui4 (>=4.8.2), libqt4-xml (>=4.8.2), libv4l-0 (>=0.8.8), libgphoto2-2 (>=2.4.14), libgphoto2-port0 (>=2.4.14)"
+        )
     ENDIF ("${LSB_DISTRIB}" MATCHES "Debian6.*")
     IF ("${LSB_DISTRIB}" MATCHES "Debian7.*")
-        SET(CPACK_DEBIAN_PACKAGE_DEPENDS "libc6 (>=2.11), ffmpeg (>=0.8.9), gstreamer0.10-plugins-base (>=0.10.36), libqtcore4 (>=4.8.2), libqtgui4 (>=4.8.2), libqt4-xml (>=4.8.2), libv4l-0 (>=0.8.8), libgphoto2-2 (>=2.4.14), libgphoto2-port0 (>=2.4.14)")
+        SET(
+            CPACK_DEBIAN_PACKAGE_DEPENDS
+            "libc6 (>=2.11), ffmpeg (>=0.8.9), gstreamer0.10-plugins-base (>=0.10.36), libqtcore4 (>=4.8.2), libqtgui4 (>=4.8.2), libqt4-xml (>=4.8.2), libv4l-0 (>=0.8.8), libgphoto2-2 (>=2.4.14), libgphoto2-port0 (>=2.4.14)"
+        )
     ENDIF ("${LSB_DISTRIB}" MATCHES "Debian7.*")
+    IF ("${LSB_DISTRIB}" MATCHES "Debian8.*")
+        SET(
+            CPACK_DEBIAN_PACKAGE_DEPENDS
+            "libc6 (>=2.11), libav-tools (>=6:11.3), gstreamer0.10-plugins-base (>=0.10.36), libqtcore4 (>=4.8.2), libqtgui4 (>=4.8.2), libqt4-xml (>=4.8.2), libv4l-0 (>=0.8.8), libgphoto2-6 (>=2.5.3)"
+        )
+    ENDIF ("${LSB_DISTRIB}" MATCHES "Debian8.*")
     IF (NOT CPACK_DEBIAN_PACKAGE_DEPENDS)
         MESSAGE ("WARNING: ${LSB_DISTRIB} not supported yet.\nPlease set deps in CMakeLists.txt before packaging.")
     ENDIF (NOT CPACK_DEBIAN_PACKAGE_DEPENDS)
 ENDIF ("${LSB_DISTRIB}" MATCHES "Ubuntu|Debian")
+MESSAGE("CPACK_DEBIAN_PACKAGE_DEPENDS: ${CPACK_DEBIAN_PACKAGE_DEPENDS}")
 
 # Mandatory
 # CPACK_DEBIAN_PACKAGE_NAME = CPACK_PACKAGE_NAME
+MESSAGE("CPACK_DEBIAN_PACKAGE_NAME: ${CPACK_DEBIAN_PACKAGE_NAME}")
 # CPACK_DEBIAN_PACKAGE_VERSION = CPACK_PACKAGE_VERSION
+MESSAGE("CPACK_DEBIAN_PACKAGE_VERSION: ${CPACK_DEBIAN_PACKAGE_VERSION}")
 # CPACK_DEBIAN_PACKAGE_ARCHITECTURE = dpkg output       # dpkg --print-architecture ???
+MESSAGE("CPACK_DEBIAN_PACKAGE_ARCHITECTURE: ${CPACK_DEBIAN_PACKAGE_ARCHITECTURE}")
 # CPACK_DEBIAN_PACKAGE_MAINTAINER = CPACK_PACKAGE_CONTACT
-# CPACK_DEBIAN_PACKAGE_DESCRIPTION = CPACK_PACKAGE_DESCRIPTION_SUMMARY
-SET(CPACK_DEBIAN_PACKAGE_SECTION "graphics")
-SET(CPACK_DEBIAN_PACKAGE_PRIORITY "optional")
+MESSAGE("CPACK_DEBIAN_PACKAGE_MAINTAINER: ${CPACK_DEBIAN_PACKAGE_MAINTAINER}")
+SET(
+    CPACK_DEBIAN_PACKAGE_DESCRIPTION
+    "create stop motion animations\n qStopMotion can be used to create stop motion animations."
+)
+MESSAGE("CPACK_DEBIAN_PACKAGE_DESCRIPTION: ${CPACK_DEBIAN_PACKAGE_DESCRIPTION}")
+SET(
+    CPACK_DEBIAN_PACKAGE_SECTION
+    "graphics"
+)
+MESSAGE("CPACK_DEBIAN_PACKAGE_SECTION: ${CPACK_DEBIAN_PACKAGE_SECTION}")
+SET(
+    CPACK_DEBIAN_PACKAGE_PRIORITY
+    "optional"
+)
+MESSAGE("CPACK_DEBIAN_PACKAGE_PRIORITY: ${CPACK_DEBIAN_PACKAGE_PRIORITY}")
 
 # Options
 
@@ -882,29 +1060,56 @@ SET(CPACK_DEBIAN_PACKAGE_HOMEPAGE ${QSTOPMOTION_HOMEPAGE})
 # CPACK_DEBIAN_PACKAGE_CONFLICTS
 # CPACK_DEBIAN_PACKAGE_PROVIDES
 # CPACK_DEBIAN_PACKAGE_REPLACES
+SET(
+    CPACK_DEBIAN_PACKAGE_CONTROL_EXTRA
+    "${CMAKE_SOURCE_DIR}/deb/postinst"
+)
 
 ###############################################################################
 # RPM package - Linux only (Fedora, Red Hat, CentOS, Mandriva, ...)
 ###############################################################################
 
 # Mandatory
-# CPACK_RPM_PACKAGE_SUMMARY = CPACK_PACKAGE_DESCRIPTION_SUMMARY
+SET(
+    CPACK_RPM_PACKAGE_SUMMARY
+    ${CPACK_PACKAGE_DESCRIPTION_SUMMARY}
+)
+MESSAGE("CPACK_RPM_PACKAGE_SUMMARY: ${CPACK_RPM_PACKAGE_SUMMARY}")
 # CPACK_RPM_PACKAGE_NAME = CPACK_PACKAGE_NAME
+MESSAGE("CPACK_RPM_PACKAGE_NAME: ${CPACK_RPM_PACKAGE_NAME}")
 # CPACK_RPM_PACKAGE_VERSION = CPACK_PACKAGE_VERSION
+MESSAGE("CPACK_RPM_PACKAGE_VERSION: ${CPACK_RPM_PACKAGE_VERSION}")
 # SET(CPACK_RPM_PACKAGE_RELEASE "1")
-SET(CPACK_RPM_PACKAGE_LICENSE "GPLv2")
-SET(CPACK_RPM_PACKAGE_GROUP "Applications/Multimedia")
+MESSAGE("CPACK_RPM_PACKAGE_RELEASE: ${CPACK_RPM_PACKAGE_RELEASE}")
+SET(
+    CPACK_RPM_PACKAGE_LICENSE
+    "GPLv2"
+)
+MESSAGE("CPACK_RPM_PACKAGE_LICENSE: ${CPACK_RPM_PACKAGE_LICENSE}")
+SET(
+    CPACK_RPM_PACKAGE_GROUP
+    "Applications/Multimedia"
+)
+MESSAGE("CPACK_RPM_PACKAGE_GROUP: ${CPACK_RPM_PACKAGE_GROUP}")
 # CPACK_RPM_PACKAGE_VENDOR = CPACK_PACKAGE_VENDOR
-
+MESSAGE("CPACK_RPM_PACKAGE_VENDOR: ${CPACK_RPM_PACKAGE_VENDOR}")
 # CPACK_RPM_PACKAGE_MAINTAINER = CPACK_PACKAGE_CONTACT
+MESSAGE("CPACK_RPM_PACKAGE_MAINTAINER: ${CPACK_RPM_PACKAGE_MAINTAINER}")
 
 # Options
 # SET(CPACK_RPM_PACKAGE_ARCHITECTURE "noarch")
-SET(CPACK_RPM_PACKAGE_URL ${QSTOPMOTION_HOMEPAGE})
+SET(
+    CPACK_RPM_PACKAGE_URL
+    ${QSTOPMOTION_HOMEPAGE}
+)
 # CPACK_RPM_PACKAGE_DESCRIPTION = CPACK_PACKAGE_DESCRIPTION_FILE
 # CPACK_RPM_COMPRESSION_TYPE
 # requireses must be in a aphabetic order
-SET(CPACK_RPM_PACKAGE_REQUIRES "glibc >= 2.14, ffmpeg >= 0.8.9, gstreamer >= 0.10.36, qt >= 4.8.2, libv4l >= 1.0.0, libgphoto2 >= 2.4.14")
+SET(
+    CPACK_RPM_PACKAGE_REQUIRES
+    "glibc >= 2.12, ffmpeg >= 0.8.9, gstreamer >= 0.10.29, qt >= 4.6.2, libv4l >= 0.6.3, libgphoto2 >= 2.4.7"
+)
+MESSAGE("CPACK_RPM_PACKAGE_REQUIRES: ${CPACK_RPM_PACKAGE_REQUIRES}")
 # CPACK_RPM_PACKAGE_SUGGESTS
 # CPACK_RPM_PACKAGE_PROVIDES
 

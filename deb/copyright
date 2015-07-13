@@ -1,0 +1,11 @@
+Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: qstopmotion
+Upstream-Contact: Ralf Lange <ralf.lange@qstopmotion.org>
+Source: http://sourceforge.net/projects/qstopmotion/files/
+
+Files: *
+Copyright: 2008-2015 Ralf Lange <ralf.lange@qstopmotion.org>
+License: GPL-2
+ On Debian systems, the full text of the GNU General Public
+ License version 2 can be found in the file
+ `/usr/share/common-licenses/GPL-2'.

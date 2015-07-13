@@ -1,6 +1,0 @@
-?package(qstopmotion):\
-  needs="X11"\
-  section="Apps/Video"\
-  titel="qStopMotion"\
-  command="/usr/share/bin/qstopmotion"\
-  icon="/usr/share/pixmaps/qstopmotion.png"

@@ -1,17 +1,26 @@
 Last Changes in the sources on qStopMotion
 ===============================================================================
 
-qStopMotion (2.0.1)
+qStopMotion (2.0.2) - 2015-09-09
+  * Update the Ubuntu package generation. Fix most of the lintian messages.
+  * Add the CentOS package generation.
+  * Bug fixing.
+qStopMotion (2.0.1) - 2015-06-11
   * Update the DEB package generation. Fix most of the lintian messages.
   * Update the RPM package generation.
   * Video4Linux2 grabber can handle BGR image format.
   * Add libav as the second encoder application.
+<<<<<<< local
+qStopMotion (2.0.0 (Beta)) - 2015-05-21
+=======
 qStopMotion (2.0.0 (Beta))
+>>>>>>> other
   * Remove of the Gstreamer grabber from the Windows platform.
   * On Windows qStopMotion can be started as an portable application.
   * Video4Linux2 grabber on the Linux platform.
   * Camera controller for the Video4Linux2 grabber.
-qStopMotion (1.1.0), Last Windows Gstreamer release
+qStopMotion (1.1.0) - 2014-12-09
+  * Last Windows Gstreamer release
   * Media Foundation grabber on the Windows platform.
   * Camera controller dialog to control all posible camera features.
   * Camera controller for the Media Foundation grabber.
@@ -20,32 +29,32 @@ qStopMotion (1.1.0), Last Windows Gstreamer release
   * Update of the user interface. Preferences of the project in the file menue,
     Properties of the application in the edit menu.
   * Optional grid in the live image view.
-qStopMotion (1.0.1), Bugfix release
+qStopMotion (1.0.1) - 2012-05-15
   * Fix Bugs
   * Full implementation of undo and redo functionality.
   * Full implementation of the recovery functionality.
   * Call gimp works on all platforms.
   * French localization.
-qStopMotion (1.0.0)
+qStopMotion (1.0.0) - 2012-03-12
   * Fix Bugs
-qStopMotion (0.9.11, release candidat 3)
+qStopMotion (0.9.11, release candidat 3) - 2012-02-21
   * Fix Bugs
   * Add packaging for Linux DEB package.
   * Update the German language translation.
-qStopMotion (0.9.10, release candidat 2)
+qStopMotion (0.9.10, release candidat 2) - 2012-02-10
   * Fix Bugs
   * Add the Qt runtime to the windows installer.
   * Add the ffmpeg runtime to the windows installer.
   * Add the download and installation of the 'GStreamer OSS Build' to the windows installer.
   * Now all actions are in the undo list. Undo is not possible.
-qStopMotion (0.9.9, release candidat)
+qStopMotion (0.9.9, release candidat) - 2012-01-03
   * Fix Bugs
   * Feature freeze for version 1.0.0.
   * Conzentration of the image grabber functionality in the technical/grabber classes.
   * Change the selection of the video device from device type list to device name list.
   * Handling of more than one device per device type.
   * Check source code quality with "valgrind".
-qStopMotion (0.9.8)
+qStopMotion (0.9.8) - 2011-10-21
   * Fix Bugs
   * Selection of the capture butten functionality in the general tab of the
     preferences dialog in the preferences menu.

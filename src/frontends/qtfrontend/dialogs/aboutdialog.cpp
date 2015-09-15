@@ -48,7 +48,7 @@ AboutDialog::AboutDialog(Frontend *f,
     aboutLayout->addWidget(new QLabel(
                           "<p>" + tr("This is the qStopMotion application for creating stop motion animations.") + "</p>"
                           "<p>" + tr("Version: ") + PreferencesTool::applicationVersion + "</p>"
-                          "<p>&copy; 2010-2014, Ralf Lange, longsoft.de </p>"
+                          "<p>&copy; 2010-2015, Ralf Lange, longsoft.de </p>"
                           "<hr />"));
     aboutLayout->addWidget(new QLabel(
                           "<p>" + tr("qStopMotion is a fork of stopmotion for linux.") + "</p>"

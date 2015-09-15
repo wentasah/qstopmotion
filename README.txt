@@ -9,7 +9,7 @@ REQUIREMENTS
 You need the following libraries installed to use qStopMotion:
     - Qt4
     - ffmpeg
-    - gtreamer (Linux only)
+    - gstreamer or libav (Linux only)
     - gphoto2 (Linux only)
     - video4linux2 (Linux only)
 
@@ -26,7 +26,9 @@ Install the following packages:
     - CMake
     - G++ Compiler
     - Qt4 development files
-    - gstreamer development files
+    - gstreamer or libav development files
+    - gphoto2 development files
+    - video4linux2 development files
 Download the source tar ball and unpack it in a separate directory.
 Change to the source directory and call:
     - cmake -DCMAKE_BUILD_TYPE=Release .
@@ -50,4 +52,5 @@ graphics, code, +++
 Your help is very much appreciated.
 
 ralf.lange@qstopmotion.org
-2014-12-15
+2015-09-09
+

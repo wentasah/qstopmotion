@@ -361,7 +361,7 @@
 "src/technical/grabber/imagegrabberthread.h": {"timestamp": 1352751913.71},
 "src/technical/grabber/mediafoundation/mfcontroller.cpp": {"timestamp": 1417811895.22},
 "src/technical/grabber/mediafoundation/mfcontroller.h": {"timestamp": 1417811895.22},
-"src/technical/grabber/mediafoundation/mfgrabber.cpp": {"timestamp": 1436075530.31},
+"src/technical/grabber/mediafoundation/mfgrabber.cpp": {"timestamp": 1442428543.51},
 "src/technical/grabber/mediafoundation/mfgrabber.h": {"timestamp": 1422453275.17},
 "src/technical/grabber/mediafoundation/mfutil.cpp": {"timestamp": 1417503909.14},
 "src/technical/grabber/mediafoundation/mfutil.h": {"timestamp": 1417504024.24},

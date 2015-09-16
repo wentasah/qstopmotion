@@ -99,17 +99,13 @@ bool MfGrabber::initialization(QVector<ImageGrabberDevice*> &devices)
 
     PreferencesTool *pref = frontend->getPreferences();
     int              value;
-    int              deviceCount = 0;
 
     HRESULT             hr = S_OK;
     IMFAttributes*      pAttributes = NULL;
     IMFActivate**       ppDevices = NULL;
-    UINT32              deviceCount;
-    int                 device_size;
+    UINT32              deviceCount = 0;
     ImageGrabberDevice* device = NULL;
     MfController*       deviceController = NULL;
-
-    device_size = devices.size();
 
     qDebug() << "MfGrabber::initialization --> Check devices of mfwvideosrc";
 
@@ -122,7 +118,7 @@ bool MfGrabber::initialization(QVector<ImageGrabberDevice*> &devices)
     // Search all possible devices
     //---------------------------------------------------------------------
 
-    hr = MFCreateAttributes(&pAttributes, 1);
+    hr = MFCreateAttributes(&pAttributes, 2);
     if (!SUCCEEDED(hr))
     {
         qDebug() << "MfGrabber::initialization --> Error: cannot create video input device attributes";
@@ -157,7 +153,6 @@ bool MfGrabber::initialization(QVector<ImageGrabberDevice*> &devices)
             if (SUCCEEDED(hr)) {
                 // Add the new device to the device list
                 devices.append(device);
-                deviceCount++;
 
                 // Add the Controller to the new device
                 if (pref->getIntegerPreference("preferences", "mediafoundationcontroller", value) == false) {

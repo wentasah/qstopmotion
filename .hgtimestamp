@@ -272,6 +272,7 @@
 "src/frontends/qtfrontend/dialogs/licence.h": {"timestamp": 1352751913.51},
 "src/frontends/qtfrontend/dialogs/startdialog.cpp": {"timestamp": 1448136857.4},
 "src/frontends/qtfrontend/dialogs/startdialog.h": {"timestamp": 1448136874.05},
+"src/frontends/qtfrontend/elements/clickablelabel.cpp": {"timestamp": 1448136900.86},
 "src/frontends/qtfrontend/elements/clickablelabel.h": {"timestamp": 1448136916.29},
 "src/frontends/qtfrontend/elements/flexiblelineedit.cpp": {"timestamp": 1448136934.77},
 "src/frontends/qtfrontend/elements/flexiblelineedit.h": {"timestamp": 1448136952.58},

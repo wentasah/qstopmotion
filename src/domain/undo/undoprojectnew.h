@@ -25,6 +25,7 @@
 
 #include <domain/undo/undobase.h>
 
+
 /**
  * The UndoProjectNew class for undoing newProject(...) calls to the project.
  */

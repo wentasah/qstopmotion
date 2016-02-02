@@ -23,18 +23,17 @@
 #ifndef SCENE_H
 #define SCENE_H
 
+#include <QDomDocument>
+#include <QDomElement>
+#include <QString>
+#include <QVector>
+
 #include "domain/animation/animationproject.h"
 #include "domain/animation/exposure.h"
 #include "domain/animation/take.h"
 #include "frontends/frontend.h"
 #include "technical/audio/audiodriver.h"
 #include "technical/audio/audioformat.h"
-
-#include <QtCore/QObject>
-#include <QtCore/QString>
-#include <QtCore/QVector>
-#include <QtXml/QDomDocument>
-#include <QtXml/QDomElement>
 
 class AnimationProject;
 class Scene;

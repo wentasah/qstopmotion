@@ -20,6 +20,9 @@
 
 #include "undosceneselect.h"
 
+#include <QDebug>
+#include <QLatin1String>
+
 
 UndoSceneSelect::UndoSceneSelect(DomainFacade *df,
                                  int           nsi)
@@ -27,7 +30,7 @@ UndoSceneSelect::UndoSceneSelect(DomainFacade *df,
 {
     oldSceneIndex = facade->getActiveSceneIndex();
     newSceneIndex = nsi;
-    undoFlag = FALSE;
+    undoFlag = false;
     setText(QString(tr("Select scene (%1)-->(%2)"))
             .arg(oldSceneIndex).arg(newSceneIndex));
 }
@@ -40,7 +43,7 @@ UndoSceneSelect::~UndoSceneSelect()
 
 void UndoSceneSelect::undo()
 {
-    qDebug("UndoSceneSelect::undo --> Start");
+    qDebug() << "UndoSceneSelect::undo --> Start";
 
     AnimationProject *animationProject = facade->getAnimationProject();
     Frontend *frontend = facade->getFrontend();
@@ -75,15 +78,15 @@ void UndoSceneSelect::undo()
     animationProject->decAnimationChanges();
 
     facade->writeHistoryEntry(QLatin1String("undo"));
-    undoFlag = TRUE;
+    undoFlag = true;
 
-    qDebug("UndoSceneSelect::undo --> Start");
+    qDebug() << "UndoSceneSelect::undo --> Start";
 }
 
 
 void UndoSceneSelect::redo()
 {
-    qDebug("UndoSceneSelect::redo --> Start");
+    qDebug() << "UndoSceneSelect::redo --> Start";
 
     AnimationProject *animationProject = facade->getAnimationProject();
     Frontend *frontend = facade->getFrontend();
@@ -119,7 +122,7 @@ void UndoSceneSelect::redo()
 
     if (undoFlag) {
         facade->writeHistoryEntry(QLatin1String("redo"));
-        undoFlag = FALSE;
+        undoFlag = false;
     }
     else {
         facade->writeHistoryEntry(QString("%1|%2|%3")
@@ -128,5 +131,5 @@ void UndoSceneSelect::redo()
                                   .arg(newSceneIndex));
     }
 
-    qDebug("UndoSceneSelect::redo --> End");
+    qDebug() << "UndoSceneSelect::redo --> End";
 }

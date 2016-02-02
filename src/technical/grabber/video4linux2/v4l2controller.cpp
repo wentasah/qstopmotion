@@ -43,12 +43,11 @@
 
 #include "v4l2controller.h"
 
-// #include <sys/ioctl.h>
+#include <QDebug>
+
 #include <libv4l2.h>
 #include <fcntl.h>
 #include <errno.h>
-
-#include <QtCore/QtDebug>
 
 /**************************************************************************
  * Default implementation of the grabber controller functions.
@@ -57,22 +56,22 @@
 V4L2Controller::V4L2Controller(int cap)
     : GrabberController(cap)
 {
-    qDebug("V4L2Controller::Constructor --> Start");
+    qDebug() << "V4L2Controller::Constructor --> Start";
 
     // errno = -1;
 
     grabber = NULL;
     grabberDevice = NULL;
 
-    qDebug("V4L2Controller::Constructor --> End");
+    qDebug() << "V4L2Controller::Constructor --> End";
 }
 
 
 V4L2Controller::~V4L2Controller()
 {
-    qDebug("V4L2Controller::Destructor --> Start (Empty)");
+    qDebug() << "V4L2Controller::Destructor --> Start (Empty)";
 
-    // qDebug("V4L2Controller::Destructor --> End");
+    // qDebug() << "V4L2Controller::Destructor --> End";
 }
 
 
@@ -84,12 +83,12 @@ ImageGrabber* V4L2Controller::getImageGrabber()
 
 bool V4L2Controller::initialization(ImageGrabber* ig, ImageGrabberDevice* igd)
 {
-    qDebug("V4L2Controller::initialization --> Start");
+    qDebug() << "V4L2Controller::initialization --> Start";
 
     grabber = (V4L2Grabber*)ig;
     grabberDevice = igd;
 
-    qDebug("V4L2Controller::initialization --> Open the device ...");
+    qDebug() << "V4L2Controller::initialization --> Open the device ...";
 
     // fd = v4l2_open(grabberDevice->getDeviceId().toAscii(), O_RDWR | O_NONBLOCK, 0);
     fd = grabber->getFd();
@@ -121,7 +120,7 @@ bool V4L2Controller::initialization(ImageGrabber* ig, ImageGrabberDevice* igd)
         return false;
     }
 
-    qDebug("V4L2Controller::initialization --> End (Successful)");
+    qDebug() << "V4L2Controller::initialization --> End (Successful)";
 
     return true;
 }
@@ -163,7 +162,7 @@ int V4L2Controller::query_ioctl(int hdevice, int current_ctrl, struct v4l2_query
 
 int V4L2Controller::xioctl(int fd, int IOCTL_X, void *arg)
 {
-    // qDebug("V4L2Controller::xioctl --> Start");
+    // qDebug() << "V4L2Controller::xioctl --> Start");
 
     int ret = 0;
     int tries = IOCTL_RETRY;
@@ -177,16 +176,16 @@ int V4L2Controller::xioctl(int fd, int IOCTL_X, void *arg)
         qDebug() << "V4L2Controller::xioctl --> v4l2_ioctl (" << IOCTL_X << ") retried " << IOCTL_RETRY << " times - giving up: " << strerror(errno) << ")";
     }
 
-    // qDebug("V4L2Controller::xioctl --> End");
+    // qDebug() << "V4L2Controller::xioctl --> End");
     return (ret);
 }
 
 
 void V4L2Controller::enumerate_menu ()
 {
-    qDebug("V4L2Controller::enumerate_menu --> Start");
+    qDebug() << "V4L2Controller::enumerate_menu --> Start";
 
-    qDebug("V4L2Controller::enumerate_menu --> Menu items:");
+    qDebug() << "V4L2Controller::enumerate_menu --> Menu items:";
 
     memset (&querymenu, 0, sizeof (querymenu));
     querymenu.id = queryctrl.id;
@@ -197,7 +196,7 @@ void V4L2Controller::enumerate_menu ()
         }
     }
 
-    qDebug("V4L2Controller::enumerate_menu --> End");
+    qDebug() << "V4L2Controller::enumerate_menu --> End";
 }
 
 
@@ -255,7 +254,7 @@ void V4L2Controller::getControlFlag(GrabberControlCapabilities *caps)
 
 bool V4L2Controller::setBaseCapabilities()
 {
-    qDebug("V4L2Controller::setBaseCapabilities --> Start");
+    qDebug() << "V4L2Controller::setBaseCapabilities --> Start";
 
     int                         ret = 0;
     int                         currentctrl = 0;
@@ -267,7 +266,7 @@ bool V4L2Controller::setBaseCapabilities()
     if (ret == 0) {
         // The driver supports the V4L2_CTRL_FLAG_NEXT_CTRL flag
 
-        qDebug("V4L2Controller::setBaseCapabilities --> Start V4L2_CTRL_FLAG_NEXT_CTRL");
+        qDebug() << "V4L2Controller::setBaseCapabilities --> Start V4L2_CTRL_FLAG_NEXT_CTRL";
 
         queryctrl.id = 0 | V4L2_CTRL_FLAG_NEXT_CTRL;
         currentctrl = 0;
@@ -449,14 +448,14 @@ next_control:
 
         }
 
-        qDebug("V4L2Controller::setBaseCapabilities --> End V4L2_CTRL_FLAG_NEXT_CTRL");
+        qDebug() << "V4L2Controller::setBaseCapabilities --> End V4L2_CTRL_FLAG_NEXT_CTRL";
 
         return true;
     }
 
     // The driver not supports the V4L2_CTRL_FLAG_NEXT_CTRL flag
 
-    qDebug("V4L2Controller::setBaseCapabilities --> Start V4L2_CID_BASE");
+    qDebug() << "V4L2Controller::setBaseCapabilities --> Start V4L2_CID_BASE";
 
     for (currentctrl = V4L2_CID_BASE; currentctrl < V4L2_CID_LASTP1; currentctrl++) {
         queryctrl.id = currentctrl;
@@ -553,9 +552,9 @@ next_control:
 
     }
 
-    qDebug("V4L2Controller::setBaseCapabilities --> End V4L2_CID_BASE");
+    qDebug() << "V4L2Controller::setBaseCapabilities --> End V4L2_CID_BASE";
 
-    qDebug("V4L2Controller::setBaseCapabilities --> End");
+    qDebug() << "V4L2Controller::setBaseCapabilities --> End";
 
     return true;
 }
@@ -563,7 +562,7 @@ next_control:
 
 bool V4L2Controller::setPrivateCapabilities()
 {
-    qDebug("V4L2Controller::setPrivateCapabilities --> Start");
+    qDebug() << "V4L2Controller::setPrivateCapabilities --> Start";
 
     int ret = 0;
 
@@ -622,7 +621,7 @@ bool V4L2Controller::setPrivateCapabilities()
 
     }
 
-    qDebug("V4L2Controller::setPrivateCapabilities --> End");
+    qDebug() << "V4L2Controller::setPrivateCapabilities --> End";
 
     return true;
 }
@@ -632,7 +631,7 @@ bool V4L2Controller::setPrivateCapabilities()
  */
 int V4L2Controller::setCtrlValue(GrabberControlCapabilities *caps, int value)
 {
-    qDebug("V4L2Controller::setCtrlValue --> Start");
+    qDebug() << "V4L2Controller::setCtrlValue --> Start";
 
     int ret = 0;
 
@@ -676,7 +675,7 @@ int V4L2Controller::setCtrlValue(GrabberControlCapabilities *caps, int value)
     // update real value
     // get_ctrl(hdevice, control_list, id, NULL);
 
-    qDebug("V4L2Controller::setCtrlValue --> End");
+    qDebug() << "V4L2Controller::setCtrlValue --> End";
     return (ret);
 }
 
@@ -686,7 +685,7 @@ int V4L2Controller::setCtrlValue(GrabberControlCapabilities *caps, int value)
  */
 int V4L2Controller::getCtrlValue(GrabberControlCapabilities *caps, int &value)
 {
-    qDebug("V4L2Controller::setCtrlValue --> Start");
+    qDebug() << "V4L2Controller::setCtrlValue --> Start";
 
     int ret = 0;
 
@@ -745,7 +744,7 @@ int V4L2Controller::getCtrlValue(GrabberControlCapabilities *caps, int &value)
     // update_ctrl_flags(control_list, id);
     // update_widget_state(control_list, all_data);
 
-    qDebug("V4L2Controller::setCtrlValue --> End");
+    qDebug() << "V4L2Controller::setCtrlValue --> End";
     return (ret);
 }
 
@@ -779,11 +778,11 @@ int V4L2Controller::getBrightness()
 
 void V4L2Controller::setBrightness(int b)
 {
-    qDebug("V4L2Controller::setBrightness --> Start");
+    qDebug() << "V4L2Controller::setBrightness --> Start";
 
     setCtrlValue(getBrightnessCaps(), b);
 
-    qDebug("V4L2Controller::setBrightness --> End");
+    qDebug() << "V4L2Controller::setBrightness --> End";
 }
 
 /**************************************************************************
@@ -810,11 +809,11 @@ int V4L2Controller::getContrast()
 
 void V4L2Controller::setContrast(int c)
 {
-    qDebug("V4L2Controller::setContrast --> Start");
+    qDebug() << "V4L2Controller::setContrast --> Start";
 
     setCtrlValue(getContrastCaps(), c);
 
-    qDebug("V4L2Controller::setContrast --> End");
+    qDebug() << "V4L2Controller::setContrast --> End";
 }
 
 /**************************************************************************
@@ -841,11 +840,11 @@ int V4L2Controller::getSaturation()
 
 void V4L2Controller::setSaturation(int s)
 {
-    qDebug("V4L2Controller::setSaturation --> Start");
+    qDebug() << "V4L2Controller::setSaturation --> Start";
 
     setCtrlValue(getSaturationCaps(), s);
 
-    qDebug("V4L2Controller::setSaturation --> End");
+    qDebug() << "V4L2Controller::setSaturation --> End";
 }
 
 /**************************************************************************
@@ -872,11 +871,11 @@ int V4L2Controller::getHue()
 
 void V4L2Controller::setHue(int h)
 {
-    qDebug("V4L2Controller::setHue --> Start");
+    qDebug() << "V4L2Controller::setHue --> Start";
 
     setCtrlValue(getHueCaps(), h);
 
-    qDebug("V4L2Controller::setHue --> End");
+    qDebug() << "V4L2Controller::setHue --> End";
 }
 
 /**************************************************************************
@@ -903,11 +902,11 @@ int V4L2Controller::getGamma()
 
 void V4L2Controller::setGamma(int g)
 {
-    qDebug("V4L2Controller::setGamma --> Start");
+    qDebug() << "V4L2Controller::setGamma --> Start";
 
     setCtrlValue(getGammaCaps(), g);
 
-    qDebug("V4L2Controller::setGamma --> End");
+    qDebug() << "V4L2Controller::setGamma --> End";
 }
 
 /**************************************************************************
@@ -934,11 +933,11 @@ int V4L2Controller::getSharpness()
 
 void V4L2Controller::setSharpness(int s)
 {
-    qDebug("V4L2Controller::setSharpness --> Start");
+    qDebug() << "V4L2Controller::setSharpness --> Start";
 
     setCtrlValue(getSharpnessCaps(), s);
 
-    qDebug("V4L2Controller::setSharpness --> End");
+    qDebug() << "V4L2Controller::setSharpness --> End";
 }
 
 /**************************************************************************
@@ -965,11 +964,11 @@ int V4L2Controller::getBacklight()
 
 void V4L2Controller::setBacklight(int b)
 {
-    qDebug("V4L2Controller::setBacklight --> Start");
+    qDebug() << "V4L2Controller::setBacklight --> Start";
 
     setCtrlValue(getBacklightCaps(), b);
 
-    qDebug("V4L2Controller::setBacklight --> End");
+    qDebug() << "V4L2Controller::setBacklight --> End";
 }
 
 /**************************************************************************
@@ -996,11 +995,11 @@ int V4L2Controller::getWhite()
 
 void V4L2Controller::setWhite(int w)
 {
-    qDebug("V4L2Controller::setWhite --> Start");
+    qDebug() << "V4L2Controller::setWhite --> Start";
 
     setCtrlValue(getWhiteCaps(), w);
 
-    qDebug("V4L2Controller::setWhite --> End");
+    qDebug() << "V4L2Controller::setWhite --> End";
 }
 
 /**************************************************************************
@@ -1027,11 +1026,11 @@ int V4L2Controller::getGain()
 
 void V4L2Controller::setGain(int g)
 {
-    qDebug("V4L2Controller::setGain --> Start");
+    qDebug() << "V4L2Controller::setGain --> Start";
 
     setCtrlValue(getGainCaps(), g);
 
-    qDebug("V4L2Controller::setGain --> End");
+    qDebug() << "V4L2Controller::setGain --> End";
 }
 
 /**************************************************************************
@@ -1058,11 +1057,11 @@ int V4L2Controller::getColor()
 
 void V4L2Controller::setColor(int c)
 {
-    qDebug("V4L2Controller::setColor --> Start");
+    qDebug() << "V4L2Controller::setColor --> Start";
 
     setCtrlValue(getColorCaps(), c);
 
-    qDebug("V4L2Controller::setColor --> End");
+    qDebug() << "V4L2Controller::setColor --> End";
 }
 
 /**************************************************************************
@@ -1095,11 +1094,11 @@ int V4L2Controller::getExposure()
 
 void V4L2Controller::setExposure(int e)
 {
-    qDebug("V4L2Controller::setExposure --> Start");
+    qDebug() << "V4L2Controller::setExposure --> Start";
 
     setCtrlValue(getExposureCaps(), e);
 
-    qDebug("V4L2Controller::setExposure --> End");
+    qDebug() << "V4L2Controller::setExposure --> End";
 }
 
 /**************************************************************************
@@ -1130,13 +1129,13 @@ int V4L2Controller::getZoom()
 
 void V4L2Controller::setZoom(int z)
 {
-    qDebug("V4L2Controller::setZoom --> Start");
+    qDebug() << "V4L2Controller::setZoom --> Start";
 
     setCtrlValue(getZoomCaps(), z);
 
     setCtrlValue(getZoomCaps(), z);
 
-    qDebug("V4L2Controller::setZoom --> End");
+    qDebug() << "V4L2Controller::setZoom --> End";
 }
 
 /**************************************************************************
@@ -1163,11 +1162,11 @@ int V4L2Controller::getFocus()
 
 void V4L2Controller::setFocus(int f)
 {
-    qDebug("V4L2Controller::setFocus --> Start");
+    qDebug() << "V4L2Controller::setFocus --> Start";
 
     setCtrlValue(getFocusCaps(), f);
 
-    qDebug("V4L2Controller::setFocus --> End");
+    qDebug() << "V4L2Controller::setFocus --> End";
 }
 
 /**************************************************************************

@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2014 by                                                *
+ *  Copyright (C) 2005-2015 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -20,23 +20,22 @@
 
 #include "generalwidget.h"
 
+#include <QDebug>
+#include <QColorDialog>
+#include <QGridLayout>
+#include <QHeaderView>
+#include <QInputDialog>
+#include <QLabel>
+
 #include "domain/domainfacade.h"
 #include "frontends/qtfrontend/elements/flexiblelineedit.h"
 #include "technical/preferencestool.h"
-
-#include <QtCore/QtDebug>
-
-#include <QtGui/QColorDialog>
-#include <QtGui/QGridLayout>
-#include <QtGui/QHeaderView>
-#include <QtGui/QInputDialog>
-#include <QtGui/QLabel>
 
 
 GeneralWidget::GeneralWidget(Frontend *f, QWidget *parent)
     : QWidget(parent)
 {
-    qDebug("GeneralWidget::Constructor --> Start");
+    qDebug() << "GeneralWidget::Constructor --> Start";
 
     frontend         = f;
 
@@ -67,7 +66,7 @@ GeneralWidget::GeneralWidget(Frontend *f, QWidget *parent)
 
     makeGUI();
 
-    qDebug("GeneralWidget::Constructor --> End");
+    qDebug() << "GeneralWidget::Constructor --> End";
 }
 
 
@@ -172,13 +171,13 @@ void GeneralWidget::makeGUI()
 
     setLayout(mainLayout);
 
-    qDebug("GeneralWidget::makeGUI --> End");
+    qDebug() << "GeneralWidget::makeGUI --> End";
 }
 
 
 void GeneralWidget::initialize()
 {
-    qDebug("GeneralWidget::initialize --> Start");
+    qDebug() << "GeneralWidget::initialize --> Start";
 
     PreferencesTool *pref = frontend->getPreferences();
     int              value;
@@ -238,23 +237,23 @@ void GeneralWidget::initialize()
     }
     gridColorButton->setText(actualGridColor.name());
 
-    qDebug("GeneralWidget::initialize --> End");
+    qDebug() << "GeneralWidget::initialize --> End";
 }
 
 /*
 void GeneralWidget::resizeEvent(QResizeEvent *event)
 {
-    qDebug("GeneralWidget::resizeEvent --> Start");
+    qDebug() << "GeneralWidget::resizeEvent --> Start";
 
     QWidget::resizeEvent(event);
 
-    qDebug("GeneralWidget::resizeEvent --> End");
+    qDebug() << "GeneralWidget::resizeEvent --> End";
 }
 */
 
 void GeneralWidget::apply()
 {
-    qDebug("GeneralWidget::apply --> Start");
+    qDebug() << "GeneralWidget::apply --> Start";
 
     PreferencesTool *pref = frontend->getPreferences();
 
@@ -325,13 +324,13 @@ void GeneralWidget::apply()
         actualGridColor = newGridColor;
     }
 
-    qDebug("GeneralWidget::apply --> End");
+    qDebug() << "GeneralWidget::apply --> End";
 }
 
 
 void GeneralWidget::reset()
 {
-    qDebug("GeneralWidget::reset --> Start");
+    qDebug() << "GeneralWidget::reset --> Start";
 
     changeLanguage(actualLanguage);
     frontend->changeCaptureButtonFunction(actualButtonFunction);
@@ -351,7 +350,7 @@ void GeneralWidget::reset()
     horizontalGridCheck->setChecked(actualHorizontalGrid);
     horizontalGridSpin->setValue(actualHorizontalSpin);
 
-    qDebug("GeneralWidget::reset --> End");
+    qDebug() << "GeneralWidget::reset --> End";
 }
 
 

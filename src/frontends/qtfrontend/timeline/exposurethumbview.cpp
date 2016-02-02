@@ -22,33 +22,33 @@
 
 #include "exposurethumbview.h"
 
-#include "domain/domainfacade.h"
+#include <QDebug>
+#include <QList>
+#include <QMimeData>
+#include <QStringList>
+#include <QUrl>
+#include <QApplication>
+#include <QDrag>
+#include <QDropEvent>
+#include <QMouseEvent>
+#include <QPainter>
+#include <QPaintEvent>
+#include <QPixmap>
 
-#include <QtCore/QtDebug>
-#include <QtCore/QList>
-#include <QtCore/QMimeData>
-#include <QtCore/QStringList>
-#include <QtCore/QUrl>
-#include <QtGui/QApplication>
-#include <QtGui/QDrag>
-#include <QtGui/QDropEvent>
-#include <QtGui/QMouseEvent>
-#include <QtGui/QPainter>
-#include <QtGui/QPaintEvent>
-#include <QtGui/QPixmap>
+#include "domain/domainfacade.h"
 
 
 ExposureThumbView::ExposureThumbView(TimeLine *line, QWidget *parent, int number, const char *name)
     : ThumbView(line, parent, number, name)
 {
-    // qDebug("ExposureThumbView::Constructor --> Start");
+    // qDebug() << "ExposureThumbView::Constructor --> Start");
 
     setObjectName("ExposureThumbView");
     stringNumber = QString("%1").arg(number + 1);
     textWidth = 5 + stringNumber.length() * 8;
     selected = false;
 
-    // qDebug("ExposureThumbView::Constructor --> End");
+    // qDebug() << "ExposureThumbView::Constructor --> End");
 }
 
 
@@ -59,7 +59,7 @@ ExposureThumbView::~ExposureThumbView()
 
 void ExposureThumbView::mousePressEvent(QMouseEvent * e)
 {
-    qDebug("ExposureThumbView::mousePressEvent --> Empty");
+    qDebug() << "ExposureThumbView::mousePressEvent --> Empty";
 /*
     if (e->button() == Qt::LeftButton) {
         if (!timeLine->isSelecting()) {
@@ -80,14 +80,14 @@ void ExposureThumbView::mousePressEvent(QMouseEvent * e)
         }
     }
 
-    qDebug("ExposureThumbView::mousePressEvent --> End");
+    qDebug() << "ExposureThumbView::mousePressEvent --> End";
     */
 }
 
 
 void ExposureThumbView::mouseReleaseEvent(QMouseEvent * e)
 {
-    qDebug("ExposureThumbView::mouseReleaseEvent --> Start");
+    qDebug() << "ExposureThumbView::mouseReleaseEvent --> Start";
 
     if (e->button() == Qt::LeftButton) {
         if (!timeLine->isSelecting()) {
@@ -107,13 +107,13 @@ void ExposureThumbView::mouseReleaseEvent(QMouseEvent * e)
         }
     }
 
-    qDebug("ExposureThumbView::mouseReleaseEvent --> End");
+    qDebug() << "ExposureThumbView::mouseReleaseEvent --> End";
 }
 
 
 void ExposureThumbView::mouseMoveEvent(QMouseEvent *me)
 {
-    qDebug("ExposureThumbView::mouseMoveEvent --> Start");
+    qDebug() << "ExposureThumbView::mouseMoveEvent --> Start";
 
     if (me->buttons() & Qt::LeftButton) {
         int distance = (me->pos() - dragPos).manhattanLength();
@@ -123,17 +123,17 @@ void ExposureThumbView::mouseMoveEvent(QMouseEvent *me)
     }
     QLabel::mouseMoveEvent(me);
 
-    qDebug("ExposureThumbView::mouseMoveEvent --> End");
+    qDebug() << "ExposureThumbView::mouseMoveEvent --> End";
 }
 
 
 void ExposureThumbView::mouseDoubleClickEvent(QMouseEvent *)
 {
-    qDebug("ExposureThumbView::mouseDoubleClickEvent --> Start");
+    qDebug() << "ExposureThumbView::mouseDoubleClickEvent --> Start";
 
     // timeLine->showPreferencesMenu();
 
-    qDebug("ExposureThumbView::mouseDoubleClickEvent --> End");
+    qDebug() << "ExposureThumbView::mouseDoubleClickEvent --> End";
 }
 
 
@@ -160,7 +160,7 @@ void ExposureThumbView::paintEvent(QPaintEvent * paintEvent)
 
 void ExposureThumbView::startDrag()
 {
-    qDebug("ExposureThumbView::startDrag --> Start");
+    qDebug() << "ExposureThumbView::startDrag --> Start";
 
     // If the drag ends on a scene this tells the scene that it is frames who are
     // being moved.
@@ -189,20 +189,20 @@ void ExposureThumbView::startDrag()
     //Qt::DropAction dropAction = drag->start(Qt::CopyAction | Qt::MoveAction);
     drag->start(Qt::MoveAction);
 
-    qDebug("ExposureThumbView::startDrag --> End");
+    qDebug() << "ExposureThumbView::startDrag --> End";
 }
 
 
 void ExposureThumbView::setThumbIndex(int index)
 {
-    qDebug("ExposureThumbView::setNumber --> Start");
+    qDebug() << "ExposureThumbView::setNumber --> Start";
 
     this->thumbIndex = index;
     stringNumber = QString("%1").arg(index + 1);
     textWidth = 5 + stringNumber.length() * 8;
     update();
 
-    qDebug("ExposureThumbView::setNumber --> End");
+    qDebug() << "ExposureThumbView::setNumber --> End";
 }
 
 
@@ -227,20 +227,20 @@ void ExposureThumbView::setSelected(bool selected)
 // This doesn't work between applications of this type because of the if-check (event->source() != 0).
 void ExposureThumbView::contentsDropped(QDropEvent * /* event */)
 {
-    qDebug("ExposureThumbView::contentsDropped --> Start");
+    qDebug() << "ExposureThumbView::contentsDropped --> Start";
 
     timeLine->getFrontend()->showInformation("Not Implemented", "ExposureThumbView::contentsDropped not implemented.");
 
     /*
     if ((event->source() != 0) && (timeLine->getMovingScene() == -1)) {
-        qDebug("Moving picture");
+        qDebug() << "Moving picture");
         int selectionFrame = timeLine->getSelectionFrame();
         int activeFrame = timeLine->getFrontend()->getProject()->getActiveExposureIndex();
         int highend = (selectionFrame > activeFrame) ? selectionFrame : activeFrame;
         int lowend = (selectionFrame < activeFrame) ? selectionFrame : activeFrame;
         timeLine->getFrontend()->getProject()->moveFrames(lowend, highend, thumbIndex);
     } else {
-        qDebug("Adding picture(s)");
+        qDebug() << "Adding picture(s)");
         timeLine->getFrontend()->getProject()->selectExposureToUndo(timeLine->getFrontend()->getProject()->getActiveSceneIndex(),
                                                                     timeLine->getFrontend()->getProject()->getActiveTakeIndex(),
                                                                     thumbIndex);
@@ -264,6 +264,5 @@ void ExposureThumbView::contentsDropped(QDropEvent * /* event */)
     }
     */
 
-    qDebug("ExposureThumbView::contentsDropped --> End");
+    qDebug() << "ExposureThumbView::contentsDropped --> End";
 }
-

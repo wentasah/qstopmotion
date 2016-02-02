@@ -20,10 +20,10 @@
 
 #include "frontends/qtfrontend/toolbar.h"
 
-#include <QtCore/QtDebug>
-#include <QtGui/QHeaderView>
-#include <QtGui/QInputDialog>
-#include <QtGui/QLabel>
+#include <QDebug>
+#include <QHeaderView>
+#include <QInputDialog>
+#include <QLabel>
 
 
 ToolBar::ToolBar(Frontend     *f,
@@ -554,7 +554,7 @@ void ToolBar::playNextFrame()
 
 void ToolBar::toolBarStateChanged()
 {
-    qDebug("ToolBar::toolBarStateChanged --> Start");
+    qDebug() << "ToolBar::toolBarStateChanged --> Start";
 
     switch (actualState) {
     case toolBarNothing:
@@ -599,7 +599,7 @@ void ToolBar::toolBarStateChanged()
         break;
     }
 
-    qDebug("ToolBar::toolBarStateChanged --> End");
+    qDebug() << "ToolBar::toolBarStateChanged --> End";
 }
 
 /*

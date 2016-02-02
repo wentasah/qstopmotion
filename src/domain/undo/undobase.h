@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2012 by                                                *
+ *  Copyright (C) 2005-2015 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -23,9 +23,10 @@
 #ifndef UNDOBASE_H
 #define UNDOBASE_H
 
+#include <QUndoCommand>
+
 #include <domain/domainfacade.h>
 
-#include <QtGui/QUndoCommand>
 
 /**
  * The UndoBase class for general undo functionality.

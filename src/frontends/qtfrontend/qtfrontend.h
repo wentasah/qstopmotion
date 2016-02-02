@@ -23,19 +23,22 @@
 #ifndef QTFRONTEND_H
 #define QTFRONTEND_H
 
+#include <QTimer>
+#include <QObject>
+#include <QApplication>
+#include <QLabel>
+#include <QLoggingCategory>
+
 #include "frontends/frontend.h"
 #include "frontends/qtfrontend/mainwindowgui.h"
-
-#include <QtCore/QTimer>
-#include <QtCore/QObject>
-#include <QtGui/QApplication>
-#include <QtGui/QLabel>
 
 
 struct AudioFile {
     unsigned int belongsTo;
     QString filename;
 };
+
+Q_DECLARE_LOGGING_CATEGORY(qstopmotion)
 
 
 /**
@@ -46,6 +49,7 @@ struct AudioFile {
 class QtFrontend : public QObject, public Frontend
 {
     Q_OBJECT
+
 public:
 
     /**
@@ -619,7 +623,6 @@ public:
      * Open the start dialog
      */
     void startDialog();
-
 
 protected slots:
 

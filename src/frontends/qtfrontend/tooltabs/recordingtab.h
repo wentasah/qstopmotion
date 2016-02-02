@@ -21,18 +21,18 @@
 #ifndef RECORDINGTAB_H
 #define RECORDINGTAB_H
 
+#include <QComboBox>
+#include <QGridLayout>
+#include <QGroupBox>
+#include <QLabel>
+#include <QPushButton>
+#include <QShortcut>
+#include <QSlider>
+#include <QTimer>
+#include <QWidget>
+
 #include "frontends/frontend.h"
 #include "frontends/qtfrontend/toolbar.h"
-
-#include <QtCore/QTimer>
-#include <QtGui/QWidget>
-#include <QtGui/QComboBox>
-#include <QtGui/QPushButton>
-#include <QtGui/QGroupBox>
-#include <QtGui/QGridLayout>
-#include <QtGui/QSlider>
-#include <QtGui/QLabel>
-#include <QtGui/QShortcut>
 
 
 /**
@@ -42,6 +42,7 @@
 class RecordingTab : public QWidget
 {
     Q_OBJECT
+
 public:
     /**
      * Sets up the tab.

@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2012-2014 by                                                *
+ *  Copyright (C) 2012-2015 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -20,7 +20,8 @@
 
 #include "grabbercontroller.h"
 
-#include <QtCore/QtDebug>
+#include <QDebug>
+
 
 /**************************************************************************
  * Default implementation of the grabber controller functions.
@@ -28,19 +29,19 @@
 
 GrabberController::GrabberController(int cap)
 {
-    qDebug("GrabberController::Constructor --> Start");
+    qDebug() << "GrabberController::Constructor --> Start";
 
     controllerCap = cap;
 
-    qDebug("GrabberController::Constructor --> End");
+    qDebug() << "GrabberController::Constructor --> End";
 }
 
 
 GrabberController::~GrabberController()
 {
-    qDebug("GrabberController::Destructor --> Start (Empty)");
+    qDebug() << "GrabberController::Destructor --> Start (Empty)";
 
-    // qDebug("GrabberController::Destructor --> End");
+    // qDebug() << "GrabberController::Destructor --> End";
 }
 
 

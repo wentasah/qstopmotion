@@ -20,6 +20,9 @@
 
 #include "undotakeselect.h"
 
+#include <QDebug>
+#include <QLatin1String>
+
 
 UndoTakeSelect::UndoTakeSelect(DomainFacade *df,
                                int           nsi,
@@ -30,7 +33,7 @@ UndoTakeSelect::UndoTakeSelect(DomainFacade *df,
     oldTakeIndex = facade->getActiveTakeIndex();
     newSceneIndex = nsi;
     newTakeIndex = nti;
-    undoFlag = FALSE;
+    undoFlag = false;
     setText(QString(tr("Select take (%1,%2)-->(%3,%4)"))
             .arg(oldSceneIndex).arg(oldTakeIndex)
             .arg(newSceneIndex).arg(newTakeIndex));
@@ -44,7 +47,7 @@ UndoTakeSelect::~UndoTakeSelect()
 
 void UndoTakeSelect::undo()
 {
-    qDebug("UndoTakeSelect::undo --> Start");
+    qDebug() << "UndoTakeSelect::undo --> Start";
 
     AnimationProject *animationProject = facade->getAnimationProject();
     Frontend *frontend = facade->getFrontend();
@@ -70,15 +73,15 @@ void UndoTakeSelect::undo()
     animationProject->decAnimationChanges();
 
     facade->writeHistoryEntry(QLatin1String("undo"));
-    undoFlag = TRUE;
+    undoFlag = true;
 
-    qDebug("UndoTakeSelect::undo --> End");
+    qDebug() << "UndoTakeSelect::undo --> End";
 }
 
 
 void UndoTakeSelect::redo()
 {
-    qDebug("UndoTakeSelect::redo --> Start");
+    qDebug() << "UndoTakeSelect::redo --> Start";
 
     AnimationProject *animationProject = facade->getAnimationProject();
     Frontend *frontend = facade->getFrontend();
@@ -105,7 +108,7 @@ void UndoTakeSelect::redo()
 
     if (undoFlag) {
         facade->writeHistoryEntry(QLatin1String("redo"));
-        undoFlag = FALSE;
+        undoFlag = false;
     }
     else {
         facade->writeHistoryEntry(QString("%1|%2|%3|%4|%5")
@@ -116,5 +119,5 @@ void UndoTakeSelect::redo()
                                   .arg(newTakeIndex));
     }
 
-    qDebug("UndoTakeSelect::redo --> End");
+    qDebug() << "UndoTakeSelect::redo --> End";
 }

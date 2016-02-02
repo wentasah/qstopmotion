@@ -23,6 +23,7 @@
 
 #include <domain/undo/undobase.h>
 
+
 /**
  * The UndoExposureSelect class for undoing exposureSelect(...) calls to the project.
  */

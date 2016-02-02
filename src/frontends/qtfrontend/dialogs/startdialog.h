@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2010-2011 by                                                *
+ *  Copyright (C) 2010-2015 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -21,18 +21,18 @@
 #ifndef STARTDIALOG_H
 #define STARTDIALOG_H
 
+#include <QDialog>
+#include <QLabel>
+#include <QLineEdit>
+#include <QPushButton>
+
 #include "frontends/frontend.h"
 #include "frontends/qtfrontend/elements/clickablelabel.h"
-
-#include <QtGui/QDialog>
-#include <QtGui/QLabel>
-#include <QtGui/QLineEdit>
-#include <QtGui/QPushButton>
 
 
 class StartDialog : public QDialog
 {
-    Q_OBJECT;
+    Q_OBJECT
 
 public:
     enum descriptionType {

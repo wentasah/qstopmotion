@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2011 by                                                *
+ *  Copyright (C) 2005-2015 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -39,8 +39,8 @@ class TimeLine;
  */
 class ThumbView : public QLabel
 {
-public:
 
+public:
     /**
      * Creates and sets up the thumbview class.
      * @param line the timeline for communicating.

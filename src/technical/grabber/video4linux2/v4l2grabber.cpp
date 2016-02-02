@@ -19,15 +19,10 @@
  ******************************************************************************/
 
 #include "v4l2grabber.h"
-#include "v4l2controller.h"
 
-#include "technical/util.h"
-#include "technical/grabber/imageconverter.h"
-
-#include <QtCore/QDir>
-#include <QtCore/QtDebug>
-#include <QtCore/QtGlobal>
-#include <QtGui/QApplication>
+#include <QApplication>
+#include <QDebug>
+#include <QDir>
 
 // #include <sys/ioctl.h>
 #include <sys/mman.h>
@@ -35,23 +30,29 @@
 #include <fcntl.h>
 #include <errno.h>
 
+#include "v4l2controller.h"
+
+#include "technical/util.h"
+#include "technical/grabber/imageconverter.h"
+
+
 V4L2Grabber::V4L2Grabber(Frontend *f)
     : ImageGrabber(f)
 {
-    qDebug("V4L2Grabber::Constructor --> Start");
+    qDebug() << "V4L2Grabber::Constructor --> Start";
 
     fd = -1;
     errno = -1;
     dst_buf = NULL;
     frameData = NULL;
 
-    qDebug("V4L2Grabber::Constructor --> End");
+    qDebug() << "V4L2Grabber::Constructor --> End";
 }
 
 
 V4L2Grabber::~V4L2Grabber()
 {
-    qDebug("V4L2Grabber::Destructor --> Start");
+    qDebug() << "V4L2Grabber::Destructor --> Start";
 
     if (fd >= 0) {
         // Close the device file
@@ -60,13 +61,13 @@ V4L2Grabber::~V4L2Grabber()
         fd = -1;
     }
 
-    qDebug("V4L2Grabber::Destructor --> End");
+    qDebug() << "V4L2Grabber::Destructor --> End";
 }
 
 
 bool V4L2Grabber::initialization(QVector<ImageGrabberDevice*> &devices)
 {
-    qDebug("V4L2Grabber::initialization --> Start");
+    qDebug() << "V4L2Grabber::initialization --> Start";
 
     PreferencesTool *pref = frontend->getPreferences();
     int              value;
@@ -82,7 +83,7 @@ bool V4L2Grabber::initialization(QVector<ImageGrabberDevice*> &devices)
         bool                 ret;
 
         // fd = open(deviceName.toAscii(), O_RDONLY);
-        fd = v4l2_open(deviceName.toAscii(), O_RDWR | O_NONBLOCK, 0);
+        fd = v4l2_open(deviceName.toLatin1(), O_RDWR | O_NONBLOCK, 0);
         if(fd < 0){
             qDebug() << "V4L2Grabber::initialization --> Error: Can't open device >" << deviceName << "<";
             continue;
@@ -122,12 +123,12 @@ bool V4L2Grabber::initialization(QVector<ImageGrabberDevice*> &devices)
     qDebug() << "V4L2Grabber::initialization --> device count: " << devices.size();
 
     if (0 == deviceCount) {
-        qDebug("V4L2Grabber::initialization --> End (false)");
+        qDebug() << "V4L2Grabber::initialization --> End (false)";
 
         return false;
     }
 
-    qDebug("V4L2Grabber::initialization --> End (true)");
+    qDebug() << "V4L2Grabber::initialization --> End (true)";
 
     return true;
 }
@@ -196,7 +197,7 @@ bool V4L2Grabber::setUp()
     //-----------------------------
 
     // fd = open(deviceName.toAscii(), O_RDONLY);
-    fd = v4l2_open(deviceName.toAscii(), O_RDWR | O_NONBLOCK, 0);
+    fd = v4l2_open(deviceName.toLatin1(), O_RDWR | O_NONBLOCK, 0);
     if(fd < 0){
         qDebug() << "V4L2Grabber::setUp --> Error: Can't open device >" << deviceName << "<";
         return false;
@@ -439,8 +440,8 @@ const QImage V4L2Grabber::getImage()
 
     // Create image
     image = QImage(QSize(width, height), (QImage::Format)imageFormat);
-    unsigned char* dst = const_cast<unsigned char*>(image.bits());        // Up to Qt 4.6.x
-    // unsigned char* dst = const_cast<unsigned char*>(image.constBits());   // From Qt 4.7
+    // unsigned char* dst = const_cast<unsigned char*>(image.bits());        // Up to Qt 4.6.x
+    unsigned char* dst = const_cast<unsigned char*>(image.constBits());   // From Qt 4.7
     const unsigned char* src = const_cast<unsigned char*>(frameData);
     const unsigned char* const srcEnd = src + width * height * 4;
 
@@ -646,7 +647,7 @@ bool V4L2Grabber::enumerateCaptureFormats(int fd, ImageGrabberDevice *device)
 
 int V4L2Grabber::xioctl(int fd, int IOCTL_X, void *arg)
 {
-    // qDebug("V4L2Grabber::xioctl --> Start");
+    // qDebug() << "V4L2Grabber::xioctl --> Start";
 
     int ret = 0;
     int tries = IOCTL_RETRY;
@@ -660,7 +661,7 @@ int V4L2Grabber::xioctl(int fd, int IOCTL_X, void *arg)
         qDebug() << "V4L2Grabber::xioctl --> ioctl (" << IOCTL_X << ") retried " << IOCTL_RETRY << " times - giving up: " << strerror(errno) << ")";
     }
 
-    // qDebug("V4L2Grabber::xioctl --> End");
+    // qDebug() << "V4L2Grabber::xioctl --> End";
     return (ret);
 }
 

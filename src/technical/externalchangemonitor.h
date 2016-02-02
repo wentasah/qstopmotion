@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2012 by                                                *
+ *  Copyright (C) 2005-2015 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -23,14 +23,15 @@
 #ifndef EXTERNALCHANGEMONITOR_H
 #define EXTERNALCHANGEMONITOR_H
 
+#include <QFileSystemWatcher>
+#include <QObject>
+#include <QString>
+#include <QStringList>
+
 #include "frontends/frontend.h"
 
-#include <QtCore/QFileSystemWatcher>
-#include <QtCore/QObject>
-#include <QtCore/QString>
-#include <QtCore/QStringList>
-
 class QSocketNotifier;
+
 
 /**
  * Class for listening after changes to the disc representation of the

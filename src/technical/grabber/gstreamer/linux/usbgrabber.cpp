@@ -20,12 +20,11 @@
 
 #include "usbgrabber.h"
 
-#include "technical/util.h"
+#include <QApplication>
+#include <QDebug>
+#include <QDir>
 
-#include <QtCore/QDir>
-#include <QtCore/QtDebug>
-#include <QtCore/QtGlobal>
-#include <QtGui/QApplication>
+#include "technical/util.h"
 
 // Include files of the gstreamer library
 #include <gst/interfaces/propertyprobe.h>
@@ -37,23 +36,23 @@
 GstreamerV4L2Grabber::GstreamerV4L2Grabber(Frontend *f)
     : GstreamerGrabber(f)
 {
-    qDebug("GstreamerV4L2Grabber::Constructor --> Start (Empty)");
+    qDebug() << "GstreamerV4L2Grabber::Constructor --> Start (Empty)";
 
-    // qDebug("GstreamerV4L2Grabber::Constructor --> End");
+    // qDebug() << "GstreamerV4L2Grabber::Constructor --> End";
 }
 
 
 GstreamerV4L2Grabber::~GstreamerV4L2Grabber()
 {
-    qDebug("GstreamerV4L2Grabber::Destructor --> Start (Empty)");
+    qDebug() << "GstreamerV4L2Grabber::Destructor --> Start (Empty)";
 
-    // qDebug("GstreamerV4L2Grabber::Destructor --> End");
+    // qDebug() << "GstreamerV4L2Grabber::Destructor --> End";
 }
 
 
 bool GstreamerV4L2Grabber::initialization(QVector<ImageGrabberDevice*> &devices)
 {
-    qDebug("GstreamerV4L2Grabber::initialization --> Start");
+    qDebug() << "GstreamerV4L2Grabber::initialization --> Start";
 
     const gchar           *device_name = NULL;
     GstElementFactory     *srcfactory = NULL;
@@ -186,7 +185,7 @@ bool GstreamerV4L2Grabber::initialization(QVector<ImageGrabberDevice*> &devices)
 
     qDebug() << "GstreamerV4L2Grabber::initialization --> device count: " << devices.size();
 
-    qDebug("GstreamerV4L2Grabber::initialization --> End (true)");
+    qDebug() << "GstreamerV4L2Grabber::initialization --> End (true)";
 
     return true;
 }
@@ -219,7 +218,7 @@ bool GstreamerV4L2Grabber::setUp()
         return false;
     }
     // this property needs to be set before linking the element, where the device id configured in get_caps() */
-    g_object_set (G_OBJECT(source), "device", videoDevice->getDeviceId().toAscii().constData(), NULL);
+    g_object_set (G_OBJECT(source), "device", videoDevice->getDeviceId().toLatin1().constData(), NULL);
 
     filter1 = gst_element_factory_make("ffmpegcolorspace", "filter1=ffmpegcolorspace");
     if (!filter1) {
@@ -232,7 +231,7 @@ bool GstreamerV4L2Grabber::setUp()
         return false;
     }
     gst_app_sink_set_max_buffers(GST_APP_SINK(sink), APP_SINK_MAX_BUFFERS);
-    g_object_set(G_OBJECT(sink), "sync", FALSE, NULL);
+    g_object_set(G_OBJECT(sink), "sync", false, NULL);
 
     // Set default values for RGB.
     gst_app_sink_set_caps(GST_APP_SINK(sink), gst_caps_new_simple("video/x-raw-rgb", NULL));

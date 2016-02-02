@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2010-2014 by                                                *
+ *  Copyright (C) 2010-2016 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -21,13 +21,13 @@
 #ifndef FRAMEVIEWIMAGE_H
 #define FRAMEVIEWIMAGE_H
 
+#include <QTimer>
+#include <QImage>
+#include <QPaintEvent>
+#include <QResizeEvent>
+
 #include "domain/animation/exposure.h"
 #include "frontends/qtfrontend/frameview/frameviewinterface.h"
-
-#include <QtCore/QTimer>
-#include <QtGui/QImage>
-#include <QtGui/QPaintEvent>
-#include <QtGui/QResizeEvent>
 
 
 /**
@@ -44,6 +44,7 @@
 class FrameViewImage : public FrameViewInterface
 {
 	Q_OBJECT
+
 public:
     /**
      * Creates and initializes the frameview.
@@ -63,6 +64,9 @@ public:
      * Initiation is compleated.
      */
     void initCompleted();
+
+    QSize minimumSizeHint() const Q_DECL_OVERRIDE;
+    QSize sizeHint() const Q_DECL_OVERRIDE;
 
     /**************************************************************************
      * Animation notification functions
@@ -166,8 +170,11 @@ public slots:
     void nextPlayBack();
 
 protected:
-    void resizeEvent(QResizeEvent *);
-    void paintEvent(QPaintEvent *);
+    void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
+
+    // bool event(QEvent *event) Q_DECL_OVERRIDE;
+
+    void resizeEvent(QResizeEvent *event);
 
 private:
     static const int alphaLut[5];
@@ -242,6 +249,8 @@ private:
      * Show the logo as active image
      */
     void showLogo();
+
+    void paintMethod();
 };
 
 #endif

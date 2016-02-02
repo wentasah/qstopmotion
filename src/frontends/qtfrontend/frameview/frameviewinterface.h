@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2010-2014 by                                                *
+ *  Copyright (C) 2010-2016 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -21,17 +21,18 @@
 #ifndef FRAMEVIEWINTERFACE_H
 #define FRAMEVIEWINTERFACE_H
 
+#include <QQueue>
+#include <QString>
+#include <QTimer>
+#include <QVector>
+#include <QWidget>
+
 #include "domain/animation/exposure.h"
 #include "frontends/observer.h"
 #include "frontends/frontend.h"
 
-#include <QtCore/QQueue>
-#include <QtCore/QString>
-#include <QtCore/QTimer>
-#include <QtCore/QVector>
-#include <QtGui/QWidget>
-
 class ImageGrabThread;
+
 
 /**
  * Interface for the frame view functionality of the widget for viewing the
@@ -47,6 +48,7 @@ class ImageGrabThread;
 class FrameViewInterface : public QWidget, public Observer
 {
 	Q_OBJECT
+
 public:
     /**
      * Enum with all possible image output formats

@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2013 by                                                *
+ *  Copyright (C) 2005-2015 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -23,21 +23,22 @@
 #ifndef TIMELINE_H
 #define TIMELINE_H
 
+#include <QDragEnterEvent>
+#include <QDropEvent>
+#include <QHBoxLayout>
+#include <QResizeEvent>
+#include <QScrollArea>
+#include <QTimer>
+#include <QWidget>
+
 #include "frontends/observer.h"
 // #include "domain/animation/animationproject.h"
 #include "domain/animation/exposure.h"
 #include "frontends/frontend.h"
 #include "frontends/qtfrontend/timeline/thumbview.h"
 
-#include <QtGui/QDragEnterEvent>
-#include <QtGui/QResizeEvent>
-#include <QtGui/QDropEvent>
-#include <QtGui/QScrollArea>
-#include <QtGui/QHBoxLayout>
-#include <QtGui/QWidget>
-#include <QtCore/QTimer>
-
 class ThumbView;
+
 
 /**
  * The timeline widget for viewing the animation model.
@@ -47,6 +48,7 @@ class ThumbView;
 class TimeLine : public QScrollArea, public Observer
 {
     Q_OBJECT
+
 public:
     /**
      * Creates and sets up the timeline.

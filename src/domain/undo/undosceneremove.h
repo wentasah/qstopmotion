@@ -25,6 +25,7 @@
 
 #include <domain/undo/undobase.h>
 
+
 /**
  * The UndoSceneRemove class for undoing removeScene(...) calls to the project.
  */

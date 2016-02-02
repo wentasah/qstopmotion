@@ -32,6 +32,7 @@ class ImageGrabberDevice;
 // set ioctl retries to 4 - linux uvc as increased timeout from 1000 to 3000 ms
 #define IOCTL_RETRY 4
 
+
 /**
  * Interface to the controller of a device.
  *

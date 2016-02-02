@@ -22,12 +22,12 @@
 
 #include "ffmpegencoder.h"
 
+#include <QDir>
+#include <QString>
+
 #include "domain/animation/projectserializer.h"
 #include "frontends/frontend.h"
 #include "technical/grabber/imagegrabber.h"
-
-#include <QtCore/QDir>
-#include <QtCore/QString>
 
 
 /**
@@ -44,7 +44,7 @@ FfmpegEncoder::FfmpegEncoder(AnimationProject *ap)
     QString encoderCommand;
     QString stopCommand;
 
-#ifdef Q_WS_WIN
+#if defined(Q_OS_WIN32) || defined(Q_OS_WIN64)
     // Windows version
 
     Frontend *frontend = animationProject->getFrontend();

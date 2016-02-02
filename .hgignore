@@ -13,8 +13,15 @@ syntax: glob
 Thumbs.db
 
 ffmpeg/*
+ffmpeg32bit/*
+ffmpeg64bit/*
 libav/*
+libav32bit/*
+libav64bit/*
 qtruntime/*
+qt4runtime/*
+qt5runtime32bit/*
+qt5runtime64bit/*
 
 # switch to regexp syntax.
 syntax: regexp

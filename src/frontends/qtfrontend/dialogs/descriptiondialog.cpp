@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2010-2012 by                                                *
+ *  Copyright (C) 2010-2015 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -20,10 +20,11 @@
 
 #include "descriptiondialog.h"
 
-#include <QtGui/QGridLayout>
-#include <QtGui/QHBoxLayout>
-#include <QtGui/QSizePolicy>
-#include <QtGui/QVBoxLayout>
+#include <QGridLayout>
+#include <QHBoxLayout>
+#include <QSizePolicy>
+#include <QVBoxLayout>
+
 
 DescriptionDialog::DescriptionDialog(Frontend *f, descriptionType type, QWidget *parent)
     : QDialog(parent)

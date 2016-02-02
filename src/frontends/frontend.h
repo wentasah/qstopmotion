@@ -563,6 +563,7 @@ public:
      * Test function for debugging purposes
      */
     virtual void testMainWidget() = 0;
+
 };
 
 #endif

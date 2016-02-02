@@ -22,6 +22,9 @@
 
 #include "undoscenemove.h"
 
+#include <QDebug>
+#include <QLatin1String>
+
 
 UndoSceneMove::UndoSceneMove(DomainFacade *df,
                              int           fsi,
@@ -30,7 +33,7 @@ UndoSceneMove::UndoSceneMove(DomainFacade *df,
 {
     fromSceneIndex = fsi;
     toSceneIndex = tsi;
-    undoFlag = FALSE;
+    undoFlag = false;
     setText(QString(tr("Move scene (%1,%2)")).arg(fromSceneIndex).arg(toSceneIndex));
 }
 
@@ -42,22 +45,22 @@ UndoSceneMove::~UndoSceneMove()
 
 void UndoSceneMove::undo()
 {
-    qDebug("UndoSceneMove::undo --> Start");
+    qDebug() << "UndoSceneMove::undo --> Start";
 
     AnimationProject *animationProject = facade->getAnimationProject();
 
     animationProject->decAnimationChanges();
 
     facade->writeHistoryEntry(QLatin1String("undo"));
-    undoFlag = TRUE;
+    undoFlag = true;
 
-    qDebug("UndoSceneMove::undo --> Start");
+    qDebug() << "UndoSceneMove::undo --> Start";
 }
 
 
 void UndoSceneMove::redo()
 {
-    qDebug("UndoSceneMove::redo --> Start");
+    qDebug() << "UndoSceneMove::redo --> Start";
 
     AnimationProject *animationProject = facade->getAnimationProject();
 
@@ -66,7 +69,7 @@ void UndoSceneMove::redo()
 
     if (undoFlag) {
         facade->writeHistoryEntry(QLatin1String("redo"));
-        undoFlag = FALSE;
+        undoFlag = false;
     }
     else {
         facade->writeHistoryEntry(QString("%1|%2|%3")
@@ -75,5 +78,5 @@ void UndoSceneMove::redo()
                                   .arg(toSceneIndex));
     }
 
-    qDebug("UndoSceneMove::redo --> Start");
+    qDebug() << "UndoSceneMove::redo --> Start";
 }

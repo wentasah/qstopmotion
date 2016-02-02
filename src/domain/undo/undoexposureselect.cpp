@@ -20,6 +20,9 @@
 
 #include "undoexposureselect.h"
 
+#include <QDebug>
+#include <QLatin1String>
+
 
 UndoExposureSelect::UndoExposureSelect(DomainFacade *df,
                                        int           nsi,
@@ -33,7 +36,7 @@ UndoExposureSelect::UndoExposureSelect(DomainFacade *df,
     newSceneIndex = nsi;
     newTakeIndex = nti;
     newExposureIndex = nei;
-    undoFlag = FALSE;
+    undoFlag = false;
     setText(QString(tr("Select exposure (%1,%2,%3)-->(%4,%5,%6)"))
             .arg(oldSceneIndex).arg(oldTakeIndex).arg(oldExposureIndex)
             .arg(newSceneIndex).arg(newTakeIndex).arg(newExposureIndex));
@@ -47,7 +50,7 @@ UndoExposureSelect::~UndoExposureSelect()
 
 void UndoExposureSelect::undo()
 {
-    qDebug("UndoExposureSelect::undo --> Start");
+    qDebug() << "UndoExposureSelect::undo --> Start";
 
     AnimationProject *animationProject = facade->getAnimationProject();
     Frontend *frontend = facade->getFrontend();
@@ -65,15 +68,15 @@ void UndoExposureSelect::undo()
     animationProject->decAnimationChanges();
 
     facade->writeHistoryEntry(QLatin1String("undo"));
-    undoFlag = TRUE;
+    undoFlag = true;
 
-    qDebug("UndoExposureSelect::undo --> End");
+    qDebug() << "UndoExposureSelect::undo --> End";
 }
 
 
 void UndoExposureSelect::redo()
 {
-    qDebug("UndoExposureSelect::redo --> Start");
+    qDebug() << "UndoExposureSelect::redo --> Start";
 
     AnimationProject *animationProject = facade->getAnimationProject();
     Frontend *frontend = facade->getFrontend();
@@ -92,7 +95,7 @@ void UndoExposureSelect::redo()
 
     if (undoFlag) {
         facade->writeHistoryEntry(QLatin1String("redo"));
-        undoFlag = FALSE;
+        undoFlag = false;
     }
     else {
         facade->writeHistoryEntry(QString("%1|%2|%3|%4|%5|%6|%7")
@@ -105,5 +108,5 @@ void UndoExposureSelect::redo()
                                   .arg(newExposureIndex));
     }
 
-    qDebug("UndoExposureSelect::redo --> End");
+    qDebug() << "UndoExposureSelect::redo --> End";
 }

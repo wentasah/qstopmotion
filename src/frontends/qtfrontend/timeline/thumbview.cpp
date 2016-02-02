@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2012 by                                                *
+ *  Copyright (C) 2005-2015 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -22,20 +22,21 @@
 
 #include "thumbview.h"
 
-#include "domain/domainfacade.h"
-
+#include <QDebug>
 #include <QLabel>
 #include <QDropEvent>
+
+#include "domain/domainfacade.h"
 
 
 ThumbView::ThumbView(TimeLine *line, QWidget *parent, int thumbIndex, const char *name)
     : QLabel(parent), timeLine(line), thumbIndex(thumbIndex)
 {
-    // qDebug("ThumbView::Constructor --> Start");
+    // qDebug() << "ThumbView::Constructor --> Start";
 
     setObjectName(name);
 
-    // qDebug("ThumbView::Constructor --> End");
+    // qDebug() << "ThumbView::Constructor --> End";
 }
 
 
@@ -46,11 +47,11 @@ ThumbView::~ThumbView()
 
 void ThumbView::setThumbIndex(int index)
 {
-    qDebug("ThumbView::setNumber --> Start");
+    qDebug() << "ThumbView::setNumber --> Start";
 
     thumbIndex = index;
 
-    qDebug("ThumbView::setNumber --> End");
+    qDebug() << "ThumbView::setNumber --> End";
 }
 
 

@@ -23,20 +23,20 @@
 
 #include "frontends/frontend.h"
 
-#include <QtCore/QTranslator>
-#include <QtGui/QCheckBox>
-#include <QtGui/QComboBox>
-#include <QtGui/QGridLayout>
-#include <QtGui/QGroupBox>
-#include <QtGui/QLabel>
-#include <QtGui/QLineEdit>
-#include <QtGui/QPushButton>
-#include <QtGui/QRadioButton>
-#include <QtGui/QSpinBox>
-#include <QtGui/QTableWidget>
-#include <QtGui/QTextEdit>
-#include <QtGui/QToolBox>
-#include <QtGui/QWidget>
+#include <QTranslator>
+#include <QCheckBox>
+#include <QComboBox>
+#include <QGridLayout>
+#include <QGroupBox>
+#include <QLabel>
+#include <QLineEdit>
+#include <QPushButton>
+#include <QRadioButton>
+#include <QSpinBox>
+#include <QTableWidget>
+#include <QTextEdit>
+#include <QToolBox>
+#include <QWidget>
 
 
 /**

@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2014 by                                                *
+ *  Copyright (C) 2005-2015 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -23,19 +23,19 @@
 
 #include "frontends/frontend.h"
 
-#include <QtGui/QComboBox>
-#include <QtGui/QGridLayout>
-#include <QtGui/QGroupBox>
-#include <QtGui/QLabel>
-#include <QtGui/QLineEdit>
-#include <QtGui/QPushButton>
-#include <QtGui/QRadioButton>
-#include <QtGui/QSpinBox>
-#include <QtGui/QSlider>
-#include <QtGui/QTableWidget>
-#include <QtGui/QTextEdit>
-#include <QtGui/QToolBox>
-#include <QtGui/QWidget>
+#include <QComboBox>
+#include <QGridLayout>
+#include <QGroupBox>
+#include <QLabel>
+#include <QLineEdit>
+#include <QPushButton>
+#include <QRadioButton>
+#include <QSpinBox>
+#include <QSlider>
+#include <QTableWidget>
+#include <QTextEdit>
+#include <QToolBox>
+#include <QWidget>
 
 
 /**
@@ -45,6 +45,7 @@
 class TransformWidget : public QWidget
 {
     Q_OBJECT
+
 public:
     /**
      * Sets up the tab.

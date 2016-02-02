@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2015 by                                                *
+ *  Copyright (C) 2005-2016 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -22,19 +22,20 @@
 
 #include "preferencestool.h"
 
+#include <QDebug>
+#include <QDomNodeList>
+#include <QDomText>
+#include <QFile>
+#include <QTextStream>
+#include <QtGlobal>
+
 #include "technical/grabber/imagegrabber.h"
 #include "technical/videoencoder/videoencoder.h"
-
-#include <QtCore/QFile>
-#include <QtCore/QtGlobal>
-#include <QtCore/QTextStream>
-#include <QtXml/QDomNodeList>
-#include <QtXml/QDomText>
 
 
 const QString PreferencesTool::applicationShowName = QLatin1String("qStopMotion");
 const QString PreferencesTool::applicationName = QLatin1String("qstopmotion");
-const QString PreferencesTool::applicationVersion = QLatin1String("2.0.2");
+const QString PreferencesTool::applicationVersion = QLatin1String("2.2.0");
 const QString PreferencesTool::preferencesVersion = QLatin1String("0.9");
 const QString PreferencesTool::preferencesSuffix = QLatin1String("qsmp");
 const QString PreferencesTool::preferencesName = QLatin1String("preferences");
@@ -89,7 +90,7 @@ PreferencesTool::~PreferencesTool()
 
 bool PreferencesTool::setPreferencesFile(const QString &filePath, const QString &newVersion)
 {
-    qDebug("PreferencesTool::setPreferencesFile --> Start");
+    qDebug() << "PreferencesTool::setPreferencesFile --> Start";
 
     QDomElement  element;
     PreferencesElement *prefElement;
@@ -145,7 +146,7 @@ bool PreferencesTool::setPreferencesFile(const QString &filePath, const QString 
         element = element.nextSiblingElement();
     }
     if (versionElement.isNull()) {
-        qWarning("PreferencesTool::setPreferencesFile --> Error while parsing preferences file");
+        qWarning() << "PreferencesTool::setPreferencesFile --> Error while parsing preferences file";
         goto FileCorrupt;
     }
     else {
@@ -165,12 +166,13 @@ bool PreferencesTool::setPreferencesFile(const QString &filePath, const QString 
     }
 
     if (findPreferencesElement("preferences") == NULL) {
-        qWarning("PreferencesTool::setPreferencesFile --> Error while parsing preferences file");
+        qWarning() << "PreferencesTool::setPreferencesFile --> Error while parsing preferences file";
         goto FileCorrupt;
     }
     return true;
 
 FileCorrupt:
+
     cleanTree();
 
     // If there are no file, no version or if the version is wrong a new preferences
@@ -196,7 +198,7 @@ FileCorrupt:
 
     flushPreferences();
 
-    qDebug("PreferencesTool::setPreferencesFile --> End");
+    qDebug() << "PreferencesTool::setPreferencesFile --> End";
 
     return false;
 }
@@ -477,7 +479,7 @@ bool PreferencesTool::fileExists(const QString &filePath)
 void PreferencesTool::checkInitialized()
 {
     if (doc == NULL) {
-        qWarning("PreferencesTool::setPreferencesFile --> A preferencesfile has to be specified before using the PreferencesTool.");
+        qWarning() << "PreferencesTool::setPreferencesFile --> A preferencesfile has to be specified before using the PreferencesTool.";
         exit(1);
     }
 }

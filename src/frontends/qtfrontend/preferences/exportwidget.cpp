@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2014 by                                                *
+ *  Copyright (C) 2005-2015 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -22,23 +22,22 @@
 
 #include "exportwidget.h"
 
+#include <QDebug>
+#include <QFileDialog>
+#include <QGridLayout>
+#include <QHeaderView>
+#include <QInputDialog>
+#include <QLabel>
+
 #include "domain/domainfacade.h"
 #include "frontends/qtfrontend/elements/flexiblelineedit.h"
 #include "technical/preferencestool.h"
 #include "technical/videoencoder/videoencoder.h"
 
-#include <QtCore/QtDebug>
-
-#include <QtGui/QFileDialog>
-#include <QtGui/QGridLayout>
-#include <QtGui/QHeaderView>
-#include <QtGui/QInputDialog>
-#include <QtGui/QLabel>
-
 
 ExportWidget::ExportWidget(Frontend *f, bool type, QWidget *parent) : QWidget(parent)
 {
-    qDebug("ExportWidget::Constructor --> Start");
+    qDebug() << "ExportWidget::Constructor --> Start";
 
     frontend                 = f;
     tabType                  = type;
@@ -77,13 +76,13 @@ ExportWidget::ExportWidget(Frontend *f, bool type, QWidget *parent) : QWidget(pa
 
     makeGUI();
 
-    qDebug("ExportWidget::Constructor --> End");
+    qDebug() << "ExportWidget::Constructor --> End";
 }
 
 
 void ExportWidget::makeGUI()
 {
-    qDebug("ExportWidget::makeGUI --> Start");
+    qDebug() << "ExportWidget::makeGUI --> Start";
 
     infoText = new QTextEdit;
     infoText->setReadOnly(true);
@@ -227,13 +226,13 @@ void ExportWidget::makeGUI()
 
     setLayout(mainLayout);
 
-    qDebug("ExportWidget::makeGUI --> End");
+    qDebug() << "ExportWidget::makeGUI --> End";
 }
 
 
 void ExportWidget::initialize()
 {
-    qDebug("ExportWidget::initialize --> Start");
+    qDebug() << "ExportWidget::initialize --> Start";
 
     PreferencesTool *pref = frontend->getPreferences();
     int              value;
@@ -323,23 +322,23 @@ void ExportWidget::initialize()
 
     defaultOutputEdit->setText(activeDefaultOutputFileName);
 
-    qDebug("ExportWidget::initialize --> End");
+    qDebug() << "ExportWidget::initialize --> End";
 }
 
 /*
 void ExportWidget::resizeEvent(QResizeEvent *event)
 {
-    qDebug("ExportWidget::resizeEvent --> Start");
+    qDebug() << "ExportWidget::resizeEvent --> Start");
 
     QWidget::resizeEvent(event);
 
-    qDebug("ExportWidget::resizeEvent --> End");
+    qDebug() << "ExportWidget::resizeEvent --> End");qDebug() << "
 }
 */
 
 void ExportWidget::apply()
 {
-    qDebug("ExportWidget::apply --> Start");
+    qDebug() << "ExportWidget::apply --> Start";
 
     PreferencesTool *pref = frontend->getPreferences();
     int index;
@@ -412,13 +411,13 @@ void ExportWidget::apply()
         }
     }
 
-    qDebug("ExportWidget::apply --> End");
+    qDebug() << "ExportWidget::apply --> End";
 }
 
 
 void ExportWidget::reset()
 {
-    qDebug("ExportWidget::reset --> Start");
+    qDebug() << "ExportWidget::reset --> Start";
 
     encoderApplicationCombo->setCurrentIndex(activeEncoderApplication);
     videoFormatCombo->setCurrentIndex(activeVideoFormat);
@@ -434,7 +433,7 @@ void ExportWidget::reset()
     }
     defaultOutputEdit->setText(activeDefaultOutputFileName);
 
-    qDebug("ExportWidget::reset --> End");
+    qDebug() << "ExportWidget::reset --> End";
 }
 
 
@@ -491,9 +490,9 @@ void ExportWidget::setNoButtonOn()
 
 void ExportWidget::changeDefaultOutput(const QString &fileName)
 {
-    qDebug("ExportWidget::setDefaultOutput --> Start");
+    qDebug() << "ExportWidget::setDefaultOutput --> Start";
 
-    qDebug("ExportWidget::setDefaultOutput --> End");
+    qDebug() << "ExportWidget::setDefaultOutput --> End";
 }
 
 

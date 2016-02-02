@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2010-2014 by                                                *
+ *  Copyright (C) 2010-2015 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -20,12 +20,11 @@
 
 #include "videotestgrabber.h"
 
-#include "technical/util.h"
+#include <QDebug>
+#include <QDir>
+#include <QApplication>
 
-#include <QtCore/QDir>
-#include <QtCore/QtDebug>
-#include <QtCore/QtGlobal>
-#include <QtGui/QApplication>
+#include "technical/util.h"
 
 // Include files of the gstreamer library
 #include <gst/interfaces/propertyprobe.h>
@@ -37,23 +36,23 @@
 GstreamerVideoTestGrabber::GstreamerVideoTestGrabber(Frontend *f)
     : GstreamerGrabber(f)
 {
-    qDebug("GstreamerVideoTestGrabber::Constructor --> Start (Empty)");
+    qDebug() << "GstreamerVideoTestGrabber::Constructor --> Start (Empty)";
 
-    // qDebug("GstreamerVideoTestGrabber::Constructor --> End");
+    // qDebug() << "GstreamerVideoTestGrabber::Constructor --> End";
 }
 
 
 GstreamerVideoTestGrabber::~GstreamerVideoTestGrabber()
 {
-    qDebug("GstreamerVideoTestGrabber::Destructor --> Start (Empty)");
+    qDebug() << "GstreamerVideoTestGrabber::Destructor --> Start (Empty)";
 
-    // qDebug("GstreamerVideoTestGrabber::Destructor --> End");
+    // qDebug() << "GstreamerVideoTestGrabber::Destructor --> End";
 }
 
 
 bool GstreamerVideoTestGrabber::initialization(QVector<ImageGrabberDevice*> &devices)
 {
-    qDebug("GstreamerVideoTestGrabber::initialization --> Start");
+    qDebug() << "GstreamerVideoTestGrabber::initialization --> Start";
 
     ImageGrabberDevice *device = NULL;
 
@@ -68,7 +67,7 @@ bool GstreamerVideoTestGrabber::initialization(QVector<ImageGrabberDevice*> &dev
 
     qDebug() << "GstreamerVideoTestGrabber::initialization --> device count: " << devices.size();
 
-    qDebug("GstreamerVideoTestGrabber::initialization --> End (true)");
+    qDebug() << "GstreamerVideoTestGrabber::initialization --> End (true)";
 
     return true;
 }
@@ -110,7 +109,7 @@ bool GstreamerVideoTestGrabber::setUp()
         return false;
     }
     gst_app_sink_set_max_buffers(GST_APP_SINK(sink), APP_SINK_MAX_BUFFERS);
-    g_object_set(G_OBJECT(sink), "sync", FALSE, NULL);
+    g_object_set(G_OBJECT(sink), "sync", false, NULL);
 
     // Set default values for RGB.
     gst_app_sink_set_caps(GST_APP_SINK(sink), gst_caps_new_simple("video/x-raw-rgb", NULL));

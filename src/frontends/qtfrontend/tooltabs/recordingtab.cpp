@@ -20,12 +20,12 @@
 
 #include "recordingtab.h"
 
-#include "technical/grabber/imagegrabber.h"
+#include <QDebug>
+#include <QHeaderView>
+#include <QInputDialog>
+#include <QLabel>
 
-#include <QtCore/QtDebug>
-#include <QtGui/QHeaderView>
-#include <QtGui/QInputDialog>
-#include <QtGui/QLabel>
+#include "technical/grabber/imagegrabber.h"
 
 
 RecordingTab::RecordingTab(Frontend *f,
@@ -470,11 +470,11 @@ void RecordingTab::changeCaptureButtonFunction(PreferencesTool::captureButtonFun
 /*
 void RecordingTab::resizeEvent(QResizeEvent *event)
 {
-    qDebug("RecordingTab::resizeEvent --> Start");
+    qDebug() << "RecordingTab::resizeEvent --> Start");
 
     QWidget::resizeEvent(event);
 
-    qDebug("RecordingTab::resizeEvent --> End");
+    qDebug() << "RecordingTab::resizeEvent --> End");
 }
 */
 
@@ -580,7 +580,7 @@ void RecordingTab::changeResolution(int index, bool save)
 
 void RecordingTab::cameraButtonClicked()
 {
-    qDebug("RecordingTab::cameraButtonClicked --> Start");
+    qDebug() << "RecordingTab::cameraButtonClicked --> Start";
 
     if (cameraOn == false) {
         // Camera is off
@@ -603,7 +603,7 @@ void RecordingTab::cameraButtonClicked()
             return;
         }
 
-        qDebug("RecordingTab::cameraButtonClicked --> Start playing video from webcam");
+        qDebug() << "RecordingTab::cameraButtonClicked --> Start playing video from webcam";
 
         cameraOn = frontend->startGrabber();
 
@@ -634,7 +634,7 @@ void RecordingTab::cameraButtonClicked()
         }
     } else {
         // Camera is on
-        qDebug("RecordingTab::cameraButtonClicked --> Stop playing video from webcam");
+        qDebug() << "RecordingTab::cameraButtonClicked --> Stop playing video from webcam";
 
         QString iconFile(frontend->getIconsDirName());
         iconFile.append(QLatin1String("cameraon.png"));
@@ -659,7 +659,7 @@ void RecordingTab::cameraButtonClicked()
         toolBar->setActualState(ToolBar::toolBarCameraOff);
     }
 
-    qDebug("RecordingTab::cameraButtonClicked --> End");
+    qDebug() << "RecordingTab::cameraButtonClicked --> End";
 }
 
 
@@ -822,7 +822,7 @@ void RecordingTab::createAccelerators()
 
 void RecordingTab::captureFrame()
 {
-    qDebug("RecordingTab::captureFrame --> Start");
+    qDebug() << "RecordingTab::captureFrame --> Start";
 
     toolBar->setActualState(ToolBar::toolBarNothing);
 
@@ -831,13 +831,13 @@ void RecordingTab::captureFrame()
 
     toolBar->setActualState(ToolBar::toolBarCameraOn);
 
-    qDebug("RecordingTab::captureFrame --> End");
+    qDebug() << "RecordingTab::captureFrame --> End";
 }
 
 
 void RecordingTab::storeFrame()
 {
-    qDebug("RecordingTab::storeFrame --> Start");
+    qDebug() << "RecordingTab::storeFrame --> Start";
 
     QImage newImage = clipAndScale(frontend->getRawImage());
 
@@ -880,7 +880,7 @@ void RecordingTab::storeFrame()
     //    cameraTimer->start(60);
     // }
 
-    qDebug("RecordingTab::storeFrame --> End");
+    qDebug() << "RecordingTab::storeFrame --> End";
 }
 
 

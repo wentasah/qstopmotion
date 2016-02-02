@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2013 by                                                *
+ *  Copyright (C) 2005-2015 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -22,36 +22,38 @@
 
 #include "timeline.h"
 
+#include <QDebug>
+#include <QDragEnterEvent>
+#include <QDropEvent>
+#include <QFrame>
+#include <QImage>
+#include <QImageReader>
+#include <QMimeData>
+#include <QPixmap>
+#include <QResizeEvent>
+#include <QScrollBar>
+#include <QtGlobal>
+#include <QVBoxLayout>
+
 #include "domain/domainfacade.h"
 #include "frontends/qtfrontend/timeline/exposurethumbview.h"
-
-#include <QtCore/QtDebug>
-#include <QtGui/QDragEnterEvent>
-#include <QtGui/QDropEvent>
-#include <QtGui/QFrame>
-#include <QtGui/QImage>
-#include <QtGui/QImageReader>
-#include <QtGui/QPixmap>
-#include <QtGui/QResizeEvent>
-#include <QtGui/QScrollBar>
-#include <QtGui/QVBoxLayout>
 
 
 static QImage tryReadImage(const QString &filename)
 {
-    // qDebug("TimeLine::tryReadImage --> Start");
+    // qDebug() << "TimeLine::tryReadImage --> Start";
 
     if (filename.isEmpty()) {
         qWarning() << "Couldn't read image: Invalid file name";
 
-        qDebug("TimeLine::tryReadImage --> End");
+        qDebug() << "TimeLine::tryReadImage --> End";
         return QImage();
     }
 
     QImageReader imageReader(filename);
     const QImage image = imageReader.read();
     if (!image.isNull()) {
-        // qDebug("TimeLine::tryReadImage --> End");
+        // qDebug() << "TimeLine::tryReadImage --> End");
         return image;
     }
 
@@ -70,7 +72,7 @@ static QImage tryReadImage(const QString &filename)
         anotherImageReader.setFormat(supportedImageFormats.at(i));
         const QImage anotherImage = anotherImageReader.read();
         if (!anotherImage.isNull()) {
-            qDebug("TimeLine::tryReadImage --> End");
+            qDebug() << "TimeLine::tryReadImage --> End";
             return anotherImage;
         }
     }
@@ -82,7 +84,7 @@ static QImage tryReadImage(const QString &filename)
 TimeLine::TimeLine(Frontend* f, QWidget *parent)
     : QScrollArea(parent)
 {
-    qDebug("TimeLine::Constructor --> Start");
+    qDebug() << "TimeLine::Constructor --> Start";
 
     setObjectName("TimeLine");
     frontend = f;
@@ -125,10 +127,10 @@ TimeLine::TimeLine(Frontend* f, QWidget *parent)
     setBackgroundRole(QPalette::Dark);
     setAcceptDrops(true);
 
-    qDebug("TimeLine::Constructor --> TimeLine is attatched to the model");
+    qDebug() << "TimeLine::Constructor --> TimeLine is attatched to the model";
     frontend->getView()->attatch(this);
 
-    qDebug("TimeLine::Constructor --> End");
+    qDebug() << "TimeLine::Constructor --> End";
 }
 
 
@@ -157,31 +159,31 @@ void TimeLine::setFrontend(Frontend* f)
 
 void TimeLine::updateRemoveProject()
 {
-    qDebug("TimeLine::updateRemoveProject --> Start");
+    qDebug() << "TimeLine::updateRemoveProject --> Start";
 
     clear();
 
-    qDebug("TimeLine::updateRemoveProject --> End");
+    qDebug() << "TimeLine::updateRemoveProject --> End";
 }
 
 
 void TimeLine::updateNewProject()
 {
-    qDebug("TimeLine::updateNewProject --> Start (Nothing)");
+    qDebug() << "TimeLine::updateNewProject --> Start (Nothing)";
 
     // newProject();
 
-    // qDebug("TimeLine::updateNewProject --> End");
+    // qDebug() << "TimeLine::updateNewProject --> End");
 }
 
 
 void TimeLine::updateOpenProject()
 {
-    qDebug("TimeLine::updateOpenProject --> Start (Nothing)");
+    qDebug() << "TimeLine::updateOpenProject --> Start (Nothing)";
 
     // openProject();
 
-    // qDebug("TimeLine::updateOpenProject --> End");
+    // qDebug() << "TimeLine::updateOpenProject --> End");
 }
 
 
@@ -206,40 +208,40 @@ void TimeLine::updateVideoFps(int) {}
 
 void TimeLine::updateAddScene(int sceneIndex)
 {
-    qDebug("TimeLine::updateAddScene --> Start");
+    qDebug() << "TimeLine::updateAddScene --> Start";
 
     this->newScene(sceneIndex);
 
-    qDebug("TimeLine::updateAddScene --> End");
+    qDebug() << "TimeLine::updateAddScene --> End";
 }
 
 void TimeLine::updateInsertScene(int sceneIndex)
 {
-    qDebug("TimeLine::updateInsertScene --> Start");
+    qDebug() << "TimeLine::updateInsertScene --> Start";
 
     this->newScene(sceneIndex);
 
-    qDebug("TimeLine::updateInsertScene --> End");
+    qDebug() << "TimeLine::updateInsertScene --> End";
 }
 
 
 void TimeLine::updateActivateScene()
 {
-    qDebug("TimeLine::updateActivateScene --> Start");
+    qDebug() << "TimeLine::updateActivateScene --> Start";
 
     this->activateScene();
 
-    qDebug("TimeLine::updateActivateScene --> End");
+    qDebug() << "TimeLine::updateActivateScene --> End";
 }
 
 
 void TimeLine::updateRemoveScene(int sceneIndex)
 {
-    qDebug("TimeLine::updateRemoveScene --> Start");
+    qDebug() << "TimeLine::updateRemoveScene --> Start";
 
     if (sceneIndex > activeSceneIndex) {
         // Nothing to do
-        qDebug("TimeLine::updateRemoveScene --> End (Nothing)");
+        qDebug() << "TimeLine::updateRemoveScene --> End (Nothing)";
         return;
     }
     if (sceneIndex < activeSceneIndex) {
@@ -247,7 +249,7 @@ void TimeLine::updateRemoveScene(int sceneIndex)
 
         Q_ASSERT(-1 < activeSceneIndex);
 
-        qDebug("TimeLine::updateRemoveScene --> End (Increment)");
+        qDebug() << "TimeLine::updateRemoveScene --> End (Increment)";
         return;
     }
 
@@ -257,17 +259,17 @@ void TimeLine::updateRemoveScene(int sceneIndex)
     this->activateTake();
     this->activateExposure();
 
-    qDebug("TimeLine::updateRemoveScene --> End (Delete)");
+    qDebug() << "TimeLine::updateRemoveScene --> End (Delete)";
 }
 
 
 void TimeLine::updateMoveScene(int sceneNumber, int movePosition)
 {
-    qDebug("TimeLine::updateMoveScene --> Start");
+    qDebug() << "TimeLine::updateMoveScene --> Start";
 
     this->moveScene(sceneNumber, movePosition);
 
-    qDebug("TimeLine::updateMoveScene --> End");
+    qDebug() << "TimeLine::updateMoveScene --> End";
 }
 
 
@@ -278,48 +280,48 @@ void TimeLine::updateMoveScene(int sceneNumber, int movePosition)
 void TimeLine::updateAddTake(int sceneIndex,
                              int takeIndex)
 {
-    qDebug("TimeLine::updateNewTake --> Start");
+    qDebug() << "TimeLine::updateNewTake --> Start";
 
     this->newTake(sceneIndex, takeIndex);
 
-    qDebug("TimeLine::updateNewTake --> End");
+    qDebug() << "TimeLine::updateNewTake --> End";
 }
 
 
 void TimeLine::updateInsertTake(int sceneIndex,
                                 int takeIndex)
 {
-    qDebug("TimeLine::updateNewTake --> Start");
+    qDebug() << "TimeLine::updateNewTake --> Start";
 
     this->newTake(sceneIndex, takeIndex);
 
-    qDebug("TimeLine::updateNewTake --> End");
+    qDebug() << "TimeLine::updateNewTake --> End";
 }
 
 
 void TimeLine::updateActivateTake()
 {
-    qDebug("TimeLine::updateActivateTake --> Start");
+    qDebug() << "TimeLine::updateActivateTake --> Start";
 
     this->activateTake();
 
-    qDebug("TimeLine::updateActivateTake --> End");
+    qDebug() << "TimeLine::updateActivateTake --> End";
 }
 
 
 void TimeLine::updateRemoveTake(int sceneIndex,
                                 int takeIndex)
 {
-    qDebug("TimeLine::updateRemoveTake --> Start");
+    qDebug() << "TimeLine::updateRemoveTake --> Start";
 
     if (sceneIndex != activeSceneIndex) {
         // Nothing to do
-        qDebug("TimeLine::updateRemoveTake --> End (Nothing)");
+        qDebug() << "TimeLine::updateRemoveTake --> End (Nothing)";
         return;
     }
     if (takeIndex > activeTakeIndex) {
         // Nothin to do
-        qDebug("TimeLine::updateRemoveTake --> End (Nothing)");
+        qDebug() << "TimeLine::updateRemoveTake --> End (Nothing)";
         return;
     }
     if (takeIndex < activeTakeIndex) {
@@ -327,7 +329,7 @@ void TimeLine::updateRemoveTake(int sceneIndex,
 
         Q_ASSERT(-1 < activeTakeIndex);
 
-        qDebug("TimeLine::updateRemoveTake --> End (Increment)");
+        qDebug() << "TimeLine::updateRemoveTake --> End (Increment)";
         return;
     }
 
@@ -337,7 +339,7 @@ void TimeLine::updateRemoveTake(int sceneIndex,
     this->activateTake();
     this->activateExposure();
 
-    qDebug("TimeLine::updateRemoveTake --> End (Delete)");
+    qDebug() << "TimeLine::updateRemoveTake --> End (Delete)";
 }
 
 
@@ -349,11 +351,11 @@ void TimeLine::updateAddExposure(int sceneIndex,
                                  int takeIndex,
                                  int exposureIndex)
 {
-    // qDebug("TimeLine::updateAddExposure --> Start");
+    // qDebug() << "TimeLine::updateAddExposure --> Start";
 
     this->newExposure(sceneIndex, takeIndex, exposureIndex);
 
-    // qDebug("TimeLine::updateAddExposure --> End");
+    // qDebug() << "TimeLine::updateAddExposure --> End";
 }
 
 
@@ -361,11 +363,11 @@ void TimeLine::updateInsertExposure(int sceneIndex,
                                     int takeIndex,
                                     int exposureIndex)
 {
-    qDebug("TimeLine::updateInsertExposure --> Start");
+    qDebug() << "TimeLine::updateInsertExposure --> Start";
 
     this->newExposure(sceneIndex, takeIndex, exposureIndex);
 
-    qDebug("TimeLine::updateInsertExposure --> End");
+    qDebug() << "TimeLine::updateInsertExposure --> End";
 }
 
 
@@ -373,31 +375,31 @@ void TimeLine::updateRemoveExposure(int sceneIndex,
                                     int takeIndex,
                                     int exposureIndex)
 {
-    qDebug("TimeLine::updateRemoveExposure --> Start");
+    qDebug() << "TimeLine::updateRemoveExposure --> Start";
 
     removeExposure(sceneIndex, takeIndex, exposureIndex);
 
-    qDebug("TimeLine::updateRemoveExposure --> End");
+    qDebug() << "TimeLine::updateRemoveExposure --> End";
 }
 
 
 void TimeLine::updateMoveExposures(int fromFrame, int toFrame, int movePosition)
 {
-    qDebug("TimeLine::updateMoveExposures --> Start");
+    qDebug() << "TimeLine::updateMoveExposures --> Start";
 
     moveExposures(fromFrame, toFrame, movePosition);
 
-    qDebug("TimeLine::updateMoveExposures --> End");
+    qDebug() << "TimeLine::updateMoveExposures --> End";
 }
 
 
 void TimeLine::updateActivateExposure()
 {
-    qDebug("TimeLine::updateActivateExposure --> Start");
+    qDebug() << "TimeLine::updateActivateExposure --> Start";
 
     activateExposure();
 
-    qDebug("TimeLine::updateActivateExposure --> End");
+    qDebug() << "TimeLine::updateActivateExposure --> End";
 }
 
 
@@ -405,11 +407,11 @@ void TimeLine::updateModifyExposure(int modSceneIndex,
                                     int modTakeIndex,
                                     int modExposureIndex)
 {
-    qDebug("TimeLine::updateModifyExposure --> Start");
+    qDebug() << "TimeLine::updateModifyExposure --> Start";
 
     modifyExposure(modSceneIndex, modTakeIndex, modExposureIndex);
 
-    qDebug("TimeLine::updateModifyExposure --> End");
+    qDebug() << "TimeLine::updateModifyExposure --> End";
 }
 
 
@@ -419,7 +421,7 @@ void TimeLine::updateModifyExposure(int modSceneIndex,
 
 void TimeLine::moveThumbView(int fromPosition, int toPosition)
 {
-    qDebug("TimeLine::moveThumbView --> Start");
+    qDebug() << "TimeLine::moveThumbView --> Start";
 
     ThumbView *f = thumbViews[fromPosition];
     f->setThumbIndex(toPosition - 1);
@@ -427,17 +429,17 @@ void TimeLine::moveThumbView(int fromPosition, int toPosition)
     thumbViews.erase(thumbViews.begin() + fromPosition);
     thumbViews.insert(thumbViews.begin() + toPosition, f);
 
-    qDebug("TimeLine::moveThumbView --> End");
+    qDebug() << "TimeLine::moveThumbView --> End";
 }
 
 
 void TimeLine::setSelecting(bool selecting)
 {
-    qDebug("TimeLine::setSelecting --> Start");
+    qDebug() << "TimeLine::setSelecting --> Start";
 
     this->selecting = selecting;
 
-    qDebug("TimeLine::setSelecting --> End");
+    qDebug() << "TimeLine::setSelecting --> End";
 }
 
 
@@ -455,7 +457,7 @@ int TimeLine::getSelectionFrame() const
 
 void TimeLine::frameSoundsChanged()
 {
-    qDebug("TimeLine::frameSoundsChanged --> Start");
+    qDebug() << "TimeLine::frameSoundsChanged --> Start";
 
     int activeFrame = frontend->getProject()->getActiveExposureIndex();
     int activeThumb = activeFrame + frontend->getProject()->getActiveSceneIndex() + 1;
@@ -469,7 +471,7 @@ void TimeLine::frameSoundsChanged()
 //        }
     }
 
-    qDebug("TimeLine::frameSoundsChanged --> End");
+    qDebug() << "TimeLine::frameSoundsChanged --> End";
 }
 
 
@@ -483,28 +485,28 @@ void TimeLine::frameSoundsChanged()
 
 void TimeLine::newScene(int sceneIndex)
 {
-    qDebug("TimeLine::newScene --> Start");
+    qDebug() << "TimeLine::newScene --> Start";
 
-    qDebug("TimeLine::newScene --> Adding new scene thumb to timeline");
+    qDebug() << "TimeLine::newScene --> Adding new scene thumb to timeline";
 
     if (sceneIndex > activeSceneIndex) {
         // New Scene is inserted after the active scene --> Nothing to do
-        qDebug("TimeLine::newScene --> End (Nothing)");
+        qDebug() << "TimeLine::newScene --> End (Nothing)";
         return;
     }
 
     activeSceneIndex++;
 
-    qDebug("TimeLine::newScene --> End");
+    qDebug() << "TimeLine::newScene --> End";
 }
 
 
 void TimeLine::moveScene(int sceneNumber, int movePosition)
 {
-    qDebug("TimeLine::moveScene --> Start");
+    qDebug() << "TimeLine::moveScene --> Start";
 
     if (thumbViews.size() <= 0) {
-        qDebug("TimeLine::moveScene --> End (nothing to do)");
+        qDebug() << "TimeLine::moveScene --> End (nothing to do)";
         return;
     }
     if (movePosition < sceneNumber) {
@@ -526,18 +528,18 @@ void TimeLine::moveScene(int sceneNumber, int movePosition)
     thumbViews.erase(thumbViews.begin() + sceneNumber);
     thumbViews.insert(thumbViews.begin() + movePosition, tv);
 
-    qDebug("TimeLine::moveScene --> End");
+    qDebug() << "TimeLine::moveScene --> End";
 }
 
 void TimeLine::activateScene()
 {
-    qDebug("TimeLine::activateScene --> Start");
+    qDebug() << "TimeLine::activateScene --> Start";
 
     int newActiveScene = frontend->getProject()->getActiveSceneIndex();
 
     if (newActiveScene == activeSceneIndex) {
         // Nothing to do
-        qDebug("TimeLine::activateScene --> End (Nothing)");
+        qDebug() << "TimeLine::activateScene --> End (Nothing)";
         return;
     }
 
@@ -547,7 +549,7 @@ void TimeLine::activateScene()
     }
     activeSceneIndex = newActiveScene;
 
-    qDebug("TimeLine::activateScene --> End");
+    qDebug() << "TimeLine::activateScene --> End";
 }
 
 
@@ -558,28 +560,28 @@ void TimeLine::activateScene()
 void TimeLine::newTake(int sceneIndex,
                        int takeIndex)
 {
-    qDebug("TimeLine::newTake --> Start");
+    qDebug() << "TimeLine::newTake --> Start";
 
     if (sceneIndex != activeSceneIndex) {
         // Not the active scene --> Nothing to do
-        qDebug("TimeLine::newTake --> End (Nothing)");
+        qDebug() << "TimeLine::newTake --> End (Nothing)";
         return;
     }
     if (takeIndex > activeTakeIndex) {
         // New take is inserted after the activ take --> Nothing to do
-        qDebug("TimeLine::newTake --> End (Nothing)");
+        qDebug() << "TimeLine::newTake --> End (Nothing)";
         return;
     }
 
     activeTakeIndex++;
 
-    qDebug("TimeLine::newTake --> End");
+    qDebug() << "TimeLine::newTake --> End";
 }
 
 
 void TimeLine::activateTake()
 {
-    qDebug("TimeLine::activateTake --> Start");
+    qDebug() << "TimeLine::activateTake --> Start";
 
     if (activeSceneIndex < 0) {
         // Nothing to do
@@ -613,7 +615,7 @@ void TimeLine::activateTake()
 
     ensureVisible((FRAME_WIDTH + SPACE) * thumbViews.size() + FRAME_WIDTH, FRAME_HEIGHT);
 
-    qDebug("TimeLine::activateTake --> End");
+    qDebug() << "TimeLine::activateTake --> End";
 }
 
 
@@ -625,13 +627,13 @@ void TimeLine::newExposure(int sceneIndex,
                            int takeIndex,
                            int newExposureIndex)
 {
-    // qDebug("TimeLine::newExposure --> Start");
+    // qDebug() << "TimeLine::newExposure --> Start";
 
     Q_ASSERT(newExposureIndex >= 0);
 
     if (activeTakeIndex < 0) {
         // No active take in the timeline
-        // qDebug("TimeLine::newExposure --> End (nothing)");
+        // qDebug() << "TimeLine::newExposure --> End (nothing)";
         return;
     }
 
@@ -673,13 +675,13 @@ void TimeLine::newExposure(int sceneIndex,
         selectionFrame++;
     }
 
-    // qDebug("TimeLine::newExposure --> End");
+    // qDebug() << "TimeLine::newExposure --> End";
 }
 
 
 void TimeLine::addExposures(const QVector<Exposure*>& exposures, int index)
 {
-    qDebug("TimeLine::addExposures --> Start");
+    qDebug() << "TimeLine::addExposures --> Start";
 
     int size = thumbViews.size();
     int exposureSize = exposures.size();
@@ -690,7 +692,7 @@ void TimeLine::addExposures(const QVector<Exposure*>& exposures, int index)
     if (exposureSize)
     // Move the frames behind the place we are inserting the new ones.
     for (int i = from; i < size; ++i) {
-        qDebug("TimeLine::addExposures --> move frame");
+        qDebug() << "TimeLine::addExposures --> move frame";
 
         thumbViews[i]->move(thumbViews[i]->x() + (FRAME_WIDTH + SPACE) * exposureSize, 0);
         if (i < to) {
@@ -706,7 +708,7 @@ void TimeLine::addExposures(const QVector<Exposure*>& exposures, int index)
 
     // Adds the new frames to the timeline
     for (; exposureIndex < exposureSize; ++exposureIndex) {
-        qDebug("TimeLine::addExposures --> add frame");
+        qDebug() << "TimeLine::addExposures --> add frame";
 
         Exposure *exposure = exposures[exposureIndex];
         thumb = new ExposureThumbView(this, this, index + exposureIndex);
@@ -741,14 +743,14 @@ void TimeLine::addExposures(const QVector<Exposure*>& exposures, int index)
 
     if (operationCanceled) {
         for (int j = index + exposureIndex, k = index; j < exposureIndex + size; ++j, ++k) {
-            qDebug("TimeLine::addExposures --> move frame back");
+            qDebug() << "TimeLine::addExposures --> move frame back";
 
             thumbViews[j]->move(thumbViews[j]->x() - exposureSize * (FRAME_WIDTH + SPACE), 0);
             thumbViews[j]->setThumbIndex(k);
         }
 
         for (int j = index; j <= index + exposureIndex; ++j) {
-            qDebug("TimeLine::addExposures --> delete frame");
+            qDebug() << "TimeLine::addExposures --> delete frame";
 
             delete thumbViews[index];
         }
@@ -757,7 +759,7 @@ void TimeLine::addExposures(const QVector<Exposure*>& exposures, int index)
         mainWidget->resize((FRAME_WIDTH + SPACE) * thumbViews.size() - SPACE, FRAME_HEIGHT);
     }
 
-    qDebug("TimeLine::addExposures --> End");
+    qDebug() << "TimeLine::addExposures --> End";
 }
 
 
@@ -765,16 +767,16 @@ void TimeLine::removeExposure(int sceneIndex,
                               int takeIndex,
                               int exposureIndex)
 {
-    qDebug("TimeLine::removeExposure --> Start");
+    qDebug() << "TimeLine::removeExposure --> Start";
 
     if (this->activeSceneIndex != sceneIndex) {
-        qDebug("TimeLine::removeExposure --> End (Nothing)");
+        qDebug() << "TimeLine::removeExposure --> End (Nothing)";
         return;
     }
 
     // The timeline is in the right scene
     if (this->activeTakeIndex != takeIndex) {
-        qDebug("TimeLine::removeExposure --> End (Nothing)");
+        qDebug() << "TimeLine::removeExposure --> End (Nothing)";
         return;
     }
 
@@ -813,13 +815,13 @@ void TimeLine::removeExposure(int sceneIndex,
         thumbViews[activeExposureIndex]->setSelected(true);
     }
 
-    qDebug("TimeLine::removeExposure --> End");
+    qDebug() << "TimeLine::removeExposure --> End";
 }
 
 
 void TimeLine::removeAllExposures()
 {
-    qDebug("TimeLine::removeAllExposures --> Start");
+    qDebug() << "TimeLine::removeAllExposures --> Start";
 
     int tumbSize = thumbViews.size();
 
@@ -832,13 +834,13 @@ void TimeLine::removeAllExposures()
 
     activeExposureIndex = -1;
 
-    qDebug("TimeLine::removeAllExposures --> End");
+    qDebug() << "TimeLine::removeAllExposures --> End";
 }
 
 
 void TimeLine::moveExposures(int fromFrame, int toFrame, int movePosition)
 {
-    qDebug("TimeLine::moveExposures --> Start");
+    qDebug() << "TimeLine::moveExposures --> Start";
 
     fromFrame += 1;
     toFrame += 1;
@@ -866,13 +868,13 @@ void TimeLine::moveExposures(int fromFrame, int toFrame, int movePosition)
         }
     }
 
-    qDebug("TimeLine::moveExposures --> End");
+    qDebug() << "TimeLine::moveExposures --> End";
 }
 
 
 void TimeLine::activateExposure()
 {
-    qDebug("TimeLine::activateExposure --> Start");
+    qDebug() << "TimeLine::activateExposure --> Start";
 
     if (activeSceneIndex < 0) {
         // Nothing to do
@@ -906,7 +908,7 @@ void TimeLine::activateExposure()
     selectionFrame = activeExposureIndex;
     this->selecting = false;
 
-    qDebug("TimeLine::activateExposure --> End");
+    qDebug() << "TimeLine::activateExposure --> End";
 }
 
 
@@ -914,24 +916,24 @@ void TimeLine::modifyExposure(int modSceneIndex,
                               int modTakeIndex,
                               int modExposureIndex)
 {
-    qDebug("TimeLine::modifyExposure --> Start");
+    qDebug() << "TimeLine::modifyExposure --> Start";
 
     if (activeSceneIndex != modSceneIndex) {
         // The scene of the modifyed exposure is not displayed in the frame view
-        qDebug("TimeLine::modifyExposure --> End (Nothing)");
+        qDebug() << "TimeLine::modifyExposure --> End (Nothing)";
         return;
     }
 
     if (activeTakeIndex != modTakeIndex) {
         // The take of the modifyed exposure is not displayed in the frame view
-        qDebug("TimeLine::modifyExposure --> End (Nothing)");
+        qDebug() << "TimeLine::modifyExposure --> End (Nothing)";
         return;
     }
 
     Exposure *exposure = frontend->getProject()->getExposure(activeSceneIndex, activeTakeIndex, modExposureIndex);
     thumbViews[modExposureIndex]->setPixmap(QPixmap::fromImage(tryReadImage(exposure->getImagePath()).scaled(FRAME_WIDTH, FRAME_HEIGHT)));
 
-    qDebug("TimeLine::modifyExposure --> End");
+    qDebug() << "TimeLine::modifyExposure --> End";
 }
 
 
@@ -953,7 +955,7 @@ void TimeLine::setMovingScene(int movingScene)
 
 void TimeLine::dragEnterEvent(QDragEnterEvent *event)
 {
-    qDebug("TimeLine::dragEnterEvent --> Start");
+    qDebug() << "TimeLine::dragEnterEvent --> Start";
 
     if (event->mimeData()->hasUrls()) {
         event->accept();
@@ -961,13 +963,13 @@ void TimeLine::dragEnterEvent(QDragEnterEvent *event)
         event->ignore();
     }
 
-    qDebug("TimeLine::dragEnterEvent --> End");
+    qDebug() << "TimeLine::dragEnterEvent --> End";
 }
 
 
 void TimeLine::dropEvent(QDropEvent *event)
 {
-    qDebug("TimeLine::dropEvent --> Start");
+    qDebug() << "TimeLine::dropEvent --> Start";
 
     scrollTimer->stop();
     scrollDirection = 0;
@@ -977,13 +979,13 @@ void TimeLine::dropEvent(QDropEvent *event)
         thumbViews[index]->contentsDropped(event);
     }
 
-    qDebug("TimeLine::dropEvent --> End");
+    qDebug() << "TimeLine::dropEvent --> End";
 }
 
 
 void TimeLine::dragMoveEvent(QDragMoveEvent *event)
 {
-    qDebug("TimeLine::dragMoveEvent --> Start");
+    qDebug() << "TimeLine::dragMoveEvent --> Start";
 
     int dragPosX = event->pos().x();
     int dragPosY = event->pos().y();
@@ -1014,13 +1016,13 @@ void TimeLine::dragMoveEvent(QDragMoveEvent *event)
         scrollDirection = 0;
     }
 
-    qDebug("TimeLine::dragMoveEvent --> End");
+    qDebug() << "TimeLine::dragMoveEvent --> End";
 }
 
 
 void TimeLine::resizeEvent(QResizeEvent *event)
 {
-    qDebug("TimeLine::resizeEvent --> Start");
+    qDebug() << "TimeLine::resizeEvent --> Start";
 
     lowerScrollAreaX = this->x() + FRAME_WIDTH;
     upperScrollAreaX = this->width() - FRAME_WIDTH;
@@ -1036,7 +1038,7 @@ void TimeLine::resizeEvent(QResizeEvent *event)
 
     QScrollArea::resizeEvent(event);
 
-    qDebug("TimeLine::resizeEvent --> End");
+    qDebug() << "TimeLine::resizeEvent --> End";
 }
 
 
@@ -1070,17 +1072,17 @@ int TimeLine::getSpace() const
 
 void TimeLine::clear()
 {
-    qDebug("TimeLine::clear --> Start");
+    qDebug() << "TimeLine::clear --> Start";
 
     clearTake();
 
-    qDebug("TimeLine::clear --> End");
+    qDebug() << "TimeLine::clear --> End";
 }
 
 
 void TimeLine::clearTake()
 {
-    qDebug("TimeLine::clearTake --> Start");
+    qDebug() << "TimeLine::clearTake --> Start";
 
     int size = thumbViews.size();
     for (int i = 0; i < size; ++i) {
@@ -1092,5 +1094,5 @@ void TimeLine::clearTake()
     activeTakeIndex = -1;
     activeSceneIndex = -1;
 
-    qDebug("TimeLine::clearTake --> End");
+    qDebug() << "TimeLine::clearTake --> End";
 }

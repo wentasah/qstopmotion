@@ -22,10 +22,10 @@
 
 #include "videoencoder.h"
 
-#include "technical/util.h"
-
 #include <stdlib.h>
 #include <string.h>
+
+#include "technical/util.h"
 
 
 VideoEncoder::VideoEncoder()

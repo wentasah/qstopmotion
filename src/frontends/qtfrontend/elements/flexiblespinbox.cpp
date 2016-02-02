@@ -22,7 +22,7 @@
 
 #include "flexiblespinbox.h"
 
-#include <QtGui/QKeyEvent>
+#include <QKeyEvent>
 
 
 FlexibleSpinBox::FlexibleSpinBox(QWidget *parent)

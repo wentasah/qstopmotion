@@ -20,23 +20,22 @@
 
 #include "grabberwidget.h"
 
+#include <QColorDialog>
+#include <QDebug>
+#include <QGridLayout>
+#include <QHeaderView>
+#include <QInputDialog>
+#include <QLabel>
+
 #include "domain/domainfacade.h"
 #include "frontends/qtfrontend/elements/flexiblelineedit.h"
 #include "technical/preferencestool.h"
-
-#include <QtCore/QtDebug>
-
-#include <QtGui/QColorDialog>
-#include <QtGui/QGridLayout>
-#include <QtGui/QHeaderView>
-#include <QtGui/QInputDialog>
-#include <QtGui/QLabel>
 
 
 GrabberWidget::GrabberWidget(Frontend *f, QWidget *parent)
     : QWidget(parent)
 {
-    qDebug("GrabberWidget::Constructor --> Start");
+    qDebug() << "GrabberWidget::Constructor --> Start";
 
     frontend                               = f;
 
@@ -67,13 +66,13 @@ GrabberWidget::GrabberWidget(Frontend *f, QWidget *parent)
 
     makeGUI();
 
-    qDebug("GrabberWidget::Constructor --> End");
+    qDebug() << "GrabberWidget::Constructor --> End";
 }
 
 
 void GrabberWidget::makeGUI()
 {
-    qDebug("GrabberWidget::makeGUI --> Start");
+    qDebug() << "GrabberWidget::makeGUI --> Start";
 
     infoText = new QTextEdit;
     infoText->setReadOnly(true);
@@ -143,18 +142,18 @@ void GrabberWidget::makeGUI()
 
     setLayout(mainLayout);
 
-    qDebug("GrabberWidget::makeGUI --> End");
+    qDebug() << "GrabberWidget::makeGUI --> End";
 }
 
 
 void GrabberWidget::initialize()
 {
-    qDebug("GrabberWidget::initialize --> Start");
+    qDebug() << "GrabberWidget::initialize --> Start";
 
     PreferencesTool *pref = frontend->getPreferences();
     int              value;
 
-#ifdef Q_WS_X11
+#ifdef Q_OS_LINUX
     // GStreamer video test device
     if (frontend->isGstreamerInstalled()) {
         if (pref->getIntegerPreference("preferences", "gstreamervideotestgrabber", value) == false) {
@@ -170,7 +169,7 @@ void GrabberWidget::initialize()
     gstreamerVideoTestGrabberCheck->hide();
 #endif
 
-#ifdef Q_WS_X11
+#ifdef Q_OS_LINUX
     // GStreamer video4linux2 device
     if (frontend->isGstreamerInstalled()) {
         if (pref->getIntegerPreference("preferences", "gstreamerv4l2grabber", value) == false) {
@@ -186,7 +185,7 @@ void GrabberWidget::initialize()
     gstreamerV4L2GrabberCheck->hide();
 #endif
 
-#ifdef Q_WS_X11
+#ifdef Q_OS_LINUX
     // GStreamer dv1394 device
     if (frontend->isGstreamerInstalled()) {
         if (pref->getIntegerPreference("preferences", "gstreamerdv1394grabber", value) == false) {
@@ -202,7 +201,7 @@ void GrabberWidget::initialize()
     gstreamerDv1394GrabberCheck->hide();
 #endif
 
-#ifdef Q_WS_X11
+#ifdef Q_OS_LINUX
     // Video4Linux2 device
     if (pref->getIntegerPreference("preferences", "v4l2grabber", value) == false) {
         value = true;
@@ -225,7 +224,7 @@ void GrabberWidget::initialize()
     v4l2ControllerCheck->hide();
 #endif
 
-#ifdef Q_WS_WIN
+#if defined(Q_OS_WIN32) || defined(Q_OS_WIN64)
     // Media Foundation device
     if (pref->getIntegerPreference("preferences", "mediafoundationgrabber", value) == false) {
         value = true;
@@ -244,7 +243,7 @@ void GrabberWidget::initialize()
     mediaFoundationControllerCheck->hide();
 #endif
 
-#ifdef Q_WS_X11
+#ifdef Q_OS_LINUX
     // gphoto2 device
     if (pref->getIntegerPreference("preferences", "gphoto2grabber", value) == false) {
         value = false;
@@ -263,23 +262,23 @@ void GrabberWidget::initialize()
     gphoto2ControllerCheck->hide();
 #endif
 
-    qDebug("GrabberWidget::initialize --> End");
+    qDebug() << "GrabberWidget::initialize --> End";
 }
 
 /*
 void GrabberWidget::resizeEvent(QResizeEvent *event)
 {
-    qDebug("GrabberWidget::resizeEvent --> Start");
+    qDebug() << "GrabberWidget::resizeEvent --> Start");
 
     QWidget::resizeEvent(event);
 
-    qDebug("GrabberWidget::resizeEvent --> End");
+    qDebug() << "GrabberWidget::resizeEvent --> End");
 }
 */
 
 void GrabberWidget::apply()
 {
-    qDebug("GrabberWidget::apply --> Start");
+    qDebug() << "GrabberWidget::apply --> Start";
 
     PreferencesTool *pref = frontend->getPreferences();
     bool             changes = false;
@@ -360,13 +359,13 @@ void GrabberWidget::apply()
         // There are changes in the grabber preferences
         frontend->showInformation(tr("Information"), tr("Pease restart qStopMotion to activate the changings!"));
     }
-    qDebug("GrabberWidget::apply --> End");
+    qDebug() << "GrabberWidget::apply --> End";
 }
 
 
 void GrabberWidget::reset()
 {
-    qDebug("GrabberWidget::reset --> Start");
+    qDebug() << "GrabberWidget::reset --> Start";
 
     gstreamerVideoTestGrabberCheck->setChecked(actualGstreamerVideoTestGrabber);
 
@@ -383,7 +382,7 @@ void GrabberWidget::reset()
     gphoto2GrabberCheck->setChecked(actualGphoto2Grabber);
     gphoto2ControllerCheck->setChecked(actualGphoto2Controller);
 
-    qDebug("GrabberWidget::reset --> End");
+    qDebug() << "GrabberWidget::reset --> End";
 }
 
 

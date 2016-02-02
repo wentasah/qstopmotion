@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2014 by                                                *
+ *  Copyright (C) 2005-2015 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -20,24 +20,24 @@
 
 #include "transformwidget.h"
 
+#include <QDebug>
+#include <QFileDialog>
+#include <QGridLayout>
+#include <QHeaderView>
+#include <QInputDialog>
+#include <QLabel>
+#include <QRect>
+#include <QSpacerItem>
+
 #include "domain/domainfacade.h"
 #include "frontends/qtfrontend/elements/flexiblelineedit.h"
 #include "technical/preferencestool.h"
 #include "technical/grabber/imagegrabber.h"
 
-#include <QtCore/QtDebug>
-#include <QtCore/QRect>
-#include <QtGui/QFileDialog>
-#include <QtGui/QGridLayout>
-#include <QtGui/QHeaderView>
-#include <QtGui/QInputDialog>
-#include <QtGui/QLabel>
-#include <QtGui/QSpacerItem>
-
 
 TransformWidget::TransformWidget(Frontend *f, bool type, QWidget *parent) : QWidget(parent)
 {
-    qDebug("TransformWidget::Constructor --> Start");
+    qDebug() << "TransformWidget::Constructor --> Start";
 
     frontend                 = f;
     tabType                  = type;
@@ -76,13 +76,13 @@ TransformWidget::TransformWidget(Frontend *f, bool type, QWidget *parent) : QWid
 
     makeGUI();
 
-    qDebug("TransformWidget::Constructor --> End");
+    qDebug() << "TransformWidget::Constructor --> End";
 }
 
 
 void TransformWidget::makeGUI()
 {
-    qDebug("TransformWidget::makeGUI --> Start");
+    qDebug() << "TransformWidget::makeGUI --> Start";
 
     infoText = new QTextEdit;
     infoText->setReadOnly(true);
@@ -276,13 +276,13 @@ void TransformWidget::makeGUI()
     mainLayout->addStretch(1);
     setLayout(mainLayout);
 
-    qDebug("TransformWidget::makeGUI --> End");
+    qDebug() << "TransformWidget::makeGUI --> End";
 }
 
 
 void TransformWidget::initialize()
 {
-    qDebug("TransformWidget::initialize --> Start");
+    qDebug() << "TransformWidget::initialize --> Start";
 
     PreferencesTool *pref = frontend->getPreferences();
     int              value;
@@ -329,23 +329,23 @@ void TransformWidget::initialize()
     zoomSlider->setValue(activeZoomValue);
 
 
-    qDebug("TransformWidget::initialize --> End");
+    qDebug() << "TransformWidget::initialize --> End";
 }
 
 /*
 void TransformWidget::resizeEvent(QResizeEvent *event)
 {
-    qDebug("TransformWidget::resizeEvent --> Start");
+    qDebug() << "TransformWidget::resizeEvent --> Start";
 
     QWidget::resizeEvent(event);
 
-    qDebug("TransformWidget::resizeEvent --> End");
+    qDebug() << "TransformWidget::resizeEvent --> End";
 }
 */
 
 void TransformWidget::apply()
 {
-    qDebug("TransformWidget::apply --> Start");
+    qDebug() << "TransformWidget::apply --> Start";
 
     PreferencesTool *pref = frontend->getPreferences();
     int index;
@@ -427,13 +427,13 @@ void TransformWidget::apply()
         }
     }
 
-    qDebug("TransformWidget::apply --> End");
+    qDebug() << "TransformWidget::apply --> End";
 }
 
 
 void TransformWidget::reset()
 {
-    qDebug("TransformWidget::reset --> Start");
+    qDebug() << "TransformWidget::reset --> Start";
 
     switch (activeTransform) {
     case 0:
@@ -449,7 +449,7 @@ void TransformWidget::reset()
     setAdjustment(activeImageAdjustment);
     zoomSlider->setValue(activeZoomValue);
 
-    qDebug("TransformWidget::reset --> End");
+    qDebug() << "TransformWidget::reset --> End";
 }
 
 

@@ -23,10 +23,10 @@
 #ifndef FFMPEGENCODER_H
 #define FFMPEGENCODER_H
 
+#include <QString>
+
 #include "domain/animation/animationproject.h"
 #include "technical/videoencoder/videoencoder.h"
-
-#include <QString>
 
 class AnimationProject;
 

@@ -22,9 +22,11 @@
 
 #include "undoexposureinsert.h"
 
-#include "domain/animation/exposure.h"
+#include <QDebug>
+#include <QVector>
+#include <QLatin1String>
 
-#include <QtCore/QVector>
+#include "domain/animation/exposure.h"
 
 
 UndoExposureInsert::UndoExposureInsert(DomainFacade  *df,
@@ -56,7 +58,7 @@ UndoExposureInsert::~UndoExposureInsert()
 
 void UndoExposureInsert::undo()
 {
-    qDebug("UndoExposureInsert::undo --> Start");
+    qDebug() << "UndoExposureInsert::undo --> Start";
 
     Q_ASSERT(NULL == exposure);
 
@@ -70,13 +72,13 @@ void UndoExposureInsert::undo()
 
     facade->writeHistoryEntry(QLatin1String("undo"));
 
-    qDebug("UndoExposureInsert::undo --> End");
+    qDebug() << "UndoExposureInsert::undo --> End";
 }
 
 
 void UndoExposureInsert::redo()
 {
-    qDebug("UndoExposureInsert::redo --> Start");
+    qDebug() << "UndoExposureInsert::redo --> Start";
 
     AnimationProject *animationProject = facade->getAnimationProject();
 
@@ -103,5 +105,5 @@ void UndoExposureInsert::redo()
 
     animationProject->incAnimationChanges();
 
-    qDebug("UndoExposureInsert::redo --> End");
+    qDebug() << "UndoExposureInsert::redo --> End";
 }

@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2014 by                                                *
+ *  Copyright (C) 2005-2015 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -22,11 +22,13 @@
 
 #include "imagegrabberfacade.h"
 
-#ifdef Q_WS_WIN
+#include <QDebug>
+
+#if defined(Q_OS_WIN32) || defined(Q_OS_WIN64)
   #include "technical/grabber/mediafoundation/mfgrabber.h"
 #endif
 
-#ifdef Q_WS_X11
+#ifdef Q_OS_LINUX
   #include "technical/grabber/gphoto2/gpgrabber.h"
   #include "technical/grabber/gstreamer/videotestgrabber.h"
   #include "technical/grabber/gstreamer/linux/dv1394grabber.h"
@@ -36,12 +38,10 @@
 
 #include "technical/preferencestool.h"
 
-#include <QtCore/QtDebug>
-
 
 ImageGrabberFacade::ImageGrabberFacade(Frontend *f)
 {
-    qDebug("ImageGrabberFacade::Constructor --> Start");
+    qDebug() << "ImageGrabberFacade::Constructor --> Start";
 
     frontend = f;
 
@@ -58,13 +58,13 @@ ImageGrabberFacade::ImageGrabberFacade(Frontend *f)
 
     mediaFoundationGrabber = NULL;
 
-    qDebug("ImageGrabberFacade::Constructor --> End");
+    qDebug() << "ImageGrabberFacade::Constructor --> End";
 }
 
 
 ImageGrabberFacade::~ImageGrabberFacade()
 {
-    qDebug("ImageGrabberFacade::Destructor --> Start");
+    qDebug() << "ImageGrabberFacade::Destructor --> Start";
 
     clearDevices();
 
@@ -93,7 +93,7 @@ ImageGrabberFacade::~ImageGrabberFacade()
         mediaFoundationGrabber = NULL;
     }
 
-    qDebug("ImageGrabberFacade::Destructor --> End");
+    qDebug() << "ImageGrabberFacade::Destructor --> End";
 }
 
 
@@ -107,7 +107,7 @@ void ImageGrabberFacade::newDeviceSet()
 
 void ImageGrabberFacade::clearDevices()
 {
-    qDebug("ImageGrabberFacade::clearDevices --> Start");
+    qDebug() << "ImageGrabberFacade::clearDevices --> Start";
 
     unsigned int deviceSize = devices.size();
     for (unsigned int deviceIndex = 0; deviceIndex < deviceSize; ++deviceIndex) {
@@ -116,20 +116,20 @@ void ImageGrabberFacade::clearDevices()
     }
     devices.clear();
 
-    qDebug("ImageGrabberFacade::clearDevices --> End");
+    qDebug() << "ImageGrabberFacade::clearDevices --> End";
 }
 
 
 void ImageGrabberFacade::initialization()
 {
-    qDebug("ImageGrabberFacade::initialization --> Start");
+    qDebug() << "ImageGrabberFacade::initialization --> Start";
 
     PreferencesTool *pref = frontend->getPreferences();
     int              value;
 
     clearDevices();
 
-#ifdef Q_WS_X11
+#ifdef Q_OS_LINUX
     // GStreamer video test device
     if (frontend->isGstreamerInstalled()) {
         if (pref->getIntegerPreference("preferences", "gstreamervideotestgrabber", value) == false) {
@@ -144,7 +144,7 @@ void ImageGrabberFacade::initialization()
     }
 #endif
 
-#ifdef Q_WS_X11
+#ifdef Q_OS_LINUX
     // GStreamer video4linux2 device
     if (pref->getIntegerPreference("preferences", "gstreamerv4l2grabber", value) == false) {
         value = true;
@@ -157,7 +157,7 @@ void ImageGrabberFacade::initialization()
     }
 #endif
 
-#ifdef Q_WS_X11
+#ifdef Q_OS_LINUX
     // GStreamer dv1394 device
     if (pref->getIntegerPreference("preferences", "gstreamerdv1394grabber", value) == false) {
         value = false;
@@ -170,7 +170,7 @@ void ImageGrabberFacade::initialization()
     }
 #endif
 
-#ifdef Q_WS_X11
+#ifdef Q_OS_LINUX
     // video4linux2 device
     if (pref->getIntegerPreference("preferences", "v4l2grabber", value) == false) {
         value = true;
@@ -183,7 +183,7 @@ void ImageGrabberFacade::initialization()
     }
 #endif
 
-#ifdef Q_WS_WIN
+#if defined(Q_OS_WIN32) || defined(Q_OS_WIN64)
     // Microsoft Media Foundation device
     if (pref->getIntegerPreference("preferences", "mediafoundationgrabber", value) == false) {
         value = true;
@@ -196,7 +196,7 @@ void ImageGrabberFacade::initialization()
     }
 #endif
 
-#ifdef Q_WS_X11
+#ifdef Q_OS_LINUX
     // gphoto2 device
     if (pref->getIntegerPreference("preferences", "gphoto2grabber", value) == false) {
         value = false;
@@ -209,7 +209,7 @@ void ImageGrabberFacade::initialization()
     }
 #endif
 
-    qDebug("ImageGrabberFacade::initialization --> End");
+    qDebug() << "ImageGrabberFacade::initialization --> End";
 }
 
 

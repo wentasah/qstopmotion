@@ -22,10 +22,14 @@
 
 #include "aboutdialog.h"
 
+#include <QLabel>
+#include <QProcess>
+#include <QPushButton>
+#include <QTextEdit>
+#include <QVBoxLayout>
+
 #include "licence.h"
 #include "technical/preferencestool.h"
-
-#include <QtGui>
 
 
 AboutDialog::AboutDialog(Frontend *f,
@@ -54,7 +58,7 @@ AboutDialog::AboutDialog(Frontend *f,
                           "<p>" + tr("qStopMotion is a fork of stopmotion for linux.") + "</p>"
                           "<p>http://developer.skolelinux.no/info/studentgrupper/2005-hig-stopmotion/index.php </p>"
                           "<p>" + tr("Version: ") + "0.6.2 </p>"
-                          "<p>&copy; 2005-2008, Bjørn Erik Nilsen " + tr("and") + " Fredrik Berg Kjølstad </p>"));
+                          "<p>&copy; 2005-2008, BjÃ¸rn Erik Nilsen " + tr("and") + " Fredrik Berg KjÃ¸lstad </p>"));
     aboutWidget->setLayout(aboutLayout);
     tabWidget->addTab(aboutWidget, tr("&About"));
 
@@ -63,8 +67,8 @@ AboutDialog::AboutDialog(Frontend *f,
                 "<p><b>" + tr("Main developers") + " - qStopMotion</b><br>"
                 "Ralf Lange &lt;ralf.lange@longsoft.de&gt;<br>"
                 "<p><b>" + tr("Main developers") + " - stopmotion for Linux</b><br>"
-                "Bjørn Erik Nilsen &lt;bjoern.nilsen@bjoernen.com&gt;<br>"
-                "Fredrik Berg Kjølstad &lt;fredrikbk@hotmail.com&gt;<br>"
+                "BjÃ¸rn Erik Nilsen &lt;bjoern.nilsen@bjoernen.com&gt;<br>"
+                "Fredrik Berg KjÃ¸lstad &lt;fredrikbk@hotmail.com&gt;<br>"
                 "<p><b>" + tr("Contributors") + " - stopmotion for Linux</b><br>"
                 "Eric Stolten &lt;stoltene2@gmail.com&gt;<br>"
                 "Josh Green &lt;josh@resonance.org&gt;<br>"
@@ -85,9 +89,9 @@ AboutDialog::AboutDialog(Frontend *f,
                 "Pavel Fric &lt;pavelfric@seznam.cz&gt; (" + tr("Czech") + ")<br>"
                 /*
                 "Gorazd Bizjak and Matej Lavreni &lt;info@zapstudio.net&gt; (" + tr("Slovenian") + ")<br>"
-                "José Jorge &lt;jjorge@free.fr&gt; (" + tr("Portuguese") + ")<br>"
-                "Manuel Quiñones &lt;manuel.por.aca@gmail.com&gt; (" + tr("Spanish") + ")<br>"
-                "Koray Löker &lt;loker@pardus.org.tr&gt; (" + tr("Turkish") + ")<br>"
+                "JosÃ© Jorge &lt;jjorge@free.fr&gt; (" + tr("Portuguese") + ")<br>"
+                "Manuel QuiÃ±ones &lt;manuel.por.aca@gmail.com&gt; (" + tr("Spanish") + ")<br>"
+                "Koray LÃ¶ker &lt;loker@pardus.org.tr&gt; (" + tr("Turkish") + ")<br>"
                 "Diego Giordano &lt;fusion_machine@tin.it&gt; (" + tr("Italian") + ")<br>"
                 "Matteo Comisso &lt;teomatteo8.9@hotmail.it&gt; (" + tr("Italian") + ")<br>"
                 "</p>"
@@ -95,13 +99,13 @@ AboutDialog::AboutDialog(Frontend *f,
                 "Gorazd Bizjak &lt;gorazd@zapstudio.net&gt;<br>"
                 "<p><b>" + tr("Coordinating") + "</b><br>"
                 "Herman Robak &lt;herman@skolelinux.no&gt;<br>"
-                "Øyvind Kolås &lt;pippin@gimp.org&gt;</p>"
+                "Ã˜yvind KolÃ¥s &lt;pippin@gimp.org&gt;</p>"
                 "<p><b>" + tr("Testing") + "</b><br>"
                 "Tore Sinding Bekkedal &lt;toresbe@ifi.uio.no&gt;<br>"
                 "Finn Arne Johansen &lt;faj@bzz.no&gt;<br>"
                 "Halvor Borgen &lt;halvor.borgen@hig.no&gt;<br>"
-                "Bjørn Are Hansen &lt;post@bahansen.net&gt;<br>"
-                "John Steinar Bildøy &lt;johnsbil@haldenfriskole.no&gt;<br>"
+                "BjÃ¸rn Are Hansen &lt;post@bahansen.net&gt;<br>"
+                "John Steinar BildÃ¸y &lt;johnsbil@haldenfriskole.no&gt;<br>"
                 "Ole-Anders Andreassen &lt;ole-anders.andreassen@sunndal.kommune.no&gt;<br>"
                 */
                 "</p>"
@@ -128,7 +132,7 @@ AboutDialog::AboutDialog(Frontend *f,
 
     // Add line containing the OS version number
     version.append(tr("Operating system name and version: "));
-#ifdef Q_WS_WIN
+#if defined(Q_OS_WIN32) || defined(Q_OS_WIN64)
     // Windows version
     switch(QSysInfo::WindowsVersion) {
     case QSysInfo::WV_NT:
@@ -160,7 +164,7 @@ AboutDialog::AboutDialog(Frontend *f,
         break;
     }
 #endif
-#ifdef Q_WS_MAC
+#ifdef Q_OS_OSX
     // Apple OS X version
     switch(QSysInfo::MacintoshVersion) {
     case QSysInfo::MV_10_3:
@@ -189,7 +193,7 @@ AboutDialog::AboutDialog(Frontend *f,
         break;
     }
 #endif
-#ifdef Q_WS_X11
+#ifdef Q_OS_LINUX
     // Linux version
     QProcess uname;
     uname.start("uname -ro");

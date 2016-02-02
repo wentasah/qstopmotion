@@ -20,13 +20,13 @@
 
 #include "compositingtab.h"
 
+#include <QDebug>
+#include <QHeaderView>
+#include <QInputDialog>
+#include <QLabel>
+
 #include "domain/domainfacade.h"
 // #include "technical/preferencestool.h"
-
-#include <QtCore/QtDebug>
-#include <QtGui/QHeaderView>
-#include <QtGui/QInputDialog>
-#include <QtGui/QLabel>
 
 
 CompositingTab::CompositingTab(Frontend *f,
@@ -206,11 +206,11 @@ void CompositingTab::initialize()
 /*
 void CompositingTab::resizeEvent(QResizeEvent *event)
 {
-    qDebug("CompositingTab::resizeEvent --> Start");
+    qDebug() << "CompositingTab::resizeEvent --> Start";
 
     QWidget::resizeEvent(event);
 
-    qDebug("CompositingTab::resizeEvent --> End");
+    qDebug() << "CompositingTab::resizeEvent --> End";
 }
 */
 

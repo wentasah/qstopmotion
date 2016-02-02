@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2012 by                                                *
+ *  Copyright (C) 2005-2015 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -21,10 +21,10 @@
 #ifndef PREFERENCESELEMENT_H
 #define PREFERENCESELEMENT_H
 
-#include <QtCore/QObject>
-#include <QtCore/QString>
-#include <QtXml/QDomDocument>
-#include <QtXml/QDomElement>
+#include <QDomDocument>
+#include <QDomElement>
+#include <QObject>
+#include <QString>
 
 
 /**

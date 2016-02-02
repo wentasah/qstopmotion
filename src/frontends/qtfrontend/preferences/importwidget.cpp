@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2014 by                                                *
+ *  Copyright (C) 2005-2015 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -20,24 +20,24 @@
 
 #include "importwidget.h"
 
+#include <QDebug>
+#include <QFileDialog>
+#include <QGridLayout>
+#include <QHeaderView>
+#include <QInputDialog>
+#include <QLabel>
+#include <QRect>
+#include <QSpacerItem>
+
 #include "domain/domainfacade.h"
 #include "frontends/qtfrontend/elements/flexiblelineedit.h"
 #include "technical/preferencestool.h"
 #include "technical/grabber/imagegrabber.h"
 
-#include <QtCore/QtDebug>
-#include <QtCore/QRect>
-#include <QtGui/QFileDialog>
-#include <QtGui/QGridLayout>
-#include <QtGui/QHeaderView>
-#include <QtGui/QInputDialog>
-#include <QtGui/QLabel>
-#include <QtGui/QSpacerItem>
-
 
 ImportWidget::ImportWidget(Frontend *f, bool type, QWidget *parent) : QWidget(parent)
 {
-    qDebug("ImportWidget::Constructor --> Start");
+    qDebug() << "ImportWidget::Constructor --> Start";
 
     frontend                 = f;
     tabType                  = type;
@@ -71,13 +71,13 @@ ImportWidget::ImportWidget(Frontend *f, bool type, QWidget *parent) : QWidget(pa
 
     makeGUI();
 
-    qDebug("ImportWidget::Constructor --> End");
+    qDebug() << "ImportWidget::Constructor --> End";
 }
 
 
 void ImportWidget::makeGUI()
 {
-    qDebug("ImportWidget::makeGUI --> Start");
+    qDebug() << "ImportWidget::makeGUI --> Start";
 
     infoText = new QTextEdit;
     infoText->setReadOnly(true);
@@ -202,13 +202,13 @@ void ImportWidget::makeGUI()
 
     setLayout(mainLayout);
 
-    qDebug("ImportWidget::makeGUI --> End");
+    qDebug() << "ImportWidget::makeGUI --> End";
 }
 
 
 void ImportWidget::initialize()
 {
-    qDebug("ImportWidget::initialize --> Start");
+    qDebug() << "ImportWidget::initialize --> Start";
 
     PreferencesTool *pref = frontend->getPreferences();
     int              value;
@@ -253,23 +253,23 @@ void ImportWidget::initialize()
 
     liveViewFpsSlider->setValue(activeLiveViewFps);
 
-    qDebug("ImportWidget::initialize --> End");
+    qDebug() << "ImportWidget::initialize --> End";
 }
 
 /*
 void ImportWidget::resizeEvent(QResizeEvent *event)
 {
-    qDebug("ImportWidget::resizeEvent --> Start");
+    qDebug() << "ImportWidget::resizeEvent --> Start";
 
     QWidget::resizeEvent(event);
 
-    qDebug("ImportWidget::resizeEvent --> End");
+    qDebug() << "ImportWidget::resizeEvent --> End";
 }
 */
 
 void ImportWidget::apply()
 {
-    qDebug("ImportWidget::apply --> Start");
+    qDebug() << "ImportWidget::apply --> Start";
 
     PreferencesTool *pref = frontend->getPreferences();
     int index;
@@ -317,13 +317,13 @@ void ImportWidget::apply()
         }
     }
 
-    qDebug("ImportWidget::apply --> End");
+    qDebug() << "ImportWidget::apply --> End";
 }
 
 
 void ImportWidget::reset()
 {
-    qDebug("ImportWidget::reset --> Start");
+    qDebug() << "ImportWidget::reset --> Start";
 
     imageFormatCombo->setCurrentIndex(activeImageFormat);
     enableQuality();
@@ -331,7 +331,7 @@ void ImportWidget::reset()
     imageSizeCombo->setCurrentIndex(activeImageSize);
     liveViewFpsSlider->setValue(activeLiveViewFps);
 
-    qDebug("ImportWidget::reset --> End");
+    qDebug() << "ImportWidget::reset --> End";
 }
 
 

@@ -21,14 +21,14 @@
 #ifndef COMPOSITINGTAB_H
 #define COMPOSITINGTAB_H
 
-#include "frontends/frontend.h"
-
-#include <QWidget>
-#include <QPushButton>
-#include <QGroupBox>
 #include <QGridLayout>
-#include <QSlider>
+#include <QGroupBox>
 #include <QLabel>
+#include <QPushButton>
+#include <QSlider>
+#include <QWidget>
+
+#include "frontends/frontend.h"
 
 
 /**

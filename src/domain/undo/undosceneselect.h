@@ -23,6 +23,7 @@
 
 #include <domain/undo/undobase.h>
 
+
 /**
  * The UndoSceneSelect class for undoing sceneSelect(...) calls to the project.
  */

@@ -25,6 +25,7 @@
 
 #include <domain/undo/undobase.h>
 
+
 /**
  * The UndoProjectOpen class for undoing openProject(...) calls to the project.
  */

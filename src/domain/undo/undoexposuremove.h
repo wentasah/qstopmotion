@@ -25,6 +25,7 @@
 
 #include <domain/undo/undobase.h>
 
+
 /**
  * The UndoExposureMove class for undoing moveExposure(...) calls to the project.
  */

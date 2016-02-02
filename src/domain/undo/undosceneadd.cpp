@@ -22,6 +22,9 @@
 
 #include "undosceneadd.h"
 
+#include <QDebug>
+#include <QLatin1String>
+
 
 UndoSceneAdd::UndoSceneAdd(DomainFacade  *df,
                            const QString &description)
@@ -46,7 +49,7 @@ UndoSceneAdd::~UndoSceneAdd()
 
 void UndoSceneAdd::undo()
 {
-    qDebug("UndoSceneAdd::undo --> Start");
+    qDebug() << "UndoSceneAdd::undo --> Start";
 
     AnimationProject *animationProject = facade->getAnimationProject();
 
@@ -58,13 +61,13 @@ void UndoSceneAdd::undo()
 
     facade->writeHistoryEntry(QLatin1String("undo"));
 
-    qDebug("UndoSceneAdd::undo --> End");
+    qDebug() << "UndoSceneAdd::undo --> End";
 }
 
 
 void UndoSceneAdd::redo()
 {
-    qDebug("UndoSceneAdd::redo --> Start");
+    qDebug() << "UndoSceneAdd::redo --> Start";
 
     AnimationProject *animationProject = facade->getAnimationProject();
 
@@ -89,5 +92,5 @@ void UndoSceneAdd::redo()
 
     animationProject->incAnimationChanges();
 
-    qDebug("UndoSceneAdd::redo --> End");
+    qDebug() << "UndoSceneAdd::redo --> End";
 }

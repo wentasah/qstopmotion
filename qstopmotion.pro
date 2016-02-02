@@ -1,7 +1,7 @@
 ###############################################################################
 # QtCreator file for the qStopMotion project                                  #
 # (c) Ralf Lange, longsoft.de                                                 #
-# Last update: 2015-05-12                                                     #
+# Last update: 2015-11-17                                                     #
 #                                                                             #
 # Please use CMake and the CMakeLists.txt file to build qStopMotion!          #
 ###############################################################################
@@ -133,6 +133,7 @@ SOURCES += src/main.cpp \
            src/frontends/qtfrontend/dialogs/externalcommanddialog.cpp \
            src/frontends/qtfrontend/dialogs/helpbrowser.cpp \
            src/frontends/qtfrontend/dialogs/startdialog.cpp \
+           src/frontends/qtfrontend/elements/clickablelabel.cpp \
            src/frontends/qtfrontend/elements/flexiblelineedit.cpp \
            src/frontends/qtfrontend/elements/flexiblespinbox.cpp \
            src/frontends/qtfrontend/frameview/frameviewimage.cpp \

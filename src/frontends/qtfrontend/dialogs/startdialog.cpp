@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2010-2011 by                                                *
+ *  Copyright (C) 2010-2015 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -20,11 +20,11 @@
 
 #include "startdialog.h"
 
-#include <QtCore/QDebug>
-#include <QtGui/QGridLayout>
-#include <QtGui/QHBoxLayout>
-#include <QtGui/QSizePolicy>
-#include <QtGui/QVBoxLayout>
+#include <QDebug>
+#include <QGridLayout>
+#include <QHBoxLayout>
+#include <QSizePolicy>
+#include <QVBoxLayout>
 
 
 StartDialog::StartDialog(Frontend *f,
@@ -133,7 +133,8 @@ StartDialog::StartDialog(Frontend *f,
 }
 
 
-void StartDialog::newClick() {
+void StartDialog::newClick()
+{
     qDebug() << "StartDialog::newClick --> Start";
 
     newProjectImage->setFrameStyle(QFrame::Panel | QFrame::Sunken);
@@ -151,7 +152,8 @@ void StartDialog::newClick() {
 }
 
 
-void StartDialog::lastClick() {
+void StartDialog::lastClick()
+{
     qDebug() << "StartDialog::lastClick --> Start";
 
     newProjectImage->setFrameStyle(QFrame::StyledPanel);
@@ -169,7 +171,8 @@ void StartDialog::lastClick() {
 }
 
 
-void StartDialog::openClick() {
+void StartDialog::openClick()
+{
     qDebug() << "StartDialog::openClick --> Start";
 
     newProjectImage->setFrameStyle(QFrame::StyledPanel);

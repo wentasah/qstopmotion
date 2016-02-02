@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2011-2014 by                                                *
+ *  Copyright (C) 2011-2015 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -20,11 +20,12 @@
 
 #include "imagegrabberdevice.h"
 
-#include <QtCore/QtDebug>
+#include <QDebug>
+
 
 ImageGrabberDevice::ImageGrabberDevice()
 {
-    qDebug("ImageGrabberDevice::Constructor(Default) --> Start");
+    qDebug() << "ImageGrabberDevice::Constructor(Default) --> Start";
 
     deviceId.clear();
     deviceName.clear();
@@ -35,7 +36,7 @@ ImageGrabberDevice::ImageGrabberDevice()
 
     controller = NULL;
 
-    qDebug("ImageGrabberDevice::Constructor(Default) --> End");
+    qDebug() << "ImageGrabberDevice::Constructor(Default) --> End";
 }
 
 
@@ -45,7 +46,7 @@ ImageGrabberDevice::ImageGrabberDevice(const int index,
                                        imageGrabberSources source,
                                        imageGrabberDeviceCapabilities cap)
 {
-    qDebug("ImageGrabberDevice::Constructor --> Start");
+    qDebug() << "ImageGrabberDevice::Constructor --> Start";
 
     deviceIndex = index;
     deviceId.clear();
@@ -57,13 +58,13 @@ ImageGrabberDevice::ImageGrabberDevice(const int index,
 
     controller = NULL;
 
-    qDebug("ImageGrabberDevice::Constructor --> End");
+    qDebug() << "ImageGrabberDevice::Constructor --> End";
 }
 
 
 ImageGrabberDevice::~ImageGrabberDevice()
 {
-    qDebug("ImageGrabberDevice::Destructor --> Start");
+    qDebug() << "ImageGrabberDevice::Destructor --> Start";
 
     if (controller != NULL)
     {
@@ -71,7 +72,7 @@ ImageGrabberDevice::~ImageGrabberDevice()
         controller = NULL;
     }
 
-    qDebug("ImageGrabberDevice::Destructor --> End");
+    qDebug() << "ImageGrabberDevice::Destructor --> End";
 }
 
 
@@ -196,4 +197,3 @@ void ImageGrabberDevice::setController(GrabberController *c)
 {
     controller = c;
 }
-

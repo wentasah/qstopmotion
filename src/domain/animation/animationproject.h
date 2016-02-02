@@ -23,16 +23,15 @@
 #ifndef ANIMATIONPROJECT_H
 #define ANIMATIONPROJECT_H
 
+#include <QString>
+#include <QVector>
+
 #include "domain/animation/exposure.h"
 #include "domain/animation/projectserializer.h"
 #include "domain/animation/scene.h"
 #include "frontends/frontend.h"
 #include "technical/audio/audiodriver.h"
 #include "technical/videoencoder/ffmpegencoder.h"
-
-#include <QtCore/QObject>
-#include <QtCore/QString>
-#include <QtCore/QVector>
 
 class ProjectSerializer;
 // class Scene;

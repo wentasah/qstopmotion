@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2014 by                                                *
+ *  Copyright (C) 2005-2015 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -23,6 +23,9 @@
 #ifndef GENERALDIALOG_H
 #define GENERALDIALOG_H
 
+#include <QDialog>
+#include <QPushButton>
+
 #include "frontends/frontend.h"
 #include "frontends/qtfrontend/preferences/exportwidget.h"
 #include "frontends/qtfrontend/preferences/generalwidget.h"
@@ -30,9 +33,6 @@
 #include "frontends/qtfrontend/preferences/importwidget.h"
 #include "frontends/qtfrontend/preferences/projectwidget.h"
 #include "frontends/qtfrontend/preferences/transformwidget.h"
-
-#include <QtGui/QDialog>
-#include <QtGui/QPushButton>
 
 
 /**

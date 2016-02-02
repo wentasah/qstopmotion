@@ -23,10 +23,10 @@
 #ifndef ABOUTDIALOG_H
 #define ABOUTDIALOG_H
 
-#include "frontends/frontend.h"
-
 #include <QDialog>
 #include <QTabWidget>
+
+#include "frontends/frontend.h"
 
 
 class AboutDialog : public QDialog

@@ -21,12 +21,13 @@
  ******************************************************************************/
 
 #include "cameracontrollerdialog.h"
-#include "technical/preferencestool.h"
 
-#include <QtCore/QtDebug>
-#include <QtCore/QUrl>
-#include <QtGui/QHBoxLayout>
-#include <QtGui/QProgressDialog>
+#include <QDebug>
+#include <QHBoxLayout>
+#include <QProgressDialog>
+#include <QUrl>
+
+#include "technical/preferencestool.h"
 
 
 CameraControllerDialog::CameraControllerDialog(Frontend *f,
@@ -34,7 +35,7 @@ CameraControllerDialog::CameraControllerDialog(Frontend *f,
                                                QWidget *parent)
     : QDialog(parent)
 {
-    qDebug("CameraControllerDialog::Constructor --> Start");
+    qDebug() << "CameraControllerDialog::Constructor --> Start";
 
     frontend = f;
     grabberDevice = device;
@@ -63,7 +64,7 @@ CameraControllerDialog::CameraControllerDialog(Frontend *f,
     makeGUI();
     retranslateStrings();
 
-    qDebug("CameraControllerDialog::Constructor --> End");
+    qDebug() << "CameraControllerDialog::Constructor --> End";
 }
 
 
@@ -348,7 +349,7 @@ void CameraControllerDialog::makeGUI()
     mainLayout->addLayout(bottomLayout);
     this->setLayout(mainLayout);
 
-    qDebug("CameraControllerDialog::makeGUI --> End");
+    qDebug() << "CameraControllerDialog::makeGUI --> End";
 }
 
 
@@ -2762,7 +2763,7 @@ void CameraControllerDialog::reset()
 
 void CameraControllerDialog::close()
 {
-    qDebug("CameraControllerDialog::close --> Start");
+    qDebug() << "CameraControllerDialog::close --> Start";
 
     setFocus();
 
@@ -2771,6 +2772,5 @@ void CameraControllerDialog::close()
 
     this->hide();
 
-    qDebug("CameraControllerDialog::close --> End");
+    qDebug() << "CameraControllerDialog::close --> End";
 }
-

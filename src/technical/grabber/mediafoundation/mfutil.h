@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2010-2014 by                                                *
+ *  Copyright (C) 2010-2016 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -21,7 +21,7 @@
 #ifndef MEDIAFROUNDATION_MFUTIL_H
 #define MEDIAFROUNDATION_MFUTIL_H
 
-#include <QtCore/QString>
+#include <QString>
 #include <mfapi.h>
 
 template <class T>

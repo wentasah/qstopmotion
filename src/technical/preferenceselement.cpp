@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2012 by                                                *
+ *  Copyright (C) 2005-2015 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -20,14 +20,13 @@
 
 #include "preferenceselement.h"
 
+#include <QDomNodeList>
+#include <QDomText>
+#include <QFile>
+#include <QTextStream>
+
 #include "technical/grabber/imagegrabber.h"
 #include "technical/videoencoder/videoencoder.h"
-
-#include <QtCore/QFile>
-#include <QtCore/QtGlobal>
-#include <QtCore/QTextStream>
-#include <QtXml/QDomNodeList>
-#include <QtXml/QDomText>
 
 
 PreferencesElement::PreferencesElement(const QString &n, QDomElement &d)

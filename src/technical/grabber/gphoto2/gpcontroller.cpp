@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2012-2014 by                                                *
+ *  Copyright (C) 2012-2015 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -20,7 +20,7 @@
 
 #include "gpcontroller.h"
 
-#include <QtCore/QtDebug>
+#include <QDebug>
 
 /**************************************************************************
  * Implementation of the grabber controller functions using the
@@ -30,20 +30,20 @@
 GphotoController::GphotoController(int cap)
     : GrabberController(cap)
 {
-    qDebug("GphotoController::Constructor --> Start");
+    qDebug() << "GphotoController::Constructor --> Start";
 
     grabber = NULL;
     grabberDevice = NULL;
 
-    qDebug("GphotoController::Constructor --> End");
+    qDebug() << "GphotoController::Constructor --> End";
 }
 
 
 GphotoController::~GphotoController()
 {
-    qDebug("GphotoController::Destructor --> Start (Empty)");
+    qDebug() << "GphotoController::Destructor --> Start (Empty)";
 
-    qDebug("GphotoController::Destructor --> End");
+    qDebug() << "GphotoController::Destructor --> End";
 }
 
 
@@ -55,16 +55,16 @@ ImageGrabber* GphotoController::getImageGrabber()
 
 bool GphotoController::initialization(ImageGrabber* ig, ImageGrabberDevice* igd)
 {
-    qDebug("GphotoController::init --> Start");
+    qDebug() << "GphotoController::init --> Start";
 
     grabber = (GphotoGrabber*)ig;
     grabberDevice = igd;
 
-    // qDebug("GphotoController::init --> Open the device ...");
+    // qDebug() << "GphotoController::init --> Open the device ...";
 
     // Enumerating device capabilities
 
-    qDebug("GphotoController::init --> End (Not Successful)");
+    qDebug() << "GphotoController::init --> End (Not Successful)";
 
     return false;
 }
@@ -148,7 +148,7 @@ void GphotoController::getControlFlag(GrabberControlCapabilities *caps)
  */
 int GphotoController::setCtrlValue(GrabberControlCapabilities *caps, int value)
 {
-    qDebug("GphotoController::setCtrlValue --> Start");
+    qDebug() << "GphotoController::setCtrlValue --> Start";
 
     int ret = 0;
 /*
@@ -192,7 +192,7 @@ int GphotoController::setCtrlValue(GrabberControlCapabilities *caps, int value)
     // update real value
     // get_ctrl(hdevice, control_list, id, NULL);
 */
-    qDebug("GphotoController::setCtrlValue --> End");
+    qDebug() << "GphotoController::setCtrlValue --> End";
     return (ret);
 }
 
@@ -202,7 +202,7 @@ int GphotoController::setCtrlValue(GrabberControlCapabilities *caps, int value)
  */
 int GphotoController::getCtrlValue(GrabberControlCapabilities *caps, int &value)
 {
-    qDebug("GphotoController::setCtrlValue --> Start");
+    qDebug() << "GphotoController::setCtrlValue --> Start";
 
     int ret = 0;
 /*
@@ -261,7 +261,7 @@ int GphotoController::getCtrlValue(GrabberControlCapabilities *caps, int &value)
     // update_ctrl_flags(control_list, id);
     // update_widget_state(control_list, all_data);
 */
-    qDebug("GphotoController::setCtrlValue --> End");
+    qDebug() << "GphotoController::setCtrlValue --> End";
     return (ret);
 }
 
@@ -294,11 +294,11 @@ int GphotoController::getBrightness()
 
 void GphotoController::setBrightness(int b)
 {
-    qDebug("GphotoController::setBrightness --> Start");
+    qDebug() << "GphotoController::setBrightness --> Start");
 
     setCtrlValue(getBrightnessCaps(), b);
 
-    qDebug("GphotoController::setBrightness --> End");
+    qDebug() << "GphotoController::setBrightness --> End");
 }
 */
 
@@ -325,11 +325,11 @@ int GphotoController::getContrast()
 
 void GphotoController::setContrast(int c)
 {
-    qDebug("GphotoController::setContrast --> Start");
+    qDebug() << "GphotoController::setContrast --> Start");
 
     setCtrlValue(getContrastCaps(), c);
 
-    qDebug("GphotoController::setContrast --> End");
+    qDebug() << "GphotoController::setContrast --> End");
 }
 */
 
@@ -356,11 +356,11 @@ int GphotoController::getSaturation()
 
 void GphotoController::setSaturation(int s)
 {
-    qDebug("GphotoController::setSaturation --> Start");
+    qDebug() << "GphotoController::setSaturation --> Start");
 
     setCtrlValue(getSaturationCaps(), s);
 
-    qDebug("GphotoController::setSaturation --> End");
+    qDebug() << "GphotoController::setSaturation --> End");
 }
 */
 
@@ -387,11 +387,11 @@ int GphotoController::getHue()
 
 void GphotoController::setHue(int h)
 {
-    qDebug("GphotoController::setHue --> Start");
+    qDebug() << "GphotoController::setHue --> Start");
 
     setCtrlValue(getHueCaps(), h);
 
-    qDebug("GphotoController::setHue --> End");
+    qDebug() << "GphotoController::setHue --> End");
 }
 */
 
@@ -418,11 +418,11 @@ int GphotoController::getGamma()
 
 void GphotoController::setGamma(int g)
 {
-    qDebug("GphotoController::setGamma --> Start");
+    qDebug() << "GphotoController::setGamma --> Start";
 
     setCtrlValue(getGammaCaps(), g);
 
-    qDebug("GphotoController::setGamma --> End");
+    qDebug() << "GphotoController::setGamma --> End";
 }
 */
 
@@ -449,11 +449,11 @@ int GphotoController::getSharpness()
 
 void GphotoController::setSharpness(int s)
 {
-    qDebug("GphotoController::setSharpness --> Start");
+    qDebug() << "GphotoController::setSharpness --> Start";
 
     setCtrlValue(getSharpnessCaps(), s);
 
-    qDebug("GphotoController::setSharpness --> End");
+    qDebug() << "GphotoController::setSharpness --> End";
 }
 */
 
@@ -480,11 +480,11 @@ int GphotoController::getBacklight()
 
 void GphotoController::setBacklight(int b)
 {
-    qDebug("GphotoController::setBacklight --> Start");
+    qDebug() << "GphotoController::setBacklight --> Start";
 
     setCtrlValue(getBacklightCaps(), b);
 
-    qDebug("GphotoController::setBacklight --> End");
+    qDebug() << "GphotoController::setBacklight --> End";
 }
 */
 
@@ -511,11 +511,11 @@ int GphotoController::getWhite()
 
 void GphotoController::setWhite(int w)
 {
-    qDebug("GphotoController::setWhite --> Start");
+    qDebug() << "GphotoController::setWhite --> Start";
 
     setCtrlValue(getWhiteCaps(), w);
 
-    qDebug("GphotoController::setWhite --> End");
+    qDebug() << "GphotoController::setWhite --> End";
 }
 */
 
@@ -542,11 +542,11 @@ int GphotoController::getGain()
 
 void GphotoController::setGain(int g)
 {
-    qDebug("GphotoController::setGain --> Start");
+    qDebug() << "GphotoController::setGain --> Start";
 
     setCtrlValue(getGainCaps(), g);
 
-    qDebug("GphotoController::setGain --> End");
+    qDebug() << "GphotoController::setGain --> End";
 }
 */
 
@@ -573,11 +573,11 @@ int GphotoController::getColor()
 
 void GphotoController::setColor(int c)
 {
-    qDebug("GphotoController::setColor --> Start");
+    qDebug() << "GphotoController::setColor --> Start";
 
     setCtrlValue(getColorCaps(), c);
 
-    qDebug("GphotoController::setColor --> End");
+    qDebug() << "GphotoController::setColor --> End";
 }
 */
 
@@ -610,11 +610,11 @@ int GphotoController::getExposure()
 
 void GphotoController::setExposure(int e)
 {
-    qDebug("GphotoController::setExposure --> Start");
+    qDebug() << "GphotoController::setExposure --> Start";
 
     setCtrlValue(getExposureCaps(), e);
 
-    qDebug("GphotoController::setExposure --> End");
+    qDebug() << "GphotoController::setExposure --> End";
 }
 */
 
@@ -646,13 +646,13 @@ int GphotoController::getZoom()
 
 void GphotoController::setZoom(int z)
 {
-    qDebug("GphotoController::setZoom --> Start");
+    qDebug() << "GphotoController::setZoom --> Start";
 
     setCtrlValue(getZoomCaps(), z);
 
     setCtrlValue(getZoomCaps(), z);
 
-    qDebug("GphotoController::setZoom --> End");
+    qDebug() << "GphotoController::setZoom --> End";
 }
 
 /**************************************************************************
@@ -678,11 +678,11 @@ int GphotoController::getFocus()
 
 void GphotoController::setFocus(int f)
 {
-    qDebug("GphotoController::setFocus --> Start");
+    qDebug() << "GphotoController::setFocus --> Start";
 
     setCtrlValue(getFocusCaps(), f);
 
-    qDebug("GphotoController::setFocus --> End");
+    qDebug() << "GphotoController::setFocus --> End";
 }
 */
 

@@ -22,15 +22,15 @@
 
 #include "exposure.h"
 
+#include <QDebug>
+#include <QFile>
+#include <QImage>
+#include <QString>
+
 #include "domain/animation/projectserializer.h"
 #include "technical/util.h"
 #include "technical/preferencestool.h"
 #include "technical/grabber/imagegrabber.h"
-
-#include <QtCore/QFile>
-#include <QtCore/QString>
-#include <QtCore/QtDebug>
-#include <QtGui/QImage>
 
 
 unsigned int Exposure::tempNumber = 0;
@@ -141,7 +141,7 @@ unsigned int Exposure::getSceneIndex() const
 
 const QString Exposure::getImagePath() const
 {
-    // qDebug("Exposure::getNewImagePath --> Start");
+    // qDebug() << "Exposure::getNewImagePath --> Start");
 
     Q_ASSERT(!theFrame.isEmpty());
 
@@ -160,7 +160,7 @@ const QString Exposure::getImagePath() const
     absImagePath.append(QLatin1String("/"));
     absImagePath.append(theFrame);
 
-    // qDebug("Exposure::getNewImagePath --> End");
+    // qDebug() << "Exposure::getNewImagePath --> End");
     return absImagePath;
 }
 
@@ -370,7 +370,7 @@ Exposure::fileLocation Exposure::getExposureLocation()
 
 bool Exposure::readDataFromProject(QDomElement &exposureNode)
 {
-    // qDebug("Exposure::readDataFromProject --> Start");
+    // qDebug() << "Exposure::readDataFromProject --> Start");
 
     id.append(exposureNode.attributeNode(QLatin1String("id")).value());
 
@@ -394,14 +394,14 @@ bool Exposure::readDataFromProject(QDomElement &exposureNode)
         currNode = currNode.nextSiblingElement();
     }
 
-    // qDebug("Exposure::readDataFromProject --> End");
+    // qDebug() << "Exposure::readDataFromProject --> End");
     return true;
 }
 
 
 bool Exposure::saveDataToProject(QDomDocument &doc, QDomElement &exposureNode)
 {
-    qDebug("Exposure::saveDataFromProject --> Start");
+    qDebug() << "Exposure::saveDataFromProject --> Start";
 
     QDomElement   theFrameElement;
 
@@ -430,6 +430,6 @@ bool Exposure::saveDataToProject(QDomDocument &doc, QDomElement &exposureNode)
     }
     */
 
-    qDebug("Exposure::saveDataFromProject --> End");
+    qDebug() << "Exposure::saveDataFromProject --> End";
     return true;
 }

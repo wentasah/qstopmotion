@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2010-2014 by                                                *
+ *  Copyright (C) 2010-2016 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -20,10 +20,10 @@
 
 #include "frameviewimage.h"
 
-#include <QtCore/QRect>
-#include <QtCore/QSize>
-#include <QtCore/QtDebug>
-#include <QtGui/QPainter>
+#include <QDebug>
+#include <QPainter>
+#include <QRect>
+#include <QSize>
 
 
 const int FrameViewImage::alphaLut[5] = { 128, 64, 43, 32, 26 };
@@ -31,19 +31,23 @@ const int FrameViewImage::alphaLut[5] = { 128, 64, 43, 32, 26 };
 FrameViewImage::FrameViewImage(Frontend *f, QWidget *parent, int pS)
     : FrameViewInterface(f, parent, pS)
 {
-    qDebug("FrameViewImage::Constructor --> Start");
+    qDebug() << "FrameViewImage::Constructor --> Start";
 
     this->setObjectName("FrameViewImage");
 
+    // setAttribute(Qt::WA_PaintOnScreen);
+    setBackgroundRole(QPalette::Base);
+    setAutoFillBackground(true);
+
     this->showLogo();
 
-    qDebug("FrameViewImage::Constructor --> End");
+    qDebug() << "FrameViewImage::Constructor --> End";
 }
 
 
 FrameViewImage::~FrameViewImage()
 {
-    qDebug("FrameViewImage::Destructor --> Start");
+    qDebug() << "FrameViewImage::Destructor --> Start";
 
     // Turn off camera if it's on
     if (displayMode == liveImageMode) {
@@ -52,13 +56,13 @@ FrameViewImage::~FrameViewImage()
 
     clearImageBuffer();
 
-    qDebug("FrameViewImage::Destructor --> End");
+    qDebug() << "FrameViewImage::Destructor --> End";
 }
 
 
 void FrameViewImage::initCompleted()
 {
-    qDebug("FrameViewImage::initCompleted --> Start");
+    qDebug() << "FrameViewImage::initCompleted --> Start";
 
     // Fill the image buffer
     clearImageBuffer();
@@ -68,7 +72,19 @@ void FrameViewImage::initCompleted()
     displayMode = emptyMode;
     repaint();
 
-    qDebug("FrameViewImage::initCompleted --> End");
+    qDebug() << "FrameViewImage::initCompleted --> End";
+}
+
+
+QSize FrameViewImage::sizeHint() const
+{
+    return QSize(400, 200);
+}
+
+
+QSize FrameViewImage::minimumSizeHint() const
+{
+    return QSize(100, 100);
 }
 
 
@@ -78,17 +94,17 @@ void FrameViewImage::initCompleted()
 
 void FrameViewImage::updateRemoveProject()
 {
-    qDebug("FrameViewImage::updateRemoveProject --> Start");
+    qDebug() << "FrameViewImage::updateRemoveProject --> Start";
 
     showLogo();
 
-    qDebug("FrameViewImage::updateRemoveProject --> End");
+    qDebug() << "FrameViewImage::updateRemoveProject --> End";
 }
 
 
 void FrameViewImage::updatePlaySound(int /*sceneIndex*/ )
 {
-    qDebug("FrameViewImage::updatePlaySound --> Start");
+    qDebug() << "FrameViewImage::updatePlaySound --> Start";
 
         /*
     if (sceneIndex > -1) {
@@ -98,7 +114,7 @@ void FrameViewImage::updatePlaySound(int /*sceneIndex*/ )
     }
         */
 
-    qDebug("FrameViewImage::updatePlaySound --> End");
+    qDebug() << "FrameViewImage::updatePlaySound --> End";
 }
 
 
@@ -143,14 +159,14 @@ void FrameViewImage::updateAddExposure(int sceneIndex,
                                        int takeIndex,
                                        int exposureIndex)
 {
-    // qDebug("FrameViewImage::updateAddExposure --> Start");
+    // qDebug() << "FrameViewImage::updateAddExposure --> Start";
 
     if (displayMode == liveImageMode) {
         Exposure *exposure = frontend->getProject()->getExposure(sceneIndex, takeIndex, exposureIndex);
         addToImageBuffer(QImage(exposure->getImagePath()));
     }
 
-    // qDebug("FrameViewImage::updateAddExposure --> End");
+    // qDebug() << "FrameViewImage::updateAddExposure --> End";
 }
 
 
@@ -158,24 +174,24 @@ void FrameViewImage::updateInsertExposure(int sceneIndex,
                                           int takeIndex,
                                           int exposureIndex)
 {
-    qDebug("FrameViewImage::updateInsertExposure --> Start");
+    qDebug() << "FrameViewImage::updateInsertExposure --> Start";
 
     if (displayMode == liveImageMode) {
         Exposure *exposure = frontend->getProject()->getExposure(sceneIndex, takeIndex, exposureIndex);
         addToImageBuffer(QImage(exposure->getImagePath()));
     }
 
-    qDebug("FrameViewImage::updateInsertExposure --> End");
+    qDebug() << "FrameViewImage::updateInsertExposure --> End";
 }
 
 
 void FrameViewImage::updateActivateExposure()
 {
-    qDebug("FrameViewImage::updateActivateExposure --> Start");
+    qDebug() << "FrameViewImage::updateActivateExposure --> Start";
 
     activateExposure();
 
-    qDebug("FrameViewImage::updateActivateExposure --> End");
+    qDebug() << "FrameViewImage::updateActivateExposure --> End";
 }
 
 
@@ -183,11 +199,11 @@ void FrameViewImage::updateModifyExposure(int modSceneIndex,
                                           int modTakeIndex,
                                           int modExposureIndex)
 {
-    qDebug("FrameViewImage::updateModifyExposure --> Start");
+    qDebug() << "FrameViewImage::updateModifyExposure --> Start";
 
     modifyExposure(modSceneIndex, modTakeIndex, modExposureIndex);
 
-    qDebug("FrameViewImage::updateModifyExposure --> End");
+    qDebug() << "FrameViewImage::updateModifyExposure --> End";
 }
 
 
@@ -197,7 +213,7 @@ void FrameViewImage::updateModifyExposure(int modSceneIndex,
 
 void FrameViewImage::nextAnimationFrame(int exposureIndex)
 {
-    // qDebug("FrameViewImage::nextAnimationFrame --> Start");
+    // qDebug() << "FrameViewImage::nextAnimationFrame --> Start");
 
     int activeSceneIndex = frontend->getProject()->getActiveSceneIndex();
     int activeTakeIndex = frontend->getProject()->getActiveTakeIndex();
@@ -219,7 +235,7 @@ void FrameViewImage::nextAnimationFrame(int exposureIndex)
     // Call the redraw function
     this->update();
 
-    // qDebug("FrameViewImage::nextAnimationFrame --> End");
+    // qDebug() << "FrameViewImage::nextAnimationFrame --> End");
     return;
 }
 
@@ -233,15 +249,25 @@ void FrameViewImage::nextAnimationFrame(int exposureIndex)
 
 void FrameViewImage::redraw()
 {
-    activeImage = clipAndScale(frontend->getLiveImage());
+    // qDebug() << "FrameViewImage::redraw --> Start";
 
-    this->update();
+    const QImage liveImage = frontend->getLiveImage();
+    if (liveImage.isNull()) {
+        qDebug() << "FrameViewImage::redraw --> End (empty live image)";
+        return;
+    }
+
+    activeImage = clipAndScale(liveImage);
+
+    update();
+
+    // qDebug() << "FrameViewImage::redraw --> End";
 }
 
 
 void FrameViewImage::nextPlayBack()
 {
-    qDebug("FrameViewImage::nextPlayBack --> Start");
+    qDebug() << "FrameViewImage::nextPlayBack --> Start";
 
     static int i = 0;
 
@@ -275,7 +301,7 @@ void FrameViewImage::nextPlayBack()
         //Exit from function/skip redraw(). This is better than having a bool which is
         //set because this is a play function run "often".
 
-        qDebug("FrameViewImage::nextPlayBack --> End");
+        qDebug() << "FrameViewImage::nextPlayBack --> End";
         return;
     }
 
@@ -284,7 +310,7 @@ void FrameViewImage::nextPlayBack()
     i = 0;
     redraw();
 
-    qDebug("FrameViewImage::nextPlayBack --> End");
+    qDebug() << "FrameViewImage::nextPlayBack --> End";
 }
 
 
@@ -294,7 +320,7 @@ void FrameViewImage::nextPlayBack()
 
 void FrameViewImage::resizeEvent(QResizeEvent*)
 {
-    qDebug("FrameViewImage::resizeEvent --> Start");
+    qDebug() << "FrameViewImage::resizeEvent --> Start";
 
     frameViewWidth = width();
     frameViewHeight = height();
@@ -302,13 +328,31 @@ void FrameViewImage::resizeEvent(QResizeEvent*)
         showLogo();
     }
 
-    qDebug("FrameViewImage::resizeEvent --> End");
+    qDebug() << "FrameViewImage::resizeEvent --> End";
 }
+/*
+bool FrameViewImage::event(QEvent *event)
+{
+    qDebug() << "FrameViewImage::event --> Start";
 
+    qDebug() << "Event: " << event;
+
+    if (event->type() == QEvent::UpdateRequest) {
+        bool result = QWidget::event(event);
+        // drawImage();
+        qDebug() << "FrameViewImage::event --> End (UpdateRequest)";
+        return result;
+    }
+
+    qDebug() << "FrameViewImage::event --> End";
+
+    return QWidget::event(event);
+}
+*/
 
 void FrameViewImage::paintEvent(QPaintEvent *)
 {
-    // qDebug("FrameViewImage::paintEvent --> Start");
+    // qDebug() << "FrameViewImage::paintEvent --> Start";
 
     QImage   outputImage = activeImage;
 
@@ -319,6 +363,8 @@ void FrameViewImage::paintEvent(QPaintEvent *)
     QSize    outputImageSize(outputImage.size());
     int      x = (widgetRect.width() - outputImageSize.width()) / 2;
     int      y = (widgetRect.height() - outputImageSize.height()) / 2;
+
+    widgetPainter.setRenderHint(QPainter::Antialiasing, true);
 
     if (displayMode == liveImageMode) {
         // Playing live video
@@ -412,7 +458,9 @@ void FrameViewImage::paintEvent(QPaintEvent *)
         break;
     }
 
-    // qDebug("FrameViewImage::paintEvent --> End");
+    widgetPainter.setRenderHint(QPainter::Antialiasing, false);
+
+    // qDebug() << "FrameViewImage::paintEvent --> End";
 }
 
 
@@ -422,7 +470,7 @@ void FrameViewImage::paintEvent(QPaintEvent *)
 
 void FrameViewImage::activateExposure()
 {
-    qDebug("FrameViewImage::activateExposure --> Start");
+    qDebug() << "FrameViewImage::activateExposure --> Start";
 
     Exposure *exposure = NULL;
 
@@ -448,7 +496,7 @@ void FrameViewImage::activateExposure()
         break;
     }
 
-    qDebug("FrameViewImage::activateExposure --> End");
+    qDebug() << "FrameViewImage::activateExposure --> End";
 }
 
 
@@ -456,26 +504,26 @@ void FrameViewImage::modifyExposure(int modSceneIndex,
                                     int modTakeIndex,
                                     int modExposureIndex)
 {
-    qDebug("FrameViewImage::modifyExposure --> Start");
+    qDebug() << "FrameViewImage::modifyExposure --> Start";
 
     int activeSceneIndex = frontend->getProject()->getActiveSceneIndex();
     if (activeSceneIndex != modSceneIndex) {
         // The scene of the modifyed exposure is not displayed in the frame view
-        qDebug("FrameViewImage::modifyExposure --> End (Nothing)");
+        qDebug() << "FrameViewImage::modifyExposure --> End (Nothing)";
         return;
     }
 
     int activeTakeIndex = frontend->getProject()->getActiveTakeIndex();
     if (activeTakeIndex != modTakeIndex) {
         // The take of the modifyed exposure is not displayed in the frame view
-        qDebug("FrameViewImage::modifyExposure --> End (Nothing)");
+        qDebug() << "FrameViewImage::modifyExposure --> End (Nothing)";
         return;
     }
 
     int activeExposureIndex = frontend->getProject()->getActiveSceneIndex();
     if (activeExposureIndex != modExposureIndex) {
         // The modifyed exposure is not displayed in the frame view
-        qDebug("FrameViewImage::modifyExposure --> End (Nothing)");
+        qDebug() << "FrameViewImage::modifyExposure --> End (Nothing)";
         return;
     }
 
@@ -489,23 +537,23 @@ void FrameViewImage::modifyExposure(int modSceneIndex,
     }
     this->update();
 
-    qDebug("FrameViewImage::modifyExposure --> End");
+    qDebug() << "FrameViewImage::modifyExposure --> End";
 }
 
 
 void FrameViewImage::addToImageBuffer(QImage const image)
 {
-    qDebug("FrameViewImage::addToImageBuffer --> Start");
+    qDebug() << "FrameViewImage::addToImageBuffer --> Start";
 
     imageBuffer.append(clipAndScale(image));
 
-    qDebug("FrameViewImage::addToImageBuffer --> End");
+    qDebug() << "FrameViewImage::addToImageBuffer --> End";
 }
 
 
 void FrameViewImage::loadImageBuffer()
 {
-    qDebug("FrameViewImage::loadImageBuffer --> Start");
+    qDebug() << "FrameViewImage::loadImageBuffer --> Start";
 
     int activeExposure = frontend->getProject()->getActiveExposureIndex();
     int exposureIndex = activeExposure - this->mixCount + 1;
@@ -521,23 +569,23 @@ void FrameViewImage::loadImageBuffer()
         addToImageBuffer(QImage(exposure->getImagePath()));
     }
 
-    qDebug("FrameViewImage::loadImageBuffer --> End");
+    qDebug() << "FrameViewImage::loadImageBuffer --> End";
 }
 
 
 void FrameViewImage::clearImageBuffer()
 {
-    qDebug("FrameViewImage::clearImageBuffer --> Start");
+    qDebug() << "FrameViewImage::clearImageBuffer --> Start";
 
     imageBuffer.clear();
 
-    qDebug("FrameViewImage::clearImageBuffer --> End");
+    qDebug() << "FrameViewImage::clearImageBuffer --> End";
 }
 
 
 const QImage FrameViewImage::createDifferentiatedImage(QImage &image1, QImage &image2)
 {
-    qDebug("FrameViewImage::createDifferentiatedImage --> Start");
+    qDebug() << "FrameViewImage::createDifferentiatedImage --> Start";
 
     int imageRows = image2.height();
     int imageCols = image2.width();
@@ -559,7 +607,7 @@ const QImage FrameViewImage::createDifferentiatedImage(QImage &image1, QImage &i
         }
     }
 
-    qDebug("FrameViewImage::createDifferentiatedImage --> End");
+    qDebug() << "FrameViewImage::createDifferentiatedImage --> End";
 
     return diffImage;
 }
@@ -567,7 +615,7 @@ const QImage FrameViewImage::createDifferentiatedImage(QImage &image1, QImage &i
 
 const QImage FrameViewImage::createAlphaImage(QImage &image, int alpha)
 {
-    // qDebug("FrameViewImage::createAlphaImage --> Start");
+    // qDebug() << "FrameViewImage::createAlphaImage --> Start";
 
     int imageRows = image.height();
     int imageCols = image.width();
@@ -584,7 +632,7 @@ const QImage FrameViewImage::createAlphaImage(QImage &image, int alpha)
         }
     }
 
-    // qDebug("FrameViewImage::createAlphaImage --> End");
+    // qDebug() << "FrameViewImage::createAlphaImage --> End";
 
     return alphaImage;
 }
@@ -592,7 +640,7 @@ const QImage FrameViewImage::createAlphaImage(QImage &image, int alpha)
 
 void FrameViewImage::showLogo()
 {
-    qDebug("FrameViewImage::showLogo --> Start");
+    qDebug() << "FrameViewImage::showLogo --> Start";
 
     QString iconFile(frontend->getGraphicsDirName());
     iconFile.append(QLatin1String("qstopmotion_logo_60.png"));
@@ -602,5 +650,5 @@ void FrameViewImage::showLogo()
     displayMode = logoMode;
     update();
 
-    qDebug("FrameViewImage::showLogo --> End");
+    qDebug() << "FrameViewImage::showLogo --> End";
 }

@@ -22,12 +22,12 @@
 
 #include "externalcommanddialog.h"
 
-#include "technical/util.h"
+#include <QDebug>
+#include <QMessageBox>
+#include <QTextCodec>
+#include <QTextCursor>
 
-#include <QtCore/QtDebug>
-#include <QtCore/QTextCodec>
-#include <QtGui/QMessageBox>
-#include <QtGui/QTextCursor>
+#include "technical/util.h"
 
 
 ExternalCommandDialog::ExternalCommandDialog(QWidget *parent)
@@ -80,16 +80,15 @@ ExternalCommandDialog::ExternalCommandDialog(QWidget *parent)
 
 void ExternalCommandDialog::run(const QString &command, const QStringList &arguments)
 {
-    qDebug("ExternalCommandDialog::run --> Start");
+    qDebug() << "ExternalCommandDialog::run --> Start";
 
     QString osCommand(Util::convertPathToOsSpecific(command));
-    qDebug("ExternalCommandDialog::run --> Command");
+    qDebug() << "ExternalCommandDialog::run --> Command";
     qDebug() << osCommand;
 
     process->start(osCommand, arguments);
 
-    qDebug("ExternalCommandDialog::run --> End");
-
+    qDebug() << "ExternalCommandDialog::run --> End";
 }
 
 

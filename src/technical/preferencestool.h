@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2015 by                                                *
+ *  Copyright (C) 2005-2016 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -23,14 +23,14 @@
 #ifndef PREFERENCESTOOL_H
 #define PREFERENCESTOOL_H
 
+#include <QDomDocument>
+#include <QDomElement>
+#include <QObject>
+#include <QString>
+#include <QVector>
+
 #include <frontends/frontend.h>
 #include <technical/preferenceselement.h>
-
-#include <QtCore/QObject>
-#include <QtCore/QString>
-#include <QtCore/QVector>
-#include <QtXml/QDomDocument>
-#include <QtXml/QDomElement>
 
 
 /**

@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2010-2011 by                                                *
+ *  Copyright (C) 2010-2015 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -24,28 +24,25 @@
 #include <QLabel>
 #include <QMouseEvent>
 
+
 class ClickableLabel : public QLabel
 {
     Q_OBJECT
+
     bool pressed;
 
-    void mousePressEvent(QMouseEvent*) {
-        pressed = true;
-    }
-    void mouseReleaseEvent(QMouseEvent* e) {
-        if(pressed && rect().contains(e->pos())) {
-            emit clicked();
-        }
-        pressed = false;
-    }
+signals:
+    void clicked();
+
+protected:
+    void mousePressEvent(QMouseEvent*);
+
+    void mouseReleaseEvent(QMouseEvent* e);
 
 public:
     ClickableLabel(QWidget* parent=0)
      : QLabel(parent), pressed(false)
     {}
-
-signals:
-    void clicked();
 };
 
 #endif

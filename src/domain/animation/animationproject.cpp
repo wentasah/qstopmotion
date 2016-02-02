@@ -22,18 +22,19 @@
 
 #include "animationproject.h"
 
+#include <QDebug>
+#include <QDir>
+#include <QFile>
+#include <QtGlobal>
+
 #include "domain/domainfacade.h"
 // #include "technical/audio/ossdriver.h"
 #include "technical/videoencoder/videoencoderfactory.h"
 
-#include <QtCore/QDir>
-#include <QtCore/QFile>
-#include <QtCore/QtDebug>
-
 
 AnimationProject::AnimationProject(Frontend* f)
 {
-    qDebug("AnimationProject::Constructor --> Start");
+    qDebug() << "AnimationProject::Constructor --> Start";
 
     frontend                 = f;
     serializer               = new ProjectSerializer(f);
@@ -70,13 +71,13 @@ AnimationProject::AnimationProject(Frontend* f)
     audioDriver              = NULL; //new OSSDriver("/dev/dsp");
     isAudioDriverInitialized = false;
 
-    qDebug("AnimationProject::Constructor --> End");
+    qDebug() << "AnimationProject::Constructor --> End";
 }
 
 
 AnimationProject::~AnimationProject()
 {
-    qDebug("AnimationProject::Destructor --> Start");
+    qDebug() << "AnimationProject::Destructor --> Start";
 
     unsigned int sceneSize = scenes.size();
     for (unsigned int sceneIndex = 0; sceneIndex < sceneSize; ++sceneIndex) {
@@ -98,7 +99,7 @@ AnimationProject::~AnimationProject()
     description.clear();
     frontend = NULL;
 
-    qDebug("AnimationProject::Destructor --> End");
+    qDebug() << "AnimationProject::Destructor --> End";
 }
 
 
@@ -445,32 +446,32 @@ void AnimationProject::setDefaultOutputFileName(const QString newDOFN)
 
 bool AnimationProject::openProject(const QString &filePath)
 {
-    qDebug("AnimationProject::openProject --> Start");
+    qDebug() << "AnimationProject::openProject --> Start";
 
     serializer->setNewProjectFilePath(filePath);
     serializer->read();
 
     if (!readSettingsFromProject(serializer->getSettingsElement())) {
-        qWarning("AnimationProject::openProject --> Read settings failed");
+        qWarning() << "AnimationProject::openProject --> Read settings failed";
         return false;
     }
     if (!readScenesFromProject(serializer->getAnimationElement())) {
-        qWarning("AnimationProject::openProject --> Read animation data failed");
+        qWarning() << "AnimationProject::openProject --> Read animation data failed";
         return false;
     }
     if (scenes.size() == 0) {
-        qDebug("AnimationProject::openProject --> End (without scene)");
+        qDebug() << "AnimationProject::openProject --> End (without scene)";
         return false;
     }
 
-    qDebug("AnimationProject::openProject --> End");
+    qDebug() << "AnimationProject::openProject --> End";
     return true;
 }
 
 
 bool AnimationProject::saveProject(const QString &filePath, bool saveAs)
 {
-    qDebug("AnimationProject::saveProject --> Start");
+    qDebug() << "AnimationProject::saveProject --> Start";
 
     if (!filePath.isEmpty()) {
         serializer->setNewProjectFilePath(filePath);
@@ -479,7 +480,7 @@ bool AnimationProject::saveProject(const QString &filePath, bool saveAs)
     frontend->showProgress(tr("Saving scenes to disk ..."), frontend->getProject()->getTotalExposureSize());
 
     if (!serializer->save(this, saveAs)) {
-        qWarning("AnimationProject::saveProject --> save animation data failed");
+        qWarning() << "AnimationProject::saveProject --> save animation data failed";
         frontend->hideProgress();
         return false;
     }
@@ -489,18 +490,18 @@ bool AnimationProject::saveProject(const QString &filePath, bool saveAs)
 
     frontend->hideProgress();
 
-    qDebug("AnimationProject::saveProject --> End");
+    qDebug() << "AnimationProject::saveProject --> End";
     return true;
 }
 
 
 bool AnimationProject::newProject(const QString &projectDescription)
 {
-    qDebug("AnimationProject::newProject --> Start");
+    qDebug() << "AnimationProject::newProject --> Start";
 
     description.append(projectDescription);
 
-    qDebug("AnimationProject::newProject --> End");
+    qDebug() << "AnimationProject::newProject --> End";
     return true;
 }
 
@@ -508,9 +509,9 @@ bool AnimationProject::newProject(const QString &projectDescription)
 bool AnimationProject::isSettingsChanges() const
 {
     if (0 == settingsChanges) {
-        return FALSE;
+        return false;
     }
-    return TRUE;
+    return true;
 }
 
 
@@ -531,9 +532,9 @@ void AnimationProject::decSettingsChanges()
 bool AnimationProject::isAnimationChanges() const
 {
     if (0 == animationChanges) {
-        return FALSE;
+        return false;
     }
-    return TRUE;
+    return true;
 }
 
 
@@ -553,7 +554,7 @@ void AnimationProject::decAnimationChanges()
 
 bool AnimationProject::initAudioDevice()
 {
-    qDebug("AnimationProject::initAudioDevice --> Empty");
+    qDebug() << "AnimationProject::initAudioDevice --> Empty";
     /*
     isAudioDriverInitialized = audioDriver->initialize();
     if (!isAudioDriverInitialized && numSounds > -1) {
@@ -564,7 +565,7 @@ bool AnimationProject::initAudioDevice()
             "have fixed the problem."));
     }
 
-    qDebug("AnimationProject::initAudioDevice --> Start");
+    qDebug() << "AnimationProject::initAudioDevice --> Start";
     return isAudioDriverInitialized;
     */
     return false;
@@ -573,25 +574,25 @@ bool AnimationProject::initAudioDevice()
 
 void AnimationProject::shutdownAudioDevice()
 {
-    qDebug("AnimationProject::shutdownAudioDevice --> Start");
+    qDebug() << "AnimationProject::shutdownAudioDevice --> Start";
 
     audioDriver->shutdown();
     isAudioDriverInitialized = false;
 
-    qDebug("AnimationProject::shutdownAudioDevice --> End");
+    qDebug() << "AnimationProject::shutdownAudioDevice --> End";
 }
 
 
 bool AnimationProject::exportToVideo(VideoEncoder * encoder)
 {
-    qDebug("AnimationProject::exportToVideo --> Start");
+    qDebug() << "AnimationProject::exportToVideo --> Start";
 
     VideoEncoderFactory factory(this->getFrontend());
     if (factory.createVideoFile(encoder) != NULL) {
         return true;
     }
 
-    qDebug("AnimationProject::exportToVideo --> End");
+    qDebug() << "AnimationProject::exportToVideo --> End";
     return false;
 }
 
@@ -604,7 +605,7 @@ bool AnimationProject::exportToCinelerra(const QString&)
 
 bool AnimationProject::readSettingsFromProject(QDomElement &settingsNode)
 {
-    qDebug("AnimationProject::readSettingsFromProject --> Start");
+    qDebug() << "AnimationProject::readSettingsFromProject --> Start";
 
     QDomElement currElement = settingsNode.firstChildElement();
 
@@ -722,14 +723,14 @@ bool AnimationProject::readSettingsFromProject(QDomElement &settingsNode)
         currElement = currElement.nextSiblingElement();
     }
 
-    qDebug("AnimationProject::readSettingsFromProject --> End");
+    qDebug() << "AnimationProject::readSettingsFromProject --> End";
     return true;
 }
 
 
 bool AnimationProject::saveSettingsToProject(QDomDocument &doc, QDomElement &settingsNode)
 {
-    qDebug("AnimationProject::saveSettingsToProject --> Start");
+    qDebug() << "AnimationProject::saveSettingsToProject --> Start";
 
     // Save project parameter
 
@@ -857,7 +858,7 @@ bool AnimationProject::saveSettingsToProject(QDomDocument &doc, QDomElement &set
     dofnElement.appendChild(dofnText);
     settingsNode.appendChild(dofnElement);
 
-    qDebug("AnimationProject::saveSettingsToProject --> End");
+    qDebug() << "AnimationProject::saveSettingsToProject --> End";
     return true;
 }
 
@@ -885,7 +886,7 @@ int AnimationProject::getSceneIndex(Scene* scene)
 
 void AnimationProject::setActiveScene(Scene *newScene)
 {
-    qDebug("AnimationProject::setActiveScene --> Start");
+    qDebug() << "AnimationProject::setActiveScene --> Start";
 
     int sceneSize = scenes.size();
     int sceneIndex;
@@ -902,13 +903,13 @@ void AnimationProject::setActiveScene(Scene *newScene)
         this->activeSceneIndex = sceneIndex;
     }
 
-    qDebug("AnimationProject::setActiveScene --> End");
+    qDebug() << "AnimationProject::setActiveScene --> End";
 }
 
 
 void AnimationProject::setActiveSceneIndex(int sceneIndex)
 {
-    qDebug("AnimationProject::setActiveSceneIndex --> Start");
+    qDebug() << "AnimationProject::setActiveSceneIndex --> Start";
 
     // The new scene index can be the same as the active scene index
     // if the active scene is removed from the scene vector
@@ -916,7 +917,7 @@ void AnimationProject::setActiveSceneIndex(int sceneIndex)
 
     this->activeSceneIndex = sceneIndex;
 
-    qDebug("AnimationProject::setActiveSceneIndex --> End");
+    qDebug() << "AnimationProject::setActiveSceneIndex --> End";
 }
 
 
@@ -963,7 +964,7 @@ Scene *AnimationProject::getScene(int sceneIndex)
 
 void AnimationProject::addScene(const QString &sceneDescription)
 {
-    qDebug("AnimationProject::addScene --> Start");
+    qDebug() << "AnimationProject::addScene --> Start";
 
     Scene *scene = new Scene(this);
 
@@ -976,23 +977,23 @@ void AnimationProject::addScene(const QString &sceneDescription)
 
     scenes.append(scene);
 
-    qDebug("AnimationProject::addScene --> End");
+    qDebug() << "AnimationProject::addScene --> End";
 }
 
 
 void AnimationProject::addScene(Scene *scene)
 {
-    qDebug("AnimationProject::addScene --> Start");
+    qDebug() << "AnimationProject::addScene --> Start";
 
     scenes.append(scene);
 
-    qDebug("AnimationProject::addScene --> End");
+    qDebug() << "AnimationProject::addScene --> End";
 }
 
 
 void AnimationProject::insertScene(int sceneIndex, const QString &sceneDescription)
 {
-    qDebug("AnimationProject::insertScene --> Start");
+    qDebug() << "AnimationProject::insertScene --> Start";
 
     Q_ASSERT(sceneIndex > -1);
     Q_ASSERT(sceneIndex < getSceneSize());
@@ -1011,13 +1012,13 @@ void AnimationProject::insertScene(int sceneIndex, const QString &sceneDescripti
         setActiveSceneIndex(activeSceneIndex+1);
     }
 
-    qDebug("AnimationProject::insertScene --> End");
+    qDebug() << "AnimationProject::insertScene --> End";
 }
 
 
 void AnimationProject::insertScene(int sceneIndex, Scene *scene)
 {
-    qDebug("AnimationProject::insertScene --> Start");
+    qDebug() << "AnimationProject::insertScene --> Start";
 
     Q_ASSERT(sceneIndex > -1);
     Q_ASSERT(sceneIndex < getSceneSize());
@@ -1027,7 +1028,7 @@ void AnimationProject::insertScene(int sceneIndex, Scene *scene)
         setActiveSceneIndex(activeSceneIndex+1);
     }
 
-    qDebug("AnimationProject::insertScene --> End");
+    qDebug() << "AnimationProject::insertScene --> End";
 }
 
 
@@ -1065,7 +1066,7 @@ void AnimationProject::removeActiveScene()
 
 Scene *AnimationProject::removeScene(int sceneIndex)
 {
-    qDebug("AnimationProject::removeScene --> Start");
+    qDebug() << "AnimationProject::removeScene --> Start";
 
     Q_ASSERT(sceneIndex != activeSceneIndex);
 
@@ -1077,14 +1078,14 @@ Scene *AnimationProject::removeScene(int sceneIndex)
     Scene *removedScene = scenes[sceneIndex];
     scenes.remove(sceneIndex);
 
-    qDebug("AnimationProject::removeScene --> End");
+    qDebug() << "AnimationProject::removeScene --> End";
     return removedScene;
 }
 
 
 bool AnimationProject::readScenesFromProject(QDomElement &animationNode)
 {
-    qDebug("AnimationProject::readScenesFromProject --> Start");
+    qDebug() << "AnimationProject::readScenesFromProject --> Start";
 
     QString activeSceneId;
 
@@ -1101,7 +1102,7 @@ bool AnimationProject::readScenesFromProject(QDomElement &animationNode)
             scenes.append(newScene);
 
             if (!newScene->readDataFromProject(currElement)) {
-                qDebug("AnimationProject::readScenesFromProject --> End (false)");
+                qDebug() << "AnimationProject::readScenesFromProject --> End (false)";
                 return false;
             }
         }
@@ -1130,14 +1131,14 @@ bool AnimationProject::readScenesFromProject(QDomElement &animationNode)
         nextSceneIndex = sceneSize;
     }
 
-    qDebug("AnimationProject::readScenesFromProject --> End");
+    qDebug() << "AnimationProject::readScenesFromProject --> End";
     return true;
 }
 
 
 bool AnimationProject::saveScenesToProject(QDomDocument &doc, QDomElement &animationNode)
 {
-    qDebug("AnimationProject::saveScenesToProject --> Start");
+    qDebug() << "AnimationProject::saveScenesToProject --> Start";
 
     unsigned int  sceneSize = scenes.size();
     unsigned int  sceneIndex;
@@ -1237,7 +1238,7 @@ bool AnimationProject::saveScenesToProject(QDomDocument &doc, QDomElement &anima
         animationNode.appendChild(sceneElement);
 
         if (!scenes[sceneIndex]->saveDataToProject(doc, sceneElement)) {
-            qDebug("AnimationProject::saveScenesToProject --> End (false)");
+            qDebug() << "AnimationProject::saveScenesToProject --> End (false)";
             return false;
         }
     }
@@ -1257,14 +1258,14 @@ bool AnimationProject::saveScenesToProject(QDomDocument &doc, QDomElement &anima
         animationNode.appendChild(leiElement);
     }
 
-    qDebug("AnimationProject::saveScenesToProject --> End");
+    qDebug() << "AnimationProject::saveScenesToProject --> End";
     return true;
 }
 
 
 bool AnimationProject::saveAsScenesToProject(QDomDocument &doc, QDomElement &animationNode)
 {
-    qDebug("AnimationProject::saveScenesToProject --> Start");
+    qDebug() << "AnimationProject::saveScenesToProject --> Start";
 
     unsigned int  sceneSize = scenes.size();
     unsigned int  sceneIndex;
@@ -1339,7 +1340,7 @@ bool AnimationProject::saveAsScenesToProject(QDomDocument &doc, QDomElement &ani
         animationNode.appendChild(sceneElement);
 
         if (!scenes[sceneIndex]->saveDataToProject(doc, sceneElement)) {
-            qDebug("AnimationProject::saveScenesToProject --> End (false)");
+            qDebug() << "AnimationProject::saveScenesToProject --> End (false)";
             return false;
         }
     }
@@ -1359,14 +1360,14 @@ bool AnimationProject::saveAsScenesToProject(QDomDocument &doc, QDomElement &ani
         animationNode.appendChild(leiElement);
     }
 
-    qDebug("AnimationProject::saveScenesToProject --> End");
+    qDebug() << "AnimationProject::saveScenesToProject --> End";
     return true;
 }
 
 
 bool AnimationProject::convertImages(int newFormat, int newQuality)
 {
-    qDebug("AnimationProject::saveScenesToProject --> Start");
+    qDebug() << "AnimationProject::saveScenesToProject --> Start";
 
     unsigned int  sceneSize = scenes.size();
     unsigned int  sceneIndex;
@@ -1409,7 +1410,7 @@ bool AnimationProject::convertImages(int newFormat, int newQuality)
 
 int AnimationProject::addSoundToScene(unsigned int sceneIndex, const QString &sound, const QString &soundName)
 {
-    qDebug("AnimationProject::addSoundToScene --> Start");
+    qDebug() << "AnimationProject::addSoundToScene --> Start";
 
     ++soundsNumber;
     int ret = scenes[sceneIndex]->addSound(sound, soundName);
@@ -1428,7 +1429,7 @@ int AnimationProject::addSoundToScene(unsigned int sceneIndex, const QString &so
         --soundsNumber;
     }
 
-    qDebug("AnimationProject::addSoundToScene --> End");
+    qDebug() << "AnimationProject::addSoundToScene --> End";
     return ret;
 }
 
@@ -1578,11 +1579,11 @@ int AnimationProject::getActiveExposureIndex() const
 
 void AnimationProject::setActiveExposureIndex(int exposureIndex)
 {
-    qDebug("AnimationProject::setActiveExposureIndex --> Start");
+    qDebug() << "AnimationProject::setActiveExposureIndex --> Start";
 
     scenes[this->activeSceneIndex]->setActiveExposureIndex(exposureIndex);
 
-    qDebug("AnimationProject::setActiveExposureIndex --> End");
+    qDebug() << "AnimationProject::setActiveExposureIndex --> End";
 }
 
 
@@ -1601,13 +1602,13 @@ Exposure *AnimationProject::getExposure(unsigned int sceneIndex,
                                         unsigned int takeIndex,
                                         unsigned int exposureIndex)
 {
-    // qDebug("AnimationProject::getExposure --> Start");
+    // qDebug() << "AnimationProject::getExposure --> Start");
 
     Q_ASSERT(exposureIndex < scenes[sceneIndex]->getExposureSize());
 
     Exposure* exposure = scenes[sceneIndex]->getExposure(takeIndex, exposureIndex);
 
-    // qDebug("AnimationProject::getExposure --> End");
+    // qDebug() << "AnimationProject::getExposure --> End");
     return exposure;
 }
 
@@ -1716,21 +1717,21 @@ bool AnimationProject::getModifyedExposure(const QString &filePath,
                                            int &modTakeIndex,
                                            int &modExposureIndex)
 {
-    qDebug("AnimationProject::getModifyedExposure --> Start");
+    qDebug() << "AnimationProject::getModifyedExposure --> Start";
 
     int sceneSize = scenes.size();
 
     for (modSceneIndex = 0; modSceneIndex < sceneSize; ++modSceneIndex) {
         if (scenes[modSceneIndex]->getModifyedExposure(filePath, modTakeIndex, modExposureIndex)) {
             // Exposure found
-            qDebug("AnimationProject::getModifyedExposure --> End");
+            qDebug() << "AnimationProject::getModifyedExposure --> End";
             return true;
         }
     }
 
     modSceneIndex = -1;
 
-    qDebug("AnimationProject::getModifyedExposure --> End (Error)");
+    qDebug() << "AnimationProject::getModifyedExposure --> End (Error)";
     return false;
 }
 
@@ -1741,7 +1742,7 @@ bool AnimationProject::getModifyedExposure(const QString &filePath,
 /*
 void AnimationProject::loadSavedScenes()
 {
-    qDebug("AnimationProject::loadSavedScenes --> Start");
+    qDebug() << "AnimationProject::loadSavedScenes --> Start");
 
     unsigned int numElem = scenes.size();
     for (unsigned int i = 0; i < numElem; ++i) {
@@ -1749,16 +1750,16 @@ void AnimationProject::loadSavedScenes()
     }
     setActiveSceneIndex(numElem - 1);
 
-    qDebug("AnimationProject::loadSavedScenes --> End");
+    qDebug() << "AnimationProject::loadSavedScenes --> End");
 }
 
 
 void AnimationProject::activateScene()
 {
-    qDebug("AnimationProject::activateScene --> Start");
+    qDebug() << "AnimationProject::activateScene --> Start");
 
     this->notifyActivateScene();
 
-    qDebug("AnimationProject::activateScene --> End");
+    qDebug() << "AnimationProject::activateScene --> End");
 }
 */

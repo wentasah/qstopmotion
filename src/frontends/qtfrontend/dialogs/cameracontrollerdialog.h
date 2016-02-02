@@ -23,17 +23,17 @@
 #ifndef CAMERACONTROLLERDIALOG_H
 #define CAMERACONTROLLERDIALOG_H
 
+#include <QCheckBox>
+#include <QComboBox>
+#include <QDialog>
+#include <QGroupBox>
+#include <QLabel>
+#include <QPushButton>
+#include <QVBoxLayout>
+
 #include "frontends/frontend.h"
 #include "technical/grabber/grabbercontroller.h"
 #include "technical/grabber/imagegrabberdevice.h"
-
-#include <QtGui/QCheckBox>
-#include <QtGui/QComboBox>
-#include <QtGui/QDialog>
-#include <QtGui/QGroupBox>
-#include <QtGui/QLabel>
-#include <QtGui/QPushButton>
-#include <QtGui/QVBoxLayout>
 
 
 class CameraControllerDialog : public QDialog

@@ -25,12 +25,13 @@
 #include "domain/domainfacade.h"
 #include "technical/preferencestool.h"
 
-#include <QtCore/QDir>
-#include <QtCore/QFile>
-#include <QtCore/QtDebug>
-#include <QtCore/QTextStream>
-#include <QtXml/QDomDocumentType>
-#include <QtXml/QDomImplementation>
+#include <QDebug>
+#include <QDir>
+#include <QDomDocumentType>
+#include <QDomImplementation>
+#include <QFile>
+#include <QtGlobal>
+#include <QTextStream>
 
 
 ProjectSerializer::ProjectSerializer(Frontend* f)
@@ -61,7 +62,7 @@ ProjectSerializer::~ProjectSerializer()
 
 bool ProjectSerializer::read()
 {
-    qDebug("ProjectSerializer::read --> Start");
+    qDebug() << "ProjectSerializer::read --> Start";
 
     QString      errorStr;
     int          errorLine;
@@ -103,11 +104,11 @@ bool ProjectSerializer::read()
         element = element.nextSiblingElement();
     }
     if (versionElement.isNull()) {
-        qWarning("ProjectSerializer::read --> Error while parsing project file");
+        qWarning() << "ProjectSerializer::read --> Error while parsing project file";
         return false;
     }
 
-    qDebug("ProjectSerializer::read --> End");
+    qDebug() << "ProjectSerializer::read --> End";
     return true;
 }
 
@@ -115,9 +116,9 @@ bool ProjectSerializer::read()
 // check if the user wants to save an opened project to an another file.
 bool ProjectSerializer::save(AnimationProject *animation, bool saveAs)
 {
-    qDebug("ProjectSerializer::save --> Start");
+    qDebug() << "ProjectSerializer::save --> Start";
 
-    bool isSaved = FALSE;
+    bool isSaved = false;
     QDomElement rootElement;
     QDomElement versionElement;
     // QDomImplementation *domImpl = new QDomImplementation();
@@ -181,20 +182,20 @@ bool ProjectSerializer::save(AnimationProject *animation, bool saveAs)
     }
     QFile file(newProjectFilePath);
     if (!file.open(QIODevice::ReadWrite | QIODevice::Truncate)) {
-        qWarning("ProjectSerializer::save --> Can't open project file");
+        qWarning() << "ProjectSerializer::save --> Can't open project file";
         return isSaved;
     }
     QTextStream out(&file);
     doc.save(out, 2);
     out.flush();
     file.close();
-    isSaved = TRUE;
+    isSaved = true;
 
     unsigned int numElem = animation->getTotalExposureSize();
     animation->getFrontend()->updateProgress(numElem);
     animation->getFrontend()->hideProgress();
 
-    qDebug("ProjectSerializer::save --> End");
+    qDebug() << "ProjectSerializer::save --> End";
     return isSaved;
 }
 
@@ -211,7 +212,7 @@ void ProjectSerializer::saveDOMToFile(const QDomDocument &doc)
 
 void ProjectSerializer::setNewProjectFilePath(const QString &pfp)
 {
-    qDebug("ProjectSerializer::setNewProjectFilePath --> Start");
+    qDebug() << "ProjectSerializer::setNewProjectFilePath --> Start";
 
     Q_ASSERT(!pfp.isEmpty());
 
@@ -288,7 +289,7 @@ void ProjectSerializer::setNewProjectFilePath(const QString &pfp)
         }
     }
 
-    qDebug("ProjectSerializer::setNewProjectFilePath --> End");
+    qDebug() << "ProjectSerializer::setNewProjectFilePath --> End";
 }
 
 

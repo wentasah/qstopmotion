@@ -29,6 +29,7 @@
 
 #define N_BUFFERS 2
 
+
 /**
  * Video grabbers using the Video4Linux2 library.
  *

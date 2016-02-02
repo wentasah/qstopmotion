@@ -20,6 +20,9 @@
 
 #include "undotakemove.h"
 
+#include <QDebug>
+#include <QLatin1String>
+
 
 UndoTakeMove::UndoTakeMove(DomainFacade *df,
                            int           fsi,
@@ -32,7 +35,7 @@ UndoTakeMove::UndoTakeMove(DomainFacade *df,
     fromTakeIndex = fti;
     toSceneIndex = tsi;
     toTakeIndex = tti;
-    undoFlag = FALSE;
+    undoFlag = false;
     setText(QString(tr("Move take (%1,%2)"))
             .arg(toSceneIndex).arg(toTakeIndex));
 }
@@ -45,19 +48,19 @@ UndoTakeMove::~UndoTakeMove()
 
 void UndoTakeMove::undo()
 {
-    qDebug("UndoTakeMove::undo --> Start");
+    qDebug() << "UndoTakeMove::undo --> Start";
 
 
     facade->writeHistoryEntry(QLatin1String("undo"));
-    undoFlag = TRUE;
+    undoFlag = true;
 
-    qDebug("UndoTakeMove::undo --> Start");
+    qDebug() << "UndoTakeMove::undo --> Start";
 }
 
 
 void UndoTakeMove::redo()
 {
-    qDebug("UndoTakeMove::redo --> Start");
+    qDebug() << "UndoTakeMove::redo --> Start";
 
     AnimationProject *animationProject = facade->getAnimationProject();
 
@@ -66,7 +69,7 @@ void UndoTakeMove::redo()
 
     if (undoFlag) {
         facade->writeHistoryEntry(QLatin1String("redo"));
-        undoFlag = FALSE;
+        undoFlag = false;
     }
     else {
         facade->writeHistoryEntry(QString("%1|%2|%3|%4|%5")
@@ -77,5 +80,5 @@ void UndoTakeMove::redo()
                                   .arg(toTakeIndex));
     }
 
-    qDebug("UndoTakeMove::redo --> Start");
+    qDebug() << "UndoTakeMove::redo --> Start";
 }

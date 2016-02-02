@@ -22,12 +22,13 @@
 
 #include "scene.h"
 
+#include <QDebug>
+#include <QFile>
+#include <QFileInfo>
+#include <QtGlobal>
+
 #include "domain/domainfacade.h"
 #include "technical/preferencestool.h"
-
-#include <QtCore/QFile>
-#include <QtCore/QFileInfo>
-#include <QtCore/QtDebug>
 
 
 Scene::Scene(AnimationProject *project)
@@ -137,7 +138,7 @@ void Scene::markAsProjectFile()
 
 bool Scene::readDataFromProject(QDomElement &sceneNode)
 {
-    qDebug("Scene::readDataFromProject --> Start");
+    qDebug() << "Scene::readDataFromProject --> Start";
 
     QString activeTakeId;
 
@@ -154,7 +155,7 @@ bool Scene::readDataFromProject(QDomElement &sceneNode)
             takes.append(newTake);
 
             if (!newTake->readDataFromProject(currElement)) {
-                qWarning("Scene::readDataFromProject --> Read take data failed");
+                qWarning() << "Scene::readDataFromProject --> Read take data failed";
                 return false;
             }
         }
@@ -167,7 +168,7 @@ bool Scene::readDataFromProject(QDomElement &sceneNode)
         }
         else if (elementName.compare("sound") == 0) {
             if (!readSoundFromProject(currElement)) {
-                qWarning("Scene::readDataFromProject --> Read sound data failed");
+                qWarning() << "Scene::readDataFromProject --> Read sound data failed";
                 return false;
             }
         }
@@ -190,14 +191,14 @@ bool Scene::readDataFromProject(QDomElement &sceneNode)
 
     this->isProjectFile = true;
 
-    qDebug("Scene::readDataFromProject --> End");
+    qDebug() << "Scene::readDataFromProject --> End";
     return true;
 }
 
 
 bool Scene::saveDataToProject(QDomDocument &doc, QDomElement &sceneNode)
 {
-    qDebug("Scene::saveDataToProject --> Start");
+    qDebug() << "Scene::saveDataToProject --> Start";
 
     unsigned int takeSize = takes.size();
     unsigned int takeIndex;
@@ -211,7 +212,7 @@ bool Scene::saveDataToProject(QDomDocument &doc, QDomElement &sceneNode)
         QDomElement takeElement = doc.createElement("take");
         sceneNode.appendChild(takeElement);
         if (!takes[takeIndex]->saveDataToProject(doc, takeElement)) {
-            qWarning("Scene::saveDataToProject --> Save take data failed");
+            qWarning() << "Scene::saveDataToProject --> Save take data failed";
             return false;
         }
     }
@@ -233,13 +234,13 @@ bool Scene::saveDataToProject(QDomDocument &doc, QDomElement &sceneNode)
 
     // Sounds
     if (!saveSoundToProject(doc, sceneNode)) {
-        qWarning("Scene::saveDataToProject --> Save sound data failed");
+        qWarning() << "Scene::saveDataToProject --> Save sound data failed";
         return false;
     }
 
     this->isProjectFile = true;
 
-    qDebug("Scene::saveDataToProject --> End");
+    qDebug() << "Scene::saveDataToProject --> End";
     return true;
 }
 
@@ -272,7 +273,7 @@ int Scene::getTakeIndex(Take *take) const
 
 void Scene::setActiveTakeIndex(int takeIndex)
 {
-    qDebug("Scene::setActiveTakeIndex --> Start");
+    qDebug() << "Scene::setActiveTakeIndex --> Start";
 
     // The new take index can be the same as the active take index
     // if the active take is removed from the take vector
@@ -280,7 +281,7 @@ void Scene::setActiveTakeIndex(int takeIndex)
 
     this->activeTakeIndex = takeIndex;
 
-    qDebug("Scene::setActiveTakeIndex --> End");
+    qDebug() << "Scene::setActiveTakeIndex --> End";
 }
 
 
@@ -294,7 +295,7 @@ Take *Scene::getActiveTake()
 
 void Scene::setActiveTake(Take *newTake)
 {
-    qDebug("Scene::setActiveTake --> Start");
+    qDebug() << "Scene::setActiveTake --> Start";
 
     // Check the actual scene index
     parent->setActiveScene(this);
@@ -316,7 +317,7 @@ void Scene::setActiveTake(Take *newTake)
         this->activeTakeIndex = takeIndex;
     }
 
-    qDebug("Scene::setActiveTake --> End");
+    qDebug() << "Scene::setActiveTake --> End";
 }
 
 
@@ -334,7 +335,7 @@ Take* Scene::getTake(unsigned int takeIndex)
 
 void Scene::addTake(const QString &takeDescription)
 {
-    qDebug("Scene::addTake(new) --> Start");
+    qDebug() << "Scene::addTake(new) --> Start";
 
     Take *take = new Take(this);
 
@@ -346,23 +347,23 @@ void Scene::addTake(const QString &takeDescription)
     }
     takes.append(take);
 
-    qDebug("Scene::addTake(new) --> End");
+    qDebug() << "Scene::addTake(new) --> End";
 }
 
 
 void Scene::addTake(Take *take)
 {
-    qDebug("Scene::addTake(exist) --> Start");
+    qDebug() << "Scene::addTake(exist) --> Start";
 
     takes.append(take);
 
-    qDebug("Scene::addTake(exist) --> End");
+    qDebug() << "Scene::addTake(exist) --> End";
 }
 
 
 void Scene::insertTake(int takeIndex, const QString &takeDescription)
 {
-    qDebug("Scene::insertTake(new) --> Start");
+    qDebug() << "Scene::insertTake(new) --> Start";
 
     Q_ASSERT(takeIndex > -1);
     Q_ASSERT(takeIndex < getTakeSize());
@@ -381,13 +382,13 @@ void Scene::insertTake(int takeIndex, const QString &takeDescription)
         setActiveTakeIndex(activeTakeIndex+1);
     }
 
-    qDebug("Scene::insertTake(new) --> End");
+    qDebug() << "Scene::insertTake(new) --> End";
 }
 
 
 void Scene::insertTake(int takeIndex, Take *take)
 {
-    qDebug("Scene::insertTake(exist) --> Start");
+    qDebug() << "Scene::insertTake(exist) --> Start";
 
     Q_ASSERT(takeIndex > -1);
     Q_ASSERT(takeIndex < getTakeSize());
@@ -397,7 +398,7 @@ void Scene::insertTake(int takeIndex, Take *take)
         setActiveTakeIndex(activeTakeIndex+1);
     }
 
-    qDebug("Scene::insertTake(exist) --> End");
+    qDebug() << "Scene::insertTake(exist) --> End";
 }
 
 
@@ -417,7 +418,7 @@ void Scene::moveTake(int takeIndex, int movePosition)
 
 Take *Scene::removeTake(int takeIndex)
 {
-    qDebug("Scene::removeTake --> Start");
+    qDebug() << "Scene::removeTake --> Start";
 
     Q_ASSERT(takeIndex != activeTakeIndex);
 
@@ -429,7 +430,7 @@ Take *Scene::removeTake(int takeIndex)
     Take *removedTake = takes[takeIndex];
     takes.remove(takeIndex);
 
-    qDebug("Scene::removeTake --> End");
+    qDebug() << "Scene::removeTake --> End";
     return removedTake;
 }
 
@@ -520,21 +521,21 @@ bool Scene::getModifyedExposure(const QString &filePath,
                                 int &modTakeIndex,
                                 int &modExposureIndex)
 {
-    qDebug("Scene::getModifyedExposure --> Start");
+    qDebug() << "Scene::getModifyedExposure --> Start";
 
     int takeSize = takes.size();
 
     for (modTakeIndex = 0; modTakeIndex < takeSize; ++modTakeIndex) {
         if (takes[modTakeIndex]->getModifyedExposure(filePath, modExposureIndex)) {
             // Exposure found
-            qDebug("Scene::getModifyedExposure --> End");
+            qDebug() << "Scene::getModifyedExposure --> End";
             return true;
         }
     }
 
     modTakeIndex = -1;
 
-    qDebug("Scene::getModifyedExposure --> End (Error)");
+    qDebug() << "Scene::getModifyedExposure --> End (Error)";
     return false;
 }
 
@@ -597,7 +598,7 @@ QVector<QString> Scene::getImagePaths() const
 
 unsigned int Scene::getSoundStartPosition() const
 {
-    qDebug("Take::getSountPosition --> Start");
+    qDebug() << "Take::getSountPosition --> Start";
 
     return this->soundStartPosition;
 }
@@ -612,7 +613,7 @@ void Scene::setSoundStartPosition(unsigned int newSoundStartPosition)
 // TODO: Check audio type (ogg, mp3, wav ...)
 int Scene::addSound(const QString & /*filename*/, const QString & /*soundname*/)
 {
-    qDebug("Scene::addSound --> Start");
+    qDebug() << "Scene::addSound --> Start";
 
     /*
     AudioFormat *f = new OggVorbis();
@@ -676,7 +677,7 @@ int Scene::addSound(const QString & /*filename*/, const QString & /*soundname*/)
         return 0;
     }
     */
-    qDebug("Scene::addSound --> End");
+    qDebug() << "Scene::addSound --> End";
 
     return 0;
 }
@@ -774,7 +775,7 @@ void Scene::moveToSoundDir(const QString &directory)
 
 bool Scene::readSoundFromProject(QDomElement &soundNode)
 {
-    qDebug("Scene::readSoundFromProject --> Start");
+    qDebug() << "Scene::readSoundFromProject --> Start";
 
     QDomElement currElement = soundNode.firstChildElement();
 
@@ -799,14 +800,14 @@ bool Scene::readSoundFromProject(QDomElement &soundNode)
         currElement = currElement.nextSiblingElement();
     }
 
-    qDebug("Scene::readSoundFromProject --> End");
+    qDebug() << "Scene::readSoundFromProject --> End";
     return true;
 }
 
 
 bool Scene::saveSoundToProject(QDomDocument &doc, QDomElement &sceneNode)
 {
-    qDebug("Scene::saveSoundFromProject --> Start");
+    qDebug() << "Scene::saveSoundFromProject --> Start";
 
 
     QDomElement   clipElement;
@@ -831,7 +832,7 @@ bool Scene::saveSoundToProject(QDomDocument &doc, QDomElement &sceneNode)
         clipElement.setAttribute("alt", getSoundName(soundIndex));
     }
 
-    qDebug("Scene::saveSoundFromProject --> End");
+    qDebug() << "Scene::saveSoundFromProject --> End";
     return true;
 }
 
@@ -841,9 +842,9 @@ bool Scene::saveSoundToProject(QDomDocument &doc, QDomElement &sceneNode)
 /*
 bool Scene::operator!= (const Scene &other) const
 {
-    qDebug("Scene::operator!= --> Start");
+    qDebug() << "Scene::operator!= --> Start");
 
-    qDebug("Scene::operator!= --> End");
+    qDebug() << "Scene::operator!= --> End");
 }
 */
 /**************************************************************************
@@ -852,10 +853,10 @@ bool Scene::operator!= (const Scene &other) const
 /*
 void Scene::activateTake()
 {
-    qDebug("Scene::activateTake --> Start");
+    qDebug() << "Scene::activateTake --> Start");
 
     parent->notifyActivateTake();
 
-    qDebug("Scene::activateTake --> End");
+    qDebug() << "Scene::activateTake --> End");
 }
 */

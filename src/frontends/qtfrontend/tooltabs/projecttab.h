@@ -21,14 +21,14 @@
 #ifndef PROJECTTAB_H
 #define PROJECTTAB_H
 
+#include <QProcess>
+#include <QGroupBox>
+#include <QPushButton>
+#include <QTreeWidget>
+#include <QWidget>
+
 #include "frontends/frontend.h"
 #include "frontends/observer.h"
-
-#include <QtCore/QProcess>
-#include <QtGui/QGroupBox>
-#include <QtGui/QPushButton>
-#include <QtGui/QTreeWidget>
-#include <QtGui/QWidget>
 
 
 /**
@@ -38,6 +38,7 @@
 class ProjectTab : public QWidget, public Observer
 {
     Q_OBJECT
+
 public:
     /**
      * Sets up the tab.

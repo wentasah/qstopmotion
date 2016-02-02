@@ -21,15 +21,16 @@
 #ifndef TOOLBAR_H
 #define TOOLBAR_H
 
-#include <QWidget>
-#include <QPushButton>
-// #include <QGroupBox>
 #include <QGridLayout>
-#include <QSlider>
+// #include <QGroupBox>
 #include <QLabel>
+#include <QPushButton>
+#include <QSlider>
 #include <QTimer>
+#include <QWidget>
 
 #include "frontends/frontend.h"
+
 
 /**
  * The tool bar on the button of the preview window

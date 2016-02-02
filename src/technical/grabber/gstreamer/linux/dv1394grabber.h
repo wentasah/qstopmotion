@@ -24,7 +24,6 @@
 #include "technical/grabber/imagegrabberdevice.h"
 #include "technical/grabber/gstreamer/gstgrabber.h"
 
-
 // Include files of the gstreamer library
 #include <gst/gst.h>
 

@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2010-2014 by                                                *
+ *  Copyright (C) 2010-2015 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -21,13 +21,13 @@
 #ifndef PROJECTWIDGET_H
 #define PROJECTWIDGET_H
 
-#include "frontends/frontend.h"
+#include <QComboBox>
+#include <QGroupBox>
+#include <QLabel>
+#include <QSlider>
+#include <QWidget>
 
-#include <QtGui/QComboBox>
-#include <QtGui/QGroupBox>
-#include <QtGui/QLabel>
-#include <QtGui/QSlider>
-#include <QtGui/QWidget>
+#include "frontends/frontend.h"
 
 
 /**
@@ -37,8 +37,8 @@
 class ProjectWidget : public QWidget
 {
     Q_OBJECT
-public:
 
+public:
     /**
      * Sets up the tab.
      * @param f frontend of the application

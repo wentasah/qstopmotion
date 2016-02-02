@@ -20,12 +20,12 @@
 
 #include "viewtab.h"
 
-#include "domain/domainfacade.h"
+#include <QDebug>
+#include <QHeaderView>
+#include <QInputDialog>
+#include <QLabel>
 
-#include <QtCore/QtDebug>
-#include <QtGui/QHeaderView>
-#include <QtGui/QInputDialog>
-#include <QtGui/QLabel>
+#include "domain/domainfacade.h"
 
 
 ViewTab::ViewTab(Frontend *f,
@@ -205,11 +205,11 @@ void ViewTab::initialize()
 /*
 void ViewTab::resizeEvent(QResizeEvent *event)
 {
-    qDebug("ViewTab::resizeEvent --> Start");
+    qDebug() << "ViewTab::resizeEvent --> Start");
 
     QWidget::resizeEvent(event);
 
-    qDebug("ViewTab::resizeEvent --> End");
+    qDebug() << "ViewTab::resizeEvent --> End");
 }
 */
 

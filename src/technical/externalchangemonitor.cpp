@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2012 by                                                *
+ *  Copyright (C) 2005-2015 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -22,14 +22,14 @@
 
 #include "externalchangemonitor.h"
 
+#include <QDebug>
+#include <QDir>
+#include <QTime>
+#include <QSocketNotifier>
+
 #include "domain/domainfacade.h"
 #include "technical/preferencestool.h"
 #include "technical/util.h"
-
-#include <QtCore/QtDebug>
-#include <QtCore/QDir>
-#include <QtCore/QTime>
-#include <QtCore/QSocketNotifier>
 
 
 /**

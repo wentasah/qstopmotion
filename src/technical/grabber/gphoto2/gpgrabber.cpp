@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2010-2014 by                                                *
+ *  Copyright (C) 2010-2015 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -20,14 +20,14 @@
 
 #include "gpgrabber.h"
 
+#include <QDebug>
+#include <QDir>
+// #include <QtGlobal>
+#include <QApplication>
+
 #include "gpcontroller.h"
 #include "technical/grabber/imagegrabberdevice.h"
 #include "technical/util.h"
-
-#include <QtCore/QDir>
-#include <QtCore/QtDebug>
-#include <QtCore/QtGlobal>
-#include <QtGui/QApplication>
 
 // Include files of the gphoto library
 #include <unistd.h>
@@ -38,7 +38,7 @@
 GphotoGrabber::GphotoGrabber(Frontend *f)
     : ImageGrabber(f)
 {
-    qDebug("GphotoGrabber::Constructor --> Start");
+    qDebug() << "GphotoGrabber::Constructor --> Start";
 
     int ret;
 
@@ -55,7 +55,7 @@ GphotoGrabber::GphotoGrabber(Frontend *f)
     // gphotoErrorId = gp_log_add_func(GP_LOG_ERROR, errorDumper, NULL);
     gp_camera_new(&gphotoCamera);
 
-    qDebug("GphotoGrabber::Constructor --> Camera init.  Takes a second or three...");
+    qDebug() << "GphotoGrabber::Constructor --> Camera init.  Takes a second or three...";
     ret = gp_camera_init(gphotoCamera, gphotoContext);
     if (ret != GP_OK) {
         qDebug() << "GphotoGrabber::Constructor --> Error during camera initialization: " << gp_result_as_string(ret);
@@ -101,13 +101,13 @@ GphotoGrabber::GphotoGrabber(Frontend *f)
     rootDir.append("capturedfile.jpg");
     filePath.append(rootDir);
 
-    qDebug("GphotoGrabber::Constructor --> End");
+    qDebug() << "GphotoGrabber::Constructor --> End";
 }
 
 
 GphotoGrabber::~GphotoGrabber()
 {
-    qDebug("GphotoGrabber::Destructor --> Start (Empty)");
+    qDebug() << "GphotoGrabber::Destructor --> Start (Empty)";
     /*
     int ret;
 
@@ -116,21 +116,21 @@ GphotoGrabber::~GphotoGrabber()
         qDebug() << "GphotoGrabber::Constructor --> Error gp_camera_get_about: " << gp_result_as_string(ret);
     }
 
-    qDebug("GphotoGrabber::Destructor --> End");
+    qDebug() << "GphotoGrabber::Destructor --> End";
     */
 }
 
 
 bool GphotoGrabber::initialization(QVector<ImageGrabberDevice*> &devices)
 {
-    qDebug("GphotoGrabber::initialization --> Start");
+    qDebug() << "GphotoGrabber::initialization --> Start";
 
     GphotoController *deviceController = NULL;
     PreferencesTool  *pref = frontend->getPreferences();
     int               value;
 
     if (!isInitSuccess) {
-        qDebug("GphotoGrabber::initialization --> End (Error)");
+        qDebug() << "GphotoGrabber::initialization --> End (Error)";
         return false;
     }
 
@@ -167,7 +167,7 @@ bool GphotoGrabber::initialization(QVector<ImageGrabberDevice*> &devices)
 
     qDebug() << "GphotoGrabber::initialization --> device count: " << devices.size();
 
-    qDebug("GphotoGrabber::initialization --> End (true)");
+    qDebug() << "GphotoGrabber::initialization --> End (true)";
 
     return true;
 }
@@ -178,7 +178,7 @@ bool GphotoGrabber::setUp()
     qDebug() << "GphotoGrabber::setUp --> Start";
 
     if (!isInitSuccess) {
-        qDebug("GphotoGrabber::setUp --> End (Error)");
+        qDebug() << "GphotoGrabber::setUp --> End (Error)";
         return false;
     }
 
@@ -254,7 +254,7 @@ bool GphotoGrabber::setUp()
         }
     }
 
-    qDebug("GphotoGrabber::setUp --> End");
+    qDebug() << "GphotoGrabber::setUp --> End";
 
 out:
     gp_widget_free(gphotoConfig);

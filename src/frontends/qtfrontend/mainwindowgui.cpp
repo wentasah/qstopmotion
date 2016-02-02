@@ -20,6 +20,13 @@
  *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                 *
  ******************************************************************************/
 
+#include <QApplication>
+#include <QDebug>
+#include <QFileDialog>
+#include <QMenuBar>
+#include <QStatusBar>
+#include <QWhatsThis>
+
 #include "mainwindowgui.h"
 
 #include "domain/domainfacade.h"
@@ -33,9 +40,6 @@
 #include "technical/videoencoder/ffmpegencoder.h"
 #include "technical/videoencoder/libavencoder.h"
 
-#include <QtCore/QtDebug>
-#include <QtGui/QFileDialog>
-
 using namespace Qt;
 
 
@@ -46,7 +50,7 @@ using namespace Qt;
 MainWindowGUI::MainWindowGUI(QApplication *stApp, Frontend *f)
     : stApp(stApp), frontend(f)
 {
-    qDebug("MainWindowGUI::Constructor --> Start");
+    qDebug() << "MainWindowGUI::Constructor --> Start";
 
     centerWidget         = 0;
     centerWidgetLayout   = 0;
@@ -141,13 +145,13 @@ MainWindowGUI::MainWindowGUI(QApplication *stApp, Frontend *f)
     stApp->installTranslator(&appTranslator);
     stApp->installTranslator(&qtTranslator);
 
-    qDebug("MainWindowGUI::Constructor --> End");
+    qDebug() << "MainWindowGUI::Constructor --> End";
 }
 
 
 MainWindowGUI::~MainWindowGUI()
 {
-    qDebug("MainWindowGUI::Destructor --> Start");
+    qDebug() << "MainWindowGUI::Destructor --> Start";
 
     if (helpBrowser) {
         helpBrowser->close();
@@ -162,13 +166,13 @@ MainWindowGUI::~MainWindowGUI()
 
     frontend = NULL;
 
-    qDebug("MainWindowGUI::Destructor --> End");
+    qDebug() << "MainWindowGUI::Destructor --> End";
 }
 
 
 void MainWindowGUI::retranslateStrings()
 {
-    qDebug("MainWindowGUI::retranslateStrings --> Start");
+    qDebug() << "MainWindowGUI::retranslateStrings --> Start";
 
     // The actions caption texts
     newAct->setText(tr("&New"));
@@ -240,7 +244,7 @@ void MainWindowGUI::retranslateStrings()
         helpBrowser = NULL;
     }
 
-    qDebug("MainWindowGUI::retranslateStrings --> End");
+    qDebug() << "MainWindowGUI::retranslateStrings --> End";
 }
 
 
@@ -484,6 +488,8 @@ void MainWindowGUI::retranslateHelpText()
 
 void MainWindowGUI::initialize()
 {
+    qDebug() << "MainWindowGUI::initialize --> Start";
+
     int     value;
     QString gridColorName;
 
@@ -581,20 +587,20 @@ void MainWindowGUI::initialize()
         gridColor.setNamedColor(gridColorName);
     }
 
-    qDebug("MainWindowGUI::Constructor --> End");
+    qDebug() << "MainWindowGUI::initialize --> End";
 }
 
 
 void MainWindowGUI::closeEvent(QCloseEvent *event)
 {
-    qDebug("MainWindowGUI::closeEvent --> Start");
+    qDebug() << "MainWindowGUI::closeEvent --> Start";
 
     // Last changes saved?
     checkSaved();
 
     event->accept();
 
-    qDebug("MainWindowGUI::closeEvent --> End");
+    qDebug() << "MainWindowGUI::closeEvent --> End";
 }
 
 
@@ -813,7 +819,7 @@ void MainWindowGUI::setExposureID(const QString &id)
 
 void MainWindowGUI::startDialog()
 {
-    qDebug("MainWindowGUI::startDialog --> Start");
+    qDebug() << "MainWindowGUI::startDialog --> Start";
 
     QString pID(mostRecentAct->text());
     StartDialog *dialog = new StartDialog(frontend, pID, this);
@@ -821,7 +827,7 @@ void MainWindowGUI::startDialog()
     if (ret == QDialog::Rejected) {
         // The user canceled the input dialog
         emit startExit();
-        qDebug("MainWindowGUI::startDialog --> End (cancel)");
+        qDebug() << "MainWindowGUI::startDialog --> End (cancel)";
         return;
     }
     int selection = dialog->getSelectedPossibility();
@@ -841,12 +847,12 @@ void MainWindowGUI::startDialog()
         break;
     }
 
-    qDebug("MainWindowGUI::startDialog --> End");
+    qDebug() << "MainWindowGUI::startDialog --> End";
 }
 
 bool MainWindowGUI::startGrabber()
 {
-    qDebug("MainWindowGUI::startGrabber --> Start");
+    qDebug() << "MainWindowGUI::startGrabber --> Start";
 
     frontend->showMessage(tr("Connecting camera..."));
     grabber->init();
@@ -868,18 +874,18 @@ bool MainWindowGUI::startGrabber()
         }
     }
 
-    qDebug("MainWindowGUI::startGrabber --> End");
+    qDebug() << "MainWindowGUI::startGrabber --> End";
     return true;
 }
 
 
 bool MainWindowGUI::isGrabberInited()
 {
-    qDebug("MainWindowGUI::isGrabberInited --> Start");
+    qDebug() << "MainWindowGUI::isGrabberInited --> Start";
 
     bool ret = grabber->isGrabberInited();
 
-    qDebug("MainWindowGUI::isGrabberInited --> End");
+    qDebug() << "MainWindowGUI::isGrabberInited --> End";
 
     return ret;
 }
@@ -887,7 +893,7 @@ bool MainWindowGUI::isGrabberInited()
 
 void MainWindowGUI::stopGrabber()
 {
-    qDebug("MainWindowGUI::stopGrabber --> Start");
+    qDebug() << "MainWindowGUI::stopGrabber --> Start";
 
     if (0 != cameraControllerDialog) {
         cameraControllerDialog->tearDown();
@@ -897,7 +903,7 @@ void MainWindowGUI::stopGrabber()
 
     grabber->finalize();
 
-    qDebug("MainWindowGUI::stopGrabber --> End");
+    qDebug() << "MainWindowGUI::stopGrabber --> End";
 }
 
 
@@ -981,11 +987,11 @@ void MainWindowGUI::openProject(const QString &filePath)
 
 void MainWindowGUI::setToolBarState(int newState)
 {
-    qDebug("MainWindowGUI::setToolBarState --> Start");
+    qDebug() << "MainWindowGUI::setToolBarState --> Start";
 
     toolBar->setActualState(newState);
 
-    qDebug("MainWindowGUI::setToolBarState --> End");
+    qDebug() << "MainWindowGUI::setToolBarState --> End";
 }
 
 
@@ -1134,11 +1140,11 @@ void MainWindowGUI::setPlaybackCount(int count)
 
 void MainWindowGUI::setupDirectoryMonitoring()
 {
-    qDebug("MainWindowGUI::setupDirectoryMonitoring --> Start");
+    qDebug() << "MainWindowGUI::setupDirectoryMonitoring --> Start";
 
     changeMonitor = new ExternalChangeMonitor(frontend, this);
 
-    qDebug("MainWindowGUI::setupDirectoryMonitoring --> End");
+    qDebug() << "MainWindowGUI::setupDirectoryMonitoring --> End";
 }
 
 
@@ -1186,7 +1192,7 @@ void MainWindowGUI::removeAllFilesFromMonitoring()
 
 void MainWindowGUI::newProject()
 {
-    qDebug("MainWindowGUI::newProject --> Start");
+    qDebug() << "MainWindowGUI::newProject --> Start";
 
     DomainFacade* project = frontend->getProject();
 
@@ -1200,7 +1206,7 @@ void MainWindowGUI::newProject()
     int ret = dialog->exec();
     if (ret == QDialog::Rejected) {
         // The user canceled the input dialog
-        qDebug("MainWindowGUI::newProject --> End (cancel)");
+        qDebug() << "MainWindowGUI::newProject --> End (cancel)";
 
         delete(dialog);
 
@@ -1240,13 +1246,13 @@ void MainWindowGUI::newProject()
 
     setWindowTitle(tr("qStopMotion - New Animation Project"));
 
-    qDebug("MainWindowGUI::newProject --> End");
+    qDebug() << "MainWindowGUI::newProject --> End";
 }
 
 
 void MainWindowGUI::openProject()
 {
-    qDebug("MainWindowGUI::openProject --> Start");
+    qDebug() << "MainWindowGUI::openProject --> Start";
 
     recordingTab->checkCameraOff();
 
@@ -1254,7 +1260,7 @@ void MainWindowGUI::openProject()
     QStringList filters;
     filters << QString(tr("Project (*.%1)")).arg(PreferencesTool::projectSuffix);
     //         << QString(tr("Archive (*.%2)")).arg(PreferencesTool::archiveSuffix);
-    fileDialog.setFilters(filters);
+    fileDialog.setNameFilters(filters);
     fileDialog.setAcceptMode(QFileDialog::AcceptOpen);
     fileDialog.setFileMode(QFileDialog::ExistingFiles);
     int ret = fileDialog.exec();
@@ -1265,7 +1271,7 @@ void MainWindowGUI::openProject()
         openProject(openFiles[0]);
     }
 
-    qDebug("MainWindowGUI::openProject --> End");
+    qDebug() << "MainWindowGUI::openProject --> End";
 }
 
 
@@ -1339,7 +1345,7 @@ void MainWindowGUI::saveProjectAs()
 
     filters << QString(tr("Project (*.%1)")).arg(PreferencesTool::projectSuffix);
     //         << QString(tr("Archive (*.%2)")).arg(PreferencesTool::archiveSuffix);
-    fileDialog.setFilters(filters);
+    fileDialog.setNameFilters(filters);
     fileDialog.setAcceptMode(QFileDialog::AcceptSave);
     fileDialog.setFileMode(QFileDialog::AnyFile);
 
@@ -1394,7 +1400,7 @@ void MainWindowGUI::saveProjectAs()
 
 void MainWindowGUI::exportToVideo()
 {
-    qDebug("MainWindowGUI::exportToVideo --> Start");
+    qDebug() << "MainWindowGUI::exportToVideo --> Start";
 
     VideoEncoder    *enc = NULL;
     int              activeEncoderApplication;
@@ -1453,7 +1459,7 @@ void MainWindowGUI::exportToVideo()
         }
 
         QFileDialog fileDialog(this, tr("Export to video file"), lastVisitedDir);
-        fileDialog.setFilters(filters);
+        fileDialog.setNameFilters(filters);
         fileDialog.setAcceptMode(QFileDialog::AcceptSave);
         fileDialog.setFileMode(QFileDialog::AnyFile);
         int ret = fileDialog.exec();
@@ -1520,7 +1526,7 @@ void MainWindowGUI::exportToVideo()
     delete enc;
     enc = NULL;
 
-    qDebug("MainWindowGUI::exportToVideo --> End");
+    qDebug() << "MainWindowGUI::exportToVideo --> End";
 }
 
 
@@ -1533,7 +1539,7 @@ void MainWindowGUI::exportToCinelerra()
     QFileDialog fileDialog(this, tr("Export to file"), lastVisitedDir);
     QStringList filters;
     filters << "Cinelerra (*.XML)";
-    fileDialog.setFilters(filters);
+    fileDialog.setNameFilters(filters);
     fileDialog.setAcceptMode(QFileDialog::AcceptSave);
     fileDialog.setFileMode(QFileDialog::AnyFile);
     int ret = fileDialog.exec();
@@ -1678,7 +1684,7 @@ void MainWindowGUI::showPreferencesDialog()
     int ret = preferencesDialog->exec();
     if (ret == QDialog::Rejected) {
         // The user canceled the input dialog
-        qDebug("MainWindowsGUI::showPreferencesDialog --> End (cancel)");
+        qDebug() << "MainWindowsGUI::showPreferencesDialog --> End (cancel)";
     }
     delete(preferencesDialog);
 }
@@ -1692,7 +1698,7 @@ void MainWindowGUI::showPropertiesDialog()
     int ret = propertiesDialog->exec();
     if (ret == QDialog::Rejected) {
         // The user canceled the input dialog
-        qDebug("MainWindowsGUI::showPropertiesDialog --> End (cancel)");
+        qDebug() << "MainWindowsGUI::showPropertiesDialog --> End (cancel)";
     }
     delete(propertiesDialog);
 }
@@ -1767,7 +1773,7 @@ void MainWindowGUI::showAboutDialog()
 
 void MainWindowGUI::createTranslator(const QString &newLocale)
 {
-    qDebug("MainWindowGUI::createTranslator --> Start");
+    qDebug() << "MainWindowGUI::createTranslator --> Start";
 
     PreferencesTool *pref = frontend->getPreferences();
     QString appTranslationFile("qstopmotion_");
@@ -1806,22 +1812,22 @@ void MainWindowGUI::createTranslator(const QString &newLocale)
         qDebug() << "MainWindowGUI::createTranslator --> Loading translator:" << appTranslationFile;
         if (!appTranslator.load(appTranslationFile, qmPath)) {
             // Translation file not opend
-            qDebug("MainWindowGUI::createTranslator --> qStopMotion translator not loaded!");
+            qDebug() << "MainWindowGUI::createTranslator --> qStopMotion translator not loaded!";
         }
         qDebug() << "MainWindowGUI::createTranslator --> Loading translator:" << qtTranslationFile;
         if (!qtTranslator.load(qtTranslationFile, qmPath)) {
             // Translation file not opend
-            qDebug("MainWindowGUI::createTranslator --> Qt translator not loaded!");
+            qDebug() << "MainWindowGUI::createTranslator --> Qt translator not loaded!";
         }
     }
 
-    qDebug("MainWindowGUI::createTranslator --> End");
+    qDebug() << "MainWindowGUI::createTranslator --> End";
 }
 
 
 void MainWindowGUI::initTranslations()
 {
-    qDebug("MainWindowGUI::initTranslations --> Start");
+    qDebug() << "MainWindowGUI::initTranslations --> Start";
 
     // Fill the list with possible languages
     QString qmPath(frontend->getTranslationsDirName());
@@ -1853,7 +1859,7 @@ void MainWindowGUI::initTranslations()
         }
     }
 
-    qDebug("MainWindowGUI::initTranslations --> End");
+    qDebug() << "MainWindowGUI::initTranslations --> End";
 }
 
 
@@ -2440,6 +2446,7 @@ void MainWindowGUI::makeViews(QHBoxLayout *layout)
     viewAreaLayout->setMargin(2);
 
     frameView = new FrameViewImage(frontend, this);
+    // frameView = new FrameViewInterface(frontend, this);
 
     frameView->setMinimumSize(400, 270);
     frameView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -2504,7 +2511,7 @@ void MainWindowGUI::makeStatusBar()
 
 void MainWindowGUI::dragEnterEvent(QDragEnterEvent * /* event */)
 {
-    qDebug("MainWindowGUI::dragEnterEvent --> Start (Nothing)");
+    qDebug() << "MainWindowGUI::dragEnterEvent --> Start (Empty)";
     // TODO: New Implementation for Drag enter event
 /*
     if (event->mimeData()->hasUrls()) {
@@ -2513,14 +2520,14 @@ void MainWindowGUI::dragEnterEvent(QDragEnterEvent * /* event */)
         event->ignore();
     }
 
-    qDebug("MainWindowGUI::dragEnterEvent --> End");
+    qDebug() << "MainWindowGUI::dragEnterEvent --> End";
 */
 }
 
 
 void MainWindowGUI::dropEvent(QDropEvent * /* event */)
 {
-    qDebug("MainWindowGUI::dropEvent --> Start (Nothing)");
+    qDebug() << "MainWindowGUI::dropEvent --> Start (Empty)";
     // TODO: New Implementation for Drop event
 /*
     if (event->mimeData()->hasUrls()) {
@@ -2533,7 +2540,7 @@ void MainWindowGUI::dropEvent(QDropEvent * /* event */)
         }
     }
 
-    qDebug("MainWindowGUI::dropEvent --> End");
+    qDebug() << "MainWindowGUI::dropEvent --> End";
 */
 }
 
@@ -2620,4 +2627,3 @@ void MainWindowGUI::checkSaved()
         }
     }
 }
-

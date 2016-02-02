@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2012 by                                                *
+ *  Copyright (C) 2005-2015 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -23,9 +23,9 @@
 #ifndef IMAGEGRABBERTHREAD_H
 #define IMAGEGRABBERTHREAD_H
 
-#include "technical/grabber/imagegrabber.h"
+#include <QThread>
 
-#include <QtCore/QThread>
+#include "technical/grabber/imagegrabber.h"
 
 
 /**

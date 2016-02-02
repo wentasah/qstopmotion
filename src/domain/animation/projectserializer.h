@@ -23,13 +23,12 @@
 #ifndef PROJECTSERIALIZER_H
 #define PROJECTSERIALIZER_H
 
+#include <QDomDocument>
+#include <QDomElement>
+#include <QString>
+
 // #include "domain/animation/animationproject.h"
 #include "frontends/frontend.h"
-
-#include <QtCore/QObject>
-#include <QtCore/QString>
-#include <QtXml/QDomDocument>
-#include <QtXml/QDomElement>
 
 class ProjectSerializer;
 class AnimationProject;

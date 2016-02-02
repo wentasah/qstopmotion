@@ -23,11 +23,11 @@
 #ifndef EXPOSURETHUMBVIEW_H
 #define EXPOSURETHUMBVIEW_H
 
-#include "frontends/qtfrontend/timeline/timeline.h"
+#include <QMouseEvent>
+#include <QDropEvent>
+#include <QPaintEvent>
 
-#include <QtGui/QMouseEvent>
-#include <QtGui/QDropEvent>
-#include <QtGui/QPaintEvent>
+#include "frontends/qtfrontend/timeline/timeline.h"
 
 
 /**

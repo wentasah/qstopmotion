@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2014 by                                                *
+ *  Copyright (C) 2005-2015 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -20,22 +20,22 @@
 
 #include "projectwidget.h"
 
+#include <QDebug>
+#include <QGridLayout>
+#include <QHeaderView>
+#include <QInputDialog>
+#include <QLabel>
+#include <QVBoxLayout>
+
 #include "domain/domainfacade.h"
 #include "frontends/qtfrontend/elements/flexiblelineedit.h"
 #include "technical/preferencestool.h"
-
-#include <QtCore/QtDebug>
-#include <QtGui/QGridLayout>
-#include <QtGui/QHeaderView>
-#include <QtGui/QInputDialog>
-#include <QtGui/QLabel>
-#include <QtGui/QVBoxLayout>
 
 
 ProjectWidget::ProjectWidget(Frontend *f, bool type, QWidget *parent)
     : QWidget(parent)
 {
-    qDebug("ProjectWidget::Constructor --> Start");
+    qDebug() << "ProjectWidget::Constructor --> Start";
 
     Q_ASSERT(type == 1);   // Use this widget only in general dialog!
 
@@ -65,12 +65,14 @@ ProjectWidget::ProjectWidget(Frontend *f, bool type, QWidget *parent)
 
     makeGUI();
 
-    qDebug("ProjectWidget::Constructor --> End");
+    qDebug() << "ProjectWidget::Constructor --> End";
 }
 
 
 void ProjectWidget::makeGUI()
 {
+    qDebug() << "ProjectWidget::makeGUI --> Start";
+
     QVBoxLayout *mainLayout = new QVBoxLayout;
 
     recordingGroupBox = new QGroupBox(tr("Recording"));
@@ -98,14 +100,14 @@ void ProjectWidget::makeGUI()
     grabberSourceCombo = new QComboBox();
     grabberSourceCombo->setFocusPolicy(Qt::NoFocus);
     connect(grabberSourceCombo, SIGNAL(activated(int)), this, SLOT(changeGrabberSource(int)));
-#ifdef Q_WS_X11
+#ifdef Q_OS_LINUX
     grabberSourceCombo->addItem(tr("Test Source"));
     grabberSourceCombo->addItem(tr("Video 4 Linux (USB WebCam)"));
     grabberSourceCombo->addItem(tr("IEEE 1394 (FireWire DigiCam)"));
     grabberSourceCombo->addItem(tr("gphoto (USB Compact Camera)"));
 #endif
 
-#ifdef Q_WS_WIN
+#if defined(Q_OS_WIN32) || defined(Q_OS_WIN64)
     grabberSourceCombo->addItem(tr("Media Foundation"));
 #endif
 
@@ -179,13 +181,13 @@ void ProjectWidget::makeGUI()
 
     setLayout(mainLayout);
 
-    qDebug("ProjectWidget::makeGUI --> End");
+    qDebug() << "ProjectWidget::makeGUI --> End";
 }
 
 
 void ProjectWidget::initialize()
 {
-    qDebug("ProjectWidget::initialize --> Start");
+    qDebug() << "ProjectWidget::initialize --> Start";
 
     PreferencesTool *pref = frontend->getPreferences();
     int              value;
@@ -244,23 +246,23 @@ void ProjectWidget::initialize()
     changeUnitMode(defaultUnitMode);
     */
 
-    qDebug("ProjectWidget::initialize --> End");
+    qDebug() << "ProjectWidget::initialize --> End";
 }
 
 /*
 void ProjectWidget::resizeEvent(QResizeEvent *event)
 {
-    qDebug("ProjectWidget::resizeEvent --> Start");
+    qDebug() << "ProjectWidget::resizeEvent --> Start";
 
     QWidget::resizeEvent(event);
 
-    qDebug("ProjectWidget::resizeEvent --> End");
+    qDebug() << "ProjectWidget::resizeEvent --> End";
 }
 */
 
 void ProjectWidget::apply()
 {
-    qDebug("ProjectWidget::apply --> Start");
+    qDebug() << "ProjectWidget::apply --> Start";
 
     int index;
     int newRecordingMode = recordingModeCombo->currentIndex();
@@ -271,25 +273,25 @@ void ProjectWidget::apply()
 
     switch (grabberSourceCombo->currentIndex()) {
     case 0:
-#ifdef Q_WS_X11
+#ifdef Q_OS_LINUX
         index = ImageGrabberDevice::testSource;
 #endif
-#ifdef Q_WS_WIN
+#if defined(Q_OS_WIN32) || defined(Q_OS_WIN64)
         index = ImageGrabberDevice::mediaFoundationSource;
 #endif
         break;
     case 1:
-#ifdef Q_WS_X11
+#ifdef Q_OS_LINUX
         index = ImageGrabberDevice::video4LinuxSource;
 #endif
         break;
     case 2:
-#ifdef Q_WS_X11
+#ifdef Q_OS_LINUX
         index = ImageGrabberDevice::ieee1394Source;
 #endif
         break;
     case 3:
-#ifdef Q_WS_X11
+#ifdef Q_OS_LINUX
         index = ImageGrabberDevice::gphoto2Source;
 #endif
         break;
@@ -336,13 +338,13 @@ void ProjectWidget::apply()
     pref->setIntegerPreference("preferences", "defaultplaybackcount", defaultPlaybackCount);
     // pref->setIntegerPreference("preferences", "defaultunitmode", defaultUnitMode);
 
-    qDebug("ProjectWidget::apply --> End");
+    qDebug() << "ProjectWidget::apply --> End";
 }
 
 
 void ProjectWidget::reset()
 {
-    qDebug("ProjectWidget::reset --> Start");
+    qDebug() << "ProjectWidget::reset --> Start";
 
     changeRecordingMode(defaultRecordingMode);
 
@@ -363,7 +365,7 @@ void ProjectWidget::reset()
 /*
     changeUnitMode(defaultUnitMode);
 */
-    qDebug("ProjectWidget::reset --> End");
+    qDebug() << "ProjectWidget::reset --> End";
 }
 
 

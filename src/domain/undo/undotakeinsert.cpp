@@ -22,6 +22,9 @@
 
 #include "undotakeinsert.h"
 
+#include <QDebug>
+#include <QLatin1String>
+
 
 UndoTakeInsert::UndoTakeInsert(DomainFacade  *df,
                                const QString &description,
@@ -51,7 +54,7 @@ UndoTakeInsert::~UndoTakeInsert()
 
 void UndoTakeInsert::undo()
 {
-    qDebug("UndoTakeInsert::undo --> Start");
+    qDebug() << "UndoTakeInsert::undo --> Start";
 
     AnimationProject *animationProject = facade->getAnimationProject();
 
@@ -63,13 +66,13 @@ void UndoTakeInsert::undo()
 
     facade->writeHistoryEntry(QLatin1String("undo"));
 
-    qDebug("UndoTakeInsert::undo --> End");
+    qDebug() << "UndoTakeInsert::undo --> End";
 }
 
 
 void UndoTakeInsert::redo()
 {
-    qDebug("UndoTakeInsert::redo --> Start");
+    qDebug() << "UndoTakeInsert::redo --> Start";
 
     AnimationProject *animationProject = facade->getAnimationProject();
 
@@ -95,5 +98,5 @@ void UndoTakeInsert::redo()
 
     animationProject->incAnimationChanges();
 
-    qDebug("UndoTakeInsert::redo --> End");
+    qDebug() << "UndoTakeInsert::redo --> End";
 }

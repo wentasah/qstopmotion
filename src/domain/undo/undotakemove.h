@@ -23,6 +23,7 @@
 
 #include <domain/undo/undobase.h>
 
+
 /**
  * The UndoTakeMove class for undoing moveTake(...) calls to the project.
  */

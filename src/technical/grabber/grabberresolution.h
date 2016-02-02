@@ -21,7 +21,7 @@
 #ifndef GRABBERRESOLUTION_H
 #define GRABBERRESOLUTION_H
 
-#include <QtCore/QString>
+#include <QString>
 
 
 /**

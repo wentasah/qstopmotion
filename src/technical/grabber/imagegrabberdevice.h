@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2011-2014 by                                                *
+ *  Copyright (C) 2011-2015 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -21,15 +21,16 @@
 #ifndef IMAGEGRABBERDEVICE_H
 #define IMAGEGRABBERDEVICE_H
 
+#include <QString>
+#include <QVector>
+#include <QImage>
+
 #include "frontends/frontend.h"
 #include "technical/grabber/grabbercontroller.h"
 #include "technical/grabber/grabberresolution.h"
 
-#include <QtCore/QString>
-#include <QtCore/QVector>
-#include <QtGui/QImage>
-
 class GrabberController;
+
 
 /**
  * Class containing all the informations of a device.

@@ -23,14 +23,14 @@
 #ifndef EXTERNALCOMMANDDIALOG_H
 #define EXTERNALCOMMANDDIALOG_H
 
-#include <QtCore/QProcess>
-#include <QtGui/QHBoxLayout>
-#include <QtGui/QLabel>
-#include <QtGui/QLineEdit>
-#include <QtGui/QPushButton>
-#include <QtGui/QTextBrowser>
-#include <QtGui/QVBoxLayout>
-#include <QtGui/QWidget>
+#include <QHBoxLayout>
+#include <QLabel>
+#include <QLineEdit>
+#include <QProcess>
+#include <QPushButton>
+#include <QTextBrowser>
+#include <QVBoxLayout>
+#include <QWidget>
 
 
 class ExternalCommandDialog : public QWidget

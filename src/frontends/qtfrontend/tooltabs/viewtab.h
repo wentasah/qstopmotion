@@ -21,14 +21,14 @@
 #ifndef VIEWTAB_H
 #define VIEWTAB_H
 
-#include "frontends/frontend.h"
-
-#include <QWidget>
-#include <QPushButton>
-#include <QGroupBox>
 #include <QGridLayout>
-#include <QSlider>
+#include <QGroupBox>
 #include <QLabel>
+#include <QPushButton>
+#include <QSlider>
+#include <QWidget>
+
+#include "frontends/frontend.h"
 
 
 /**
@@ -38,6 +38,7 @@
 class ViewTab : public QWidget
 {
     Q_OBJECT
+
 public:
     /**
      * Sets up the tab.

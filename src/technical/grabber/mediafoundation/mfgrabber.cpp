@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2010-2014 by                                                *
+ *  Copyright (C) 2010-2016 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -25,10 +25,10 @@
 #include "technical/preferencestool.h"
 #include "technical/util.h"
 
-#include <QtCore/QDir>
-#include <QtCore/QtDebug>
-#include <QtCore/QtGlobal>
-#include <QtGui/QApplication>
+#include <QApplication>
+#include <QDebug>
+#include <QDir>
+// #include <QtGlobal>
 
 // Include files of the media foundation
 // #include "mfidl.h"
@@ -47,7 +47,7 @@
 MfGrabber::MfGrabber(Frontend *f)
     : ImageGrabber(f)
 {
-    qDebug("MfGrabber::Constructor --> Start");
+    qDebug() << "MfGrabber::Constructor --> Start";
 
     HRESULT hr;
 
@@ -67,13 +67,13 @@ MfGrabber::MfGrabber(Frontend *f)
         qFatal("MfGrabber::Constructor --> Error: Cannot start the media foundation!");
     }
 
-    qDebug("MfGrabber::Constructor --> End");
+    qDebug() << "MfGrabber::Constructor --> End";
 }
 
 
 MfGrabber::~MfGrabber()
 {
-    qDebug("MfGrabber::Destructor --> Start");
+    qDebug() << "MfGrabber::Destructor --> Start";
 
     HRESULT hr;
 
@@ -83,7 +83,7 @@ MfGrabber::~MfGrabber()
         qFatal("MfGrabber::Destructor --> Error: Cannot shut down the media foundation!");
     }
 
-    qDebug("MfGrabber::Destructor --> End");
+    qDebug() << "MfGrabber::Destructor --> End";
 }
 
 
@@ -95,7 +95,7 @@ IMFMediaSource* MfGrabber::getSource()
 
 bool MfGrabber::initialization(QVector<ImageGrabberDevice*> &devices)
 {
-    qDebug("MfGrabber::initialization --> Start");
+    qDebug() << "MfGrabber::initialization --> Start";
 
     PreferencesTool *pref = frontend->getPreferences();
     int              value;
@@ -191,12 +191,12 @@ bool MfGrabber::initialization(QVector<ImageGrabberDevice*> &devices)
     qDebug() << "MfGrabber::initialization --> device count: " << devices.size();
 
     if (0 == deviceCount) {
-        qDebug("MfGrabber::initialization --> End (false)");
+        qDebug() << "MfGrabber::initialization --> End (false)";
 
         return false;
     }
 
-    qDebug("MfGrabber::initialization --> End (true)");
+    qDebug() << "MfGrabber::initialization --> End (true)";
 
     return true;
 }

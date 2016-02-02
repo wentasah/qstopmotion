@@ -22,6 +22,9 @@
 
 #include "undoexposuremove.h"
 
+#include <QDebug>
+#include <QLatin1String>
+
 
 UndoExposureMove::UndoExposureMove(DomainFacade *df,
                                    int           fsi,
@@ -38,7 +41,7 @@ UndoExposureMove::UndoExposureMove(DomainFacade *df,
     toSceneIndex = tsi;
     toTakeIndex = tti;
     toExposureIndex = tei;
-    undoFlag = FALSE;
+    undoFlag = false;
     setText(QString(tr("Move exposure (%1,%2,%3)")).arg(toSceneIndex).arg(toTakeIndex).arg(toExposureIndex));
 }
 
@@ -52,13 +55,13 @@ void UndoExposureMove::undo()
 {
     /* TODO: Implementation of the redoExposureMove function
 
-    qDebug("UndoExposureMove::undo --> Start");
+    qDebug() << "UndoExposureMove::undo --> Start";
 
 
     facade->writeHistoryEntry(QLatin1String("undo"));
-    undoFlag = TRUE;
+    undoFlag = true;
 
-    qDebug("UndoExposureMove::undo --> End");
+    qDebug() << "UndoExposureMove::undo --> End";
     */
 }
 
@@ -67,7 +70,7 @@ void UndoExposureMove::redo()
 {
     /* TODO: Implementation of the redoExposureMove function
 
-    qDebug("UndoExposureMove::redo --> Start");
+    qDebug() << "UndoExposureMove::redo --> Start";
 
     Exposure* exposure = animationProject->removeExposure(sceneIndex, takeIndex, exposureIndex);
     getView()->notifyRemoveExposure(sceneIndex, takeIndex, exposureIndex);
@@ -83,7 +86,7 @@ void UndoExposureMove::redo()
 
     if (undoFlag) {
         facade->writeHistoryEntry(QLatin1String("redo"));
-        undoFlag = FALSE;
+        undoFlag = false;
     }
     else {
         facade->writeHistoryEntry(QString("%1|%2|%3|%4|%5|%6|%7")
@@ -95,6 +98,6 @@ void UndoExposureMove::redo()
                                   .arg(toExposureIndex));
     }
 
-    qDebug("UndoExposureMove::redo --> End");
+    qDebug() << "UndoExposureMove::redo --> End";
     */
 }

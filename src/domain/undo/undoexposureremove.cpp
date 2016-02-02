@@ -22,6 +22,9 @@
 
 #include "undoexposureremove.h"
 
+#include <QDebug>
+#include <QLatin1String>
+
 #include "domain/animation/exposure.h"
 
 
@@ -35,7 +38,7 @@ UndoExposureRemove::UndoExposureRemove(DomainFacade *df,
     takeIndex = ti;
     exposureIndex = ei;
     exposure = NULL;
-    undoFlag = FALSE;
+    undoFlag = false;
     setText(QString(tr("Remove exposure (%1,%2,%3)"))
             .arg(sceneIndex).arg(takeIndex).arg(exposureIndex));
 }
@@ -52,7 +55,7 @@ UndoExposureRemove::~UndoExposureRemove()
 
 void UndoExposureRemove::undo()
 {
-    qDebug("UndoExposureRemove::undo --> Start");
+    qDebug() << "UndoExposureRemove::undo --> Start";
 
     AnimationProject *animationProject = facade->getAnimationProject();
 
@@ -69,19 +72,19 @@ void UndoExposureRemove::undo()
         facade->getView()->notifyInsertExposure(sceneIndex, takeIndex, exposureIndex);
     }
     exposure = NULL;
-    undoFlag = TRUE;
+    undoFlag = true;
 
     animationProject->decAnimationChanges();
 
     facade->writeHistoryEntry(QLatin1String("undo"));
 
-    qDebug("UndoExposureRemove::undo --> End");
+    qDebug() << "UndoExposureRemove::undo --> End";
 }
 
 
 void UndoExposureRemove::redo()
 {
-    qDebug("UndoExposureRemove::redo --> Start");
+    qDebug() << "UndoExposureRemove::redo --> Start";
 
     AnimationProject *animationProject = facade->getAnimationProject();
 
@@ -93,7 +96,7 @@ void UndoExposureRemove::redo()
 
     if (undoFlag) {
         // Call of the redo function after a undo call
-        undoFlag = FALSE;
+        undoFlag = false;
 
         facade->writeHistoryEntry(QLatin1String("redo"));
     }
@@ -105,5 +108,5 @@ void UndoExposureRemove::redo()
                                   .arg(exposureIndex));
     }
 
-    qDebug("UndoExposureRemove::redo --> End");
+    qDebug() << "UndoExposureRemove::redo --> End";
 }

@@ -20,6 +20,14 @@
  *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                 *
  ******************************************************************************/
 
+#include <QDate>
+#include <QDesktopWidget>
+#include <QDir>
+#include <QPoint>
+#include <QMessageBox>
+#include <QSize>
+#include <QSplashScreen>
+
 #include "qtfrontend.h"
 
 #include "domain/animation/projectserializer.h"
@@ -28,18 +36,15 @@
 #include "technical/util.h"
 #include "technical/preferencestool.h"
 
-#include <QtCore/QDebug>
-#include <QtCore/QPoint>
-#include <QtCore/QSize>
-#include <QtGui/QtGui>
-
 #include <cstring>
 // #include <unistd.h>
 
+Q_LOGGING_CATEGORY(qstopmotion, "qtfrontend.qstopmotion")
 
 QtFrontend::QtFrontend(int &argc, char **argv)
 {
-    qDebug("QtFrontend::Constructor --> Start");
+    qCDebug(qstopmotion) << "QtFrontend::Constructor --> Start";
+    qCDebug(qstopmotion) << "QtFrontend::Constructor Date:" << QDate::currentDate();
 
     domainFacade         = NULL;
     viewFacade           = NULL;
@@ -47,28 +52,28 @@ QtFrontend::QtFrontend(int &argc, char **argv)
     preferencesTool      = NULL;
 
     stApp = new QApplication(argc, argv);
-    /*
-    #if QT_VERSION == 0x040400
-        stApp->setAttribute(Qt::AA_NativeWindows);
-    #endif
-    */
 
+    // #if QT_VERSION == 0x040400
+    //     stApp->setAttribute(Qt::AA_NativeWindows);
+    // #endif
+
+/*
 #if QT_VERSION<0x050000
     // der Codec der Quelltexte ist UTF-8,
     // Die Standardkonvertierung von char* in Unicode geht jedoch von Latin-1 aus (bis QT4.8):
-    QTextCodec::setCodecForTr(QTextCodec::codecForName("UTF-8"));       // für tr()
+    QTextCodec::setCodecForTr(QTextCodec::codecForName("UTF-8"));       // f"ur tr()
     QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8")); // const char* in QString
-    QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF-8"));   // für locale
+    QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF-8"));   // f"ur locale
 #endif
+*/
 
-
-    qDebug("QtFrontend::Constructor --> End");
+    qCDebug(qstopmotion) << "QtFrontend::Constructor --> End";
 }
 
 
 QtFrontend::~QtFrontend()
 {
-    qDebug("QtFrontend::Destructor --> Start");
+    qDebug() << "QtFrontend::Destructor --> Start";
 
     // Save the size and position of the application
     QSize appSize = mw->size();
@@ -100,7 +105,7 @@ QtFrontend::~QtFrontend()
     delete stApp;
     stApp = NULL;
 
-    qDebug("QtFrontend::Destructor --> End");
+    qDebug() << "QtFrontend::Destructor --> End";
 }
 
 
@@ -124,7 +129,7 @@ bool QtFrontend::checkApplicationDirectory(char *binDirName)
                 tr("You do not have the necessary permissions to run qStopMotion.\n"
                 "You need permission to create the .qstopmotion directory in your home directory."));
 
-            qDebug("QtFrontend::checkApplicationDirectory --> End (Error)");
+            qDebug() << "QtFrontend::checkApplicationDirectory --> End (Error)";
             return 1;
         }
     }
@@ -143,7 +148,7 @@ bool QtFrontend::checkApplicationDirectory(char *binDirName)
                 tr("You do not have the necessary permissions to run qStopMotion.\n"
                 "You need permission to read, write and execute on the .qstopmotion directory."));
 
-            qDebug("QtFrontend::checkApplicationDirectory --> End (Error)");
+            qDebug() << "QtFrontend::checkApplicationDirectory --> End (Error)";
             return 1;
         }
     }
@@ -171,7 +176,7 @@ bool QtFrontend::checkApplicationDirectory(char *binDirName)
     if (pathLength == -1)
     {
         // The binDirName is only the application name --> use default values
-#ifdef Q_WS_WIN
+#if defined(Q_OS_WIN32) || defined(Q_OS_WIN64)
         // Windows version
 
         appApplicationDirName.append("C:/Program Files/qstopmotion/");
@@ -195,7 +200,7 @@ bool QtFrontend::checkApplicationDirectory(char *binDirName)
     qDebug() << "QtFrontend::checkApplicationDirectory --> Application Direcory:" << appApplicationDirName;
     qDebug() << "QtFrontend::checkApplicationDirectory --> Application Binary Direcory:" << appBinDirName;
 
-#ifdef Q_WS_WIN
+#if defined(Q_OS_WIN32) || defined(Q_OS_WIN64)
     // Windows version
 
     otherDirName.clear();
@@ -274,7 +279,7 @@ bool QtFrontend::checkApplicationDirectory(char *binDirName)
 
 void QtFrontend::init()
 {
-    qDebug("QtFrontend::init --> Start");
+    qDebug() << "QtFrontend::init --> Start";
 
     QString iconFile(getGraphicsDirName());
     iconFile.append(QLatin1String("qstopmotion_splash_screen.png"));
@@ -343,27 +348,27 @@ void QtFrontend::init()
 
     // this->testMainWidget();
 
-    qDebug("QtFrontend::init --> End");
+    qDebug() << "QtFrontend::init --> End";
 }
 
 
 bool QtFrontend::handleArguments(int argc, char **argv)
 {
-    qDebug("QtFrontend::handleArguments --> Start");
+    qDebug() << "QtFrontend::handleArguments --> Start";
 
     if (argc < 2) {
         // No arguments
-        qDebug("QtFrontend::handleArguments --> End (false)");
+        qDebug() << "QtFrontend::handleArguments --> End (false)";
         return false;
     }
 
     if (QFileInfo(argv[1]).isReadable()) {
         mw->openProject(argv[1]);
-        qDebug("QtFrontend::handleArguments --> End (true)");
+        qDebug() << "QtFrontend::handleArguments --> End (true)";
         return true;
     }
 
-    qDebug("QtFrontend::handleArguments --> End (false)");
+    qDebug() << "QtFrontend::handleArguments --> End (false)";
     return false;
 }
 
@@ -618,7 +623,7 @@ void QtFrontend::processEvents()
 
 void QtFrontend::initializePreferences()
 {
-    qDebug("QtFrontend::initializePreferences --> Start");
+    qDebug() << "QtFrontend::initializePreferences --> Start";
 
     QDir homeDir = QDir::home();
     QString preferencesFile = homeDir.absolutePath();
@@ -634,19 +639,19 @@ void QtFrontend::initializePreferences()
         setDefaultPreferences();
     }
 
-    qDebug("QtFrontend::initializePreferences --> End");
+    qDebug() << "QtFrontend::initializePreferences --> End";
 }
 
 
 void QtFrontend::setDefaultPreferences()
 {
-    qDebug("QtFrontend::setDefaultPreferences --> Start");
+    qDebug() << "QtFrontend::setDefaultPreferences --> Start";
 
     preferencesTool->setVersion(PreferencesTool::preferencesVersion);
     preferencesTool->setBasicPreferenceDefaults();
     // preferencesTool->setEncoderDefaults();
 
-    qDebug("QtFrontend::setDefaultPreferences --> End");
+    qDebug() << "QtFrontend::setDefaultPreferences --> End";
 }
 
 
@@ -731,11 +736,11 @@ bool QtFrontend::startGrabber()
 {
     bool ret;
 
-    qDebug("QtFrontend::startGrabber --> Start");
+    qDebug() << "QtFrontend::startGrabber --> Start";
 
     ret = mw->startGrabber();
 
-    qDebug("QtFrontend::startGrabber --> End");
+    qDebug() << "QtFrontend::startGrabber --> End";
     return ret;
 }
 
@@ -744,28 +749,28 @@ bool QtFrontend::isGrabberInited()
 {
     bool ret;
 
-    qDebug("QtFrontend::on --> Start");
+    qDebug() << "QtFrontend::on --> Start";
 
     ret = mw->isGrabberInited();
 
-    qDebug("QtFrontend::on --> End");
+    qDebug() << "QtFrontend::on --> End";
     return ret;
 }
 
 
 void QtFrontend::stopGrabber()
 {
-    qDebug("QtFrontend::stopGrabber --> Start");
+    qDebug() << "QtFrontend::stopGrabber --> Start";
 
     mw->stopGrabber();
 
-    qDebug("QtFrontend::stopGrabber --> End");
+    qDebug() << "QtFrontend::stopGrabber --> End";
 }
 
 
 bool QtFrontend::isGstreamerInstalled()
 {
-#ifdef Q_WS_WIN
+#if defined(Q_OS_WIN32) || defined(Q_OS_WIN64)
     QByteArray path = qgetenv("OSSBUILD_GSTREAMER_DIR");
     if (path.isEmpty()) {
         return false;
@@ -889,57 +894,57 @@ void QtFrontend::removeApplicationFiles()
 
 bool QtFrontend::isRecoveryMode()
 {
-    qDebug("QtFrontend::isRecoveryMode --> Start");
+    qDebug() << "QtFrontend::isRecoveryMode --> Start";
 
     if (QFile::exists(getTempDirName()) == false) {
-        qDebug("QtFrontend::isRecoveryMode --> End (False)");
+        qDebug() << "QtFrontend::isRecoveryMode --> End (False)";
         return false;
     }
 
     // Everything is intact and we have to run in recovery mode
-    qDebug("QtFrontend::isRecoveryMode --> End (True)");
+    qDebug() << "QtFrontend::isRecoveryMode --> End (True)";
     return true;
 }
 
 
 bool QtFrontend::recoverProject()
 {
-    qDebug("QtFrontend::recoverProject --> Start");
+    qDebug() << "QtFrontend::recoverProject --> Start";
 
     int ret = askQuestion(tr("Recovery"),
                   tr("Something caused qStopmotion to exit abnormally\n"
                   "last time it was runned. Do you want to recover?"));
     // The user wants to recover
     if (ret != 0) {
-        qDebug("QtFrontend::recoverProject --> End (False)");
+        qDebug() << "QtFrontend::recoverProject --> End (False)";
         return false;
     }
 
     mw->setWindowTitle(tr("qStopMotion - Recovered Project"));
     bool recovered = getProject()->recoverProject();
 
-    qDebug("QtFrontend::recoverProject --> End");
+    qDebug() << "QtFrontend::recoverProject --> End";
     return recovered;
 }
 
 
 void QtFrontend::startDialog()
 {
-    qDebug("QtFrontend::startDialog --> Start");
+    qDebug() << "QtFrontend::startDialog --> Start";
 
     mw->startDialog();
 
-    qDebug("QtFrontend::startDialog --> End");
+    qDebug() << "QtFrontend::startDialog --> End";
 }
 
 
 void QtFrontend::setToolBarState(int newState)
 {
-    qDebug("MainWindowGUI::setToolBarState --> Start");
+    qDebug() << "MainWindowGUI::setToolBarState --> Start";
 
     mw->setToolBarState(newState);
 
-    qDebug("MainWindowGUI::setToolBarState --> End");
+    qDebug() << "MainWindowGUI::setToolBarState --> End";
 }
 
 

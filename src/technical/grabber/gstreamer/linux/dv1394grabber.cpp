@@ -20,12 +20,12 @@
 
 #include "dv1394grabber.h"
 
-#include "technical/util.h"
+#include <QApplication>
+#include <QDebug>
+#include <QDir>
+#include <QString>
 
-#include <QtCore/QDir>
-#include <QtCore/QtDebug>
-#include <QtCore/QtGlobal>
-#include <QtGui/QApplication>
+#include "technical/util.h"
 
 // Include files of the gstreamer library
 #include <gst/interfaces/propertyprobe.h>
@@ -37,25 +37,25 @@
 GstreamerDv1394Grabber::GstreamerDv1394Grabber(Frontend *f)
     : GstreamerGrabber(f)
 {
-    qDebug("GstreamerDv1394Grabber::Constructor --> Start");
+    qDebug() << "GstreamerDv1394Grabber::Constructor --> Start";
 
     filter3 = 0;
 
-    qDebug("GstreamerDv1394Grabber::Constructor --> End");
+    qDebug() << "GstreamerDv1394Grabber::Constructor --> End";
 }
 
 
 GstreamerDv1394Grabber::~GstreamerDv1394Grabber()
 {
-    qDebug("GstreamerDv1394Grabber::Destructor --> Start (Empty)");
+    qDebug() << "GstreamerDv1394Grabber::Destructor --> Start (Empty)";
 
-    // qDebug("GstreamerDv1394Grabber::Destructor --> End");
+    // qDebug() << "GstreamerDv1394Grabber::Destructor --> End";
 }
 
 
 bool GstreamerDv1394Grabber::initialization(QVector<ImageGrabberDevice*> &devices)
 {
-    qDebug("GstreamerDv1394Grabber::initialization --> Start");
+    qDebug() << "GstreamerDv1394Grabber::initialization --> Start";
 
     const gchar *device_name = NULL;
     GstElementFactory *srcfactory = NULL;
@@ -184,7 +184,7 @@ bool GstreamerDv1394Grabber::initialization(QVector<ImageGrabberDevice*> &device
 
     qDebug() << "GstreamerDv1394Grabber::initialization --> device count: " << devices.size();
 
-    qDebug("GstreamerDv1394Grabber::initialization --> End (true)");
+    qDebug() << "GstreamerDv1394Grabber::initialization --> End (true)";
 
     return true;
 }
@@ -223,7 +223,7 @@ bool GstreamerDv1394Grabber::setUp()
         return false;
     }
     // this property needs to be set before linking the element, where the device id configured in get_caps() */
-    g_object_set(G_OBJECT(source), "guid", g_ascii_strtoull(videoDevice->getDeviceId().toAscii().constData(), NULL, 0), NULL);
+    g_object_set(G_OBJECT(source), "guid", g_ascii_strtoull(videoDevice->getDeviceId().toLatin1().constData(), NULL, 0), NULL);
     // g_object_set(G_OBJECT(source), "port", 0, NULL);
 
     filter1 = gst_element_factory_make("dvdemux", "filter1=dvdemux");
@@ -258,7 +258,7 @@ bool GstreamerDv1394Grabber::setUp()
         return false;
     }
     gst_app_sink_set_max_buffers(GST_APP_SINK(sink), APP_SINK_MAX_BUFFERS);
-    g_object_set(G_OBJECT(sink), "sync", FALSE, NULL);
+    g_object_set(G_OBJECT(sink), "sync", false, NULL);
 
     // Set default values for RGB.
     gst_app_sink_set_caps(GST_APP_SINK(sink), gst_caps_new_simple("video/x-raw-rgb", NULL));

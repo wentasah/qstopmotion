@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2011 by                                                *
+ *  Copyright (C) 2005-2015 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -23,10 +23,10 @@
 #ifndef MENUFRAME_H
 #define MENUFRAME_H
 
-#include <QtGui/QFrame>
-#include <QtGui/QSpinBox>
-#include <QtGui/QLineEdit>
-#include <QtGui/QMouseEvent>
+#include <QFrame>
+#include <QSpinBox>
+#include <QLineEdit>
+#include <QMouseEvent>
 
 
 /**

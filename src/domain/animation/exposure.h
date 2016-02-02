@@ -23,15 +23,15 @@
 #ifndef EXPOSURE_H
 #define EXPOSURE_H
 
+#include <QDomDocument>
+#include <QDomElement>
+#include <QObject>
+#include <QString>
+#include <QVector>
+
 #include "domain/animation/animationproject.h"
 // #include "domain/animation/scene.h"
 #include "domain/animation/take.h"
-
-#include <QtCore/QObject>
-#include <QtCore/QString>
-#include <QtCore/QVector>
-#include <QtXml/QDomDocument>
-#include <QtXml/QDomElement>
 
 // class AnimationProject;
 // class Scene;

@@ -22,6 +22,9 @@
 
 #include "undosceneremove.h"
 
+#include <QDebug>
+#include <QLatin1String>
+
 
 UndoSceneRemove::UndoSceneRemove(DomainFacade *df,
                                  int           si)
@@ -29,7 +32,7 @@ UndoSceneRemove::UndoSceneRemove(DomainFacade *df,
 {
     sceneIndex = si;
     removedScene = NULL;
-    undoFlag = FALSE;
+    undoFlag = false;
     setText(QString(tr("Remove scene (%1)")).arg(sceneIndex));
 }
 
@@ -45,7 +48,7 @@ UndoSceneRemove::~UndoSceneRemove()
 
 void UndoSceneRemove::undo()
 {
-    qDebug("UndoSceneRemove::undo --> Start");
+    qDebug() << "UndoSceneRemove::undo --> Start";
 
     AnimationProject *animationProject = facade->getAnimationProject();
 
@@ -64,15 +67,15 @@ void UndoSceneRemove::undo()
     animationProject->decAnimationChanges();
 
     facade->writeHistoryEntry(QLatin1String("undo"));
-    undoFlag = TRUE;
+    undoFlag = true;
 
-    qDebug("UndoSceneRemove::undo --> End");
+    qDebug() << "UndoSceneRemove::undo --> End";
 }
 
 
 void UndoSceneRemove::redo()
 {
-    qDebug("UndoSceneRemove::redo --> Start");
+    qDebug() << "UndoSceneRemove::redo --> Start";
 
     AnimationProject *animationProject = facade->getAnimationProject();
 
@@ -84,7 +87,7 @@ void UndoSceneRemove::redo()
 
     if (undoFlag) {
         facade->writeHistoryEntry(QLatin1String("redo"));
-        undoFlag = FALSE;
+        undoFlag = false;
     }
     else {
         facade->writeHistoryEntry(QString("%1|%2")
@@ -92,5 +95,5 @@ void UndoSceneRemove::redo()
                                   .arg(sceneIndex));
     }
 
-    qDebug("UndoSceneRemove::redo --> End");
+    qDebug() << "UndoSceneRemove::redo --> End";
 }

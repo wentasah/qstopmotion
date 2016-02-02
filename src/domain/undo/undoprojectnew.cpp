@@ -21,6 +21,10 @@
  ******************************************************************************/
 
 #include "undoprojectnew.h"
+
+#include <QDebug>
+#include <QLatin1String>
+
 #include "frontends/qtfrontend/toolbar.h"
 
 
@@ -45,7 +49,7 @@ UndoProjectNew::~UndoProjectNew()
 
 void UndoProjectNew::undo()
 {
-    qDebug("UndoProjectNew::undo --> Start");
+    qDebug() << "UndoProjectNew::undo --> Start";
 
     Q_ASSERT(NULL == project);
 
@@ -62,13 +66,13 @@ void UndoProjectNew::undo()
 
     facade->writeHistoryEntry(QLatin1String("undo"));
 
-    qDebug("UndoProjectNew::undo --> End");
+    qDebug() << "UndoProjectNew::undo --> End";
 }
 
 
 void UndoProjectNew::redo()
 {
-    qDebug("UndoProjectNew::redo --> Start");
+    qDebug() << "UndoProjectNew::redo --> Start";
 
     Frontend *frontend = facade->getFrontend();
 
@@ -96,5 +100,5 @@ void UndoProjectNew::redo()
     frontend->setExposureID("---");
     frontend->setToolBarState(ToolBar::toolBarCameraOff);
 
-    qDebug("UndoProjectNew::redo --> End");
+    qDebug() << "UndoProjectNew::redo --> End";
 }

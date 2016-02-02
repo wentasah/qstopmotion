@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2014 by                                                *
+ *  Copyright (C) 2005-2015 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -23,16 +23,16 @@
 #ifndef IMAGEGRABBERFACADE_H
 #define IMAGEGRABBERFACADE_H
 
+#include <QObject>
+#include <QString>
+#include <QVector>
+#include <QImage>
+
 #include "frontends/frontend.h"
 #include "technical/grabber/grabbercontroller.h"
 #include "technical/grabber/imagegrabber.h"
 #include "technical/grabber/imagegrabberdevice.h"
 #include "technical/grabber/imagegrabberthread.h"
-
-#include <QtCore/QObject>
-#include <QtCore/QString>
-#include <QtCore/QVector>
-#include <QtGui/QImage>
 
 
 /**

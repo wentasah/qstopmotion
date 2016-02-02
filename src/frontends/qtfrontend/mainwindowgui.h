@@ -23,6 +23,13 @@
 #ifndef QTGUI_H
 #define QTGUI_H
 
+#include <QAction>
+#include <QMenu>
+#include <QMainWindow>
+#include <QProgressBar>
+#include <QProgressDialog>
+#include <QUndoView>
+
 #include "frontends/frontend.h"
 #include "frontends/qtfrontend/menuframe.h"
 #include "frontends/qtfrontend/toolbar.h"
@@ -40,11 +47,6 @@
 // #include "frontends/qtfrontend/tooltabs/viewtab.h"
 #include "technical/externalchangemonitor.h"
 #include "technical/grabber/imagegrabberfacade.h"
-
-#include <QtGui/QProgressBar>
-#include <QtGui/QProgressDialog>
-#include <QtGui/QUndoView>
-#include <QtGui/QtGui>
 
 
 /**

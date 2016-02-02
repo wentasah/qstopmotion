@@ -1,7 +1,7 @@
 ###############################################################################
 # CMake file for the qStopMotion project                                      #
 # (c) Ralf Lange, longsoft.de                                                 #
-# Last update: 2015-06-12                                                     #
+# Last update: 2016-02-02                                                     #
 #                                                                             #
 # Usage:                                                                      #
 #   * Qt-Creator (Windows, Linux)                                             #
@@ -9,7 +9,10 @@
 #      + select a destination directory                                       #
 #      + press the CMake button                                               #
 #   * makefile: (Windows)                                                     #
-#      + cmake -G "NMake Makefile"                                            #
+#      + open Visual Studio Command Prompt                                    #
+#        (for 64bit use: 'VS2013 x64 Native Tools Command Prompt'             #
+#        (for 32bit use: 'VS2013 x32 Native Tools Command Prompt'             #
+#      + cmake -G "NMake Makefiles" .                                         #
 #      + nmake                                                                #
 #      + nmake install (with administration rights)                           #
 #      + nmake package                                                        #
@@ -18,45 +21,81 @@
 #      + make                                                                 #
 #      + sudo make install                                                    #
 #   * MS Visual Studio (Windows)                                              #
-#      + cmake -G "Visual Studio 10 2010"                                     #
+#      + for 32bit: cmake -G "Visual Studio 12 2013"                          #
+#      + for 64bit: cmake -G "Visual Studio 12 2013 x64"                      #
 #      + open the solution file                                               #
 #                                                                             #
 ###############################################################################
 
 project(qStopMotion)
 
-cmake_minimum_required(VERSION 2.8.2)
+cmake_minimum_required(VERSION 2.8.8)
+
+###############################################################################
+# Platform check
+###############################################################################
+
+IF(WIN32)
+    IF(CMAKE_CL_64)
+        message("Target platform: Windows 64bit")
+    ELSE(CMAKE_CL_64)
+        message("Target platform: Windows 32bit")
+    ENDIF(CMAKE_CL_64)
+ELSEIF(UNIX)
+    IF(APPLE)
+        message(
+            FATAL_ERROR
+            "Target platform: MacOS 64bit - Not supported!"
+        )
+    ENDIF(APPLE)
+
+    IF("${CMAKE_SIZEOF_VOID_P}" EQUAL "8")
+        message("Target platform: Unix 64bit")
+    ELSE("${CMAKE_SIZEOF_VOID_P}" EQUAL "8")
+        message("Target platform: Unix 32bit")
+    ENDIF("${CMAKE_SIZEOF_VOID_P}" EQUAL "8")
+ELSE(WIN32)
+    message(
+        FATAL_ERROR
+        "Target platform - Not supported!"
+    )
+ENDIF(WIN32)
 
 ###############################################################################
 # General project settings
 ###############################################################################
 
 IF(NOT DEFINED CMAKE_BUILD_TYPE)
-    SET(CMAKE_BUILD_TYPE "Release")
+    SET(
+        CMAKE_BUILD_TYPE
+        "Release"
+        CACHE
+        STRING
+        "Create Release Version"
+        FORCE
+    )
 ENDIF(NOT DEFINED CMAKE_BUILD_TYPE)
 
 SET(CMAKE_PROJECT_NAME "qstopmotion")
 SET(QSTOPMOTION_HOMEPAGE "http://www.qstopmotion.org")
 SET(QSTOPMOTION_VERSION_MAJOR "2")
-SET(QSTOPMOTION_VERSION_MINOR "0")
-SET(QSTOPMOTION_VERSION_PATCH "2")
+SET(QSTOPMOTION_VERSION_MINOR "2")
+SET(QSTOPMOTION_VERSION_PATCH "0")
 
 SET(FILES_TO_TRANSLATE )
 
 ###############################################################################
-# Qt4 support
+# Qt5 support
 ###############################################################################
 
-# find and setup Qt4 for this poroject
-find_package(Qt4 REQUIRED)
-
-message("Qt Version: ${QT_VERSION_MAJOR}.${QT_VERSION_MINOR}.${QT_VERSION_PATCH}")
-
 # Enable/disable Qt functionality
-set(QT_USE_QTXML TRUE)
+SET(CMAKE_AUTOMOC ON)
+SET(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-# include a cmake listfile
-include(${QT_USE_FILE})
+# find and setup Qt5 for this poroject
+find_package(Qt5 REQUIRED COMPONENTS Core Widgets Xml)
+
+message("Qt5 Version: ${Qt5Widgets_VERSION_STRING}")
 
 IF(CMAKE_BUILD_TYPE STREQUAL "Release")
     message("No Qt debug and warning output!")
@@ -101,14 +140,14 @@ IF(WIN32)
     )
 ENDIF(WIN32)
 
-IF(UNIX)
+IF(UNIX AND NOT APPLE)
     SET(
         HEADERS
         ${HEADERS}
         src/technical/grabber/gphoto2/gpcontroller.h
         src/technical/grabber/video4linux2/v4l2controller.h
     )
-ENDIF(UNIX)
+ENDIF(UNIX AND NOT APPLE)
 
 # add all header files of the project to MOC to MOC_HEADERS
 SET(
@@ -180,7 +219,7 @@ IF(WIN32)
     )
 ENDIF(WIN32)
 
-IF(UNIX)
+IF(UNIX AND NOT APPLE)
     SET(
         MOC_HEADERS
         ${MOC_HEADERS}
@@ -192,7 +231,7 @@ IF(UNIX)
         src/technical/grabber/gstreamer/linux/usbgrabber.h
         src/technical/grabber/video4linux2/v4l2grabber.h
     )
-ENDIF(UNIX)
+ENDIF(UNIX AND NOT APPLE)
 
 # add all source files to SOURCES
 SET(
@@ -233,6 +272,7 @@ SET(
     src/frontends/qtfrontend/dialogs/externalcommanddialog.cpp
     src/frontends/qtfrontend/dialogs/helpbrowser.cpp
     src/frontends/qtfrontend/dialogs/startdialog.cpp
+    src/frontends/qtfrontend/elements/clickablelabel.cpp
     src/frontends/qtfrontend/elements/flexiblelineedit.cpp
     src/frontends/qtfrontend/elements/flexiblespinbox.cpp
     src/frontends/qtfrontend/frameview/frameviewimage.cpp
@@ -280,7 +320,7 @@ IF(WIN32)
     )
 ENDIF(WIN32)
 
-IF(UNIX)
+IF(UNIX AND NOT APPLE)
     SET(
         SOURCES
         ${SOURCES}
@@ -293,7 +333,7 @@ IF(UNIX)
         src/technical/grabber/video4linux2/v4l2controller.cpp
         src/technical/grabber/video4linux2/v4l2grabber.cpp
     )
-ENDIF(UNIX)
+ENDIF(UNIX AND NOT APPLE)
 
 SET(
     TRANSLATIONS
@@ -356,14 +396,7 @@ SET(
 # used libraries: glib-2.0.lib, gobject-2.0.lib, gstreamer-0.10.lib, xml2.lib
 ###############################################################################
 
-IF(WIN32)
-
-    SET(GSTREAMER_INCLUDE_DIR)
-    SET(GSTREAMER_LIBRARIES)
-    SET(GSTREAMER_FOUND)
-
-ELSE(WIN32)
-
+IF(UNIX AND NOT APPLE)
     include(${CMAKE_SOURCE_DIR}/cmake/FindGStreamerPkgConfig.cmake)
     message("GSTREAMER_INCLUDE_DIR: ${GSTREAMER_INCLUDE_DIR}")
     message("GSTREAMER_LIBRARY: ${GSTREAMER_LIBRARY}")
@@ -374,8 +407,11 @@ ELSE(WIN32)
     message("GSTREAMER_DEFINITIONS: ${GSTREAMER_DEFINITIONS}")
 
     add_definitions("-Wno-deprecated-declarations")
-
-ENDIF(WIN32)
+ELSE(UNIX AND NOT APPLE)
+    SET(GSTREAMER_INCLUDE_DIR)
+    SET(GSTREAMER_LIBRARIES)
+    SET(GSTREAMER_FOUND)
+ENDIF(UNIX AND NOT APPLE)
 
 ###############################################################################
 # gPhoto2 support
@@ -385,18 +421,14 @@ ENDIF(WIN32)
 # used libraries: libgphoto2
 ###############################################################################
 
-IF(UNIX)
-
+IF(UNIX AND NOT APPLE)
     include(${CMAKE_SOURCE_DIR}/cmake/FindGPhoto2PkgConfig.cmake)
     message("GPHOTO2_INCLUDE_DIR: ${GPHOTO2_INCLUDE_DIR}")
     message("GPHOTO2_LIBRARIES: ${GPHOTO2_LIBRARIES}")
-
-ELSE(UNIX)
-
+ELSE(UNIX AND NOT APPLE)
     SET(GPHOTO2_INCLUDE_DIR)
     SET(GPHOTO2_LIBRARIES)
-
-ENDIF(UNIX)
+ENDIF(UNIX AND NOT APPLE)
 
 ###############################################################################
 # Video4Linux2 support
@@ -406,18 +438,14 @@ ENDIF(UNIX)
 # used libraries: libv4l2
 ###############################################################################
 
-IF(UNIX)
-
+IF(UNIX AND NOT APPLE)
     include(${CMAKE_SOURCE_DIR}/cmake/FindV4L2PkgConfig.cmake)
     message("V4L2_INCLUDE_DIRS: ${V4L2_INCLUDE_DIRS}")
     message("V4L2_LIBRARIES: ${V4L2_LIBRARIES}")
-
-ELSE(UNIX)
-
+ELSE(UNIX AND NOT APPLE)
     SET(V4L2_INCLUDE_DIRS)
     SET(V4L2_LIBRARIES)
-
-ENDIF(UNIX)
+ENDIF(UNIX AND NOT APPLE)
 
 ###############################################################################
 # Microsoft Media Foundation support
@@ -448,8 +476,6 @@ ENDIF(WIN32)
 # tell cmake where to search for headers:
 include_directories(
     ${CMAKE_SOURCE_DIR}/src
-    ${QT_INCLUDE_DIR}
-    ${QT_QTXML_INCLUDE_DIR}
     ${GSTREAMER_INCLUDE_DIR}
     ${GPHOTO2_INCLUDE_DIR}
     ${V4L2_INCLUDE_DIRS}
@@ -467,6 +493,10 @@ include_directories(
 # TEMPLATE = app
 #
 ###############################################################################
+
+IF(WIN32)
+    add_definitions(-DUNICODE -D_UNICODE)
+ENDIF(WIN32)
 
 ###############################################################################
 # Create binaries
@@ -486,43 +516,33 @@ SET(RUNTIME_OUTPUT_DIRECTORY
     "Single directory for all executables"
 )
 
-# Set the output directory for the static libraries
-# SET(LIBRARY_OUTPUT_DIRECTORY
-#     ${PROJECT_BINARY_DIR}/bin
-#     CACHE PATH
-#     "Single directory for all executables"
-# )
-
-# Set the output directory for the shared libraries
-# SET(ARCHIVE_OUTPUT_DIRECTORY
-#     ${PROJECT_BINARY_DIR}/bin
-#     CACHE PATH
-#     "Single directory for all executables"
-# )
-
 MARK_AS_ADVANCED(
     EXECUTABLE_OUTPUT_PATH
     RUNTIME_OUTPUT_DIRECTORY
-#     LIBRARY_OUTPUT_DIRECTORY
-#     ARCHIVE_OUTPUT_DIRECTORY
-)
-# Create .moc files
-qt4_wrap_cpp(
-    MOC_SOURCES
-    ${MOC_HEADERS}
 )
 
-# Create a executable
-IF(UNIX)
+IF(UNIX AND NOT APPLE)
+    # Linux
 
+    # Create a executable
     add_executable(
         qstopmotion
         ${SOURCES}
         ${MOC_SOURCES}
     )
 
+    # tell cmake which libraries to link
+    target_link_libraries(
+        qstopmotion
+        ${GSTREAMER_LIBRARIES}
+        ${GPHOTO2_LIBRARIES}
+        ${V4L2_LIBRARIES}
+        Qt5::Widgets
+    )
 ELSEIF(APPLE)
+    # MacOSX
 
+    # Create a executable
     add_executable(
         qstopmotion
         MACOSX_BUNDLE
@@ -530,8 +550,18 @@ ELSEIF(APPLE)
         ${MOC_SOURCES}
     )
 
+    # tell cmake which libraries to link
+    target_link_libraries(
+        qstopmotion
+        ${GSTREAMER_LIBRARIES}
+        ${GPHOTO2_LIBRARIES}
+        ${V4L2_LIBRARIES}
+        Qt5::Widgets
+    )
 ELSEIF(WIN32)
+    # Windows
 
+    # Create a executable
     add_executable(
         qstopmotion
         WIN32
@@ -540,45 +570,67 @@ ELSEIF(WIN32)
         ${MOC_SOURCES}
     )
 
+    # tell cmake which libraries to link
+    target_link_libraries(
+        qstopmotion
+        ${MEDIAFOUNDATION_LIBRARIES}
+        Qt5::WinMain
+        Qt5::Widgets
+    )
 ENDIF()
- 
-# tell cmake which libraries to link
-target_link_libraries(
+
+# Use the Qt5 modules
+qt5_use_modules(
     qstopmotion
-    ${QT_LIBRARIES}
-    ${QT_QTMAIN_LIBRARY}
-    ${QT_QTXML_LIBRARIES}
-    ${GSTREAMER_LIBRARIES}
-    ${GPHOTO2_LIBRARIES}
-    ${V4L2_LIBRARIES}
-    ${MEDIAFOUNDATION_LIBRARIES}
+    Core
+    Gui
+    Widgets
+    Xml
 )
 
-add_definitions(${QT_DEFINITIONS})
+add_definitions(
+    ${QT_DEFINITIONS}
+)
+
+IF(UNIX AND NOT APPLE)
+    add_definitions(
+        ${GSTREAMER_DEFINITIONS}
+    )
+ENDIF(UNIX AND NOT APPLE)
 
 IF(WIN32)
-
-ELSE(WIN32)
-
-    add_definitions(${GSTREAMER_DEFINITIONS})
-
-ENDIF(WIN32)
-
-IF(WIN32)
-
     file(COPY graphics DESTINATION ".")
     file(COPY manual DESTINATION ".")
     file(COPY translations DESTINATION ".")
     file(COPY ${ICON_FILES} DESTINATION ".")
     file(COPY ${GENERAL_FILES} DESTINATION ".")
 
-    file(COPY ffmpeg DESTINATION ".")
-    file(COPY libav DESTINATION ".")
+    IF(CMAKE_CL_64)
+        # Windows 64bit
+        
+        IF(CMAKE_BUILD_TYPE STREQUAL "Release")
+            file(COPY qt5runtime64bit/release/ DESTINATION "qtruntime")
+        ELSE(CMAKE_BUILD_TYPE STREQUAL "Release")
+            file(COPY qt5runtime64bit/debug/ DESTINATION "qtruntime")
+        ENDIF(CMAKE_BUILD_TYPE STREQUAL "Release")
 
-    file(COPY qtruntime DESTINATION ".")
+        file(COPY ffmpeg64bit/ DESTINATION "ffmpeg")
+        file(COPY libav64bit/ DESTINATION "libav")
+    ELSE(CMAKE_CL_64)
+        # Windows 32bit
+        
+        IF(CMAKE_BUILD_TYPE STREQUAL "Release")
+            file(COPY qt5runtime32bit/release/ DESTINATION "qtruntime")
+        ELSE(CMAKE_BUILD_TYPE STREQUAL "Release")
+            file(COPY qt5runtime32bit/debug/ DESTINATION "qtruntime")
+        ENDIF(CMAKE_BUILD_TYPE STREQUAL "Release")
 
-ELSE(WIN32)
+        file(COPY ffmpeg32bit/ DESTINATION "ffmpeg")
+        file(COPY libav32bit/ DESTINATION "libav")
+    ENDIF(CMAKE_CL_64)
+ENDIF(WIN32)
 
+IF(UNIX AND NOT APPLE)
     file(COPY graphics DESTINATION "share/qstopmotion/")
     file(COPY manual/ DESTINATION "share/doc/qstopmotion/")
     file(COPY translations DESTINATION "share/qstopmotion/")
@@ -588,25 +640,7 @@ ELSE(WIN32)
     file(COPY ${UNIX_FILES} DESTINATION "share/qstopmotion/")
     file(COPY ${DEB_FILES} DESTINATION "share/qstopmotion/deb/")
     file(COPY ${RPM_FILES} DESTINATION "share/qstopmotion/rpm/")
-
-ENDIF(WIN32)
-
-###############################################################################
-# Translation
-###############################################################################
-
-set (FILES_TO_TRANSLATE ${FILES_TO_TRANSLATE} ${HEADERS} ${MOC_HEADERS} ${SOURCES})
-
-file (GLOB TRANSLATIONS_FILES ${TRANSLATIONS})
-
-option (UPDATE_TRANSLATIONS "Update source translation translations/*.ts files (WARNING: make clean will delete the source .ts files! Danger!)")
-if (UPDATE_TRANSLATIONS)
-  qt4_create_translation(QM_FILES ${FILES_TO_TRANSLATE} ${TRANSLATIONS_FILES})
-else (UPDATE_TRANSLATIONS)
-  qt4_add_translation(QM_FILES ${TRANSLATIONS_FILES})
-endif (UPDATE_TRANSLATIONS) 
-
-add_custom_target (translations_target DEPENDS ${QM_FILES})
+ENDIF(UNIX AND NOT APPLE)
 
 ###############################################################################
 # Installation
@@ -615,35 +649,35 @@ add_custom_target (translations_target DEPENDS ${QM_FILES})
 IF(WIN32)
     # The predefined windows installer path include the qstopmotion subdirectory
     
-    set(QSTOPMOTION_GENERALS_INSTALL_DIR ".")
-    set(QSTOPMOTION_BIN_INSTALL_DIR "bin")
-    set(QSTOPMOTION_GRAPHICS_INSTALL_DIR "graphics")
-    set(QSTOPMOTION_GRAPHICS_ICONS_INSTALL_DIR "graphics/icons")
-    set(QSTOPMOTION_GRAPHICS_PICTURES_INSTALL_DIR "graphics/pictures")
-    set(QSTOPMOTION_MANUAL_INSTALL_DIR "manual")
-    set(QSTOPMOTION_TRANSLATIONS_INSTALL_DIR "translations")
-    set(QSTOPMOTION_PIXMAP_INSTALL_DIR "pixmaps")
-    set(QSTOPMOTION_ICONS_INSTALL_DIR "icons")
+    SET(QSTOPMOTION_GENERALS_INSTALL_DIR ".")
+    SET(QSTOPMOTION_BIN_INSTALL_DIR "bin")
+    SET(QSTOPMOTION_GRAPHICS_INSTALL_DIR "graphics")
+    SET(QSTOPMOTION_GRAPHICS_ICONS_INSTALL_DIR "graphics/icons")
+    SET(QSTOPMOTION_GRAPHICS_PICTURES_INSTALL_DIR "graphics/pictures")
+    SET(QSTOPMOTION_MANUAL_INSTALL_DIR "manual")
+    SET(QSTOPMOTION_TRANSLATIONS_INSTALL_DIR "translations")
+    SET(QSTOPMOTION_PIXMAP_INSTALL_DIR "pixmaps")
+    SET(QSTOPMOTION_ICONS_INSTALL_DIR "icons")
+ENDIF(WIN32)
 
-ELSE(WIN32)
+IF(UNIX AND NOT APPLE)
     # The predefined CMake-Linux installer path is "/usr/local"
     # The predefined RPM installer path is "/usr"
     # The predefined DEB installer path is "/usr"
 
-    set(QSTOPMOTION_GENERALS_INSTALL_DIR "share/qstopmotion")
-    set(QSTOPMOTION_BIN_INSTALL_DIR "bin")
-    set(QSTOPMOTION_GRAPHICS_INSTALL_DIR "share/qstopmotion/graphics")
-    set(QSTOPMOTION_GRAPHICS_ICONS_INSTALL_DIR "share/qstopmotion/graphics/icons")
-    set(QSTOPMOTION_GRAPHICS_PICTURES_INSTALL_DIR "share/qstopmotion/graphics/pictures")
-    set(QSTOPMOTION_TRANSLATIONS_INSTALL_DIR "share/qstopmotion/translations")
-    set(QSTOPMOTION_MANUAL_INSTALL_DIR "share/doc/qstopmotion")
-    set(QSTOPMOTION_DESKTOP_INSTALL_DIR "share/applications")
-    set(QSTOPMOTION_MENUFILE_INSTALL_DIR "share/menu")
-    set(QSTOPMOTION_PIXMAP_INSTALL_DIR "share/pixmaps")
-    set(QSTOPMOTION_ICONS_INSTALL_DIR "share/icons")
-    set(QSTOPMOTION_MAN1_INSTALL_DIR "share/man/man1")
-
-ENDIF(WIN32)
+    SET(QSTOPMOTION_GENERALS_INSTALL_DIR "share/qstopmotion")
+    SET(QSTOPMOTION_BIN_INSTALL_DIR "bin")
+    SET(QSTOPMOTION_GRAPHICS_INSTALL_DIR "share/qstopmotion/graphics")
+    SET(QSTOPMOTION_GRAPHICS_ICONS_INSTALL_DIR "share/qstopmotion/graphics/icons")
+    SET(QSTOPMOTION_GRAPHICS_PICTURES_INSTALL_DIR "share/qstopmotion/graphics/pictures")
+    SET(QSTOPMOTION_TRANSLATIONS_INSTALL_DIR "share/qstopmotion/translations")
+    SET(QSTOPMOTION_MANUAL_INSTALL_DIR "share/doc/qstopmotion")
+    SET(QSTOPMOTION_DESKTOP_INSTALL_DIR "share/applications")
+    SET(QSTOPMOTION_MENUFILE_INSTALL_DIR "share/menu")
+    SET(QSTOPMOTION_PIXMAP_INSTALL_DIR "share/pixmaps")
+    SET(QSTOPMOTION_ICONS_INSTALL_DIR "share/icons")
+    SET(QSTOPMOTION_MAN1_INSTALL_DIR "share/man/man1")
+ENDIF(UNIX AND NOT APPLE)
 
 # installation of the executables
 install(
@@ -671,7 +705,7 @@ install(
 
 # installation only on Windows systems
 IF(WIN32)
-    message("Special task for deb package!")
+    message("Special task for windows package!")
     
     # installation of the general-purpose files
     install(
@@ -681,7 +715,7 @@ IF(WIN32)
 ENDIF(WIN32)
 
 # installation only on UNIX systems
-IF(UNIX)
+IF(UNIX AND NOT APPLE)
     # installation of the general unix files
     install(
         FILES "linux/qstopmotion.mime"
@@ -705,7 +739,7 @@ IF(UNIX)
         FILES "linux/qstopmotion.1.gz"
         DESTINATION ${QSTOPMOTION_MAN1_INSTALL_DIR}
     )
-ENDIF(UNIX)
+ENDIF(UNIX AND NOT APPLE)
 
 # installation on DEB systems
 IF(CPACK_BINARY_DEB)
@@ -755,23 +789,64 @@ ENDIF(CPACK_BINARY_RPM)
 
 # installation on Windows systems
 IF(WIN32)
-    # installation of ffmpeg
-    install(
-        DIRECTORY ffmpeg
-        DESTINATION ${QSTOPMOTION_GENERALS_INSTALL_DIR}
-    )
+    IF(CMAKE_CL_64)
+        # Windows 64bit
+        
+        # installation of Qt runtime
+        IF(CMAKE_BUILD_TYPE STREQUAL "Release")
+            install(
+                DIRECTORY qt5runtime64bit/release/
+                DESTINATION ${QSTOPMOTION_BIN_INSTALL_DIR}
+            )
+        ELSE(CMAKE_BUILD_TYPE STREQUAL "Release")
+            install(
+                DIRECTORY qt5runtime64bit/debug/
+                DESTINATION ${QSTOPMOTION_BIN_INSTALL_DIR}
+            )
+        ENDIF(CMAKE_BUILD_TYPE STREQUAL "Release")
 
-    # installation of libav
-    install(
-        DIRECTORY libav
-        DESTINATION ${QSTOPMOTION_GENERALS_INSTALL_DIR}
-    )
+        # installation of ffmpeg
+        install(
+            DIRECTORY ffmpeg64bit/
+            DESTINATION "${QSTOPMOTION_GENERALS_INSTALL_DIR}/ffmpeg"
+        )
+    
+        # installation of libav
+        install(
+            DIRECTORY libav64bit/
+            DESTINATION "${QSTOPMOTION_GENERALS_INSTALL_DIR}/libav"
+        )
+    
+    ELSE(CMAKE_CL_64)
+        # Windows 32bit
+        
+        # installation of Qt runtime
+        IF(CMAKE_BUILD_TYPE STREQUAL "Release")
+            install(
+                DIRECTORY qt5runtime32bit/release/
+                DESTINATION ${QSTOPMOTION_BIN_INSTALL_DIR}
+            )
+        ELSE(CMAKE_BUILD_TYPE STREQUAL "Release")
+            install(
+                DIRECTORY qt5runtime32bit/debug/
+                DESTINATION ${QSTOPMOTION_BIN_INSTALL_DIR}
+            )
+        ENDIF(CMAKE_BUILD_TYPE STREQUAL "Release")
 
-    # installation of Qt runtime
-    install(
-        DIRECTORY qtruntime/
-        DESTINATION ${QSTOPMOTION_BIN_INSTALL_DIR}
-    )
+        # installation of ffmpeg
+        install(
+            DIRECTORY ffmpeg32bit/
+            DESTINATION "${QSTOPMOTION_GENERALS_INSTALL_DIR}/ffmpeg"
+        )
+    
+        # installation of libav
+        install(
+            DIRECTORY libav32bit/
+            DESTINATION "${QSTOPMOTION_GENERALS_INSTALL_DIR}/libav"
+        )
+    
+    ENDIF(CMAKE_CL_64)
+        
 ENDIF(WIN32)
 
 ###############################################################################
@@ -849,7 +924,7 @@ SET(
 )
 # CPACK_PACKAGE_VERSION - generated from major, minor, patch
 
-IF(UNIX)
+IF(UNIX AND NOT APPLE)
     # Try to find architecture
     execute_process (COMMAND uname -m OUTPUT_VARIABLE CPACK_PACKAGE_ARCHITECTURE)
     string (STRIP "${CPACK_PACKAGE_ARCHITECTURE}" CPACK_PACKAGE_ARCHITECTURE)
@@ -869,7 +944,7 @@ IF(UNIX)
         CPACK_SYSTEM_NAME
         "${LSB_DISTRIB}-${CPACK_PACKAGE_ARCHITECTURE}"
     )
-ENDIF(UNIX)
+ENDIF(UNIX AND NOT APPLE)
 
 ###############################################################################
 # Source Packages
@@ -882,9 +957,13 @@ IF(WIN32)
         CPACK_SOURCE_IGNORE_FILES
         "${CPACK_SOURCE_IGNORE_FILES}"
         "${PROJECT_SOURCE_DIR}/.hg/"
+        "${PROJECT_SOURCE_DIR}/.hgignore"
         "${PROJECT_SOURCE_DIR}/.hgtags"
+        "${PROJECT_SOURCE_DIR}/.hgtimestamp"
     )
-ELSE(WIN32)
+ENDIF(WIN32)
+
+IF(UNIX AND NOT APPLE)
     # Exclude:
     # * Mercurial SMC files
     # * ffmpeg Windows binaries
@@ -894,21 +973,65 @@ ELSE(WIN32)
         CPACK_SOURCE_IGNORE_FILES
         "${CPACK_SOURCE_IGNORE_FILES}"
         "${PROJECT_SOURCE_DIR}/.hg/"
+        "${PROJECT_SOURCE_DIR}/.hgignore"
         "${PROJECT_SOURCE_DIR}/.hgtags"
-        "${PROJECT_SOURCE_DIR}/ffmpeg/"
-        "${PROJECT_SOURCE_DIR}/libav/"
-        "${PROJECT_SOURCE_DIR}/qtruntime/"
+        "${PROJECT_SOURCE_DIR}/.hgtimestamp"
+        "${PROJECT_SOURCE_DIR}/ffmpeg32bit/"
+        "${PROJECT_SOURCE_DIR}/ffmpeg64bit/"
+        "${PROJECT_SOURCE_DIR}/libav32bit/"
+        "${PROJECT_SOURCE_DIR}/libav64bit/"
+        "${PROJECT_SOURCE_DIR}/qt4runtime/"
+        "${PROJECT_SOURCE_DIR}/qt5runtime32bit/"
+        "${PROJECT_SOURCE_DIR}/qt5runtime64bit/"
     )
-ENDIF(WIN32)
+ENDIF(UNIX AND NOT APPLE)
 
 ###############################################################################
 # NSIS - Windows only
 ###############################################################################
 
+# Installers for 32- vs. 64-bit CMake:
+#  - Root install directory (displayed to end user at installer-run time)
+#  - "NSIS package/display name" (text used in the installer GUI)
+#  - Registry key used to store info about the installation
+IF(CMAKE_CL_64)
+    # 64-bit Windows
+    SET(
+        CPACK_NSIS_INSTALL_ROOT
+        "$PROGRAMFILES64"
+    )
+    SET(
+        CPACK_NSIS_PACKAGE_NAME
+        "${CPACK_PACKAGE_INSTALL_DIRECTORY} (Win64)"
+    )
+    SET(
+        CPACK_PACKAGE_INSTALL_REGISTRY_KEY
+        "${CPACK_PACKAGE_NAME} ${CPACK_PACKAGE_VERSION} (Win64)"
+    )
+ELSE(CMAKE_CL_64)
+    # 32-bit Windows
+    SET(
+        CPACK_NSIS_INSTALL_ROOT
+        "$PROGRAMFILES"
+    )
+    SET(
+        CPACK_NSIS_PACKAGE_NAME
+        "${CPACK_PACKAGE_INSTALL_DIRECTORY}"
+    )
+    SET(
+        CPACK_PACKAGE_INSTALL_REGISTRY_KEY
+        "${CPACK_PACKAGE_NAME} ${CPACK_PACKAGE_VERSION}"
+    )
+ENDIF(CMAKE_CL_64)
+
+MESSAGE("CPACK_NSIS_INSTALL_ROOT: ${CPACK_NSIS_INSTALL_ROOT}")
+MESSAGE("CPACK_NSIS_PACKAGE_NAME: ${CPACK_NSIS_PACKAGE_NAME}")
+MESSAGE("CPACK_PACKAGE_INSTALL_REGISTRY_KEY: ${CPACK_PACKAGE_INSTALL_REGISTRY_KEY}")
+
 # Installing Microsoft run time libraries in the same directory as the executables
 SET(
     CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS_SKIP
-    TRUE
+    true
 )
 INCLUDE(InstallRequiredSystemLibraries)
 INSTALL(
@@ -1107,9 +1230,13 @@ SET(
 # CPACK_RPM_PACKAGE_DESCRIPTION = CPACK_PACKAGE_DESCRIPTION_FILE
 # CPACK_RPM_COMPRESSION_TYPE
 # requireses must be in a aphabetic order
+# Qt5: qt5-qtbase - Core, Concurrent, DBus, Network, Sql, Test, Xml
+# Qt5: qt5-qtbase-gui - Gui, OpenGL, PrintSupport, Widgets, XcbQpa
+# Qt5: qt5-qtimageformats - Qt5 image format plugins
+# Qt5: qt5-qtmultimedia - Multimedia, MultimediaQuick, MultimediaWidgets
 SET(
     CPACK_RPM_PACKAGE_REQUIRES
-    "glibc >= 2.12, ffmpeg >= 0.8.9, gstreamer >= 0.10.29, qt >= 4.6.2, libv4l >= 0.6.3, libgphoto2 >= 2.4.7"
+    "ffmpeg >= 0.8.9, glibc >= 2.12, gstreamer >= 0.10.29, libgphoto2 >= 2.4.7, libv4l >= 0.6.3, qt5-qtbase >= 5.2.0, qt5-qtbase-gui >= 5.2.0, qt5-qtimageformats >= 5.2.0"
 )
 MESSAGE("CPACK_RPM_PACKAGE_REQUIRES: ${CPACK_RPM_PACKAGE_REQUIRES}")
 # CPACK_RPM_PACKAGE_SUGGESTS
@@ -1127,6 +1254,8 @@ SET(
     CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION
     "/usr/share/applications"
     "/usr/share/pixmaps"
+    "/usr/share/man"
+    "/usr/share/man/man1"
 )
 
 ###############################################################################

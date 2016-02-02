@@ -48,8 +48,8 @@ SET(
 )
 
 include(FindPackageHandleStandardArgs)
-# handle the QUIETLY and REQUIRED arguments and set V4L2_FOUND to TRUE
-# if all listed variables are TRUE
+# handle the QUIETLY and REQUIRED arguments and set V4L2_FOUND to true
+# if all listed variables are true
 find_package_handle_standard_args(
     Libv4l2
     DEFAULT_MSG

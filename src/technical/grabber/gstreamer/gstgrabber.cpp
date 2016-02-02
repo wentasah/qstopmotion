@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2010-2014 by                                                *
+ *  Copyright (C) 2010-2015 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -22,10 +22,9 @@
 
 #include "technical/util.h"
 
-#include <QtCore/QDir>
-#include <QtCore/QtDebug>
-#include <QtCore/QtGlobal>
-#include <QtGui/QApplication>
+#include <QDebug>
+#include <QDir>
+#include <QApplication>
 
 // Include files of the gstreamer library
 #include <gst/interfaces/propertyprobe.h>
@@ -37,7 +36,7 @@
 GstreamerGrabber::GstreamerGrabber(Frontend *f)
     : ImageGrabber(f)
 {
-    qDebug("GstreamerGrabber::Constructor --> Start");
+    qDebug() << "GstreamerGrabber::Constructor --> Start";
 
     isInitSuccess = false;
     firstImage = true;
@@ -49,15 +48,15 @@ GstreamerGrabber::GstreamerGrabber(Frontend *f)
 
     gst_init(0,0);
 
-    qDebug("GstreamerGrabber::Constructor --> End");
+    qDebug() << "GstreamerGrabber::Constructor --> End";
 }
 
 
 GstreamerGrabber::~GstreamerGrabber()
 {
-    qDebug("GstreamerGrabber::Destructor --> Start (Empty)");
+    qDebug() << "GstreamerGrabber::Destructor --> Start (Empty)";
 
-    // qDebug("GstreamerGrabber::Destructor --> End");
+    // qDebug() << "GstreamerGrabber::Destructor --> End";
 }
 
 

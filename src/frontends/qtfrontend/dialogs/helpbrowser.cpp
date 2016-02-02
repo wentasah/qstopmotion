@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2013 by                                                *
+ *  Copyright (C) 2005-2015 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -22,10 +22,10 @@
 
 #include "helpbrowser.h"
 
-#include <QtCore/QFile>
-#include <QtCore/QUrl>
-#include <QtGui/QHBoxLayout>
-#include <QtGui/QVBoxLayout>
+#include <QFile>
+#include <QHBoxLayout>
+#include <QUrl>
+#include <QVBoxLayout>
 
 
 HelpBrowser::HelpBrowser(Frontend *f,

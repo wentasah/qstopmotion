@@ -23,17 +23,17 @@
 #ifndef DOMAINFACADE_H
 #define DOMAINFACADE_H
 
+#include <QFile>
+#include <QObject>
+#include <QString>
+#include <QVector>
+#include <QTreeWidget>
+#include <QUndoStack>
+
 #include "domain/animation/animationproject.h"
 #include "frontends/frontend.h"
 // #include "frontends/viewfacade.h"
 #include "technical/videoencoder/videoencoder.h"
-
-#include <QtCore/QFile>
-#include <QtCore/QObject>
-#include <QtCore/QString>
-#include <QtCore/QVector>
-#include <QtGui/QTreeWidget>
-#include <QtGui/QUndoStack>
 
 class AnimationProject;
 class Frontend;

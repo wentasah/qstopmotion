@@ -25,6 +25,7 @@
 
 #include <domain/undo/undobase.h>
 
+
 /**
  * The UndoTakeAdd class for undoing addTake(...) calls to the project.
  */

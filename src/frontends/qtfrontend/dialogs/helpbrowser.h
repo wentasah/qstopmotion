@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2013 by                                                *
+ *  Copyright (C) 2005-2015 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -23,12 +23,12 @@
 #ifndef HELPBROWSER_H
 #define HELPBROWSER_H
 
-#include "frontends/frontend.h"
+#include <QDialog>
+#include <QLineEdit>
+#include <QPushButton>
+#include <QTextBrowser>
 
-#include <QtGui/QDialog>
-#include <QtGui/QTextBrowser>
-#include <QtGui/QLineEdit>
-#include <QtGui/QPushButton>
+#include "frontends/frontend.h"
 
 
 class HelpBrowser : public QDialog

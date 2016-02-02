@@ -22,10 +22,11 @@
 
 #include "take.h"
 
-#include "domain/domainfacade.h"
+#include <QDebug>
+#include <QFileInfo>
+#include <QtGlobal>
 
-#include <QtCore/QFileInfo>
-#include <QtCore/QtDebug>
+#include "domain/domainfacade.h"
 
 
 Take::Take(Scene *scene)
@@ -46,6 +47,7 @@ Take::~Take()
         exposures[exposureIndex] = NULL;
     }
     exposures.clear();
+
 }
 
 
@@ -73,6 +75,7 @@ void Take::setId(const QString &newId)
 const QString Take::getDescription() const
 {
     return description;
+
 }
 
 
@@ -106,6 +109,7 @@ unsigned int Take::getSceneIndex()
     unsigned int index;
 
     index = parent->getIndex();
+#include <QDebug>
 
     return index;
 }
@@ -137,7 +141,7 @@ AnimationProject* Take::getAnimationProject()
 
 bool Take::readDataFromProject(QDomElement &takeNode)
 {
-    qDebug("Take::readDataFromProject --> Start");
+    qDebug() << "Take::readDataFromProject --> Start";
 
     QString activeExposureId;
 
@@ -154,7 +158,7 @@ bool Take::readDataFromProject(QDomElement &takeNode)
             exposures.append(newExposure);
 
             if (!newExposure->readDataFromProject(currElement)) {
-                qWarning("Take::readDataFromProject --> Read exposure data failed");
+                qWarning() << "Take::readDataFromProject --> Read exposure data failed";
                 return false;
             }
         }
@@ -167,7 +171,7 @@ bool Take::readDataFromProject(QDomElement &takeNode)
         }
         else if (elementName.compare("sound") == 0) {
             if (!readSoundFromProject(currElement)) {
-                qWarning("Take::readDataFromProject --> Read sound data failed");
+                qWarning() << "Take::readDataFromProject --> Read sound data failed";
                 return false;
             }
         }
@@ -190,14 +194,14 @@ bool Take::readDataFromProject(QDomElement &takeNode)
 
     this->isProjectFile = true;
 
-    qDebug("Take::readDataFromProject --> End");
+    qDebug() << "Take::readDataFromProject --> End";
     return true;
 }
 
 
 bool Take::saveDataToProject(QDomDocument &doc, QDomElement &takeNode)
 {
-    qDebug("Take::saveDataFromProject --> Start");
+    qDebug() << "Take::saveDataFromProject --> Start";
 
     unsigned int exposureSize = exposures.size();
     unsigned int exposureIndex;
@@ -212,7 +216,7 @@ bool Take::saveDataToProject(QDomDocument &doc, QDomElement &takeNode)
         QDomElement exposureElement = doc.createElement("exposure");
         takeNode.appendChild(exposureElement);
         if (!exposures[exposureIndex]->saveDataToProject(doc, exposureElement)) {
-            qWarning("Take::saveDataFromProject --> Save exposure data failed");
+            qWarning() << "Take::saveDataFromProject --> Save exposure data failed";
             return false;
         }
     }
@@ -234,13 +238,13 @@ bool Take::saveDataToProject(QDomDocument &doc, QDomElement &takeNode)
 
     // Sounds
     if (!saveSoundToProject(doc, takeNode)) {
-        qWarning("Take::saveDataFromProject --> Save sound data failed");
+        qWarning() << "Take::saveDataFromProject --> Save sound data failed";
         return false;
     }
 
     this->isProjectFile = true;
 
-    qDebug("Take::saveDataFromProject --> End");
+    qDebug() << "Take::saveDataFromProject --> End";
     return true;
 }
 
@@ -273,7 +277,7 @@ int Take::getExposureIndex(Exposure *exposure)
 
 void Take::setActiveExposure(Exposure *newExposure)
 {
-    qDebug("Take::setActiveExposure --> Start");
+    qDebug() << "Take::setActiveExposure --> Start";
 
     // Check the active take index and active scene index
     parent->setActiveTake(this);
@@ -294,13 +298,13 @@ void Take::setActiveExposure(Exposure *newExposure)
         this->activeExposureIndex = exposureIndex;
     }
 
-    qDebug("Take::setActiveExposure --> End");
+    qDebug() << "Take::setActiveExposure --> End";
 }
 
 
 void Take::setActiveExposureIndex(int exposureIndex)
 {
-    qDebug("Take::setActiveExposureIndex --> Start");
+    qDebug() << "Take::setActiveExposureIndex --> Start";
 
     // The new exposure index can be the same as the active exposure index
     // if the active exposure is removed from the exposure vector
@@ -308,7 +312,7 @@ void Take::setActiveExposureIndex(int exposureIndex)
 
     this->activeExposureIndex = exposureIndex;
 
-    qDebug("Take::setActiveExposureIndex --> End");
+    qDebug() << "Take::setActiveExposureIndex --> End";
 }
 
 
@@ -335,7 +339,7 @@ Exposure* Take::getExposure(unsigned int exposureIndex)
 
 void Take::addExposure(const QString &fileName, int location)
 {
-    qDebug("Take::addExposure(new) --> Start");
+    qDebug() << "Take::addExposure(new) --> Start";
 
     Exposure *newExposure = new Exposure(this, fileName, location);
 
@@ -344,23 +348,23 @@ void Take::addExposure(const QString &fileName, int location)
 
     exposures.append(newExposure);
 
-    qDebug("Take::addExposure(new) --> End");
+    qDebug() << "Take::addExposure(new) --> End";
 }
 
 
 void Take::addExposure(Exposure *exposure)
 {
-    qDebug("Take::addExposure(exist) --> Start");
+    qDebug() << "Take::addExposure(exist) --> Start";
 
     exposures.append(exposure);
 
-    qDebug("Take::addExposure(exist) --> End");
+    qDebug() << "Take::addExposure(exist) --> End";
 }
 
 
 void Take::insertExposure(int exposureIndex, const QString &fileName, int location)
 {
-    qDebug("Take::insertExposure(new) --> Start");
+    qDebug() << "Take::insertExposure(new) --> Start";
 
     Q_ASSERT(exposureIndex > -1);
     Q_ASSERT(exposureIndex < getExposureSize());
@@ -375,13 +379,13 @@ void Take::insertExposure(int exposureIndex, const QString &fileName, int locati
         setActiveExposureIndex(activeExposureIndex+1);
     }
 
-    qDebug("Take::insertExposure(new) --> End");
+    qDebug() << "Take::insertExposure(new) --> End";
 }
 
 
 void Take::insertExposure(int exposureIndex, Exposure *exposure)
 {
-    qDebug("Take::insertExposure(exist) --> Start");
+    qDebug() << "Take::insertExposure(exist) --> Start";
 
     Q_ASSERT(exposureIndex > -1);
     Q_ASSERT(exposureIndex < getExposureSize());
@@ -391,14 +395,14 @@ void Take::insertExposure(int exposureIndex, Exposure *exposure)
         setActiveExposureIndex(activeExposureIndex+1);
     }
 
-    qDebug("Take::insertExposure(exist) --> End");
+    qDebug() << "Take::insertExposure(exist) --> End";
 }
 
 
 bool Take::getModifyedExposure(const QString &filePath,
                                int &modExposureIndex)
 {
-    qDebug("Take::getModifyedExposure --> Start");
+    qDebug() << "Take::getModifyedExposure --> Start";
 
     int exposureSize = exposures.size();
 
@@ -406,14 +410,14 @@ bool Take::getModifyedExposure(const QString &filePath,
         QString imagePath(exposures[modExposureIndex]->getImagePath());
         if (0 == filePath.compare(imagePath)) {
             // Exposure found
-            qDebug("Take::getModifyedExposure --> End");
+            qDebug() << "Take::getModifyedExposure --> End";
             return true;
         }
     }
 
     modExposureIndex = -1;
 
-    qDebug("Take::getModifyedExposure --> End (Error)");
+    qDebug() << "Take::getModifyedExposure --> End (Error)";
     return false;
 }
 
@@ -524,8 +528,6 @@ QVector<QString> Take::getImagePaths() const
 
 unsigned int Take::getSoundStartPosition() const
 {
-    qDebug("Take::getSountPosition --> Start");
-
     return soundStartPosition;
 }
 
@@ -538,7 +540,7 @@ void Take::setSoundStartPosition(unsigned int newSoundStartPosition)
 
 bool Take::readSoundFromProject(QDomElement &soundNode)
 {
-    qDebug("Take::readSoundFromProject --> Start");
+    qDebug() << "Take::readSoundFromProject --> Start";
 
     QDomElement currElement = soundNode.firstChildElement();
 
@@ -554,7 +556,7 @@ bool Take::readSoundFromProject(QDomElement &soundNode)
         currElement = currElement.nextSiblingElement();
     }
 
-    qDebug("Take::readSoundFromProject --> End");
+    qDebug() << "Take::readSoundFromProject --> End";
     return true;
 }
 
@@ -562,10 +564,10 @@ bool Take::readSoundFromProject(QDomElement &soundNode)
 bool Take::saveSoundToProject(QDomDocument &/*doc*/,
                               QDomElement &/*takeNode*/)
 {
-    qDebug("Take::saveSoundFromProject --> Start");
+    qDebug() << "Take::saveSoundFromProject --> Start";
     // Save the node offset value
     
-    qDebug("Take::saveSoundFromProject --> End");
+    qDebug() << "Take::saveSoundFromProject --> End";
     return true;
 }
 
@@ -575,10 +577,10 @@ bool Take::saveSoundToProject(QDomDocument &/*doc*/,
 /*
 void Take::activateExposure()
 {
-    qDebug("Take::activateExposure --> Start");
+    qDebug() << "Take::activateExposure --> Start";
 
     parent->getParent()->notifyActivateExposure();
 
-    qDebug("Take::activateExposure --> End");
+    qDebug() << "Take::activateExposure --> End";
 }
 */

@@ -23,6 +23,7 @@
 
 #include <domain/undo/undobase.h>
 
+
 /**
  * The UndoTakeSelect class for undoing takeSelect(...) calls to the project.
  */

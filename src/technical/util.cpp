@@ -22,16 +22,15 @@
 
 #include "technical/util.h"
 
-#include <QtCore/QFile>
-#include <QtCore/QProcess>
-#include <QtCore/QtGlobal>
+#include <QFile>
+#include <QProcess>
 
 
 const QString Util::checkCommand(const QString &command)
 {
     Q_ASSERT(!command.isEmpty());
 
-#ifdef Q_WS_WIN
+#if defined(Q_OS_WIN32) || defined(Q_OS_WIN64)
     // Windows version
     QString tmp(QString("%1%2")
                 .arg(QLatin1String("where "))
@@ -55,7 +54,7 @@ const QString Util::checkCommand(const QString &command)
 
     if (!line.isEmpty()) {
         if (line.endsWith("\n")) {
-#ifdef Q_WS_WIN
+#if defined(Q_OS_WIN32) || defined(Q_OS_WIN64)
             // Windows version (remove CR and LF)
             return Util::convertPathFromOsSpecific(line.left(line.length()-2));
 #else
@@ -71,7 +70,7 @@ const QString Util::checkCommand(const QString &command)
 
 const QString Util::convertPathToOsSpecific(const QString &path)
 {
-#ifdef Q_WS_WIN
+#if defined(Q_OS_WIN32) || defined(Q_OS_WIN64)
     // Windows version
     QString     newPath("");
     QStringList sections = path.split('/');
@@ -108,7 +107,7 @@ const QString Util::convertPathToOsSpecific(const QString &path)
 
 const QString Util::convertPathFromOsSpecific(const QString &path)
 {
-#ifdef Q_WS_WIN
+#if defined(Q_OS_WIN32) || defined(Q_OS_WIN64)
     // Windows version
     QString     newPath("");
     QStringList sections = path.split('\\');

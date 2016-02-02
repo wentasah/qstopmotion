@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2013 by                                                *
+ *  Copyright (C) 2005-2015 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -23,18 +23,19 @@
 #ifndef VIEWFACADE_H
 #define VIEWFACADE_H
 
+#include <QDomDocument>
+#include <QDomElement>
+#include <QUndoStack>
+#include <QVector>
+
 #include "frontends/observer.h"
 #include "frontends/frontend.h"
 #include "technical/videoencoder/ffmpegencoder.h"
 
-#include <QtGui/QUndoStack>
-#include <QtCore/QVector>
-#include <QtXml/QDomDocument>
-#include <QtXml/QDomElement>
-
 class Frontend;
 class Observer;
 class DomainFacade;
+
 
 /**
  * The facade to all views class.

@@ -22,6 +22,9 @@
 
 #include "undoprojectopen.h"
 
+#include <QDebug>
+#include <QLatin1String>
+
 
 UndoProjectOpen::UndoProjectOpen(DomainFacade *df,
                                  const QString &path)
@@ -44,7 +47,7 @@ UndoProjectOpen::~UndoProjectOpen()
 
 void UndoProjectOpen::undo()
 {
-    qDebug("UndoProjectOpen::undo --> Start");
+    qDebug() << "UndoProjectOpen::undo --> Start";
 
     Q_ASSERT(NULL == project);
 
@@ -57,15 +60,15 @@ void UndoProjectOpen::undo()
 
     facade->writeHistoryEntry(QLatin1String("undo"));
 
-    qDebug("UndoProjectOpen::undo --> End");
+    qDebug() << "UndoProjectOpen::undo --> End";
 }
 
 
 void UndoProjectOpen::redo()
 {
-    qDebug("UndoProjectOpen::redo --> Start");
+    qDebug() << "UndoProjectOpen::redo --> Start";
 
-    bool projectOpen = TRUE;
+    bool projectOpen = true;
 
     // facade->getView()->notifyNewProject();
 
@@ -108,5 +111,5 @@ void UndoProjectOpen::redo()
         }
     }
 
-    qDebug("UndoProjectOpen::redo --> End");
+    qDebug() << "UndoProjectOpen::redo --> End";
 }

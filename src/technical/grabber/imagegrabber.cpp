@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2014 by                                                *
+ *  Copyright (C) 2005-2015 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -22,24 +22,24 @@
 
 #include "imagegrabber.h"
 
-#include <QtCore/QtDebug>
+#include <QDebug>
 
 
 ImageGrabber::ImageGrabber(Frontend *f)
 {
-    qDebug("ImageGrabber::Constructor --> Start");
+    qDebug() << "ImageGrabber::Constructor --> Start";
 
     frontend = f;
 
-    qDebug("ImageGrabber::Constructor --> End");
+    qDebug() << "ImageGrabber::Constructor --> End";
 }
 
 
 ImageGrabber::~ImageGrabber()
 {
-    qDebug("ImageGrabber::Destructor --> Start (Empty)");
+    qDebug() << "ImageGrabber::Destructor --> Start (Empty)";
 
-    // qDebug("ImageGrabber::Destructor --> End");
+    // qDebug() << "ImageGrabber::Destructor --> End");
 }
 
 

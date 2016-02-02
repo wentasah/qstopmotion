@@ -22,6 +22,10 @@
 
 #include "domainfacade.h"
 
+#include <QDebug>
+#include <QDir>
+#include <QFile>
+
 #include "domain/animation/animationproject.h"
 #include "domain/undo/undoexposureadd.h"
 #include "domain/undo/undoexposureinsert.h"
@@ -43,10 +47,6 @@
 #include "frontends/qtfrontend/toolbar.h"
 #include "technical/grabber/imagegrabber.h"
 #include "technical/videoencoder/videoencoder.h"
-
-#include <QtCore/QDir>
-#include <QtCore/QFile>
-#include <QtCore/QtDebug>
 
 
 DomainFacade::DomainFacade(Frontend *f)
@@ -185,7 +185,7 @@ AnimationProject* DomainFacade::getAnimationProject()
 bool DomainFacade::isProjectSettingsChanges()
 {
     if (NULL == animationProject) {
-        return FALSE;
+        return false;
     }
     return animationProject->isSettingsChanges();
 }
@@ -194,7 +194,7 @@ bool DomainFacade::isProjectSettingsChanges()
 bool DomainFacade::isProjectAnimationChanges()
 {
     if (NULL == animationProject) {
-        return FALSE;
+        return false;
     }
     return animationProject->isAnimationChanges();
 }
@@ -203,9 +203,9 @@ bool DomainFacade::isProjectAnimationChanges()
 bool DomainFacade::isActiveProject()
 {
     if (NULL == animationProject) {
-        return FALSE;
+        return false;
     }
-    return TRUE;
+    return true;
 }
 
 
@@ -510,7 +510,7 @@ bool DomainFacade::exportToCinelerra(const QString file)
 
 bool DomainFacade::recoverProject()
 {
-    qDebug("DomainFacade::recoverProject --> Start");
+    qDebug() << "DomainFacade::recoverProject --> Start";
 
     bool recovered = false;
 
@@ -713,7 +713,7 @@ bool DomainFacade::recoverProject()
 
     frontend->setToolBarState(ToolBar::toolBarCameraOff);
 
-    qDebug("DomainFacade::recoverProject --> End");
+    qDebug() << "DomainFacade::recoverProject --> End";
     return recovered;
 }
 
@@ -865,7 +865,7 @@ void DomainFacade::openProject(AnimationProject *project)
 
 void DomainFacade::saveProject(const QString &projectPath, bool saveAs)
 {
-    qDebug("DomainFacade::saveProject --> Start");
+    qDebug() << "DomainFacade::saveProject --> Start";
 
     Q_ASSERT(NULL != animationProject);
 
@@ -880,13 +880,13 @@ void DomainFacade::saveProject(const QString &projectPath, bool saveAs)
                           .arg(projectPath));
     }
 
-    qDebug("DomainFacade::saveProject --> End");
+    qDebug() << "DomainFacade::saveProject --> End";
 }
 
 
 void DomainFacade::closeProject()
 {
-    qDebug("DomainFacade::closeProject --> Start");
+    qDebug() << "DomainFacade::closeProject --> Start";
 
     Q_ASSERT(NULL != animationProject);
 
@@ -900,7 +900,7 @@ void DomainFacade::closeProject()
 
     getView()->notifyRemoveProject();
 
-    qDebug("DomainFacade::closeProject --> End");
+    qDebug() << "DomainFacade::closeProject --> End";
 }
 
 
@@ -1006,8 +1006,6 @@ int DomainFacade::addSoundToScene(int           sceneIndex,
                                   const QString filename,
                                   const QString soundName)
 {
-    qDebug("DomainFacade::addSoundToScene --> Start");
-
     return animationProject->addSoundToScene(sceneIndex, filename, soundName);
 }
 
@@ -1232,7 +1230,7 @@ const QString DomainFacade::copyToTemp(const QImage &rawImage)
 {
     bool ret;
 
-    qDebug("DomainFacade::copyToTemp --> Start");
+    qDebug() << "DomainFacade::copyToTemp --> Start";
 
     // creates a new image name
     QString toImageName(QString("%1%2%3")
@@ -1277,7 +1275,7 @@ const QString DomainFacade::copyToTemp(const QImage &rawImage)
 
     Exposure::tempNumber++;
 
-    qDebug("DomainFacade::copyToTemp --> End");
+    qDebug() << "DomainFacade::copyToTemp --> End";
 
     return toImageName;
 }

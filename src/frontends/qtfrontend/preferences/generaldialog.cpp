@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2014 by                                                *
+ *  Copyright (C) 2005-2015 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -22,11 +22,10 @@
 
 #include "generaldialog.h"
 
+#include <QDebug>
+#include <QVBoxLayout>
+
 #include "technical/preferencestool.h"
-
-#include <QtCore/QtDebug>
-
-#include <QtGui/QVBoxLayout>
 
 #define MIN_TREE_WIDTH   240
 #define MAX_TREE_WIDTH   MIN_TREE_WIDTH
@@ -35,10 +34,11 @@
 #define MAX_PAGE_WIDTH   MIN_PAGE_WIDTH
 #define MAX_PAGE_HEIGHT  MIN_PAGE_HEIGHT
 
+
 GeneralDialog::GeneralDialog(Frontend *f, QWidget *parent)
     : QDialog(parent, Qt::Dialog)
 {
-    qDebug("GeneralDialog::Constructor --> Start");
+    qDebug() << "GeneralDialog::Constructor --> Start";
 
     frontend                = f;
     pageTree                = 0;
@@ -100,13 +100,13 @@ GeneralDialog::GeneralDialog(Frontend *f, QWidget *parent)
 
     pageLayout->addStretch(1);
 
-    qDebug("GeneralDialog::Constructor --> End");
+    qDebug() << "GeneralDialog::Constructor --> End";
 }
 
 
 void GeneralDialog::makeGeneralSettingsPage()
 {
-    qDebug("GeneralDialog::makeGeneralSettingsPage --> Start");
+    qDebug() << "GeneralDialog::makeGeneralSettingsPage --> Start";
 
     QTreeWidgetItem *newItem = new QTreeWidgetItem();
     newItem->setText(0, tr("General Settings"));
@@ -121,13 +121,13 @@ void GeneralDialog::makeGeneralSettingsPage()
     pageLayout->addWidget(generalSettingsPage);
     generalSettingsPage->setVisible(true);
 
-    qDebug("GeneralDialog::makeGeneralSettingsPage --> End");
+    qDebug() << "GeneralDialog::makeGeneralSettingsPage --> End";
 }
 
 
 void GeneralDialog::makeProjectValuePage()
 {
-    qDebug("GeneralDialog::makeProjectValuePage --> Start");
+    qDebug() << "GeneralDialog::makeProjectValuePage --> Start";
 
     QTreeWidgetItem *newItem = new QTreeWidgetItem();
     newItem->setText(0, tr("New Project Values"));
@@ -142,13 +142,13 @@ void GeneralDialog::makeProjectValuePage()
     pageLayout->addWidget(projectValuePage);
     projectValuePage->setVisible(false);
 
-    qDebug("GeneralDialog::makeProjectValuePage --> End");
+    qDebug() << "GeneralDialog::makeProjectValuePage --> End";
 }
 
 
 void GeneralDialog::makeImageImportPage()
 {
-    qDebug("GeneralDialog::makeImageImportPage --> Start");
+    qDebug() << "GeneralDialog::makeImageImportPage --> Start";
 
     QTreeWidgetItem *newItem = new QTreeWidgetItem();
     newItem->setText(0, tr("Image Import"));
@@ -163,13 +163,13 @@ void GeneralDialog::makeImageImportPage()
     pageLayout->addWidget(imageImportPage);
     imageImportPage->setVisible(false);
 
-    qDebug("GeneralDialog::makeImageImportPage --> End");
+    qDebug() << "GeneralDialog::makeImageImportPage --> End";
 }
 
 
 void GeneralDialog::makeImageTransformPage()
 {
-    qDebug("GeneralDialog::makeImageTransformPage --> Start");
+    qDebug() << "GeneralDialog::makeImageTransformPage --> Start";
 
     QTreeWidgetItem *newItem = new QTreeWidgetItem();
     newItem->setText(0, tr("Image Transformation"));
@@ -184,13 +184,13 @@ void GeneralDialog::makeImageTransformPage()
     pageLayout->addWidget(imageTransformationPage);
     imageTransformationPage->setVisible(false);
 
-    qDebug("GeneralDialog::makeImageTransformPage --> End");
+    qDebug() << "GeneralDialog::makeImageTransformPage --> End";
 }
 
 
 void GeneralDialog::makeVideoExportPage()
 {
-    qDebug("GeneralDialog::makeVideoExportPage --> Start");
+    qDebug() << "GeneralDialog::makeVideoExportPage --> Start";
 
     QTreeWidgetItem *newItem = new QTreeWidgetItem();
     newItem->setText(0, tr("Video Export"));
@@ -206,13 +206,13 @@ void GeneralDialog::makeVideoExportPage()
     pageLayout->addWidget(videoExportPage);
     videoExportPage->setVisible(false);
 
-    qDebug("GeneralDialog::makeVideoExportPage --> End");
+    qDebug() << "GeneralDialog::makeVideoExportPage --> End";
 }
 
 
 void GeneralDialog::makeGrabberSelectPage()
 {
-    qDebug("GeneralDialog::makeGrabberSelectPage --> Start");
+    qDebug() << "GeneralDialog::makeGrabberSelectPage --> Start";
 
     QTreeWidgetItem *newItem = new QTreeWidgetItem();
     newItem->setText(0, tr("Grabber"));
@@ -228,14 +228,14 @@ void GeneralDialog::makeGrabberSelectPage()
     pageLayout->addWidget(grabberSelectPage);
     grabberSelectPage->setVisible(false);
 
-    qDebug("GeneralDialog::makeGrabberSelectPage --> End");
+    qDebug() << "GeneralDialog::makeGrabberSelectPage --> End";
 }
 
 
 void GeneralDialog::itemClicked(QTreeWidgetItem *pageItem,
                                 int               /*column*/)
 {
-    qDebug("GeneralDialog::itemClicked --> Start");
+    qDebug() << "GeneralDialog::itemClicked --> Start";
 
     int itemIndex = 0;
 
@@ -280,13 +280,13 @@ void GeneralDialog::itemClicked(QTreeWidgetItem *pageItem,
         break;
     }
 
-    qDebug("GeneralDialog::itemClicked --> End");
+    qDebug() << "GeneralDialog::itemClicked --> End";
 }
 
 
 void GeneralDialog::apply()
 {
-    qDebug("GeneralDialog::apply --> Start");
+    qDebug() << "GeneralDialog::apply --> Start";
 
     setFocus();
     this->generalSettingsPage->apply();
@@ -299,13 +299,13 @@ void GeneralDialog::apply()
     this->setResult(QDialog::Accepted);
     this->hide();
 
-    qDebug("GeneralDialog::apply --> End");
+    qDebug() << "GeneralDialog::apply --> End";
 }
 
 
 void GeneralDialog::close()
 {
-    qDebug("GeneralDialog::close --> Start");
+    qDebug() << "GeneralDialog::close --> Start";
 
     setFocus();
     this->generalSettingsPage->reset();
@@ -316,13 +316,13 @@ void GeneralDialog::close()
     this->grabberSelectPage->reset();
     this->hide();
 
-    qDebug("GeneralDialog::close --> End");
+    qDebug() << "GeneralDialog::close --> End";
 }
 
 
 void GeneralDialog::finish(int result)
 {
-    qDebug("GeneralDialog::finish --> Start");
+    qDebug() << "GeneralDialog::finish --> Start";
 
     setFocus();
     if (result == 0)
@@ -336,5 +336,5 @@ void GeneralDialog::finish(int result)
     }
     this->hide();
 
-    qDebug("GeneralDialog::finish --> End");
+    qDebug() << "GeneralDialog::finish --> End";
 }

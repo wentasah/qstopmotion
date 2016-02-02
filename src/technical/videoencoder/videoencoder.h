@@ -26,6 +26,7 @@
 #include <QString>
 #include <QStringList>
 
+
 /**
  * Class for gathering information needed to export a qstopmotion project to
  * a video file.

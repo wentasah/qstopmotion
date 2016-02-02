@@ -25,6 +25,7 @@
 
 #include <domain/undo/undobase.h>
 
+
 /**
  * The UndoSceneNew class for undoing newScene(...) calls to the project.
  */

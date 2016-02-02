@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2010-2014 by                                                *
+ *  Copyright (C) 2010-2016 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -20,31 +20,26 @@
 
 #include "frameviewinterface.h"
 
+#include <QApplication>
+#include <QColor>
+#include <QDebug>
+#include <QDir>
+#include <QHBoxLayout>
+#include <QPainter>
+#include <QPaintEvent>
+#include <QResizeEvent>
+#include <QRect>
+#include <QSize>
+#include <QString>
+
 #include "domain/animation/animationproject.h"
 #include "technical/grabber/imagegrabber.h"
 
-#include <QtCore/QDir>
-#include <QtCore/QRect>
-#include <QtCore/QSize>
-#include <QtCore/QString>
-#include <QtCore/QtDebug>
-#include <QtGui/QApplication>
-#include <QtGui/QColor>
-#include <QtGui/QHBoxLayout>
-#include <QtGui/QPainter>
-#include <QtGui/QPaintEvent>
-#include <QtGui/QResizeEvent>
-#include <QtGui/QX11Info>
 
 FrameViewInterface::FrameViewInterface(Frontend *f, QWidget *parent, int fps)
-    :QWidget(parent)
+    :QWidget(0)
 {
-    qDebug("FrameViewInterface::Constructor --> Start");
-
-    setAttribute(Qt::WA_PaintOnScreen);      // Paint directly on the screen, no composition management (only on X11 systems)
-    // setAttribute(Qt::WA_PaintUnclipped);     // All painter operations unclipped
-    setAttribute(Qt::WA_NoSystemBackground); // There is no background image
-    // setAttribute(Qt::WA_OpaquePaintEvent);   // No erase of the image before updated
+    qDebug() << "FrameViewInterface::Constructor --> Start";
 
     frontend = f;
 
@@ -63,22 +58,22 @@ FrameViewInterface::FrameViewInterface(Frontend *f, QWidget *parent, int fps)
 
     frontend->getView()->attatch(this);
 
-    qDebug("FrameViewInterface::Constructor --> FrameView is attatched to the ViewFacade");
+    qDebug() << "FrameViewInterface::Constructor --> FrameView is attatched to the ViewFacade";
 
     connect(&grabTimer, SIGNAL(timeout()), this, SLOT(redraw()));
     connect(&playbackTimer, SIGNAL(timeout()), this, SLOT(nextPlayBack()));
 
-    qDebug("FrameViewInterface::Constructor --> End");
+    qDebug() << "FrameViewInterface::Constructor --> End";
 }
 
 
 FrameViewInterface::~FrameViewInterface()
 {
-    qDebug("FrameViewInterface::Destructor --> Start");
+    qDebug() << "FrameViewInterface::Destructor --> Start";
 
     frontend = NULL;
 
-    qDebug("FrameViewInterface::Destructor --> End");
+    qDebug() << "FrameViewInterface::Destructor --> End";
 }
 
 
@@ -98,7 +93,7 @@ void FrameViewInterface::setFrontend(Frontend* f)
 
 void FrameViewInterface::setWidescreenRatio()
 {
-    qDebug("FrameViewInterface::setWidescreenRatio --> Start");
+    qDebug() << "FrameViewInterface::setWidescreenRatio --> Start";
 
     widthConst  = 16;
     heightConst = 9;
@@ -106,20 +101,20 @@ void FrameViewInterface::setWidescreenRatio()
     this->setMinimumSize((int)minWidth, 300);
     this->update();
 
-    qDebug("FrameViewInterface::setWidescreenRatio --> End");
+    qDebug() << "FrameViewInterface::setWidescreenRatio --> End";
 }
 
 
 void FrameViewInterface::setNormalRatio()
 {
-    qDebug("FrameViewInterface::setNormalRatio --> Start");
+    qDebug() << "FrameViewInterface::setNormalRatio --> Start";
 
     widthConst  = 4;
     heightConst = 3;
     this->setMinimumSize(400, 300);
     this->update();
 
-    qDebug("FrameViewInterface::setNormalRatio --> End");
+    qDebug() << "FrameViewInterface::setNormalRatio --> End";
 }
 
 
@@ -129,61 +124,61 @@ void FrameViewInterface::setNormalRatio()
 
 void FrameViewInterface::updateNewProject()
 {
-    qDebug("FrameViewInterface::updateNewProject --> Nothing");
+    qDebug() << "FrameViewInterface::updateNewProject --> Nothing";
 
     // this->newProject();
 
-    // qDebug("FrameViewInterface::updateNewProject --> End");
+    // qDebug() << "FrameViewInterface::updateNewProject --> End";
 }
 
 
 void FrameViewInterface::updateOpenProject()
 {
-    qDebug("FrameViewInterface::updateOpenProject --> Nothing");
+    qDebug() << "FrameViewInterface::updateOpenProject --> Nothing";
 
     // this->openProject();
 
-    // qDebug("FrameViewInterface::updateOpenProject --> End");
+    // qDebug() << "FrameViewInterface::updateOpenProject --> End";
 }
 
 
 void FrameViewInterface::updateMixMode(int newMixMode)
 {
-    qDebug("FrameViewInterface::updateMixMode --> Start");
+    qDebug() << "FrameViewInterface::updateMixMode --> Start";
 
     this->setMixMode(newMixMode);
 
-    qDebug("FrameViewInterface::updateMixMode --> End");
+    qDebug() << "FrameViewInterface::updateMixMode --> End";
 }
 
 
 void FrameViewInterface::updateMixCount(int newMixCount)
 {
-    qDebug("FrameViewInterface::updateMixCount --> Start");
+    qDebug() << "FrameViewInterface::updateMixCount --> Start";
 
     this->mixCount = newMixCount;
 
-    qDebug("FrameViewInterface::updateMixCount --> End");
+    qDebug() << "FrameViewInterface::updateMixCount --> End";
 }
 
 
 void FrameViewInterface::updateLiveViewFps(int newFps)
 {
-    qDebug("FrameViewInterface::updateLiveViewFps --> Start");
+    qDebug() << "FrameViewInterface::updateLiveViewFps --> Start";
 
     this->setLiveViewFps(newFps);
 
-    qDebug("FrameViewInterface::updateLiveViewFps --> End");
+    qDebug() << "FrameViewInterface::updateLiveViewFps --> End";
 }
 
 
 void FrameViewInterface::updateVideoFps(int newFps)
 {
-    qDebug("FrameViewInterface::updateVideoFps --> Start");
+    qDebug() << "FrameViewInterface::updateVideoFps --> Start";
 
     this->setVideoFps(newFps);
 
-    qDebug("FrameViewInterface::updateVideoFps --> End");
+    qDebug() << "FrameViewInterface::updateVideoFps --> End";
 }
 
 
@@ -193,23 +188,23 @@ void FrameViewInterface::updateVideoFps(int newFps)
 
 void FrameViewInterface::updateAddScene(int)
 {
-    qDebug("FrameViewInterface::updateAddScene --> Empty");
+    qDebug() << "FrameViewInterface::updateAddScene --> Empty";
 }
 
 void FrameViewInterface::updateInsertScene(int)
 {
-    qDebug("FrameViewInterface::updateInsertScene --> Empty");
+    qDebug() << "FrameViewInterface::updateInsertScene --> Empty";
 }
 
 // void FrameViewInterface::updateSetNewActiveScene(int) {}
 
 void FrameViewInterface::updateActivateScene()
 {
-    qDebug("FrameViewInterface::updateActivateScene --> Start");
+    qDebug() << "FrameViewInterface::updateActivateScene --> Start";
 
     activateScene();
 
-    qDebug("FrameViewInterface::updateActivateScene --> End");
+    qDebug() << "FrameViewInterface::updateActivateScene --> End";
 }
 
 void FrameViewInterface::updateMoveScene(int, int) {}
@@ -221,12 +216,12 @@ void FrameViewInterface::updateMoveScene(int, int) {}
 
 void FrameViewInterface::updateAddTake(int, int)
 {
-    qDebug("FrameViewInterface::updateAddTake --> Empty");
+    qDebug() << "FrameViewInterface::updateAddTake --> Empty";
 }
 
 void FrameViewInterface::updateInsertTake(int, int)
 {
-    qDebug("FrameViewInterface::updateInsertTake --> Empty");
+    qDebug() << "FrameViewInterface::updateInsertTake --> Empty";
 }
 
 // void FrameViewInterface::updateSetNewActiveTake(int) {}
@@ -234,9 +229,9 @@ void FrameViewInterface::updateInsertTake(int, int)
 
 void FrameViewInterface::updateActivateTake()
 {
-    qDebug("FrameViewInterface::updateActivateTake --> Start");
+    qDebug() << "FrameViewInterface::updateActivateTake --> Start";
 
-    qDebug("FrameViewInterface::updateActivateTake --> End");
+    qDebug() << "FrameViewInterface::updateActivateTake --> End";
 }
 
 
@@ -256,21 +251,21 @@ void FrameViewInterface::updateMoveExposures(int, int, int) {}
 
 bool FrameViewInterface::cameraOn()
 {
-    qDebug("FrameViewInterface::cameraOn --> Start");
+    qDebug() << "FrameViewInterface::cameraOn --> Start";
 
     initCompleted();
 
     displayMode = liveImageMode;
     grabTimer.start(1000 / liveViewFps * 10 );  // The liveViewFps = 20 means 2.0
 
-    qDebug("FrameViewInterface::cameraOn --> End");
+    qDebug() << "FrameViewInterface::cameraOn --> End";
     return true;
 }
 
 
 void FrameViewInterface::cameraOff()
 {
-    qDebug("FrameViewInterface::cameraOff --> Start");
+    qDebug() << "FrameViewInterface::cameraOff --> Start";
 
     grabTimer.stop();
     playbackTimer.stop();
@@ -290,7 +285,7 @@ void FrameViewInterface::cameraOff()
     }
     this->update();
 
-    qDebug("FrameViewInterface::cameraOff --> End");
+    qDebug() << "FrameViewInterface::cameraOff --> End";
 }
 
 
@@ -302,7 +297,7 @@ int FrameViewInterface::getMixMode() const
 
 bool FrameViewInterface::setMixMode(int mode)
 {
-    qDebug("FrameViewInterface::setMixMode --> Start");
+    qDebug() << "FrameViewInterface::setMixMode --> Start";
 
     // Going into playback mode.
     if (mode == 2 && this->mixMode != 2) {
@@ -317,7 +312,7 @@ bool FrameViewInterface::setMixMode(int mode)
 
     mixMode = mode;
 
-    qDebug("FrameViewInterface::setMixMode --> End (true)");
+    qDebug() << "FrameViewInterface::setMixMode --> End (true)";
     return true;
 }
 
@@ -351,21 +346,21 @@ void FrameViewInterface::setVideoFps(int fps)
 
 void FrameViewInterface::activateScene()
 {
-    qDebug("FrameViewInterface::activateScene --> Start");
+    qDebug() << "FrameViewInterface::activateScene --> Start";
 
     // activateTake();
 
-    qDebug("FrameViewInterface::activateScene --> End");
+    qDebug() << "FrameViewInterface::activateScene --> End";
 }
 
 
 void FrameViewInterface::activateTake()
 {
-    qDebug("FrameViewInterface::activateTake --> Start");
+    qDebug() << "FrameViewInterface::activateTake --> Start";
 
     // activateExposure();
 
-    qDebug("FrameViewInterface::activateTake --> End");
+    qDebug() << "FrameViewInterface::activateTake --> End";
 }
 
 

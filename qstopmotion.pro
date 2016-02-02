@@ -1,7 +1,7 @@
 ###############################################################################
 # QtCreator file for the qStopMotion project                                  #
 # (c) Ralf Lange, longsoft.de                                                 #
-# Last update: 2015-11-17                                                     #
+# Last update: 2016-02-02                                                     #
 #                                                                             #
 # Please use CMake and the CMakeLists.txt file to build qStopMotion!          #
 ###############################################################################
@@ -256,7 +256,7 @@ CONFIG += debug
 # CONFIG += release warn_off
 # DEFINES += NO_DEBUG
 TEMPLATE = app
-QT += xml
+QT += widgets xml
 
 target.path = /usr/local/bin
 

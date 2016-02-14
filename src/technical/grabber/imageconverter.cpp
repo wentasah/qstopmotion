@@ -49,7 +49,7 @@ int convert_rgb24_to_xbgr32_buffer(unsigned char *rgb24, unsigned char *xbgr32, 
     int           b;
 
     if (!upsideDown) {
-        for (in = 0; in < width * height * 2; in += 3) {
+        for (in = 0; in < bufferLength; in += 3) {
             r = rgb24[in + 0];
             g = rgb24[in + 1];
             b = rgb24[in + 2];
@@ -105,7 +105,7 @@ int convert_bgr24_to_xbgr32_buffer(unsigned char *bgr24, unsigned char *xbgr32, 
     int           b;
 
     if (!upsideDown) {
-        for (in = 0; in < width * height * 2; in += 3) {
+        for (in = 0; in < bufferLength; in += 3) {
             b = bgr24[in + 0];
             g = bgr24[in + 1];
             r = bgr24[in + 2];

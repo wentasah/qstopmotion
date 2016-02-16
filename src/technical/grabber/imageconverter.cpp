@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2010-2014 by                                                *
+ *  Copyright (C) 2010-2015 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -17,6 +17,10 @@
  *  Free Software Foundation, Inc.,                                           *
  *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                 *
  ******************************************************************************/
+
+#include "imageconverter.h"
+
+#include <memory.h>   // memset
 
 /******************************************************************************
  * Destination Format is abgr32
@@ -738,6 +742,666 @@ int convert_rgb24_to_yuy2_buffer(unsigned char *rgb24, unsigned char *yuy2, unsi
         yuy2[out++] = (u0 + u1) / 2;
         yuy2[out++] = y1;
         yuy2[out++] = (v0 + v1) / 2;
+    }
+
+    return 0;
+}
+
+/******************************************************************************
+ * Convert Motion-JPEG to XBGR 32bit
+ ******************************************************************************/
+
+/*
+ * linux/drivers/video/fbcon-jpegdec.c - a tiny jpeg decoder.
+ *
+ * (w) August 2001 by Michael Schroeder, <mls@suse.de>
+ *
+ * I severly gutted this beast and hardcoded it to the palette and subset
+ * of jpeg needed for the spca50x driver. Also converted it from K&R style
+ * C to a more modern form ;). Michael can't be blamed for what is left.
+ * All nice features are his, all bugs are mine. - till
+ *
+ * Change color space converter for YUVP and RGB -
+ * Rework the IDCT implementation for best speed, cut test in the loop but instead
+ * more copy and paste code :)
+ * For more details about idct look at :
+ * http://rnvs.informatik.tu-chemnitz.de/~jan/MPEG/HTML/IDCT.html
+ * 12/12/2003 mxhaard@magic.fr
+ *
+ * add make jpeg from header (mxhaard 20/09/2004)
+ * add jpeg_decode for 422 stream (mxhaard 01/10/2004)
+ */
+
+#define ISHIFT 11
+#define M_RST0  0xd0
+#define M_BADHUFF   -1
+
+#define IFIX(a) ((long)((a) * (1 << ISHIFT) + .5))
+#define CLIP(color) (unsigned char)(((color)>0xFF)?0xff:(((color)<0)?0:(color)))
+#define IMULT(a, b) (((a) * (b)) >> ISHIFT)
+#define ITOINT(a) ((a) >> ISHIFT)
+#define LEBI_GET(in)    (le = in->left, bi = in->bits)
+#define LEBI_PUT(in)    (in->left = le, in->bits = bi)
+
+static int fillbits(struct in *in, int le, unsigned int bi)
+{
+    int b;
+    int m;
+
+    if (in->marker) {
+        if (le <= 16) {
+            in->bits = bi << 16, le += 16;
+        }
+
+        return le;
+    }
+    while (le <= 24) {
+        b = *in->p++;
+        if (in->omitescape) {
+            if (b == 0xff && (m = *in->p++) != 0) {
+                in->marker = m;
+                if (le <= 16) {
+                    bi = bi << 16, le += 16;
+                }
+                break;
+            }
+        }
+        bi = bi << 8 | b;
+        le += 8;
+    }
+    in->bits = bi;      // tmp... 2 return values needed
+
+    return le;
+}
+
+#define GETBITS(in, n) (                                        \
+  (le < (n) ? le = fillbits(in, le, bi), bi = in->bits : 0),    \
+  (le -= (n)),                                                  \
+  bi >> le & ((1 << (n)) - 1)                                   \
+)
+
+#define UNGETBITS(in, n) (   \
+  le += (n)                  \
+)
+
+static int
+dec_rec2(struct in *in, struct dec_hufftbl *hu, int *runp, int c, int i)
+{
+    int le, bi;
+
+    le = in->left;
+    bi = in->bits;
+    if (i) {
+        UNGETBITS(in, i & 127);
+        *runp = i >> 8 & 15;
+        i >>= 16;
+    }
+    else {
+        for (i = DECBITS; (c = ((c << 1) | GETBITS(in, 1))) >= (hu->maxcode[i]); i++);
+        if (i >= 16) {
+            in->marker = M_BADHUFF;
+            return 0;
+        }
+        i = hu->vals[hu->valptr[i] + c - hu->maxcode[i - 1] * 2];
+        *runp = i >> 4;
+        i &= 15;
+    }
+    if (i == 0) {       // sigh, 0xf0 is 11 bit
+        LEBI_PUT(in);
+        return 0;
+    }
+    // receive part
+    c = GETBITS(in, i);
+    if (c < (1 << (i - 1))) {
+        c += (-1 << i) + 1;
+    }
+    LEBI_PUT(in);
+
+    return c;
+}
+
+#define DEC_REC(in, hu, r, i) (        \
+  r = GETBITS(in, DECBITS),            \
+  i = hu->llvals[r],                   \
+  i & 128 ?                            \
+    (                                  \
+      UNGETBITS(in, i & 127),          \
+      r = i >> 8 & 15,                 \
+      i >> 16                          \
+    )                                  \
+  :                                    \
+    (                                  \
+      LEBI_PUT(in),                    \
+      i = dec_rec2(in, hu, &r, r, i),  \
+      LEBI_GET(in),                    \
+      i                                \
+    )                                  \
+)
+
+static int dec_readmarker(struct in *in)
+{
+    int m;
+
+    in->left = fillbits(in, in->left, in->bits);
+    if ((m = in->marker) == 0) {
+        return 0;
+    }
+    in->left = 0;
+    in->marker = 0;
+
+    return m;
+}
+
+static int dec_checkmarker(struct dec_data *decode)
+{
+    struct jpginfo *info = &decode->info;
+    struct scan *dscans = decode->dscans;
+    struct in *in = &decode->in;
+    int i;
+
+    if (dec_readmarker(in) != info->rm) {
+        return -1;
+    }
+    info->nm = info->dri;
+    info->rm = (info->rm + 1) & ~0x08;
+    for (i = 0; i < info->ns; i++) {
+        dscans[i].dc = 0;
+    }
+
+    return 0;
+}
+
+static void jpeg_reset_input_context(struct dec_data *decode, unsigned char *buf, int oescap)
+{
+    // set input context
+
+    struct in *in = &decode->in;
+    in->p = buf;
+    in->omitescape = oescap;
+    in->left = 0;
+    in->bits = 0;
+    in->marker = 0;
+}
+
+static void dec_initscans(struct dec_data *decode)
+{
+    jpginfo *info = &decode->info;
+    struct scan *dscans = decode->dscans;
+    int i;
+
+    info->ns = 3;               // HARDCODED  here
+    info->nm = info->dri + 1;   // macroblock count
+    info->rm = M_RST0;
+    for (i = 0; i < info->ns; i++) {
+        dscans[i].dc = 0;
+    }
+}
+
+inline static void
+decode_mcus(struct in *in, int *dct, int n, struct scan *sc, int *maxp)
+{
+    struct dec_hufftbl *hu;
+    int i, r, t;
+    int le, bi;
+
+    memset(dct, 0, n * 64 * sizeof(*dct));
+    le = in->left;
+    bi = in->bits;
+
+    while (n-- > 0) {
+        hu = sc->hudc.dhuff;
+        *dct++ = (sc->dc += DEC_REC(in, hu, r, t));
+
+        hu = sc->huac.dhuff;
+        i = 63;
+        while (i > 0) {
+            t = DEC_REC(in, hu, r, t);
+            if (t == 0 && r == 0) {
+                dct += i;
+                break;
+            }
+            dct += r;
+            *dct++ = t;
+            i -= r + 1;
+        }
+        *maxp++ = 64 - i;
+        if (n == sc->next) {
+            sc++;
+        }
+    }
+    LEBI_PUT(in);
+}
+
+// ***********************************************************
+// ************             idct                  ************
+// ***********************************************************
+
+#define S22 ((long)IFIX(2 * 0.382683432))
+#define C22 ((long)IFIX(2 * 0.923879532))
+#define IC4 ((long)IFIX(1 / 0.707106781))
+
+static unsigned char zig2[64] = {
+    0, 2, 3, 9, 10, 20, 21, 35,
+    14, 16, 25, 31, 39, 46, 50, 57,
+    5, 7, 12, 18, 23, 33, 37, 48,
+    27, 29, 41, 44, 52, 55, 59, 62,
+    15, 26, 30, 40, 45, 51, 56, 58,
+    1, 4, 8, 11, 19, 22, 34, 36,
+    28, 42, 43, 53, 54, 60, 61, 63,
+    6, 13, 17, 24, 32, 38, 47, 49
+};
+
+static void idct(int *in, int *out, int *quant, long off, int max)
+{
+    long  t0, t1, t2, t3, t4, t5, t6, t7;
+    long  tmp0, tmp1, tmp2, tmp3, tmp4, tmp5, tmp6;
+    long  tmp[64];
+    long* tmpp;
+    int   i, j;
+    int   te;
+    unsigned char *zig2p;
+
+    t0 = off;
+    if (max == 1) {
+        t0 += in[0] * quant[0];
+        for (i = 0; i < 64; i++) {
+            out[i] = ITOINT(t0);
+        }
+        return;
+    }
+    zig2p = zig2;
+    tmpp = tmp;
+    for (i = 0; i < 8; i++) {
+        j = *zig2p++;
+        t0 += in[j] * (long) quant[j];
+        j = *zig2p++;
+        t5 = in[j] * (long) quant[j];
+        j = *zig2p++;
+        t2 = in[j] * (long) quant[j];
+        j = *zig2p++;
+        t7 = in[j] * (long) quant[j];
+        j = *zig2p++;
+        t1 = in[j] * (long) quant[j];
+        j = *zig2p++;
+        t4 = in[j] * (long) quant[j];
+        j = *zig2p++;
+        t3 = in[j] * (long) quant[j];
+        j = *zig2p++;
+        t6 = in[j] * (long) quant[j];
+
+        if ((t1 | t2 | t3 | t4 | t5 | t6 | t7) == 0) {
+            tmpp[0 * 8] = t0;
+            tmpp[1 * 8] = t0;
+            tmpp[2 * 8] = t0;
+            tmpp[3 * 8] = t0;
+            tmpp[4 * 8] = t0;
+            tmpp[5 * 8] = t0;
+            tmpp[6 * 8] = t0;
+            tmpp[7 * 8] = t0;
+
+            tmpp++;
+            t0 = 0;
+
+            continue;
+        }
+        //IDCT;
+        tmp0 = t0 + t1;
+        t1 = t0 - t1;
+        tmp2 = t2 - t3;
+        t3 = t2 + t3;
+        tmp2 = IMULT(tmp2, IC4) - t3;
+        tmp3 = tmp0 + t3;
+        t3 = tmp0 - t3;
+        tmp1 = t1 + tmp2;
+        tmp2 = t1 - tmp2;
+        tmp4 = t4 - t7;
+        t7 = t4 + t7;
+        tmp5 = t5 + t6;
+        t6 = t5 - t6;
+        tmp6 = tmp5 - t7;
+        t7 = tmp5 + t7;
+        tmp5 = IMULT(tmp6, IC4);
+        tmp6 = IMULT((tmp4 + t6), S22);
+        tmp4 = IMULT(tmp4, (C22 - S22)) + tmp6;
+        t6 = IMULT(t6, (C22 + S22)) - tmp6;
+        t6 = t6 - t7;
+        t5 = tmp5 - t6;
+        t4 = tmp4 - t5;
+
+        tmpp[0 * 8] = tmp3 + t7;    //t0;
+        tmpp[1 * 8] = tmp1 + t6;    //t1;
+        tmpp[2 * 8] = tmp2 + t5;    //t2;
+        tmpp[3 * 8] = t3 + t4;  //t3;
+        tmpp[4 * 8] = t3 - t4;  //t4;
+        tmpp[5 * 8] = tmp2 - t5;    //t5;
+        tmpp[6 * 8] = tmp1 - t6;    //t6;
+        tmpp[7 * 8] = tmp3 - t7;    //t7;
+
+        tmpp++;
+        t0 = 0;
+    }
+    for (i = 0, j = 0; i < 8; i++) {
+        t0 = tmp[j + 0];
+        t1 = tmp[j + 1];
+        t2 = tmp[j + 2];
+        t3 = tmp[j + 3];
+        t4 = tmp[j + 4];
+        t5 = tmp[j + 5];
+        t6 = tmp[j + 6];
+        t7 = tmp[j + 7];
+        if ((t1 | t2 | t3 | t4 | t5 | t6 | t7) == 0) {
+            te = ITOINT(t0);
+            out[j + 0] = te;
+            out[j + 1] = te;
+            out[j + 2] = te;
+            out[j + 3] = te;
+            out[j + 4] = te;
+            out[j + 5] = te;
+            out[j + 6] = te;
+            out[j + 7] = te;
+            j += 8;
+
+            continue;
+        }
+        //IDCT;
+        tmp0 = t0 + t1;
+        t1 = t0 - t1;
+        tmp2 = t2 - t3;
+        t3 = t2 + t3;
+        tmp2 = IMULT(tmp2, IC4) - t3;
+        tmp3 = tmp0 + t3;
+        t3 = tmp0 - t3;
+        tmp1 = t1 + tmp2;
+        tmp2 = t1 - tmp2;
+        tmp4 = t4 - t7;
+        t7 = t4 + t7;
+        tmp5 = t5 + t6;
+        t6 = t5 - t6;
+        tmp6 = tmp5 - t7;
+        t7 = tmp5 + t7;
+        tmp5 = IMULT(tmp6, IC4);
+        tmp6 = IMULT((tmp4 + t6), S22);
+        tmp4 = IMULT(tmp4, (C22 - S22)) + tmp6;
+        t6 = IMULT(t6, (C22 + S22)) - tmp6;
+        t6 = t6 - t7;
+        t5 = tmp5 - t6;
+        t4 = tmp4 - t5;
+
+        out[j + 0] = ITOINT(tmp3 + t7);
+        out[j + 1] = ITOINT(tmp1 + t6);
+        out[j + 2] = ITOINT(tmp2 + t5);
+        out[j + 3] = ITOINT(t3 + t4);
+        out[j + 4] = ITOINT(t3 - t4);
+        out[j + 5] = ITOINT(tmp2 - t5);
+        out[j + 6] = ITOINT(tmp1 - t6);
+        out[j + 7] = ITOINT(tmp3 - t7);
+
+        j += 8;
+    }
+
+}
+
+int convert_mjpeg411_to_xbgr32_buffer(unsigned char *mjpeg411, unsigned char *xbgr32, unsigned int width, unsigned int height /*, unsigned long bufferLength, long stride */)
+{
+    int mcusx, mcusy, mx, my;
+    int dcts[6 * 64 + 16];
+    int out[6 * 64];
+    int max[6];
+    int bpp;
+    int framesize, frameUsize;
+    int k, j;
+    int nextline, nextblk, nextnewline;
+    unsigned char *pic0, *pic1;
+    int picy, picx;
+    unsigned char *U, *V;
+    int *outy, *inv, *inu;
+    int outy1, outy2;
+    int v, u, y1, v1, u1, u2;
+    int r_offset, g_offset, b_offset;
+
+    unsigned char red[256];
+    unsigned char green[256];
+    unsigned char blue[256];
+    struct dec_data *decode = new struct dec_data();
+
+    if ((height & 15) || (width & 15)) {
+        return 1;
+    }
+
+    mcusx = width >> 4;
+    mcusy = height >> 4;
+    framesize = width * height;
+    frameUsize = framesize >> 2;
+    jpeg_reset_input_context(decode, mjpeg411, 0);
+
+    // Reset dc values.
+    dec_initscans(decode);
+
+    // create bgr
+    V = xbgr32 + framesize;
+    U = V + frameUsize;
+    r_offset = 0;
+    g_offset = 1;
+    b_offset = 2;
+
+    // Decode to the correct format.
+    // case VIDEO_PALETTE_RGB32:
+    // case VIDEO_PALETTE_RGB24:
+    bpp = 4;    // (format == VIDEO_PALETTE_RGB32) ? 4 : 3;
+    nextline = bpp * ((width << 1) - 16);
+    nextblk = bpp * (width << 4);
+    nextnewline = bpp * width;
+    for (my = 0, picy = 0; my < mcusy; my++) {
+        for (mx = 0, picx = 0; mx < mcusx; mx++) {
+            decode_mcus(&decode->in, dcts, 6, decode->dscans, max);
+
+            idct(dcts,       out,       decode->dquant[0], IFIX(128.5), max[0]);
+            idct(dcts + 64,  out + 64,  decode->dquant[0], IFIX(128.5), max[1]);
+            idct(dcts + 128, out + 128, decode->dquant[0], IFIX(128.5), max[2]);
+            idct(dcts + 192, out + 192, decode->dquant[0], IFIX(128.5), max[3]);
+            idct(dcts + 256, out + 256, decode->dquant[1], IFIX(0.5),   max[4]);
+            idct(dcts + 320, out + 320, decode->dquant[2], IFIX(0.5),   max[5]);
+
+            pic0 = xbgr32 + picx + picy;
+            pic1 = pic0 + nextnewline;
+            outy = out;
+            outy1 = 0;
+            outy2 = 8;
+            inv = out + 64 * 4;
+            inu = out + 64 * 5;
+
+            for (j = 0; j < 8; j++) {
+                for (k = 0; k < 8; k++) {
+                    if (k == 4) {
+                        outy1 += 56;
+                        outy2 += 56;
+                    }
+                    // outup 4 pixels
+                    // get the UV colors need to change UV order for force rgb?
+                    v = *inv++;
+                    u = *inu++;
+                    // MX color space why not?
+                    v1 = ((v << 10)
+                          + (v << 9))
+                        >> 10;
+                    u1 = ((u <<
+                           8) + (u << 7) + (v << 9) + (v << 4))
+                        >> 10;
+                    u2 = ((u << 11)
+                          + (u << 4))
+                        >> 10;
+                    // top pixel Right
+                    y1 = outy[outy1++];
+                    pic0[r_offset] = red[CLIP((y1 + v1))];
+                    pic0[g_offset] = green[CLIP((y1 - u1))];
+                    pic0[b_offset] = blue[CLIP((y1 + u2))];
+                    pic0 += bpp;
+                    // top pixel Left
+                    y1 = outy[outy1++];
+                    pic0[r_offset] = red[CLIP((y1 + v1))];
+                    pic0[g_offset] = green[CLIP((y1 - u1))];
+                    pic0[b_offset] = blue[CLIP((y1 + u2))];
+                    pic0 += bpp;
+                    // bottom pixel Right
+                    y1 = outy[outy2++];
+                    pic1[r_offset] = red[CLIP((y1 + v1))];
+                    pic1[g_offset] = green[CLIP((y1 - u1))];
+                    pic1[b_offset] = blue[CLIP((y1 + u2))];
+                    pic1 += bpp;
+                    // bottom pixel Left
+                    y1 = outy[outy2++];
+                    pic1[r_offset] = red[CLIP((y1 + v1))];
+                    pic1[g_offset] = green[CLIP((y1 - u1))];
+                    pic1[b_offset] = blue[CLIP((y1 + u2))];
+                    pic1 += bpp;
+                }
+                if (j == 3) {
+                    outy = out + 128;
+                }
+                else {
+                    outy += 16;
+                }
+                outy1 = 0;
+                outy2 = 8;
+                pic0 += nextline;
+                pic1 += nextline;
+            }
+            picx += 16 * bpp;
+        }
+        picy += nextblk;
+    }
+
+    return 0;
+}
+
+int convert_mjpeg422_to_xbgr32_buffer(unsigned char *mjpeg422, unsigned char *xbgr32, unsigned int width, unsigned int height /*, unsigned long bufferLength, long stride */)
+{
+    int mcusx, mcusy, mx, my;
+    int dcts[6 * 64 + 16];
+    int out[6 * 64];
+    int max[6];
+    int bpp;
+    int framesize, frameUsize;
+    int k, j;
+    int nextline, nextblk, nextnewline;
+    unsigned char *pic0, *pic1;
+    int picy, picx;
+    unsigned char *U, *V;
+    int *outy, *inv, *inu;
+    int outy1, outy2;
+    int v, u, y1, v1, u1, u2;
+    int r_offset, g_offset, b_offset;
+
+    unsigned char red[256];
+    unsigned char green[256];
+    unsigned char blue[256];
+    struct dec_data *decode = new struct dec_data();
+
+    if ((height & 7) || (width & 7)) {
+        return 1;
+    }
+
+    mcusx = width >> 4;
+    mcusy = height >> 3;
+    framesize = width * height;
+    frameUsize = framesize >> 2;
+    jpeg_reset_input_context(decode, mjpeg422, 1);
+
+    // for each component. Reset dc values.
+    dec_initscans(decode);
+
+    // crate bgr
+    V = xbgr32 + framesize;
+    U = V + frameUsize;
+    r_offset = 0;
+    g_offset = 1;
+    b_offset = 2;
+
+    // Decode to the correct format.
+    // case VIDEO_PALETTE_RGB32:
+    // case VIDEO_PALETTE_RGB24:
+    bpp = 4;  // (format == VIDEO_PALETTE_RGB32) ? 4 : 3;
+    nextline = bpp * ((width << 1) - 16);
+    nextblk = bpp * (width << 3);
+    nextnewline = bpp * width;
+
+    for (my = 0, picy = 0; my < mcusy; my++) {
+        for (mx = 0, picx = 0; mx < mcusx; mx++) {
+            if (decode->info.dri && !--decode->info.nm) {
+                if (dec_checkmarker(decode)) {
+                    return -1;   // ERR_WRONG_MARKER;
+                }
+            }
+            decode_mcus(&decode->in, dcts, 4, decode->dscans, max);
+
+            idct(dcts,       out,       decode->dquant[0], IFIX(128.5), max[0]);
+            idct(dcts + 64,  out + 64,  decode->dquant[0], IFIX(128.5), max[1]);
+            idct(dcts + 128, out + 256, decode->dquant[1], IFIX(0.5),   max[2]);
+            idct(dcts + 192, out + 320, decode->dquant[2], IFIX(0.5),   max[3]);
+
+            pic0 = xbgr32 + picx + picy;
+            pic1 = pic0 + nextnewline;
+            outy = out;
+            outy1 = 0;
+            outy2 = 8;
+            inv = out + 64 * 4;
+            inu = out + 64 * 5;
+
+            for (j = 0; j < 4; j++) {
+                for (k = 0; k < 8; k++) {
+                    if (k == 4) {
+                        outy1 += 56;
+                        outy2 += 56;
+                    }
+                    // outup 4 pixels Colors are treated as 411
+
+                    v = *inv++;
+                    u = *inu++;
+
+                    // MX color space why not?
+                    v1 = ((v << 10)
+                    + (v << 9))
+                    >> 10;
+                    u1 = ((u <<
+                    8) + (u << 7) + (v << 9) + (v << 4))
+                    >> 10;
+                    u2 = ((u << 11)
+                    + (u << 4))
+                    >> 10;
+                    // top pixel Right
+                    y1 = outy[outy1++];
+                    pic0[r_offset] = red[CLIP((y1 + v1))];
+                    pic0[g_offset] = green[CLIP((y1 - u1))];
+                    pic0[b_offset] = blue[CLIP((y1 + u2))];
+                    pic0 += bpp;
+                    // top pixel Left
+                    y1 = outy[outy1++];
+                    pic0[r_offset] = red[CLIP((y1 + v1))];
+                    pic0[g_offset] = green[CLIP((y1 - u1))];
+                    pic0[b_offset] = blue[CLIP((y1 + u2))];
+                    pic0 += bpp;
+                    // bottom pixel Right
+                    y1 = outy[outy2++];
+                    pic1[r_offset] = red[CLIP((y1 + v1))];
+                    pic1[g_offset] = green[CLIP((y1 - u1))];
+                    pic1[b_offset] = blue[CLIP((y1 + u2))];
+                    pic1 += bpp;
+                    // bottom pixel Left
+                    y1 = outy[outy2++];
+                    pic1[r_offset] = red[CLIP((y1 + v1))];
+                    pic1[g_offset] = green[CLIP((y1 - u1))];
+                    pic1[b_offset] = blue[CLIP((y1 + u2))];
+                    pic1 += bpp;
+                }
+                outy += 16;
+                outy1 = 0;
+                outy2 = 8;
+                pic0 += nextline;
+                pic1 += nextline;
+            }
+            picx += 16 * bpp;
+        }
+        picy += nextblk;
     }
 
     return 0;

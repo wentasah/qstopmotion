@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2010-2015 by                                                *
+ *  Copyright (C) 2010-2016 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -748,7 +748,7 @@ int convert_rgb24_to_yuy2_buffer(unsigned char *rgb24, unsigned char *yuy2, unsi
 }
 
 /******************************************************************************
- * Convert Motion-JPEG to XBGR 32bit
+ * Convert Motion-JPEG to XBGR 32bit Variant 2
  ******************************************************************************/
 
 /*
@@ -972,6 +972,217 @@ decode_mcus(struct in *in, int *dct, int n, struct scan *sc, int *maxp)
     LEBI_PUT(in);
 }
 
+/****************************************************************/
+/**************       huffman decoder             ***************/
+/****************************************************************/
+
+/*need to be on init jpeg */
+static struct comp comp_template[MAXCOMP] = {
+    {0x01, 0x22, 0x00},
+    {0x02, 0x11, 0x01},
+    {0x03, 0x11, 0x01},
+    {0x00, 0x00, 0x00}
+};
+
+#define GSMART_JPG_HUFFMAN_TABLE_LENGTH 0x1A0
+
+const unsigned char GsmartJPEGHuffmanTable[GSMART_JPG_HUFFMAN_TABLE_LENGTH] =
+{
+    0x00, 0x00, 0x01, 0x05, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x00,
+    0x00, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09,
+    0x0A, 0x0B, 0x01, 0x00, 0x03,
+    0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00, 0x01,
+    0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x10,
+    0x00, 0x02, 0x01, 0x03, 0x03,
+    0x02, 0x04, 0x03, 0x05, 0x05, 0x04, 0x04, 0x00, 0x00, 0x01, 0x7D,
+    0x01, 0x02, 0x03, 0x00, 0x04,
+    0x11, 0x05, 0x12, 0x21, 0x31, 0x41, 0x06, 0x13, 0x51, 0x61, 0x07,
+    0x22, 0x71, 0x14, 0x32, 0x81,
+    0x91, 0xA1, 0x08, 0x23, 0x42, 0xB1, 0xC1, 0x15, 0x52, 0xD1, 0xF0,
+    0x24, 0x33, 0x62, 0x72, 0x82,
+    0x09, 0x0A, 0x16, 0x17, 0x18, 0x19, 0x1A, 0x25, 0x26, 0x27, 0x28,
+    0x29, 0x2A, 0x34, 0x35, 0x36,
+    0x37, 0x38, 0x39, 0x3A, 0x43, 0x44, 0x45, 0x46, 0x47, 0x48, 0x49,
+    0x4A, 0x53, 0x54, 0x55, 0x56,
+    0x57, 0x58, 0x59, 0x5A, 0x63, 0x64, 0x65, 0x66, 0x67, 0x68, 0x69,
+    0x6A, 0x73, 0x74, 0x75, 0x76,
+    0x77, 0x78, 0x79, 0x7A, 0x83, 0x84, 0x85, 0x86, 0x87, 0x88, 0x89,
+    0x8A, 0x92, 0x93, 0x94, 0x95,
+    0x96, 0x97, 0x98, 0x99, 0x9A, 0xA2, 0xA3, 0xA4, 0xA5, 0xA6, 0xA7,
+    0xA8, 0xA9, 0xAA, 0xB2, 0xB3,
+    0xB4, 0xB5, 0xB6, 0xB7, 0xB8, 0xB9, 0xBA, 0xC2, 0xC3, 0xC4, 0xC5,
+    0xC6, 0xC7, 0xC8, 0xC9, 0xCA,
+    0xD2, 0xD3, 0xD4, 0xD5, 0xD6, 0xD7, 0xD8, 0xD9, 0xDA, 0xE1, 0xE2,
+    0xE3, 0xE4, 0xE5, 0xE6, 0xE7,
+    0xE8, 0xE9, 0xEA, 0xF1, 0xF2, 0xF3, 0xF4, 0xF5, 0xF6, 0xF7, 0xF8,
+    0xF9, 0xFA, 0x11, 0x00, 0x02,
+    0x01, 0x02, 0x04, 0x04, 0x03, 0x04, 0x07, 0x05, 0x04, 0x04, 0x00,
+    0x01, 0x02, 0x77, 0x00, 0x01,
+    0x02, 0x03, 0x11, 0x04, 0x05, 0x21, 0x31, 0x06, 0x12, 0x41, 0x51,
+    0x07, 0x61, 0x71, 0x13, 0x22,
+    0x32, 0x81, 0x08, 0x14, 0x42, 0x91, 0xA1, 0xB1, 0xC1, 0x09, 0x23,
+    0x33, 0x52, 0xF0, 0x15, 0x62,
+    0x72, 0xD1, 0x0A, 0x16, 0x24, 0x34, 0xE1, 0x25, 0xF1, 0x17, 0x18,
+    0x19, 0x1A, 0x26, 0x27, 0x28,
+    0x29, 0x2A, 0x35, 0x36, 0x37, 0x38, 0x39, 0x3A, 0x43, 0x44, 0x45,
+    0x46, 0x47, 0x48, 0x49, 0x4A,
+    0x53, 0x54, 0x55, 0x56, 0x57, 0x58, 0x59, 0x5A, 0x63, 0x64, 0x65,
+    0x66, 0x67, 0x68, 0x69, 0x6A,
+    0x73, 0x74, 0x75, 0x76, 0x77, 0x78, 0x79, 0x7A, 0x82, 0x83, 0x84,
+    0x85, 0x86, 0x87, 0x88, 0x89,
+    0x8A, 0x92, 0x93, 0x94, 0x95, 0x96, 0x97, 0x98, 0x99, 0x9A, 0xA2,
+    0xA3, 0xA4, 0xA5, 0xA6, 0xA7,
+    0xA8, 0xA9, 0xAA, 0xB2, 0xB3, 0xB4, 0xB5, 0xB6, 0xB7, 0xB8, 0xB9,
+    0xBA, 0xC2, 0xC3, 0xC4, 0xC5,
+    0xC6, 0xC7, 0xC8, 0xC9, 0xCA, 0xD2, 0xD3, 0xD4, 0xD5, 0xD6, 0xD7,
+    0xD8, 0xD9, 0xDA, 0xE2, 0xE3,
+    0xE4, 0xE5, 0xE6, 0xE7, 0xE8, 0xE9, 0xEA, 0xF2, 0xF3, 0xF4, 0xF5,
+    0xF6, 0xF7, 0xF8, 0xF9, 0xFA
+};
+
+const unsigned char GsmartJPEGScanTable[6] =
+{
+    0x01, 0x00, 0x02, 0x11, 0x03, 0x11
+};
+
+/* table de Huffman global for all */
+static struct dec_hufftbl dhuff[4];
+#define dec_huffdc (dhuff + 0)
+#define dec_huffac (dhuff + 2)
+
+static void
+dec_makehuff(struct dec_hufftbl *hu, int *hufflen, unsigned char *huffvals)
+{
+    int code, k, i, j, d, x, c, v;
+
+    for (i = 0; i < (1 << DECBITS); i++) {
+        hu->llvals[i] = 0;
+    }
+
+    // llvals layout:
+    //
+    // value v already known, run r, backup u bits:
+    //  vvvvvvvvvvvvvvvv 0000 rrrr 1 uuuuuuu
+    // value unknown, size b bits, run r, backup u bits:
+    //  000000000000bbbb 0000 rrrr 0 uuuuuuu
+    // value and size unknown:
+    //  0000000000000000 0000 0000 0 0000000
+    //
+    code = 0;
+    k = 0;
+    for (i = 0; i < 16; i++, code <<= 1) {            // sizes
+        hu->valptr[i] = k;
+        for (j = 0; j < hufflen[i]; j++) {
+            hu->vals[k] = *huffvals++;
+            if (i < DECBITS) {
+                c = code << (DECBITS - 1 - i);
+                v = hu->vals[k] & 0x0f; /* size */
+                for (d = 1 << (DECBITS - 1 - i); --d >= 0;) {
+                    if (v + i < DECBITS) {            // both fit in table
+                        x = d >> (DECBITS - 1 - v - i);
+                        if (v && x < (1 << (v - 1))) {
+                            x += (-1 << v) + 1;
+                        }
+                        x = x << 16 | (hu->vals[k] & 0xf0) << 4 | (DECBITS - (i + 1 + v)) | 128;
+                    }
+                    else {
+                        x = v << 16 | (hu->vals[k] & 0xf0) << 4 | (DECBITS - (i + 1));
+                    }
+                    hu->llvals[c | d] = x;
+                }
+            }
+            code++;
+            k++;
+        }
+        hu->maxcode[i] = code;
+    }
+    hu->maxcode[16] = 0x20000;  /* always terminate decode */
+}
+
+void init_jpeg_decoder(struct dec_data &maindecode)
+{
+    unsigned int i, j, k, l;
+    int tc, th, tt, tac, tdc;
+    const unsigned char *ptr;
+    // unsigned int qIndex = spca50x->qindex;
+
+    memcpy(maindecode.comps, comp_template, MAXCOMP * sizeof(struct comp));
+
+    /* set up the huffman table */
+    ptr = (const unsigned char *) GsmartJPEGHuffmanTable;
+    l = GSMART_JPG_HUFFMAN_TABLE_LENGTH;
+    while (l > 0) {
+        int hufflen[16];
+        unsigned char huffvals[256];
+    
+        tc = *ptr++;
+        th = tc & 15;
+        tc >>= 4;
+        tt = tc * 2 + th;
+        if (tc > 1 || th > 1) {
+            //printf("died whilst setting up huffman table.\n");
+            //abort();
+        }
+        for (i = 0; i < 16; i++) {
+            hufflen[i] = *ptr++;
+        }
+        l -= 1 + 16;
+        k = 0;
+        for (i = 0; i < 16; i++) {
+            for (j = 0; j < (unsigned int) hufflen[i]; j++) {
+                huffvals[k++] = *ptr++;
+            }
+            l -= hufflen[i];
+        }
+        dec_makehuff(dhuff + tt, hufflen, huffvals);
+    }
+
+    /* set up the scan table */
+    ptr = (const unsigned char *) GsmartJPEGScanTable;
+    for (i = 0; i < 3; i++) {
+        maindecode.dscans[i].cid = *ptr++;
+        tdc = *ptr++;
+        tac = tdc & 15;
+        tdc >>= 4;
+        if (tdc > 1 || tac > 1) {
+            //printf("died whilst setting up scan table.\n");
+            //abort();
+        }
+        /* for each component */
+        for (j = 0; j < 3; j++) {
+            if (maindecode.comps[j].cid == maindecode.dscans[i].cid) {
+                break;
+            }
+        }
+        maindecode.dscans[i].hv = maindecode.comps[j].hv;
+        maindecode.dscans[i].tq = maindecode.comps[j].tq;
+        maindecode.dscans[i].hudc.dhuff = dec_huffdc + tdc;
+        maindecode.dscans[i].huac.dhuff = dec_huffac + tac;
+    }
+
+    if (maindecode.dscans[0].cid != 1 ||
+        maindecode.dscans[1].cid != 2 ||
+        maindecode.dscans[2].cid != 3) {
+        //printf("invalid cid found.\n");
+        //abort();
+    }
+
+    if (maindecode.dscans[0].hv != 0x22 ||
+        maindecode.dscans[1].hv != 0x11 ||
+        maindecode.dscans[2].hv != 0x11) {
+        //printf("invalid hv found.\n");
+        //abort();
+    }
+    maindecode.dscans[0].next = 6 - 4;
+    maindecode.dscans[1].next = 6 - 4 - 1;
+    maindecode.dscans[2].next = 6 - 4 - 1 - 1;  /* 411 encoding */
+
+    /* set up a quantization table */
+    // init_qTable(spca50x, qIndex);
+}
+
 // ***********************************************************
 // ************             idct                  ************
 // ***********************************************************
@@ -980,7 +1191,8 @@ decode_mcus(struct in *in, int *dct, int n, struct scan *sc, int *maxp)
 #define C22 ((long)IFIX(2 * 0.923879532))
 #define IC4 ((long)IFIX(1 / 0.707106781))
 
-static unsigned char zig2[64] = {
+static unsigned char zig2[64] =
+{
     0, 2, 3, 9, 10, 20, 21, 35,
     14, 16, 25, 31, 39, 46, 50, 57,
     5, 7, 12, 18, 23, 33, 37, 48,
@@ -1162,7 +1374,11 @@ int convert_mjpeg411_to_xbgr32_buffer(unsigned char *mjpeg411, unsigned char *xb
     unsigned char red[256];
     unsigned char green[256];
     unsigned char blue[256];
-    struct dec_data *decode = new struct dec_data();
+    struct dec_data decoder;
+
+    init_jpeg_decoder(decoder);
+
+    struct dec_data *decode = &decoder;
 
     if ((height & 15) || (width & 15)) {
         return 1;
@@ -1177,7 +1393,13 @@ int convert_mjpeg411_to_xbgr32_buffer(unsigned char *mjpeg411, unsigned char *xb
     // Reset dc values.
     dec_initscans(decode);
 
-    // create bgr
+    /* create rgb
+    U = xbgr32 + framesize;
+    V = U + frameUsize;
+    r_offset = 2;
+    g_offset = 1;
+    b_offset = 0; */
+    // crate bgr
     V = xbgr32 + framesize;
     U = V + frameUsize;
     r_offset = 0;
@@ -1295,7 +1517,11 @@ int convert_mjpeg422_to_xbgr32_buffer(unsigned char *mjpeg422, unsigned char *xb
     unsigned char red[256];
     unsigned char green[256];
     unsigned char blue[256];
-    struct dec_data *decode = new struct dec_data();
+    struct dec_data decoder;
+
+    init_jpeg_decoder(decoder);
+
+    struct dec_data *decode = &decoder;
 
     if ((height & 7) || (width & 7)) {
         return 1;
@@ -1310,6 +1536,12 @@ int convert_mjpeg422_to_xbgr32_buffer(unsigned char *mjpeg422, unsigned char *xb
     // for each component. Reset dc values.
     dec_initscans(decode);
 
+    /* create rgb
+    U = xbgr32 + framesize;
+    V = U + frameUsize;
+    r_offset = 2;
+    g_offset = 1;
+    b_offset = 0; */
     // crate bgr
     V = xbgr32 + framesize;
     U = V + frameUsize;

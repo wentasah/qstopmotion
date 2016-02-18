@@ -188,6 +188,9 @@ bool V4L2Grabber::setUp()
         pixelFormat = V4L2_PIX_FMT_NV12M;
         break;
 #endif
+    case GrabberResolution::mjpegFormat:
+        pixelFormat = V4L2_PIX_FMT_MJPEG;
+        break;
     default:
         goto Error;
     }
@@ -417,11 +420,13 @@ const QImage V4L2Grabber::getImage()
     if (format.fmt.pix.pixelformat == V4L2_PIX_FMT_MJPEG) {
         // Read a image in MJPG format
 
-        // nBytes = buf.bytesused;
-        // pixels = (unsigned char*)malloc(nBytes);
-        // memcpy(pixels, buffers[buf.index].start, nBytes);
+        nBytes = buf.bytesused;
+        pixels = (unsigned char*)malloc(nBytes);
+        memcpy(pixels, buffers[buf.index].start, nBytes);
 
-        // Not supported!
+        // Not supported?
+
+        convert_mjpeg422_to_xbgr32_buffer(pixels, frameData, width, height/*, nBytes, 0L*/);
 
         // Example code: v4l2handcontrol
         // uchar jpegBuf1[buf.bytesused + 420];
@@ -626,6 +631,9 @@ bool V4L2Grabber::enumerateCaptureFormats(int fd, ImageGrabberDevice *device)
               device->addResolution(GrabberResolution(outputWidth, outputHeight, GrabberResolution::nv12Format, false));
               break;
 #endif
+            case V4L2_PIX_FMT_MJPEG:
+              device->addResolution(GrabberResolution(outputWidth, outputHeight, GrabberResolution::mjpegFormat, false));
+              break;
             default:
               device->addResolution(GrabberResolution(outputWidth, outputHeight, GrabberResolution::unknownFormat, false));
               break;

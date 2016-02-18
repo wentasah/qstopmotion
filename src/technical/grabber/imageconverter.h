@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2010-2015 by                                                *
+ *  Copyright (C) 2010-2016 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -226,14 +226,14 @@ struct in {
 };
 
 struct jpginfo {
-    int nc;         /* number of components */
-    int ns;         /* number of scans */
-    int dri;        /* restart interval */
-    int nm;         /* mcus til next marker */
-    int rm;         /* next restart marker */
+    int nc;        // number of components
+    int ns;        // number of scans
+    int dri;       // restart interval
+    int nm;        // mcus til next marker
+    int rm;        // next restart marker
 };
 
-#define DECBITS 10      /* seems to be the optimum */
+#define DECBITS 10      // seems to be the optimum
 struct dec_hufftbl {
     int maxcode[17];
     int valptr[16];
@@ -249,20 +249,26 @@ union hufftblp {
 };
 
 struct scan {
-    int dc;         /* old dc value */
-    union hufftblp hudc;    /* pointer to huffman table dc */
-    union hufftblp huac;    /* pointer to huffman table ac */
-    int next;       /* when to switch to next scan */
-    int cid;        /* component id */
-    int hv;         /* horiz/vert, copied from comp */
-    int tq;         /* quant tbl, copied from comp */
+    int dc;                  // old dc value
+    union hufftblp hudc;     // pointer to huffman table dc
+    union hufftblp huac;     // pointer to huffman table ac
+    int next;                // when to switch to next scan
+    int cid;                 // component id
+    int hv;                  // horiz/vert, copied from comp
+    int tq;                  // quant tbl, copied from comp
 };
 
 #define MAXCOMP 4
+struct comp {
+    int cid;
+    int hv;
+    int tq;
+};
+
 struct dec_data {
     struct in in;
     struct jpginfo info;
-    // struct comp comps[MAXCOMP];
+    struct comp comps[MAXCOMP];
     struct scan dscans[MAXCOMP];
     unsigned char quant[3][64];
     int dquant[3][64];

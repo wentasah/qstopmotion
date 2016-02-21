@@ -316,6 +316,7 @@ const QImage V4L2Grabber::getImage()
     int      ret = 0;
     int      imageFormat = QImage::Format_ARGB32;
     QImage   image;
+    int      imageLoaded = 0;
 
     qDebug() << "V4L2Grabber::getImage --> Start";
     
@@ -336,12 +337,15 @@ const QImage V4L2Grabber::getImage()
     // Save the image.
     if (format.fmt.pix.pixelformat == V4L2_PIX_FMT_BGR24) {
         // Read a image in RGB24 format ==> TextureFormat::Format_RGB_8
+        // 8:8:8 Format, 24 Bits per Pixel
 
         nBytes = buf.bytesused;
         pixels = (unsigned char*)malloc(nBytes);
         memcpy(pixels, buffers[buf.index].start, nBytes);
 
-        convert_bgr24_to_xbgr32_buffer(pixels, frameData, width, height, nBytes, 0L);
+        if (convert_bgr24_to_xbgr32_buffer(pixels, frameData, width, height, nBytes, 0L) != 0) {
+            qDebug() << "V4L2Grabber::getImage --> Error: Can not convert bgr to xbgr";
+        }
     }
     // if (format.fmt.pix.pixelformat == V4L2_PIX_FMT_xxx) {
         // Read a image in AYUV (AYCbCr BT.601)
@@ -417,6 +421,7 @@ const QImage V4L2Grabber::getImage()
 
         convert_nv12_to_xbgr32_buffer(pixels, frameData, width, height, nBytes, 0L);
     }
+
     if (format.fmt.pix.pixelformat == V4L2_PIX_FMT_MJPEG) {
         // Read a image in MJPG format
 
@@ -424,16 +429,14 @@ const QImage V4L2Grabber::getImage()
         pixels = (unsigned char*)malloc(nBytes);
         memcpy(pixels, buffers[buf.index].start, nBytes);
 
-        // Not supported?
-
-        convert_mjpeg422_to_xbgr32_buffer(pixels, frameData, width, height/*, nBytes, 0L*/);
-
-        // Example code: v4l2handcontrol
-        // uchar jpegBuf1[buf.bytesused + 420];
-        // if (format.fmt.pix.pixelformat == V4L2_PIX_FMT_MJPEG) {
-        //     if (mjpegToJpeg(mem[buf.index], jpegBuf1, (int) buf.bytesused) == EXIT_SUCCESS)
-        //     image.loadFromData(jpegBuf1, buf.bytesused+420);
-        // }
+        uchar jpegBuf1[nBytes + JPEG_DHT_LENGTH];
+        if (mjpegToJpeg(pixels, jpegBuf1, nBytes) == 0) {
+            image.loadFromData(jpegBuf1, nBytes + JPEG_DHT_LENGTH);
+            imageLoaded = 1;
+        }
+        else {
+            qDebug() << "V4L2Grabber::getImage --> Error: Can not convert mjpeg to jpeg";
+        }
     }
 
     // Requeue the buffer.
@@ -443,15 +446,19 @@ const QImage V4L2Grabber::getImage()
         return image;
     }
 
-    // Create image
-    image = QImage(QSize(width, height), (QImage::Format)imageFormat);
-    // unsigned char* dst = const_cast<unsigned char*>(image.bits());        // Up to Qt 4.6.x
-    unsigned char* dst = const_cast<unsigned char*>(image.constBits());   // From Qt 4.7
-    const unsigned char* src = const_cast<unsigned char*>(frameData);
-    const unsigned char* const srcEnd = src + width * height * 4;
+    if (imageLoaded == 0) {
+        // Create image
+        image = QImage(QSize(width, height), (QImage::Format)imageFormat);
+        // unsigned char* dst = const_cast<unsigned char*>(image.bits());        // Up to Qt 4.6.x
+        unsigned char* dst = const_cast<unsigned char*>(image.constBits());   // From Qt 4.7
+        const unsigned char* src = const_cast<unsigned char*>(frameData);
+        const unsigned char* const srcEnd = src + width * height * 4;
 
-    while (src < srcEnd) {
-        *dst++ = *src++;
+        while (src < srcEnd) {
+            *dst++ = *src++;
+        }
+
+        imageLoaded = 1;
     }
 
     if (firstImage) {

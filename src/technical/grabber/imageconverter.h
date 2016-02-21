@@ -289,4 +289,8 @@ int convert_mjpeg422_to_xbgr32_buffer(unsigned char *mjpeg422,
                                       unsigned long bufferLength,
                                       long stride */);
 
+#define JPEG_DHT_LENGTH 0x1A4
+
+int mjpegToJpeg(unsigned char *inFrame, unsigned char *outFrame, unsigned int bufSize);
+
 #endif // IMAGECONVERTER_H

@@ -214,80 +214,8 @@ int convert_rgb24_to_yuy2_buffer(unsigned char *rgb24,
                                  unsigned int   height);
 
 /******************************************************************************
- * Convert Motion-JPEG to XBGR 32bit
+ * Convert Motion-JPEG to JPEG
  ******************************************************************************/
-
-struct in {
-    unsigned char *p;
-    unsigned int bits;
-    int omitescape;
-    int left;
-    int marker;
-};
-
-struct jpginfo {
-    int nc;        // number of components
-    int ns;        // number of scans
-    int dri;       // restart interval
-    int nm;        // mcus til next marker
-    int rm;        // next restart marker
-};
-
-#define DECBITS 10      // seems to be the optimum
-struct dec_hufftbl {
-    int maxcode[17];
-    int valptr[16];
-    unsigned char vals[256];
-    unsigned int llvals[1 << DECBITS];
-};
-
-struct enc_hufftbl;
-
-union hufftblp {
-    struct dec_hufftbl *dhuff;
-    struct enc_hufftbl *ehuff;
-};
-
-struct scan {
-    int dc;                  // old dc value
-    union hufftblp hudc;     // pointer to huffman table dc
-    union hufftblp huac;     // pointer to huffman table ac
-    int next;                // when to switch to next scan
-    int cid;                 // component id
-    int hv;                  // horiz/vert, copied from comp
-    int tq;                  // quant tbl, copied from comp
-};
-
-#define MAXCOMP 4
-struct comp {
-    int cid;
-    int hv;
-    int tq;
-};
-
-struct dec_data {
-    struct in in;
-    struct jpginfo info;
-    struct comp comps[MAXCOMP];
-    struct scan dscans[MAXCOMP];
-    unsigned char quant[3][64];
-    int dquant[3][64];
-    // struct code_table_t table[256];
-};
-
-int convert_mjpeg411_to_xbgr32_buffer(unsigned char *mjpeg411,
-                                      unsigned char *xbgr32,
-                                      unsigned int width,
-                                      unsigned int height /*,
-                                      unsigned long bufferLength,
-                                      long stride */);
-
-int convert_mjpeg422_to_xbgr32_buffer(unsigned char *mjpeg422,
-                                      unsigned char *xbgr32,
-                                      unsigned int width,
-                                      unsigned int height /*,
-                                      unsigned long bufferLength,
-                                      long stride */);
 
 #define JPEG_DHT_LENGTH 0x1A4
 

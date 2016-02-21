@@ -429,7 +429,7 @@ const QImage V4L2Grabber::getImage()
         pixels = (unsigned char*)malloc(nBytes);
         memcpy(pixels, buffers[buf.index].start, nBytes);
 
-        uchar jpegBuf1[nBytes + JPEG_DHT_LENGTH];
+        unsigned char jpegBuf1[nBytes + JPEG_DHT_LENGTH];
         if (mjpegToJpeg(pixels, jpegBuf1, nBytes) == 0) {
             image.loadFromData(jpegBuf1, nBytes + JPEG_DHT_LENGTH);
             imageLoaded = 1;

@@ -439,6 +439,10 @@ bool MfGrabber::setUp()
         return true;
     }
 
+    if (subType == MFVideoFormat_MJPG) {
+        return true;
+    }
+
     SafeRelease(&mediaType);
     SafeRelease(&sourceReader);
     SafeRelease(&mediaSource);
@@ -460,19 +464,8 @@ const QImage MfGrabber::getImage()
     const BYTE* data = NULL;
     int         Tries = 10;
 
-    while (data == NULL && --Tries) {
-        getRawFrame(data);
-    }
-
-    if (data != NULL && width > 0 && height > 0) {
-        image = QImage(QSize(width, height), QImage::Format_ARGB32);
-        BYTE* dst = const_cast<BYTE*>(image.constBits());
-        const BYTE* src = const_cast<BYTE*>(data);
-        const BYTE* const srcEnd = src + width * height * 4;
-
-        while (src < srcEnd) {
-            *dst++ = *src++;
-        }
+    while (image.isNull() && --Tries) {
+        getRawFrame(image);
     }
 
     if (firstImage) {
@@ -656,10 +649,9 @@ HRESULT MfGrabber::enumerateCaptureFormats(IMFMediaSource *pSource, ImageGrabber
         else if (*val.puuid == MFVideoFormat_NV12) {
             outputFormat = GrabberResolution::nv12Format;
         }
-        // MJPEG is not supported!
-        // else if (*val.puuid == MFVideoFormat_MJPG) {
-        //     outputFormat = GrabberResolution::mjpegFormat;
-        // }
+        else if (*val.puuid == MFVideoFormat_MJPG) {
+            outputFormat = GrabberResolution::mjpegFormat;
+        }
         else {
             qDebug() << "MfGrabber::enumerateCaptureFormats --> Not supported format (" << i << "): " << outputWidth << " x " << outputHeight << " [" << GUID_name << "]";
             goto nextType;
@@ -733,7 +725,7 @@ done:
 }
 
 
-void MfGrabber::getRawFrame(const uchar*& data)
+void MfGrabber::getRawFrame(QImage &image)
 {
     qDebug() << "MfGrabber::getRawFrame --> Start";
 
@@ -743,8 +735,7 @@ void MfGrabber::getRawFrame(const uchar*& data)
     DWORD           dwFlags = 0x00000000U;
     BYTE*           pixels = NULL;
     DWORD           nPixels = 0;
-
-    data = NULL;
+    int             imageLoaded = 0;
 
     hr = sourceReader->ReadSample((DWORD)MF_SOURCE_READER_FIRST_VIDEO_STREAM,
                                   0,
@@ -778,7 +769,6 @@ void MfGrabber::getRawFrame(const uchar*& data)
         safeDeleteArray(frameData);
         frameData = new uchar[width * height * 4];  // New frame data for ARGB 8bit
     }
-    data = frameData;
 
     if (subType == MFVideoFormat_RGB24) {
         // Read a image in RGB24 format ==> TextureFormat::Format_RGB_8
@@ -824,11 +814,34 @@ void MfGrabber::getRawFrame(const uchar*& data)
     if (subType == MFVideoFormat_MJPG) {
         // Read a image in MJPG format
 
-        // Not supported!
+        const int bufSize = nPixels + JPEG_DHT_LENGTH;
+        unsigned char* jpegBuf1 = new unsigned char[bufSize];
+
+        // Convert to JPEG and use load function
+        if (mjpegToJpeg(pixels, jpegBuf1, nPixels) == 0) {
+            image.loadFromData(jpegBuf1, nPixels + JPEG_DHT_LENGTH);
+            imageLoaded = 1;
+        }
+        else {
+            qDebug() << "V4L2Grabber::getImage --> Error: Can not convert mjpeg to jpeg";
+        }
+
+        delete jpegBuf1;
     }
 
     // MFVideoFormat_RGB32 ==> TextureFormat::Format_RGBA_8
     // MFVideoFormat_ARGB32
+
+    if (imageLoaded == 0) {
+        image = QImage(QSize(width, height), QImage::Format_ARGB32);
+        BYTE* dst = const_cast<BYTE*>(image.constBits());
+        const BYTE* src = const_cast<BYTE*>(frameData);
+        const BYTE* const srcEnd = src + width * height * 4;
+
+        while (src < srcEnd) {
+            *dst++ = *src++;
+        }
+    }
 
 unlock:
     buffer->Unlock();

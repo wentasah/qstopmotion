@@ -97,7 +97,7 @@ private:
 
     HRESULT SetDeviceFormat(IMFMediaSource *pSource, DWORD dwFormatIndex);
 
-    void getRawFrame(const uchar*& data);
+    void getRawFrame(QImage &image);
 
     /**
      * Get the actual image from the gstreamer application interface.
@@ -108,8 +108,8 @@ private:
     bool        isInitSuccess;
     bool        firstImage;
 
-    QImage liveImage;
-    QImage rawImage;
+    QImage      liveImage;
+    QImage      rawImage;
 
     IMFMediaSource*  mediaSource;
     IMFSourceReader* sourceReader;

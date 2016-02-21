@@ -190,7 +190,7 @@ bool MfGrabber::initialization(QVector<ImageGrabberDevice*> &devices)
 
     qDebug() << "MfGrabber::initialization --> device count: " << devices.size();
 
-    if (0 == deviceCount) {
+    if (0 == devices.size()) {
         qDebug() << "MfGrabber::initialization --> End (false)";
 
         return false;
@@ -654,12 +654,11 @@ HRESULT MfGrabber::enumerateCaptureFormats(IMFMediaSource *pSource, ImageGrabber
         }
         else {
             qDebug() << "MfGrabber::enumerateCaptureFormats --> Not supported format (" << i << "): " << outputWidth << " x " << outputHeight << " [" << GUID_name << "]";
-            goto nextType;
+            outputFormat = GrabberResolution::unknownFormat;
         }
 
         device->addResolution(GrabberResolution(outputWidth, outputHeight, outputFormat, false));
 
-nextType:
         hr = PropVariantClear(&val);
 
         SafeRelease(&pType);

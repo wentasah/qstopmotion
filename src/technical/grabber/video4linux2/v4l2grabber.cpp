@@ -154,6 +154,9 @@ bool V4L2Grabber::setUp()
     height = resolution.getHeight();
 
     switch (resolution.getFormat()) {
+    case GrabberResolution::rgb24Format:
+        pixelFormat = V4L2_PIX_FMT_RGB24;
+        break;
     case GrabberResolution::bgr24Format:
         pixelFormat = V4L2_PIX_FMT_BGR24;
         break;
@@ -173,14 +176,20 @@ bool V4L2Grabber::setUp()
     case GrabberResolution::uyvyFormat:
         pixelFormat = V4L2_PIX_FMT_UYVY;
         break;
-#ifdef V4L2_PIX_FMT_YVU420M
-    case GrabberResolution::yv12Format:
-        pixelFormat = V4L2_PIX_FMT_YVU420M;
+    case GrabberResolution::yu12Format:
+        pixelFormat = V4L2_PIX_FMT_YUV420;
+        break;
+#ifdef V4L2_PIX_FMT_YUV420M
+    case GrabberResolution::yuv420mFormat:
+        pixelFormat = V4L2_PIX_FMT_YUV420M;
         break;
 #endif
-#ifdef V4L2_PIX_FMT_YUV420M
-    case GrabberResolution::i420Format:
-        pixelFormat = V4L2_PIX_FMT_YUV420M;
+    case GrabberResolution::yv12Format:
+        pixelFormat = V4L2_PIX_FMT_YVU420;
+        break;
+#ifdef V4L2_PIX_FMT_YVU420M
+    case GrabberResolution::yvu420mFormat:
+        pixelFormat = V4L2_PIX_FMT_YVU420M;
         break;
 #endif
 #ifdef V4L2_PIX_FMT_NV12M
@@ -335,8 +344,20 @@ const QImage V4L2Grabber::getImage()
     unsigned int    nBytes = 0;
 
     // Save the image.
-    if (format.fmt.pix.pixelformat == V4L2_PIX_FMT_BGR24) {
+    if (format.fmt.pix.pixelformat == V4L2_PIX_FMT_RGB24) {
         // Read a image in RGB24 format ==> TextureFormat::Format_RGB_8
+        // 8:8:8 Format, 24 Bits per Pixel
+
+        nBytes = buf.bytesused;
+        pixels = (unsigned char*)malloc(nBytes);
+        memcpy(pixels, buffers[buf.index].start, nBytes);
+
+        if (convert_rgb24_to_xbgr32_buffer(pixels, frameData, width, height, nBytes, 0L) != 0) {
+            qDebug() << "V4L2Grabber::getImage --> Error: Can not convert rgb to xbgr";
+        }
+    }
+    if (format.fmt.pix.pixelformat == V4L2_PIX_FMT_BGR24) {
+        // Read a image in BGR24 format ==> TextureFormat::Format_BGR_8
         // 8:8:8 Format, 24 Bits per Pixel
 
         nBytes = buf.bytesused;
@@ -377,6 +398,38 @@ const QImage V4L2Grabber::getImage()
 
         convert_uyvy_to_xbgr32_buffer(pixels, frameData, width, height, nBytes, 0L);
     }
+    if (format.fmt.pix.pixelformat == V4L2_PIX_FMT_YUV420) {
+        // Read a image in YUV 4:2:0 (YCr12, YU12)
+        // 4:2:0 Format, 12 Bits per Pixel
+
+        nBytes = buf.bytesused;
+        pixels = (unsigned char*)malloc(nBytes);
+        memcpy(pixels, buffers[buf.index].start, nBytes);
+
+        convert_yu12_to_xbgr32_buffer(pixels, frameData, width, height, nBytes, 0L);
+    }
+#ifdef V4L2_PIX_FMT_YUV420M
+    if (format.fmt.pix.pixelformat == V4L2_PIX_FMT_YUV420M) {
+        // Read a image in YV12 (YCr12)
+        // 4:2:0 Format, 12 Bits per Pixel
+
+        nBytes = buf.bytesused;
+        pixels = (unsigned char*)malloc(nBytes);
+        memcpy(pixels, buffers[buf.index].start, nBytes);
+
+        convert_yuv420m_to_xbgr32_buffer(pixels, frameData, width, height, nBytes, 0L);
+    }
+#endif
+    if (format.fmt.pix.pixelformat == V4L2_PIX_FMT_YVU420) {
+        // Read a image in YVU 4:2:0 (YCr12, YU12)
+        // 4:2:0 Format, 12 Bits per Pixel
+
+        nBytes = buf.bytesused;
+        pixels = (unsigned char*)malloc(nBytes);
+        memcpy(pixels, buffers[buf.index].start, nBytes);
+
+        convert_yv12_to_xbgr32_buffer(pixels, frameData, width, height, nBytes, 0L);
+    }
 #ifdef V4L2_PIX_FMT_YVU420M
     if (format.fmt.pix.pixelformat == V4L2_PIX_FMT_YVU420M) {
         // Read a image in YV12 (YCr12)
@@ -386,19 +439,9 @@ const QImage V4L2Grabber::getImage()
         pixels = (unsigned char*)malloc(nBytes);
         memcpy(pixels, buffers[buf.index].start, nBytes);
 
-        convert_yv12_to_xbgr32_buffer(pixels, frameData, width, height, nBytes, 0L);
+        convert_yvu420m_to_xbgr32_buffer(pixels, frameData, width, height, nBytes, 0L);
     }
 #endif
-    if (format.fmt.pix.pixelformat == V4L2_PIX_FMT_YUV420) {
-        // Read a image in I420 (YCr12)
-        // 4:2:0 Format, 12 Bits per Pixel
-
-        nBytes = buf.bytesused;
-        pixels = (unsigned char*)malloc(nBytes);
-        memcpy(pixels, buffers[buf.index].start, nBytes);
-
-        convert_i420_to_xbgr32_buffer(pixels, frameData, width, height, nBytes, 0L);
-    }
 #ifdef V4L2_PIX_FMT_NV12M
     if (format.fmt.pix.pixelformat == V4L2_PIX_FMT_NV12M) {
         // Read a image in NV12 (NCr12)
@@ -599,6 +642,10 @@ bool V4L2Grabber::enumerateCaptureFormats(int fd, ImageGrabberDevice *device)
             }
             
             switch(frmsize.pixel_format) {
+            case V4L2_PIX_FMT_RGB24:
+              // Depth: 24, Description: RGB 24bit
+              device->addResolution(GrabberResolution(outputWidth, outputHeight, GrabberResolution::rgb24Format, false));
+              break;
             case V4L2_PIX_FMT_BGR24:
               // Depth: 24, Description: BGR 24bit
               device->addResolution(GrabberResolution(outputWidth, outputHeight, GrabberResolution::bgr24Format, false));
@@ -623,14 +670,20 @@ bool V4L2Grabber::enumerateCaptureFormats(int fd, ImageGrabberDevice *device)
               // Depth: 16, Description: YUV 4:2:2
               device->addResolution(GrabberResolution(outputWidth, outputHeight, GrabberResolution::uyvyFormat, false));
               break;
-#ifdef V4L2_PIX_FMT_YVU420M
-            case V4L2_PIX_FMT_YVU420M:
+            case V4L2_PIX_FMT_YVU420:
               device->addResolution(GrabberResolution(outputWidth, outputHeight, GrabberResolution::yv12Format, false));
               break;
+#ifdef V4L2_PIX_FMT_YVU420M
+            case V4L2_PIX_FMT_YVU420M:
+              device->addResolution(GrabberResolution(outputWidth, outputHeight, GrabberResolution::yvu420mFormat, false));
+              break;
 #endif
+            case V4L2_PIX_FMT_YUV420:
+              device->addResolution(GrabberResolution(outputWidth, outputHeight, GrabberResolution::yu12Format, false));
+              break;
 #ifdef V4L2_PIX_FMT_YUV420M
             case V4L2_PIX_FMT_YUV420M:
-              device->addResolution(GrabberResolution(outputWidth, outputHeight, GrabberResolution::i420Format, false));
+              device->addResolution(GrabberResolution(outputWidth, outputHeight, GrabberResolution::yuv420mFormat, false));
               break;
 #endif
 #ifdef V4L2_PIX_FMT_NV12M

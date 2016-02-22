@@ -166,6 +166,63 @@ int convert_yv12_to_xbgr32_buffer(unsigned char *yv12,
                                   long           stride);
 
 /**
+ * Convert a buffer with YUV 4:2:0 (Microsoft I420) pixels to XBGR 32bit.
+ *
+ * @brief convert_yuv420m_to_xbgr32_buffer
+ * @param i420
+ * @param xbgr32
+ * @param width
+ * @param height
+ * @param bufferLength
+ * @param stride
+ * @return
+ */
+int convert_yuv420m_to_xbgr32_buffer(unsigned char *yuv420m,
+                                     unsigned char *rgb32,
+                                     unsigned int   width,
+                                     unsigned int   height,
+                                     unsigned long  bufferLength,
+                                     long           stride);
+
+/**
+ * Convert a buffer with YUV 4:2:0 (Microsoft YV12) pixels to XBGR 32bit.
+ *
+ * @brief convert_yv12_to_xbgr32_buffer
+ * @param yv12
+ * @param xbgr32
+ * @param width
+ * @param height
+ * @param bufferLength
+ * @param stride
+ * @return
+ */
+int convert_yu12_to_xbgr32_buffer(unsigned char *yu12,
+                                  unsigned char *xbgr32,
+                                  unsigned int   width,
+                                  unsigned int   height,
+                                  unsigned long  bufferLength,
+                                  long           stride);
+
+/**
+ * Convert a buffer with YVU 4:2:0 (Microsoft ???) pixels to XBGR 32bit.
+ *
+ * @brief convert_yvu420m_to_xbgr32_buffer
+ * @param i420
+ * @param xbgr32
+ * @param width
+ * @param height
+ * @param bufferLength
+ * @param stride
+ * @return
+ */
+int convert_yvu420m_to_xbgr32_buffer(unsigned char *yvu420m,
+                                     unsigned char *rgb32,
+                                     unsigned int   width,
+                                     unsigned int   height,
+                                     unsigned long  bufferLength,
+                                     long           stride);
+
+/**
  * Convert a buffer with YUV 4:2:0 (Microsoft NV12) pixels to XBGR 32bit.
  *
  * @brief convert_nv12_to_xbgr32_buffer
@@ -179,25 +236,6 @@ int convert_yv12_to_xbgr32_buffer(unsigned char *yv12,
  */
 int convert_nv12_to_xbgr32_buffer(unsigned char *nv12,
                                   unsigned char *xbgr32,
-                                  unsigned int   width,
-                                  unsigned int   height,
-                                  unsigned long  bufferLength,
-                                  long           stride);
-
-/**
- * Convert a buffer with YUV 4:2:0 (Microsoft I420) pixels to XBGR 32bit.
- *
- * @brief convert_i420_to_xbgr32_buffer
- * @param i420
- * @param xbgr32
- * @param width
- * @param height
- * @param bufferLength
- * @param stride
- * @return
- */
-int convert_i420_to_xbgr32_buffer(unsigned char *i420,
-                                  unsigned char *rgb32,
                                   unsigned int   width,
                                   unsigned int   height,
                                   unsigned long  bufferLength,

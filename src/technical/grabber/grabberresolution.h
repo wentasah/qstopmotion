@@ -38,15 +38,18 @@ public:
      */
     enum resolutionFormat {
         unknownFormat,         // Not supported format
+        rgb24Format,           // RGB24 format
         bgr24Format,           // BGR24 format
         xbgr32Format,          // XBGR32 format
         abgr32Format,          // ABGR32 format
         ayuvFormat,            // AYUV format
         yuv2Format,            // YUV2 format
         uyvyFormat,            // UYVY format
-        yv12Format,            // YV12 format
         nv12Format,            // NV12 format
-        i420Format,            // I420 format
+        yu12Format,            // YU12 format (= YUV420 format)
+        yuv420mFormat,         // YUV420 planar (= I420 format)
+        yv12Format,            // YV12 format (= YVU420 format)
+        yvu420mFormat,         // YVU420 planar
         mjpegFormat            // MJPEG format
     };
 

@@ -327,7 +327,7 @@ bool MfGrabber::setUp()
                     mediaType->CopyAllItems(newMediaType);
                 }
                 break;
-            case GrabberResolution::i420Format:
+            case GrabberResolution::yuv420mFormat:
                 if (typeSubType == MFVideoFormat_I420) {
                     mediaType->CopyAllItems(newMediaType);
                 }
@@ -644,7 +644,7 @@ HRESULT MfGrabber::enumerateCaptureFormats(IMFMediaSource *pSource, ImageGrabber
             outputFormat = GrabberResolution::yv12Format;
         }
         else if (*val.puuid == MFVideoFormat_I420) {
-            outputFormat = GrabberResolution::i420Format;
+            outputFormat = GrabberResolution::yuv420mFormat;
         }
         else if (*val.puuid == MFVideoFormat_NV12) {
             outputFormat = GrabberResolution::nv12Format;
@@ -803,7 +803,7 @@ void MfGrabber::getRawFrame(QImage &image)
         // Read a image in I420 (YCr12)
         // 4:2:0 Format, 12 Bits per Pixel
 
-        convert_i420_to_xbgr32_buffer(pixels, frameData, width, height, nPixels, stride);
+        convert_yuv420m_to_xbgr32_buffer(pixels, frameData, width, height, nPixels, stride);
     }
     if (subType == MFVideoFormat_NV12) {
         // Read a image in NV12 (NCr12)

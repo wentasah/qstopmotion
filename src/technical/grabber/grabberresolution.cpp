@@ -93,6 +93,9 @@ const QString GrabberResolution::getName()
     QString formatName;
 
     switch(format) {
+    case GrabberResolution::rgb24Format:
+        formatName.append("RGB24");
+        break;
     case GrabberResolution::bgr24Format:
         formatName.append("BGR24");
         break;
@@ -105,11 +108,17 @@ const QString GrabberResolution::getName()
     case GrabberResolution::uyvyFormat:
         formatName.append("UYUY");
         break;
+    case GrabberResolution::yu12Format:
+        formatName.append("YU12");
+        break;
+    case GrabberResolution::yuv420mFormat:
+        formatName.append("YUV420");
+        break;
     case GrabberResolution::yv12Format:
         formatName.append("YV12");
         break;
-    case GrabberResolution::i420Format:
-        formatName.append("I420");
+    case GrabberResolution::yvu420mFormat:
+        formatName.append("YVU420");
         break;
     case GrabberResolution::nv12Format:
         formatName.append("NV12");

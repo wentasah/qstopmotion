@@ -513,7 +513,7 @@ int convert_yv12_to_xbgr32_buffer(unsigned char *yv12, unsigned char *xbgr32, un
 
 
 /*
- * Memory layout i420:
+ * Memory layout yuv420:
  *   +----+----+----+----+----+----+----+----+
  *   | Y0 | Y1 | Y2 | Y3 |
  *   +----+----+----+----+
@@ -534,7 +534,7 @@ int convert_yv12_to_xbgr32_buffer(unsigned char *yv12, unsigned char *xbgr32, un
  *   |
  *   +----+----+----+----+----+----+----+----+
  */
-int convert_i420_to_xbgr32_buffer(unsigned char *i420, unsigned char *xbgr32, unsigned int width, unsigned int height, unsigned long bufferLength, long stride)
+int convert_yuv420m_to_xbgr32_buffer(unsigned char *yuv420m, unsigned char *xbgr32, unsigned int width, unsigned int height, unsigned long bufferLength, long stride)
 {
     unsigned int  yPos1, yPos2;
     unsigned int  uPos;
@@ -559,12 +559,198 @@ int convert_i420_to_xbgr32_buffer(unsigned char *i420, unsigned char *xbgr32, un
                 outPos1 = (h * width + w) * 4;
                 outPos2 = ((h + 1) * width + w) * 4;
 
-                y0 = i420[yPos1];
-                y1 = i420[yPos1+1];
-                y2 = i420[yPos2];
-                y3 = i420[yPos2+1];
-                u = i420[uPos];
-                v = i420[vPos];
+                y0 = yuv420m[yPos1];
+                y1 = yuv420m[yPos1+1];
+                y2 = yuv420m[yPos2];
+                y3 = yuv420m[yPos2+1];
+                u = yuv420m[uPos];
+                v = yuv420m[vPos];
+
+                convert_yuv_to_rgb_SDTV_pixel(y0, u, v, r, g, b);
+
+                xbgr32[outPos1++] = b;      // B
+                xbgr32[outPos1++] = g;      // G
+                xbgr32[outPos1++] = r;      // R
+                xbgr32[outPos1++] = 0xffU;  // A
+
+                convert_yuv_to_rgb_SDTV_pixel(y1, u, v, r, g, b);
+
+                xbgr32[outPos1++] = b;      // B
+                xbgr32[outPos1++] = g;      // G
+                xbgr32[outPos1++] = r;      // R
+                xbgr32[outPos1++] = 0xffU;  // A
+
+                convert_yuv_to_rgb_SDTV_pixel(y2, u, v, r, g, b);
+
+                xbgr32[outPos2++] = b;      // B
+                xbgr32[outPos2++] = g;      // G
+                xbgr32[outPos2++] = r;      // R
+                xbgr32[outPos2++] = 0xffU;  // A
+
+                convert_yuv_to_rgb_SDTV_pixel(y3, u, v, r, g, b);
+
+                xbgr32[outPos2++] = b;      // B
+                xbgr32[outPos2++] = g;      // G
+                xbgr32[outPos2++] = r;      // R
+                xbgr32[outPos2++] = 0xffU;  // A
+            }
+        }
+    }
+    else {
+        // Not supported
+        return -1;
+    }
+
+    return 0;
+}
+
+
+/*
+ * Memory layout yv12:
+ *   +----+----+----+----+----+----+----+----+
+ *   | Y0 | Y1 | Y2 | Y3 |
+ *   +----+----+----+----+
+ *   |
+ *   |
+ *   |
+ *   +----+----+----+----+----+----+----+----+
+ *   | V0 | V1 |
+ *   +----+----+
+ *   |
+ *   |
+ *   |
+ *   +----+----+----+----+----+----+----+----+
+ *   | U0 | U1 |
+ *   +----+----+
+ *   |
+ *   |
+ *   |
+ *   +----+----+----+----+----+----+----+----+
+ */
+int convert_yu12_to_xbgr32_buffer(unsigned char *yu12, unsigned char *xbgr32, unsigned int width, unsigned int height, unsigned long bufferLength, long stride)
+{
+    unsigned int  yPos1, yPos2;
+    unsigned int  uPos;
+    unsigned int  vPos;
+    int           y0, y1, y2, y3;
+    int           u;
+    int           v;
+    int           r;
+    int           g;
+    int           b;
+    int           outPos1;
+    int           outPos2;
+    bool          upsideDown = (stride < 0);
+
+    if (!upsideDown) {
+        for (unsigned int h = 0; h < height; h = h + 2) {
+            for (unsigned int w = 0; w < width; w = w + 2) {
+                yPos1 = h * width + w;
+                yPos2 = (h + 1) * width + w;
+                vPos = (height * width) + ((h / 2) * (width / 2) + (w / 2));
+                uPos = vPos + (height * width / 4);
+                outPos1 = (h * width + w) * 4;
+                outPos2 = ((h + 1) * width + w) * 4;
+
+                y0 = yu12[yPos1];
+                y1 = yu12[yPos1+1];
+                y2 = yu12[yPos2];
+                y3 = yu12[yPos2+1];
+                v = yu12[uPos];
+                u = yu12[vPos];
+
+                convert_yuv_to_rgb_SDTV_pixel(y0, u, v, r, g, b);
+
+                xbgr32[outPos1++] = b;      // B
+                xbgr32[outPos1++] = g;      // G
+                xbgr32[outPos1++] = r;      // R
+                xbgr32[outPos1++] = 0xffU;  // A
+
+                convert_yuv_to_rgb_SDTV_pixel(y1, u, v, r, g, b);
+
+                xbgr32[outPos1++] = b;      // B
+                xbgr32[outPos1++] = g;      // G
+                xbgr32[outPos1++] = r;      // R
+                xbgr32[outPos1++] = 0xffU;  // A
+
+                convert_yuv_to_rgb_SDTV_pixel(y2, u, v, r, g, b);
+
+                xbgr32[outPos2++] = b;      // B
+                xbgr32[outPos2++] = g;      // G
+                xbgr32[outPos2++] = r;      // R
+                xbgr32[outPos2++] = 0xffU;  // A
+
+                convert_yuv_to_rgb_SDTV_pixel(y3, u, v, r, g, b);
+
+                xbgr32[outPos2++] = b;      // B
+                xbgr32[outPos2++] = g;      // G
+                xbgr32[outPos2++] = r;      // R
+                xbgr32[outPos2++] = 0xffU;  // A
+            }
+        }
+    }
+    else {
+        // Not supported
+        return -1;
+    }
+
+    return 0;
+}
+
+
+/*
+ * Memory layout yvu420:
+ *   +----+----+----+----+----+----+----+----+
+ *   | Y0 | Y1 | Y2 | Y3 |
+ *   +----+----+----+----+
+ *   |
+ *   |
+ *   |
+ *   +----+----+----+----+----+----+----+----+
+ *   | V0 | V1 |
+ *   +----+----+
+ *   |
+ *   |
+ *   |
+ *   +----+----+----+----+----+----+----+----+
+ *   | U0 | U1 |
+ *   +----+----+
+ *   |
+ *   |
+ *   |
+ *   +----+----+----+----+----+----+----+----+
+ */
+int convert_yvu420m_to_xbgr32_buffer(unsigned char *yvu420m, unsigned char *xbgr32, unsigned int width, unsigned int height, unsigned long bufferLength, long stride)
+{
+    unsigned int  yPos1, yPos2;
+    unsigned int  uPos;
+    unsigned int  vPos;
+    int           y0, y1, y2, y3;
+    int           u;
+    int           v;
+    int           r;
+    int           g;
+    int           b;
+    int           outPos1;
+    int           outPos2;
+    bool          upsideDown = (stride < 0);
+
+    if (!upsideDown) {
+        for (unsigned int h = 0; h < height; h = h + 2) {
+            for (unsigned int w = 0; w < width; w = w + 2) {
+                yPos1 = h * width + w;
+                yPos2 = (h + 1) * width + w;
+                uPos = (height * width) + ((h / 2) * (width / 2) + (w / 2));
+                vPos = uPos + (height * width / 4);
+                outPos1 = (h * width + w) * 4;
+                outPos2 = ((h + 1) * width + w) * 4;
+
+                y0 = yvu420m[yPos1];
+                y1 = yvu420m[yPos1+1];
+                y2 = yvu420m[yPos2];
+                y3 = yvu420m[yPos2+1];
+                v = yvu420m[vPos];
+                u = yvu420m[uPos];
 
                 convert_yuv_to_rgb_SDTV_pixel(y0, u, v, r, g, b);
 

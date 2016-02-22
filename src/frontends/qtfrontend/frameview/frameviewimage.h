@@ -246,6 +246,14 @@ private:
     const QImage createAlphaImage(QImage &image, int alpha);
 
     /**
+     * Change the alpha value of the image.
+     *
+     * @param image the first image of the two to differentiate.
+     * @return a image with the new alpha value.
+     */
+    const QImage createGrayAlphaImage(QImage &image, int alpha);
+
+    /**
      * Show the logo as active image
      */
     void showLogo();

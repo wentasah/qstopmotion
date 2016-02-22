@@ -28,6 +28,7 @@
 
 const int FrameViewImage::alphaLut[5] = { 128, 64, 43, 32, 26 };
 
+
 FrameViewImage::FrameViewImage(Frontend *f, QWidget *parent, int pS)
     : FrameViewInterface(f, parent, pS)
 {
@@ -381,7 +382,8 @@ void FrameViewImage::paintEvent(QPaintEvent *)
             offset = imageBuffer.count() - 1;
             for (int i = 0; i < imageBuffer.count() && i < mixCount; ++i) {
                 QImage image(imageBuffer[offset - i]);
-                QImage alphaImage(this->createAlphaImage(image, alphaLut[i]));
+                // QImage alphaImage(this->createAlphaImage(image, alphaLut[i]));
+                QImage alphaImage(this->createGrayAlphaImage(image, alphaLut[i]));
                 imagePainter.drawImage(0, 0, alphaImage);
             }
             break;
@@ -619,9 +621,11 @@ const QImage FrameViewImage::createAlphaImage(QImage &image, int alpha)
 
     int imageRows = image.height();
     int imageCols = image.width();
-    // QImage alphaImage(imageCols, imageRows, QImage::Format_ARGB32);
     QImage alphaImage(image);
     QColor alphaColor;
+
+    // We assume the format to be RGB32!!!
+    Q_ASSERT(image.format() == QImage::Format_RGB32);
 
     // Goes through the surfaces as one-dimensional arrays.
     for (int r = 0; r < imageRows; ++r) {
@@ -635,6 +639,32 @@ const QImage FrameViewImage::createAlphaImage(QImage &image, int alpha)
     // qDebug() << "FrameViewImage::createAlphaImage --> End";
 
     return alphaImage;
+}
+
+
+const QImage FrameViewImage::createGrayAlphaImage(QImage &image, int alpha)
+{
+    // qDebug() << "FrameViewImage::createGrayAlphaImage --> Start";
+
+    int imageRows = image.height();
+    int imageCols = image.width();
+
+    // We assume the format to be RGB32!!!
+    Q_ASSERT(image.format() == QImage::Format_RGB32);
+
+    // Goes through the surfaces as one-dimensional arrays.
+    for (int ii = 0; ii < imageRows; ii++) {
+        QRgb *pixel = reinterpret_cast<QRgb*>(image.scanLine(ii));
+        QRgb *end = pixel + imageCols;
+        for (; pixel != end; pixel++) {
+            int gray = qGray(*pixel);
+            *pixel = QColor(QColor(gray, gray, gray, qAlpha(*pixel)).lighter(150)).rgb();
+        }
+    }
+
+    // qDebug() << "FrameViewImage::createGrayAlphaImage --> End";
+
+    return image;
 }
 
 

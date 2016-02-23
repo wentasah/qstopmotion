@@ -158,7 +158,7 @@ int convert_uyvy_to_xbgr32_buffer(unsigned char *uyvy,
  * @param stride
  * @return
  */
-int convert_yv12_to_xbgr32_buffer(unsigned char *yv12,
+int convert_yu12_to_xbgr32_buffer(unsigned char *yu12,
                                   unsigned char *xbgr32,
                                   unsigned int   width,
                                   unsigned int   height,
@@ -196,7 +196,7 @@ int convert_yuv420m_to_xbgr32_buffer(unsigned char *yuv420m,
  * @param stride
  * @return
  */
-int convert_yu12_to_xbgr32_buffer(unsigned char *yu12,
+int convert_yv12_to_xbgr32_buffer(unsigned char *yv12,
                                   unsigned char *xbgr32,
                                   unsigned int   width,
                                   unsigned int   height,
@@ -246,6 +246,7 @@ int convert_nv12_to_xbgr32_buffer(unsigned char *nv12,
  ******************************************************************************/
 
 int convert_rgb_to_yuv_pixel(int r8, int g8, int b8);
+
 int convert_rgb24_to_yuy2_buffer(unsigned char *rgb24,
                                  unsigned char *yuy2,
                                  unsigned int   width,

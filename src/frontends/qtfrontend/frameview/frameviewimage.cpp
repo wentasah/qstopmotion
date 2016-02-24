@@ -228,9 +228,9 @@ void FrameViewImage::nextAnimationFrame(int exposureIndex)
     if (!exposure->isEmpty()) {
         QImage nextImage;
         nextImage.load(exposure->getImagePath());
-        activeImage = clipAndScale(nextImage);
+        activeImage = scaleImage(nextImage);
         QPainter widgetPainter(this);
-        widgetPainter.drawImage(0, 0, activeImage);
+        widgetPainter.drawImage(0, 0, scaleImage(activeImage));
     }
 
     // Call the redraw function
@@ -258,7 +258,7 @@ void FrameViewImage::redraw()
         return;
     }
 
-    activeImage = clipAndScale(liveImage);
+    activeImage = clipImage(liveImage);
 
     update();
 
@@ -295,7 +295,7 @@ void FrameViewImage::nextPlayBack()
         if (!exposure->isEmpty()) {
             activeImage.load(exposure->getImagePath());
             QPainter widgetPainter(this);
-            widgetPainter.drawImage(0, 0, activeImage);
+            widgetPainter.drawImage(0, 0, scaleImage(activeImage));
         }
 
         this->update();
@@ -331,45 +331,24 @@ void FrameViewImage::resizeEvent(QResizeEvent*)
 
     qDebug() << "FrameViewImage::resizeEvent --> End";
 }
-/*
-bool FrameViewImage::event(QEvent *event)
-{
-    qDebug() << "FrameViewImage::event --> Start";
 
-    qDebug() << "Event: " << event;
-
-    if (event->type() == QEvent::UpdateRequest) {
-        bool result = QWidget::event(event);
-        // drawImage();
-        qDebug() << "FrameViewImage::event --> End (UpdateRequest)";
-        return result;
-    }
-
-    qDebug() << "FrameViewImage::event --> End";
-
-    return QWidget::event(event);
-}
-*/
 
 void FrameViewImage::paintEvent(QPaintEvent *)
 {
-    // qDebug() << "FrameViewImage::paintEvent --> Start";
+    qDebug() << "FrameViewImage::paintEvent --> Start";
 
-    QImage   outputImage = activeImage;
+    // QImage   outputImage = activeImage;
 
-    QPainter imagePainter(&outputImage);
     QPainter widgetPainter(this);
     QColor   gridColor;
     QRect    widgetRect(this->rect());
-    QSize    outputImageSize(outputImage.size());
-    int      x = (widgetRect.width() - outputImageSize.width()) / 2;
-    int      y = (widgetRect.height() - outputImageSize.height()) / 2;
 
     widgetPainter.setRenderHint(QPainter::Antialiasing, true);
 
     if (displayMode == liveImageMode) {
         // Playing live video
 
+        QPainter imagePainter(&activeImage);
         int offset;
 
         switch (mixMode) {
@@ -384,7 +363,7 @@ void FrameViewImage::paintEvent(QPaintEvent *)
                 QImage image(imageBuffer[offset - i]);
                 // QImage alphaImage(this->createAlphaImage(image, alphaLut[i]));
                 QImage alphaImage(this->createGrayAlphaImage(image, alphaLut[i]));
-                imagePainter.drawImage(0, 0, alphaImage);
+                imagePainter.drawImage(0, 0, scaleImage(alphaImage));
             }
             break;
         case 1:
@@ -392,9 +371,9 @@ void FrameViewImage::paintEvent(QPaintEvent *)
 
             if (imageBuffer.count() > 0) {
                 QImage image(imageBuffer.last());
-                QImage diffImage(this->createDifferentiatedImage(outputImage, image));
-                imagePainter.eraseRect(outputImage.rect());
-                imagePainter.drawImage(0, 0, diffImage);
+                QImage diffImage(this->createDifferentiatedImage(activeImage, image));
+                imagePainter.eraseRect(activeImage.rect());
+                imagePainter.drawImage(0, 0, scaleImage(diffImage));
             }
             break;
         }
@@ -410,6 +389,10 @@ void FrameViewImage::paintEvent(QPaintEvent *)
         widgetPainter.fillRect(widgetRect, QColor(225, 225, 225, 255));
     default:
         // Display the actual image
+        QImage   outputImage = scaleImage(activeImage);
+        QSize    outputImageSize(outputImage.size());
+        int x = (widgetRect.width() - outputImageSize.width()) / 2;
+        int y = (widgetRect.height() - outputImageSize.height()) / 2;
         widgetPainter.drawImage(x, y, outputImage);
     }
 
@@ -486,7 +469,7 @@ void FrameViewImage::activateExposure()
 
         if (exposure != NULL) {
             const QString fileName = exposure->getImagePath();
-            activeImage = clipAndScale(QImage(fileName));
+            activeImage = QImage(fileName);
         } else {
             showLogo();
         }
@@ -547,7 +530,7 @@ void FrameViewImage::addToImageBuffer(QImage const image)
 {
     qDebug() << "FrameViewImage::addToImageBuffer --> Start";
 
-    imageBuffer.append(clipAndScale(image));
+    imageBuffer.append(image);
 
     qDebug() << "FrameViewImage::addToImageBuffer --> End";
 }
@@ -658,7 +641,7 @@ const QImage FrameViewImage::createGrayAlphaImage(QImage &image, int alpha)
         QRgb *end = pixel + imageCols;
         for (; pixel != end; pixel++) {
             int gray = qGray(*pixel);
-            *pixel = QColor(QColor(gray, gray, gray, qAlpha(*pixel)).lighter(150)).rgb();
+            *pixel = QColor(QColor(gray, gray, gray, qAlpha(*pixel)).lighter(200)).rgb();
         }
     }
 
@@ -675,7 +658,7 @@ void FrameViewImage::showLogo()
     QString iconFile(frontend->getGraphicsDirName());
     iconFile.append(QLatin1String("qstopmotion_logo_60.png"));
 
-    activeImage = QImage(iconFile);
+    activeImage = scaleImage(QImage(iconFile));
 
     displayMode = logoMode;
     update();

@@ -364,7 +364,7 @@ void FrameViewInterface::activateTake()
 }
 
 
-QImage FrameViewInterface::clipAndScale(QImage image)
+QImage FrameViewInterface::clipImage(QImage image)
 {
     QImage outputImage;
     QImage clipImage;
@@ -514,19 +514,34 @@ QImage FrameViewInterface::clipAndScale(QImage image)
         }
     }
     else {
-        // All other modes
+        // All other modes - nothing to do
 
-        // Scale the image to the output size
+        outputImage = image;
+    }
 
-        widthScale = imageWidth / frameViewWidth;
-        heightScale = imageHeight / frameViewHeight;
+    return outputImage;
+}
 
-        if (widthScale > heightScale) {
-            outputImage = image.scaledToWidth(frameViewWidth);
-        }
-        else {
-            outputImage = image.scaledToHeight(frameViewHeight);
-        }
+
+QImage FrameViewInterface::scaleImage(QImage image)
+{
+    QImage outputImage;
+
+    double imageWidth = image.width();
+    double imageHeight = image.height();
+    double widthScale = 0;
+    double heightScale = 0;
+
+    // Scale the image to the frame view size
+
+    widthScale = imageWidth / frameViewWidth;
+    heightScale = imageHeight / frameViewHeight;
+
+    if (widthScale > heightScale) {
+        outputImage = image.scaledToWidth(frameViewWidth);
+    }
+    else {
+        outputImage = image.scaledToHeight(frameViewHeight);
     }
 
     return outputImage;

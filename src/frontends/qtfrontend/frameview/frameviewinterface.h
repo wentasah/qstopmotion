@@ -382,11 +382,18 @@ protected:
     virtual void showLogo() = 0;
 
     /**
-     * Clip and scale the image to the frame view size
-     * @param image The image to clip and scale
-     * @return The cliped and scaled image
+     * Clip the image to the video size
+     * @param image The image to clip
+     * @return The cliped image
      */
-    QImage clipAndScale(QImage image);
+    QImage clipImage(QImage image);
+
+    /**
+     * Scale the image to the frame view size
+     * @param image The image to scale
+     * @return The scaled image
+     */
+    QImage scaleImage(QImage image);
 
     /**
      * Frontend of the application

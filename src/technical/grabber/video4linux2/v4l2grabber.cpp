@@ -327,7 +327,7 @@ const QImage V4L2Grabber::getImage()
     QImage   image;
     int      imageLoaded = 0;
 
-    qDebug() << "V4L2Grabber::getImage --> Start";
+    // qDebug() << "V4L2Grabber::getImage --> Start";
     
     // Dequeue a buffer.
     memset(&buf, 0, sizeof(struct v4l2_buffer));
@@ -508,7 +508,7 @@ const QImage V4L2Grabber::getImage()
         firstImage = false;
     }
     
-    qDebug() << "V4L2Grabber::getImage --> End";
+    // qDebug() << "V4L2Grabber::getImage --> End";
 	
     return image;
 }

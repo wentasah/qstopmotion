@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2015 by                                                *
+ *  Copyright (C) 2005-2016 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -83,16 +83,19 @@ void CameraControllerDialog::makeGUI()
     qualityGroupBox->setLayout(qualityLayout);
     qualityCount = 0;
 
+    // ------------------------------------
     brightnessCheckBox = new QCheckBox("brightnessCheckBox");
     brightnessCheckBox->setChecked(false);
     connect(brightnessCheckBox, SIGNAL(stateChanged(int)), this, SLOT(changeAutoBrightness(int)));
     brightnessCheckBox->hide();
 
     brightnessLabel = new QLabel("brightnessLabel");
-    brightnessComboBox = new QComboBox();
-    connect(brightnessComboBox, SIGNAL(activated(int)), this, SLOT(changeBrightness(int)));
+    brightnessSlider = new QSlider(Qt::Horizontal);
+    connect(brightnessSlider, SIGNAL(valueChanged(int)), this, SLOT(changeBrightness(int)));
+    // connect(brightnessSlider, SIGNAL(valueChanged(int)), this, SLOT(movedBrightness(int)));
     brightnessLabel->hide();
-    brightnessComboBox->hide();
+    brightnessSlider->hide();
+    // ------------------------------------
 
     contrastCheckBox = new QCheckBox("contrastCheckBox");
     contrastCheckBox->setChecked(false);
@@ -291,7 +294,7 @@ void CameraControllerDialog::makeGUI()
 
     qualityLayout->addWidget(brightnessCheckBox);
     qualityLayout->addWidget(brightnessLabel);
-    qualityLayout->addWidget(brightnessComboBox);
+    qualityLayout->addWidget(brightnessSlider);
     qualityLayout->addWidget(contrastCheckBox);
     qualityLayout->addWidget(contrastLabel);
     qualityLayout->addWidget(contrastComboBox);
@@ -435,17 +438,14 @@ void CameraControllerDialog::initialize()
     }
     if (capabilities->isCapability()) {
         qualityCount++;
-        if (!capabilities->isAutomatic()) {
-            brightnessLabel->show();
-        }
-        brightnessComboBox->show();
-        brightnessComboBox->setEnabled(false);
-        stepBrightness = fillComboBox(brightnessComboBox, capabilities);
+        brightnessLabel->show();
+        brightnessSlider->show();
+        brightnessSlider->setEnabled(false);
         if (preferences->getIntegerPreference(deviceId, "brightness", value) == false) {
             // Calculate default value
-            value = (capabilities->getDefault() - capabilities->getMinimum()) / capabilities->getStep();
+            value = capabilities->getDefault();
         }
-        brightnessComboBox->setCurrentIndex(value);
+        stepBrightness = configureSlider(brightnessSlider, capabilities, value);
     }
 
     capabilities = grabberController->getContrastCaps();
@@ -468,9 +468,7 @@ void CameraControllerDialog::initialize()
     }
     if (capabilities->isCapability()) {
         qualityCount++;
-        if (!capabilities->isAutomatic()) {
-            contrastLabel->show();
-        }
+        contrastLabel->show();
         contrastComboBox->show();
         contrastComboBox->setEnabled(false);
         stepContrast = fillComboBox(contrastComboBox, capabilities);
@@ -501,9 +499,7 @@ void CameraControllerDialog::initialize()
     }
     if (capabilities->isCapability()) {
         qualityCount++;
-        if (!capabilities->isAutomatic()) {
-            saturationLabel->show();
-        }
+        saturationLabel->show();
         saturationComboBox->show();
         saturationComboBox->setEnabled(false);
         stepSaturation = fillComboBox(saturationComboBox, capabilities);
@@ -534,9 +530,7 @@ void CameraControllerDialog::initialize()
     }
     if (capabilities->isCapability()) {
         qualityCount++;
-        if (!capabilities->isAutomatic()) {
-            hueLabel->show();
-        }
+        hueLabel->show();
         hueComboBox->show();
         hueComboBox->setEnabled(false);
         stepHue = fillComboBox(hueComboBox, capabilities);
@@ -567,9 +561,7 @@ void CameraControllerDialog::initialize()
     }
     if (capabilities->isCapability()) {
         qualityCount++;
-        if (!capabilities->isAutomatic()) {
-            gammaLabel->show();
-        }
+        gammaLabel->show();
         gammaComboBox->show();
         gammaComboBox->setEnabled(false);
         stepGamma = fillComboBox(gammaComboBox, capabilities);
@@ -600,9 +592,7 @@ void CameraControllerDialog::initialize()
     }
     if (capabilities->isCapability()) {
         qualityCount++;
-        if (!capabilities->isAutomatic()) {
-            sharpnessLabel->show();
-        }
+        sharpnessLabel->show();
         sharpnessComboBox->show();
         sharpnessComboBox->setEnabled(false);
         stepSharpness = fillComboBox(sharpnessComboBox, capabilities);
@@ -633,9 +623,7 @@ void CameraControllerDialog::initialize()
     }
     if (capabilities->isCapability()) {
         qualityCount++;
-        if (!capabilities->isAutomatic()) {
-            backlightLabel->show();
-        }
+        backlightLabel->show();
         backlightComboBox->show();
         backlightComboBox->setEnabled(false);
         stepBacklight = fillComboBox(backlightComboBox, capabilities);
@@ -666,9 +654,7 @@ void CameraControllerDialog::initialize()
     }
     if (capabilities->isCapability()) {
         qualityCount++;
-        if (!capabilities->isAutomatic()) {
-            whiteLabel->show();
-        }
+        whiteLabel->show();
         whiteComboBox->show();
         whiteComboBox->setEnabled(false);
         stepWhite = fillComboBox(whiteComboBox, capabilities);
@@ -699,9 +685,7 @@ void CameraControllerDialog::initialize()
     }
     if (capabilities->isCapability()) {
         qualityCount++;
-        if (!capabilities->isAutomatic()) {
-            gainLabel->show();
-        }
+        gainLabel->show();
         gainComboBox->show();
         gainComboBox->setEnabled(false);
         stepGain = fillComboBox(gainComboBox, capabilities);
@@ -732,9 +716,7 @@ void CameraControllerDialog::initialize()
     }
     if (capabilities->isCapability()) {
         qualityCount++;
-        if (!capabilities->isAutomatic()) {
-            colorLabel->show();
-        }
+        colorLabel->show();
         colorComboBox->show();
         colorComboBox->setEnabled(false);
         stepColor = fillComboBox(colorComboBox, capabilities);
@@ -772,9 +754,7 @@ void CameraControllerDialog::initialize()
     }
     if (capabilities->isCapability()) {
         controlCount++;
-        if (!capabilities->isAutomatic()) {
-            exposureLabel->show();
-        }
+        exposureLabel->show();
         exposureComboBox->show();
         exposureComboBox->setEnabled(false);
         stepExposure = fillComboBox(exposureComboBox, capabilities);
@@ -805,9 +785,7 @@ void CameraControllerDialog::initialize()
     }
     if (capabilities->isCapability()) {
         controlCount++;
-        if (!capabilities->isAutomatic()) {
-            zoomLabel->show();
-        }
+        zoomLabel->show();
         zoomComboBox->show();
         zoomComboBox->setEnabled(false);
         stepZoom = fillComboBox(zoomComboBox, capabilities);
@@ -838,9 +816,7 @@ void CameraControllerDialog::initialize()
     }
     if (capabilities->isCapability()) {
         controlCount++;
-        if (!capabilities->isAutomatic()) {
-            focusLabel->show();
-        }
+        focusLabel->show();
         focusComboBox->show();
         focusComboBox->setEnabled(false);
         stepFocus = fillComboBox(focusComboBox, capabilities);
@@ -871,9 +847,7 @@ void CameraControllerDialog::initialize()
     }
     if (capabilities->isCapability()) {
         controlCount++;
-        if (!capabilities->isAutomatic()) {
-            panLabel->show();
-        }
+        panLabel->show();
         panComboBox->show();
         panComboBox->setEnabled(false);
         stepPan = fillComboBox(panComboBox, capabilities);
@@ -904,9 +878,7 @@ void CameraControllerDialog::initialize()
     }
     if (capabilities->isCapability()) {
         controlCount++;
-        if (!capabilities->isAutomatic()) {
-            tiltLabel->show();
-        }
+        tiltLabel->show();
         tiltComboBox->show();
         tiltComboBox->setEnabled(false);
         stepTilt = fillComboBox(tiltComboBox, capabilities);
@@ -937,9 +909,7 @@ void CameraControllerDialog::initialize()
     }
     if (capabilities->isCapability()) {
         controlCount++;
-        if (!capabilities->isAutomatic()) {
-            irisLabel->show();
-        }
+        irisLabel->show();
         irisComboBox->show();
         irisComboBox->setEnabled(false);
         stepIris = fillComboBox(irisComboBox, capabilities);
@@ -970,9 +940,7 @@ void CameraControllerDialog::initialize()
     }
     if (capabilities->isCapability()) {
         controlCount++;
-        if (!capabilities->isAutomatic()) {
-            rollLabel->show();
-        }
+        rollLabel->show();
         rollComboBox->show();
         rollComboBox->setEnabled(false);
         stepRoll = fillComboBox(rollComboBox, capabilities);
@@ -1032,13 +1000,14 @@ bool CameraControllerDialog::setUp()
         changeAutoBrightness(checked, false);
     }
     if (capabilities->isCapability()) {
-        brightnessComboBox->setEnabled(true);
+        brightnessSlider->setEnabled(true);
         if (preferences->getIntegerPreference(deviceId, "brightness", value) == false) {
             // Calculate default value
             value = (capabilities->getDefault() - capabilities->getMinimum()) / capabilities->getStep();
         }
         changeBrightness(value, false);
     }
+    qDebug() << "CameraControllerDialog::setUp --> Brightness enabeled:" << brightnessSlider->isEnabled();
 
     progress.setValue(progressValue++);
     capabilities = grabberController->getContrastCaps();
@@ -1477,7 +1446,7 @@ bool CameraControllerDialog::tearDown()
         brightnessCheckBox->setEnabled(false);
     }
     if (capabilities->isCapability()) {
-        brightnessComboBox->setEnabled(false);
+        brightnessSlider->setEnabled(false);
     }
 
     capabilities = grabberController->getContrastCaps();
@@ -1634,11 +1603,11 @@ void CameraControllerDialog::changeAutoBrightness(int newState, bool save)
     PreferencesTool *preferences = frontend->getPreferences();
 
     if (newState) {
-        brightnessComboBox->setEnabled(false);
+        brightnessSlider->setEnabled(false);
         grabberController->setAutomaticBrightness(true);
     }
     else {
-        brightnessComboBox->setEnabled(true);
+        brightnessSlider->setEnabled(true);
         grabberController->setAutomaticBrightness(false);
     }
     if (save) {
@@ -1649,26 +1618,22 @@ void CameraControllerDialog::changeAutoBrightness(int newState, bool save)
 }
 
 
-void CameraControllerDialog::changeBrightness(int index)
+void CameraControllerDialog::changeBrightness(int value)
 {
-    changeBrightness(index, true);
+    brightnessSlider->setToolTip(QString::number(value));
+    changeBrightness(value, true);
 }
 
 
-void CameraControllerDialog::changeBrightness(int index, bool save)
+void CameraControllerDialog::changeBrightness(int value, bool save)
 {
     qDebug() << "CameraControllerDialog::changeBrightness --> Start";
 
     PreferencesTool *preferences = frontend->getPreferences();
-    long value = grabberController->getBrightnessCaps()->getMinimum() + (index * stepBrightness);
-    long maxValue = grabberController->getBrightnessCaps()->getMaximum();
 
-    if (value > maxValue) {
-        value = maxValue;
-    }
     grabberController->setBrightness(value);
     if (save) {
-        preferences->setIntegerPreference(deviceId, "brightness", index);
+        preferences->setIntegerPreference(deviceId, "brightness", value);
     }
 
     qDebug() << "CameraControllerDialog::changeBrightness --> End";
@@ -2554,6 +2519,26 @@ int CameraControllerDialog::fillComboBox(QComboBox *comboBox, GrabberControlCapa
 }
 
 
+int CameraControllerDialog::configureSlider(QSlider *slider, GrabberControlCapabilities *controlCaps, int value)
+{
+    slider->setMinimum(controlCaps->getMinimum());
+    slider->setMaximum(controlCaps->getMaximum());
+    slider->setSingleStep(controlCaps->getStep());
+    slider->setPageStep(controlCaps->getStep()/10);
+    slider->setValue(value);
+
+    slider->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Maximum);
+    slider->setTracking(true);
+    slider->setTickInterval(10);
+    slider->setTickPosition(QSlider::TicksBelow);
+    slider->setFocusPolicy(Qt::NoFocus);
+
+    qDebug() << "CameraControllerDialog::configureSlider --> Values: Min:" << slider->minimum() << " Step:" << slider->singleStep() << " Max:" << slider->maximum();
+
+    return controlCaps->getStep();
+}
+
+
 void CameraControllerDialog::reset()
 {
     qDebug() << "CameraControllerDialog::reset --> Start";
@@ -2574,7 +2559,7 @@ void CameraControllerDialog::reset()
     capabilities = grabberController->getBrightnessCaps();
     if (capabilities->isCapability()) {
         value = (capabilities->getDefault() - capabilities->getMinimum()) / capabilities->getStep();
-        brightnessComboBox->setCurrentIndex(value);
+        brightnessSlider->setValue(value);
         changeBrightness(value, true);
     }
 

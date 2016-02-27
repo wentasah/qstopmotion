@@ -335,7 +335,7 @@ void FrameViewImage::resizeEvent(QResizeEvent*)
 
 void FrameViewImage::paintEvent(QPaintEvent *)
 {
-    qDebug() << "FrameViewImage::paintEvent --> Start";
+    // qDebug() << "FrameViewImage::paintEvent --> Start";
 
     // QImage   outputImage = activeImage;
 

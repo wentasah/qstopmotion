@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2015 by                                                *
+ *  Copyright (C) 2005-2016 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -93,17 +93,17 @@ private slots:
     /**
      * Slot for notified the camera controller when the brightness changes,
      * so that brightness can be updated.
-     * @param index the new brightness value.
+     * @param value the new brightness value.
      */
-    void changeBrightness(int index);
+    void changeBrightness(int value);
 
     /**
      * Slot for notified the camera controller when the brightness changes,
      * so that brightness can be updated.
-     * @param index the new brightness value.
+     * @param value the new brightness value.
      * @param save If true than the new value is saved in the preferences file.
      */
-    void changeBrightness(int index, bool save);
+    void changeBrightness(int value, bool save);
 
     /**
      * Slot for notified the camera contoller when automatic contrast is changed, so that
@@ -606,6 +606,15 @@ private:
      */
     int fillComboBox(QComboBox *comboBox, GrabberControlCapabilities *controlCaps);
 
+    /**
+     * Configure the slider with the values.
+     * @param slider The slider to configure.
+     * @param controlCaps The control capabilities.
+     * @param value The actual value of the slider.
+     * @return The step lengt for the values of the slider.
+     */
+    int configureSlider(QSlider *slider, GrabberControlCapabilities *controlCaps, int value);
+
     Frontend     *frontend;
 
     ImageGrabberDevice *grabberDevice;
@@ -617,7 +626,7 @@ private:
 
     QCheckBox    *brightnessCheckBox;
     QLabel       *brightnessLabel;
-    QComboBox    *brightnessComboBox;
+    QSlider      *brightnessSlider;
     int           stepBrightness;
 
     QCheckBox    *contrastCheckBox;

@@ -83,7 +83,6 @@ void CameraControllerDialog::makeGUI()
     qualityGroupBox->setLayout(qualityLayout);
     qualityCount = 0;
 
-    // ------------------------------------
     brightnessCheckBox = new QCheckBox("brightnessCheckBox");
     brightnessCheckBox->setChecked(false);
     connect(brightnessCheckBox, SIGNAL(stateChanged(int)), this, SLOT(changeAutoBrightness(int)));
@@ -92,10 +91,8 @@ void CameraControllerDialog::makeGUI()
     brightnessLabel = new QLabel("brightnessLabel");
     brightnessSlider = new QSlider(Qt::Horizontal);
     connect(brightnessSlider, SIGNAL(valueChanged(int)), this, SLOT(changeBrightness(int)));
-    // connect(brightnessSlider, SIGNAL(valueChanged(int)), this, SLOT(movedBrightness(int)));
     brightnessLabel->hide();
     brightnessSlider->hide();
-    // ------------------------------------
 
     contrastCheckBox = new QCheckBox("contrastCheckBox");
     contrastCheckBox->setChecked(false);
@@ -103,10 +100,10 @@ void CameraControllerDialog::makeGUI()
     contrastCheckBox->hide();
 
     contrastLabel = new QLabel("contrastLabel");
-    contrastComboBox = new QComboBox();
-    connect(contrastComboBox, SIGNAL(activated(int)), this, SLOT(changeContrast(int)));
+    contrastSlider = new QSlider(Qt::Horizontal);
+    connect(contrastSlider, SIGNAL(valueChanged(int)), this, SLOT(changeContrast(int)));
     contrastLabel->hide();
-    contrastComboBox->hide();
+    contrastSlider->hide();
 
     saturationCheckBox = new QCheckBox("saturationCheckBox");
     saturationCheckBox->setChecked(false);
@@ -114,10 +111,10 @@ void CameraControllerDialog::makeGUI()
     saturationCheckBox->hide();
 
     saturationLabel = new QLabel("saturationLabel");
-    saturationComboBox = new QComboBox();
-    connect(saturationComboBox, SIGNAL(activated(int)), this, SLOT(changeSaturation(int)));
+    saturationSlider = new QSlider(Qt::Horizontal);
+    connect(saturationSlider, SIGNAL(valueChanged(int)), this, SLOT(changeSaturation(int)));
     saturationLabel->hide();
-    saturationComboBox->hide();
+    saturationSlider->hide();
 
     hueCheckBox = new QCheckBox("hueCheckBox");
     hueCheckBox->setChecked(false);
@@ -125,10 +122,10 @@ void CameraControllerDialog::makeGUI()
     hueCheckBox->hide();
 
     hueLabel = new QLabel("hueLabel");
-    hueComboBox = new QComboBox();
-    connect(hueComboBox, SIGNAL(activated(int)), this, SLOT(changeHue(int)));
+    hueSlider = new QSlider(Qt::Horizontal);
+    connect(hueSlider, SIGNAL(valueChanged(int)), this, SLOT(changeHue(int)));
     hueLabel->hide();
-    hueComboBox->hide();
+    hueSlider->hide();
 
     gammaCheckBox = new QCheckBox("gammaCheckBox");
     gammaCheckBox->setChecked(false);
@@ -136,10 +133,10 @@ void CameraControllerDialog::makeGUI()
     gammaCheckBox->hide();
 
     gammaLabel = new QLabel("gammaLabel");
-    gammaComboBox = new QComboBox();
-    connect(gammaComboBox, SIGNAL(activated(int)), this, SLOT(changeGamma(int)));
+    gammaSlider = new QSlider(Qt::Horizontal);
+    connect(gammaSlider, SIGNAL(valueChanged(int)), this, SLOT(changeGamma(int)));
     gammaLabel->hide();
-    gammaComboBox->hide();
+    gammaSlider->hide();
 
     sharpnessCheckBox = new QCheckBox("sharpnessCheckBox");
     sharpnessCheckBox->setChecked(false);
@@ -147,10 +144,10 @@ void CameraControllerDialog::makeGUI()
     sharpnessCheckBox->hide();
 
     sharpnessLabel = new QLabel("sharpnessLabel");
-    sharpnessComboBox = new QComboBox();
-    connect(sharpnessComboBox, SIGNAL(activated(int)), this, SLOT(changeSharpness(int)));
+    sharpnessSlider = new QSlider(Qt::Horizontal);
+    connect(sharpnessSlider, SIGNAL(valueChanged(int)), this, SLOT(changeSharpness(int)));
     sharpnessLabel->hide();
-    sharpnessComboBox->hide();
+    sharpnessSlider->hide();
 
     backlightCheckBox = new QCheckBox("backlightCheckBox");
     backlightCheckBox->setChecked(false);
@@ -158,10 +155,10 @@ void CameraControllerDialog::makeGUI()
     backlightCheckBox->hide();
 
     backlightLabel = new QLabel("backlightLabel");
-    backlightComboBox = new QComboBox();
-    connect(backlightComboBox, SIGNAL(activated(int)), this, SLOT(changeBacklight(int)));
+    backlightSlider = new QSlider(Qt::Horizontal);
+    connect(backlightSlider, SIGNAL(valueChanged(int)), this, SLOT(changeBacklight(int)));
     backlightLabel->hide();
-    backlightComboBox->hide();
+    backlightSlider->hide();
 
     whiteCheckBox = new QCheckBox("whiteCheckBox");
     whiteCheckBox->setChecked(false);
@@ -169,10 +166,10 @@ void CameraControllerDialog::makeGUI()
     whiteCheckBox->hide();
 
     whiteLabel = new QLabel("whiteLabel");
-    whiteComboBox = new QComboBox();
-    connect(whiteComboBox, SIGNAL(activated(int)), this, SLOT(changeWhite(int)));
+    whiteSlider = new QSlider(Qt::Horizontal);
+    connect(whiteSlider, SIGNAL(valueChanged(int)), this, SLOT(changeWhite(int)));
     whiteLabel->hide();
-    whiteComboBox->hide();
+    whiteSlider->hide();
 
     gainCheckBox = new QCheckBox("gainCheckBox");
     gainCheckBox->setChecked(false);
@@ -180,10 +177,10 @@ void CameraControllerDialog::makeGUI()
     gainCheckBox->hide();
 
     gainLabel = new QLabel("gainLabel");
-    gainComboBox = new QComboBox();
-    connect(gainComboBox, SIGNAL(activated(int)), this, SLOT(changeGain(int)));
+    gainSlider = new QSlider(Qt::Horizontal);
+    connect(gainSlider, SIGNAL(valueChanged(int)), this, SLOT(changeGain(int)));
     gainLabel->hide();
-    gainComboBox->hide();
+    gainSlider->hide();
 
     colorCheckBox = new QCheckBox("colorCheckBox");
     colorCheckBox->setChecked(false);
@@ -191,10 +188,10 @@ void CameraControllerDialog::makeGUI()
     colorCheckBox->hide();
 
     colorLabel = new QLabel("colorLabel");
-    colorComboBox = new QComboBox();
-    connect(colorComboBox, SIGNAL(activated(int)), this, SLOT(changeColor(int)));
+    colorSlider = new QSlider(Qt::Horizontal);
+    connect(colorSlider, SIGNAL(valueChanged(int)), this, SLOT(changeColor(int)));
     colorLabel->hide();
-    colorComboBox->hide();
+    colorSlider->hide();
 
     controlGroupBox = new QGroupBox("controlGroupBox");
     QVBoxLayout *controlLayout = new QVBoxLayout;
@@ -207,10 +204,10 @@ void CameraControllerDialog::makeGUI()
     exposureCheckBox->hide();
 
     exposureLabel = new QLabel("exposureLabel");
-    exposureComboBox = new QComboBox();
-    connect(exposureComboBox, SIGNAL(activated(int)), this, SLOT(changeExposure(int)));
+    exposureSlider = new QSlider(Qt::Horizontal);
+    connect(exposureSlider, SIGNAL(valueChanged(int)), this, SLOT(changeExposure(int)));
     exposureLabel->hide();
-    exposureComboBox->hide();
+    exposureSlider->hide();
 
     zoomCheckBox = new QCheckBox("zoomCheckBox");
     zoomCheckBox->setChecked(false);
@@ -218,10 +215,10 @@ void CameraControllerDialog::makeGUI()
     zoomCheckBox->hide();
 
     zoomLabel = new QLabel("zoomLabel");
-    zoomComboBox = new QComboBox();
-    connect(zoomComboBox, SIGNAL(activated(int)), this, SLOT(changeZoom(int)));
+    zoomSlider = new QSlider(Qt::Horizontal);
+    connect(zoomSlider, SIGNAL(valueChanged(int)), this, SLOT(changeZoom(int)));
     zoomLabel->hide();
-    zoomComboBox->hide();
+    zoomSlider->hide();
 
     focusCheckBox = new QCheckBox("focusCheckBox");
     focusCheckBox->setChecked(false);
@@ -229,10 +226,10 @@ void CameraControllerDialog::makeGUI()
     focusCheckBox->hide();
 
     focusLabel = new QLabel("focusLabel");
-    focusComboBox = new QComboBox();
-    connect(focusComboBox, SIGNAL(activated(int)), this, SLOT(changeFocus(int)));
+    focusSlider = new QSlider(Qt::Horizontal);
+    connect(focusSlider, SIGNAL(valueChanged(int)), this, SLOT(changeFocus(int)));
     focusLabel->hide();
-    focusComboBox->hide();
+    focusSlider->hide();
 
     panCheckBox = new QCheckBox("panCheckBox");
     panCheckBox->setChecked(false);
@@ -240,10 +237,10 @@ void CameraControllerDialog::makeGUI()
     panCheckBox->hide();
 
     panLabel = new QLabel("panLabel");
-    panComboBox = new QComboBox();
-    connect(panComboBox, SIGNAL(activated(int)), this, SLOT(changePan(int)));
+    panSlider = new QSlider(Qt::Horizontal);
+    connect(panSlider, SIGNAL(valueChanged(int)), this, SLOT(changePan(int)));
     panLabel->hide();
-    panComboBox->hide();
+    panSlider->hide();
 
     tiltCheckBox = new QCheckBox("tiltCheckBox");
     tiltCheckBox->setChecked(false);
@@ -251,10 +248,10 @@ void CameraControllerDialog::makeGUI()
     tiltCheckBox->hide();
 
     tiltLabel = new QLabel("tiltLabel");
-    tiltComboBox = new QComboBox();
-    connect(tiltComboBox, SIGNAL(activated(int)), this, SLOT(changeTilt(int)));
+    tiltSlider = new QSlider(Qt::Horizontal);
+    connect(tiltSlider, SIGNAL(valueChanged(int)), this, SLOT(changeTilt(int)));
     tiltLabel->hide();
-    tiltComboBox->hide();
+    tiltSlider->hide();
 
     irisCheckBox = new QCheckBox("irisCheckBox");
     irisCheckBox->setChecked(false);
@@ -262,10 +259,10 @@ void CameraControllerDialog::makeGUI()
     irisCheckBox->hide();
 
     irisLabel = new QLabel("irisLabel");
-    irisComboBox = new QComboBox();
-    connect(irisComboBox, SIGNAL(activated(int)), this, SLOT(changeIris(int)));
+    irisSlider = new QSlider(Qt::Horizontal);
+    connect(irisSlider, SIGNAL(valueChanged(int)), this, SLOT(changeIris(int)));
     irisLabel->hide();
-    irisComboBox->hide();
+    irisSlider->hide();
 
     rollCheckBox = new QCheckBox("rollCheckBox");
     rollCheckBox->setChecked(false);
@@ -273,10 +270,10 @@ void CameraControllerDialog::makeGUI()
     rollCheckBox->hide();
 
     rollLabel = new QLabel("rollLabel");
-    rollComboBox = new QComboBox();
-    connect(rollComboBox, SIGNAL(activated(int)), this, SLOT(changeRoll(int)));
+    rollSlider = new QSlider(Qt::Horizontal);
+    connect(rollSlider, SIGNAL(valueChanged(int)), this, SLOT(changeRoll(int)));
     rollLabel->hide();
-    rollComboBox->hide();
+    rollSlider->hide();
 
     resetButton = new QPushButton("resetButton");
     connect(resetButton, SIGNAL(clicked()), this, SLOT(reset()));
@@ -297,54 +294,54 @@ void CameraControllerDialog::makeGUI()
     qualityLayout->addWidget(brightnessSlider);
     qualityLayout->addWidget(contrastCheckBox);
     qualityLayout->addWidget(contrastLabel);
-    qualityLayout->addWidget(contrastComboBox);
+    qualityLayout->addWidget(contrastSlider);
     qualityLayout->addWidget(saturationCheckBox);
     qualityLayout->addWidget(saturationLabel);
-    qualityLayout->addWidget(saturationComboBox);
+    qualityLayout->addWidget(saturationSlider);
     qualityLayout->addWidget(hueCheckBox);
     qualityLayout->addWidget(hueLabel);
-    qualityLayout->addWidget(hueComboBox);
+    qualityLayout->addWidget(hueSlider);
     qualityLayout->addWidget(gammaCheckBox);
     qualityLayout->addWidget(gammaLabel);
-    qualityLayout->addWidget(gammaComboBox);
+    qualityLayout->addWidget(gammaSlider);
     qualityLayout->addWidget(sharpnessCheckBox);
     qualityLayout->addWidget(sharpnessLabel);
-    qualityLayout->addWidget(sharpnessComboBox);
+    qualityLayout->addWidget(sharpnessSlider);
     qualityLayout->addWidget(backlightCheckBox);
     qualityLayout->addWidget(backlightLabel);
-    qualityLayout->addWidget(backlightComboBox);
+    qualityLayout->addWidget(backlightSlider);
     qualityLayout->addWidget(whiteCheckBox);
     qualityLayout->addWidget(whiteLabel);
-    qualityLayout->addWidget(whiteComboBox);
+    qualityLayout->addWidget(whiteSlider);
     qualityLayout->addWidget(gainCheckBox);
     qualityLayout->addWidget(gainLabel);
-    qualityLayout->addWidget(gainComboBox);
+    qualityLayout->addWidget(gainSlider);
     qualityLayout->addWidget(colorCheckBox);
     qualityLayout->addWidget(colorLabel);
-    qualityLayout->addWidget(colorComboBox);
+    qualityLayout->addWidget(colorSlider);
     qualityLayout->addStretch();
 
     controlLayout->addWidget(exposureCheckBox);
     controlLayout->addWidget(exposureLabel);
-    controlLayout->addWidget(exposureComboBox);
+    controlLayout->addWidget(exposureSlider);
     controlLayout->addWidget(zoomCheckBox);
     controlLayout->addWidget(zoomLabel);
-    controlLayout->addWidget(zoomComboBox);
+    controlLayout->addWidget(zoomSlider);
     controlLayout->addWidget(focusCheckBox);
     controlLayout->addWidget(focusLabel);
-    controlLayout->addWidget(focusComboBox);
+    controlLayout->addWidget(focusSlider);
     controlLayout->addWidget(panCheckBox);
     controlLayout->addWidget(panLabel);
-    controlLayout->addWidget(panComboBox);
+    controlLayout->addWidget(panSlider);
     controlLayout->addWidget(tiltCheckBox);
     controlLayout->addWidget(tiltLabel);
-    controlLayout->addWidget(tiltComboBox);
+    controlLayout->addWidget(tiltSlider);
     controlLayout->addWidget(irisCheckBox);
     controlLayout->addWidget(irisLabel);
-    controlLayout->addWidget(irisComboBox);
+    controlLayout->addWidget(irisSlider);
     controlLayout->addWidget(rollCheckBox);
     controlLayout->addWidget(rollLabel);
-    controlLayout->addWidget(rollComboBox);
+    controlLayout->addWidget(rollSlider);
     controlLayout->addStretch();
 
     mainLayout->addWidget(qualityGroupBox);
@@ -469,14 +466,13 @@ void CameraControllerDialog::initialize()
     if (capabilities->isCapability()) {
         qualityCount++;
         contrastLabel->show();
-        contrastComboBox->show();
-        contrastComboBox->setEnabled(false);
-        stepContrast = fillComboBox(contrastComboBox, capabilities);
+        contrastSlider->show();
+        contrastSlider->setEnabled(false);
         if (preferences->getIntegerPreference(deviceId, "contrast", value) == false) {
             // Calculate default value
-            value = (capabilities->getDefault() - capabilities->getMinimum()) / capabilities->getStep();
+            value = capabilities->getDefault();
         }
-        contrastComboBox->setCurrentIndex(value);
+        stepContrast = configureSlider(contrastSlider, capabilities, value);
     }
 
     capabilities = grabberController->getSaturationCaps();
@@ -500,14 +496,13 @@ void CameraControllerDialog::initialize()
     if (capabilities->isCapability()) {
         qualityCount++;
         saturationLabel->show();
-        saturationComboBox->show();
-        saturationComboBox->setEnabled(false);
-        stepSaturation = fillComboBox(saturationComboBox, capabilities);
+        saturationSlider->show();
+        saturationSlider->setEnabled(false);
         if (preferences->getIntegerPreference(deviceId, "saturation", value) == false) {
             // Calculate default value
-            value = (capabilities->getDefault() - capabilities->getMinimum()) / capabilities->getStep();
+            value = capabilities->getDefault();
         }
-        saturationComboBox->setCurrentIndex(value);
+        stepSaturation = configureSlider(saturationSlider, capabilities, value);
     }
 
     capabilities = grabberController->getHueCaps();
@@ -531,14 +526,13 @@ void CameraControllerDialog::initialize()
     if (capabilities->isCapability()) {
         qualityCount++;
         hueLabel->show();
-        hueComboBox->show();
-        hueComboBox->setEnabled(false);
-        stepHue = fillComboBox(hueComboBox, capabilities);
+        hueSlider->show();
+        hueSlider->setEnabled(false);
         if (preferences->getIntegerPreference(deviceId, "hue", value) == false) {
             // Calculate default value
-            value = (capabilities->getDefault() - capabilities->getMinimum()) / capabilities->getStep();
+            value = capabilities->getDefault();
         }
-        hueComboBox->setCurrentIndex(value);
+        stepHue = configureSlider(hueSlider, capabilities, value);
     }
 
     capabilities = grabberController->getGammaCaps();
@@ -562,14 +556,13 @@ void CameraControllerDialog::initialize()
     if (capabilities->isCapability()) {
         qualityCount++;
         gammaLabel->show();
-        gammaComboBox->show();
-        gammaComboBox->setEnabled(false);
-        stepGamma = fillComboBox(gammaComboBox, capabilities);
+        gammaSlider->show();
+        gammaSlider->setEnabled(false);
         if (preferences->getIntegerPreference(deviceId, "gamma", value) == false) {
             // Calculate default value
-            value = (capabilities->getDefault() - capabilities->getMinimum()) / capabilities->getStep();
+            value = capabilities->getDefault();
         }
-        gammaComboBox->setCurrentIndex(value);
+        stepGamma = configureSlider(gammaSlider, capabilities, value);
     }
 
     capabilities = grabberController->getSharpnessCaps();
@@ -593,14 +586,13 @@ void CameraControllerDialog::initialize()
     if (capabilities->isCapability()) {
         qualityCount++;
         sharpnessLabel->show();
-        sharpnessComboBox->show();
-        sharpnessComboBox->setEnabled(false);
-        stepSharpness = fillComboBox(sharpnessComboBox, capabilities);
+        sharpnessSlider->show();
+        sharpnessSlider->setEnabled(false);
         if (preferences->getIntegerPreference(deviceId, "sharpness", value) == false) {
             // Calculate default value
-            value = (capabilities->getDefault() - capabilities->getMinimum()) / capabilities->getStep();
+            value = capabilities->getDefault();
         }
-        sharpnessComboBox->setCurrentIndex(value);
+        stepSharpness = configureSlider(sharpnessSlider, capabilities, value);
     }
 
     capabilities = grabberController->getBacklightCaps();
@@ -624,14 +616,13 @@ void CameraControllerDialog::initialize()
     if (capabilities->isCapability()) {
         qualityCount++;
         backlightLabel->show();
-        backlightComboBox->show();
-        backlightComboBox->setEnabled(false);
-        stepBacklight = fillComboBox(backlightComboBox, capabilities);
+        backlightSlider->show();
+        backlightSlider->setEnabled(false);
         if (preferences->getIntegerPreference(deviceId, "backlight", value) == false) {
             // Calculate default value
-            value = (capabilities->getDefault() - capabilities->getMinimum()) / capabilities->getStep();
+            value = capabilities->getDefault();
         }
-        backlightComboBox->setCurrentIndex(value);
+        stepBacklight = configureSlider(backlightSlider, capabilities, value);
     }
 
     capabilities = grabberController->getWhiteCaps();
@@ -655,14 +646,13 @@ void CameraControllerDialog::initialize()
     if (capabilities->isCapability()) {
         qualityCount++;
         whiteLabel->show();
-        whiteComboBox->show();
-        whiteComboBox->setEnabled(false);
-        stepWhite = fillComboBox(whiteComboBox, capabilities);
+        whiteSlider->show();
+        whiteSlider->setEnabled(false);
         if (preferences->getIntegerPreference(deviceId, "white", value) == false) {
             // Calculate default value
-            value = (capabilities->getDefault() - capabilities->getMinimum()) / capabilities->getStep();
+            value = capabilities->getDefault();
         }
-        whiteComboBox->setCurrentIndex(value);
+        stepWhite = configureSlider(whiteSlider, capabilities, value);
     }
 
     capabilities = grabberController->getGainCaps();
@@ -686,14 +676,13 @@ void CameraControllerDialog::initialize()
     if (capabilities->isCapability()) {
         qualityCount++;
         gainLabel->show();
-        gainComboBox->show();
-        gainComboBox->setEnabled(false);
-        stepGain = fillComboBox(gainComboBox, capabilities);
+        gainSlider->show();
+        gainSlider->setEnabled(false);
         if (preferences->getIntegerPreference(deviceId, "gain", value) == false) {
             // Calculate default value
-            value = (capabilities->getDefault() - capabilities->getMinimum()) / capabilities->getStep();
+            value = capabilities->getDefault();
         }
-        gainComboBox->setCurrentIndex(value);
+        stepGain = configureSlider(gainSlider, capabilities, value);
     }
 
     capabilities = grabberController->getColorCaps();
@@ -717,14 +706,13 @@ void CameraControllerDialog::initialize()
     if (capabilities->isCapability()) {
         qualityCount++;
         colorLabel->show();
-        colorComboBox->show();
-        colorComboBox->setEnabled(false);
-        stepColor = fillComboBox(colorComboBox, capabilities);
+        colorSlider->show();
+        colorSlider->setEnabled(false);
         if (preferences->getIntegerPreference(deviceId, "color", value) == false) {
             // Calculate default value
-            value = (capabilities->getDefault() - capabilities->getMinimum()) / capabilities->getStep();
+            value = capabilities->getDefault();
         }
-        colorComboBox->setCurrentIndex(value);
+        stepColor = configureSlider(colorSlider, capabilities, value);
     }
 
     // TODO: This will not work
@@ -755,14 +743,13 @@ void CameraControllerDialog::initialize()
     if (capabilities->isCapability()) {
         controlCount++;
         exposureLabel->show();
-        exposureComboBox->show();
-        exposureComboBox->setEnabled(false);
-        stepExposure = fillComboBox(exposureComboBox, capabilities);
+        exposureSlider->show();
+        exposureSlider->setEnabled(false);
         if (preferences->getIntegerPreference(deviceId, "exposure", value) == false) {
             // Calculate default value
-            value = (capabilities->getDefault() - capabilities->getMinimum()) / capabilities->getStep();
+            value = capabilities->getDefault();
         }
-        exposureComboBox->setCurrentIndex(value);
+        stepExposure = configureSlider(exposureSlider, capabilities, value);
     }
 
     capabilities = grabberController->getZoomCaps();
@@ -786,14 +773,13 @@ void CameraControllerDialog::initialize()
     if (capabilities->isCapability()) {
         controlCount++;
         zoomLabel->show();
-        zoomComboBox->show();
-        zoomComboBox->setEnabled(false);
-        stepZoom = fillComboBox(zoomComboBox, capabilities);
+        zoomSlider->show();
+        zoomSlider->setEnabled(false);
         if (preferences->getIntegerPreference(deviceId, "zoom", value) == false) {
             // Calculate default value
-            value = (capabilities->getDefault() - capabilities->getMinimum()) / capabilities->getStep();
+            value = capabilities->getDefault();
         }
-        zoomComboBox->setCurrentIndex(value);
+        stepZoom = configureSlider(zoomSlider, capabilities, value);
     }
 
     capabilities = grabberController->getFocusCaps();
@@ -817,14 +803,13 @@ void CameraControllerDialog::initialize()
     if (capabilities->isCapability()) {
         controlCount++;
         focusLabel->show();
-        focusComboBox->show();
-        focusComboBox->setEnabled(false);
-        stepFocus = fillComboBox(focusComboBox, capabilities);
+        focusSlider->show();
+        focusSlider->setEnabled(false);
         if (preferences->getIntegerPreference(deviceId, "focus", value) == false) {
             // Calculate default value
-            value = (capabilities->getDefault() - capabilities->getMinimum()) / capabilities->getStep();
+            value = capabilities->getDefault();
         }
-        focusComboBox->setCurrentIndex(value);
+        stepFocus = configureSlider(focusSlider, capabilities, value);
     }
 
     capabilities = grabberController->getPanCaps();
@@ -848,14 +833,13 @@ void CameraControllerDialog::initialize()
     if (capabilities->isCapability()) {
         controlCount++;
         panLabel->show();
-        panComboBox->show();
-        panComboBox->setEnabled(false);
-        stepPan = fillComboBox(panComboBox, capabilities);
+        panSlider->show();
+        panSlider->setEnabled(false);
         if (preferences->getIntegerPreference(deviceId, "pan", value) == false) {
             // Calculate default value
-            value = (capabilities->getDefault() - capabilities->getMinimum()) / capabilities->getStep();
+            value = capabilities->getDefault();
         }
-        panComboBox->setCurrentIndex(value);
+        stepPan = configureSlider(panSlider, capabilities, value);
     }
 
     capabilities = grabberController->getTiltCaps();
@@ -879,14 +863,13 @@ void CameraControllerDialog::initialize()
     if (capabilities->isCapability()) {
         controlCount++;
         tiltLabel->show();
-        tiltComboBox->show();
-        tiltComboBox->setEnabled(false);
-        stepTilt = fillComboBox(tiltComboBox, capabilities);
+        tiltSlider->show();
+        tiltSlider->setEnabled(false);
         if (preferences->getIntegerPreference(deviceId, "tilt", value) == false) {
             // Calculate default value
-            value = (capabilities->getDefault() - capabilities->getMinimum()) / capabilities->getStep();
+            value = capabilities->getDefault();
         }
-        tiltComboBox->setCurrentIndex(value);
+        stepTilt = configureSlider(tiltSlider, capabilities, value);
     }
 
     capabilities = grabberController->getIrisCaps();
@@ -910,14 +893,13 @@ void CameraControllerDialog::initialize()
     if (capabilities->isCapability()) {
         controlCount++;
         irisLabel->show();
-        irisComboBox->show();
-        irisComboBox->setEnabled(false);
-        stepIris = fillComboBox(irisComboBox, capabilities);
+        irisSlider->show();
+        irisSlider->setEnabled(false);
         if (preferences->getIntegerPreference(deviceId, "iris", value) == false) {
             // Calculate default value
-            value = (capabilities->getDefault() - capabilities->getMinimum()) / capabilities->getStep();
+            value = capabilities->getDefault();
         }
-        irisComboBox->setCurrentIndex(value);
+        stepIris = configureSlider(irisSlider, capabilities, value);
     }
 
     capabilities = grabberController->getRollCaps();
@@ -941,14 +923,13 @@ void CameraControllerDialog::initialize()
     if (capabilities->isCapability()) {
         controlCount++;
         rollLabel->show();
-        rollComboBox->show();
-        rollComboBox->setEnabled(false);
-        stepRoll = fillComboBox(rollComboBox, capabilities);
+        rollSlider->show();
+        rollSlider->setEnabled(false);
         if (preferences->getIntegerPreference(deviceId, "roll", value) == false) {
             // Calculate default value
-            value = (capabilities->getDefault() - capabilities->getMinimum()) / capabilities->getStep();
+            value = capabilities->getDefault();
         }
-        rollComboBox->setCurrentIndex(value);
+        stepRoll = configureSlider(rollSlider, capabilities, value);
     }
 
     // TODO: This will not work
@@ -1003,7 +984,7 @@ bool CameraControllerDialog::setUp()
         brightnessSlider->setEnabled(true);
         if (preferences->getIntegerPreference(deviceId, "brightness", value) == false) {
             // Calculate default value
-            value = (capabilities->getDefault() - capabilities->getMinimum()) / capabilities->getStep();
+            value = capabilities->getDefault();
         }
         changeBrightness(value, false);
     }
@@ -1027,10 +1008,10 @@ bool CameraControllerDialog::setUp()
         changeAutoContrast(checked, false);
     }
     if (capabilities->isCapability()) {
-        contrastComboBox->setEnabled(true);
+        contrastSlider->setEnabled(true);
         if (preferences->getIntegerPreference(deviceId, "contrast", value) == false) {
             // Calculate default value
-            value = (capabilities->getDefault() - capabilities->getMinimum()) / capabilities->getStep();
+            value = capabilities->getDefault();
         }
         changeContrast(value, false);
     }
@@ -1053,10 +1034,10 @@ bool CameraControllerDialog::setUp()
         changeAutoSaturation(checked, false);
     }
     if (capabilities->isCapability()) {
-        saturationComboBox->setEnabled(true);
+        saturationSlider->setEnabled(true);
         if (preferences->getIntegerPreference(deviceId, "saturation", value) == false) {
             // Calculate default value
-            value = (capabilities->getDefault() - capabilities->getMinimum()) / capabilities->getStep();
+            value = capabilities->getDefault();
         }
         changeSaturation(value, false);
     }
@@ -1079,10 +1060,10 @@ bool CameraControllerDialog::setUp()
         changeAutoHue(checked, false);
     }
     if (capabilities->isCapability()) {
-        hueComboBox->setEnabled(true);
+        hueSlider->setEnabled(true);
         if (preferences->getIntegerPreference(deviceId, "hue", value) == false) {
             // Calculate default value
-            value = (capabilities->getDefault() - capabilities->getMinimum()) / capabilities->getStep();
+            value = capabilities->getDefault();
         }
         changeHue(value, false);
     }
@@ -1105,10 +1086,10 @@ bool CameraControllerDialog::setUp()
         changeAutoGamma(checked, false);
     }
     if (capabilities->isCapability()) {
-        gammaComboBox->setEnabled(true);
+        gammaSlider->setEnabled(true);
         if (preferences->getIntegerPreference(deviceId, "gamma", value) == false) {
             // Calculate default value
-            value = (capabilities->getDefault() - capabilities->getMinimum()) / capabilities->getStep();
+            value = capabilities->getDefault();
         }
         changeGamma(value, false);
     }
@@ -1131,10 +1112,10 @@ bool CameraControllerDialog::setUp()
         changeAutoSharpness(checked, false);
     }
     if (capabilities->isCapability()) {
-        sharpnessComboBox->setEnabled(true);
+        sharpnessSlider->setEnabled(true);
         if (preferences->getIntegerPreference(deviceId, "sharpness", value) == false) {
             // Calculate default value
-            value = (capabilities->getDefault() - capabilities->getMinimum()) / capabilities->getStep();
+            value = capabilities->getDefault();
         }
         changeSharpness(value, false);
     }
@@ -1157,10 +1138,10 @@ bool CameraControllerDialog::setUp()
         changeAutoBacklight(checked, false);
     }
     if (capabilities->isCapability()) {
-        backlightComboBox->setEnabled(true);
+        backlightSlider->setEnabled(true);
         if (preferences->getIntegerPreference(deviceId, "backlight", value) == false) {
             // Calculate default value
-            value = (capabilities->getDefault() - capabilities->getMinimum()) / capabilities->getStep();
+            value = capabilities->getDefault();
         }
         changeBacklight(value, false);
     }
@@ -1183,11 +1164,10 @@ bool CameraControllerDialog::setUp()
         changeAutoWhite(checked, false);
     }
     if (capabilities->isCapability()) {
-        whiteComboBox->setEnabled(true);
-        stepWhite = fillComboBox(whiteComboBox, capabilities);
+        whiteSlider->setEnabled(true);
         if (preferences->getIntegerPreference(deviceId, "white", value) == false) {
             // Calculate default value
-            value = (capabilities->getDefault() - capabilities->getMinimum()) / capabilities->getStep();
+            value = capabilities->getDefault();
         }
         changeWhite(value, false);
     }
@@ -1210,10 +1190,10 @@ bool CameraControllerDialog::setUp()
         changeAutoGain(checked, false);
     }
     if (capabilities->isCapability()) {
-        gainComboBox->setEnabled(true);
+        gainSlider->setEnabled(true);
         if (preferences->getIntegerPreference(deviceId, "gain", value) == false) {
             // Calculate default value
-            value = (capabilities->getDefault() - capabilities->getMinimum()) / capabilities->getStep();
+            value = capabilities->getDefault();
         }
         changeGain(value, false);
     }
@@ -1236,10 +1216,10 @@ bool CameraControllerDialog::setUp()
         changeAutoColor(checked, false);
     }
     if (capabilities->isCapability()) {
-        colorComboBox->setEnabled(true);
+        colorSlider->setEnabled(true);
         if (preferences->getIntegerPreference(deviceId, "color", value) == false) {
             // Calculate default value
-            value = (capabilities->getDefault() - capabilities->getMinimum()) / capabilities->getStep();
+            value = capabilities->getDefault();
         }
         changeColor(value, false);
     }
@@ -1262,10 +1242,10 @@ bool CameraControllerDialog::setUp()
         changeAutoExposure(checked, false);
     }
     if (capabilities->isCapability()) {
-        exposureComboBox->setEnabled(true);
+        exposureSlider->setEnabled(true);
         if (preferences->getIntegerPreference(deviceId, "exposure", value) == false) {
             // Calculate default value
-            value = (capabilities->getDefault() - capabilities->getMinimum()) / capabilities->getStep();
+            value = capabilities->getDefault();
         }
         changeExposure(value, false);
     }
@@ -1288,10 +1268,10 @@ bool CameraControllerDialog::setUp()
         changeAutoZoom(checked, false);
     }
     if (capabilities->isCapability()) {
-        zoomComboBox->setEnabled(true);
+        zoomSlider->setEnabled(true);
         if (preferences->getIntegerPreference(deviceId, "zoom", value) == false) {
             // Calculate default value
-            value = (capabilities->getDefault() - capabilities->getMinimum()) / capabilities->getStep();
+            value = capabilities->getDefault();
         }
         changeZoom(value, false);
     }
@@ -1314,10 +1294,10 @@ bool CameraControllerDialog::setUp()
         changeAutoFocus(checked, false);
     }
     if (capabilities->isCapability()) {
-        focusComboBox->setEnabled(true);
+        focusSlider->setEnabled(true);
         if (preferences->getIntegerPreference(deviceId, "focus", value) == false) {
             // Calculate default value
-            value = (capabilities->getDefault() - capabilities->getMinimum()) / capabilities->getStep();
+            value = capabilities->getDefault();
         }
         changeFocus(value, false);
     }
@@ -1340,10 +1320,10 @@ bool CameraControllerDialog::setUp()
         changeAutoPan(checked, false);
     }
     if (capabilities->isCapability()) {
-        panComboBox->setEnabled(true);
+        panSlider->setEnabled(true);
         if (preferences->getIntegerPreference(deviceId, "pan", value) == false) {
             // Calculate default value
-            value = (capabilities->getDefault() - capabilities->getMinimum()) / capabilities->getStep();
+            value = capabilities->getDefault();
         }
         changePan(value, false);
     }
@@ -1366,10 +1346,10 @@ bool CameraControllerDialog::setUp()
         changeAutoTilt(checked, false);
     }
     if (capabilities->isCapability()) {
-        tiltComboBox->setEnabled(true);
+        tiltSlider->setEnabled(true);
         if (preferences->getIntegerPreference(deviceId, "tilt", value) == false) {
             // Calculate default value
-            value = (capabilities->getDefault() - capabilities->getMinimum()) / capabilities->getStep();
+            value = capabilities->getDefault();
         }
         changeTilt(value, false);
     }
@@ -1392,10 +1372,10 @@ bool CameraControllerDialog::setUp()
         changeAutoIris(checked, false);
     }
     if (capabilities->isCapability()) {
-        irisComboBox->setEnabled(true);
+        irisSlider->setEnabled(true);
         if (preferences->getIntegerPreference(deviceId, "iris", value) == false) {
             // Calculate default value
-            value = (capabilities->getDefault() - capabilities->getMinimum()) / capabilities->getStep();
+            value = capabilities->getDefault();
         }
         changeIris(value, false);
     }
@@ -1418,10 +1398,10 @@ bool CameraControllerDialog::setUp()
         changeAutoRoll(checked, false);
     }
     if (capabilities->isCapability()) {
-        rollComboBox->setEnabled(true);
+        rollSlider->setEnabled(true);
         if (preferences->getIntegerPreference(deviceId, "roll", value) == false) {
             // Calculate default value
-            value = (capabilities->getDefault() - capabilities->getMinimum()) / capabilities->getStep();
+            value = capabilities->getDefault();
         }
         changeRoll(value, false);
     }
@@ -1454,7 +1434,7 @@ bool CameraControllerDialog::tearDown()
         contrastCheckBox->setEnabled(false);
     }
     if (capabilities->isCapability()) {
-        contrastComboBox->setEnabled(false);
+        contrastSlider->setEnabled(false);
     }
 
     capabilities = grabberController->getSaturationCaps();
@@ -1462,7 +1442,7 @@ bool CameraControllerDialog::tearDown()
         saturationCheckBox->setEnabled(false);
     }
     if (capabilities->isCapability()) {
-        saturationComboBox->setEnabled(false);
+        saturationSlider->setEnabled(false);
     }
 
     capabilities = grabberController->getHueCaps();
@@ -1470,7 +1450,7 @@ bool CameraControllerDialog::tearDown()
         hueCheckBox->setEnabled(false);
     }
     if (capabilities->isCapability()) {
-        hueComboBox->setEnabled(false);
+        hueSlider->setEnabled(false);
     }
 
     capabilities = grabberController->getGammaCaps();
@@ -1478,7 +1458,7 @@ bool CameraControllerDialog::tearDown()
         gammaCheckBox->setEnabled(false);
     }
     if (capabilities->isCapability()) {
-        gammaComboBox->setEnabled(false);
+        gammaSlider->setEnabled(false);
     }
 
     capabilities = grabberController->getSharpnessCaps();
@@ -1486,7 +1466,7 @@ bool CameraControllerDialog::tearDown()
         sharpnessCheckBox->setEnabled(false);
     }
     if (capabilities->isCapability()) {
-        sharpnessComboBox->setEnabled(false);
+        sharpnessSlider->setEnabled(false);
     }
 
     capabilities = grabberController->getBacklightCaps();
@@ -1494,7 +1474,7 @@ bool CameraControllerDialog::tearDown()
         backlightCheckBox->setEnabled(false);
     }
     if (capabilities->isCapability()) {
-        backlightComboBox->setEnabled(false);
+        backlightSlider->setEnabled(false);
     }
 
     capabilities = grabberController->getWhiteCaps();
@@ -1502,7 +1482,7 @@ bool CameraControllerDialog::tearDown()
         whiteCheckBox->setEnabled(false);
     }
     if (capabilities->isCapability()) {
-        whiteComboBox->setEnabled(false);
+        whiteSlider->setEnabled(false);
     }
 
     capabilities = grabberController->getGainCaps();
@@ -1510,7 +1490,7 @@ bool CameraControllerDialog::tearDown()
         gainCheckBox->setEnabled(false);
     }
     if (capabilities->isCapability()) {
-        gainComboBox->setEnabled(false);
+        gainSlider->setEnabled(false);
     }
 
     capabilities = grabberController->getColorCaps();
@@ -1518,7 +1498,7 @@ bool CameraControllerDialog::tearDown()
         colorCheckBox->setEnabled(false);
     }
     if (capabilities->isCapability()) {
-        colorComboBox->setEnabled(false);
+        colorSlider->setEnabled(false);
     }
 
     capabilities = grabberController->getExposureCaps();
@@ -1526,7 +1506,7 @@ bool CameraControllerDialog::tearDown()
         exposureCheckBox->setEnabled(false);
     }
     if (capabilities->isCapability()) {
-        exposureComboBox->setEnabled(false);
+        exposureSlider->setEnabled(false);
     }
 
     capabilities = grabberController->getZoomCaps();
@@ -1534,7 +1514,7 @@ bool CameraControllerDialog::tearDown()
         zoomCheckBox->setEnabled(false);
     }
     if (capabilities->isCapability()) {
-        zoomComboBox->setEnabled(false);
+        zoomSlider->setEnabled(false);
     }
 
     capabilities = grabberController->getFocusCaps();
@@ -1542,7 +1522,7 @@ bool CameraControllerDialog::tearDown()
         focusCheckBox->setEnabled(false);
     }
     if (capabilities->isCapability()) {
-        focusComboBox->setEnabled(false);
+        focusSlider->setEnabled(false);
     }
 
     capabilities = grabberController->getPanCaps();
@@ -1550,7 +1530,7 @@ bool CameraControllerDialog::tearDown()
         panCheckBox->setEnabled(false);
     }
     if (capabilities->isCapability()) {
-        panComboBox->setEnabled(false);
+        panSlider->setEnabled(false);
     }
 
     capabilities = grabberController->getTiltCaps();
@@ -1558,7 +1538,7 @@ bool CameraControllerDialog::tearDown()
         tiltCheckBox->setEnabled(false);
     }
     if (capabilities->isCapability()) {
-        tiltComboBox->setEnabled(false);
+        tiltSlider->setEnabled(false);
     }
 
     capabilities = grabberController->getIrisCaps();
@@ -1566,7 +1546,7 @@ bool CameraControllerDialog::tearDown()
         irisCheckBox->setEnabled(false);
     }
     if (capabilities->isCapability()) {
-        irisComboBox->setEnabled(false);
+        irisSlider->setEnabled(false);
     }
 
     capabilities = grabberController->getRollCaps();
@@ -1574,7 +1554,7 @@ bool CameraControllerDialog::tearDown()
         rollCheckBox->setEnabled(false);
     }
     if (capabilities->isCapability()) {
-        rollComboBox->setEnabled(false);
+        rollSlider->setEnabled(false);
     }
 
     grabberController->tearDown();
@@ -1653,11 +1633,11 @@ void CameraControllerDialog::changeAutoContrast(int newState, bool save)
     PreferencesTool *preferences = frontend->getPreferences();
 
     if (newState) {
-        contrastComboBox->setEnabled(false);
+        contrastSlider->setEnabled(false);
         grabberController->setAutomaticContrast(true);
     }
     else {
-        contrastComboBox->setEnabled(true);
+        contrastSlider->setEnabled(true);
         grabberController->setAutomaticContrast(false);
     }
     if (save) {
@@ -1707,11 +1687,11 @@ void CameraControllerDialog::changeAutoSaturation(int newState, bool save)
     PreferencesTool *preferences = frontend->getPreferences();
 
     if (newState) {
-        saturationComboBox->setEnabled(false);
+        saturationSlider->setEnabled(false);
         grabberController->setAutomaticSaturation(true);
     }
     else {
-        saturationComboBox->setEnabled(true);
+        saturationSlider->setEnabled(true);
         grabberController->setAutomaticSaturation(false);
     }
     if (save) {
@@ -1761,11 +1741,11 @@ void CameraControllerDialog::changeAutoHue(int newState, bool save)
     PreferencesTool *preferences = frontend->getPreferences();
 
     if (newState) {
-        hueComboBox->setEnabled(false);
+        hueSlider->setEnabled(false);
         grabberController->setAutomaticHue(true);
     }
     else {
-        hueComboBox->setEnabled(true);
+        hueSlider->setEnabled(true);
         grabberController->setAutomaticHue(false);
     }
     if (save) {
@@ -1815,11 +1795,11 @@ void CameraControllerDialog::changeAutoGamma(int newState, bool save)
     PreferencesTool *preferences = frontend->getPreferences();
 
     if (newState) {
-        gammaComboBox->setEnabled(false);
+        gammaSlider->setEnabled(false);
         grabberController->setAutomaticGamma(true);
     }
     else {
-        gammaComboBox->setEnabled(true);
+        gammaSlider->setEnabled(true);
         grabberController->setAutomaticGamma(false);
     }
     if (save) {
@@ -1869,11 +1849,11 @@ void CameraControllerDialog::changeAutoSharpness(int newState, bool save)
     PreferencesTool *preferences = frontend->getPreferences();
 
     if (newState) {
-        sharpnessComboBox->setEnabled(false);
+        sharpnessSlider->setEnabled(false);
         grabberController->setAutomaticSharpness(true);
     }
     else {
-        sharpnessComboBox->setEnabled(true);
+        sharpnessSlider->setEnabled(true);
         grabberController->setAutomaticSharpness(false);
     }
     if (save) {
@@ -1923,11 +1903,11 @@ void CameraControllerDialog::changeAutoBacklight(int newState, bool save)
     PreferencesTool *preferences = frontend->getPreferences();
 
     if (newState) {
-        backlightComboBox->setEnabled(false);
+        backlightSlider->setEnabled(false);
         grabberController->setAutomaticBacklight(true);
     }
     else {
-        backlightComboBox->setEnabled(true);
+        backlightSlider->setEnabled(true);
         grabberController->setAutomaticBacklight(false);
     }
     if (save) {
@@ -1977,11 +1957,11 @@ void CameraControllerDialog::changeAutoWhite(int newState, bool save)
     PreferencesTool *preferences = frontend->getPreferences();
 
     if (newState) {
-        whiteComboBox->setEnabled(false);
+        whiteSlider->setEnabled(false);
         grabberController->setAutomaticWhite(true);
     }
     else {
-        whiteComboBox->setEnabled(true);
+        whiteSlider->setEnabled(true);
         grabberController->setAutomaticWhite(false);
     }
     if (save) {
@@ -2031,11 +2011,11 @@ void CameraControllerDialog::changeAutoGain(int newState, bool save)
     PreferencesTool *preferences = frontend->getPreferences();
 
     if (newState) {
-        gainComboBox->setEnabled(false);
+        gainSlider->setEnabled(false);
         grabberController->setAutomaticGain(true);
     }
     else {
-        gainComboBox->setEnabled(true);
+        gainSlider->setEnabled(true);
         grabberController->setAutomaticGain(false);
     }
     if (save) {
@@ -2085,11 +2065,11 @@ void CameraControllerDialog::changeAutoColor(int newState, bool save)
     PreferencesTool *preferences = frontend->getPreferences();
 
     if (newState) {
-        colorComboBox->setEnabled(false);
+        colorSlider->setEnabled(false);
         grabberController->setAutomaticColor(true);
     }
     else {
-        colorComboBox->setEnabled(true);
+        colorSlider->setEnabled(true);
         grabberController->setAutomaticColor(false);
     }
     if (save) {
@@ -2139,11 +2119,11 @@ void CameraControllerDialog::changeAutoExposure(int newState, bool save)
     PreferencesTool *preferences = frontend->getPreferences();
 
     if (newState) {
-        exposureComboBox->setEnabled(false);
+        exposureSlider->setEnabled(false);
         grabberController->setAutomaticExposure(true);
     }
     else {
-        exposureComboBox->setEnabled(true);
+        exposureSlider->setEnabled(true);
         grabberController->setAutomaticExposure(false);
     }
     if (save) {
@@ -2193,11 +2173,11 @@ void CameraControllerDialog::changeAutoZoom(int newState, bool save)
     PreferencesTool *preferences = frontend->getPreferences();
 
     if (newState) {
-        zoomComboBox->setEnabled(false);
+        zoomSlider->setEnabled(false);
         grabberController->setAutomaticZoom(true);
     }
     else {
-        zoomComboBox->setEnabled(true);
+        zoomSlider->setEnabled(true);
         grabberController->setAutomaticZoom(false);
     }
     if (save) {
@@ -2247,11 +2227,11 @@ void CameraControllerDialog::changeAutoFocus(int newState, bool save)
     PreferencesTool *preferences = frontend->getPreferences();
 
     if (newState) {
-        focusComboBox->setEnabled(false);
+        focusSlider->setEnabled(false);
         grabberController->setAutomaticFocus(true);
     }
     else {
-        focusComboBox->setEnabled(true);
+        focusSlider->setEnabled(true);
         grabberController->setAutomaticFocus(false);
     }
     if (save) {
@@ -2301,11 +2281,11 @@ void CameraControllerDialog::changeAutoPan(int newState, bool save)
     PreferencesTool *preferences = frontend->getPreferences();
 
     if (newState) {
-        panComboBox->setEnabled(false);
+        panSlider->setEnabled(false);
         grabberController->setAutomaticPan(true);
     }
     else {
-        panComboBox->setEnabled(true);
+        panSlider->setEnabled(true);
         grabberController->setAutomaticPan(false);
     }
     if (save) {
@@ -2355,11 +2335,11 @@ void CameraControllerDialog::changeAutoTilt(int newState, bool save)
     PreferencesTool *preferences = frontend->getPreferences();
 
     if (newState) {
-        tiltComboBox->setEnabled(false);
+        tiltSlider->setEnabled(false);
         grabberController->setAutomaticTilt(true);
     }
     else {
-        tiltComboBox->setEnabled(true);
+        tiltSlider->setEnabled(true);
         grabberController->setAutomaticTilt(false);
     }
     if (save) {
@@ -2409,11 +2389,11 @@ void CameraControllerDialog::changeAutoIris(int newState, bool save)
     PreferencesTool *preferences = frontend->getPreferences();
 
     if (newState) {
-        irisComboBox->setEnabled(false);
+        irisSlider->setEnabled(false);
         grabberController->setAutomaticIris(true);
     }
     else {
-        irisComboBox->setEnabled(true);
+        irisSlider->setEnabled(true);
         grabberController->setAutomaticIris(false);
     }
     if (save) {
@@ -2463,11 +2443,11 @@ void CameraControllerDialog::changeAutoRoll(int newState, bool save)
     PreferencesTool *preferences = frontend->getPreferences();
 
     if (newState) {
-        rollComboBox->setEnabled(false);
+        rollSlider->setEnabled(false);
         grabberController->setAutomaticRoll(true);
     }
     else {
-        rollComboBox->setEnabled(true);
+        rollSlider->setEnabled(true);
         grabberController->setAutomaticRoll(false);
     }
     if (save) {
@@ -2501,21 +2481,6 @@ void CameraControllerDialog::changeRoll(int index, bool save)
     }
 
     qDebug() << "CameraControllerDialog::changeRoll --> End";
-}
-
-
-int CameraControllerDialog::fillComboBox(QComboBox *comboBox, GrabberControlCapabilities *controlCaps)
-{
-    int value;
-
-    for (value = controlCaps->getMinimum() ; value <= controlCaps->getMaximum() ; value += controlCaps->getStep()) {
-        comboBox->addItem(QString("%1").arg(value));
-    }
-    if (value < controlCaps->getMaximum()) {
-        comboBox->addItem(QString("%1").arg(controlCaps->getMaximum()));
-    }
-
-    return controlCaps->getStep();
 }
 
 
@@ -2558,7 +2523,7 @@ void CameraControllerDialog::reset()
     }
     capabilities = grabberController->getBrightnessCaps();
     if (capabilities->isCapability()) {
-        value = (capabilities->getDefault() - capabilities->getMinimum()) / capabilities->getStep();
+        value = capabilities->getDefault();
         brightnessSlider->setValue(value);
         changeBrightness(value, true);
     }
@@ -2569,8 +2534,8 @@ void CameraControllerDialog::reset()
     }
     capabilities = grabberController->getContrastCaps();
     if (capabilities->isCapability()) {
-        value = (capabilities->getDefault() - capabilities->getMinimum()) / capabilities->getStep();
-        contrastComboBox->setCurrentIndex(value);
+        value = capabilities->getDefault();
+        contrastSlider->setValue(value);
         changeContrast(value, true);
     }
 
@@ -2580,8 +2545,8 @@ void CameraControllerDialog::reset()
     }
     capabilities = grabberController->getSaturationCaps();
     if (capabilities->isCapability()) {
-        value = (capabilities->getDefault() - capabilities->getMinimum()) / capabilities->getStep();
-        saturationComboBox->setCurrentIndex(value);
+        value = capabilities->getDefault();
+        saturationSlider->setValue(value);
         changeSaturation(value, true);
     }
 
@@ -2591,8 +2556,8 @@ void CameraControllerDialog::reset()
     }
     capabilities = grabberController->getHueCaps();
     if (capabilities->isCapability()) {
-        value = (capabilities->getDefault() - capabilities->getMinimum()) / capabilities->getStep();
-        hueComboBox->setCurrentIndex(value);
+        value = capabilities->getDefault();
+        hueSlider->setValue(value);
         changeHue(value, true);
     }
 
@@ -2602,8 +2567,8 @@ void CameraControllerDialog::reset()
     }
     capabilities = grabberController->getGammaCaps();
     if (capabilities->isCapability()) {
-        value = (capabilities->getDefault() - capabilities->getMinimum()) / capabilities->getStep();
-        gammaComboBox->setCurrentIndex(value);
+        value = capabilities->getDefault();
+        gammaSlider->setValue(value);
         changeGamma(value, true);
     }
 
@@ -2613,8 +2578,8 @@ void CameraControllerDialog::reset()
     }
     capabilities = grabberController->getSharpnessCaps();
     if (capabilities->isCapability()) {
-        value = (capabilities->getDefault() - capabilities->getMinimum()) / capabilities->getStep();
-        sharpnessComboBox->setCurrentIndex(value);
+        value = capabilities->getDefault();
+        sharpnessSlider->setValue(value);
         changeSharpness(value, true);
     }
 
@@ -2624,8 +2589,8 @@ void CameraControllerDialog::reset()
     }
     capabilities = grabberController->getBacklightCaps();
     if (capabilities->isCapability()) {
-        value = (capabilities->getDefault() - capabilities->getMinimum()) / capabilities->getStep();
-        backlightComboBox->setCurrentIndex(value);
+        value = capabilities->getDefault();
+        backlightSlider->setValue(value);
         changeBacklight(value, true);
     }
 
@@ -2635,8 +2600,8 @@ void CameraControllerDialog::reset()
     }
     capabilities = grabberController->getGainCaps();
     if (capabilities->isCapability()) {
-        value = (capabilities->getDefault() - capabilities->getMinimum()) / capabilities->getStep();
-        gainComboBox->setCurrentIndex(value);
+        value = capabilities->getDefault();
+        gainSlider->setValue(value);
         changeGain(value, true);
     }
 
@@ -2646,8 +2611,8 @@ void CameraControllerDialog::reset()
     }
     capabilities = grabberController->getColorCaps();
     if (capabilities->isCapability()) {
-        value = (capabilities->getDefault() - capabilities->getMinimum()) / capabilities->getStep();
-        colorComboBox->setCurrentIndex(value);
+        value = capabilities->getDefault();
+        colorSlider->setValue(value);
         changeColor(value, true);
     }
 
@@ -2657,8 +2622,8 @@ void CameraControllerDialog::reset()
     }
     capabilities = grabberController->getWhiteCaps();
     if (capabilities->isCapability()) {
-        value = (capabilities->getDefault() - capabilities->getMinimum()) / capabilities->getStep();
-        whiteComboBox->setCurrentIndex(value);
+        value = capabilities->getDefault();
+        whiteSlider->setValue(value);
         changeWhite(value, true);
     }
 
@@ -2668,8 +2633,8 @@ void CameraControllerDialog::reset()
     }
     capabilities = grabberController->getExposureCaps();
     if (capabilities->isCapability()) {
-        value = (capabilities->getDefault() - capabilities->getMinimum()) / capabilities->getStep();
-        exposureComboBox->setCurrentIndex(value);
+        value = capabilities->getDefault();
+        exposureSlider->setValue(value);
         changeExposure(value, true);
     }
 
@@ -2679,8 +2644,8 @@ void CameraControllerDialog::reset()
     }
     capabilities = grabberController->getZoomCaps();
     if (capabilities->isCapability()) {
-        value = (capabilities->getDefault() - capabilities->getMinimum()) / capabilities->getStep();
-        zoomComboBox->setCurrentIndex(value);
+        value = capabilities->getDefault();
+        zoomSlider->setValue(value);
         changeZoom(value, true);
     }
 
@@ -2690,8 +2655,8 @@ void CameraControllerDialog::reset()
     }
     capabilities = grabberController->getFocusCaps();
     if (capabilities->isCapability()) {
-        value = (capabilities->getDefault() - capabilities->getMinimum()) / capabilities->getStep();
-        focusComboBox->setCurrentIndex(value);
+        value = capabilities->getDefault();
+        focusSlider->setValue(value);
         changeFocus(value, true);
     }
 
@@ -2701,8 +2666,8 @@ void CameraControllerDialog::reset()
     }
     capabilities = grabberController->getPanCaps();
     if (capabilities->isCapability()) {
-        value = (capabilities->getDefault() - capabilities->getMinimum()) / capabilities->getStep();
-        panComboBox->setCurrentIndex(value);
+        value = capabilities->getDefault();
+        panSlider->setValue(value);
         changePan(value, true);
     }
 
@@ -2712,8 +2677,8 @@ void CameraControllerDialog::reset()
     }
     capabilities = grabberController->getTiltCaps();
     if (capabilities->isCapability()) {
-        value = (capabilities->getDefault() - capabilities->getMinimum()) / capabilities->getStep();
-        tiltComboBox->setCurrentIndex(value);
+        value = capabilities->getDefault();
+        tiltSlider->setValue(value);
         changeTilt(value, true);
     }
 
@@ -2723,8 +2688,8 @@ void CameraControllerDialog::reset()
     }
     capabilities = grabberController->getIrisCaps();
     if (capabilities->isCapability()) {
-        value = (capabilities->getDefault() - capabilities->getMinimum()) / capabilities->getStep();
-        irisComboBox->setCurrentIndex(value);
+        value = capabilities->getDefault();
+        irisSlider->setValue(value);
         changeIris(value, true);
     }
 
@@ -2734,8 +2699,8 @@ void CameraControllerDialog::reset()
     }
     capabilities = grabberController->getRollCaps();
     if (capabilities->isCapability()) {
-        value = (capabilities->getDefault() - capabilities->getMinimum()) / capabilities->getStep();
-        rollComboBox->setCurrentIndex(value);
+        value = capabilities->getDefault();
+        rollSlider->setValue(value);
         changeRoll(value, true);
     }
 

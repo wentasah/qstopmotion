@@ -43,23 +43,6 @@ CameraControllerDialog::CameraControllerDialog(Frontend *f,
     deviceId.remove(QLatin1Char(' '));   // Remove all spaces (Windows)
     deviceId.remove(QLatin1Char('/'));   // Remove all slashs (Linux)
     grabberController = device->getController();
-    stepBrightness = -1;
-    stepContrast = -1;
-    stepSaturation = -1;
-    stepHue = -1;
-    stepGamma = -1;
-    stepSharpness = -1;
-    stepBacklight = -1;
-    stepWhite = -1;
-    stepGain = -1;
-    stepColor = -1;
-    stepExposure = -1;
-    stepZoom = -1;
-    stepFocus = -1;
-    stepPan = -1;
-    stepTilt = -1;
-    stepIris = -1;
-    stepRoll = -1;
 
     makeGUI();
     retranslateStrings();
@@ -442,7 +425,7 @@ void CameraControllerDialog::initialize()
             // Calculate default value
             value = capabilities->getDefault();
         }
-        stepBrightness = configureSlider(brightnessSlider, capabilities, value);
+        configureSlider(brightnessSlider, capabilities, value);
     }
 
     capabilities = grabberController->getContrastCaps();
@@ -472,7 +455,7 @@ void CameraControllerDialog::initialize()
             // Calculate default value
             value = capabilities->getDefault();
         }
-        stepContrast = configureSlider(contrastSlider, capabilities, value);
+        configureSlider(contrastSlider, capabilities, value);
     }
 
     capabilities = grabberController->getSaturationCaps();
@@ -502,7 +485,7 @@ void CameraControllerDialog::initialize()
             // Calculate default value
             value = capabilities->getDefault();
         }
-        stepSaturation = configureSlider(saturationSlider, capabilities, value);
+        configureSlider(saturationSlider, capabilities, value);
     }
 
     capabilities = grabberController->getHueCaps();
@@ -532,7 +515,7 @@ void CameraControllerDialog::initialize()
             // Calculate default value
             value = capabilities->getDefault();
         }
-        stepHue = configureSlider(hueSlider, capabilities, value);
+        configureSlider(hueSlider, capabilities, value);
     }
 
     capabilities = grabberController->getGammaCaps();
@@ -562,7 +545,7 @@ void CameraControllerDialog::initialize()
             // Calculate default value
             value = capabilities->getDefault();
         }
-        stepGamma = configureSlider(gammaSlider, capabilities, value);
+        configureSlider(gammaSlider, capabilities, value);
     }
 
     capabilities = grabberController->getSharpnessCaps();
@@ -592,7 +575,7 @@ void CameraControllerDialog::initialize()
             // Calculate default value
             value = capabilities->getDefault();
         }
-        stepSharpness = configureSlider(sharpnessSlider, capabilities, value);
+        configureSlider(sharpnessSlider, capabilities, value);
     }
 
     capabilities = grabberController->getBacklightCaps();
@@ -622,7 +605,7 @@ void CameraControllerDialog::initialize()
             // Calculate default value
             value = capabilities->getDefault();
         }
-        stepBacklight = configureSlider(backlightSlider, capabilities, value);
+        configureSlider(backlightSlider, capabilities, value);
     }
 
     capabilities = grabberController->getWhiteCaps();
@@ -652,7 +635,7 @@ void CameraControllerDialog::initialize()
             // Calculate default value
             value = capabilities->getDefault();
         }
-        stepWhite = configureSlider(whiteSlider, capabilities, value);
+        configureSlider(whiteSlider, capabilities, value);
     }
 
     capabilities = grabberController->getGainCaps();
@@ -682,7 +665,7 @@ void CameraControllerDialog::initialize()
             // Calculate default value
             value = capabilities->getDefault();
         }
-        stepGain = configureSlider(gainSlider, capabilities, value);
+        configureSlider(gainSlider, capabilities, value);
     }
 
     capabilities = grabberController->getColorCaps();
@@ -712,7 +695,7 @@ void CameraControllerDialog::initialize()
             // Calculate default value
             value = capabilities->getDefault();
         }
-        stepColor = configureSlider(colorSlider, capabilities, value);
+        configureSlider(colorSlider, capabilities, value);
     }
 
     // TODO: This will not work
@@ -749,7 +732,7 @@ void CameraControllerDialog::initialize()
             // Calculate default value
             value = capabilities->getDefault();
         }
-        stepExposure = configureSlider(exposureSlider, capabilities, value);
+        configureSlider(exposureSlider, capabilities, value);
     }
 
     capabilities = grabberController->getZoomCaps();
@@ -779,7 +762,7 @@ void CameraControllerDialog::initialize()
             // Calculate default value
             value = capabilities->getDefault();
         }
-        stepZoom = configureSlider(zoomSlider, capabilities, value);
+        configureSlider(zoomSlider, capabilities, value);
     }
 
     capabilities = grabberController->getFocusCaps();
@@ -809,7 +792,7 @@ void CameraControllerDialog::initialize()
             // Calculate default value
             value = capabilities->getDefault();
         }
-        stepFocus = configureSlider(focusSlider, capabilities, value);
+        configureSlider(focusSlider, capabilities, value);
     }
 
     capabilities = grabberController->getPanCaps();
@@ -839,7 +822,7 @@ void CameraControllerDialog::initialize()
             // Calculate default value
             value = capabilities->getDefault();
         }
-        stepPan = configureSlider(panSlider, capabilities, value);
+        configureSlider(panSlider, capabilities, value);
     }
 
     capabilities = grabberController->getTiltCaps();
@@ -869,7 +852,7 @@ void CameraControllerDialog::initialize()
             // Calculate default value
             value = capabilities->getDefault();
         }
-        stepTilt = configureSlider(tiltSlider, capabilities, value);
+        configureSlider(tiltSlider, capabilities, value);
     }
 
     capabilities = grabberController->getIrisCaps();
@@ -899,7 +882,7 @@ void CameraControllerDialog::initialize()
             // Calculate default value
             value = capabilities->getDefault();
         }
-        stepIris = configureSlider(irisSlider, capabilities, value);
+        configureSlider(irisSlider, capabilities, value);
     }
 
     capabilities = grabberController->getRollCaps();
@@ -929,7 +912,7 @@ void CameraControllerDialog::initialize()
             // Calculate default value
             value = capabilities->getDefault();
         }
-        stepRoll = configureSlider(rollSlider, capabilities, value);
+        configureSlider(rollSlider, capabilities, value);
     }
 
     // TODO: This will not work
@@ -1648,26 +1631,22 @@ void CameraControllerDialog::changeAutoContrast(int newState, bool save)
 }
 
 
-void CameraControllerDialog::changeContrast(int index)
+void CameraControllerDialog::changeContrast(int value)
 {
-    changeContrast(index, true);
+    contrastSlider->setToolTip(QString::number(value));
+    changeContrast(value, true);
 }
 
 
-void CameraControllerDialog::changeContrast(int index, bool save)
+void CameraControllerDialog::changeContrast(int value, bool save)
 {
     qDebug() << "CameraControllerDialog::changeContrast --> Start";
 
     PreferencesTool *preferences = frontend->getPreferences();
-    int value = grabberController->getContrastCaps()->getMinimum() + (index * stepContrast);
-    int maxValue = grabberController->getContrastCaps()->getMaximum();
 
-    if (value > maxValue) {
-        value = maxValue;
-    }
     grabberController->setContrast(value);
     if (save) {
-        preferences->setIntegerPreference(deviceId, "contrast", index);
+        preferences->setIntegerPreference(deviceId, "contrast", value);
     }
 
     qDebug() << "CameraControllerDialog::changeContrast --> End";
@@ -1702,26 +1681,22 @@ void CameraControllerDialog::changeAutoSaturation(int newState, bool save)
 }
 
 
-void CameraControllerDialog::changeSaturation(int index)
+void CameraControllerDialog::changeSaturation(int value)
 {
-    changeSaturation(index, true);
+    saturationSlider->setToolTip(QString::number(value));
+    changeSaturation(value, true);
 }
 
 
-void CameraControllerDialog::changeSaturation(int index, bool save)
+void CameraControllerDialog::changeSaturation(int value, bool save)
 {
     qDebug() << "CameraControllerDialog::changeSaturation --> Start";
 
     PreferencesTool *preferences = frontend->getPreferences();
-    int value = grabberController->getSaturationCaps()->getMinimum() + (index * stepSaturation);
-    int maxValue = grabberController->getSaturationCaps()->getMaximum();
 
-    if (value > maxValue) {
-        value = maxValue;
-    }
     grabberController->setSaturation(value);
     if (save) {
-        preferences->setIntegerPreference(deviceId, "saturation", index);
+        preferences->setIntegerPreference(deviceId, "saturation", value);
     }
 
     qDebug() << "CameraControllerDialog::changeSaturation --> End";
@@ -1756,26 +1731,22 @@ void CameraControllerDialog::changeAutoHue(int newState, bool save)
 }
 
 
-void CameraControllerDialog::changeHue(int index)
+void CameraControllerDialog::changeHue(int value)
 {
-    changeHue(index, true);
+    hueSlider->setToolTip(QString::number(value));
+    changeHue(value, true);
 }
 
 
-void CameraControllerDialog::changeHue(int index, bool save)
+void CameraControllerDialog::changeHue(int value, bool save)
 {
     qDebug() << "CameraControllerDialog::changeHue --> Start";
 
     PreferencesTool *preferences = frontend->getPreferences();
-    int value = grabberController->getHueCaps()->getMinimum() + (index * stepHue);
-    int maxValue = grabberController->getHueCaps()->getMaximum();
 
-    if (value > maxValue) {
-        value = maxValue;
-    }
     grabberController->setHue(value);
     if (save) {
-        preferences->setIntegerPreference(deviceId, "hue", index);
+        preferences->setIntegerPreference(deviceId, "hue", value);
     }
 
     qDebug() << "CameraControllerDialog::changeHue --> End";
@@ -1810,26 +1781,22 @@ void CameraControllerDialog::changeAutoGamma(int newState, bool save)
 }
 
 
-void CameraControllerDialog::changeGamma(int index)
+void CameraControllerDialog::changeGamma(int value)
 {
-    changeGamma(index, true);
+    gammaSlider->setToolTip(QString::number(value));
+    changeGamma(value, true);
 }
 
 
-void CameraControllerDialog::changeGamma(int index, bool save)
+void CameraControllerDialog::changeGamma(int value, bool save)
 {
     qDebug() << "CameraControllerDialog::changeGamma --> Start";
 
     PreferencesTool *preferences = frontend->getPreferences();
-    int value = grabberController->getGammaCaps()->getMinimum() + (index * stepGamma);
-    int maxValue = grabberController->getGammaCaps()->getMaximum();
 
-    if (value > maxValue) {
-        value = maxValue;
-    }
     grabberController->setGamma(value);
     if (save) {
-        preferences->setIntegerPreference(deviceId, "gamma", index);
+        preferences->setIntegerPreference(deviceId, "gamma", value);
     }
 
     qDebug() << "CameraControllerDialog::changeGamma --> End";
@@ -1864,26 +1831,22 @@ void CameraControllerDialog::changeAutoSharpness(int newState, bool save)
 }
 
 
-void CameraControllerDialog::changeSharpness(int index)
+void CameraControllerDialog::changeSharpness(int value)
 {
-    changeSharpness(index, true);
+    sharpnessSlider->setToolTip(QString::number(value));
+    changeSharpness(value, true);
 }
 
 
-void CameraControllerDialog::changeSharpness(int index, bool save)
+void CameraControllerDialog::changeSharpness(int value, bool save)
 {
     qDebug() << "CameraControllerDialog::changeSharpness --> Start";
 
     PreferencesTool *preferences = frontend->getPreferences();
-    int value = grabberController->getSharpnessCaps()->getMinimum() + (index * stepSharpness);
-    int maxValue = grabberController->getSharpnessCaps()->getMaximum();
 
-    if (value > maxValue) {
-        value = maxValue;
-    }
     grabberController->setSharpness(value);
     if (save) {
-        preferences->setIntegerPreference(deviceId, "sharpness", index);
+        preferences->setIntegerPreference(deviceId, "sharpness", value);
     }
 
     qDebug() << "CameraControllerDialog::changeSharpness --> End";
@@ -1918,26 +1881,22 @@ void CameraControllerDialog::changeAutoBacklight(int newState, bool save)
 }
 
 
-void CameraControllerDialog::changeBacklight(int index)
+void CameraControllerDialog::changeBacklight(int value)
 {
-    changeBacklight(index, true);
+    backlightSlider->setToolTip(QString::number(value));
+    changeBacklight(value, true);
 }
 
 
-void CameraControllerDialog::changeBacklight(int index, bool save)
+void CameraControllerDialog::changeBacklight(int value, bool save)
 {
     qDebug() << "CameraControllerDialog::changeBacklight --> Start";
 
     PreferencesTool *preferences = frontend->getPreferences();
-    int value = grabberController->getBacklightCaps()->getMinimum() + (index * stepBacklight);
-    int maxValue = grabberController->getBacklightCaps()->getMaximum();
 
-    if (value > maxValue) {
-        value = maxValue;
-    }
     grabberController->setBacklight(value);
     if (save) {
-        preferences->setIntegerPreference(deviceId, "backlight", index);
+        preferences->setIntegerPreference(deviceId, "backlight", value);
     }
 
     qDebug() << "CameraControllerDialog::changeBacklight --> End";
@@ -1972,26 +1931,22 @@ void CameraControllerDialog::changeAutoWhite(int newState, bool save)
 }
 
 
-void CameraControllerDialog::changeWhite(int index)
+void CameraControllerDialog::changeWhite(int value)
 {
-    changeWhite(index, true);
+    whiteSlider->setToolTip(QString::number(value));
+    changeWhite(value, true);
 }
 
 
-void CameraControllerDialog::changeWhite(int index, bool save)
+void CameraControllerDialog::changeWhite(int value, bool save)
 {
     qDebug() << "CameraControllerDialog::changeWhite --> Start";
 
     PreferencesTool *preferences = frontend->getPreferences();
-    int value = grabberController->getWhiteCaps()->getMinimum() + (index * stepWhite);
-    int maxValue = grabberController->getWhiteCaps()->getMaximum();
 
-    if (value > maxValue) {
-        value = maxValue;
-    }
     grabberController->setWhite(value);
     if (save) {
-        preferences->setIntegerPreference(deviceId, "white", index);
+        preferences->setIntegerPreference(deviceId, "white", value);
     }
 
     qDebug() << "CameraControllerDialog::changeWhite --> End";
@@ -2026,26 +1981,22 @@ void CameraControllerDialog::changeAutoGain(int newState, bool save)
 }
 
 
-void CameraControllerDialog::changeGain(int index)
+void CameraControllerDialog::changeGain(int value)
 {
-    changeGain(index, true);
+    gainSlider->setToolTip(QString::number(value));
+    changeGain(value, true);
 }
 
 
-void CameraControllerDialog::changeGain(int index, bool save)
+void CameraControllerDialog::changeGain(int value, bool save)
 {
     qDebug() << "CameraControllerDialog::changeGain --> Start";
 
     PreferencesTool *preferences = frontend->getPreferences();
-    int value = grabberController->getGainCaps()->getMinimum() + (index * stepGain);
-    int maxValue = grabberController->getGainCaps()->getMaximum();
 
-    if (value > maxValue) {
-        value = maxValue;
-    }
     grabberController->setGain(value);
     if (save) {
-        preferences->setIntegerPreference(deviceId, "gain", index);
+        preferences->setIntegerPreference(deviceId, "gain", value);
     }
 
     qDebug() << "CameraControllerDialog::changeGain --> End";
@@ -2080,26 +2031,22 @@ void CameraControllerDialog::changeAutoColor(int newState, bool save)
 }
 
 
-void CameraControllerDialog::changeColor(int index)
+void CameraControllerDialog::changeColor(int value)
 {
-    changeColor(index, true);
+    colorSlider->setToolTip(QString::number(value));
+    changeColor(value, true);
 }
 
 
-void CameraControllerDialog::changeColor(int index, bool save)
+void CameraControllerDialog::changeColor(int value, bool save)
 {
     qDebug() << "CameraControllerDialog::changeColor --> Start";
 
     PreferencesTool *preferences = frontend->getPreferences();
-    int value = grabberController->getColorCaps()->getMinimum() + (index * stepColor);
-    int maxValue = grabberController->getColorCaps()->getMaximum();
 
-    if (value > maxValue) {
-        value = maxValue;
-    }
     grabberController->setColor(value);
     if (save) {
-        preferences->setIntegerPreference(deviceId, "color", index);
+        preferences->setIntegerPreference(deviceId, "color", value);
     }
 
     qDebug() << "CameraControllerDialog::changeColor --> End";
@@ -2134,26 +2081,22 @@ void CameraControllerDialog::changeAutoExposure(int newState, bool save)
 }
 
 
-void CameraControllerDialog::changeExposure(int index)
+void CameraControllerDialog::changeExposure(int value)
 {
-    changeExposure(index, true);
+    exposureSlider->setToolTip(QString::number(value));
+    changeExposure(value, true);
 }
 
 
-void CameraControllerDialog::changeExposure(int index, bool save)
+void CameraControllerDialog::changeExposure(int value, bool save)
 {
     qDebug() << "CameraControllerDialog::changeExposure --> Start";
 
     PreferencesTool *preferences = frontend->getPreferences();
-    int value = grabberController->getExposureCaps()->getMinimum() + (index * stepExposure);
-    int maxValue = grabberController->getExposureCaps()->getMaximum();
 
-    if (value > maxValue) {
-        value = maxValue;
-    }
     grabberController->setExposure(value);
     if (save) {
-        preferences->setIntegerPreference(deviceId, "exposure", index);
+        preferences->setIntegerPreference(deviceId, "exposure", value);
     }
 
     qDebug() << "CameraControllerDialog::changeExposure --> End";
@@ -2188,26 +2131,22 @@ void CameraControllerDialog::changeAutoZoom(int newState, bool save)
 }
 
 
-void CameraControllerDialog::changeZoom(int index)
+void CameraControllerDialog::changeZoom(int value)
 {
-    changeZoom(index, true);
+    zoomSlider->setToolTip(QString::number(value));
+    changeZoom(value, true);
 }
 
 
-void CameraControllerDialog::changeZoom(int index, bool save)
+void CameraControllerDialog::changeZoom(int value, bool save)
 {
     qDebug() << "CameraControllerDialog::changeZoo --> Start";
 
     PreferencesTool *preferences = frontend->getPreferences();
-    int value = grabberController->getZoomCaps()->getMinimum() + (index * stepZoom);
-    int maxValue = grabberController->getZoomCaps()->getMaximum();
 
-    if (value > maxValue) {
-        value = maxValue;
-    }
     grabberController->setZoom(value);
     if (save) {
-        preferences->setIntegerPreference(deviceId, "zoom", index);
+        preferences->setIntegerPreference(deviceId, "zoom", value);
     }
 
     qDebug() << "CameraControllerDialog::changeZoo --> End";
@@ -2242,26 +2181,22 @@ void CameraControllerDialog::changeAutoFocus(int newState, bool save)
 }
 
 
-void CameraControllerDialog::changeFocus(int index)
+void CameraControllerDialog::changeFocus(int value)
 {
-    changeFocus(index, true);
+    focusSlider->setToolTip(QString::number(value));
+    changeFocus(value, true);
 }
 
 
-void CameraControllerDialog::changeFocus(int index, bool save)
+void CameraControllerDialog::changeFocus(int value, bool save)
 {
     qDebug() << "CameraControllerDialog::changeFocus --> Start";
 
     PreferencesTool *preferences = frontend->getPreferences();
-    int value = grabberController->getFocusCaps()->getMinimum() + (index * stepFocus);
-    int maxValue = grabberController->getFocusCaps()->getMaximum();
 
-    if (value > maxValue) {
-        value = maxValue;
-    }
     grabberController->setFocus(value);
     if (save) {
-        preferences->setIntegerPreference(deviceId, "focus", index);
+        preferences->setIntegerPreference(deviceId, "focus", value);
     }
 
     qDebug() << "CameraControllerDialog::changeFocus --> End";
@@ -2296,26 +2231,22 @@ void CameraControllerDialog::changeAutoPan(int newState, bool save)
 }
 
 
-void CameraControllerDialog::changePan(int index)
+void CameraControllerDialog::changePan(int value)
 {
-    changePan(index, true);
+    panSlider->setToolTip(QString::number(value));
+    changePan(value, true);
 }
 
 
-void CameraControllerDialog::changePan(int index, bool save)
+void CameraControllerDialog::changePan(int value, bool save)
 {
     qDebug() << "CameraControllerDialog::changePan --> Start";
 
     PreferencesTool *preferences = frontend->getPreferences();
-    int value = grabberController->getPanCaps()->getMinimum() + (index * stepPan);
-    int maxValue = grabberController->getPanCaps()->getMaximum();
 
-    if (value > maxValue) {
-        value = maxValue;
-    }
     grabberController->setPan(value);
     if (save) {
-        preferences->setIntegerPreference(deviceId, "pan", index);
+        preferences->setIntegerPreference(deviceId, "pan", value);
     }
 
     qDebug() << "CameraControllerDialog::changePan --> End";
@@ -2350,26 +2281,22 @@ void CameraControllerDialog::changeAutoTilt(int newState, bool save)
 }
 
 
-void CameraControllerDialog::changeTilt(int index)
+void CameraControllerDialog::changeTilt(int value)
 {
-    changeTilt(index, true);
+    tiltSlider->setToolTip(QString::number(value));
+    changeTilt(value, true);
 }
 
 
-void CameraControllerDialog::changeTilt(int index, bool save)
+void CameraControllerDialog::changeTilt(int value, bool save)
 {
     qDebug() << "CameraControllerDialog::changeTilt --> Start";
 
     PreferencesTool *preferences = frontend->getPreferences();
-    int value = grabberController->getTiltCaps()->getMinimum() + (index * stepTilt);
-    int maxValue = grabberController->getTiltCaps()->getMaximum();
 
-    if (value > maxValue) {
-        value = maxValue;
-    }
     grabberController->setTilt(value);
     if (save) {
-        preferences->setIntegerPreference(deviceId, "tilt", index);
+        preferences->setIntegerPreference(deviceId, "tilt", value);
     }
 
     qDebug() << "CameraControllerDialog::changeTilt --> End";
@@ -2404,26 +2331,22 @@ void CameraControllerDialog::changeAutoIris(int newState, bool save)
 }
 
 
-void CameraControllerDialog::changeIris(int index)
+void CameraControllerDialog::changeIris(int value)
 {
-    changeIris(index, true);
+    irisSlider->setToolTip(QString::number(value));
+    changeIris(value, true);
 }
 
 
-void CameraControllerDialog::changeIris(int index, bool save)
+void CameraControllerDialog::changeIris(int value, bool save)
 {
     qDebug() << "CameraControllerDialog::changeIris --> Start";
 
     PreferencesTool *preferences = frontend->getPreferences();
-    int value = grabberController->getIrisCaps()->getMinimum() + (index * stepIris);
-    int maxValue = grabberController->getIrisCaps()->getMaximum();
 
-    if (value > maxValue) {
-        value = maxValue;
-    }
     grabberController->setIris(value);
     if (save) {
-        preferences->setIntegerPreference(deviceId, "iris", index);
+        preferences->setIntegerPreference(deviceId, "iris", value);
     }
 
     qDebug() << "CameraControllerDialog::changeIris --> End";
@@ -2458,33 +2381,29 @@ void CameraControllerDialog::changeAutoRoll(int newState, bool save)
 }
 
 
-void CameraControllerDialog::changeRoll(int index)
+void CameraControllerDialog::changeRoll(int value)
 {
-    changeRoll(index, true);
+    rollSlider->setToolTip(QString::number(value));
+    changeRoll(value, true);
 }
 
 
-void CameraControllerDialog::changeRoll(int index, bool save)
+void CameraControllerDialog::changeRoll(int value, bool save)
 {
     qDebug() << "CameraControllerDialog::changeRoll --> Start";
 
     PreferencesTool *preferences = frontend->getPreferences();
-    int value = grabberController->getRollCaps()->getMinimum() + (index * stepRoll);
-    int maxValue = grabberController->getRollCaps()->getMaximum();
 
-    if (value > maxValue) {
-        value = maxValue;
-    }
     grabberController->setRoll(value);
     if (save) {
-        preferences->setIntegerPreference(deviceId, "roll", index);
+        preferences->setIntegerPreference(deviceId, "roll", value);
     }
 
     qDebug() << "CameraControllerDialog::changeRoll --> End";
 }
 
 
-int CameraControllerDialog::configureSlider(QSlider *slider, GrabberControlCapabilities *controlCaps, int value)
+void CameraControllerDialog::configureSlider(QSlider *slider, GrabberControlCapabilities *controlCaps, int value)
 {
     slider->setMinimum(controlCaps->getMinimum());
     slider->setMaximum(controlCaps->getMaximum());
@@ -2497,10 +2416,6 @@ int CameraControllerDialog::configureSlider(QSlider *slider, GrabberControlCapab
     slider->setTickInterval(10);
     slider->setTickPosition(QSlider::TicksBelow);
     slider->setFocusPolicy(Qt::NoFocus);
-
-    qDebug() << "CameraControllerDialog::configureSlider --> Values: Min:" << slider->minimum() << " Step:" << slider->singleStep() << " Max:" << slider->maximum();
-
-    return controlCaps->getStep();
 }
 
 

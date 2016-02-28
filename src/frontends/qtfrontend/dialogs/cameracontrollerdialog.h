@@ -605,7 +605,7 @@ private:
      * @param value The actual value of the slider.
      * @return The step lengt for the values of the slider.
      */
-    int configureSlider(QSlider *slider, GrabberControlCapabilities *controlCaps, int value);
+    void configureSlider(QSlider *slider, GrabberControlCapabilities *controlCaps, int value);
 
     Frontend     *frontend;
 
@@ -619,52 +619,42 @@ private:
     QCheckBox    *brightnessCheckBox;
     QLabel       *brightnessLabel;
     QSlider      *brightnessSlider;
-    int           stepBrightness;
 
     QCheckBox    *contrastCheckBox;
     QLabel       *contrastLabel;
     QSlider      *contrastSlider;
-    int           stepContrast;
 
     QCheckBox    *saturationCheckBox;
     QLabel       *saturationLabel;
     QSlider      *saturationSlider;
-    int           stepSaturation;
 
     QCheckBox    *hueCheckBox;
     QLabel       *hueLabel;
     QSlider      *hueSlider;
-    int           stepHue;
 
     QCheckBox    *gammaCheckBox;
     QLabel       *gammaLabel;
     QSlider      *gammaSlider;
-    int           stepGamma;
 
     QCheckBox    *sharpnessCheckBox;
     QLabel       *sharpnessLabel;
     QSlider      *sharpnessSlider;
-    int           stepSharpness;
 
     QCheckBox    *backlightCheckBox;
     QLabel       *backlightLabel;
     QSlider      *backlightSlider;
-    int           stepBacklight;
 
     QCheckBox    *whiteCheckBox;
     QLabel       *whiteLabel;
     QSlider      *whiteSlider;
-    int           stepWhite;
 
     QCheckBox    *gainCheckBox;
     QLabel       *gainLabel;
     QSlider      *gainSlider;
-    int           stepGain;
 
     QCheckBox    *colorCheckBox;
     QLabel       *colorLabel;
     QSlider      *colorSlider;
-    int           stepColor;
 
     QGroupBox    *controlGroupBox;
     int           controlCount;
@@ -672,37 +662,30 @@ private:
     QCheckBox    *exposureCheckBox;
     QLabel       *exposureLabel;
     QSlider      *exposureSlider;
-    int           stepExposure;
 
     QCheckBox    *zoomCheckBox;
     QLabel       *zoomLabel;
     QSlider      *zoomSlider;
-    int           stepZoom;
 
     QCheckBox    *focusCheckBox;
     QLabel       *focusLabel;
     QSlider      *focusSlider;
-    int           stepFocus;
 
     QCheckBox    *panCheckBox;
     QLabel       *panLabel;
     QSlider      *panSlider;
-    int           stepPan;
 
     QCheckBox    *tiltCheckBox;
     QLabel       *tiltLabel;
     QSlider      *tiltSlider;
-    int           stepTilt;
 
     QCheckBox    *irisCheckBox;
     QLabel       *irisLabel;
     QSlider      *irisSlider;
-    int           stepIris;
 
     QCheckBox    *rollCheckBox;
     QLabel       *rollLabel;
     QSlider      *rollSlider;
-    int           stepRoll;
 
     QVBoxLayout  *mainLayout;
 

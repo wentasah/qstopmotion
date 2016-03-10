@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2010-2015 by                                                *
+ *  Copyright (C) 2010-2016 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -31,6 +31,11 @@
 
 // Include files of the gphoto library
 #include <unistd.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <errno.h>
+#include <string.h>
 #include <gst/interfaces/propertyprobe.h>
 #include <gst/app/gstappsink.h>
 
@@ -63,6 +68,8 @@ GphotoGrabber::GphotoGrabber(Frontend *f)
         return;
     }
     isInitSuccess = true;
+
+    canonEnableCapture(gphotoCamera, TRUE, gphotoContext);
 
     // summary
     CameraText sum;
@@ -113,7 +120,7 @@ GphotoGrabber::~GphotoGrabber()
 
     ret = gp_log_remove_func(gphotoErrorId);
     if (ret != GP_OK) {
-        qDebug() << "GphotoGrabber::Constructor --> Error gp_camera_get_about: " << gp_result_as_string(ret);
+        qDebug() << "GphotoGrabber::Destructor --> Error gp_log_remove_func: " << gp_result_as_string(ret);
     }
 
     qDebug() << "GphotoGrabber::Destructor --> End";
@@ -267,7 +274,12 @@ bool GphotoGrabber::tearDown()
 {
     qDebug() << "GphotoGrabber::tearDown --> Start";
 
-    gp_camera_exit(gphotoCamera, gphotoContext);
+    int ret;
+
+    ret = gp_camera_exit(gphotoCamera, gphotoContext);
+    if (ret != GP_OK) {
+        qDebug() << "GphotoGrabber::tearDown --> Error End gp_camera_exit: " << gp_result_as_string(ret);
+    }
 
     qDebug() << "GphotoGrabber::tearDown --> End";
     return true;
@@ -302,7 +314,8 @@ const QImage GphotoGrabber::getLiveImage()
     ret = gp_camera_capture_preview(gphotoCamera, cf, gphotoContext);
     if (ret != GP_OK) {
         qDebug() << "GphotoGrabber::getLiveImage --> Error End gp_camera_capture_preview: " << gp_result_as_string(ret);
-        return QImage();
+        liveImage = QImage();
+        goto LiveError;
     }
 
     // setImage(cf, a);
@@ -310,39 +323,20 @@ const QImage GphotoGrabber::getLiveImage()
     ret = gp_file_get_data_and_size(cf, &data, &mysize);
     if (ret != GP_OK) {
         qDebug() << "GphotoGrabber::getLiveImage --> Error: gp_file_get_data_and_size: " << gp_result_as_string(ret);
-        return QImage();
+        liveImage = QImage();
+        goto LiveError;
     }
 
     if (mysize == 0 ) {
-        return QImage();
+        liveImage = QImage();
+        goto LiveError;
     }
 
     liveImage.loadFromData((uchar*)data, (uint)mysize);
 
-    /*
-    char output_file[256];
-    char temp_file[256];
-
-    sprintf(output_file, "%s", filePath.toAscii().data());
-    sprintf(temp_file, "%s.tmp", output_file);
-
-    ret = gp_file_save(cf, temp_file);
-    if (ret != GP_OK) {
-        // fprintf(stderr,"gp_camera_capture_preview(%d): %d\n", i, ret);
-        qDebug() << "GphotoGrabber::getLiveImage --> Error End gp_camera_capture_preview: " << gp_result_as_string(ret);
-        return QImage();
-    }
-    gp_file_unref(cf);
-
-    // When the file name is constant, unlink first...
-    unlink(output_file);   // Delete the name from the file system (#include <unistd.h>)
-
-    // Always doing this
-    link(temp_file, output_file);  // Create a new link to the existing file (#include <unistd.h>)
-    unlink(temp_file);             // Delete the name from the file system (#include <unistd.h>)
-
-    liveImage.load(filePath);
-    */
+LiveError:
+    gp_file_free(cf);
+    // gp_file_unref(cf);
 
     qDebug() << "GphotoGrabber::getLiveImage --> End";
     return liveImage;
@@ -358,6 +352,11 @@ const QImage GphotoGrabber::getRawImage()
     unsigned long   mysize = 0;
     const char     *data = NULL;
     int             ret;
+    int fdesc; // file descriptor
+
+    // NOP: This gets overridden in the library to /capt0000.jpg
+    strcpy(cfp.folder, "/");
+    strcpy(cfp.name, "foo.jpg");
 
     // Taking Image
     ret = gp_camera_capture(gphotoCamera, GP_CAPTURE_IMAGE, &cfp, gphotoContext );
@@ -365,33 +364,60 @@ const QImage GphotoGrabber::getRawImage()
         qDebug() << "GphotoGrabber::getRawImage --> Error: gp_camera_capture: " << gp_result_as_string(ret);
         return QImage();
     }
+    qDebug() << "GphotoGrabber::getRawImage --> Captured file: " << cfp.folder << "/" << cfp.name;
 
-    // Downloading Image
     ret = gp_file_new(&cf);
     if (ret != GP_OK) {
-        qDebug() << "gp_file_new";
+        qDebug() << "GphotoGrabber::getRawImage --> Error: gp_file_new_from_fd: " << gp_result_as_string(ret);
+        close(fdesc);
         return QImage();
     }
 
+    // Download image from camera to imageFilename
     ret = gp_camera_file_get(gphotoCamera, cfp.folder, cfp.name, GP_FILE_TYPE_NORMAL, cf, gphotoContext);
     if (ret != GP_OK) {
         qDebug() << "GphotoGrabber::getRawImage --> Error: gp_camera_file_get: " << gp_result_as_string(ret);
-        return QImage();
+        rawImage = QImage();
+        goto RawError;
     }
-
-    // setImage(cf, a);
 
     ret = gp_file_get_data_and_size(cf, &data, &mysize);
     if (ret != GP_OK) {
         qDebug() << "GphotoGrabber::getRawImage --> Error: gp_file_get_data_and_size: " << gp_result_as_string(ret);
-        return QImage();
+        rawImage = QImage();
+        goto RawError;
     }
 
     if (mysize == 0 ) {
-        return QImage();
+        rawImage = QImage();
+        goto RawError;
     }
 
+    // Delete image on camera
+    ret = gp_camera_file_delete(gphotoCamera, cfp.folder, cfp.name, gphotoContext);
+    if (ret != GP_OK) {
+        qDebug() << "GphotoGrabber::getRawImage --> Error: gp_camera_file_delete: " << gp_result_as_string(ret);
+        rawImage = QImage();
+        goto RawError;
+    }
+
+    // rawImage.load(QString(imageFilename));
     rawImage.loadFromData((uchar*)data, (uint)mysize);
+
+RawError:
+    // ret = gp_file_free(cf);
+    // if (ret != GP_OK) {
+    //     qDebug() << "GphotoGrabber::getRawImage --> Error: gp_file_free: " << gp_result_as_string(ret);
+    // }
+
+    // ret = gp_camera_exit(gphotoCamera, gphotoContext);
+    // if (ret != GP_OK) {
+    //     qDebug() << "GphotoGrabber::getRawImage --> Error End gp_camera_exit: " << gp_result_as_string(ret);
+    // }
+
+    this->tearDown();
+
+    this->setUp();
 
     qDebug() << "GphotoGrabber::getRawImage --> End";
     return rawImage;
@@ -657,3 +683,76 @@ void GphotoGrabber::populateWithConfigs(CameraWidget *gphotoConfig)
 
     qDebug() << "GphotoGrabber::populateWithConfigs --> End";
 }
+
+
+static int _lookup_widget(CameraWidget*widget, const char *key, CameraWidget **child)
+{
+    int ret;
+
+    ret = gp_widget_get_child_by_name (widget, key, child);
+    if (ret < GP_OK) {
+        ret = gp_widget_get_child_by_label (widget, key, child);
+    }
+    return ret;
+}
+
+
+/*
+ * This enables/disables the specific canon capture mode.
+ *
+ * For non canons this is not required, and will just return
+ * with an error (but without negative effects).
+ */
+int GphotoGrabber::canonEnableCapture (Camera *camera, int onoff, GPContext *context)
+{
+    qDebug() << "GphotoGrabber::canonEnableCapture --> Start";
+
+    CameraWidget*      widget = NULL;
+    CameraWidget*      child = NULL;
+    CameraWidgetType   type;
+    int                ret;
+
+    ret = gp_camera_get_config(camera, &widget, context);
+    if (ret < GP_OK) {
+        qDebug() << "GphotoGrabber::canonEnableCapture --> Error gp_camera_get_config: " << gp_result_as_string(ret);
+        return ret;
+    }
+    ret = _lookup_widget(widget, "capture", &child);
+    if (ret < GP_OK) {
+        qDebug() << "GphotoGrabber::canonEnableCapture --> Error gp_camera_get_config: " << gp_result_as_string(ret);
+        goto out;
+    }
+
+    ret = gp_widget_get_type(child, &type);
+    if (ret < GP_OK) {
+        qDebug() << "GphotoGrabber::canonEnableCapture --> Error gp_widget_get_type: " << gp_result_as_string(ret);
+        goto out;
+    }
+    switch (type) {
+    case GP_WIDGET_TOGGLE:
+        break;
+    default:
+        qDebug() << "GphotoGrabber::canonEnableCapture --> Error Widget has bad type: " << type;
+        ret = GP_ERROR_BAD_PARAMETERS;
+        goto out;
+    }
+    /* Now set the toggle to the wanted value */
+    ret = gp_widget_set_value(child, &onoff);
+    if (ret < GP_OK) {
+        qDebug() << "GphotoGrabber::canonEnableCapture --> Error gp_widget_set_value: " << gp_result_as_string(ret);
+        goto out;
+    }
+    /* OK */
+    ret = gp_camera_set_config(camera, widget, context);
+    if (ret < GP_OK) {
+        qDebug() << "GphotoGrabber::canonEnableCapture --> Error gp_camera_set_config: " << gp_result_as_string(ret);
+        return ret;
+    }
+out:
+    gp_widget_free(widget);
+
+    qDebug() << "GphotoGrabber::canonEnableCapture --> End";
+
+    return ret;
+}
+

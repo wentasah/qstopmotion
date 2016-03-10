@@ -1,7 +1,7 @@
 ###############################################################################
 # CMake file for the qStopMotion project                                      #
 # (c) Ralf Lange, longsoft.de                                                 #
-# Last update: 2016-02-05                                                     #
+# Last update: 2016-03-10                                                     #
 #                                                                             #
 # Usage:                                                                      #
 #   * Qt-Creator (Windows, Linux)                                             #
@@ -926,17 +926,8 @@ SET(
 
 IF(UNIX AND NOT APPLE)
     # Try to find architecture
-    execute_process (COMMAND uname -m OUTPUT_VARIABLE UNAME_ARCHITECTURE)
-    string (STRIP "${UNAME_ARCHITECTURE}" UNAME_ARCHITECTURE)
-    execute_process (COMMAND uname -r OUTPUT_VARIABLE UNAME_LINUX_VERSION)
-    string (STRIP "${UNAME_LINUX_VERSION}" UNAME_LINUX_VERSION)
-    string (FIND "${UNAME_LINUX_VERSION}" "${UNAME_ARCHITECTURE}" UNAME_POS)
-    math(EXPR UNAME_POS "${UNAME_POS}-1")
-    string (SUBSTRING "${UNAME_LINUX_VERSION}" 0 ${UNAME_POS} UNAME_DISTRIBUTION)
-    string (FIND "${UNAME_DISTRIBUTION}" "." UNAME_POS REVERSE)
-    math(EXPR UNAME_POS "${UNAME_POS}+1")
-    string (SUBSTRING "${UNAME_DISTRIBUTION}" ${UNAME_POS} -1 UNAME_DISTRIBUTION)
-
+    execute_process (COMMAND uname -m OUTPUT_VARIABLE CPACK_PACKAGE_ARCHITECTURE)
+    string (STRIP "${CPACK_PACKAGE_ARCHITECTURE}" CPACK_PACKAGE_ARCHITECTURE)
     # Try to find distro name and distro-specific arch
     execute_process (COMMAND lsb_release -is OUTPUT_VARIABLE LSB_ID)
     execute_process (COMMAND lsb_release -rs OUTPUT_VARIABLE LSB_RELEASE)
@@ -951,17 +942,12 @@ IF(UNIX AND NOT APPLE)
     ENDIF (NOT LSB_DISTRIB)
     SET(
         CPACK_SYSTEM_NAME
-        "${LSB_DISTRIB}.${CPACK_PACKAGE_ARCHITECTURE}"
-    )
-    SET(
-        CPACK_PACKAGE_ARCHITECTURE
-        "${UNAME_ARCHITECTURE}"
+        "${LSB_DISTRIB}-${CPACK_PACKAGE_ARCHITECTURE}"
     )
 
 MESSAGE("UNAME Infos =========================================================")
 MESSAGE("UNAME_ARCHITECTURE: ${UNAME_ARCHITECTURE}")
 MESSAGE("UNAME_LINUX_VERSION: ${UNAME_LINUX_VERSION}")
-MESSAGE("UNAME_DISTRIBUTION: ${UNAME_DISTRIBUTION}")
 MESSAGE("LSB Infos ===========================================================")
 MESSAGE("LSB_ID: ${LSB_ID}")
 MESSAGE("LSB_RELEASE: ${LSB_RELEASE}")
@@ -1263,7 +1249,7 @@ SET(
 # Qt5: qt5-qtmultimedia - Multimedia, MultimediaQuick, MultimediaWidgets
 SET(
     CPACK_RPM_PACKAGE_REQUIRES
-    "ffmpeg >= 0.8.9, glibc >= 2.12, gstreamer >= 0.10.29, libgphoto2 >= 2.4.7, libv4l >= 0.6.3, qt5-qtbase >= 5.2.0, qt5-qtbase-gui >= 5.2.0, qt5-qtimageformats >= 5.2.0"
+    "glibc >= 2.12, gstreamer >= 0.10.29, libgphoto2 >= 2.4.7, libv4l >= 0.6.3, qt5-qtbase >= 5.2.0, qt5-qtbase-gui >= 5.2.0, qt5-qtimageformats >= 5.2.0"
 )
 MESSAGE("CPACK_RPM_PACKAGE_REQUIRES: ${CPACK_RPM_PACKAGE_REQUIRES}")
 # CPACK_RPM_PACKAGE_SUGGESTS

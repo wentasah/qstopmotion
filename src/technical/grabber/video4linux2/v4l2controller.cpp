@@ -202,6 +202,8 @@ void V4L2Controller::enumerate_menu ()
 
 void V4L2Controller::getControlData(GrabberControlCapabilities *caps, long flags)
 {
+    qDebug() << "V4L2Controller::getControlData --> Start";
+
     caps->setControlId(queryctrl.id);
     caps->setControlType(queryctrl.type);
     caps->setFlags(flags);
@@ -225,9 +227,11 @@ void V4L2Controller::getControlData(GrabberControlCapabilities *caps, long flags
     case V4L2_CTRL_TYPE_STRING:
     // case V4L2_CTRL_TYPE_BITMASK:   // Not defined on Debian systems
     default:
-        qDebug() << "V4L2Controller::setCameraCapabilities --> Not supported control type";
+        qDebug() << "V4L2Controller::getControlData --> Not supported control type";
         break;
     }
+
+    qDebug() << "V4L2Controller::getControlData --> End";
 }
 
 

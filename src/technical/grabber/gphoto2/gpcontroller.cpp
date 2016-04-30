@@ -60,13 +60,174 @@ bool GphotoController::initialization(ImageGrabber* ig, ImageGrabberDevice* igd)
     grabber = (GphotoGrabber*)ig;
     grabberDevice = igd;
 
-    // qDebug() << "GphotoController::init --> Open the device ...";
+    if (false == setCapabilities()) {
+        qDebug() << "GphotoController::init --> End (Not Successful)";
+
+        return false;
+    }
+
+    qDebug() << "GphotoController::init --> End";
+
+    return true;
+}
+
+
+bool GphotoController::setCapabilities()
+{
+    qDebug() << "GphotoController::setCapabilities --> Start";
+
+    int                         ret;
+    GrabberControlCapabilities *caps = NULL;
+    int                         flags = 0;
 
     // Enumerating device capabilities
+    // Use 'gphoto2 --list-config' to see the widget tree of the connected cameras
+    CameraWidget* widget_root = NULL;
+    CameraWidget* widget_main = NULL;
+    CameraWidget* widget_actions = NULL;
+    CameraWidget* widget_action = NULL;
+    int           widgetCount = 0;
 
-    qDebug() << "GphotoController::init --> End (Not Successful)";
+    ret = gp_camera_get_config(grabber->getCamera(), &widget_root, grabber->getContext());
+    if (ret != GP_OK) {
+        qDebug() << "GphotoController::setCapabilities --> Error gp_camera_get_config: " << gp_result_as_string(ret);
+    }
 
-    return false;
+    ret = gp_widget_get_child_by_name(widget_root, "main", &widget_main);
+    if (ret != GP_OK) {
+        qDebug() << "GphotoController::setCapabilities --> Error gp_widget_get_child_by_name(main): " << gp_result_as_string(ret);
+    }
+
+    ret = gp_widget_get_child_by_name(widget_main, "actions", &widget_actions);
+    if (ret != GP_OK) {
+        qDebug() << "GphotoController::setCapabilities --> Error gp_widget_get_child_by_name(actions): " << gp_result_as_string(ret);
+    }
+
+    ret = gp_widget_count_children(widget_actions);
+    if (ret < GP_OK) {
+        qDebug() << "GphotoController::setCapabilities --> Error gp_widget_count_children: " << gp_result_as_string(ret);
+    }
+    widgetCount = ret;
+
+    for (int widgetIndex = 0; widgetIndex < widgetCount; widgetIndex++) {
+
+        ret = gp_widget_get_child(widget_actions, widgetIndex, &widget_action);
+        if (ret != GP_OK) {
+            qDebug() << "GphotoController::setCapabilities --> Error gp_widget_get_child: " << gp_result_as_string(ret);
+        }
+        else {
+            const char*      info = NULL;
+            const char*      name = NULL;
+            const char*      label = NULL;
+            CameraWidgetType type;
+            float            min, max, increment;
+            int              choiceCount = 0;
+            const char*      choice = NULL;
+            char*            value;
+
+            ret = gp_widget_get_info(widget_action, &info);
+            if (ret != GP_OK) {
+                qDebug() << "GphotoController::setCapabilities --> Error gp_widget_get_info: " << gp_result_as_string(ret);
+            }
+            else {
+                qDebug() << "GphotoController::setCapabilities --> gp_widget_get_info: " << info;
+            }
+
+            ret = gp_widget_get_name(widget_action, &name);
+            if (ret != GP_OK) {
+                qDebug() << "GphotoController::setCapabilities --> Error gp_widget_get_name: " << gp_result_as_string(ret);
+            }
+            else {
+                qDebug() << "GphotoController::setCapabilities --> gp_widget_get_name: " << name;
+            }
+
+            ret = gp_widget_get_label(widget_action, &label);
+            if (ret != GP_OK) {
+                qDebug() << "GphotoController::setCapabilities --> Error gp_widget_get_label: " << gp_result_as_string(ret);
+            }
+            else {
+                qDebug() << "GphotoController::setCapabilities --> gp_widget_get_label: " << label;
+            }
+
+            ret = gp_widget_get_type(widget_action, &type);
+            if (ret != GP_OK) {
+                qDebug() << "GphotoController::setCapabilities --> Error gp_widget_get_type: " << gp_result_as_string(ret);
+            }
+            else {
+                qDebug() << "GphotoController::setCapabilities --> gp_widget_get_type: " << type;
+            }
+
+            switch (type) {
+            case GP_WIDGET_RANGE:
+                ret = gp_widget_get_range(widget_action, &min, &max, &increment);
+                if (ret != GP_OK) {
+                    qDebug() << "GphotoController::setCapabilities --> Error gp_widget_get_range: " << gp_result_as_string(ret);
+                }
+                else {
+                    qDebug() << "GphotoController::setCapabilities --> gp_widget_get_range: min: " << min << " max: " << max << " increment: " << increment;
+                }
+                break;
+
+            case GP_WIDGET_RADIO:
+                ret = gp_widget_count_choices(widget_action);
+                if (ret < GP_OK) {
+                    qDebug() << "GphotoController::init --> Error gp_widget_count_choices: " << gp_result_as_string(ret);
+                }
+                else {
+                    choiceCount = ret;
+                    qDebug() << "GphotoController::init --> gp_widget_count_choices: count: " << choiceCount;
+
+                    for (int choiceIndex = 0; choiceIndex < choiceCount; choiceIndex++) {
+
+                        ret = gp_widget_get_choice(widget_action, choiceIndex, &choice);
+                        if (ret != GP_OK) {
+                            qDebug() << "GphotoController::init --> Error gp_widget_get_choice: " << gp_result_as_string(ret);
+                        }
+                        else {
+                            qDebug() << "GphotoController::init --> gp_widget_get_choice: " << choice;
+                        }
+                    }
+                }
+                ret = gp_widget_get_value(widget_action, &value);
+                if (ret != GP_OK) {
+                    qDebug() << "GphotoController::init --> Error gp_widget_get_value: " << gp_result_as_string(ret);
+                }
+                else {
+                    qDebug() << "GphotoController::init --> gp_widget_get_value: " << value;
+                }
+
+                break;
+
+            }
+
+            // gp_widget_free(widget_action);
+        }
+    }
+
+    // Iportant action widgets:
+    // Manual Focus: main/actions/manualfocusdrive
+    ret = gp_widget_get_child_by_name(widget_actions, "manualfocusdrive", &widget_action);
+    if (ret != GP_OK) {
+        qDebug() << "GphotoController::setCapabilities --> Error gp_widget_get_child: " << gp_result_as_string(ret);
+    }
+    else {
+        caps = getFocusCaps();
+        flags = GrabberController::controller_Absolute;
+        getControlData(caps, flags);
+
+        // gp_widget_free(widget_action);
+    }
+    // Auto Focus: main/actions/autofocusdrive
+
+    // gp_widget_free(widget_actions);
+
+    // gp_widget_free(widget_main);
+
+    gp_widget_free(widget_root);
+
+    qDebug() << "GphotoController::setCapabilities --> End";
+
+    return true;
 }
 
 
@@ -88,6 +249,8 @@ bool GphotoController::tearDown()
 
 void GphotoController::getControlData(GrabberControlCapabilities *caps, long flags)
 {
+    qDebug() << "GphotoController::getControlData --> Start";
+
     /*
     caps->setControlId(queryctrl.id);
     caps->setControlType(queryctrl.type);
@@ -112,10 +275,12 @@ void GphotoController::getControlData(GrabberControlCapabilities *caps, long fla
     case V4L2_CTRL_TYPE_STRING:
     // case V4L2_CTRL_TYPE_BITMASK:   // Not defined on Debian systems
     default:
-        qDebug() << "GphotoController::setCameraCapabilities --> Not supported control type";
+        qDebug() << "GphotoController::getControlData --> Not supported control type";
         break;
     }
     */
+
+    qDebug() << "GphotoController::getControlData --> End";
 }
 
 

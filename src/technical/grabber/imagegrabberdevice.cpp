@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2011-2015 by                                                *
+ *  Copyright (C) 2011-2016 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -57,6 +57,8 @@ ImageGrabberDevice::ImageGrabberDevice(const int index,
     deviceCap = cap;
 
     controller = NULL;
+
+    resolutionChangeable = true;
 
     qDebug() << "ImageGrabberDevice::Constructor --> End";
 }
@@ -160,15 +162,15 @@ QVector<GrabberResolution> ImageGrabberDevice::getResolutions()
 }
 
 
-int ImageGrabberDevice::getActiveResolution()
+void ImageGrabberDevice::setResolutionChangeable(bool rc)
 {
-    return -1;
+    resolutionChangeable = rc;
 }
 
 
-void ImageGrabberDevice::setActiveResolution(int /*ac*/)
+bool ImageGrabberDevice::isResolutionChangeable()
 {
-    Q_ASSERT( 1 );
+    return resolutionChangeable;
 }
 
 /**************************************************************************

@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2011-2015 by                                                *
+ *  Copyright (C) 2011-2016 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -167,16 +167,19 @@ public:
     QVector<GrabberResolution> getResolutions();
 
     /**
-     * Get the active resolution of the controller.
-     * @return The index of the active resolution.
+     * Set the resolution changeable flag of the device.
+     * False means that the resolution of the device can't be changed by the application.
+     * @brief setResolutionChangeable
+     * @param rc The new resolution changeable flag.
      */
-    virtual int getActiveResolution();
+    void setResolutionChangeable(bool rc);
 
     /**
-     * Set the active resolution of the controller.
-     * @param ac The index of the new active resolution.
+     * Ist the resolution changeable by the application?
+     * @brief isResolutionChangeable
+     * @return True is yes.
      */
-    virtual void setActiveResolution(int ac);
+    bool isResolutionChangeable();
 
     /**************************************************************************
      **************************************************************************
@@ -210,6 +213,7 @@ private:
     imageGrabberDeviceCapabilities  deviceCap;
 
     QVector<GrabberResolution>      resolutions;
+    bool                            resolutionChangeable;
 
     GrabberController              *controller;
 

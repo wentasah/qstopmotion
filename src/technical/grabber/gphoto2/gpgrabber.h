@@ -84,7 +84,15 @@ public:
      */
     virtual bool tearDown();
 
-protected:
+    Camera* getCamera();
+
+    GPContext* getContext();
+
+private:
+    void openCamera();
+
+    void closeCamera();
+
     static int lookupWidget(CameraWidget  *widget,
                             const char    *key,
                             CameraWidget* *child);
@@ -101,18 +109,13 @@ protected:
 
     void populateWithConfigs(CameraWidget *gphotoConfig);
 
-    int canonEnableCapture(Camera    *camera,
-                           int        onoff,
-                           GPContext *context);
+    void readImageSettings(ImageGrabberDevice *device);
 
-private:
     QString    filePath;
 
-protected:
     Camera    *gphotoCamera;
     GPContext *gphotoContext;
 
-private:
     int        gphotoErrorId;
     int        activeSource;
     bool       isInitSuccess;

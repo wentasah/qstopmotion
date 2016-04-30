@@ -619,7 +619,7 @@ bool V4L2Grabber::enumerateCaptureFormats(int fd, ImageGrabberDevice *device)
 
     while (xioctl(fd, VIDIOC_ENUM_FMT, &fmt) >= 0) {
 
-        qDebug() << "GrabberV4L2Controller::setResolutions --> Format Description: " << (char*)(fmt.description);
+        qDebug() << "GrabberV4L2Controller::enumerateCaptureFormats --> Format Description: " << (char*)(fmt.description);
 
         frmsize.pixel_format = fmt.pixelformat;
         frmsize.index = 0;
@@ -702,7 +702,7 @@ bool V4L2Grabber::enumerateCaptureFormats(int fd, ImageGrabberDevice *device)
             frmsize.index++;
         }
 
-        // qDebug() << "GrabberV4L2Controller::setResolutions --> Private Control: " << (char*)(queryctrl.name);
+        // qDebug() << "GrabberV4L2Controller::enumerateCaptureFormats --> Private Control: " << (char*)(queryctrl.name);
 
         fmt.index++;
     }

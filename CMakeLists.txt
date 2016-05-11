@@ -1,7 +1,7 @@
 ###############################################################################
 # CMake file for the qStopMotion project                                      #
 # (c) Ralf Lange, longsoft.de                                                 #
-# Last update: 2016-03-10                                                     #
+# Last update: 2016-05-11                                                     #
 #                                                                             #
 # Usage:                                                                      #
 #   * Qt-Creator (Windows, Linux)                                             #
@@ -1265,6 +1265,7 @@ MESSAGE("CPACK_RPM_PACKAGE_REQUIRES: ${CPACK_RPM_PACKAGE_REQUIRES}")
 # Prevent conflicts with the filesystem package
 SET(
     CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION
+    "/usr/bin"
     "/usr/share/applications"
     "/usr/share/pixmaps"
     "/usr/share/man"

@@ -7,7 +7,7 @@ See http://www.qstopmotion.org for more info.
 REQUIREMENTS
 ------------
 You need the following libraries installed to use qStopMotion:
-    - Qt4
+    - Qt5
     - ffmpeg
     - gstreamer or libav (Linux only)
     - gphoto2 (Linux only)
@@ -25,7 +25,7 @@ BUILD ON LINUX
 Install the following packages:
     - CMake
     - G++ Compiler
-    - Qt4 development files
+    - Qt5 development files
     - gstreamer or libav development files
     - gphoto2 development files
     - video4linux2 development files
@@ -52,5 +52,5 @@ graphics, code, +++
 Your help is very much appreciated.
 
 ralf.lange@qstopmotion.org
-2015-09-09
+2016-05-10
 

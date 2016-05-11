@@ -1,28 +1,44 @@
 Building qStopMotion using MS Visual Studio
-Last Change: 2014-12-15
+Last Change: 2016-05-10
 
 1. Preparation of the development environment
 ================================================================================
 
-1.1 Install MS Visual Studio 2010 Express/Professional
+1.1 Install the Visual Studio 2013
 --------------------------------------------------------------------------------
 
-* Install in the default installation directory.
+* Download the "Visual Studio 2013 Community Edition"
+* This package including the Visual Studio 2010 command line tools.
+* Install in the default installation directory
+  (C:\Program Files\Microsoft Visual Studio 12.0).
+  - Switch off all optional features
+  - Start the IDE and search for updates
+* Add the binary directory to the path variable
+  (C:\Program Files\Microsoft Visual Studio 12.0\VC\bin\).
 
-1.2 Qt for Windows and Visual Studio
+1.2 Install the Windows SDK
 --------------------------------------------------------------------------------
 
-* Download Qt libraries 4.8.4 for Windows 32-bit (VS 2010) from qt-project.com/downloads
+* Download the "Windows Software Development Kit for Windows 8.1"
+* This package including the debugging tools for windows.
+* Install in the default installation directory
+  (C:\Program Files\Windows Kits\v8.1).
+
+1.3 Qt5 for Windows and Visual Studio
+--------------------------------------------------------------------------------
+
+* Download Qt runtime 5.5.x for Windows 64-bit (VS 2013) from qt-project.com/downloads
 * Install in the Directory C:\Tools\Qt\...
 * Qt need write permissions to this directory during compilation and linking.
-* Add the binary directory to the path variable (e.g. C:\Tools\Qt\4.8.4\bin\).
+* Add the binary directory to the path variable (e.g. C:\Tools\Qt\Qt5.5.1\bin\).
+* Set the environment variable 'Qt5_DIR' to 'C:\Tools\Qt\Qt5.5.1\5.5\msvc2013_64\'
 
-1.3 CMake 2.8.12
+1.4 CMake
 --------------------------------------------------------------------------------
 
-* Download CMake 2.8.12.x from "http://www.cmake.org/cmake/resources/software.html"
-* Add CMake to the system PATH for all users.
+* Download CMake >= 3.3.2 (32bit) from "http://www.cmake.org/cmake/resources/software.html"
 * Install in the default installation directory.
+* Add CMake to the system PATH for all users.
 * Create a start script for CMake (C:\Tools\cmakestart.bat)
     rem Set the Visual Studion 10 environment variables
     call "C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\vcvarsall.bat"
@@ -30,16 +46,16 @@ Last Change: 2014-12-15
     "C:\Program Files (x86)\CMake 2.8\bin\cmake-gui.exe"
 * Create a shortcut to the start script.
 
-1.4 NSIS 2.46
---------------------------------------------------------------------------------
-
-* Download NSIS from "http://nsis.sourceforge.net/Main_Page"
-* Install in the default installation directory.
-
 1.5 Mercurial SCM (Developers only)
 --------------------------------------------------------------------------------
 
 * Download Mercurial or TortoiseHG with Mercurial from "http://mercurial.selenic.com/downloads"
+* Install in the default installation directory.
+
+1.6 NSIS 2.46
+--------------------------------------------------------------------------------
+
+* Download NSIS from "http://nsis.sourceforge.net/Main_Page"
 * Install in the default installation directory.
 
 2. Access to the sources of qStopMotion
@@ -104,8 +120,7 @@ Last Change: 2014-12-15
 * Select the directory with the cmakelist.txt file
 * Select the destination directory
 * Press the configure button
-* Select the generator "Visual Studio 11"
-  (the generator "Visual Studio 12" did not work in this time)
+* Select the generator "Visual Studio 12 2013 Win64"
 * Press the generate button
 
 3.4 Build the application

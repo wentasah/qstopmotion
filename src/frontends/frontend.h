@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2015 by                                                *
+ *  Copyright (C) 2005-2016 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -348,14 +348,6 @@ public:
      * Abstract function to turns off the webcamera/video import mode.
      */
     virtual void stopGrabber() = 0;
-
-    /**
-     * Is the Gstreamer library installed on the operation system.
-     *
-     * @brief isGstreamerInstalled
-     * @return true if the library is installed.
-     */
-    virtual bool isGstreamerInstalled() = 0;
 
     /**
      * Abstract function to get the possible video devices.

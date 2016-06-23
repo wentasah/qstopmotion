@@ -1,7 +1,7 @@
 ###############################################################################
 # CMake file for the qStopMotion project                                      #
 # (c) Ralf Lange, longsoft.de                                                 #
-# Last update: 2016-05-11                                                     #
+# Last update: 2016-06-23                                                     #
 #                                                                             #
 # Usage:                                                                      #
 #   * Qt-Creator (Windows, Linux)                                             #
@@ -224,11 +224,6 @@ IF(UNIX AND NOT APPLE)
         MOC_HEADERS
         ${MOC_HEADERS}
         src/technical/grabber/gphoto2/gpgrabber.h
-        # src/technical/grabber/gstreamer/gstdevicegrabber.h
-        src/technical/grabber/gstreamer/gstgrabber.h
-        src/technical/grabber/gstreamer/videotestgrabber.h
-        src/technical/grabber/gstreamer/linux/dv1394grabber.h
-        src/technical/grabber/gstreamer/linux/usbgrabber.h
         src/technical/grabber/video4linux2/v4l2grabber.h
     )
 ENDIF(UNIX AND NOT APPLE)
@@ -326,10 +321,6 @@ IF(UNIX AND NOT APPLE)
         ${SOURCES}
         src/technical/grabber/gphoto2/gpcontroller.cpp
         src/technical/grabber/gphoto2/gpgrabber.cpp
-        src/technical/grabber/gstreamer/gstgrabber.cpp
-        src/technical/grabber/gstreamer/videotestgrabber.cpp
-        src/technical/grabber/gstreamer/linux/dv1394grabber.cpp
-        src/technical/grabber/gstreamer/linux/usbgrabber.cpp
         src/technical/grabber/video4linux2/v4l2controller.cpp
         src/technical/grabber/video4linux2/v4l2grabber.cpp
     )
@@ -387,31 +378,6 @@ SET(
     RPM_FILES
     rpm/qstopmotion.png       # RPM Icon is installed in a separate step
 )
-
-###############################################################################
-# GStreamer support
-#
-# (Only UNIX)
-#
-# used libraries: glib-2.0.lib, gobject-2.0.lib, gstreamer-0.10.lib, xml2.lib
-###############################################################################
-
-IF(UNIX AND NOT APPLE)
-    include(${CMAKE_SOURCE_DIR}/cmake/FindGStreamerPkgConfig.cmake)
-    message("GSTREAMER_INCLUDE_DIR: ${GSTREAMER_INCLUDE_DIR}")
-    message("GSTREAMER_LIBRARY: ${GSTREAMER_LIBRARY}")
-    message("GSTREAMER_BASE_LIBRARY: ${GSTREAMER_BASE_LIBRARY}")
-    message("GSTREAMER_LIBRARIES: ${GSTREAMER_LIBRARIES}")
-    message("GSTREAMER_STATIC_LIBRARIES: ${GSTREAMER_STATIC_LIBRARIES}")
-    message("GSTREAMER_VERSION: ${GSTREAMER_VERSION}")
-    message("GSTREAMER_DEFINITIONS: ${GSTREAMER_DEFINITIONS}")
-
-    add_definitions("-Wno-deprecated-declarations")
-ELSE(UNIX AND NOT APPLE)
-    SET(GSTREAMER_INCLUDE_DIR)
-    SET(GSTREAMER_LIBRARIES)
-    SET(GSTREAMER_FOUND)
-ENDIF(UNIX AND NOT APPLE)
 
 ###############################################################################
 # gPhoto2 support
@@ -476,7 +442,6 @@ ENDIF(WIN32)
 # tell cmake where to search for headers:
 include_directories(
     ${CMAKE_SOURCE_DIR}/src
-    ${GSTREAMER_INCLUDE_DIR}
     ${GPHOTO2_INCLUDE_DIR}
     ${V4L2_INCLUDE_DIRS}
 )
@@ -534,7 +499,6 @@ IF(UNIX AND NOT APPLE)
     # tell cmake which libraries to link
     target_link_libraries(
         qstopmotion
-        ${GSTREAMER_LIBRARIES}
         ${GPHOTO2_LIBRARIES}
         ${V4L2_LIBRARIES}
         Qt5::Widgets
@@ -553,7 +517,6 @@ ELSEIF(APPLE)
     # tell cmake which libraries to link
     target_link_libraries(
         qstopmotion
-        ${GSTREAMER_LIBRARIES}
         ${GPHOTO2_LIBRARIES}
         ${V4L2_LIBRARIES}
         Qt5::Widgets
@@ -591,12 +554,6 @@ qt5_use_modules(
 add_definitions(
     ${QT_DEFINITIONS}
 )
-
-IF(UNIX AND NOT APPLE)
-    add_definitions(
-        ${GSTREAMER_DEFINITIONS}
-    )
-ENDIF(UNIX AND NOT APPLE)
 
 IF(WIN32)
     file(COPY graphics DESTINATION ".")
@@ -1126,34 +1083,28 @@ IF ("${LSB_DISTRIB}" MATCHES "Ubuntu|Debian")
     # Set the dependencies based on the distro version
     # thus only one package is build you must list here *any* depending libraries,
     # even if they are only used in one module
-    IF ("${LSB_DISTRIB}" MATCHES "Ubuntu12.04")
-        SET(
-            CPACK_DEBIAN_PACKAGE_DEPENDS
-            "libc6 (>=2.11), ffmpeg (>=0.8.9), gstreamer0.10-plugins-base (>=0.10.36), libqtcore4 (>=4.8.1), libqtgui4 (>=4.8.1), libqt4-xml (>=4.8.1), libv4l-0 (>=0.8.6), libgphoto2-2 (>=2.4.11), libgphoto2-port0 (>=2.4.11)"
-        )
-    ENDIF ("${LSB_DISTRIB}" MATCHES "Ubuntu12.04")
     IF ("${LSB_DISTRIB}" MATCHES "Ubuntu14.04")
         SET(
             CPACK_DEBIAN_PACKAGE_DEPENDS
-            "libc6 (>=2.11), libavbin0 (>=7-1), gstreamer0.10-plugins-base (>=0.10.36), libqtcore4 (>=4.8.1), libqtgui4 (>=4.8.1), libqt4-xml (>=4.8.1), libv4l-0 (>=0.8.6), libgphoto2-6 (>=2.5.3)"
+            "libc6 (>=2.11), libavbin0 (>=7-1), libqt5core5 (>=5.2.1), libqt5gui5 (>=5.2.1), libqt5widgets5 (>=5.2.1), libqt5xml5 (>=5.2.1), libv4l-0 (>=1.0.0), libgphoto2-6 (>=2.5.3), qt5-image-formats-plugins (>=5.2.1)"
         )
     ENDIF ("${LSB_DISTRIB}" MATCHES "Ubuntu14.04")
-    IF ("${LSB_DISTRIB}" MATCHES "Debian6.*")
+    IF ("${LSB_DISTRIB}" MATCHES "Ubuntu16.04")
         SET(
             CPACK_DEBIAN_PACKAGE_DEPENDS
-            "libc6 (>=2.11), ffmpeg (>=0.8.9), gstreamer0.10-plugins-base (>=0.10.36), libqtcore4 (>=4.8.2), libqtgui4 (>=4.8.2), libqt4-xml (>=4.8.2), libv4l-0 (>=0.8.8), libgphoto2-2 (>=2.4.14), libgphoto2-port0 (>=2.4.14)"
+            "libc6 (>=2.11), ffmpeg (>=2.8.6), libqt5core5 (>=5.3.2), libqt5gui5 (>=5.3.2), libqt5widgets5 (>=5.3.2), libqt5xml5 (>=5.3.2), libv4l-0 (>=1.0.0), libgphoto2-6 (>=2.5.3), qt5-image-formats-plugins (>=5.3.2)"
         )
-    ENDIF ("${LSB_DISTRIB}" MATCHES "Debian6.*")
+    ENDIF ("${LSB_DISTRIB}" MATCHES "Ubuntu16.04")
     IF ("${LSB_DISTRIB}" MATCHES "Debian7.*")
         SET(
             CPACK_DEBIAN_PACKAGE_DEPENDS
-            "libc6 (>=2.11), ffmpeg (>=0.8.9), gstreamer0.10-plugins-base (>=0.10.36), libqtcore4 (>=4.8.2), libqtgui4 (>=4.8.2), libqt4-xml (>=4.8.2), libv4l-0 (>=0.8.8), libgphoto2-2 (>=2.4.14), libgphoto2-port0 (>=2.4.14)"
+            "libc6 (>=2.11), ffmpeg (>=0.8.9), libqtcore4 (>=4.8.2), libqtgui4 (>=4.8.2), libqt4-xml (>=4.8.2), libv4l-0 (>=0.8.8), libgphoto2-2 (>=2.4.14), libgphoto2-port0 (>=2.4.14)"
         )
     ENDIF ("${LSB_DISTRIB}" MATCHES "Debian7.*")
     IF ("${LSB_DISTRIB}" MATCHES "Debian8.*")
         SET(
             CPACK_DEBIAN_PACKAGE_DEPENDS
-            "libc6 (>=2.11), libav-tools (>=6:11.3), gstreamer0.10-plugins-base (>=0.10.36), libqtcore4 (>=4.8.2), libqtgui4 (>=4.8.2), libqt4-xml (>=4.8.2), libv4l-0 (>=0.8.8), libgphoto2-6 (>=2.5.3)"
+            "libc6 (>=2.11), libav-tools (>=6:11.3), libqt5core5 (>=5.3.2), libqt5gui5 (>=5.3.2), libqt5widgets5 (>=5.3.2), libqt5xml5 (>=5.3.2), libv4l-0 (>=1.0.0), libgphoto2-6 (>=2.5.3), qt5-image-formats-plugins (>=5.3.2)"
         )
     ENDIF ("${LSB_DISTRIB}" MATCHES "Debian8.*")
     IF (NOT CPACK_DEBIAN_PACKAGE_DEPENDS)
@@ -1249,7 +1200,7 @@ SET(
 # Qt5: qt5-qtmultimedia - Multimedia, MultimediaQuick, MultimediaWidgets
 SET(
     CPACK_RPM_PACKAGE_REQUIRES
-    "glibc >= 2.12, gstreamer >= 0.10.29, libgphoto2 >= 2.4.7, libv4l >= 0.6.3, qt5-qtbase >= 5.2.0, qt5-qtbase-gui >= 5.2.0, qt5-qtimageformats >= 5.2.0"
+    "glibc >= 2.12, libgphoto2 >= 2.4.7, libv4l >= 0.6.3, qt5-qtbase >= 5.2.0, qt5-qtbase-gui >= 5.2.0, qt5-qtimageformats >= 5.2.0"
 )
 MESSAGE("CPACK_RPM_PACKAGE_REQUIRES: ${CPACK_RPM_PACKAGE_REQUIRES}")
 # CPACK_RPM_PACKAGE_SUGGESTS

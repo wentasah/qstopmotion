@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2015 by                                                *
+ *  Copyright (C) 2005-2016 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -387,14 +387,6 @@ public:
      * Turns off the webcamera/video import mode.
      */
     void stopGrabber();
-
-    /**
-     * Is the Gstreamer library installed on the operation system.
-     *
-     * @brief isGstreamerInstalled
-     * @return true if the library is installed.
-     */
-    bool isGstreamerInstalled();
 
     /**
      * Get the possible video devices

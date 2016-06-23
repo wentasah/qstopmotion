@@ -46,12 +46,9 @@ public:
      */
     enum imageGrabberSources {
         noSource,                      // 0
-        testSource,                    // 1
-        video4LinuxSource,             // 2
-        ieee1394Source,                // 3
-        video4Linux2Source,            // 4
-        gphoto2Source,                 // 5
-        mediaFoundationSource          // 6
+        video4Linux2Source,            // 1
+        gphoto2Source,                 // 2
+        mediaFoundationSource          // 3
     };
 
     /**

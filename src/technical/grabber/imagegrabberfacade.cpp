@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2015 by                                                *
+ *  Copyright (C) 2005-2016 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -30,9 +30,6 @@
 
 #ifdef Q_OS_LINUX
   #include "technical/grabber/gphoto2/gpgrabber.h"
-  #include "technical/grabber/gstreamer/videotestgrabber.h"
-  #include "technical/grabber/gstreamer/linux/dv1394grabber.h"
-  #include "technical/grabber/gstreamer/linux/usbgrabber.h"
   #include "technical/grabber/video4linux2/v4l2grabber.h"
 #endif
 
@@ -50,9 +47,6 @@ ImageGrabberFacade::ImageGrabberFacade(Frontend *f)
     isInitialized = false;
     isInited = false;
 
-    gstreamerVideoTestGrabber = NULL;
-    gstreamerV4L2Grabber = NULL;
-    gstreamerDv1394Grabber = NULL;
     gphotoGrabber = NULL;
     v4l2Grabber = NULL;
 
@@ -68,18 +62,6 @@ ImageGrabberFacade::~ImageGrabberFacade()
 
     clearDevices();
 
-    if (gstreamerVideoTestGrabber != NULL) {
-        delete gstreamerVideoTestGrabber;
-        gstreamerVideoTestGrabber = NULL;
-    }
-    if (gstreamerV4L2Grabber != NULL) {
-        delete gstreamerV4L2Grabber;
-        gstreamerV4L2Grabber = NULL;
-    }
-    if (gstreamerDv1394Grabber != NULL) {
-        delete gstreamerDv1394Grabber;
-        gstreamerDv1394Grabber = NULL;
-    }
     if (gphotoGrabber != NULL) {
         delete gphotoGrabber;
         gphotoGrabber = NULL;
@@ -128,47 +110,6 @@ void ImageGrabberFacade::initialization()
     int              value;
 
     clearDevices();
-
-#ifdef Q_OS_LINUX
-    // GStreamer video test device
-    if (frontend->isGstreamerInstalled()) {
-        if (pref->getIntegerPreference("preferences", "gstreamervideotestgrabber", value) == false) {
-            value = false;
-        }
-        if ((int)true == value) {
-            gstreamerVideoTestGrabber = new GstreamerVideoTestGrabber(frontend);
-            if (gstreamerVideoTestGrabber->initialization(devices)) {
-                isInitialized = true;
-            }
-        }
-    }
-#endif
-
-#ifdef Q_OS_LINUX
-    // GStreamer video4linux2 device
-    if (pref->getIntegerPreference("preferences", "gstreamerv4l2grabber", value) == false) {
-        value = true;
-    }
-    if ((int)true == value) {
-        gstreamerV4L2Grabber = new GstreamerV4L2Grabber(frontend);
-        if (gstreamerV4L2Grabber->initialization(devices)) {
-            isInitialized = true;
-        }
-    }
-#endif
-
-#ifdef Q_OS_LINUX
-    // GStreamer dv1394 device
-    if (pref->getIntegerPreference("preferences", "gstreamerdv1394grabber", value) == false) {
-        value = false;
-    }
-    if ((int)true == value) {
-        gstreamerDv1394Grabber = new GstreamerDv1394Grabber(frontend);
-        if (gstreamerDv1394Grabber->initialization(devices)) {
-            isInitialized = true;
-        }
-    }
-#endif
 
 #ifdef Q_OS_LINUX
     // video4linux2 device
@@ -228,18 +169,6 @@ void ImageGrabberFacade::init()
     ImageGrabberDevice *videoDevice = getDevice(videoSource);
 
     switch (videoDevice->getDeviceSource()) {
-    case ImageGrabberDevice::testSource:
-        isInited = gstreamerVideoTestGrabber->setUp();
-
-        break;
-    case ImageGrabberDevice::video4LinuxSource:
-        isInited = gstreamerV4L2Grabber->setUp();
-
-        break;
-    case ImageGrabberDevice::ieee1394Source:
-        isInited = gstreamerDv1394Grabber->setUp();
-
-        break;
     case ImageGrabberDevice::video4Linux2Source:
         isInited = v4l2Grabber->setUp();
 
@@ -280,15 +209,6 @@ void ImageGrabberFacade::finalize()
     isInited = false;
 
     switch (videoDevice->getDeviceSource()) {
-    case ImageGrabberDevice::testSource:
-        gstreamerVideoTestGrabber->tearDown();
-        break;
-    case ImageGrabberDevice::video4LinuxSource:
-        gstreamerV4L2Grabber->tearDown();
-        break;
-    case ImageGrabberDevice::ieee1394Source:
-        gstreamerDv1394Grabber->tearDown();
-        break;
     case ImageGrabberDevice::video4Linux2Source:
         v4l2Grabber->tearDown();
         break;
@@ -381,15 +301,6 @@ const QImage ImageGrabberFacade::getLiveImage()
     ImageGrabberDevice *videoDevice = getDevice(videoSource);
 
     switch (videoDevice->getDeviceSource()) {
-    case ImageGrabberDevice::testSource:
-        liveImage = gstreamerVideoTestGrabber->getLiveImage();
-        break;
-    case ImageGrabberDevice::video4LinuxSource:
-        liveImage = gstreamerV4L2Grabber->getLiveImage();
-        break;
-    case ImageGrabberDevice::ieee1394Source:
-        liveImage = gstreamerDv1394Grabber->getLiveImage();
-        break;
     case ImageGrabberDevice::video4Linux2Source:
         liveImage = v4l2Grabber->getLiveImage();
         break;
@@ -415,15 +326,6 @@ const QImage ImageGrabberFacade::getRawImage()
     ImageGrabberDevice *videoDevice = getDevice(videoSource);
 
     switch (videoDevice->getDeviceSource()) {
-    case ImageGrabberDevice::testSource:
-        rawImage = gstreamerVideoTestGrabber->getRawImage();
-        break;
-    case ImageGrabberDevice::video4LinuxSource:
-        rawImage = gstreamerV4L2Grabber->getRawImage();
-        break;
-    case ImageGrabberDevice::ieee1394Source:
-        rawImage = gstreamerDv1394Grabber->getRawImage();
-        break;
     case ImageGrabberDevice::video4Linux2Source:
         rawImage = v4l2Grabber->getRawImage();
         break;

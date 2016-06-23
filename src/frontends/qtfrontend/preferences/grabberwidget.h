@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2014-2015 by                                                *
+ *  Copyright (C) 2014-2016 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -110,9 +110,6 @@ private:
     QTextEdit    *infoText;
 
     QGroupBox    *grabberGroupBox;
-    QCheckBox    *gstreamerVideoTestGrabberCheck;
-    QCheckBox    *gstreamerV4L2GrabberCheck;
-    QCheckBox    *gstreamerDv1394GrabberCheck;
     QCheckBox    *v4l2GrabberCheck;
     QCheckBox    *v4l2ControllerCheck;
     QCheckBox    *mediaFoundationGrabberCheck;
@@ -120,9 +117,6 @@ private:
     QCheckBox    *gphoto2GrabberCheck;
     QCheckBox    *gphoto2ControllerCheck;
 
-    bool          actualGstreamerVideoTestGrabber;
-    bool          actualGstreamerV4L2Grabber;
-    bool          actualGstreamerDv1394Grabber;
     bool          actualV4L2Grabber;
     bool          actualV4L2Controller;
     bool          actualMediaFoundationGrabber;

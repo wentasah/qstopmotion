@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2015 by                                                *
+ *  Copyright (C) 2005-2016 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -101,9 +101,7 @@ void ProjectWidget::makeGUI()
     grabberSourceCombo->setFocusPolicy(Qt::NoFocus);
     connect(grabberSourceCombo, SIGNAL(activated(int)), this, SLOT(changeGrabberSource(int)));
 #ifdef Q_OS_LINUX
-    grabberSourceCombo->addItem(tr("Test Source"));
-    grabberSourceCombo->addItem(tr("Video 4 Linux (USB WebCam)"));
-    grabberSourceCombo->addItem(tr("IEEE 1394 (FireWire DigiCam)"));
+    grabberSourceCombo->addItem(tr("Video 4 Linux 2 (USB WebCam)"));
     grabberSourceCombo->addItem(tr("gphoto (USB Compact Camera)"));
 #endif
 
@@ -274,23 +272,13 @@ void ProjectWidget::apply()
     switch (grabberSourceCombo->currentIndex()) {
     case 0:
 #ifdef Q_OS_LINUX
-        index = ImageGrabberDevice::testSource;
+        index = ImageGrabberDevice::video4Linux2Source;
 #endif
 #if defined(Q_OS_WIN32) || defined(Q_OS_WIN64)
         index = ImageGrabberDevice::mediaFoundationSource;
 #endif
         break;
     case 1:
-#ifdef Q_OS_LINUX
-        index = ImageGrabberDevice::video4LinuxSource;
-#endif
-        break;
-    case 2:
-#ifdef Q_OS_LINUX
-        index = ImageGrabberDevice::ieee1394Source;
-#endif
-        break;
-    case 3:
 #ifdef Q_OS_LINUX
         index = ImageGrabberDevice::gphoto2Source;
 #endif
@@ -374,17 +362,11 @@ void ProjectWidget::setImageGrabberSource(int newSource)
     qDebug() << "ImportWidget::setImageGrabberSource --> Start";
 
     switch (newSource) {
-    case ImageGrabberDevice::testSource:
+    case ImageGrabberDevice::video4Linux2Source:
         grabberSourceCombo->setCurrentIndex(0);
         break;
-    case ImageGrabberDevice::video4LinuxSource:
-        grabberSourceCombo->setCurrentIndex(1);
-        break;
-    case ImageGrabberDevice::ieee1394Source:
-        grabberSourceCombo->setCurrentIndex(2);
-        break;
     case ImageGrabberDevice::gphoto2Source:
-        grabberSourceCombo->setCurrentIndex(3);
+        grabberSourceCombo->setCurrentIndex(1);
         break;
     case ImageGrabberDevice::mediaFoundationSource:
         grabberSourceCombo->setCurrentIndex(0);

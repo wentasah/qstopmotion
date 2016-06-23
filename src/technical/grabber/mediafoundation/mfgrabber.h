@@ -100,7 +100,7 @@ private:
     void getRawFrame(QImage &image);
 
     /**
-     * Get the actual image from the gstreamer application interface.
+     * Get the actual image from the media foundation interface.
      */
     const QImage getImage();
 

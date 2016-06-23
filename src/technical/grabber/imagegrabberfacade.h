@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2015 by                                                *
+ *  Copyright (C) 2005-2016 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -164,13 +164,11 @@ protected:
     QVector<ImageGrabberDevice*> devices;
     ImageGrabberThread *grabberThread;
 
-    ImageGrabber *gstreamerVideoTestGrabber;
-
-    ImageGrabber *gstreamerV4L2Grabber;
-    ImageGrabber *gstreamerDv1394Grabber;
+    // Linux grabbers
     ImageGrabber *gphotoGrabber;
     ImageGrabber *v4l2Grabber;
 
+    // Windows grabbers
     ImageGrabber *mediaFoundationGrabber;
 
 };

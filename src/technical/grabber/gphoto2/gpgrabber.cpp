@@ -37,8 +37,6 @@
 #include <fcntl.h>
 #include <errno.h>
 #include <string.h>
-#include <gst/interfaces/propertyprobe.h>
-#include <gst/app/gstappsink.h>
 
 
 GphotoGrabber::GphotoGrabber(Frontend *f)

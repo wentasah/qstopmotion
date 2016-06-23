@@ -345,10 +345,7 @@ void PreferencesTool::setBasicPreferenceDefaults()
     setIntegerPreference("preferences", "defaultvideofps", 12);
     setIntegerPreference("preferences", "defaultusedefaultoutputfile", false);
     // Grabber defaults
-    setIntegerPreference("preferences", "gstreamervideotestgrabber", false);
-    setIntegerPreference("preferences", "gstreamerv4l2grabber", true);
-    setIntegerPreference("preferences", "gstreamerdv1394grabber", false);
-    setIntegerPreference("preferences", "v4l2grabber", false);
+    setIntegerPreference("preferences", "v4l2grabber", true);
     setIntegerPreference("preferences", "v4l2controller", false);
     setIntegerPreference("preferences", "mediafoundationgrabber", true);
     setIntegerPreference("preferences", "mediafoundationcontroller", false);

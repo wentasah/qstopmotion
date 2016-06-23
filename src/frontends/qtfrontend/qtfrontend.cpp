@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2015 by                                                *
+ *  Copyright (C) 2005-2016 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -765,19 +765,6 @@ void QtFrontend::stopGrabber()
     mw->stopGrabber();
 
     qDebug() << "QtFrontend::stopGrabber --> End";
-}
-
-
-bool QtFrontend::isGstreamerInstalled()
-{
-#if defined(Q_OS_WIN32) || defined(Q_OS_WIN64)
-    QByteArray path = qgetenv("OSSBUILD_GSTREAMER_DIR");
-    if (path.isEmpty()) {
-        return false;
-    }
-#endif
-
-    return true;
 }
 
 

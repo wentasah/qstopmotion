@@ -43,12 +43,6 @@ GrabberWidget::GrabberWidget(Frontend *f, QWidget *parent)
 
     // Image grabber preferences
     grabberGroupBox                        = 0;
-    gstreamerVideoTestGrabberCheck         = 0;
-    actualGstreamerVideoTestGrabber        = true;
-    gstreamerV4L2GrabberCheck              = 0;
-    actualGstreamerV4L2Grabber             = false;
-    gstreamerDv1394GrabberCheck            = 0;
-    actualGstreamerDv1394Grabber           = false;
     v4l2GrabberCheck                       = 0;
     actualV4L2Grabber                      = false;
     v4l2ControllerCheck                    = 0;
@@ -91,15 +85,6 @@ void GrabberWidget::makeGUI()
     grabberGroupBox = new QGroupBox;
     grabberGroupBox->setTitle(tr("Grabber Functionality"));
 
-    gstreamerVideoTestGrabberCheck = new QCheckBox(tr("GStreamer Video Test Source"));
-    gstreamerVideoTestGrabberCheck->setChecked(false);
-
-    gstreamerV4L2GrabberCheck = new QCheckBox(tr("GStreamer Video 4 Linux 2 Source"));
-    gstreamerV4L2GrabberCheck->setChecked(false);
-
-    gstreamerDv1394GrabberCheck = new QCheckBox(tr("GStreamer DV1394 Source"));
-    gstreamerDv1394GrabberCheck->setChecked(false);
-
     v4l2GrabberCheck = new QCheckBox(tr("Video 4 Linux 2 Source"));
     v4l2GrabberCheck->setChecked(false);
     connect(v4l2GrabberCheck, SIGNAL(stateChanged(int)), this, SLOT(changeV4L2GrabberCheckState(int)));
@@ -124,15 +109,12 @@ void GrabberWidget::makeGUI()
     QGridLayout *grabberLayout = new QGridLayout;
     grabberLayout->setColumnMinimumWidth(0, 20);
     grabberLayout->setColumnStretch(1, 1);
-    grabberLayout->addWidget(gstreamerVideoTestGrabberCheck, 0, 0, 1, 2);
-    grabberLayout->addWidget(gstreamerV4L2GrabberCheck, 1, 0, 1, 2);
-    grabberLayout->addWidget(gstreamerDv1394GrabberCheck, 2, 0, 1, 2);
-    grabberLayout->addWidget(v4l2GrabberCheck, 3, 0, 1, 2);
-    grabberLayout->addWidget(v4l2ControllerCheck, 4, 1, 1, 1);
-    grabberLayout->addWidget(mediaFoundationGrabberCheck, 5, 0, 1, 2);
-    grabberLayout->addWidget(mediaFoundationControllerCheck, 6, 1, 1, 1);
-    grabberLayout->addWidget(gphoto2GrabberCheck, 7, 0, 1, 2);
-    grabberLayout->addWidget(gphoto2ControllerCheck, 8, 1, 1, 1);
+    grabberLayout->addWidget(v4l2GrabberCheck, 0, 0, 1, 2);
+    grabberLayout->addWidget(v4l2ControllerCheck, 1, 1, 1, 1);
+    grabberLayout->addWidget(mediaFoundationGrabberCheck, 2, 0, 1, 2);
+    grabberLayout->addWidget(mediaFoundationControllerCheck, 3, 1, 1, 1);
+    grabberLayout->addWidget(gphoto2GrabberCheck, 4, 0, 1, 2);
+    grabberLayout->addWidget(gphoto2ControllerCheck, 5, 1, 1, 1);
     grabberGroupBox->setLayout(grabberLayout);
 
     QVBoxLayout *mainLayout = new QVBoxLayout;
@@ -152,54 +134,6 @@ void GrabberWidget::initialize()
 
     PreferencesTool *pref = frontend->getPreferences();
     int              value;
-
-#ifdef Q_OS_LINUX
-    // GStreamer video test device
-    if (frontend->isGstreamerInstalled()) {
-        if (pref->getIntegerPreference("preferences", "gstreamervideotestgrabber", value) == false) {
-            value = false;
-        }
-        actualGstreamerVideoTestGrabber = value;
-        gstreamerVideoTestGrabberCheck->setChecked(actualGstreamerVideoTestGrabber);
-    }
-    else {
-        gstreamerVideoTestGrabberCheck->hide();
-    }
-#else
-    gstreamerVideoTestGrabberCheck->hide();
-#endif
-
-#ifdef Q_OS_LINUX
-    // GStreamer video4linux2 device
-    if (frontend->isGstreamerInstalled()) {
-        if (pref->getIntegerPreference("preferences", "gstreamerv4l2grabber", value) == false) {
-            value = true;
-        }
-        actualGstreamerV4L2Grabber = value;
-        gstreamerV4L2GrabberCheck->setChecked(actualGstreamerV4L2Grabber);
-    }
-    else {
-        gstreamerV4L2GrabberCheck->hide();
-    }
-#else
-    gstreamerV4L2GrabberCheck->hide();
-#endif
-
-#ifdef Q_OS_LINUX
-    // GStreamer dv1394 device
-    if (frontend->isGstreamerInstalled()) {
-        if (pref->getIntegerPreference("preferences", "gstreamerdv1394grabber", value) == false) {
-            value = false;
-        }
-        actualGstreamerDv1394Grabber = value;
-        gstreamerDv1394GrabberCheck->setChecked(actualGstreamerDv1394Grabber);
-    }
-    else {
-        gstreamerDv1394GrabberCheck->hide();
-    }
-#else
-    gstreamerDv1394GrabberCheck->hide();
-#endif
 
 #ifdef Q_OS_LINUX
     // Video4Linux2 device
@@ -283,30 +217,6 @@ void GrabberWidget::apply()
     PreferencesTool *pref = frontend->getPreferences();
     bool             changes = false;
 
-    bool newGstreamerVideoTestGrabber = gstreamerVideoTestGrabberCheck->isChecked();
-    if (newGstreamerVideoTestGrabber != actualGstreamerVideoTestGrabber) {
-        // Video test grabber changed
-        pref->setIntegerPreference("preferences", "gstreamervideotestgrabber", newGstreamerVideoTestGrabber);
-        actualGstreamerVideoTestGrabber = newGstreamerVideoTestGrabber;
-        changes = true;
-    }
-
-    bool newGstreamerV4L2Grabber = gstreamerV4L2GrabberCheck->isChecked();
-    if (newGstreamerV4L2Grabber != actualGstreamerV4L2Grabber) {
-        // Video 4 Linux 2 grabber changed
-        pref->setIntegerPreference("preferences", "gstreamerv4l2grabber", newGstreamerV4L2Grabber);
-        actualGstreamerV4L2Grabber = newGstreamerV4L2Grabber;
-        changes = true;
-    }
-
-    bool newGstreamerDv1394Grabber = gstreamerDv1394GrabberCheck->isChecked();
-    if (newGstreamerDv1394Grabber != actualGstreamerDv1394Grabber) {
-        // DV1394 grabber changed
-        pref->setIntegerPreference("preferences", "gstreamerdv1394grabber", newGstreamerDv1394Grabber);
-        actualGstreamerDv1394Grabber = newGstreamerDv1394Grabber;
-        changes = true;
-    }
-
     bool newV4L2Grabber = v4l2GrabberCheck->isChecked();
     if (newV4L2Grabber != actualV4L2Grabber) {
         // Video 4 Linux 2 grabber changed
@@ -366,12 +276,6 @@ void GrabberWidget::apply()
 void GrabberWidget::reset()
 {
     qDebug() << "GrabberWidget::reset --> Start";
-
-    gstreamerVideoTestGrabberCheck->setChecked(actualGstreamerVideoTestGrabber);
-
-    gstreamerV4L2GrabberCheck->setChecked(actualGstreamerV4L2Grabber);
-
-    gstreamerDv1394GrabberCheck->setChecked(actualGstreamerDv1394Grabber);
 
     v4l2GrabberCheck->setChecked(actualV4L2Grabber);
     v4l2ControllerCheck->setChecked(actualV4L2Controller);

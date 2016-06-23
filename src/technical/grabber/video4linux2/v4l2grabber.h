@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2010-2015 by                                                *
+ *  Copyright (C) 2010-2016 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -110,7 +110,7 @@ private:
     int xioctl(int fd, int IOCTL_X, void *arg);
 
     /**
-     * Get the actual image from the gstreamer application interface.
+     * Get the actual image from the v4l2 interface.
      */
     const QImage getImage();
 

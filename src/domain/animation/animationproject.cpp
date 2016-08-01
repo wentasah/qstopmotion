@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2015 by                                                *
+ *  Copyright (C) 2005-2016 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -45,6 +45,7 @@ AnimationProject::AnimationProject(Frontend* f)
     mixMode                  = 0;
     mixCount                 = 2;
     playbackCount            = 0;
+    overlayIntensity         = 100;
 
     encoderApplication       = 0;
     imageFormat              = 0;
@@ -177,8 +178,10 @@ int AnimationProject::getRecordingMode() const
 
 void AnimationProject::setRecordingMode(int newRecordingMode)
 {
-    recordingMode = newRecordingMode;
-    incSettingsChanges();
+    if (recordingMode != newRecordingMode) {
+        recordingMode = newRecordingMode;
+        incSettingsChanges();
+    }
 }
 
 
@@ -190,8 +193,10 @@ int AnimationProject::getVideoSource() const
 
 void AnimationProject::setVideoSource(int newVideoSource)
 {
-    videoSource = newVideoSource;
-    incSettingsChanges();
+    if (videoSource != newVideoSource) {
+        videoSource = newVideoSource;
+        incSettingsChanges();
+    }
 }
 
 
@@ -203,8 +208,10 @@ int AnimationProject::getResolution() const
 
 void AnimationProject::setResolution(int newResolution)
 {
-    videoResolution = newResolution;
-    incSettingsChanges();
+    if (videoResolution != newResolution) {
+        videoResolution = newResolution;
+        incSettingsChanges();
+    }
 }
 
 
@@ -216,8 +223,10 @@ int AnimationProject::getMixMode() const
 
 void AnimationProject::setMixMode(int newMixMode)
 {
-    mixMode = newMixMode;
-    incSettingsChanges();
+    if (mixMode != newMixMode) {
+        mixMode = newMixMode;
+        incSettingsChanges();
+    }
 }
 
 
@@ -229,8 +238,10 @@ int AnimationProject::getMixCount() const
 
 void AnimationProject::setMixCount(int newMixCount)
 {
-    mixCount = newMixCount;
-    incSettingsChanges();
+    if (mixCount != newMixCount) {
+        mixCount = newMixCount;
+        incSettingsChanges();
+    }
 }
 
 
@@ -242,8 +253,10 @@ int AnimationProject::getPlaybackCount() const
 
 void AnimationProject::setPlaybackCount(int newPlaybackCount)
 {
-    playbackCount = newPlaybackCount;
-    incSettingsChanges();
+    if (playbackCount != newPlaybackCount) {
+        playbackCount = newPlaybackCount;
+        incSettingsChanges();
+    }
 }
 
 
@@ -255,8 +268,25 @@ int AnimationProject::getUnitMode() const
 
 void AnimationProject::setUnitMode(int newUnitMode)
 {
-    unitMode = newUnitMode;
-    incSettingsChanges();
+    if (unitMode != newUnitMode) {
+        unitMode = newUnitMode;
+        incSettingsChanges();
+    }
+}
+
+
+int AnimationProject::getOverlayIntensity()
+{
+    return overlayIntensity;
+}
+
+
+void AnimationProject::setOverlayIntensity(int overlay)
+{
+    if (overlayIntensity != overlay) {
+        overlayIntensity = overlay;
+        incSettingsChanges();
+    }
 }
 
 /**************************************************************************
@@ -301,8 +331,10 @@ int AnimationProject::getImageSize()
 
 void AnimationProject::setImageSize(int newIS)
 {
-    imageSize = newIS;
-    incSettingsChanges();
+    if (imageSize != newIS) {
+        imageSize = newIS;
+        incSettingsChanges();
+    }
 }
 
 
@@ -314,8 +346,10 @@ int AnimationProject::getImageTransformation()
 
 void AnimationProject::setImageTransformation(int newTransform)
 {
-    imageTransformation = newTransform;
-    incSettingsChanges();
+    if (imageTransformation != newTransform) {
+        imageTransformation = newTransform;
+        incSettingsChanges();
+    }
 }
 
 
@@ -327,8 +361,10 @@ int AnimationProject::getImageAdjustment()
 
 void AnimationProject::setImageAdjustment(int newIA)
 {
-    imageAdjustment = newIA;
-    incSettingsChanges();
+    if (imageAdjustment != newIA) {
+        imageAdjustment = newIA;
+        incSettingsChanges();
+    }
 }
 
 
@@ -340,8 +376,10 @@ int AnimationProject::getZoomValue()
 
 void AnimationProject::setZoomValue(int newZV)
 {
-    zoomValue = newZV;
-    incSettingsChanges();
+    if (zoomValue != newZV) {
+        zoomValue = newZV;
+        incSettingsChanges();
+    }
 }
 
 
@@ -371,8 +409,10 @@ int AnimationProject::getEncoderApplication() const
 
 void AnimationProject::setEncoderApplication(int newEA)
 {
-    encoderApplication = newEA;
-    incSettingsChanges();
+    if (encoderApplication != newEA) {
+        encoderApplication = newEA;
+        incSettingsChanges();
+    }
 }
 
 
@@ -384,8 +424,10 @@ int AnimationProject::getVideoFormat() const
 
 void AnimationProject::setVideoFormat(int newVF)
 {
-    videoFormat = newVF;
-    incSettingsChanges();
+    if (videoFormat != newVF) {
+        videoFormat = newVF;
+        incSettingsChanges();
+    }
 }
 
 
@@ -397,8 +439,10 @@ int AnimationProject::getVideoSize() const
 
 void AnimationProject::setVideoSize(int newVS)
 {
-    videoSize = newVS;
-    incSettingsChanges();
+    if (videoSize != newVS) {
+        videoSize = newVS;
+        incSettingsChanges();
+    }
 }
 
 
@@ -410,8 +454,10 @@ int AnimationProject::getVideoFps() const
 
 void AnimationProject::setVideoFps(int newFPS)
 {
-    videoFps = newFPS;
-    incSettingsChanges();
+    if (videoFps != newFPS) {
+        videoFps = newFPS;
+        incSettingsChanges();
+    }
 }
 
 
@@ -423,8 +469,10 @@ bool AnimationProject::getUseDefaultOutputFile() const
 
 void AnimationProject::setUseDefaultOutputFile(bool newUDOF)
 {
-    useDefaultOutputFile = newUDOF;
-    incSettingsChanges();
+    if (useDefaultOutputFile != newUDOF) {
+        useDefaultOutputFile = newUDOF;
+        incSettingsChanges();
+    }
 }
 
 
@@ -436,8 +484,10 @@ const QString AnimationProject::getDefaultOutputFileName()
 
 void AnimationProject::setDefaultOutputFileName(const QString newDOFN)
 {
-    defaultOutputFileName = newDOFN;
-    incSettingsChanges();
+    if (defaultOutputFileName.compare(newDOFN) != 0) {
+        defaultOutputFileName = newDOFN;
+        incSettingsChanges();
+    }
 }
 
 /**************************************************************************
@@ -656,6 +706,11 @@ bool AnimationProject::readSettingsFromProject(QDomElement &settingsNode)
             QString tmp = currElement.text();
             unitMode = tmp.toInt();
         }
+        else if (nodeName.compare("overlayintensity") == 0) {
+            QString tmp = currElement.text();
+            overlayIntensity = tmp.toInt();
+            frontend->setOverlayIntensity(overlayIntensity);
+        }
         // Save image import parameter
         else if (nodeName.compare("imageformat") == 0) {
             QString tmp = currElement.text();
@@ -775,6 +830,12 @@ bool AnimationProject::saveSettingsToProject(QDomDocument &doc, QDomElement &set
     QDomText unitModeText = doc.createTextNode(QString("%1").arg(unitMode));
     unitModeElement.appendChild(unitModeText);
     settingsNode.appendChild(unitModeElement);
+
+    // Save overlay intensity parameter
+    QDomElement overlayIntensityElement = doc.createElement("overlayintensity");
+    QDomText overlayIntensityText = doc.createTextNode(QString("%1").arg(overlayIntensity));
+    overlayIntensityElement.appendChild(overlayIntensityText);
+    settingsNode.appendChild(overlayIntensityElement);
 
     // Save image import preferences
 

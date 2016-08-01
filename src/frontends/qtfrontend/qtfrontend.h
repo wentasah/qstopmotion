@@ -529,9 +529,22 @@ public:
     void setPlaybackCount(int count);
 
     /**
+     * Get the overlay intensity value.
+     * @return The overlay intensity value.
+     */
+    int getOverlayIntensity();
+
+    /**
+     * Set the overlay intensity value of the project.
+     * @param overlay The new overlay intensity value.
+     */
+    void setOverlayIntensity(int overlay);
+
+    /**
      * Sets up the ExternalChangeMonitor to monitor the project directories
      * for changes in the project files.
      */
+    // Overlay slider
     void setupDirectoryMonitoring();
 
     /**

@@ -1019,6 +1019,18 @@ void QtFrontend::setPlaybackCount(int count)
 }
 
 
+int QtFrontend::getOverlayIntensity()
+{
+    return mw->getOverlayIntensity();
+}
+
+
+void QtFrontend::setOverlayIntensity(int overlay)
+{
+    mw->setOverlayIntensity(overlay);
+}
+
+
 void QtFrontend::setupDirectoryMonitoring()
 {
     mw->setupDirectoryMonitoring();

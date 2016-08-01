@@ -26,7 +26,8 @@
 #include <QSize>
 
 
-const int FrameViewImage::alphaLut[5] = { 128, 64, 43, 32, 26 };
+// const int FrameViewImage::alphaLut[5] = { 128, 64, 43, 32, 26 };
+const int FrameViewImage::alphaLut[5] = { 255, 128, 64, 32, 16 };
 
 
 FrameViewImage::FrameViewImage(Frontend *f, QWidget *parent, int pS)
@@ -361,8 +362,8 @@ void FrameViewImage::paintEvent(QPaintEvent *)
             offset = imageBuffer.count() - 1;
             for (int i = 0; i < imageBuffer.count() && i < mixCount; ++i) {
                 QImage image(imageBuffer[offset - i]);
-                // QImage alphaImage(this->createAlphaImage(image, alphaLut[i]));
-                QImage alphaImage(this->createGrayAlphaImage(image, alphaLut[i]));
+                // QImage alphaImage(this->createAlphaImage(image));
+                QImage alphaImage(this->createGrayAlphaImage(image));
                 imagePainter.drawImage(0, 0, scaleImage(alphaImage));
             }
             break;
@@ -598,14 +599,16 @@ const QImage FrameViewImage::createDifferentiatedImage(QImage &image1, QImage &i
 }
 
 
-const QImage FrameViewImage::createAlphaImage(QImage &image, int alpha)
+const QImage FrameViewImage::createAlphaImage(QImage &image)
 {
     // qDebug() << "FrameViewImage::createAlphaImage --> Start";
 
     int imageRows = image.height();
     int imageCols = image.width();
-    QImage alphaImage(image);
+    int overlayIntensity = frontend->getProject()->getOverlayIntensity();
+    QImage alphaImage(image.size(), QImage::Format_ARGB32);
     QColor alphaColor;
+    int overlayAlpha = 255 - overlayIntensity;
 
     // We assume the format to be RGB32!!!
     Q_ASSERT(image.format() == QImage::Format_RGB32);
@@ -613,9 +616,9 @@ const QImage FrameViewImage::createAlphaImage(QImage &image, int alpha)
     // Goes through the surfaces as one-dimensional arrays.
     for (int r = 0; r < imageRows; ++r) {
         for (int c = 0; c < imageCols; ++c) {
-            alphaColor = alphaImage.pixel(c, r);
-            alphaColor.setAlpha(alpha);
-            alphaImage.setPixel(c, r, alphaColor.rgba());
+            alphaColor = image.pixel(c, r);
+            alphaColor.setAlpha(overlayAlpha);
+            alphaImage.setPixelColor(c, r, alphaColor);
         }
     }
 
@@ -625,29 +628,35 @@ const QImage FrameViewImage::createAlphaImage(QImage &image, int alpha)
 }
 
 
-const QImage FrameViewImage::createGrayAlphaImage(QImage &image, int alpha)
+const QImage FrameViewImage::createGrayAlphaImage(QImage &image)
 {
     // qDebug() << "FrameViewImage::createGrayAlphaImage --> Start";
 
     int imageRows = image.height();
     int imageCols = image.width();
+    int overlayIntensity = frontend->getProject()->getOverlayIntensity();
+    QImage alphaImage(image.size(), QImage::Format_ARGB32);
+    QColor alphaColor;
+    QColor grayColor;
+    int gray;
+    int overlayAlpha = 255 - overlayIntensity;
 
     // We assume the format to be RGB32!!!
     Q_ASSERT(image.format() == QImage::Format_RGB32);
 
     // Goes through the surfaces as one-dimensional arrays.
-    for (int ii = 0; ii < imageRows; ii++) {
-        QRgb *pixel = reinterpret_cast<QRgb*>(image.scanLine(ii));
-        QRgb *end = pixel + imageCols;
-        for (; pixel != end; pixel++) {
-            int gray = qGray(*pixel);
-            *pixel = QColor(QColor(gray, gray, gray, qAlpha(*pixel)).lighter(200)).rgb();
+    for (int r = 0; r < imageRows; ++r) {
+        for (int c = 0; c < imageCols; ++c) {
+            alphaColor = image.pixel(c, r);
+            gray = qGray(alphaColor.rgb());
+            grayColor.setRgba(qRgba(gray, gray, gray, overlayAlpha));
+            alphaImage.setPixelColor(c, r, grayColor);
         }
     }
 
     // qDebug() << "FrameViewImage::createGrayAlphaImage --> End";
 
-    return image;
+    return alphaImage;
 }
 
 

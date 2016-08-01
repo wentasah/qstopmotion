@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2010-2015 by Ralf Lange                                 *
+ *   Copyright (C) 2010-2016 by Ralf Lange                                 *
  *   ralf.lange@longsoft.de                                                *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -81,6 +81,18 @@ public:
      * @param newState The new tool bar state.
      */
     void setActualState(int newState);
+
+    /**
+     * Get the overlay intensity value.
+     * @return The overlay intensity value.
+     */
+    int getOverlayIntensity();
+
+    /**
+     * Set the overlay intensity value.
+     * @param newOverlay The new overlay intensity value.
+     */
+    void setOverlayIntensity(int newOverlay);
 
     /**
      * This function is called when the size of the model changes so that menuframe
@@ -180,6 +192,11 @@ public slots:
      */
     void toggleLooping();
 
+    /**
+     * Overlay slider has changed his value.
+     */
+    void overlaySliderChanged(int value);
+
 private:
     Frontend        *frontend;
     QTimer          *runAnimationTimer;
@@ -188,6 +205,7 @@ private:
     QLabel          *framesIcon;
     QSlider         *overlaySlider;
     QLabel          *cameraIcon;
+
     QPushButton     *toBeginButton;
     QPushButton     *previousFrameButton;
     QPushButton     *captureButton;
@@ -201,15 +219,6 @@ private:
     int              exposureIndex;
 
     void makeGUI();
-
-private slots:
-    /*  void toBegin();
-        void previousFrame();
-        void play();
-        void capture();
-        void nextFrame();
-        void toEnd();
-    */
 
     /**
      * Slot for playing the next frame. This slot is triggered by the timer.

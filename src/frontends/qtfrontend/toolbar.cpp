@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2010-2015 by                                                *
+ *  Copyright (C) 2010-2016 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -62,17 +62,25 @@ void ToolBar::makeGUI()
 {
     QString iconFile(frontend->getIconsDirName());
 
+    // Overlay slider
+
     framesIcon = new QLabel();
     iconFile.append(QLatin1String("frames.png"));
     framesIcon->setPixmap(QPixmap(iconFile));
 
     overlaySlider = new QSlider(Qt::Horizontal);
+    connect(overlaySlider, SIGNAL(valueChanged(int)), this, SLOT(overlaySliderChanged(int)));
+    overlaySlider->setMinimum(0);
+    overlaySlider->setMaximum(255);
+    overlaySlider->setValue(100);
 
     cameraIcon = new QLabel();
     iconFile.clear();
     iconFile.append(frontend->getIconsDirName());
     iconFile.append(QLatin1String("camera.png"));
     cameraIcon->setPixmap(QPixmap(iconFile));
+
+    // Contol buttons
 
     toBeginButton = new QPushButton;
     iconFile.clear();
@@ -284,6 +292,18 @@ void ToolBar::setActualState(int newState)
 {
     actualState = newState;
     toolBarStateChanged();
+}
+
+
+int ToolBar::getOverlayIntensity()
+{
+    return overlaySlider->value();
+}
+
+
+void ToolBar::setOverlayIntensity(int newOverlay)
+{
+    overlaySlider->setValue(newOverlay);
 }
 
 
@@ -522,6 +542,12 @@ void ToolBar::selectLastScene()
 void ToolBar::toggleLooping()
 {
     isLooping = !isLooping;
+}
+
+
+void ToolBar::overlaySliderChanged(int value)
+{
+    frontend->getProject()->setOverlayIntensity(value);
 }
 
 

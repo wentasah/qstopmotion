@@ -547,6 +547,18 @@ public:
      */
     virtual void setPlaybackCount(int count) = 0;
 
+    /**
+     * Get the overlay intensity value.
+     * @return The overlay intensity value.
+     */
+    virtual int getOverlayIntensity() = 0;
+
+    /**
+     * Set the overlay intensity value of the project.
+     * @param overlay The new overlay intensity value.
+     */
+    virtual void setOverlayIntensity(int overlay) = 0;
+
     /**************************************************************************
      * Other
      **************************************************************************/

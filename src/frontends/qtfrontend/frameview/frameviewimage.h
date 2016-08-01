@@ -240,18 +240,18 @@ private:
     /**
      * Change the alpha value of the image.
      *
-     * @param image the first image of the two to differentiate.
-     * @return a image with the new alpha value.
+     * @param image The first image of the two to differentiate.
+     * @return A image with the new alpha value.
      */
-    const QImage createAlphaImage(QImage &image, int alpha);
+    const QImage createAlphaImage(QImage &image);
 
     /**
-     * Change the alpha value of the image.
+     * Change the alpha value of the gray image of the image.
      *
-     * @param image the first image of the two to differentiate.
-     * @return a image with the new alpha value.
+     * @param image The first image of the two to differentiate.
+     * @return A image with the new alpha value.
      */
-    const QImage createGrayAlphaImage(QImage &image, int alpha);
+    const QImage createGrayAlphaImage(QImage &image);
 
     /**
      * Show the logo as active image

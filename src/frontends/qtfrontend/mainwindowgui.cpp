@@ -1138,6 +1138,18 @@ void MainWindowGUI::setPlaybackCount(int count)
 }
 
 
+int MainWindowGUI::getOverlayIntensity()
+{
+    return toolBar->getOverlayIntensity();
+}
+
+
+void MainWindowGUI::setOverlayIntensity(int overlay)
+{
+    toolBar->setOverlayIntensity(overlay);
+}
+
+
 void MainWindowGUI::setupDirectoryMonitoring()
 {
     qDebug() << "MainWindowGUI::setupDirectoryMonitoring --> Start";
@@ -1217,10 +1229,9 @@ void MainWindowGUI::newProject()
     QString sceneDescription = dialog->getSceneDescription();
     QString takeDescription = dialog->getTakeDescription();
 
-    if (frontend->getProject()->isActiveProject()) {
+    if (project->isActiveProject()) {
         // Close the old project
-        // frontend->getProject()->closeProjectToUndo();
-        frontend->getProject()->closeProject();
+        project->closeProject();
     }
 
     // Create the new project
@@ -1234,9 +1245,8 @@ void MainWindowGUI::newProject()
     project->addTakeToUndo(takeDescription, 0);
     project->selectTakeToUndo(0, 0);
 
-    //fileMenu->setItemEnabled(SAVE, false);
-
     setToolBarState(ToolBar::toolBarCameraOff);
+    frontend->setOverlayIntensity(project->getOverlayIntensity());
 
     delete(dialog);
 

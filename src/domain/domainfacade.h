@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2015 by                                                *
+ *  Copyright (C) 2005-2016 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -267,6 +267,18 @@ public:
      * @param newUnitMode the new unit mode.
      */
     void setUnitMode(int newUnitMode);
+
+    /**
+     * Get the overlay intensity value.
+     * @return The overlay intensity value.
+     */
+    int getOverlayIntensity();
+
+    /**
+     * Set the overlay intensity value of the project.
+     * @param overlay The new overlay intensity value.
+     */
+    void setOverlayIntensity(int overlay);
 
     /**************************************************************************
      * Image import preferences

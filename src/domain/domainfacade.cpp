@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2015 by                                                *
+ *  Copyright (C) 2005-2016 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -322,6 +322,20 @@ int DomainFacade::getUnitMode()
 void DomainFacade::setUnitMode(int newUnitMode)
 {
     animationProject->setUnitMode(newUnitMode);
+}
+
+
+int DomainFacade::getOverlayIntensity()
+{
+    return animationProject->getOverlayIntensity();
+}
+
+
+void DomainFacade::setOverlayIntensity(int overlay)
+{
+    if (NULL != animationProject) {
+        animationProject->setOverlayIntensity(overlay);
+    }
 }
 
 /**************************************************************************

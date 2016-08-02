@@ -52,7 +52,7 @@ AboutDialog::AboutDialog(Frontend *f,
     aboutLayout->addWidget(new QLabel(
                           "<p>" + tr("This is the qStopMotion application for creating stop motion animations.") + "</p>"
                           "<p>" + tr("Version: ") + PreferencesTool::applicationVersion + "</p>"
-                          "<p>&copy; 2010-2015, Ralf Lange, longsoft.de </p>"
+                          "<p>&copy; 2010-" + PreferencesTool::applicationYear + ", Ralf Lange, longsoft.de </p>"
                           "<hr />"));
     aboutLayout->addWidget(new QLabel(
                           "<p>" + tr("qStopMotion is a fork of stopmotion for linux.") + "</p>"
@@ -81,7 +81,7 @@ AboutDialog::AboutDialog(Frontend *f,
     QTextEdit *thanksText = new QTextEdit;
     thanksText->setHtml(
                 "<p><b>" + tr("Translation") + "</b><br>"
-                "Norma Ludwig (" + tr("French") + " - qStopMotion)<br>"
+                "Norma Klinsmann (" + tr("French") + " - qStopMotion)<br>"
                 "Guillaume B &lt;littletux@zarb.org&gt; (" + tr("French") + " - stopmotion for Linux)<br>"
                 "David Lamhauge &lt;davidlamhauge@gmail.com&gt; (" + tr("Danish") + ")<br>"
                 "David Rylander &lt;david@rylanderanimation.se&gt; (" + tr("Swedish") + ")<br>"

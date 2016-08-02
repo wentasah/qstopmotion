@@ -1,6 +1,15 @@
 Last Changes in the sources on qStopMotion
 ===============================================================================
 
+qStopMotion (2.3.0) - 2016-08-02
+  * Overlay intensity slider now works.
+  * Change the onion scinning to gray scale images.
+  * Remove all gstreamer using.
+  * Bug fixing.
+qStopMotion (2.2.0) - 2016-05-09
+  * Change the controller dialog from listboxes to slider
+  * Improve the gphoto image grabber
+  * Bug fixing.
 qStopMotion (2.0.2) - 2015-09-09
   * Update the Ubuntu package generation. Fix most of the lintian messages.
   * Add the CentOS package generation.

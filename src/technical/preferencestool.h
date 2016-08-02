@@ -67,6 +67,11 @@ public:
     static const QString applicationVersion;
 
     /**
+     * Year of the application version
+     */
+    static const QString applicationYear;
+
+    /**
      * Version of the preferences
      */
     static const QString preferencesVersion;

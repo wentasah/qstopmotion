@@ -35,7 +35,8 @@
 
 const QString PreferencesTool::applicationShowName = QLatin1String("qStopMotion");
 const QString PreferencesTool::applicationName = QLatin1String("qstopmotion");
-const QString PreferencesTool::applicationVersion = QLatin1String("2.2.0");
+const QString PreferencesTool::applicationVersion = QLatin1String("2.3.0");
+const QString PreferencesTool::applicationYear = QLatin1String("2016");
 const QString PreferencesTool::preferencesVersion = QLatin1String("0.9");
 const QString PreferencesTool::preferencesSuffix = QLatin1String("qsmp");
 const QString PreferencesTool::preferencesName = QLatin1String("preferences");

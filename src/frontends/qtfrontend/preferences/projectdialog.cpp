@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2015 by                                                *
+ *  Copyright (C) 2005-2016 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -29,7 +29,7 @@
 
 #define MIN_TREE_WIDTH   200
 #define MAX_TREE_WIDTH   MIN_TREE_WIDTH
-#define MIN_PAGE_WIDTH   460
+#define MIN_PAGE_WIDTH   560
 #define MIN_PAGE_HEIGHT  400
 #define MAX_PAGE_WIDTH   MIN_PAGE_WIDTH
 #define MAX_PAGE_HEIGHT  MIN_PAGE_HEIGHT

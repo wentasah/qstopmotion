@@ -1521,8 +1521,8 @@ void MainWindowGUI::exportToVideo()
 
     if (!enc->isValid()) {
         frontend->showWarning(tr("Warning"),
-                              tr("The selected encoder is not valid.\n"
-                                 "Check your settings in the properties dialog of the project!"));
+                              tr("The selected encoder is not installed on your computer.\n"
+                                 "Install the encoder or select another one!"));
         delete enc;
         enc = NULL;
         return;

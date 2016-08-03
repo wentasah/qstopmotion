@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2015 by                                                *
+ *  Copyright (C) 2005-2016 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -166,6 +166,7 @@ void ExportWidget::makeGUI()
 
     askForOutputLabel = new QLabel(
         tr("Do you want to be asked for an output file everytime you choose to export?"));
+    askForOutputLabel->setWordWrap(true);
 
     yesButton = new QRadioButton(tr("Yes"));
     yesButton->setChecked(true);

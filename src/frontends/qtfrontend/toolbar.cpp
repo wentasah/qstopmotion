@@ -319,12 +319,14 @@ void ToolBar::toggleRunning()
 
 void ToolBar::runAnimation()
 {
+    qDebug() << "ToolBar::runAnimation --> Start";
+
     int activeSceneIndex = frontend->getProject()->getActiveSceneIndex();
     int activeTakeIndex = frontend->getProject()->getActiveTakeIndex();
     exposureCount = frontend->getProject()->getTakeExposureSize(activeSceneIndex, activeTakeIndex);
     fps = frontend->getProject()->getVideoFps();
 
-    if (frontend->getProject()->getActiveSceneIndex() >= 0) {
+    if (activeSceneIndex >= 0) {
         if (exposureCount > 0) {
             // frontend->getProject()->initAudioDevice();
 
@@ -348,6 +350,8 @@ void ToolBar::runAnimation()
             runAnimationTimer->setSingleShot(false);
         }
     }
+
+    qDebug() << "ToolBar::runAnimation --> End";
 }
 
 
@@ -553,6 +557,8 @@ void ToolBar::overlaySliderChanged(int value)
 
 void ToolBar::playNextFrame()
 {
+    // qDebug() << "ToolBar::playNextFrame --> Start";
+
     if (frontend->getProject()->getActiveSceneIndex() >= 0) {
 
         // frontend->playSound(frameNr);
@@ -575,6 +581,8 @@ void ToolBar::playNextFrame()
     else {
         stopAnimation();
     }
+
+    // qDebug() << "ToolBar::playNextFrame --> End";
 }
 
 

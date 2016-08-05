@@ -197,6 +197,11 @@ public slots:
      */
     void overlaySliderChanged(int value);
 
+    /**
+     * Slot for playing the next frame. This slot is triggered by the timer.
+     */
+    void playNextFrame();
+
 private:
     Frontend        *frontend;
     QTimer          *runAnimationTimer;
@@ -219,11 +224,6 @@ private:
     int              exposureIndex;
 
     void makeGUI();
-
-    /**
-     * Slot for playing the next frame. This slot is triggered by the timer.
-     */
-    void playNextFrame();
 };
 
 #endif

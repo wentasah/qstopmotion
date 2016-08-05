@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="cs_CZ">
+<TS version="2.1" language="cs_CZ">
 <context>
     <name>AboutDialog</name>
     <message>
@@ -476,6 +476,10 @@ rozhodnete pro přehrání, přehrána bez zvuku.</translation>
         <source>QVGA (320x240)</source>
         <translation>QVGA (320 x 240)</translation>
     </message>
+    <message>
+        <source>libav</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Exposure</name>
@@ -641,11 +645,11 @@ rozhodnete pro přehrání, přehrána bez zvuku.</translation>
     </message>
     <message>
         <source>GStreamer Video 4 Linux 2 Source</source>
-        <translation>Zdroj GStreamer Video pro Linux 2</translation>
+        <translation type="vanished">Zdroj GStreamer Video pro Linux 2</translation>
     </message>
     <message>
         <source>GStreamer DV1394 Source</source>
-        <translation>Zdroj GStreamer DV1394</translation>
+        <translation type="vanished">Zdroj GStreamer DV1394</translation>
     </message>
     <message>
         <source>Gphoto2 Source (Experimental)</source>
@@ -657,7 +661,7 @@ rozhodnete pro přehrání, přehrána bez zvuku.</translation>
     </message>
     <message>
         <source>GStreamer Video Test Source</source>
-        <translation>Zdroj zkoušky obrazu GStreamer</translation>
+        <translation type="vanished">Zdroj zkoušky obrazu GStreamer</translation>
     </message>
     <message>
         <source>Below you can select which image grabber should be used for grabbing images from the camera. If available the controller can be used to control focus, zoom and other functionality.</source>
@@ -672,21 +676,21 @@ rozhodnete pro přehrání, přehrána bez zvuku.</translation>
     <name>GstreamerDv1394Grabber</name>
     <message>
         <source>Device %1</source>
-        <translation>Zařízení %1</translation>
+        <translation type="vanished">Zařízení %1</translation>
     </message>
 </context>
 <context>
     <name>GstreamerV4L2Grabber</name>
     <message>
         <source>Device %1</source>
-        <translation>Zařízení %1</translation>
+        <translation type="vanished">Zařízení %1</translation>
     </message>
 </context>
 <context>
     <name>GstreamerVideoTestGrabber</name>
     <message>
         <source>Video test device</source>
-        <translation>Zařízení na zkoušku obrazu</translation>
+        <translation type="vanished">Zařízení na zkoušku obrazu</translation>
     </message>
 </context>
 <context>
@@ -1226,7 +1230,7 @@ Prověřte nastavení v dialogu vlastností projektu!</translation>
     <message>
         <source>The selected encoder is not valid.
 Check your settings in the properties dialog of the project!</source>
-        <translation>Vybraný kodér není platný.
+        <translation type="vanished">Vybraný kodér není platný.
 Prověřte nastavení v dialogu vlastností projektu!</translation>
     </message>
     <message>
@@ -1269,6 +1273,11 @@ Prověřte nastavení v dialogu vlastností projektu!</translation>
         <source>English</source>
         <comment>This should be translated to the name of the language you are translating to, in that language. Example: English = Deutsch (Deutsch is &quot;German&quot; in German)</comment>
         <translation>Angličtina</translation>
+    </message>
+    <message>
+        <source>The selected encoder is not installed on your computer.
+Install the encoder or select another one!</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1531,7 +1540,7 @@ Prověřte nastavení v dialogu vlastností projektu!</translation>
     </message>
     <message>
         <source>Video 4 Linux (USB WebCam)</source>
-        <translation>Video 4 Linux (USB WebCam)</translation>
+        <translation type="vanished">Video 4 Linux (USB WebCam)</translation>
     </message>
     <message>
         <source>Number of images:</source>
@@ -1543,11 +1552,11 @@ Prověřte nastavení v dialogu vlastností projektu!</translation>
     </message>
     <message>
         <source>Test Source</source>
-        <translation>Zdroj zkoušky</translation>
+        <translation type="vanished">Zdroj zkoušky</translation>
     </message>
     <message>
         <source>IEEE 1394 (FireWire DigiCam)</source>
-        <translation>IEEE 1394 (FireWire DigiCam)</translation>
+        <translation type="vanished">IEEE 1394 (FireWire DigiCam)</translation>
     </message>
     <message>
         <source>gphoto (USB Compact Camera)</source>
@@ -1572,6 +1581,10 @@ Prověřte nastavení v dialogu vlastností projektu!</translation>
     <message>
         <source>&lt;h4&gt;Number of images&lt;/h4&gt; &lt;p&gt;By changing the value in this slidebar you can specify how many images backwards in the animation which should be mixed on top of the camera or if you are in playback mode: how many images to play. &lt;/p&gt; &lt;p&gt;By mixing the previous image(s) onto the camera you can more easily see how the next shot will be in relation to the other, therby making a smoother stop motion animation!&lt;/p&gt;</source>
         <translation>&lt;h4&gt;Počet obrázků&lt;/h4&gt; &lt;p&gt;Tímto posuvníkem (změnou hodnoty) můžete nastavit, kolik předcházejících obrázků v animaci se má zařadit v obrazu kamery. Nebo, pokud jste v režimu přehrávání: Kolik obrázků bude přehráno. &lt;/p&gt; &lt;p&gt;Tím (míšením předchozího obrázku(ů) do kamery) lépe uvidíte, jak je následující obrázek ve vztahu k předcházejícím obrázkům. To umožňuje stejnoměrný (hladší) průběh pohybu!&lt;/p&gt;</translation>
+    </message>
+    <message>
+        <source>Video 4 Linux 2 (USB WebCam)</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

@@ -278,7 +278,7 @@
 "src/frontends/qtfrontend/elements/flexiblelineedit.h": {"timestamp": 1448136952.58},
 "src/frontends/qtfrontend/elements/flexiblespinbox.cpp": {"timestamp": 1447407885.23},
 "src/frontends/qtfrontend/elements/flexiblespinbox.h": {"timestamp": 1352751913.51},
-"src/frontends/qtfrontend/frameview/frameviewimage.cpp": {"timestamp": 1470035297.97},
+"src/frontends/qtfrontend/frameview/frameviewimage.cpp": {"timestamp": 1470391965.19},
 "src/frontends/qtfrontend/frameview/frameviewimage.h": {"timestamp": 1470035082.85},
 "src/frontends/qtfrontend/frameview/frameviewinterface.cpp": {"timestamp": 1456298363.75},
 "src/frontends/qtfrontend/frameview/frameviewinterface.h": {"timestamp": 1456298015.66},

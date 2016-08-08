@@ -1,7 +1,7 @@
 ###############################################################################
 # CMake file for the qStopMotion project                                      #
 # (c) Ralf Lange, longsoft.de                                                 #
-# Last update: 2016-08-02                                                     #
+# Last update: 2016-08-08                                                     #
 #                                                                             #
 # Usage:                                                                      #
 #   * Qt-Creator (Windows, Linux)                                             #
@@ -80,7 +80,7 @@ SET(CMAKE_PROJECT_NAME "qstopmotion")
 SET(QSTOPMOTION_HOMEPAGE "http://www.qstopmotion.org")
 SET(QSTOPMOTION_VERSION_MAJOR "2")
 SET(QSTOPMOTION_VERSION_MINOR "3")
-SET(QSTOPMOTION_VERSION_PATCH "0")
+SET(QSTOPMOTION_VERSION_PATCH "1")
 
 SET(FILES_TO_TRANSLATE )
 
@@ -1086,13 +1086,13 @@ IF ("${LSB_DISTRIB}" MATCHES "Ubuntu|Debian")
     IF ("${LSB_DISTRIB}" MATCHES "Ubuntu14.04")
         SET(
             CPACK_DEBIAN_PACKAGE_DEPENDS
-            "libc6 (>=2.11), libavbin0 (>=7-1), libqt5core5 (>=5.2.1), libqt5gui5 (>=5.2.1), libqt5widgets5 (>=5.2.1), libqt5xml5 (>=5.2.1), libv4l-0 (>=1.0.0), libgphoto2-6 (>=2.5.3), qt5-image-formats-plugins (>=5.2.1)"
+            "libc6 (>=2.11), libavbin0 (>=7-1), libqt5core5 (>=5.2.1) | libqt5core5a (>=5.2.1), libqt5gui5 (>=5.2.1), libqt5widgets5 (>=5.2.1), libqt5xml5 (>=5.2.1), libv4l-0 (>=1.0.0), libgphoto2-6 (>=2.5.3), qt5-image-formats-plugins (>=5.2.1)"
         )
     ENDIF ("${LSB_DISTRIB}" MATCHES "Ubuntu14.04")
     IF ("${LSB_DISTRIB}" MATCHES "Ubuntu16.04")
         SET(
             CPACK_DEBIAN_PACKAGE_DEPENDS
-            "libc6 (>=2.11), ffmpeg (>=2.8.6), libqt5core5 (>=5.3.2), libqt5gui5 (>=5.3.2), libqt5widgets5 (>=5.3.2), libqt5xml5 (>=5.3.2), libv4l-0 (>=1.0.0), libgphoto2-6 (>=2.5.3), qt5-image-formats-plugins (>=5.3.2)"
+            "libc6 (>=2.11), ffmpeg (>=2.8.6), libqt5core5 (>=5.3.2) | libqt5core5a (>=5.3.2), libqt5gui5 (>=5.3.2), libqt5widgets5 (>=5.3.2), libqt5xml5 (>=5.3.2), libv4l-0 (>=1.0.0), libgphoto2-6 (>=2.5.3), qt5-image-formats-plugins (>=5.3.2)"
         )
     ENDIF ("${LSB_DISTRIB}" MATCHES "Ubuntu16.04")
     IF ("${LSB_DISTRIB}" MATCHES "Debian7.*")
@@ -1104,7 +1104,7 @@ IF ("${LSB_DISTRIB}" MATCHES "Ubuntu|Debian")
     IF ("${LSB_DISTRIB}" MATCHES "Debian8.*")
         SET(
             CPACK_DEBIAN_PACKAGE_DEPENDS
-            "libc6 (>=2.11), libav-tools (>=6:11.3), libqt5core5 (>=5.3.2), libqt5gui5 (>=5.3.2), libqt5widgets5 (>=5.3.2), libqt5xml5 (>=5.3.2), libv4l-0 (>=1.0.0), libgphoto2-6 (>=2.5.3), qt5-image-formats-plugins (>=5.3.2)"
+            "libc6 (>=2.11), libav-tools (>=6:11.3), libqt5core5 (>=5.3.2) | libqt5core5a (>=5.3.2), libqt5gui5 (>=5.3.2), libqt5widgets5 (>=5.3.2), libqt5xml5 (>=5.3.2), libv4l-0 (>=1.0.0), libgphoto2-6 (>=2.5.3), qt5-image-formats-plugins (>=5.3.2)"
         )
     ENDIF ("${LSB_DISTRIB}" MATCHES "Debian8.*")
     IF (NOT CPACK_DEBIAN_PACKAGE_DEPENDS)

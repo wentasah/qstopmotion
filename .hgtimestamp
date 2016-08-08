@@ -2,7 +2,7 @@
 "Version": "0.2.3.05141102",
 "FileData":{
 ".hgignore": {"timestamp": 1452239748.88},
-".hgtags": {"timestamp": 1463749936.76},
+".hgtags": {"timestamp": 1470636879.17},
 "AUTHORS": {"timestamp": 1352751912.63},
 "Changes.txt": {"timestamp": 1470125931.48},
 "cmake/FindGPhoto2PkgConfig.cmake": {"timestamp": 1447408231.44},

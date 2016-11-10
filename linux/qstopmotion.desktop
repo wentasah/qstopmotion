@@ -8,4 +8,5 @@ X-MultipleArgs=false
 Type=Application
 Categories=AudioVideo;Video;AudioVideoEditing;
 StartupNotify=true
+Keywords=animation;stop-motion;video;
 MimeType=application/x-qstopmotion;

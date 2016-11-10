@@ -56,9 +56,9 @@ FrameViewInterface::FrameViewInterface(Frontend *f, QWidget *parent, int fps)
 
     setNormalRatio();
 
-    frontend->getView()->attatch(this);
+    frontend->getView()->attach(this);
 
-    qDebug() << "FrameViewInterface::Constructor --> FrameView is attatched to the ViewFacade";
+    qDebug() << "FrameViewInterface::Constructor --> FrameView is attached to the ViewFacade";
 
     connect(&grabTimer, SIGNAL(timeout()), this, SLOT(redraw()));
     connect(&playbackTimer, SIGNAL(timeout()), this, SLOT(nextPlayBack()));

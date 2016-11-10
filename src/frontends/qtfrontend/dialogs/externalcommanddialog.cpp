@@ -128,7 +128,7 @@ void ExternalCommandDialog::displayExitStatus(int exitCode, QProcess::ExitStatus
     } else {
         QMessageBox::information(this,
                                  tr("Result"),
-                                 tr("Successfull!"));
+                                 tr("Successful!"));
     }
 
     lineEdit->setEnabled(false);

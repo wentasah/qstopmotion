@@ -197,8 +197,8 @@ bool QtFrontend::checkApplicationDirectory(char *binDirName)
         pathLength = absoluteAppName.lastIndexOf("/");
         appBinDirName.append(absoluteAppName.left(pathLength + 1));
     }
-    qDebug() << "QtFrontend::checkApplicationDirectory --> Application Direcory:" << appApplicationDirName;
-    qDebug() << "QtFrontend::checkApplicationDirectory --> Application Binary Direcory:" << appBinDirName;
+    qDebug() << "QtFrontend::checkApplicationDirectory --> Application Directory:" << appApplicationDirName;
+    qDebug() << "QtFrontend::checkApplicationDirectory --> Application Binary Directory:" << appBinDirName;
 
 #if defined(Q_OS_WIN32) || defined(Q_OS_WIN64)
     // Windows version
@@ -253,9 +253,9 @@ bool QtFrontend::checkApplicationDirectory(char *binDirName)
 
 #endif
 
-    qDebug() << "QtFrontend::checkApplicationDirectory --> Application Manual Direcory:" << appManualDirName;
-    qDebug() << "QtFrontend::checkApplicationDirectory --> Application Translations Direcory:" << appTranslationsDirName;
-    qDebug() << "QtFrontend::checkApplicationDirectory --> Application Graphics Direcory:" << appGraphicsDirName;
+    qDebug() << "QtFrontend::checkApplicationDirectory --> Application Manual Directory:" << appManualDirName;
+    qDebug() << "QtFrontend::checkApplicationDirectory --> Application Translations Directory:" << appTranslationsDirName;
+    qDebug() << "QtFrontend::checkApplicationDirectory --> Application Graphics Directory:" << appGraphicsDirName;
 
 
     otherDirName.clear();
@@ -263,14 +263,14 @@ bool QtFrontend::checkApplicationDirectory(char *binDirName)
     otherDirName.append(PreferencesTool::iconsDirectory);
     otherDirName.append(QLatin1String("/"));
     appIconsDirName.append(otherDirName);
-    qDebug() << "QtFrontend::checkApplicationDirectory --> Application Icon Direcory:" << appIconsDirName;
+    qDebug() << "QtFrontend::checkApplicationDirectory --> Application Icon Directory:" << appIconsDirName;
 
     otherDirName.clear();
     otherDirName.append(appGraphicsDirName);
     otherDirName.append(PreferencesTool::picturesDirectory);
     otherDirName.append(QLatin1String("/"));
     appPicturesDirName.append(otherDirName);
-    qDebug() << "QtFrontend::checkApplicationDirectory --> Application Pictures Direcory:" << appPicturesDirName;
+    qDebug() << "QtFrontend::checkApplicationDirectory --> Application Pictures Directory:" << appPicturesDirName;
 
     qDebug() << "QtFrontend::checkApplicationDirectory --> End";
     return 0;
@@ -900,7 +900,7 @@ bool QtFrontend::recoverProject()
 
     int ret = askQuestion(tr("Recovery"),
                   tr("Something caused qStopmotion to exit abnormally\n"
-                  "last time it was runned. Do you want to recover?"));
+                  "last time it was run. Do you want to recover?"));
     // The user wants to recover
     if (ret != 0) {
         qDebug() << "QtFrontend::recoverProject --> End (False)";
@@ -1080,7 +1080,7 @@ void QtFrontend::test(QWidget *parentWidget, int level)
     QObjectList testList = parentWidget->children();
     int testSize = testList.size();
     if (testSize == 0) {
-        QDebug(QtDebugMsg) << "QtFrontend::test of level: " << level << " --> End (no childs) <<<<<<<<<<<<<<<=======================";
+        QDebug(QtDebugMsg) << "QtFrontend::test of level: " << level << " --> End (no children) <<<<<<<<<<<<<<<=======================";
         return;
     }
     QDebug(QtDebugMsg) << "QtFrontend::test of level: " << level << " --> testSize: " << testSize;

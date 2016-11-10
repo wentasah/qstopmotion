@@ -127,8 +127,8 @@ TimeLine::TimeLine(Frontend* f, QWidget *parent)
     setBackgroundRole(QPalette::Dark);
     setAcceptDrops(true);
 
-    qDebug() << "TimeLine::Constructor --> TimeLine is attatched to the model";
-    frontend->getView()->attatch(this);
+    qDebug() << "TimeLine::Constructor --> TimeLine is attached to the model";
+    frontend->getView()->attach(this);
 
     qDebug() << "TimeLine::Constructor --> End";
 }

@@ -320,13 +320,13 @@ public:
 
     /**
      * Sets the live view frames per second.
-     * @param fps the speed to be setted
+     * @param fps the speed to be set
      */
     void setLiveViewFps(int fps);
 
     /**
      * Sets the video frames per second for the playback.
-     * @param fps the speed to be setted
+     * @param fps the speed to be set
      */
     void setVideoFps(int fps);
 

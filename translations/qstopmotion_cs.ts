@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="cs_CZ">
+<TS version="2.1" language="cs_CZ">
 <context>
     <name>AboutDialog</name>
     <message>
@@ -109,7 +109,7 @@
     <message>
         <source>Cannot open the selected audio file for reading.
 Check that you have the right permissions set.
-The animation will be runned without sound if you
+The animation will be run without sound if you
 choose to play.</source>
         <translation>Vybraný soubor se záznamem zvuku nelze otevřít pro čtení.
 Prověřte, že jsou oprávnění nastavena správně.
@@ -118,7 +118,7 @@ přehrána bez zvuku.</translation>
     </message>
     <message>
         <source>The selected audio file is not valid within the
-given audio format. The animation will be runned
+given audio format. The animation will be run
 without sound if you choose to play.</source>
         <translation>Vybraný soubor se záznamem zvuku není v platném
 zvukovém formátu. Animace bude, v případě že se
@@ -319,7 +319,7 @@ rozhodnete pro přehrání, přehrána bez zvuku.</translation>
         <translation>Popis &amp;záběru:</translation>
     </message>
     <message>
-        <source>Project Decription</source>
+        <source>Project Description</source>
         <translation>Popis projektu</translation>
     </message>
     <message>
@@ -327,7 +327,7 @@ rozhodnete pro přehrání, přehrána bez zvuku.</translation>
         <translation>Informace</translation>
     </message>
     <message>
-        <source>Take Decription</source>
+        <source>Take Description</source>
         <translation>Popis záběru</translation>
     </message>
     <message>
@@ -343,7 +343,7 @@ rozhodnete pro přehrání, přehrána bez zvuku.</translation>
         <translation>Znak &apos;|&apos; není v popisu výjevu dovolen.</translation>
     </message>
     <message>
-        <source>Scene Decription</source>
+        <source>Scene Description</source>
         <translation>Popis výjevu</translation>
     </message>
     <message>
@@ -531,7 +531,7 @@ rozhodnete pro přehrání, přehrána bez zvuku.</translation>
         <translation>Nepodařilo se!</translation>
     </message>
     <message>
-        <source>Successfull!</source>
+        <source>Successful!</source>
         <translation>Podařilo se!</translation>
     </message>
     <message>
@@ -645,11 +645,11 @@ rozhodnete pro přehrání, přehrána bez zvuku.</translation>
     </message>
     <message>
         <source>GStreamer Video 4 Linux 2 Source</source>
-        <translation>Zdroj GStreamer Video pro Linux 2</translation>
+        <translation type="vanished">Zdroj GStreamer Video pro Linux 2</translation>
     </message>
     <message>
         <source>GStreamer DV1394 Source</source>
-        <translation>Zdroj GStreamer DV1394</translation>
+        <translation type="vanished">Zdroj GStreamer DV1394</translation>
     </message>
     <message>
         <source>Gphoto2 Source (Experimental)</source>
@@ -661,7 +661,7 @@ rozhodnete pro přehrání, přehrána bez zvuku.</translation>
     </message>
     <message>
         <source>GStreamer Video Test Source</source>
-        <translation>Zdroj zkoušky obrazu GStreamer</translation>
+        <translation type="vanished">Zdroj zkoušky obrazu GStreamer</translation>
     </message>
     <message>
         <source>Below you can select which image grabber should be used for grabbing images from the camera. If available the controller can be used to control focus, zoom and other functionality.</source>
@@ -676,21 +676,21 @@ rozhodnete pro přehrání, přehrána bez zvuku.</translation>
     <name>GstreamerDv1394Grabber</name>
     <message>
         <source>Device %1</source>
-        <translation>Zařízení %1</translation>
+        <translation type="vanished">Zařízení %1</translation>
     </message>
 </context>
 <context>
     <name>GstreamerV4L2Grabber</name>
     <message>
         <source>Device %1</source>
-        <translation>Zařízení %1</translation>
+        <translation type="vanished">Zařízení %1</translation>
     </message>
 </context>
 <context>
     <name>GstreamerVideoTestGrabber</name>
     <message>
         <source>Video test device</source>
-        <translation>Zařízení na zkoušku obrazu</translation>
+        <translation type="vanished">Zařízení na zkoušku obrazu</translation>
     </message>
 </context>
 <context>
@@ -1012,9 +1012,9 @@ nabídce pro nastavení.</translation>
     </message>
     <message>
         <source>No encoder selected for the video export.
-This can be setted in the properties dialog of the project.
+This can be set in the properties dialog of the project.
 Export to video will not be possible until you
-have setted an encoder to use!</source>
+have set an encoder to use!</source>
         <translation>Pro vyvedení obrazového záznamu není vybrán
 žádný kodér. Toto můžete změnit v dialogu pro
 nastaveníi projektu. vyvedení obrazu bude možné
@@ -1038,9 +1038,9 @@ teprve, až vyberete nějaký kodér. Chcete to udělat nyní?</translation>
     </message>
     <message>
         <source>No video format selected for the video export.
-This can be setted in the properties dialog of the project.
+This can be set in the properties dialog of the project.
 Export to video will not be possible until you
-have setted an video format to use!</source>
+have set an video format to use!</source>
         <translation>Pro vyvedení obrazového záznamu není vybrán
 žádný formát obrazu. Toto můžete změnit v dialogu pro
 nastaveníi projektu. vyvedení obrazu bude možné
@@ -1106,7 +1106,7 @@ na kartě pro nahrávání.</translation>
         <translation>Uložit &amp;jako</translation>
     </message>
     <message>
-        <source>&lt;h4&gt;Save&lt;/h4&gt; &lt;p&gt;&lt;em&gt;Saves&lt;/em&gt; the current animation as a qStopMotion project file. &lt;BR&gt;If this project has been saved before it will automaticly be saved to the previously selected file.&lt;/p&gt;</source>
+        <source>&lt;h4&gt;Save&lt;/h4&gt; &lt;p&gt;&lt;em&gt;Saves&lt;/em&gt; the current animation as a qStopMotion project file. &lt;BR&gt;If this project has been saved before it will automatically be saved to the previously selected file.&lt;/p&gt;</source>
         <translation>&lt;h4&gt;Uložit&lt;/h4&gt; &lt;p&gt;Uloží nynější animaci jako soubor s projektem qStopMotion. &lt;/p&gt;</translation>
     </message>
     <message>
@@ -1230,7 +1230,7 @@ Prověřte nastavení v dialogu vlastností projektu!</translation>
     <message>
         <source>The selected encoder is not valid.
 Check your settings in the properties dialog of the project!</source>
-        <translation>Vybraný kodér není platný.
+        <translation type="vanished">Vybraný kodér není platný.
 Prověřte nastavení v dialogu vlastností projektu!</translation>
     </message>
     <message>
@@ -1541,7 +1541,7 @@ Kodér nainstalujte nebo vyberte jiný!</translation>
     </message>
     <message>
         <source>Video 4 Linux (USB WebCam)</source>
-        <translation>Video 4 Linux (USB WebCam)</translation>
+        <translation type="vanished">Video 4 Linux (USB WebCam)</translation>
     </message>
     <message>
         <source>Number of images:</source>
@@ -1553,11 +1553,11 @@ Kodér nainstalujte nebo vyberte jiný!</translation>
     </message>
     <message>
         <source>Test Source</source>
-        <translation>Zdroj zkoušky</translation>
+        <translation type="vanished">Zdroj zkoušky</translation>
     </message>
     <message>
         <source>IEEE 1394 (FireWire DigiCam)</source>
-        <translation>IEEE 1394 (FireWire DigiCam)</translation>
+        <translation type="vanished">IEEE 1394 (FireWire DigiCam)</translation>
     </message>
     <message>
         <source>gphoto (USB Compact Camera)</source>
@@ -1618,7 +1618,7 @@ tato oprávnění potřebujete k vytvoření adresáře .qstopmotion ve vašem d
     </message>
     <message>
         <source>Something caused qStopmotion to exit abnormally
-last time it was runned. Do you want to recover?</source>
+last time it was run. Do you want to recover?</source>
         <translation>Vypadá to, že qStopmotion nebyl při posledním používání správně
 ukončen. Chcete obnovit poslední sezení?</translation>
     </message>

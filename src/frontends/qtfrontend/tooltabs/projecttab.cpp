@@ -80,7 +80,7 @@ ProjectTab::ProjectTab(Frontend *f,
     makeGUI();
     retranslateStrings();
     enableTab();
-    frontend->getView()->attatch(this);
+    frontend->getView()->attach(this);
 
     qDebug() << "ProjectTab::Constructor --> End";
 }

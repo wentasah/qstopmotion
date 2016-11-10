@@ -149,7 +149,7 @@
         <location filename="../src/domain/animation/animationproject.cpp" line="1480"/>
         <source>Cannot open the selected audio file for reading.
 Check that you have the right permissions set.
-The animation will be runned without sound if you
+The animation will be run without sound if you
 choose to play.</source>
         <translation>Kan ikke åbne den valgte lydfil til læsning.
 Check at du har sat de rigtige rettigheder.
@@ -159,7 +159,7 @@ hvis du vælger afspil.</translation>
     <message>
         <location filename="../src/domain/animation/animationproject.cpp" line="1487"/>
         <source>The selected audio file is not valid within the
-given audio format. The animation will be runned
+given audio format. The animation will be run
 without sound if you choose to play.</source>
         <translation>Den valgte audio fil er ugyldig indenfor det
 valgte lyd format. Animationen vil blivet spillet
@@ -499,17 +499,17 @@ uden lyd hvis du vælger afspil.</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/dialogs/descriptiondialog.cpp" line="74"/>
-        <source>Project Decription</source>
+        <source>Project Description</source>
         <translation>Projekt Beskrivelse</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/dialogs/descriptiondialog.cpp" line="80"/>
-        <source>Scene Decription</source>
+        <source>Scene Description</source>
         <translation>Scene Beskrivelse</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/dialogs/descriptiondialog.cpp" line="86"/>
-        <source>Take Decription</source>
+        <source>Take Description</source>
         <translation>Take Beskrivelse</translation>
     </message>
     <message>
@@ -878,7 +878,7 @@ uden lyd hvis du vælger afspil.</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/dialogs/externalcommanddialog.cpp" line="131"/>
-        <source>Successfull!</source>
+        <source>Successful!</source>
         <translation>Succes!</translation>
     </message>
 </context>
@@ -1634,9 +1634,9 @@ Install the encoder or select another one!</source>
     </message>
     <message>
         <source>Cannot find any registered encoder to be used for video export.
-This can be setted in the preferences menu.
+This can be set in the preferences menu.
 Export to video will not be possible until you
-have setted an encoder to use!</source>
+have set an encoder to use!</source>
         <translation type="obsolete">Kan ikke finde en registreret encoder for video export.
 Det kan sættes i foretrukne menuen.
 Eksport til video er ikke mulig før du har
@@ -1727,7 +1727,7 @@ Tjek dine indstillinger i foretrukne menuen!</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="274"/>
-        <source>&lt;h4&gt;Save&lt;/h4&gt; &lt;p&gt;&lt;em&gt;Saves&lt;/em&gt; the current animation as a qStopMotion project file. &lt;BR&gt;If this project has been saved before it will automaticly be saved to the previously selected file.&lt;/p&gt;</source>
+        <source>&lt;h4&gt;Save&lt;/h4&gt; &lt;p&gt;&lt;em&gt;Saves&lt;/em&gt; the current animation as a qStopMotion project file. &lt;BR&gt;If this project has been saved before it will automatically be saved to the previously selected file.&lt;/p&gt;</source>
         <translation>&lt;h4&gt;Gem&lt;/h4&gt; &lt;p&gt;&lt;em&gt;Gemmer&lt;/em&gt; den aktive animation som en qStopMotion projekt fil. &lt;BR&gt;Er projektet tidligere gemt, vil det automatisk blive gemt som den tidligere gemte fil.&lt;/p&gt;</translation>
     </message>
     <message>
@@ -1866,9 +1866,9 @@ Tjek dine indstillinger i foretrukne menuen!</translation>
     <message>
         <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1424"/>
         <source>No encoder selected for the video export.
-This can be setted in the properties dialog of the project.
+This can be set in the properties dialog of the project.
 Export to video will not be possible until you
-have setted an encoder to use!</source>
+have set an encoder to use!</source>
         <translation>Ingen encoder er valgt til video eksport.
 Denne kan vælges i projektets indstillingsdialog.
 Eksport til video er ikke mulig før du har valgt
@@ -1877,9 +1877,9 @@ en encoder!</translation>
     <message>
         <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1464"/>
         <source>No video format selected for the video export.
-This can be setted in the properties dialog of the project.
+This can be set in the properties dialog of the project.
 Export to video will not be possible until you
-have setted an video format to use!</source>
+have set an video format to use!</source>
         <translation>Video format er ikke valgt til video eksport.
 Denne kan vælges i projektets indstillingsdialog.
 Eksport til video er ikke mulig før du har valgt
@@ -2409,7 +2409,7 @@ Du behøver ret til at læse, skrive og eksekvere i .qstopmotion mappen.</transl
     <message>
         <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="902"/>
         <source>Something caused qStopmotion to exit abnormally
-last time it was runned. Do you want to recover?</source>
+last time it was run. Do you want to recover?</source>
         <translation>Noget fik qStopmotion til at stoppe uregelmæssigt
 sidst. Ønsker du at genoprette?</translation>
     </message>

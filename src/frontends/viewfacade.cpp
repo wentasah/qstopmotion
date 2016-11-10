@@ -53,17 +53,17 @@ DomainFacade* ViewFacade::getProject()
 }
 
 
-void ViewFacade::attatch(Observer *o)
+void ViewFacade::attach(Observer *o)
 {
-    qDebug() << "ViewFacade::attatch --> Start";
+    qDebug() << "ViewFacade::attach --> Start";
 
     if (o != NULL) {
         observers.append(o);
     } else {
-        qDebug() << "ViewFacade::attatch --> Trying to attatch a NULL pointer to the ViewFacade";
+        qDebug() << "ViewFacade::attach --> Trying to attach a NULL pointer to the ViewFacade";
     }
 
-    qDebug() << "ViewFacade::attatch --> End";
+    qDebug() << "ViewFacade::attach --> End";
 }
 
 

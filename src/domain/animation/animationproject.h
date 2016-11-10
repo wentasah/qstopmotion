@@ -90,7 +90,7 @@ public:
 
     /**
      * Retrieves the new project file name
-     * @return the project file name if it's setted, NULL otherwise.
+     * @return the project file name if it's set, NULL otherwise.
      */
     const QString getNewProjectFilePath() const;
 

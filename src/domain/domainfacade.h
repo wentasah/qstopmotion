@@ -156,19 +156,19 @@ public:
 
     /**
      * Retrieves the new project file path.
-     * @return the project file path if it's setted, NULL otherwise.
+     * @return the project file path if it's set, NULL otherwise.
      */
     const QString getNewProjectFilePath();
 
     /**
      * Retrieves the new project path.
-     * @return the project path if it's setted, NULL otherwise.
+     * @return the project path if it's set, NULL otherwise.
      */
     const QString getNewProjectPath();
 
     /**
      * Retrieves the project description.
-     * @return the project description if it's setted, NULL otherwise.
+     * @return the project description if it's set, NULL otherwise.
      */
     const QString getProjectDescription();
 

@@ -71,19 +71,19 @@ DescriptionDialog::DescriptionDialog(Frontend *f, descriptionType type, QWidget 
 
     switch (type) {
     case ProjectDescription:
-        setWindowTitle(tr("Project Decription"));
+        setWindowTitle(tr("Project Description"));
         projectDescrEdit->setEnabled(true);
         sceneDescrEdit->setEnabled(true);
         takeDescrEdit->setEnabled(true);
         break;
     case SceneDescription:
-        setWindowTitle(tr("Scene Decription"));
+        setWindowTitle(tr("Scene Description"));
         projectDescrEdit->setEnabled(false);
         sceneDescrEdit->setEnabled(true);
         takeDescrEdit->setEnabled(true);
         break;
     case TakeDescription:
-        setWindowTitle(tr("Take Decription"));
+        setWindowTitle(tr("Take Description"));
         projectDescrEdit->setEnabled(false);
         sceneDescrEdit->setEnabled(false);
         takeDescrEdit->setEnabled(true);

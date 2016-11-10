@@ -56,7 +56,7 @@ public:
     bool initialization(QVector<ImageGrabberDevice*> &devices);
 
     /**
-     * Starts the grabber if it is marked to be runned in deamon mode.
+     * Starts the grabber if it is marked to be run in deamon mode.
      * @return true on success, false otherwise
      */
     bool setUp();
@@ -78,7 +78,7 @@ public:
     bool grab();
 
     /**
-     * Shut downs the grabber process either if it is runned in deamon
+     * Shut downs the grabber process either if it is run in deamon
      * mode or "single grab" mode.
      * @return true on success, false otherwise
      */

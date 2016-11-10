@@ -34,7 +34,7 @@ class Exposure;
  * The observer interface. All classes who wants to be notified when something
  * changes in the animationmodel has to implement from this class.
  *
- * The observers implemented with this class also has to be attatched to the
+ * The observers implemented with this class also has to be attached to the
  * animationmodel.
  *
  * The observer is implemented with strong use of the push model. Although this

@@ -274,7 +274,7 @@ void MainWindowGUI::retranslateHelpText()
         tr("<h4>Save</h4> "
            "<p><em>Saves</em> the current animation as a qStopMotion "
            "project file. <BR>If this project has been saved before it will "
-           "automaticly be saved to the previously selected file.</p>");
+           "automatically be saved to the previously selected file.</p>");
     saveAct->setWhatsThis(infoText);
     infoText =
         saveAct->toolTip().prepend(tr("Save project"));
@@ -1422,9 +1422,9 @@ void MainWindowGUI::exportToVideo()
     if (activeEncoderApplication == VideoEncoder::noneApplication) {
         frontend->showWarning(tr("Warning"),
                               tr("No encoder selected for the video export.\n"
-                                 "This can be setted in the properties dialog of the project.\n"
+                                 "This can be set in the properties dialog of the project.\n"
                                  "Export to video will not be possible until you\n"
-                                 "have setted an encoder to use!"));
+                                 "have set an encoder to use!"));
         return;
     }
 
@@ -1462,9 +1462,9 @@ void MainWindowGUI::exportToVideo()
         case VideoEncoder::noneFormat:
             frontend->showWarning(tr("Warning"),
                                   tr("No video format selected for the video export.\n"
-                                     "This can be setted in the properties dialog of the project.\n"
+                                     "This can be set in the properties dialog of the project.\n"
                                      "Export to video will not be possible until you\n"
-                                     "have setted an video format to use!"));
+                                     "have set an video format to use!"));
             return;
         }
 

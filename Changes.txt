@@ -1,6 +1,9 @@
 Last Changes in the sources on qStopMotion
 ===============================================================================
 
+qStopMotion (2.3.2) - 2016-11-10
+  * Some spelling corrections.
+  * Update of the Czech translation.
 qStopMotion (2.3.0) - 2016-08-02
   * Overlay intensity slider now works.
   * Change the onion scinning to gray scale images.
@@ -19,11 +22,7 @@ qStopMotion (2.0.1) - 2015-06-11
   * Update the RPM package generation.
   * Video4Linux2 grabber can handle BGR image format.
   * Add libav as the second encoder application.
-<<<<<<< local
 qStopMotion (2.0.0 (Beta)) - 2015-05-21
-=======
-qStopMotion (2.0.0 (Beta))
->>>>>>> other
   * Remove of the Gstreamer grabber from the Windows platform.
   * On Windows qStopMotion can be started as an portable application.
   * Video4Linux2 grabber on the Linux platform.

@@ -1,3 +1,21 @@
+qStopMotion (2.3.2) unstable; urgency=low
+  * Some spelling corrections.
+  * Update of the Czech translation.
+ -- Ralf Lange <ralf.lange@qstopmotion.org> Thu, 10 Nov 2016 00:09:11 +0100
+
+qStopMotion (2.3.0) unstable; urgency=low
+  * Overlay intensity slider now works.
+  * Change the onion scinning to gray scale images.
+  * Remove all gstreamer using.
+  * Bug fixing.
+ -- Ralf Lange <ralf.lange@qstopmotion.org> Thu, 02 Aug 2016 00:09:11 +0100
+
+qStopMotion (2.2.0) unstable; urgency=low
+  * Change the controller dialog from listboxes to slider
+  * Improve the gphoto image grabber
+  * Bug fixing.
+ -- Ralf Lange <ralf.lange@qstopmotion.org> Thu, 09 May 2016 00:09:11 +0100
+
 qstopmotion (2.0.2) unstable; urgency=low
  * Update the Ubuntu package generation. Fix most of the lintian messages.
  * Add the CentOS package generation.

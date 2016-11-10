@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="cs_CZ">
+<TS version="2.0" language="cs_CZ">
 <context>
     <name>AboutDialog</name>
     <message>
@@ -478,7 +478,7 @@ rozhodnete pro přehrání, přehrána bez zvuku.</translation>
     </message>
     <message>
         <source>libav</source>
-        <translation type="unfinished"></translation>
+        <translation>libav</translation>
     </message>
 </context>
 <context>
@@ -645,11 +645,11 @@ rozhodnete pro přehrání, přehrána bez zvuku.</translation>
     </message>
     <message>
         <source>GStreamer Video 4 Linux 2 Source</source>
-        <translation type="vanished">Zdroj GStreamer Video pro Linux 2</translation>
+        <translation>Zdroj GStreamer Video pro Linux 2</translation>
     </message>
     <message>
         <source>GStreamer DV1394 Source</source>
-        <translation type="vanished">Zdroj GStreamer DV1394</translation>
+        <translation>Zdroj GStreamer DV1394</translation>
     </message>
     <message>
         <source>Gphoto2 Source (Experimental)</source>
@@ -661,7 +661,7 @@ rozhodnete pro přehrání, přehrána bez zvuku.</translation>
     </message>
     <message>
         <source>GStreamer Video Test Source</source>
-        <translation type="vanished">Zdroj zkoušky obrazu GStreamer</translation>
+        <translation>Zdroj zkoušky obrazu GStreamer</translation>
     </message>
     <message>
         <source>Below you can select which image grabber should be used for grabbing images from the camera. If available the controller can be used to control focus, zoom and other functionality.</source>
@@ -676,21 +676,21 @@ rozhodnete pro přehrání, přehrána bez zvuku.</translation>
     <name>GstreamerDv1394Grabber</name>
     <message>
         <source>Device %1</source>
-        <translation type="vanished">Zařízení %1</translation>
+        <translation>Zařízení %1</translation>
     </message>
 </context>
 <context>
     <name>GstreamerV4L2Grabber</name>
     <message>
         <source>Device %1</source>
-        <translation type="vanished">Zařízení %1</translation>
+        <translation>Zařízení %1</translation>
     </message>
 </context>
 <context>
     <name>GstreamerVideoTestGrabber</name>
     <message>
         <source>Video test device</source>
-        <translation type="vanished">Zařízení na zkoušku obrazu</translation>
+        <translation>Zařízení na zkoušku obrazu</translation>
     </message>
 </context>
 <context>
@@ -1230,7 +1230,7 @@ Prověřte nastavení v dialogu vlastností projektu!</translation>
     <message>
         <source>The selected encoder is not valid.
 Check your settings in the properties dialog of the project!</source>
-        <translation type="vanished">Vybraný kodér není platný.
+        <translation>Vybraný kodér není platný.
 Prověřte nastavení v dialogu vlastností projektu!</translation>
     </message>
     <message>
@@ -1277,7 +1277,8 @@ Prověřte nastavení v dialogu vlastností projektu!</translation>
     <message>
         <source>The selected encoder is not installed on your computer.
 Install the encoder or select another one!</source>
-        <translation type="unfinished"></translation>
+        <translation>Vybraný kodér není nainstalován na vašem počítači.
+Kodér nainstalujte nebo vyberte jiný!</translation>
     </message>
 </context>
 <context>
@@ -1540,7 +1541,7 @@ Install the encoder or select another one!</source>
     </message>
     <message>
         <source>Video 4 Linux (USB WebCam)</source>
-        <translation type="vanished">Video 4 Linux (USB WebCam)</translation>
+        <translation>Video 4 Linux (USB WebCam)</translation>
     </message>
     <message>
         <source>Number of images:</source>
@@ -1552,11 +1553,11 @@ Install the encoder or select another one!</source>
     </message>
     <message>
         <source>Test Source</source>
-        <translation type="vanished">Zdroj zkoušky</translation>
+        <translation>Zdroj zkoušky</translation>
     </message>
     <message>
         <source>IEEE 1394 (FireWire DigiCam)</source>
-        <translation type="vanished">IEEE 1394 (FireWire DigiCam)</translation>
+        <translation>IEEE 1394 (FireWire DigiCam)</translation>
     </message>
     <message>
         <source>gphoto (USB Compact Camera)</source>
@@ -1584,7 +1585,7 @@ Install the encoder or select another one!</source>
     </message>
     <message>
         <source>Video 4 Linux 2 (USB WebCam)</source>
-        <translation type="unfinished"></translation>
+        <translation>Video 4 Linux (USB WebCam)</translation>
     </message>
 </context>
 <context>

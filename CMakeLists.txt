@@ -1,7 +1,7 @@
 ###############################################################################
 # CMake file for the qStopMotion project                                      #
 # (c) Ralf Lange, longsoft.de                                                 #
-# Last update: 2016-08-08                                                     #
+# Last update: 2016-11-10                                                     #
 #                                                                             #
 # Usage:                                                                      #
 #   * Qt-Creator (Windows, Linux)                                             #
@@ -388,7 +388,8 @@ SET(
 ###############################################################################
 
 IF(UNIX AND NOT APPLE)
-    include(${CMAKE_SOURCE_DIR}/cmake/FindGPhoto2PkgConfig.cmake)
+    find_package(PkgConfig)
+    pkg_check_modules(GPHOTO2 REQUIRED libgphoto2)
     message("GPHOTO2_INCLUDE_DIR: ${GPHOTO2_INCLUDE_DIR}")
     message("GPHOTO2_LIBRARIES: ${GPHOTO2_LIBRARIES}")
 ELSE(UNIX AND NOT APPLE)
@@ -1218,6 +1219,7 @@ SET(
     CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION
     "/usr/bin"
     "/usr/share/applications"
+    "/usr/share/icons"
     "/usr/share/pixmaps"
     "/usr/share/man"
     "/usr/share/man/man1"

@@ -1,68 +1,69 @@
 qStopMotion (2.3.2) unstable; urgency=low
   * Some spelling corrections.
   * Update of the Czech translation.
- -- Ralf Lange <ralf.lange@qstopmotion.org> Thu, 10 Nov 2016 00:09:11 +0100
+ -- Ralf Lange <ralf.lange@qstopmotion.org>  Thu, 10 Nov 2016 00:09:11 +0100
 
 qStopMotion (2.3.0) unstable; urgency=low
   * Overlay intensity slider now works.
   * Change the onion scinning to gray scale images.
   * Remove all gstreamer using.
   * Bug fixing.
- -- Ralf Lange <ralf.lange@qstopmotion.org> Thu, 02 Aug 2016 00:09:11 +0100
+ -- Ralf Lange <ralf.lange@qstopmotion.org>  Thu, 02 Aug 2016 00:09:11 +0100
 
 qStopMotion (2.2.0) unstable; urgency=low
   * Change the controller dialog from listboxes to slider
   * Improve the gphoto image grabber
   * Bug fixing.
- -- Ralf Lange <ralf.lange@qstopmotion.org> Thu, 09 May 2016 00:09:11 +0100
+ -- Ralf Lange <ralf.lange@qstopmotion.org>  Thu, 09 May 2016 00:09:11 +0100
 
 qstopmotion (2.0.2) unstable; urgency=low
- * Update the Ubuntu package generation. Fix most of the lintian messages.
- * Add the CentOS package generation.
- * Bug fixing.
- -- Ralf Lange <ralf.lange@qstopmotion.org> Thu, 12 Sep 2015 00:09:11 +0100
+  * Update the Ubuntu package generation. Fix most of the lintian messages.
+  * Add the CentOS package generation.
+  * Bug fixing.
+ -- Ralf Lange <ralf.lange@qstopmotion.org>  Thu, 12 Sep 2015 00:09:11 +0100
 
 qStopMotion (2.0.1) unstable; urgency=low
- * Update the DEB package generation. Fix most of the lintian messages.
- * Update the RPM package generation.
- * Video4Linux2 grabber can handle BGR image format.
- * Add libav as the second encoder application.
- -- Ralf Lange <ralf.lange@qstopmotion.org> Thu, 11 Jun 2015 00:09:11 +0100
+  * Update the DEB package generation. Fix most of the lintian messages.
+  * Update the RPM package generation.
+  * Video4Linux2 grabber can handle BGR image format.
+  * Add libav as the second encoder application.
+ -- Ralf Lange <ralf.lange@qstopmotion.org>  Thu, 11 Jun 2015 00:09:11 +0100
 
-qStopMotion (2.0.0 (Beta)) unstable; urgency=low
- * Remove of the Gstreamer grabber from the Windows platform.
- * On Windows qStopMotion can be started as an portable application.
- * Video4Linux2 grabber on the Linux platform.
- * Camera controller for the Video4Linux2 grabber.
- -- Ralf Lange <ralf.lange@qstopmotion.org> Thu, 21 May 2015 00:09:11 +0100
+qStopMotion (2.0.0) unstable; urgency=low
+  * Beta version of the new major release
+  * Remove of the Gstreamer grabber from the Windows platform
+  * On Windows qStopMotion can be started as an portable application.
+  * Video4Linux2 grabber on the Linux platform.
+  * Camera controller for the Video4Linux2 grabber.
+ -- Ralf Lange <ralf.lange@qstopmotion.org>  Thu, 21 May 2015 00:09:11 +0100
 
 qStopMotion (1.1.0) unstable; urgency=low
- * Last Windows Gstreamer release
- * Media Foundation grabber on the Windows platform.
- * Camera controller dialog to control all posible camera features.
- * Camera controller for the Media Foundation grabber.
- * Gphoto2 greabber on the Linux platform (Experimental, not finished).
- * Camera controller for the Gphoto2 grabber (Experimental, not finished).
- * Update of the user interface. Preferences of the project in the file menue,
-   Properties of the application in the edit menu.
- * Optional grid in the live image view.
- -- Ralf Lange <ralf.lange@qstopmotion.org> Thu, 09 Dec 2014 00:09:11 +0100
+  * Last Windows Gstreamer release
+  * Media Foundation grabber on the Windows platform.
+  * Camera controller dialog to control all posible camera features.
+  * Camera controller for the Media Foundation grabber.
+  * Gphoto2 greabber on the Linux platform (Experimental, not finished).
+  * Camera controller for the Gphoto2 grabber (Experimental, not finished).
+  * Update of the user interface. Preferences of the project in the file menue,
+    Properties of the application in the edit menu.
+  * Optional grid in the live image view.
+ -- Ralf Lange <ralf.lange@qstopmotion.org>  Thu, 09 Dec 2014 00:09:11 +0100
 
 qStopMotion (1.0.1) unstable; urgency=low
- * Fix Bugs
- * Full implementation of undo and redo functionality.
- * Full implementation of the recovery functionality.
- * Call gimp works on all platforms.
- * French localization.
- -- Ralf Lange <ralf.lange@qstopmotion.org> Thu, 15 May 2012 00:09:11 +0100
+  * Fix Bugs
+  * Full implementation of undo and redo functionality.
+  * Full implementation of the recovery functionality.
+  * Call gimp works on all platforms.
+  * French localization.
+ -- Ralf Lange <ralf.lange@qstopmotion.org>  Thu, 15 May 2012 00:09:11 +0100
 
 qStopMotion (1.0.0) unstable; urgency=low
- * Fix Bugs
- -- Ralf Lange <ralf.lange@qstopmotion.org> Thu, 12 Mar 2012 00:09:11 +0100
+  * Fix Bugs
+ -- Ralf Lange <ralf.lange@qstopmotion.org>  Thu, 12 Mar 2012 00:09:11 +0100
 
-qStopMotion (0.9.11, release candidat 3) unstable; urgency=low
- * Fix Bugs
- * Add packaging for Linux DEB package.
- * Update the German language translation.
- -- Ralf Lange <ralf.lange@qstopmotion.org> Thu, 21 Feb 2012 00:09:11 +0100
-
+qStopMotion (0.9.11) unstable; urgency=low
+  * Release candidat 3 of the new major release
+  * Fix Bugs
+  * Add packaging for Linux DEB package.
+  * Update the German language translation.
+ -- Ralf Lange <ralf.lange@qstopmotion.org>  Thu, 21 Feb 2012 00:09:11 +0100

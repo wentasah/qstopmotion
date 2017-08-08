@@ -629,6 +629,12 @@ public:
      */
     void startDialog();
 
+    /**
+     * Open the online help in the default internet browser
+     * @param anchor The anchor in the manual to go to after the manual is opend
+     */
+    void openOnlineHelp(const QString &anchor);
+
 protected slots:
 
 private:

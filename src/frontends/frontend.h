@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2016 by                                                *
+ *  Copyright (C) 2005-2017 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -453,6 +453,12 @@ public:
      * @param newState the new tool bar state.
      */
     virtual void setToolBarState(int newState) = 0;
+
+    /**
+     * Open the online help in the default internet browser
+     * @param anchor The anchor in the manual to go to after the manual is opend
+     */
+    virtual void openOnlineHelp(const QString &anchor) = 0;
 
     /**************************************************************************
      * Project preferences

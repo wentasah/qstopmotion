@@ -925,6 +925,16 @@ void QtFrontend::startDialog()
 }
 
 
+void QtFrontend::openOnlineHelp(const QString &anchor)
+{
+    qDebug() << "QtFrontend::openOnlineHelp --> Start";
+
+    mw->openOnlineHelp(anchor);
+
+    qDebug() << "QtFrontend::openOnlineHelp --> End";
+}
+
+
 void QtFrontend::setToolBarState(int newState)
 {
     qDebug() << "MainWindowGUI::setToolBarState --> Start";

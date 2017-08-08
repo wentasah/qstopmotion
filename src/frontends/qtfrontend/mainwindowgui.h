@@ -106,6 +106,12 @@ public:
     void keyPressEvent(QKeyEvent *k);
 
     /**
+     * Getting the active locale
+     * @return A string with the active locale
+     */
+    const QString getActiveLocale();
+
+    /**
      * Getting all possible GUI languages
      * @return A vector with all languages
      */
@@ -492,6 +498,12 @@ public:
      */
     void removeAllFilesFromMonitoring();
 
+    /**
+     * Open the online help in the default internet browser
+     * @param anchor The anchor in the manual to go to after the manual is opend
+     */
+    void openOnlineHelp(const QString &anchor);
+
     /**************************************************************************
      * Public slots
      **************************************************************************/
@@ -591,7 +603,7 @@ private slots:
     void showCameraControllerDialog();
 
     /**
-     *
+     * Show the tool tip entries for user interface elements
      */
     void whatsThis();
 
@@ -599,6 +611,11 @@ private slots:
      * Brings up an help dialog with the qstopmotion user manua.
      */
     void showHelpDialog();
+
+    /**
+     * Brings up an help dialog with the qstopmotion user manua.
+     */
+    void showOnlineHelp();
 
     /**
      * Brings up an about dialog with information about the application.
@@ -679,9 +696,10 @@ private:
     QAction *cameraControllerAct;
     // Help menu
     QAction *whatsthisAct;
+    QAction *helpAct;
+    QAction *onlineHelpAct;
     QAction *aboutQtAct;
     QAction *aboutAct;
-    QAction *helpAct;
 
     // Menues
     QMenu           *fileMenu;
@@ -727,6 +745,7 @@ private:
     ExternalChangeMonitor *changeMonitor;
 
     // Translation handling
+    QString                activeLocale;
     QTranslator            appTranslator;
     QTranslator            qtTranslator;
     QString                translationsPath;

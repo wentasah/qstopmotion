@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2015 by                                                *
+ *  Copyright (C) 2005-2017 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -65,6 +65,9 @@ private:
     GrabberWidget   *grabberSelectPage;
     QPushButton     *applyButton;
     QPushButton     *closeButton;
+    QPushButton     *helpButton;
+
+    int              activePage;
 
     void makeGeneralSettingsPage();
     void makeProjectValuePage();
@@ -84,6 +87,7 @@ private slots:
 
     void apply();
     void close();
+    void help();
     void finish(int result);
 };
 

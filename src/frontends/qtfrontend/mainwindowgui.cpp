@@ -22,9 +22,11 @@
 
 #include <QApplication>
 #include <QDebug>
+#include <QDesktopServices>
 #include <QFileDialog>
 #include <QMenuBar>
 #include <QStatusBar>
+#include <QUrl>
 #include <QWhatsThis>
 
 #include "mainwindowgui.h"
@@ -89,11 +91,13 @@ MainWindowGUI::MainWindowGUI(QApplication *stApp, Frontend *f)
     copyAct              = 0;
     pasteAct             = 0;
     preferencesAct       = 0;
-    whatsthisAct         = 0;
     undoViewAct          = 0;
     cameraControllerAct  = 0;
-    aboutAct             = 0;
+    whatsthisAct         = 0;
     helpAct              = 0;
+    onlineHelpAct        = 0;
+    aboutQtAct           = 0;
+    aboutAct             = 0;
 
     fileMenu             = 0;
     exportMenu           = 0;
@@ -202,6 +206,7 @@ void MainWindowGUI::retranslateStrings()
     undoViewAct->setText(tr("&Undo stack"));
     cameraControllerAct->setText(tr("&Camera Controller"));
     helpAct->setText(tr("&Help"));
+    onlineHelpAct->setText(tr("&Online Help"));
     aboutQtAct->setText(tr("About &Qt"));
     aboutAct->setText(tr("&About"));
 
@@ -497,7 +502,6 @@ void MainWindowGUI::initialize()
 
     this->initTranslations();
     PreferencesTool *pref = frontend->getPreferences();
-    QString activeLocale;
 
     pref->getStringPreference("preferences", "language", activeLocale);
     createTranslator(activeLocale);
@@ -644,21 +648,28 @@ void MainWindowGUI::keyPressEvent(QKeyEvent *k)
 }
 
 
+const QString MainWindowGUI::getActiveLocale()
+{
+    return activeLocale;
+}
+
+
 const QVector<QString> MainWindowGUI::getLanguages()
 {
-    return this->translationsLanguages;
+    return translationsLanguages;
 }
 
 
 const QVector<QString> MainWindowGUI::getLocales()
 {
-    return this->translationsLocales;
+    return translationsLocales;
 }
 
 
 void MainWindowGUI::changeLanguage(int newIndex)
 {
-    this->createTranslator(this->translationsLocales[newIndex]);
+    activeLocale = translationsLocales[newIndex];
+    createTranslator(activeLocale);
     retranslateStrings();
 }
 
@@ -1189,9 +1200,25 @@ void MainWindowGUI::removeFileFromMonitoring(const QString &file)
     changeMonitor->removeFile(file);
 }
 
+
 void MainWindowGUI::removeAllFilesFromMonitoring()
 {
     changeMonitor->removeAllFiles();
+}
+
+
+void MainWindowGUI::openOnlineHelp(const QString &anchor)
+{
+    qDebug() << "MainWindowGUI::openOnlineHelp --> Start";
+
+    if ("de" == activeLocale) {
+        QDesktopServices::openUrl(QUrl("http://www.qstopmotion.org/manual/manual_de.html" + anchor));
+    }
+    else {
+        QDesktopServices::openUrl(QUrl("http://www.qstopmotion.org/manual/manual_en.html" + anchor));
+    }
+
+    qDebug() << "MainWindowGUI::openOnlineHelp --> End";
 }
 
 /**************************************************************************
@@ -1770,6 +1797,12 @@ void MainWindowGUI::showHelpDialog()
 }
 
 
+void MainWindowGUI::showOnlineHelp()
+{
+    this->openOnlineHelp("#overview");
+}
+
+
 void MainWindowGUI::showAboutDialog()
 {
     AboutDialog *aboutDialog = new AboutDialog(frontend, this);
@@ -2285,6 +2318,15 @@ void MainWindowGUI::createActions()
     helpAct->setIconVisibleInMenu(true);
     connect(helpAct, SIGNAL(triggered()), this, SLOT(showHelpDialog()));
 
+    onlineHelpAct = new QAction(this);
+    iconFile.clear();
+    iconFile.append(frontend->getIconsDirName());
+    iconFile.append(QLatin1String("window.png"));
+    onlineHelpAct->setIcon(QIcon(iconFile));
+    onlineHelpAct->setShortcut(ControlModifier + Key_F1);
+    onlineHelpAct->setIconVisibleInMenu(true);
+    connect(onlineHelpAct, SIGNAL(triggered()), this, SLOT(showOnlineHelp()));
+
     aboutQtAct = new QAction(this);
     iconFile.clear();
     iconFile.append(frontend->getIconsDirName());
@@ -2363,6 +2405,7 @@ void MainWindowGUI::createMenus()
     helpMenu = new QMenu(this);
     helpMenu->addAction(whatsthisAct);
     helpMenu->addAction(helpAct);
+    helpMenu->addAction(onlineHelpAct);
     helpMenu->addSeparator();
     helpMenu->addAction(aboutQtAct);
     helpMenu->addAction(aboutAct);

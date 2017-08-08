@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2016 by                                                *
+ *  Copyright (C) 2005-2017 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -23,6 +23,7 @@
 #include "generaldialog.h"
 
 #include <QDebug>
+#include <QShortcut>
 #include <QVBoxLayout>
 
 #include "technical/preferencestool.h"
@@ -49,6 +50,7 @@ GeneralDialog::GeneralDialog(Frontend *f, QWidget *parent)
     imageTransformationPage = 0;
     videoExportPage         = 0;
     grabberSelectPage       = 0;
+    activePage              = 0;
 
     pageTree = new QTreeWidget();
     pageTree->setColumnCount(1);
@@ -66,6 +68,12 @@ GeneralDialog::GeneralDialog(Frontend *f, QWidget *parent)
     pageLayout = new QHBoxLayout;
     pageLayout->addWidget(pageTree);
 
+    helpButton = new QPushButton(tr("Help"), this);
+    helpButton->setDefault(true);
+    connect(helpButton, SIGNAL(clicked()), this, SLOT(help()));
+    helpButton->setShortcut(QKeySequence::HelpContents);
+    connect(helpButton, SIGNAL(triggered()), this, SLOT(help()));
+
     applyButton = new QPushButton(tr("Apply"), this);
     applyButton->setDefault(true);
     connect(applyButton, SIGNAL(clicked()), this, SLOT(apply()));
@@ -76,6 +84,7 @@ GeneralDialog::GeneralDialog(Frontend *f, QWidget *parent)
     connect(this, SIGNAL(finished(int)), this, SLOT(finish(int)));
 
     QHBoxLayout *buttonLayout = new QHBoxLayout;
+    buttonLayout->addWidget(helpButton);
     buttonLayout->addStretch(1);
     buttonLayout->addWidget(applyButton);
     buttonLayout->addWidget(closeButton);
@@ -120,6 +129,7 @@ void GeneralDialog::makeGeneralSettingsPage()
     generalSettingsPage->setMaximumSize(MAX_PAGE_WIDTH, MAX_PAGE_HEIGHT);
     pageLayout->addWidget(generalSettingsPage);
     generalSettingsPage->setVisible(true);
+    activePage = 0;
 
     qDebug() << "GeneralDialog::makeGeneralSettingsPage --> End";
 }
@@ -237,11 +247,11 @@ void GeneralDialog::itemClicked(QTreeWidgetItem *pageItem,
 {
     qDebug() << "GeneralDialog::itemClicked --> Start";
 
-    int itemIndex = 0;
+    activePage = 0;
 
     if (NULL != pageItem->parent())
     {
-        itemIndex = pageItem->parent()->indexOfChild(pageItem);
+        activePage = pageItem->parent()->indexOfChild(pageItem);
     }
 
     generalSettingsPage->setVisible(false);
@@ -251,7 +261,7 @@ void GeneralDialog::itemClicked(QTreeWidgetItem *pageItem,
     videoExportPage->setVisible(false);
     grabberSelectPage->setVisible(false);
 
-    switch (itemIndex)
+    switch (activePage)
     {
     default:
     case 0:
@@ -281,6 +291,43 @@ void GeneralDialog::itemClicked(QTreeWidgetItem *pageItem,
     }
 
     qDebug() << "GeneralDialog::itemClicked --> End";
+}
+
+
+void GeneralDialog::help()
+{
+    qDebug() << "GeneralDialog::help --> Start";
+
+    switch (activePage)
+    {
+    default:
+    case 0:
+        // General settings
+        frontend->openOnlineHelp("#preferences-general");
+        break;
+    case 1:
+        // New project values
+        frontend->openOnlineHelp("#preferences-new");
+        break;
+    case 2:
+        // Image import settings
+        frontend->openOnlineHelp("#preferences-import");
+        break;
+    case 3:
+        // Image transformation settings
+        frontend->openOnlineHelp("#preferences-trans");
+        break;
+    case 4:
+        // Video export settings
+        frontend->openOnlineHelp("#preferences-export");
+        break;
+    case 5:
+        // Grabber settings
+        frontend->openOnlineHelp("#preferences-grabber");
+        break;
+    }
+
+    qDebug() << "GeneralDialog::help --> End";
 }
 
 

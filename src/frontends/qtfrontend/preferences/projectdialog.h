@@ -65,6 +65,9 @@ private:
     // GrabberWidget   *grabberSelectPage;
     QPushButton     *applyButton;
     QPushButton     *closeButton;
+    QPushButton     *helpButton;
+
+    int              activePage;
 
     // void makeGeneralSettingsPage();
     // void makeProjectValuePage();
@@ -84,6 +87,7 @@ private slots:
 
     void apply();
     void close();
+    void help();
     void finish(int result);
 };
 

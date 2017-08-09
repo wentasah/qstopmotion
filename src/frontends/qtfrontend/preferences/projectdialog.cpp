@@ -49,6 +49,7 @@ ProjectDialog::ProjectDialog(Frontend *f, QWidget *parent)
     imageTransformationPage = 0;
     videoExportPage         = 0;
     // grabberSelectPage       = 0;
+    activePage              = 0;
 
     pageTree = new QTreeWidget();
     pageTree->setColumnCount(1);
@@ -66,6 +67,12 @@ ProjectDialog::ProjectDialog(Frontend *f, QWidget *parent)
     pageLayout = new QHBoxLayout;
     pageLayout->addWidget(pageTree);
 
+    helpButton = new QPushButton(tr("Help"), this);
+    helpButton->setDefault(true);
+    connect(helpButton, SIGNAL(clicked()), this, SLOT(help()));
+    helpButton->setShortcut(QKeySequence::HelpContents);
+    connect(helpButton, SIGNAL(triggered()), this, SLOT(help()));
+
     applyButton = new QPushButton(tr("Apply"), this);
     applyButton->setDefault(true);
     connect(applyButton, SIGNAL(clicked()), this, SLOT(apply()));
@@ -76,6 +83,7 @@ ProjectDialog::ProjectDialog(Frontend *f, QWidget *parent)
     connect(this, SIGNAL(finished(int)), this, SLOT(finish(int)));
 
     QHBoxLayout *buttonLayout = new QHBoxLayout;
+    buttonLayout->addWidget(helpButton);
     buttonLayout->addStretch(1);
     buttonLayout->addWidget(applyButton);
     buttonLayout->addWidget(closeButton);
@@ -235,11 +243,11 @@ void ProjectDialog::itemClicked(QTreeWidgetItem *pageItem,
 {
     qDebug() << "ProjectDialog::itemClicked --> Start";
 
-    int itemIndex = 0;
+    activePage = 0;
 
     if (NULL != pageItem->parent())
     {
-        itemIndex = pageItem->parent()->indexOfChild(pageItem);
+        activePage = pageItem->parent()->indexOfChild(pageItem);
     }
 
     // generalSettingsPage->setVisible(false);
@@ -249,7 +257,7 @@ void ProjectDialog::itemClicked(QTreeWidgetItem *pageItem,
     videoExportPage->setVisible(false);
     // grabberSelectPage->setVisible(false);
 
-    switch (itemIndex)
+    switch (activePage)
     {
     default:
     case 0:
@@ -267,6 +275,31 @@ void ProjectDialog::itemClicked(QTreeWidgetItem *pageItem,
     }
 
     qDebug() << "ProjectDialog::itemClicked --> End";
+}
+
+
+void ProjectDialog::help()
+{
+    qDebug() << "ProjectDialog::help --> Start";
+
+    switch (activePage)
+    {
+    default:
+    case 0:
+        // Image import settings
+        frontend->openOnlineHelp("#properties-import");
+        break;
+    case 1:
+        // Image transformation settings
+        frontend->openOnlineHelp("#properties-trans");
+        break;
+    case 2:
+        // Video export settings
+        frontend->openOnlineHelp("#properties-export");
+        break;
+    }
+
+    qDebug() << "ProjectDialog::help --> End";
 }
 
 

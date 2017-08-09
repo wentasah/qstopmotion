@@ -60,6 +60,7 @@ private slots:
     void newClick();
     void lastClick();
     void openClick();
+    void help();
 
 private:
     Frontend       *frontend;
@@ -71,6 +72,7 @@ private:
     ClickableLabel *openProjectLabel;
     QPushButton    *okButton;
     QPushButton    *closeButton;
+    QPushButton    *helpButton;
     int             selectedPossibility;
     int             defaultFrameStyle;
     QString         lastProjectPath;

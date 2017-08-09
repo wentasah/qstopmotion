@@ -109,16 +109,25 @@ StartDialog::StartDialog(Frontend *f,
 
     connect(openProjectLabel, SIGNAL(clicked()), SLOT(openClick()));
 
-    okButton = new QPushButton(tr("&OK"));
-    closeButton = new QPushButton(tr("&Close"));
+    helpButton = new QPushButton(tr("Help"), this);
+    helpButton->setDefault(false);
+    connect(helpButton, SIGNAL(clicked()), this, SLOT(help()));
+    helpButton->setShortcut(QKeySequence::HelpContents);
+    connect(helpButton, SIGNAL(triggered()), this, SLOT(help()));
 
+    okButton = new QPushButton(tr("&OK"));
+    okButton->setDefault(true);
     connect(okButton, SIGNAL(clicked()), this, SLOT(accept()));
+
+    closeButton = new QPushButton(tr("&Close"));
+    closeButton->setDefault(false);
     connect(closeButton, SIGNAL(clicked()), this, SLOT(reject()));
 
     inputLayout->addWidget(openProjectImage, 2, 0);
     inputLayout->addWidget(openProjectLabel, 2, 1);
 
     QHBoxLayout *buttonLayout = new QHBoxLayout;
+    buttonLayout->addWidget(helpButton);
     buttonLayout->addStretch();
     buttonLayout->addWidget(okButton);
     buttonLayout->addWidget(closeButton);
@@ -130,6 +139,16 @@ StartDialog::StartDialog(Frontend *f,
     this->setLayout(mainLayout);
 
     this->newClick();
+}
+
+
+void StartDialog::help()
+{
+    qDebug() << "StartDialog::help --> Start";
+
+    frontend->openOnlineHelp("#started-start");
+
+    qDebug() << "StartDialog::help --> End";
 }
 
 

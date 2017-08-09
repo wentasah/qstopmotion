@@ -68,13 +68,13 @@ ProjectDialog::ProjectDialog(Frontend *f, QWidget *parent)
     pageLayout->addWidget(pageTree);
 
     helpButton = new QPushButton(tr("Help"), this);
-    helpButton->setDefault(true);
+    helpButton->setDefault(false);
     connect(helpButton, SIGNAL(clicked()), this, SLOT(help()));
     helpButton->setShortcut(QKeySequence::HelpContents);
     connect(helpButton, SIGNAL(triggered()), this, SLOT(help()));
 
     applyButton = new QPushButton(tr("Apply"), this);
-    applyButton->setDefault(true);
+    applyButton->setDefault(false);
     connect(applyButton, SIGNAL(clicked()), this, SLOT(apply()));
 
     closeButton = new QPushButton(tr("Close"), this);

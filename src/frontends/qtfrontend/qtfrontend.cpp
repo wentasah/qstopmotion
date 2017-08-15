@@ -725,7 +725,7 @@ void QtFrontend::showCritical(const QString title, const QString &message)
 
 int QtFrontend::runExternalCommand(const QString &command, const QStringList &arguments)
 {
-    ExternalCommandDialog *ec = new ExternalCommandDialog;
+    ExternalCommandDialog *ec = new ExternalCommandDialog(this);
     ec->show();
     ec->run(command, arguments);
     return 0;

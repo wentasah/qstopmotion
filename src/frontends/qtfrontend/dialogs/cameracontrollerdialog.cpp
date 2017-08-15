@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2016 by                                                *
+ *  Copyright (C) 2005-2017 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -24,6 +24,7 @@
 
 #include <QDebug>
 #include <QHBoxLayout>
+#include <QVBoxLayout>
 #include <QProgressDialog>
 #include <QUrl>
 
@@ -57,7 +58,7 @@ void CameraControllerDialog::makeGUI()
 
 
     setWindowTitle("windowTitle");
-    setMinimumSize(200, 500);
+    setMinimumSize(250, 500);
     // Enable help window for modal dialoges
     this->setAttribute(Qt::WA_GroupLeader);
 
@@ -259,15 +260,26 @@ void CameraControllerDialog::makeGUI()
     rollSlider->hide();
 
     resetButton = new QPushButton("resetButton");
+    resetButton->setDefault(false);
     connect(resetButton, SIGNAL(clicked()), this, SLOT(reset()));
 
+    helpButton = new QPushButton(tr("Help"), this);
+    helpButton->setDefault(false);
+    connect(helpButton, SIGNAL(clicked()), this, SLOT(help()));
+    helpButton->setShortcut(QKeySequence::HelpContents);
+    connect(helpButton, SIGNAL(triggered()), this, SLOT(help()));
+
     closeButton = new QPushButton("closeButton");
+    closeButton->setDefault(true);
     connect(closeButton, SIGNAL(clicked()), this, SLOT(close()));
+
+    QHBoxLayout *buttonLayout = new QHBoxLayout;
+    buttonLayout->addWidget(helpButton);
+    buttonLayout->addWidget(closeButton);
 
     QVBoxLayout *bottomLayout = new QVBoxLayout;
     bottomLayout->addWidget(resetButton);
-    // bottomLayout->addStretch();
-    bottomLayout->addWidget(closeButton);
+    bottomLayout->addLayout(buttonLayout);
 
     mainLayout = new QVBoxLayout;
     // mainLayout->addLayout(topLayout);
@@ -2623,6 +2635,16 @@ void CameraControllerDialog::reset()
     progress.hide();
 
     qDebug() << "CameraControllerDialog::reset --> End";
+}
+
+
+void CameraControllerDialog::help()
+{
+    qDebug() << "CameraControllerDialog::help --> Start";
+
+    frontend->openOnlineHelp("#control");
+
+    qDebug() << "CameraControllerDialog::help --> End";
 }
 
 

@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2010-2015 by                                                *
+ *  Copyright (C) 2010-2017 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -88,6 +88,7 @@ private slots:
     void checkProjectText(const QString &text);
     void checkSceneText(const QString &text);
     void checkTakeText(const QString &text);
+    void help();
 
 private:
     Frontend    *frontend;
@@ -99,6 +100,7 @@ private:
     QLineEdit   *takeDescrEdit;
     QPushButton *okButton;
     QPushButton *cancelButton;
+    QPushButton *helpButton;
 };
 
 #endif // DESCRIPTIONDIALOG_H

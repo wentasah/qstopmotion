@@ -35,21 +35,31 @@ DescriptionDialog::DescriptionDialog(Frontend *f, descriptionType type, QWidget 
     projectDescrLabel = new QLabel(tr("&Project Description:"));
     projectDescrEdit = new QLineEdit;
     projectDescrLabel->setBuddy(projectDescrEdit);
+    connect(projectDescrEdit, SIGNAL(textChanged(const QString &)), this, SLOT(checkProjectText(const QString &)));
+
     sceneDescrLabel = new QLabel(tr("&Scene Description:"));
     sceneDescrEdit = new QLineEdit;
     sceneDescrLabel->setBuddy(sceneDescrEdit);
+    connect(sceneDescrEdit, SIGNAL(textChanged(const QString &)), this, SLOT(checkSceneText(const QString &)));
+
     takeDescrLabel = new QLabel(tr("&Take Description:"));
     takeDescrEdit = new QLineEdit;
     takeDescrLabel->setBuddy(takeDescrEdit);
+    connect(takeDescrEdit, SIGNAL(textChanged(const QString &)), this, SLOT(checkTakeText(const QString &)));
 
     okButton = new QPushButton(tr("&OK"));
-    cancelButton = new QPushButton(tr("&Cancel"));
-
-    connect(projectDescrEdit, SIGNAL(textChanged(const QString &)), this, SLOT(checkProjectText(const QString &)));
-    connect(sceneDescrEdit, SIGNAL(textChanged(const QString &)), this, SLOT(checkSceneText(const QString &)));
-    connect(takeDescrEdit, SIGNAL(textChanged(const QString &)), this, SLOT(checkTakeText(const QString &)));
+    okButton->setDefault(true);
     connect(okButton, SIGNAL(clicked()), this, SLOT(accept()));
+
+    cancelButton = new QPushButton(tr("&Cancel"));
+    cancelButton->setDefault(false);
     connect(cancelButton, SIGNAL(clicked()), this, SLOT(reject()));
+
+    helpButton = new QPushButton(tr("Help"), this);
+    helpButton->setDefault(false);
+    connect(helpButton, SIGNAL(clicked()), this, SLOT(help()));
+    helpButton->setShortcut(QKeySequence::HelpContents);
+    connect(helpButton, SIGNAL(triggered()), this, SLOT(help()));
 
     QGridLayout *inputLayout = new QGridLayout;
     inputLayout->addWidget(projectDescrLabel, 0, 0);
@@ -62,7 +72,7 @@ DescriptionDialog::DescriptionDialog(Frontend *f, descriptionType type, QWidget 
     QVBoxLayout *buttonLayout = new QVBoxLayout;
     buttonLayout->addWidget(okButton);
     buttonLayout->addWidget(cancelButton);
-    buttonLayout->addStretch();
+    buttonLayout->addWidget(helpButton);
 
     QHBoxLayout *mainLayout = new QHBoxLayout;
     mainLayout->addLayout(inputLayout);
@@ -169,4 +179,10 @@ void DescriptionDialog::checkTakeText(const QString &text)
         QString newText(text);
         takeDescrEdit->setText(newText.remove('|'));
     }
+}
+
+
+void DescriptionDialog::help()
+{
+    frontend->openOnlineHelp("#started-project");
 }

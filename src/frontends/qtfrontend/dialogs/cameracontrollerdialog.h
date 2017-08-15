@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2016 by                                                *
+ *  Copyright (C) 2005-2017 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -591,6 +591,13 @@ private slots:
     void reset();
 
     /**
+     * Slot for notified the camera controller to open the online help.
+     *
+     * @brief help
+     */
+    void help();
+
+    /**
      * Slot for notified the camera controller to close the dialog.
      *
      * @brief close
@@ -690,6 +697,7 @@ private:
     QVBoxLayout  *mainLayout;
 
     QPushButton  *resetButton;
+    QPushButton  *helpButton;
     QPushButton  *closeButton;
 };
 

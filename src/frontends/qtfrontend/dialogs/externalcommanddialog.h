@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2015 by                                                *
+ *  Copyright (C) 2005-2017 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -32,13 +32,15 @@
 #include <QVBoxLayout>
 #include <QWidget>
 
+#include "frontends/frontend.h"
+
 
 class ExternalCommandDialog : public QWidget
 {
     Q_OBJECT
 
 public:
-    ExternalCommandDialog(QWidget *parent = 0);
+    ExternalCommandDialog(Frontend *f, QWidget *parent = 0);
     void run(const QString &command, const QStringList &arguments);
 
 private slots:
@@ -46,16 +48,19 @@ private slots:
     void readFromStandardError();
     void submitInputToProgram();
     void displayExitStatus(int exitCode, QProcess::ExitStatus exitStatus);
+    void help();
 
 private:
-    QVBoxLayout *vboxLayout;
+    Frontend     *frontend;
+    QVBoxLayout  *vboxLayout;
     QTextBrowser *textBrowser;
-    QHBoxLayout *hboxLayout;
-    QLabel *label;
-    QLineEdit *lineEdit;
-    QPushButton *submitButton;
-    QPushButton *closeButton;
-    QProcess *process;
+    QHBoxLayout  *hboxLayout;
+    QLabel       *label;
+    QLineEdit    *lineEdit;
+    QPushButton  *submitButton;
+    QPushButton  *helpButton;
+    QPushButton  *closeButton;
+    QProcess     *process;
 };
 
 #endif

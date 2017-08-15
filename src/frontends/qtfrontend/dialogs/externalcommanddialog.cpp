@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2015 by                                                *
+ *  Copyright (C) 2005-2017 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -30,9 +30,11 @@
 #include "technical/util.h"
 
 
-ExternalCommandDialog::ExternalCommandDialog(QWidget *parent)
+ExternalCommandDialog::ExternalCommandDialog(Frontend *f, QWidget *parent)
     : QWidget(parent)
 {
+    frontend = f;
+
     vboxLayout = new QVBoxLayout(this);
     vboxLayout->setSpacing(6);
     vboxLayout->setMargin(9);
@@ -55,11 +57,20 @@ ExternalCommandDialog::ExternalCommandDialog(QWidget *parent)
 
     submitButton = new QPushButton(this);
     connect(submitButton, SIGNAL(clicked()), this, SLOT(submitInputToProgram()));
+    submitButton->setDefault(false);
     submitButton->setText(tr("Submit"));
     hboxLayout->addWidget(submitButton);
 
+    helpButton = new QPushButton(tr("Help"), this);
+    helpButton->setDefault(false);
+    connect(helpButton, SIGNAL(clicked()), this, SLOT(help()));
+    helpButton->setShortcut(QKeySequence::HelpContents);
+    connect(helpButton, SIGNAL(triggered()), this, SLOT(help()));
+    hboxLayout->addWidget(helpButton);
+
     closeButton = new QPushButton(this);
     connect(closeButton, SIGNAL(clicked()), this, SLOT(close()));
+    closeButton->setDefault(true);
     closeButton->setEnabled(false);
     closeButton->setText(tr("Close"));
     hboxLayout->addWidget(closeButton);
@@ -136,3 +147,12 @@ void ExternalCommandDialog::displayExitStatus(int exitCode, QProcess::ExitStatus
     closeButton->setEnabled(true);
 }
 
+
+void ExternalCommandDialog::help()
+{
+    qDebug() << "ExternalCommandDialog::help --> Start";
+
+    frontend->openOnlineHelp("#export");
+
+    qDebug() << "ExternalCommandDialog::help --> End";
+}

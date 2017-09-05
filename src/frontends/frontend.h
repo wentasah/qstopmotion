@@ -477,6 +477,56 @@ public:
     virtual void setRecordingMode(int mode) = 0;
 
     /**
+     * Get the unit mode.
+     * @return The unit mode.
+     */
+    virtual int getUnitMode() = 0;
+
+    /**
+     * Set the unit mode.
+     * @param mode The new unit mode.
+     */
+    virtual void setUnitMode(int mode) = 0;
+
+    /**
+     * Get the unit count.
+     * @return The unit count.
+     */
+    virtual int getUnitCount() = 0;
+
+    /**
+     * Set the unit count.
+     * @param count The new unit count.
+     */
+    virtual void setUnitCount(int count) = 0;
+
+    /**
+     * Get the beep checkbox state.
+     * @brief getBeepState
+     * @return The actual beep checkbox state
+     */
+    virtual bool getBeepState() = 0;
+
+    /**
+     * Set the beep checkbox state.
+     * @brief setBeepState
+     * @param state The new beep checkbox state.
+     */
+    virtual void setBeepState(bool state) = 0;
+
+    /**
+     * Get the beep unit count.
+     * @return The beep unit count.
+     */
+    virtual int getBeepCount() = 0;
+
+    /**
+     * Set the beep unit count.
+     * @param count The new beep unit count.
+     */
+    virtual void setBeepCount(int count) = 0;
+
+    /**
      * Get the video source index.
      * @return video source index
      */

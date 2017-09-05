@@ -1,7 +1,7 @@
 ###############################################################################
 # CMake file for the qStopMotion project                                      #
 # (c) Ralf Lange, longsoft.de                                                 #
-# Last update: 2017-08-07                                                     #
+# Last update: 2017-08-27                                                     #
 #                                                                             #
 # Usage:                                                                      #
 #   * Qt-Creator (Windows, Linux)                                             #
@@ -30,6 +30,13 @@
 project(qStopMotion)
 
 cmake_minimum_required(VERSION 2.8.8)
+
+# set path to additional CMake modules
+SET(
+    CMAKE_MODULE_PATH
+    ${CMAKE_SOURCE_DIR}/cmake
+    ${CMAKE_MODULE_PATH}
+)
 
 ###############################################################################
 # Platform check
@@ -96,6 +103,7 @@ SET(CMAKE_INCLUDE_CURRENT_DIR ON)
 find_package(Qt5 REQUIRED COMPONENTS Core Widgets Xml)
 
 message("Qt5 Version: ${Qt5Widgets_VERSION_STRING}")
+message("QT_INCLUDE_DIRS: ${Qt5Widgets_INCLUDE_DIRS}")
 
 IF(CMAKE_BUILD_TYPE STREQUAL "Release")
     message("No Qt debug and warning output!")
@@ -380,6 +388,38 @@ SET(
 )
 
 ###############################################################################
+# Qwt support
+#
+# (UNIX and Windows)
+#
+# used libraries: libgphoto2
+###############################################################################
+
+IF(UNIX AND NOT APPLE)
+    # Linux
+
+    SET(QT_INCLUDE_DIR ${Qt5Widgets_INCLUDE_DIRS})
+
+    FIND_PACKAGE(Qwt REQUIRED)
+    message("Qwt Version: ${QWT_VERSION_STRING}")
+
+ELSEIF(WIN32)
+    # Windows
+
+    SET(
+        QWT_INCLUDE_DIR
+        ../qwt/include
+    )
+    SET(
+        QWT_LIBRARIES
+        qwt.lib
+    )
+ENDIF()
+
+message("QWT_INCLUDE_DIRS: ${QWT_INCLUDE_DIRS}")
+message("QWT_LIBRARIES: ${QWT_LIBRARIES}")
+
+###############################################################################
 # gPhoto2 support
 #
 # (Only UNIX)
@@ -500,6 +540,7 @@ IF(UNIX AND NOT APPLE)
     # tell cmake which libraries to link
     target_link_libraries(
         qstopmotion
+        ${QWT_LIBRARIES}
         ${GPHOTO2_LIBRARIES}
         ${V4L2_LIBRARIES}
         Qt5::Widgets
@@ -518,6 +559,7 @@ ELSEIF(APPLE)
     # tell cmake which libraries to link
     target_link_libraries(
         qstopmotion
+        ${QWT_LIBRARIES}
         ${GPHOTO2_LIBRARIES}
         ${V4L2_LIBRARIES}
         Qt5::Widgets
@@ -537,6 +579,7 @@ ELSEIF(WIN32)
     # tell cmake which libraries to link
     target_link_libraries(
         qstopmotion
+        ${QWT_LIBRARIES}
         ${MEDIAFOUNDATION_LIBRARIES}
         Qt5::WinMain
         Qt5::Widgets

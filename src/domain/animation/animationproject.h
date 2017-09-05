@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2016 by                                                *
+ *  Copyright (C) 2005-2017 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -147,6 +147,56 @@ public:
     void setRecordingMode(int newRecordingMode);
 
     /**
+     * Get the unit mode.
+     * @return The unit mode.
+     */
+    int getUnitMode() const;
+
+    /**
+     * Set the unit mode.
+     * @param mode The new unit mode.
+     */
+    void setUnitMode(int mode);
+
+    /**
+     * Get the unit count.
+     * @return The unit count.
+     */
+    int getUnitCount() const;
+
+    /**
+     * Set the unit count.
+     * @param count The new unit count.
+     */
+    void setUnitCount(int count);
+
+    /**
+     * Get the beep checkbox state.
+     * @brief getBeepState
+     * @return The actual beep checkbox state
+     */
+    bool getBeepState() const;
+
+    /**
+     * Set the beep checkbox state.
+     * @brief setBeepState
+     * @param state The new beep checkbox state.
+     */
+    void setBeepState(bool state);
+
+    /**
+     * Get the beep unit count.
+     * @return The beep unit count.
+     */
+    int getBeepCount() const;
+
+    /**
+     * Set the beep unit count.
+     * @param count The new beep unit count.
+     */
+    void setBeepCount(int count);
+
+    /**
      * Get the index of the active video source device of the project.
      * @return active video source.
      */
@@ -205,18 +255,6 @@ public:
      * @param newPlaybackCount the new playback count source.
      */
     void setPlaybackCount(int newPlaybackCount);
-
-    /**
-     * Get the active unit of the project.
-     * @return active unit mode.
-     */
-    int getUnitMode() const;
-
-    /**
-     * Set the active unit mode of the project.
-     * @param newUnitMode the new unit mode.
-     */
-    void setUnitMode(int newUnitMode);
 
     /**
      * Get the overlay intensity value.
@@ -908,6 +946,26 @@ private:
     int recordingMode;
 
     /**
+     * Active unit mode of the project.
+     */
+    int unitMode;
+
+    /**
+     * Active unit count of the project.
+     */
+    int unitCount;
+
+    /**
+     * Active beep state of the project.
+     */
+    bool beepState;
+
+    /**
+     * Active beep count of the project.
+     */
+    int beepCount;
+
+    /**
      * Index of the active video source device of the project.
      */
     int videoSource;
@@ -996,11 +1054,6 @@ private:
      * Active default output file name of the project.
      */
     QString defaultOutputFileName;
-
-    /**
-     * Active unit mode of the project.
-     */
-    int unitMode;
 
     /**
      * Active overlay value of the project.

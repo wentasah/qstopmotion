@@ -38,9 +38,6 @@ RecordingTab::RecordingTab(Frontend *f,
     cameraOn               = false;
     cameraTimer            = NULL;
 
-    recordingGroupBox      = 0;
-    recordingModeCombo     = 0;
-
     cameraGroupBox         = 0;
     videoSourceLabel       = 0;
     videoSourceCombo       = 0;
@@ -48,13 +45,24 @@ RecordingTab::RecordingTab(Frontend *f,
     resolutionCombo        = 0;
     cameraButton           = 0;
 
+    recordingGroupBox      = 0;
+    recordingModeCombo     = 0;
+
     captureGroupBox        = 0;
     mixModeCombo           = 0;
     mixCountSliderCaption  = 0;
     mixCountSlider         = 0;
 
-    // autoGroupBox           = 0;
-    // unitModeCombo          = 0;
+    timelapseGroupBox      = 0;
+    unitModeComboCaption   = 0;
+    unitModeCombo          = 0;
+    unitCountSliderValue   = 0;
+    unitCountSliderCaption = 0;
+    unitCountSlider        = 0;
+    beepCheckBox           = 0;
+    beepCountSliderValue   = 0;
+    beepCountSliderCaption = 0;
+    beepCountSlider        = 0;
 
     mixAccel               = 0;
     diffAccel              = 0;
@@ -95,23 +103,6 @@ void RecordingTab::makeGUI()
     int deviceSize = deviceNames.size();
 
     // ========================================================================
-    // Recording group box
-    recordingGroupBox = new QGroupBox("recordingGroupBox");
-    // recordingGroupBox->setFlat(true);
-
-    recordingModeCombo = new QComboBox();
-    recordingModeCombo->setFocusPolicy(Qt::NoFocus);
-    connect(recordingModeCombo, SIGNAL(activated(int)), this, SLOT(changeRecordingMode(int)));
-
-    QVBoxLayout *recordingLayout = new QVBoxLayout;
-    recordingLayout->setMargin(4);
-    // recordingLayout->setSpacing(2);
-    // recordingLayout->addStretch(1);
-    recordingLayout->addWidget(recordingModeCombo);
-    recordingLayout->addStretch(10);
-    recordingGroupBox->setLayout(recordingLayout);
-
-    // ========================================================================
     // Camera group box
     cameraGroupBox = new QGroupBox("cameraGroupBox");
     // cameraGroupBox->setFlat(true);
@@ -130,38 +121,44 @@ void RecordingTab::makeGUI()
     // resolutionLabel->hide();
     // resolutionCombo->hide();
 
-    cameraButton = new QPushButton;
-    iconFile.append(QLatin1String("cameraon.png"));
-    cameraButton->setIcon(QPixmap(iconFile));
-    // cameraButton->setFlat(true);
-    cameraButton->setFocusPolicy(Qt::NoFocus);
-    connect(cameraButton, SIGNAL(clicked()), this, SLOT(cameraButtonClicked()));
-    // cameraButton->setEnabled(false);
-
     QVBoxLayout *cameraLayout = new QVBoxLayout;
     cameraLayout->setMargin(4);
     // cameraLayout->setSpacing(2);
-    // cameraLayout->addStretch(1);
     cameraLayout->addWidget(videoSourceLabel);
     cameraLayout->addWidget(videoSourceCombo);
+    cameraLayout->addSpacing(10);
     cameraLayout->addWidget(resolutionLabel);
     cameraLayout->addWidget(resolutionCombo);
-
-    cameraLayout->addWidget(cameraButton);
-    cameraLayout->addStretch(10);
+    // cameraLayout->addStretch(10);
     cameraGroupBox->setLayout(cameraLayout);
+
+    // ========================================================================
+    // Recording group box
+    recordingGroupBox = new QGroupBox("recordingGroupBox");
+    // recordingGroupBox->setFlat(true);
+
+    recordingModeCombo = new QComboBox();
+    recordingModeCombo->setFocusPolicy(Qt::NoFocus);
+    connect(recordingModeCombo, SIGNAL(activated(int)), this, SLOT(changeRecordingMode(int)));
+
+    QVBoxLayout *recordingLayout = new QVBoxLayout;
+    recordingLayout->setMargin(4);
+    // recordingLayout->setSpacing(2);
+    recordingLayout->addWidget(recordingModeCombo);
+    recordingLayout->addStretch(10);
+    recordingGroupBox->setLayout(recordingLayout);
 
     // ========================================================================
     // Capture group box
     captureGroupBox = new QGroupBox("captureGroupBox");
-    // secondGroupBox->setFlat(true);
+    // captureGroupBox->setFlat(true);
 
     mixModeCombo = new QComboBox();
     mixModeCombo->setFocusPolicy(Qt::NoFocus);
     connect(mixModeCombo, SIGNAL(activated(int)), this, SLOT(changeMixMode(int)));
 
     mixCountSliderCaption = new QLabel();
-
+    /*
     mixCountSlider = new QSlider(Qt::Horizontal);
     mixCountSlider->setMinimum(0);
     mixCountSlider->setMaximum(5);
@@ -170,44 +167,136 @@ void RecordingTab::makeGUI()
     mixCountSlider->setTickPosition(QSlider::TicksBelow);
     mixCountSlider->setFocusPolicy(Qt::NoFocus);
     connect(mixCountSlider, SIGNAL(valueChanged(int)), this, SLOT(changeMixCount(int)));
+    */
+    mixCountSlider = new QwtSlider();
+    mixCountSlider->setOrientation(Qt::Horizontal);
+    mixCountSlider->setScalePosition(QwtSlider::LeadingScale);
+    mixCountSlider->setGroove(true);
+    mixCountSlider->setScale(0.0, 5.0);
+    connect(mixCountSlider, SIGNAL(valueChanged(double)), this, SLOT(changeMixCount(double)));
 
     QVBoxLayout *captureLayout = new QVBoxLayout;
     captureLayout->setMargin(4);
     // captureLayout->setSpacing(2);
-    // captureLayout->addStretch(1);
     captureLayout->addWidget(mixModeCombo);
+    captureLayout->addSpacing(10);
     captureLayout->addWidget(mixCountSliderCaption);
     captureLayout->addWidget(mixCountSlider);
     captureLayout->addStretch(10);
     captureGroupBox->setLayout(captureLayout);
-    captureGroupBox->hide();
+    // captureGroupBox->hide();
 
-    /* ========================================================================
-    // Auto group box
-    autoGroupBox = new QGroupBox("autoGroupBox");
-    autoGroupBox->setFlat(true);
+    // ========================================================================
+    // Time-lapse group box
+    timelapseGroupBox = new QGroupBox("timelapseGroupBox");
+    // timelapseGroupBox->setFlat(true);
 
-    unitModeChooseCombo = new QComboBox();
-    unitModeChooseCombo->setFocusPolicy(Qt::NoFocus);
-    unitModeChooseCombo->setEnabled(false);
-    connect(unitModeChooseCombo, SIGNAL(activated(int)), this, SLOT(changeUnitMode(int)));
+    unitModeComboCaption = new QLabel();
 
-    QVBoxLayout *autoLayout = new QVBoxLayout;
-    autoLayout->setMargin(4);
-    autoLayout->setSpacing(2);
-    autoLayout->addStretch(1);
-    autoLayout->addWidget(unitModeChooseCombo);
+    unitModeCombo = new QComboBox();
+    unitModeCombo->setFocusPolicy(Qt::NoFocus);
+    // unitModeCombo->setEnabled(false);
+    connect(unitModeCombo, SIGNAL(activated(int)), this, SLOT(changeUnitMode(int)));
+
+    // "n Seconds between pictures"
+    unitCountSliderValue = new QLabel("0");
+    unitCountSliderCaption = new QLabel("unitCountSliderCaption");
+
+    /*
+    unitCountSlider = new QSlider(Qt::Horizontal);
+    unitCountSlider->setMinimum(0);
+    unitCountSlider->setMaximum(60);
+    unitCountSlider->setPageStep(5);
+    unitCountSlider->setValue(5);
+    unitCountSlider->setTickPosition(QSlider::TicksBelow);
+    unitCountSlider->setFocusPolicy(Qt::NoFocus);
+    connect(unitCountSlider, SIGNAL(valueChanged(int)), this, SLOT(changeUnitCount(int)));
     */
+    unitCountSlider = new QwtSlider();
+    unitCountSlider->setOrientation(Qt::Horizontal);
+    unitCountSlider->setScalePosition(QwtSlider::LeadingScale);
+    unitCountSlider->setGroove(true);
+    unitCountSlider->setValue(30);
+    connect(unitCountSlider, SIGNAL(valueChanged(double)), this, SLOT(changeUnitCount(double)));
+
+    // beepCountSliderCaption = new QLabel();
+
+    // "Beep n seconds before picture:"
+    beepCheckBox = new QCheckBox("beepCheckBox");
+    beepCheckBox->setChecked(false);
+    connect(beepCheckBox, SIGNAL(stateChanged(int)), this, SLOT(changeBeep(int)));
+
+    beepCountSliderValue = new QLabel("0");
+    beepCountSliderCaption = new QLabel("beepCountSliderCaption");
+
+    /*
+    beepCountSlider = new QSlider(Qt::Horizontal);
+    beepCountSlider->setMinimum(0);
+    beepCountSlider->setMaximum(60);
+    beepCountSlider->setPageStep(5);
+    beepCountSlider->setValue(5);
+    beepCountSlider->setTickPosition(QSlider::TicksBelow);
+    beepCountSlider->setFocusPolicy(Qt::NoFocus);
+    connect(beepCountSlider, SIGNAL(valueChanged(int)), this, SLOT(changeBeepCount(int)));
+    */
+    beepCountSlider = new QwtSlider();
+    beepCountSlider->setOrientation(Qt::Horizontal);
+    beepCountSlider->setScalePosition(QwtSlider::LeadingScale);
+    beepCountSlider->setGroove(true);
+    connect(beepCountSlider, SIGNAL(valueChanged(double)), this, SLOT(changeBeepCount(double)));
+
+    QHBoxLayout *unitCountCaptionLayout = new QHBoxLayout;
+    unitCountCaptionLayout->addWidget(unitCountSliderValue);
+    unitCountCaptionLayout->addSpacing(1);
+    unitCountCaptionLayout->addWidget(unitCountSliderCaption);
+    unitCountCaptionLayout->addStretch(1);
+
+    QHBoxLayout *beepCountCaptionLayout = new QHBoxLayout;
+    beepCountCaptionLayout->addWidget(beepCheckBox);
+    beepCountCaptionLayout->addSpacing(1);
+    beepCountCaptionLayout->addWidget(beepCountSliderValue);
+    beepCountCaptionLayout->addSpacing(1);
+    beepCountCaptionLayout->addWidget(beepCountSliderCaption);
+    beepCountCaptionLayout->addStretch(1);
+
+    QVBoxLayout *timelapseLayout = new QVBoxLayout;
+    timelapseLayout->setMargin(4);
+    // timelapseLayout->setSpacing(2);
+    timelapseLayout->addWidget(unitModeComboCaption);
+    timelapseLayout->addWidget(unitModeCombo);
+    timelapseLayout->addSpacing(10);
+    timelapseLayout->addLayout(unitCountCaptionLayout);
+    timelapseLayout->addWidget(unitCountSlider);
+    timelapseLayout->addSpacing(10);
+    timelapseLayout->addLayout(beepCountCaptionLayout);
+    timelapseLayout->addWidget(beepCountSlider);
+    timelapseGroupBox->setLayout(timelapseLayout);
+    timelapseGroupBox->hide();
+
+    // ========================================================================
+    // Camera button layout
+    cameraButton = new QPushButton;
+    iconFile.append(QLatin1String("cameraon.png"));
+    cameraButton->setIcon(QPixmap(iconFile));
+    // cameraButton->setFlat(true);
+    cameraButton->setFocusPolicy(Qt::NoFocus);
+    cameraButton->setMinimumHeight(80);
+    connect(cameraButton, SIGNAL(clicked()), this, SLOT(cameraButtonClicked()));
+    // cameraButton->setEnabled(false);
 
     // ========================================================================
     // Tab layout
     tabLayout->setMargin(0);
-    tabLayout->setSpacing(2);
-    // tabLayout->addStretch(1);
-    tabLayout->addWidget(recordingGroupBox);
+    // tabLayout->setSpacing(2);
     tabLayout->addWidget(cameraGroupBox);
+    tabLayout->addSpacing(10);
+    tabLayout->addWidget(recordingGroupBox);
+    tabLayout->addSpacing(10);
+    tabLayout->addWidget(timelapseGroupBox);
+    tabLayout->addSpacing(10);
     tabLayout->addWidget(captureGroupBox);
-    // tabLayout->addWidget(autoGroupBox);
+    tabLayout->addSpacing(10);
+    tabLayout->addWidget(cameraButton);
     tabLayout->addStretch(1);
 
     setLayout(tabLayout);
@@ -218,29 +307,20 @@ void RecordingTab::makeGUI()
 
 void RecordingTab::retranslateStrings()
 {
-    recordingGroupBox->setTitle(tr("Recording"));
-    recordingModeCombo->clear();
-    recordingModeCombo->addItem(tr("Single frame capture"));
-    // recordingModeCombo->addItem(tr("Automated recording"));
-
     cameraGroupBox->setTitle(tr("Camera"));
     videoSourceLabel->setText(tr("Video Source:"));
     resolutionLabel->setText(tr("Resolution:"));
+
+    recordingGroupBox->setTitle(tr("Recording mode"));
+    recordingModeCombo->clear();
+    recordingModeCombo->addItem(tr("Single frame capture"));
+    recordingModeCombo->addItem(tr("Time-lapse capture"));
 
     captureGroupBox->setTitle(tr("Capture"));
     mixModeCombo->clear();
     mixModeCombo->addItem(tr("Mix"));
     mixModeCombo->addItem(tr("Diff"));
     mixModeCombo->addItem(tr("Playback"));
-    /*
-    autoGroupBox->setTitle(tr("Auto"));
-    unitModeCombo->clear();
-    unitModeCombo->addItem("");
-    unitModeCombo->addItem(tr("Pr sec"));
-    unitModeCombo->addItem(tr("Pr min"));
-    unitModeCombo->addItem(tr("Pr hr"));
-    unitModeCombo->setCurrentIndex(0);
-    */
 
     QString infoText =
         tr("<h4>Toggle camera on/off (C)</h4> "
@@ -259,6 +339,23 @@ void RecordingTab::retranslateStrings()
            "stop motion animation!</p>");
     mixCountSliderCaption->setWhatsThis(infoText);
     mixCountSlider->setWhatsThis(infoText);
+
+    timelapseGroupBox->setTitle(tr("Time-lapse"));
+
+    unitModeComboCaption->setText(tr("Unit:"));
+
+    unitModeCombo->clear();
+    unitModeCombo->addItem(tr("Seconds"));
+    unitModeCombo->addItem(tr("Minutes"));
+    unitModeCombo->addItem(tr("Hours"));
+    unitModeCombo->addItem(tr("Days"));
+    unitModeCombo->setCurrentIndex(getUnitMode());
+
+    changeUnitMode(getUnitMode());
+
+    // beepCountSliderCaption->setText(tr("Beep ?? seconds before picture:"));
+    beepCheckBox->setText(tr("Beep"));
+    beepCountSliderCaption->setText(tr("seconds before picture:"));
 }
 
 
@@ -339,21 +436,6 @@ void RecordingTab::checkCameraOff()
 }
 
 
-int RecordingTab::getRecordingMode()
-{
-    return recordingModeCombo->currentIndex();
-}
-
-
-void RecordingTab::setRecordingMode(int mode)
-{
-    Q_ASSERT(mode >= 0);
-    Q_ASSERT(mode < 1);
-
-    recordingModeCombo->setCurrentIndex(mode);
-}
-
-
 int RecordingTab::getVideoSource()
 {
     return videoSourceCombo->currentIndex();
@@ -404,6 +486,22 @@ bool RecordingTab::setResolution(int index)
     resolutionCombo->setCurrentIndex(index);
 
     return true;
+}
+
+
+int RecordingTab::getRecordingMode()
+{
+    return recordingModeCombo->currentIndex();
+}
+
+
+void RecordingTab::setRecordingMode(int mode)
+{
+    Q_ASSERT(mode >= 0);
+    Q_ASSERT(mode < 2);
+
+    recordingModeCombo->setCurrentIndex(mode);
+    changeRecordingMode(mode);
 }
 
 
@@ -460,10 +558,92 @@ void RecordingTab::setPlaybackCount(int count)
 }
 
 
-void RecordingTab::changeCaptureButtonFunction(PreferencesTool::captureButtonFunction newFunction)
+void RecordingTab::setMixModeMixing()
 {
-    // The function of the camera button is changed
-    captureFunction = newFunction;
+    changeMixMode(0);
+}
+
+
+void RecordingTab::setMixModeDiffing()
+{
+    changeMixMode(1);
+}
+
+
+void RecordingTab::setMixModePlayback()
+{
+    changeMixMode(2);
+}
+
+
+int RecordingTab::getUnitMode()
+{
+    return unitModeCombo->currentIndex();
+}
+
+
+void RecordingTab::setUnitMode(int mode)
+{
+    Q_ASSERT(mode >= 0);
+    Q_ASSERT(mode < 4);
+
+    unitModeCombo->setCurrentIndex(mode);
+}
+
+
+int RecordingTab::getUnitCount()
+{
+    if (unitModeCombo->currentIndex() == 0) {
+        return unitCountSlider->value();
+    }
+    else {
+        return frontend->getProject()->getUnitCount();
+    }
+}
+
+
+void RecordingTab::setUnitCount(int count)
+{
+    unitCountSlider->setValue(count);
+}
+
+
+bool RecordingTab::getBeepState()
+{
+    bool checked;
+
+    checked = beepCheckBox->isChecked();
+
+    return checked;
+}
+
+
+void RecordingTab::setBeepState(bool checked)
+{
+    beepCheckBox->setChecked(checked);
+    if (checked) {
+        changeBeep(Qt::Checked);
+    }
+    else {
+        changeBeep(Qt::Unchecked);
+    }
+}
+
+
+int RecordingTab::getBeepCount()
+{
+    if (unitModeCombo->currentIndex() == 0) {
+        return beepCountSlider->value();
+    }
+    else {
+        return frontend->getProject()->getBeepCount();
+    }
+}
+
+
+void RecordingTab::setBeepCount(int count)
+{
+    beepCountSlider->setValue(count);
 }
 
 
@@ -508,33 +688,6 @@ void RecordingTab::apply()
 */
 
 
-void RecordingTab::setMixModeMixing()
-{
-    changeMixMode(0);
-}
-
-
-void RecordingTab::setMixModeDiffing()
-{
-    changeMixMode(1);
-}
-
-
-void RecordingTab::setMixModePlayback()
-{
-    changeMixMode(2);
-}
-
-
-void RecordingTab::changeRecordingMode(int /*index*/)
-{
-    qDebug() << "RecordingTab::changeRecordingMode --> Empty";
-
-
-    // qDebug() << "RecordingTab::changeRecordingMode --> End";
-}
-
-
 void RecordingTab::changeVideoSource(int index)
 {
     qDebug() << "RecordingTab::changeSource --> Start";
@@ -577,6 +730,278 @@ void RecordingTab::changeResolution(int index, bool save)
     qDebug() << "RecordingTab::changeResolution --> End";
 }
 */
+
+void RecordingTab::changeRecordingMode(int index)
+{
+    qDebug() << "RecordingTab::changeRecordingMode --> Start";
+
+    switch(index) {
+      case 0:
+        // Singe picture
+        timelapseGroupBox->hide();
+        captureGroupBox->show();
+
+        break;
+      case 1:
+        // Time-lapse picture
+        timelapseGroupBox->show();
+        captureGroupBox->hide();
+
+        break;
+    }
+
+    frontend->getProject()->getAnimationProject()->setRecordingMode(index);
+
+    qDebug() << "RecordingTab::changeRecordingMode --> End";
+}
+
+
+void RecordingTab::changeMixMode(int newMixMode)
+{
+    qDebug() << "RecordingTab::changeMixMode --> Start";
+
+    frontend->getProject()->getAnimationProject()->setMixMode(newMixMode);
+
+    frontend->getProject()->getView()->notifyNewMixMode(newMixMode);
+
+    // mixingModeCombo->setCurrentIndex(newMixingMode);
+    switch (newMixMode) {
+    case 0:
+        mixCountSliderCaption->setEnabled(true);
+        mixCountSlider->setEnabled(true);
+        // mixCountSlider->setMaximum(5);
+        mixCountSlider->setScale(0.0, 5.0);
+        mixCountSlider->setValue(frontend->getProject()->getAnimationProject()->getMixCount());
+        break;
+    case 1:
+        mixCountSliderCaption->setEnabled(false);
+        mixCountSlider->setEnabled(false);
+        mixCountSlider->setValue(1);
+        break;
+    case 2:
+        mixCountSliderCaption->setEnabled(true);
+        mixCountSlider->setEnabled(true);
+        // mixCountSlider->setMaximum(50);
+        mixCountSlider->setScale(0.0, 50.0);
+        mixCountSlider->setValue(frontend->getProject()->getAnimationProject()->getPlaybackCount());
+        break;
+    default:
+        Q_ASSERT(newMixMode < 3);
+        break;
+    }
+
+    qDebug() << "RecordingTab::changeMixMode --> End";
+}
+
+
+void RecordingTab::changeMixCount(double value)
+{
+    int newMixCount = (int)value;
+    int mixMode = mixModeCombo->currentIndex();
+
+    switch (mixMode) {
+    case 0:
+        if (frontend->getProject()->getAnimationProject()->getMixCount() != newMixCount) {
+            frontend->getProject()->getAnimationProject()->setMixCount(newMixCount);
+        }
+        break;
+    case 1:
+        break;
+    case 2:
+        if (frontend->getProject()->getAnimationProject()->getPlaybackCount() != newMixCount) {
+            frontend->getProject()->getAnimationProject()->setPlaybackCount(newMixCount);
+        }
+        break;
+    case 3:
+        break;
+    }
+
+    frontend->getProject()->getView()->notifyNewMixCount(newMixCount);
+}
+
+
+void RecordingTab::changeUnitMode(int index)
+{
+    qDebug() << "RecordingTab::changeUnitMode --> Start";
+
+    // frontend->getProject()->getAnimationProject()->setUnitMode(index);
+
+    switch (index) {
+    case 0:
+        // Seconds
+        unitCountSliderCaption->setText(tr("Seconds between pictures"));
+        unitCountSlider->setScale(0, 60);
+        unitCountSlider->setValue(30);
+
+        break;
+    case 1:
+        // Minutes
+        unitCountSliderCaption->setText(tr("Minutes between pictures"));
+        unitCountSlider->setScale(0, 60);
+        unitCountSlider->setValue(5);
+
+        break;
+    case 2:
+        // Hours
+        unitCountSliderCaption->setText(tr("Hours between pictures"));
+        unitCountSlider->setScale(0, 25);
+        unitCountSlider->setValue(1);
+
+        break;
+    case 3:
+        // Days
+        unitCountSliderCaption->setText(tr("Days between pictures"));
+        unitCountSlider->setScale(0, 30);
+        unitCountSlider->setValue(1);
+
+        break;
+    }
+
+    if (frontend->getProject()->isActiveProject()) {
+        frontend->getProject()->getAnimationProject()->setUnitMode(index);
+    }
+
+    qDebug() << "RecordingTab::changeUnitMode --> End";
+}
+
+
+void RecordingTab::changeUnitCount(double value)
+{
+    qDebug() << "RecordingTab::changeUnitCount --> Start";
+
+    int newUnitCount = (int)value;
+    int factor = 0;
+    int unitMode = unitModeCombo->currentIndex();
+
+    if (0 == newUnitCount) {
+        newUnitCount = 1;
+    }
+
+    switch (unitMode) {
+    case 0:
+        if (60 < newUnitCount) {
+            newUnitCount = 60;
+        }
+        break;
+    case 1:
+        if (60 < newUnitCount) {
+            newUnitCount = 60;
+        }
+        break;
+    case 2:
+        if (24 < newUnitCount) {
+            newUnitCount = 24;
+        }
+        break;
+    case 3:
+        if (30 < newUnitCount) {
+            newUnitCount = 30;
+        }
+        break;
+    }
+
+    if (frontend->getProject()->isActiveProject()) {
+        frontend->getProject()->getAnimationProject()->setUnitCount(newUnitCount);
+    }
+    unitCountSliderValue->setText(QString("%1").arg(newUnitCount));
+    /*
+    if (newUnitCount == 0 || unitMode == 0) {
+        if (timelapseTimer->isActive()) {
+            timelapseTimer->stop();
+        }
+        return;
+    }
+
+    switch (unitMode) {
+    case 0:
+        // Seconds
+        factor = 1000;
+
+        break;
+    case 1:
+        // Minutes
+        factor = 60000;
+
+        break;
+    case 2:
+        // Hours
+        factor = 3600000;
+
+        break;
+    case 3:
+        // Days
+        factor = 86400000;
+
+        break;
+    default:
+        if (timelapseTimer->isActive()) {
+            timelapseTimer->stop();
+        }
+        break;
+    }
+
+    if (timelapseTimer->isActive() == false) {
+        // Grab the first frame manually
+        cameraHandler->captureFrame();
+        // then grab at the given interval
+        timelapseTimer->start(factor / newUnitCount);
+    }
+    else {
+        timelapseTimer->setInterval(factor / newUnitCount);
+    }
+    */
+
+    qDebug() << "RecordingTab::changeUnitCount --> End";
+}
+
+
+void RecordingTab::changeBeep(int newState)
+{
+    qDebug() << "RecordingTab::changeBeep --> Start";
+
+    bool checked;
+
+    if (Qt::Unchecked == newState) {
+        checked = false;
+    }
+    else {
+        checked = true;
+    }
+
+    beepCountSlider->setEnabled(checked);
+    // beepCheckBox->setEnabled(checked);
+    beepCountSliderValue->setEnabled(checked);
+    beepCountSliderCaption->setEnabled(checked);
+
+    frontend->getProject()->getAnimationProject()->setBeepState(checked);
+
+    qDebug() << "RecordingTab::changeBeep --> End";
+}
+
+
+void RecordingTab::changeBeepCount(double value)
+{
+    qDebug() << "RecordingTab::changeBeepCount --> Start";
+
+    int newBeepCount = (int)value;
+
+    if (0 == newBeepCount) {
+        newBeepCount = 1;
+    }
+
+    frontend->getProject()->getAnimationProject()->setBeepCount(newBeepCount);
+    beepCountSliderValue->setText(QString("%1").arg(newBeepCount));
+
+    qDebug() << "RecordingTab::changeBeepCount --> End";
+}
+
+
+void RecordingTab::changeCaptureButtonFunction(PreferencesTool::captureButtonFunction newFunction)
+{
+    // The function of the camera button is changed
+    captureFunction = newFunction;
+}
+
 
 void RecordingTab::cameraButtonClicked()
 {
@@ -663,114 +1088,10 @@ void RecordingTab::cameraButtonClicked()
 }
 
 
-void RecordingTab::changeMixMode(int newMixMode)
-{
-    qDebug() << "RecordingTab::changeMixMode --> Start";
-
-    frontend->getProject()->getAnimationProject()->setMixMode(newMixMode);
-
-    frontend->getProject()->getView()->notifyNewMixMode(newMixMode);
-
-    // mixingModeCombo->setCurrentIndex(newMixingMode);
-    switch (newMixMode) {
-    case 0:
-        mixCountSliderCaption->setEnabled(true);
-        mixCountSlider->setEnabled(true);
-        mixCountSlider->setMaximum(5);
-        mixCountSlider->setValue(frontend->getProject()->getAnimationProject()->getMixCount());
-        break;
-    case 1:
-        mixCountSliderCaption->setEnabled(false);
-        mixCountSlider->setEnabled(false);
-        mixCountSlider->setValue(1);
-        break;
-    case 2:
-        mixCountSliderCaption->setEnabled(true);
-        mixCountSlider->setEnabled(true);
-        mixCountSlider->setMaximum(50);
-        mixCountSlider->setValue(frontend->getProject()->getAnimationProject()->getPlaybackCount());
-        break;
-    default:
-        Q_ASSERT(newMixMode < 3);
-        break;
-    }
-
-    qDebug() << "RecordingTab::changeMixMode --> End";
-}
-
-
-void RecordingTab::changeMixCount(int newMixCount)
-{
-    int mixMode = mixModeCombo->currentIndex();
-    switch (mixMode) {
-    case 0:
-        if (frontend->getProject()->getAnimationProject()->getMixCount() != newMixCount) {
-            frontend->getProject()->getAnimationProject()->setMixCount(newMixCount);
-        }
-        break;
-    case 1:
-        break;
-    case 2:
-        if (frontend->getProject()->getAnimationProject()->getPlaybackCount() != newMixCount) {
-            frontend->getProject()->getAnimationProject()->setPlaybackCount(newMixCount);
-        }
-        break;
-    case 3:
-        break;
-    }
-
-    frontend->getProject()->getView()->notifyNewMixCount(newMixCount);
-}
-
 /*
-void RecordingTab::changeUnitMode(int index)
-{
-    qDebug() << "RecordingTab::changeUnitMode --> Start";
-
-    frontend->getProject()->getAnimationProject()->setUnitMode(index);
-
-    int sliderValue = mixCountSlider->value();
-    if (sliderValue == 0 || index == 0) {
-        if (autoCaptureTimer->isActive()) {
-            autoCaptureTimer->stop();
-        }
-        return;
-    }
-
-    int factor = 0;
-    switch (index) {
-    case 1:
-        factor = 1000;
-        break;
-    case 2:
-        factor = 60000;
-        break;
-    case 3:
-        factor = 3600000;
-        break;
-    default:
-        if (autoCaptureTimer->isActive()) {
-            autoCaptureTimer->stop();
-        }
-        break;
-    }
-
-    if (captureTimer->isActive() == false) {
-        // Grab the first frame manually
-        cameraHandler->captureFrame();
-        // then grab at the given interval
-        autoCaptureTimer->start(factor / sliderValue);
-    } else {
-        autoCaptureTimer->setInterval(factor / sliderValue);
-    }
-
-    qDebug() << "RecordingTab::changeUnitMode --> End";
-}
-
-
 void RecordingTab::changeFpuCount(int newFpuCount)
 {
-    if (autoCaptureTimer->isActive() && newMixCount != 0) {
+    if (timelapseTimer->isActive() && newMixCount != 0) {
         int factor = 0;
         int unitMode = unitModeChooseCombo->currentIndex();
         switch (unitMode) {
@@ -784,7 +1105,7 @@ void RecordingTab::changeFpuCount(int newFpuCount)
             factor = 3600000;
             break;
         }
-        autoCaptureTimer->setInterval(factor / newMixCount);
+        timelapseTimer->setInterval(factor / newMixCount);
     }
 
     int viewingMode = viewingModeChooseCombo->currentIndex();

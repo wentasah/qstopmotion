@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2016 by                                                *
+ *  Copyright (C) 2005-2017 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -243,6 +243,58 @@ void DomainFacade::setRecordingMode(int newRecordingMode)
     frontend->setRecordingMode(newRecordingMode);
 }
 
+int DomainFacade::getUnitMode()
+{
+    return animationProject->getUnitMode();
+}
+
+
+void DomainFacade::setUnitMode(int mode)
+{
+    animationProject->setUnitMode(mode);
+    frontend->setUnitMode(mode);
+}
+
+
+int DomainFacade::getUnitCount()
+{
+    return animationProject->getUnitCount();
+}
+
+
+void DomainFacade::setUnitCount(int count)
+{
+    animationProject->setUnitCount(count);
+    frontend->setUnitCount(count);
+}
+
+
+bool DomainFacade::getBeepState()
+{
+    return animationProject->getBeepState();
+}
+
+
+void DomainFacade::setBeepState(bool state)
+{
+    animationProject->setBeepState(state);
+    frontend->setBeepState(state);
+}
+
+
+int DomainFacade::getBeepCount()
+{
+    return animationProject->getBeepCount();
+}
+
+
+void DomainFacade::setBeepCount(int count)
+{
+    animationProject->setBeepCount(count);
+    frontend->setBeepCount(count);
+}
+
+
 int DomainFacade::getVideoSource()
 {
     return animationProject->getVideoSource();
@@ -310,18 +362,6 @@ int DomainFacade::getPlaybackCount()
 void DomainFacade::setPlaybackCount(int newPlaybackCount)
 {
     animationProject->setPlaybackCount(newPlaybackCount);
-}
-
-
-int DomainFacade::getUnitMode()
-{
-    return animationProject->getUnitMode();
-}
-
-
-void DomainFacade::setUnitMode(int newUnitMode)
-{
-    animationProject->setUnitMode(newUnitMode);
 }
 
 

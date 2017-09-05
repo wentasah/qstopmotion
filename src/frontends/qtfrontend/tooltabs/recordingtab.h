@@ -21,6 +21,7 @@
 #ifndef RECORDINGTAB_H
 #define RECORDINGTAB_H
 
+#include <QCheckBox>
 #include <QComboBox>
 #include <QGridLayout>
 #include <QGroupBox>
@@ -30,6 +31,8 @@
 #include <QSlider>
 #include <QTimer>
 #include <QWidget>
+
+#include <qwt/qwt_slider.h>
 
 #include "frontends/frontend.h"
 #include "frontends/qtfrontend/toolbar.h"
@@ -82,18 +85,6 @@ public:
     void checkCameraOff();
 
     /**
-     * Get the recording mode.
-     * @return The recording mode.
-     */
-    int getRecordingMode();
-
-    /**
-     * Set the recording mode.
-     * @param mode The new recording mode.
-     */
-    void setRecordingMode(int mode);
-
-    /**
      * Get the video source index.
      * @return video source index
      */
@@ -118,6 +109,18 @@ public:
      * @return true if the new index is set, false else.
      */
     bool setResolution(int index);
+
+    /**
+     * Get the recording mode.
+     * @return The recording mode.
+     */
+    int getRecordingMode();
+
+    /**
+     * Set the recording mode.
+     * @param mode The new recording mode.
+     */
+    void setRecordingMode(int mode);
 
     /**
      * Get the mix mode.
@@ -154,6 +157,54 @@ public:
      * @param count The new playback count.
      */
     void setPlaybackCount(int count);
+
+    /**
+     * Get the unit mode.
+     * @return The unit mode.
+     */
+    int getUnitMode();
+
+    /**
+     * Set the unit mode.
+     * @param mode The new unit mode
+     */
+    void setUnitMode(int mode);
+
+    /**
+     * Get the unit count.
+     * @return The unit count.
+     */
+    int getUnitCount();
+
+    /**
+     * Set the unit count.
+     * @param count The new unit count.
+     */
+    void setUnitCount(int count);
+
+    /**
+     * Get the beep check box state.
+     * @return The beep check box state.
+     */
+    bool getBeepState();
+
+    /**
+     * Set the beep check box state.
+     * @param count The new beep check box state.
+     */
+    void setBeepState(bool checked);
+
+    /**
+     * Get the beep unit count.
+     * @return The beep unit count.
+     */
+    int getBeepCount();
+
+    /**
+     * Set the beep unit count.
+     * @param count The new beep unit count.
+     */
+    void setBeepCount(int count);
 
     /**
      * Applies the settings in the import tab.
@@ -195,13 +246,6 @@ public slots:
     void captureFrame();
 
     /**
-     * Slot for notified the recording tab when the recording mode changes, so that widgets
-     * can be updated.
-     * @param index the new viewing mode.
-     */
-    void changeRecordingMode(int index);
-
-    /**
      * Slot for notified the recording tab when the grabber source changes, so that grabber
      * can be updated.
      * @param index the new viewing mode.
@@ -216,9 +260,11 @@ public slots:
     void changeResolution(int index);
 
     /**
-     * Slot for notified the recording tab when the camera button is pressed.
+     * Slot for notified the recording tab when the recording mode changes, so that widgets
+     * can be updated.
+     * @param index the new viewing mode.
      */
-    void cameraButtonClicked();
+    void changeRecordingMode(int index);
 
     /**
      * Slot for notified the recording tab when the mix mode changes, so that widgets
@@ -231,7 +277,7 @@ public slots:
      * Slot for updating the slider value when running in automatic mode.
      * @param value the new slider value.
      */
-    void changeMixCount(int value);
+    void changeMixCount(double value);
 
     /**
      * Slot for setting the mix mode to Mixing.
@@ -255,7 +301,30 @@ public slots:
      * Slot for notified the recording tab when the unit mode changes.
      * @param index the new unit mode.
      */
-    // void changeUnitMode(int index);
+    void changeUnitMode(int index);
+
+    /**
+     * Slot for updating the unit slider value when running in automatic mode.
+     * @param value the new slider value.
+     */
+    void changeUnitCount(double value);
+
+    /**
+     * Slot for changing the beep status.
+     * @param newState the new check box state.
+     */
+    void changeBeep(int newState);
+
+    /**
+     * Slot for updating the beep slider value when running in automatic mode.
+     * @param value the new slider value.
+     */
+    void changeBeepCount(double value);
+
+    /**
+     * Slot for notified the recording tab when the camera button is pressed.
+     */
+    void cameraButtonClicked();
 
     /**
      * Slot for updating the slider value when running in automatic mode.
@@ -274,27 +343,36 @@ private:
     QShortcut   *diffAccel;
     QShortcut   *playbackAccel;
 
-    QGroupBox   *recordingGroupBox;
-    QComboBox   *recordingModeCombo;
-
     QGroupBox   *cameraGroupBox;
     QLabel      *videoSourceLabel;
     QComboBox   *videoSourceCombo;
     QLabel      *resolutionLabel;
     QComboBox   *resolutionCombo;
 
-    QPushButton *cameraButton;
+    QGroupBox   *recordingGroupBox;
+    QComboBox   *recordingModeCombo;
 
     QGroupBox   *captureGroupBox;
     QComboBox   *mixModeCombo;
     QLabel      *mixCountSliderCaption;
-    QSlider     *mixCountSlider;
+    QwtSlider   *mixCountSlider;
 
-    // QGroupBox   *autoGroupBox;
-    // QComboBox   *unitChooseCombo;
+    QGroupBox   *timelapseGroupBox;
+    QLabel      *unitModeComboCaption;
+    QComboBox   *unitModeCombo;
+    QLabel      *unitCountSliderValue;
+    QLabel      *unitCountSliderCaption;
+    QwtSlider   *unitCountSlider;
+    QCheckBox   *beepCheckBox;
+    QLabel      *beepCountSliderValue;
+    QLabel      *beepCountSliderCaption;
+    QwtSlider   *beepCountSlider;
+    QTimer      *timelapseTimer;
+
+    QPushButton *cameraButton;
+
     // QLabel      *fpuSliderCaption;    // Frames per unit
     // QSlider     *fpuSlider;
-    // QTimer      *autoCaptureTimer;
 
 private slots:
     /**

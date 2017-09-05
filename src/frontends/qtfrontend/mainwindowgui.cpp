@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2016 by                                                *
+ *  Copyright (C) 2005-2017 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -1015,6 +1015,54 @@ int MainWindowGUI::getRecordingMode()
 void MainWindowGUI::setRecordingMode(int mode)
 {
     recordingTab->setRecordingMode(mode);
+}
+
+
+int MainWindowGUI::getUnitMode()
+{
+    return recordingTab->getUnitMode();
+}
+
+
+void MainWindowGUI::setUnitMode(int mode)
+{
+    recordingTab->setUnitMode(mode);
+}
+
+
+int MainWindowGUI::getUnitCount()
+{
+    return recordingTab->getUnitCount();
+}
+
+
+void MainWindowGUI::setUnitCount(int count)
+{
+    recordingTab->setUnitCount(count);
+}
+
+
+bool MainWindowGUI::getBeepState()
+{
+    return recordingTab->getBeepState();
+}
+
+
+void MainWindowGUI::setBeepState(bool state)
+{
+    recordingTab->setBeepState(state);
+}
+
+
+int MainWindowGUI::getBeepCount()
+{
+    return recordingTab->getBeepCount();
+}
+
+
+void MainWindowGUI::setBeepCount(int count)
+{
+    recordingTab->setBeepCount(count);
 }
 
 
@@ -2420,8 +2468,10 @@ void MainWindowGUI::makeToolsMenu(QHBoxLayout *layout)
     sideBar = new QTabWidget();
     sideBar->setObjectName("sideBar");
     sideBar->setTabPosition(QTabWidget::South);
-    sideBar->setMaximumWidth(250);
-    sideBar->setMinimumWidth(200);
+    // sideBar->setMaximumWidth(270);
+    // sideBar->setMinimumWidth(220);
+    // sideBar->setMinimumSize(170, 300);
+    sideBar->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Expanding);
     layout->addWidget(sideBar);
 
     Q_ASSERT(frontend != 0);
@@ -2502,14 +2552,14 @@ void MainWindowGUI::makeViews(QHBoxLayout *layout)
     frameView = new FrameViewImage(frontend, this);
     // frameView = new FrameViewInterface(frontend, this);
 
-    frameView->setMinimumSize(400, 270);
+    // frameView->setMinimumSize(400, 270);
     frameView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     viewAreaLayout->addWidget(frameView);
 
     toolBar = new ToolBar(frontend, recordingTab);
     toolBar->setObjectName("ToolBar");
-    toolBar->setMinimumSize(400, 30);
+    // toolBar->setMinimumSize(400, 30);
     toolBar->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     viewAreaLayout->addWidget(toolBar);
     // viewAreaLayout->addWidget(toolBar, 1, Qt::AlignJustify);

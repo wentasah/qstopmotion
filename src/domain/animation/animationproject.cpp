@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2016 by                                                *
+ *  Copyright (C) 2005-2017 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -40,6 +40,10 @@ AnimationProject::AnimationProject(Frontend* f)
     serializer               = new ProjectSerializer(f);
 
     recordingMode            = 0;
+    unitMode                 = 0;
+    unitCount                = 5;
+    beepState                = true;
+    beepCount                = 1;
     videoSource              = 0;
     videoResolution          = 0;
     mixMode                  = 0;
@@ -185,6 +189,66 @@ void AnimationProject::setRecordingMode(int newRecordingMode)
 }
 
 
+int AnimationProject::getUnitMode() const
+{
+    return unitMode;
+}
+
+
+void AnimationProject::setUnitMode(int newUnitMode)
+{
+    if (unitMode != newUnitMode) {
+        unitMode = newUnitMode;
+        incSettingsChanges();
+    }
+}
+
+
+int AnimationProject::getUnitCount() const
+{
+    return unitCount;
+}
+
+
+void AnimationProject::setUnitCount(int newUnitCount)
+{
+    if (unitCount != newUnitCount) {
+        unitCount = newUnitCount;
+        incSettingsChanges();
+    }
+}
+
+
+bool AnimationProject::getBeepState() const
+{
+    return beepState;
+}
+
+
+void AnimationProject::setBeepState(bool newBeepState)
+{
+    if (beepState != newBeepState) {
+        beepState = newBeepState;
+        incSettingsChanges();
+    }
+}
+
+
+int AnimationProject::getBeepCount() const
+{
+    return beepCount;
+}
+
+
+void AnimationProject::setBeepCount(int newBeepCount)
+{
+    if (beepCount != newBeepCount) {
+        beepCount = newBeepCount;
+        incSettingsChanges();
+    }
+}
+
+
 int AnimationProject::getVideoSource() const
 {
     return videoSource;
@@ -255,21 +319,6 @@ void AnimationProject::setPlaybackCount(int newPlaybackCount)
 {
     if (playbackCount != newPlaybackCount) {
         playbackCount = newPlaybackCount;
-        incSettingsChanges();
-    }
-}
-
-
-int AnimationProject::getUnitMode() const
-{
-    return unitMode;
-}
-
-
-void AnimationProject::setUnitMode(int newUnitMode)
-{
-    if (unitMode != newUnitMode) {
-        unitMode = newUnitMode;
         incSettingsChanges();
     }
 }
@@ -669,6 +718,31 @@ bool AnimationProject::readSettingsFromProject(QDomElement &settingsNode)
             recordingMode = tmp.toInt();
             frontend->setRecordingMode(tmp.toInt());
         }
+        else if (nodeName.compare("unitmode") == 0) {
+            QString tmp = currElement.text();
+            unitMode = tmp.toInt();
+            frontend->setUnitMode(tmp.toInt());
+        }
+        else if (nodeName.compare("unitcount") == 0) {
+            QString tmp = currElement.text();
+            unitCount = tmp.toInt();
+            frontend->setUnitCount(tmp.toInt());
+        }
+        else if (nodeName.compare("beepstate") == 0) {
+            QString tmp = currElement.text();
+            if (1 == tmp.toInt()) {
+                beepState = true;
+            }
+            else {
+                beepState = false;
+            }
+            frontend->setBeepState(beepState);
+        }
+        else if (nodeName.compare("beepcount") == 0) {
+            QString tmp = currElement.text();
+            beepCount = tmp.toInt();
+            frontend->setBeepCount(tmp.toInt());
+        }
         else if (nodeName.compare("videosource") == 0) {
             QString tmp = currElement.text();
             if (frontend->setVideoSource(tmp.toInt())) {
@@ -701,10 +775,6 @@ bool AnimationProject::readSettingsFromProject(QDomElement &settingsNode)
         else if (nodeName.compare("playbackcount") == 0) {
             QString tmp = currElement.text();
             playbackCount = tmp.toInt();
-        }
-        else if (nodeName.compare("unitmode") == 0) {
-            QString tmp = currElement.text();
-            unitMode = tmp.toInt();
         }
         else if (nodeName.compare("overlayintensity") == 0) {
             QString tmp = currElement.text();
@@ -795,6 +865,30 @@ bool AnimationProject::saveSettingsToProject(QDomDocument &doc, QDomElement &set
     recordingModeElement.appendChild(recordingModeText);
     settingsNode.appendChild(recordingModeElement);
 
+    // Save unit mode parameter
+    QDomElement unitModeElement = doc.createElement("unitmode");
+    QDomText unitModeText = doc.createTextNode(QString("%1").arg(unitMode));
+    unitModeElement.appendChild(unitModeText);
+    settingsNode.appendChild(unitModeElement);
+
+    // Save unit count parameter
+    QDomElement unitCountElement = doc.createElement("unitcount");
+    QDomText unitCountText = doc.createTextNode(QString("%1").arg(unitCount));
+    unitCountElement.appendChild(unitCountText);
+    settingsNode.appendChild(unitCountElement);
+
+    // Save beep state parameter
+    QDomElement beepStateElement = doc.createElement("beepstate");
+    QDomText beepStateText = doc.createTextNode(QString("%1").arg((true == beepState ? 1 : 0)));
+    beepStateElement.appendChild(beepStateText);
+    settingsNode.appendChild(beepStateElement);
+
+    // Save beep count parameter
+    QDomElement beepCountElement = doc.createElement("beepcount");
+    QDomText beepCountText = doc.createTextNode(QString("%1").arg(beepCount));
+    beepCountElement.appendChild(beepCountText);
+    settingsNode.appendChild(beepCountElement);
+
     // Save video source parameter
     QDomElement videoSourceElement = doc.createElement("videosource");
     QDomText videoSourceText = doc.createTextNode(QString("%1").arg(videoSource));
@@ -824,12 +918,6 @@ bool AnimationProject::saveSettingsToProject(QDomDocument &doc, QDomElement &set
     QDomText playbackCountText = doc.createTextNode(QString("%1").arg(playbackCount));
     playbackCountElement.appendChild(playbackCountText);
     settingsNode.appendChild(playbackCountElement);
-
-    // Save unit mode parameter
-    QDomElement unitModeElement = doc.createElement("unitmode");
-    QDomText unitModeText = doc.createTextNode(QString("%1").arg(unitMode));
-    unitModeElement.appendChild(unitModeText);
-    settingsNode.appendChild(unitModeElement);
 
     // Save overlay intensity parameter
     QDomElement overlayIntensityElement = doc.createElement("overlayintensity");

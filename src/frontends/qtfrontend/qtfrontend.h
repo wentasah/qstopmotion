@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2016 by                                                *
+ *  Copyright (C) 2005-2017 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -450,6 +450,56 @@ public:
      * @param mode The new recording mode.
      */
     void setRecordingMode(int mode);
+
+    /**
+     * Get the unit mode.
+     * @return The unit mode.
+     */
+    virtual int getUnitMode();
+
+    /**
+     * Set the unit mode.
+     * @param mode The new unit mode.
+     */
+    virtual void setUnitMode(int mode);
+
+    /**
+     * Get the unit count.
+     * @return The unit count.
+     */
+    virtual int getUnitCount();
+
+    /**
+     * Set the unit count.
+     * @param count The new unit count.
+     */
+    virtual void setUnitCount(int count);
+
+    /**
+     * Get the beep checkbox state.
+     * @brief getBeepState
+     * @return The actual beep checkbox state
+     */
+    virtual bool getBeepState();
+
+    /**
+     * Set the beep checkbox state.
+     * @brief setBeepState
+     * @param state The new beep checkbox state.
+     */
+    virtual void setBeepState(bool state);
+
+    /**
+     * Get the beep unit count.
+     * @return The beep unit count.
+     */
+    virtual int getBeepCount();
+
+    /**
+     * Set the beep unit count.
+     * @param count The new beep unit count.
+     */
+    virtual void setBeepCount(int count);
 
     /**
      * Get the video source index.

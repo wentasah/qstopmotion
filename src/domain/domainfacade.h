@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2016 by                                                *
+ *  Copyright (C) 2005-2017 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -189,6 +189,56 @@ public:
     void setRecordingMode(int newRecordingMode);
 
     /**
+     * Get the unit mode.
+     * @return The unit mode.
+     */
+    int getUnitMode();
+
+    /**
+     * Set the unit mode.
+     * @param mode The new unit mode.
+     */
+    void setUnitMode(int mode);
+
+    /**
+     * Get the unit count.
+     * @return The unit count.
+     */
+    int getUnitCount();
+
+    /**
+     * Set the unit count.
+     * @param count The new unit count.
+     */
+    void setUnitCount(int count);
+
+    /**
+     * Get the beep checkbox state.
+     * @brief getBeepState
+     * @return The actual beep checkbox state
+     */
+    bool getBeepState();
+
+    /**
+     * Set the beep checkbox state.
+     * @brief setBeepState
+     * @param state The new beep checkbox state.
+     */
+    void setBeepState(bool state);
+
+    /**
+     * Get the beep unit count.
+     * @return The beep unit count.
+     */
+    int getBeepCount();
+
+    /**
+     * Set the beep unit count.
+     * @param count The new beep unit count.
+     */
+    void setBeepCount(int count);
+
+    /**
      * Get the active video source of the project.
      * @return active video source.
      */
@@ -255,18 +305,6 @@ public:
      * @param newPlaybackCount the new playback count source.
      */
     void setPlaybackCount(int newPlaybackCount);
-
-    /**
-     * Get the active unit of the project.
-     * @return active unit mode.
-     */
-    int getUnitMode();
-
-    /**
-     * Set the active unit mode of the project.
-     * @param newUnitMode the new unit mode.
-     */
-    void setUnitMode(int newUnitMode);
 
     /**
      * Get the overlay intensity value.

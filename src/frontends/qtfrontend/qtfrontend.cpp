@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2016 by                                                *
+ *  Copyright (C) 2005-2017 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -954,6 +954,54 @@ int QtFrontend::getRecordingMode()
 void QtFrontend::setRecordingMode(int mode)
 {
     mw->setRecordingMode(mode);
+}
+
+
+int QtFrontend::getUnitMode()
+{
+    return mw->getUnitMode();
+}
+
+
+void QtFrontend::setUnitMode(int mode)
+{
+    mw->setUnitMode(mode);
+}
+
+
+int QtFrontend::getUnitCount()
+{
+    return mw->getUnitCount();
+}
+
+
+void QtFrontend::setUnitCount(int count)
+{
+    mw->setUnitCount(count);
+}
+
+
+bool QtFrontend::getBeepState()
+{
+    return mw->getBeepState();
+}
+
+
+void QtFrontend::setBeepState(bool state)
+{
+    mw->setBeepState(state);
+}
+
+
+int QtFrontend::getBeepCount()
+{
+    return mw->getBeepCount();
+}
+
+
+void QtFrontend::setBeepCount(int count)
+{
+    mw->setBeepCount(count);
 }
 
 

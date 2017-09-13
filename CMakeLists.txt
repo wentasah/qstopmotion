@@ -1,7 +1,7 @@
 ###############################################################################
 # CMake file for the qStopMotion project                                      #
 # (c) Ralf Lange, longsoft.de                                                 #
-# Last update: 2017-08-27                                                     #
+# Last update: 2017-09-13                                                     #
 #                                                                             #
 # Usage:                                                                      #
 #   * Qt-Creator (Windows, Linux)                                             #
@@ -37,6 +37,8 @@ SET(
     ${CMAKE_SOURCE_DIR}/cmake
     ${CMAKE_MODULE_PATH}
 )
+
+message("CMAKE_BUILD_TYPE: ${CMAKE_BUILD_TYPE}")
 
 ###############################################################################
 # Platform check
@@ -104,6 +106,7 @@ find_package(Qt5 REQUIRED COMPONENTS Core Widgets Xml)
 
 message("Qt5 Version: ${Qt5Widgets_VERSION_STRING}")
 message("QT_INCLUDE_DIRS: ${Qt5Widgets_INCLUDE_DIRS}")
+message("QT_DEFINITIONS: ${QT_DEFINITIONS}")
 
 IF(CMAKE_BUILD_TYPE STREQUAL "Release")
     message("No Qt debug and warning output!")
@@ -398,25 +401,47 @@ SET(
 IF(UNIX AND NOT APPLE)
     # Linux
 
-    SET(QT_INCLUDE_DIR ${Qt5Widgets_INCLUDE_DIRS})
+    SET(
+        QT_INCLUDE_DIR
+        ${Qt5Widgets_INCLUDE_DIRS}
+    )
 
     FIND_PACKAGE(Qwt REQUIRED)
     message("Qwt Version: ${QWT_VERSION_STRING}")
+ENDIF(UNIX AND NOT APPLE)
 
-ELSEIF(WIN32)
+IF(WIN32)
     # Windows
 
     SET(
-        QWT_INCLUDE_DIR
-        ../qwt/include
+        QWT_INCLUDE_DIRS
+        # C:/Tools/Qwt/include
+        $ENV{QWT_INCLUDE_DIR}
     )
+
     SET(
-        QWT_LIBRARIES
-        qwt.lib
+        QWT_LIBRARY
+        # C:/Tools/Qwt/lib
+        $ENV{QWT_LIBRARY_DIR}
     )
-ENDIF()
+
+    IF(CMAKE_BUILD_TYPE STREQUAL "Release")
+        SET(
+            QWT_LIBRARIES
+            qwt.lib
+        )
+    ENDIF(CMAKE_BUILD_TYPE STREQUAL "Release")
+
+    IF(CMAKE_BUILD_TYPE STREQUAL "Debug")
+        SET(
+            QWT_LIBRARIES
+            qwtd.lib
+        )
+    ENDIF(CMAKE_BUILD_TYPE STREQUAL "Debug")
+ENDIF(WIN32)
 
 message("QWT_INCLUDE_DIRS: ${QWT_INCLUDE_DIRS}")
+message("QWT_LIBRARY: ${QWT_LIBRARY}")
 message("QWT_LIBRARIES: ${QWT_LIBRARIES}")
 
 ###############################################################################
@@ -485,6 +510,12 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/src
     ${GPHOTO2_INCLUDE_DIR}
     ${V4L2_INCLUDE_DIRS}
+    ${QWT_INCLUDE_DIRS}
+)
+
+# tell cmake where to search for libraries:
+link_directories(
+    ${QWT_LIBRARY}
 )
 
 ###############################################################################
@@ -617,6 +648,7 @@ IF(WIN32)
 
         file(COPY ffmpeg64bit/ DESTINATION "ffmpeg")
         file(COPY libav64bit/ DESTINATION "libav")
+        file(COPY qwt64bit/ DESTINATION "qwt")
     ELSE(CMAKE_CL_64)
         # Windows 32bit
         
@@ -628,6 +660,7 @@ IF(WIN32)
 
         file(COPY ffmpeg32bit/ DESTINATION "ffmpeg")
         file(COPY libav32bit/ DESTINATION "libav")
+        file(COPY qwt32bit/ DESTINATION "qwt")
     ENDIF(CMAKE_CL_64)
 ENDIF(WIN32)
 
@@ -799,9 +832,17 @@ IF(WIN32)
                 DIRECTORY qt5runtime64bit/release/
                 DESTINATION ${QSTOPMOTION_BIN_INSTALL_DIR}
             )
+            install(
+                DIRECTORY qwt64bit/release/
+                DESTINATION ${QSTOPMOTION_BIN_INSTALL_DIR}
+            )
         ELSE(CMAKE_BUILD_TYPE STREQUAL "Release")
             install(
                 DIRECTORY qt5runtime64bit/debug/
+                DESTINATION ${QSTOPMOTION_BIN_INSTALL_DIR}
+            )
+            install(
+                DIRECTORY qwt64bit/debug/
                 DESTINATION ${QSTOPMOTION_BIN_INSTALL_DIR}
             )
         ENDIF(CMAKE_BUILD_TYPE STREQUAL "Release")
@@ -827,9 +868,17 @@ IF(WIN32)
                 DIRECTORY qt5runtime32bit/release/
                 DESTINATION ${QSTOPMOTION_BIN_INSTALL_DIR}
             )
+            install(
+                DIRECTORY qwt32bit/release/
+                DESTINATION ${QSTOPMOTION_BIN_INSTALL_DIR}
+            )
         ELSE(CMAKE_BUILD_TYPE STREQUAL "Release")
             install(
                 DIRECTORY qt5runtime32bit/debug/
+                DESTINATION ${QSTOPMOTION_BIN_INSTALL_DIR}
+            )
+            install(
+                DIRECTORY qwt32bit/debug/
                 DESTINATION ${QSTOPMOTION_BIN_INSTALL_DIR}
             )
         ENDIF(CMAKE_BUILD_TYPE STREQUAL "Release")
@@ -997,6 +1046,8 @@ IF(UNIX AND NOT APPLE)
         "${PROJECT_SOURCE_DIR}/qt4runtime/"
         "${PROJECT_SOURCE_DIR}/qt5runtime32bit/"
         "${PROJECT_SOURCE_DIR}/qt5runtime64bit/"
+        "${PROJECT_SOURCE_DIR}/qwt32bit/"
+        "${PROJECT_SOURCE_DIR}/qwt64bit/"
     )
 ENDIF(UNIX AND NOT APPLE)
 

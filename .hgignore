@@ -22,7 +22,8 @@ qtruntime/*
 qt4runtime/*
 qt5runtime32bit/*
 qt5runtime64bit/*
-qwt/*
+qwt32bit/*
+qwt64bit/*
 
 # switch to regexp syntax.
 syntax: regexp

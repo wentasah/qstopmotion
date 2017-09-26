@@ -168,6 +168,12 @@ public:
     const QString getPicturesDirName();
 
     /**
+     * Function for getting the sounds directory
+     * @return the sounds directory name string
+     */
+    const QString getSoundsDirName();
+
+    /**
      * Getting all possible GUI languages
      * @return A vector with all languages
      */
@@ -702,6 +708,7 @@ private:
     QString          appGraphicsDirName;
     QString          appIconsDirName;
     QString          appPicturesDirName;
+    QString          appSoundsDirName;
 
     void initializePreferences();
     void setDefaultPreferences();

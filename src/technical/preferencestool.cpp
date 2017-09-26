@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2016 by                                                *
+ *  Copyright (C) 2005-2017 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -52,6 +52,7 @@ const QString PreferencesTool::translationsDirectory = QLatin1String("translatio
 const QString PreferencesTool::graphicsDirectory = QLatin1String("graphics");
 const QString PreferencesTool::iconsDirectory = QLatin1String("icons");
 const QString PreferencesTool::picturesDirectory = QLatin1String("pictures");
+const QString PreferencesTool::soundsDirectory = QLatin1String("sounds");
 const QString PreferencesTool::historyFileName = QLatin1String(".history");
 
 const QString PreferencesTool::jpegSuffix = QLatin1String("jpg");

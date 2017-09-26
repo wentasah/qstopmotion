@@ -26,6 +26,7 @@
 #include <QInputDialog>
 #include <QLabel>
 #include <QMediaPlayer>
+#include <QSoundEffect>
 #include <QUrl>
 
 #include "technical/grabber/imagegrabber.h"
@@ -1151,12 +1152,21 @@ void RecordingTab::sendBeep()
 
 
     // Send a beep signal
-    QApplication::beep();
+    // QApplication::beep();
 
     // QMediaPlayer player;      // Works not under Linux!!!
     // player.setMedia(QUrl::fromLocalFile("/usr/share/sounds/freedesktop/stereo/bell.oga")); //this seems to be default alert
     // player.setVolume(50);
     // player.play();
+
+    QString soundFile(frontend->getSoundsDirName());
+    soundFile.append(QLatin1String("beep.wav"));
+    QSoundEffect effect;
+    effect.setSource(soundFile);
+    // effect.setLoopCount(QSoundEffect::Infinite);
+    effect.setVolume(0.25f);
+    effect.play();
+
 
     if (beepCheckBox->isChecked()) {
         // Start the timer for the frame capture

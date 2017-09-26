@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2016 by                                                *
+ *  Copyright (C) 2005-2017 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -115,6 +115,11 @@ public:
      * Relative to pictures directory
      */
     static const QString picturesDirectory;
+
+    /**
+     * Relative to icons directory
+     */
+    static const QString soundsDirectory;
 
     /**
      * Relative to home dirctory

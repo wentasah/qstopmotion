@@ -251,6 +251,15 @@ bool QtFrontend::checkApplicationDirectory(char *binDirName)
     otherDirName.append(QLatin1String("/"));
     appGraphicsDirName.append(otherDirName);
 
+    otherDirName.clear();
+    otherDirName.append(appApplicationDirName);
+    otherDirName.append(QLatin1String("share/"));
+    otherDirName.append(PreferencesTool::applicationName);
+    otherDirName.append(QLatin1String("/"));
+    otherDirName.append(PreferencesTool::soundsDirectory);
+    otherDirName.append(QLatin1String("/"));
+    appSoundsDirName.append(otherDirName);
+
 #endif
 
     qDebug() << "QtFrontend::checkApplicationDirectory --> Application Manual Directory:" << appManualDirName;
@@ -456,6 +465,12 @@ const QString QtFrontend::getIconsDirName()
 const QString QtFrontend::getPicturesDirName()
 {
     return this->appPicturesDirName;
+}
+
+
+const QString QtFrontend::getSoundsDirName()
+{
+    return this->appSoundsDirName;
 }
 
 

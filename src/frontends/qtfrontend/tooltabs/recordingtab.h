@@ -207,11 +207,6 @@ public:
     void setBeepCount(int count);
 
     /**
-     * Applies the settings in the import tab.
-     */
-    // void apply();
-
-    /**
      * A new capture button function is selected in the preferences menu.
      * @param newFunction New selected function.
      */
@@ -235,6 +230,20 @@ private:
      * @return The cliped and scaled image
      */
     QImage clipAndScale(QImage image);
+
+    /**
+     * Change the enabled state of the elements of the capture group box.
+     * @brief enableCaptureGroupBox
+     * @param newState The new state of the capture group box.
+     */
+    void enableCaptureGroupBox(bool newState);
+
+    /**
+     * Change the enabled state of the elements of the timelapse group box.
+     * @brief enableTimelapseGroupBox
+     * @param newState The new state of the timelapse group box.
+     */
+    void enableTimelapseGroupBox(bool newState);
 
 protected:
     // void resizeEvent(QResizeEvent *event);
@@ -336,7 +345,6 @@ private:
     Frontend    *frontend;
     ToolBar     *toolBar;
     bool         cameraOn;
-    QTimer      *cameraTimer;
     int          captureFunction;
 
     QShortcut   *mixAccel;
@@ -368,6 +376,7 @@ private:
     QLabel      *beepCountSliderCaption;
     QwtSlider   *beepCountSlider;
     QTimer      *timelapseTimer;
+    QTimer      *cameraTimer;
 
     QPushButton *cameraButton;
 
@@ -375,8 +384,14 @@ private:
     // QSlider     *fpuSlider;
 
 private slots:
+
     /**
-     * Slot called by the cameraTimer which checks if the frame has been fully captured.
+     * Slot called by the timelapseTimer which send a beep signal to the speaker.
+     */
+    void sendBeep();
+
+    /**
+     * Slot called by the cameraTimer which capture the frame  some seconds after the beep signal.
      */
     void storeFrame();
 

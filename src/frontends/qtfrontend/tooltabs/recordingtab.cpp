@@ -20,10 +20,13 @@
 
 #include "recordingtab.h"
 
+#include <QApplication>
 #include <QDebug>
 #include <QHeaderView>
 #include <QInputDialog>
 #include <QLabel>
+#include <QMediaPlayer>
+#include <QUrl>
 
 #include "technical/grabber/imagegrabber.h"
 
@@ -36,7 +39,6 @@ RecordingTab::RecordingTab(Frontend *f,
     frontend               = f;
     toolBar                = tb;
     cameraOn               = false;
-    cameraTimer            = NULL;
 
     cameraGroupBox         = 0;
     videoSourceLabel       = 0;
@@ -63,6 +65,8 @@ RecordingTab::RecordingTab(Frontend *f,
     beepCountSliderValue   = 0;
     beepCountSliderCaption = 0;
     beepCountSlider        = 0;
+    timelapseTimer         = NULL;
+    cameraTimer            = NULL;
 
     mixAccel               = 0;
     diffAccel              = 0;
@@ -75,10 +79,6 @@ RecordingTab::RecordingTab(Frontend *f,
         captureFunction = PreferencesTool::captureButtonAfter;
     }
 
-    cameraTimer = new QTimer(this);
-    cameraTimer->setSingleShot(true);
-    QObject::connect(cameraTimer, SIGNAL(timeout()), this, SLOT(storeFrame()));
-
     makeGUI();
     retranslateStrings();
 
@@ -88,6 +88,9 @@ RecordingTab::RecordingTab(Frontend *f,
 
 RecordingTab::~RecordingTab()
 {
+    if (timelapseTimer != NULL) {
+        delete timelapseTimer;
+    }
     if (cameraTimer != NULL) {
         delete cameraTimer;
     }
@@ -277,7 +280,9 @@ void RecordingTab::makeGUI()
     // Camera button layout
     cameraButton = new QPushButton;
     iconFile.append(QLatin1String("cameraon.png"));
-    cameraButton->setIcon(QPixmap(iconFile));
+    QIcon ic(iconFile);
+    cameraButton->setIcon(ic);
+    cameraButton->setIconSize(ic.availableSizes().first());
     // cameraButton->setFlat(true);
     cameraButton->setFocusPolicy(Qt::NoFocus);
     cameraButton->setMinimumHeight(80);
@@ -588,6 +593,7 @@ void RecordingTab::setUnitMode(int mode)
     Q_ASSERT(mode < 4);
 
     unitModeCombo->setCurrentIndex(mode);
+    changeUnitMode(mode);
 }
 
 
@@ -658,35 +664,6 @@ void RecordingTab::resizeEvent(QResizeEvent *event)
 }
 */
 
-/*
-void RecordingTab::apply()
-{
-    PreferencesTool *pref = PreferencesTool::get();
-
-    // Remove old preferences
-    pref->removeAllEncoders();
-
-    // Set new preferences
-    int numEncoders = encoderTable->rowCount();
-    if (numEncoders > 0) {
-        pref->setNumberEncoders(numEncoders);
-        pref->setActiveEncoder(QString("%1%2").arg(QLatin1String("encoder")).arg(encoderTable->currentRow()));
-        for (int i = 0; i < numEncoders; ++i) {
-            pref->setEncoder(QString("%1%2").arg(QLatin1String("encoder")).arg(i),
-                             encoderTable->item(i, 0)->text(),
-                             encoderTable->item(i, 1)->text(),
-                             startEncoderStrings[i],
-                             stopEncoderStrings[i],
-                             outputFiles[i]);
-        }
-    }
-    else {
-        pref->setNumberEncoders(0);
-        pref->setActiveEncoder(QString());
-    }
-}
-*/
-
 
 void RecordingTab::changeVideoSource(int index)
 {
@@ -709,27 +686,6 @@ void RecordingTab::changeResolution(int index)
     qDebug() << "RecordingTab::changeResolution --> End";
 }
 
-/*
-void RecordingTab::changeResolution(int index, bool save)
-{
-    qDebug() << "RecordingTab::changeResolution --> Start";
-
-    PreferencesTool *preferences = frontend->getPreferences();
-
-    long value = grabberController->getBrightnessCaps()->getMinimum() + (index * stepBrightness);
-    long maxValue = grabberController->getBrightnessCaps()->getMaximum();
-
-    if (value > maxValue) {
-        value = maxValue;
-    }
-    grabberController->setBrightness(value);
-    if (save) {
-        preferences->setIntegerPreference(deviceId, "brightness", index);
-    }
-
-    qDebug() << "RecordingTab::changeResolution --> End";
-}
-*/
 
 void RecordingTab::changeRecordingMode(int index)
 {
@@ -912,34 +868,6 @@ void RecordingTab::changeUnitCount(double value)
         return;
     }
 
-    switch (unitMode) {
-    case 0:
-        // Seconds
-        factor = 1000;
-
-        break;
-    case 1:
-        // Minutes
-        factor = 60000;
-
-        break;
-    case 2:
-        // Hours
-        factor = 3600000;
-
-        break;
-    case 3:
-        // Days
-        factor = 86400000;
-
-        break;
-    default:
-        if (timelapseTimer->isActive()) {
-            timelapseTimer->stop();
-        }
-        break;
-    }
-
     if (timelapseTimer->isActive() == false) {
         // Grab the first frame manually
         cameraHandler->captureFrame();
@@ -1038,7 +966,6 @@ void RecordingTab::cameraButtonClicked()
 
             QString iconFile(frontend->getIconsDirName());
             iconFile.append(QLatin1String("cameraoff.png"));
-
             cameraButton->setIcon(QIcon(iconFile));
 
             switch (captureFunction) {
@@ -1076,12 +1003,89 @@ void RecordingTab::cameraButtonClicked()
 
     if (cameraOn) {
         initialize();
-        captureGroupBox->show();
-        toolBar->setActualState(ToolBar::toolBarCameraOn);
+        // captureGroupBox->show();
+        enableCaptureGroupBox(false);
+        enableTimelapseGroupBox(false);
+        if (0 == getRecordingMode()) {
+            // Capture mode
+
+            toolBar->setActualState(ToolBar::toolBarCameraOn);
+        }
+        else {
+            // Time lapse mode
+
+            int msec;
+            int factor;
+
+            if (beepCheckBox->isChecked()) {
+                // Create timer for the time between beep and frame capture
+                cameraTimer = new QTimer(this);
+                cameraTimer->setSingleShot(true);
+                QObject::connect(cameraTimer, SIGNAL(timeout()), this, SLOT(storeFrame()));
+            }
+
+            // Create timer for the time between the beeps
+            timelapseTimer = new QTimer(this);
+            timelapseTimer->setSingleShot(false);
+            QObject::connect(timelapseTimer, SIGNAL(timeout()), this, SLOT(sendBeep()));
+
+            // Calculate the time between the beeps
+            switch (unitModeCombo->currentIndex()) {
+            case 0:
+                // Seconds
+                factor = 1000;
+
+                break;
+            case 1:
+                // Minutes
+                factor = 60000;
+
+                break;
+            case 2:
+                // Hours
+                factor = 3600000;
+
+                break;
+            case 3:
+                // Days
+                factor = 86400000;
+
+                break;
+            default:
+                if (timelapseTimer->isActive()) {
+                    timelapseTimer->stop();
+                }
+                break;
+            }
+
+            msec = unitCountSlider->value() * factor;
+
+            // Start the time lapse time
+            timelapseTimer->start(msec);
+        }
     }
     else {
-        captureGroupBox->hide();
-        toolBar->setActualState(ToolBar::toolBarCameraOff);
+        // captureGroupBox->hide();
+        enableCaptureGroupBox(true);
+        enableTimelapseGroupBox(true);
+        if (0 == getRecordingMode()) {
+            // Capture mode
+
+            toolBar->setActualState(ToolBar::toolBarCameraOff);
+        }
+        else {
+            // Time lapse mode
+
+            timelapseTimer->stop();
+            delete timelapseTimer;
+            timelapseTimer = NULL;
+
+            if (beepCheckBox->isChecked()) {
+                cameraTimer->stop();
+                delete cameraTimer;
+                cameraTimer = NULL;
+            }
+        }
     }
 
     qDebug() << "RecordingTab::cameraButtonClicked --> End";
@@ -1141,16 +1145,51 @@ void RecordingTab::createAccelerators()
 }
 
 
+void RecordingTab::sendBeep()
+{
+    qDebug() << "RecordingTab::sendBeep --> Start";
+
+
+    // Send a beep signal
+    QApplication::beep();
+
+    // QMediaPlayer player;      // Works not under Linux!!!
+    // player.setMedia(QUrl::fromLocalFile("/usr/share/sounds/freedesktop/stereo/bell.oga")); //this seems to be default alert
+    // player.setVolume(50);
+    // player.play();
+
+    if (beepCheckBox->isChecked()) {
+        // Start the timer for the frame capture
+        cameraTimer->start(beepCountSlider->value() * 1000);
+    }
+    else
+    {
+        // Save the frame immediately
+        storeFrame();
+    }
+
+
+    qDebug() << "RecordingTab::sendBeep --> End";
+}
+
+
 void RecordingTab::captureFrame()
 {
     qDebug() << "RecordingTab::captureFrame --> Start";
 
-    toolBar->setActualState(ToolBar::toolBarNothing);
+    if (0 == getRecordingMode()) {
+        // Capture mode
 
-    // cameraTimer->start(60);
+        toolBar->setActualState(ToolBar::toolBarNothing);
+    }
+
     storeFrame();
 
-    toolBar->setActualState(ToolBar::toolBarCameraOn);
+    if (0 == getRecordingMode()) {
+        // Capture mode
+
+        toolBar->setActualState(ToolBar::toolBarCameraOn);
+    }
 
     qDebug() << "RecordingTab::captureFrame --> End";
 }
@@ -1161,6 +1200,16 @@ void RecordingTab::storeFrame()
     qDebug() << "RecordingTab::storeFrame --> Start";
 
     QImage newImage = clipAndScale(frontend->getRawImage());
+
+    if (beepCheckBox->isChecked()) {
+        QApplication::beep();
+
+        // QMediaPlayer player;      // Works not under Linux!!!
+        // player.setMedia(QUrl::fromLocalFile("/usr/share/sounds/freedesktop/stereo/bell.oga")); //this seems to be default alert
+        // player.setVolume(50);
+        // player.play();
+        }
+
 
     if (!newImage.isNull()) {
         int activeSceneIndex = frontend->getProject()->getActiveSceneIndex();
@@ -1343,4 +1392,35 @@ QImage RecordingTab::clipAndScale(QImage image)
     }
 
     return outputImage;
+}
+
+
+void RecordingTab::enableCaptureGroupBox(bool newState)
+{
+    qDebug() << "RecordingTab::enableCaptureGroupBox --> Start";
+
+    mixModeCombo->setEnabled(newState);
+    mixCountSliderCaption->setEnabled(newState);
+    mixCountSlider->setEnabled(newState);
+
+    qDebug() << "RecordingTab::enableCaptureGroupBox --> End";
+}
+
+
+void RecordingTab::enableTimelapseGroupBox(bool newState)
+{
+    qDebug() << "RecordingTab::enableTimelapseGroupBox --> Start";
+
+    unitModeComboCaption->setEnabled(newState);
+    unitModeCombo->setEnabled(newState);
+    unitCountSliderValue->setEnabled(newState);
+    unitCountSliderCaption->setEnabled(newState);
+    beepCheckBox->setEnabled(newState);
+    if (beepCheckBox->isChecked()) {
+        beepCountSliderValue->setEnabled(newState);
+        beepCountSliderCaption->setEnabled(newState);
+        beepCountSlider->setEnabled(newState);
+    }
+
+    qDebug() << "RecordingTab::enableTimelapseGroupBox --> End";
 }

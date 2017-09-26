@@ -471,7 +471,7 @@ ENDIF(UNIX AND NOT APPLE)
 ###############################################################################
 
 IF(UNIX AND NOT APPLE)
-    include(${CMAKE_SOURCE_DIR}/cmake/FindV4L2PkgConfig.cmake)
+    find_package(V4L2 REQUIRED)
     message("V4L2_INCLUDE_DIRS: ${V4L2_INCLUDE_DIRS}")
     message("V4L2_LIBRARIES: ${V4L2_LIBRARIES}")
 ELSE(UNIX AND NOT APPLE)
@@ -624,6 +624,7 @@ qt5_use_modules(
     Gui
     Widgets
     Xml
+    Multimedia
 )
 
 add_definitions(
@@ -1187,7 +1188,7 @@ IF ("${LSB_DISTRIB}" MATCHES "Ubuntu|Debian")
     IF ("${LSB_DISTRIB}" MATCHES "Ubuntu16.04")
         SET(
             CPACK_DEBIAN_PACKAGE_DEPENDS
-            "libc6 (>=2.11), ffmpeg (>=2.8.6), libqt5core5 (>=5.3.2) | libqt5core5a (>=5.3.2), libqt5gui5 (>=5.3.2), libqt5widgets5 (>=5.3.2), libqt5xml5 (>=5.3.2), libv4l-0 (>=1.0.0), libgphoto2-6 (>=2.5.3), qt5-image-formats-plugins (>=5.3.2)"
+            "libc6 (>=2.11), ffmpeg (>=2.8.6), libqt5core5 (>=5.3.2) | libqt5core5a (>=5.3.2), libqt5gui5 (>=5.3.2), libqt5widgets5 (>=5.3.2), libqt5xml5 (>=5.3.2), libqwt-qt5-6 (>=6.1.0), libv4l-0 (>=1.0.0), libgphoto2-6 (>=2.5.3), qt5-image-formats-plugins (>=5.3.2)"
         )
     ENDIF ("${LSB_DISTRIB}" MATCHES "Ubuntu16.04")
     IF ("${LSB_DISTRIB}" MATCHES "Debian7.*")

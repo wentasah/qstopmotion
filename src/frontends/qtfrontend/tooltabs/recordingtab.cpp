@@ -26,7 +26,6 @@
 #include <QInputDialog>
 #include <QLabel>
 #include <QMediaPlayer>
-#include <QSoundEffect>
 #include <QUrl>
 
 #include "technical/grabber/imagegrabber.h"
@@ -68,6 +67,8 @@ RecordingTab::RecordingTab(Frontend *f,
     beepCountSlider        = 0;
     timelapseTimer         = NULL;
     cameraTimer            = NULL;
+    beepEffect             = NULL;
+    clickEffect            = NULL;
 
     mixAccel               = 0;
     diffAccel              = 0;
@@ -91,9 +92,19 @@ RecordingTab::~RecordingTab()
 {
     if (timelapseTimer != NULL) {
         delete timelapseTimer;
+        timelapseTimer = NULL;
     }
     if (cameraTimer != NULL) {
         delete cameraTimer;
+        cameraTimer = NULL;
+    }
+    if (beepEffect != NULL) {
+        delete beepEffect;
+        beepEffect = NULL;
+    }
+    if (clickEffect != NULL) {
+        delete clickEffect;
+        clickEffect = NULL;
     }
 }
 
@@ -1018,11 +1029,25 @@ void RecordingTab::cameraButtonClicked()
             int msec;
             int factor;
 
+            QString clickSoundFile(frontend->getSoundsDirName());
+            clickSoundFile.append(QLatin1String("click.wav"));
+
+            clickEffect = new QSoundEffect();
+            clickEffect->setSource(QUrl::fromLocalFile(clickSoundFile));
+            clickEffect->setVolume(0.25f);
+
             if (beepCheckBox->isChecked()) {
                 // Create timer for the time between beep and frame capture
                 cameraTimer = new QTimer(this);
                 cameraTimer->setSingleShot(true);
                 QObject::connect(cameraTimer, SIGNAL(timeout()), this, SLOT(storeFrame()));
+
+                QString beepSoundFile(frontend->getSoundsDirName());
+                beepSoundFile.append(QLatin1String("beep.wav"));
+
+                beepEffect = new QSoundEffect();
+                beepEffect->setSource(QUrl::fromLocalFile(beepSoundFile));
+                beepEffect->setVolume(0.25f);
             }
 
             // Create timer for the time between the beeps
@@ -1081,10 +1106,16 @@ void RecordingTab::cameraButtonClicked()
             delete timelapseTimer;
             timelapseTimer = NULL;
 
+            delete clickEffect;
+            clickEffect = NULL;
+
             if (beepCheckBox->isChecked()) {
                 cameraTimer->stop();
                 delete cameraTimer;
                 cameraTimer = NULL;
+
+                delete beepEffect;
+                beepEffect = NULL;
             }
         }
     }
@@ -1159,14 +1190,7 @@ void RecordingTab::sendBeep()
     // player.setVolume(50);
     // player.play();
 
-    QString soundFile(frontend->getSoundsDirName());
-    soundFile.append(QLatin1String("beep.wav"));
-    QSoundEffect effect;
-    effect.setSource(soundFile);
-    // effect.setLoopCount(QSoundEffect::Infinite);
-    effect.setVolume(0.25f);
-    effect.play();
-
+    beepEffect->play();
 
     if (beepCheckBox->isChecked()) {
         // Start the timer for the frame capture
@@ -1211,15 +1235,7 @@ void RecordingTab::storeFrame()
 
     QImage newImage = clipAndScale(frontend->getRawImage());
 
-    if (beepCheckBox->isChecked()) {
-        QApplication::beep();
-
-        // QMediaPlayer player;      // Works not under Linux!!!
-        // player.setMedia(QUrl::fromLocalFile("/usr/share/sounds/freedesktop/stereo/bell.oga")); //this seems to be default alert
-        // player.setVolume(50);
-        // player.play();
-        }
-
+    clickEffect->play();
 
     if (!newImage.isNull()) {
         int activeSceneIndex = frontend->getProject()->getActiveSceneIndex();

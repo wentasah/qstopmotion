@@ -31,6 +31,7 @@
 #include <QSlider>
 #include <QTimer>
 #include <QWidget>
+#include <QSoundEffect>
 
 #include <qwt/qwt_slider.h>
 
@@ -377,6 +378,8 @@ private:
     QwtSlider   *beepCountSlider;
     QTimer      *timelapseTimer;
     QTimer      *cameraTimer;
+    QSoundEffect *beepEffect;
+    QSoundEffect *clickEffect;
 
     QPushButton *cameraButton;
 

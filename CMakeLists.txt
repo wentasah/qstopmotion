@@ -1,7 +1,7 @@
 ###############################################################################
 # CMake file for the qStopMotion project                                      #
 # (c) Ralf Lange, longsoft.de                                                 #
-# Last update: 2017-09-13                                                     #
+# Last update: 2017-09-28                                                     #
 #                                                                             #
 # Usage:                                                                      #
 #   * Qt-Creator (Windows, Linux)                                             #
@@ -113,6 +113,8 @@ IF(CMAKE_BUILD_TYPE STREQUAL "Release")
     add_definitions(-DQT_NO_DEBUG_OUTPUT)
     add_definitions(-DQT_NO_WARNING_OUTPUT)
 ENDIF(CMAKE_BUILD_TYPE STREQUAL "Release")
+
+add_definitions(-DQT_DEBUG_PLUGINS)
 
 ###############################################################################
 # File definitions
@@ -670,6 +672,7 @@ IF(UNIX AND NOT APPLE)
     file(COPY manual/ DESTINATION "share/doc/qstopmotion/")
     file(COPY translations DESTINATION "share/qstopmotion/")
     file(COPY icons DESTINATION "share/qstopmotion/")
+    file(COPY sounds DESTINATION "share/qstopmotion/")
     file(COPY ${ICON_FILES} DESTINATION "share/qstopmotion/")
     file(COPY ${GENERAL_FILES} DESTINATION "share/qstopmotion/")
     file(COPY ${UNIX_FILES} DESTINATION "share/qstopmotion/")
@@ -689,6 +692,7 @@ IF(WIN32)
     SET(QSTOPMOTION_GRAPHICS_INSTALL_DIR "graphics")
     SET(QSTOPMOTION_GRAPHICS_ICONS_INSTALL_DIR "graphics/icons")
     SET(QSTOPMOTION_GRAPHICS_PICTURES_INSTALL_DIR "graphics/pictures")
+    SET(QSTOPMOTION_SOUNDS_INSTALL_DIR "sounds")
     SET(QSTOPMOTION_MANUAL_INSTALL_DIR "manual")
     SET(QSTOPMOTION_TRANSLATIONS_INSTALL_DIR "translations")
     SET(QSTOPMOTION_PIXMAP_INSTALL_DIR "pixmaps")
@@ -705,6 +709,7 @@ IF(UNIX AND NOT APPLE)
     SET(QSTOPMOTION_GRAPHICS_INSTALL_DIR "share/qstopmotion/graphics")
     SET(QSTOPMOTION_GRAPHICS_ICONS_INSTALL_DIR "share/qstopmotion/graphics/icons")
     SET(QSTOPMOTION_GRAPHICS_PICTURES_INSTALL_DIR "share/qstopmotion/graphics/pictures")
+    SET(QSTOPMOTION_SOUNDS_INSTALL_DIR "share/qstopmotion/sounds")
     SET(QSTOPMOTION_TRANSLATIONS_INSTALL_DIR "share/qstopmotion/translations")
     SET(QSTOPMOTION_MANUAL_INSTALL_DIR "share/doc/qstopmotion")
     SET(QSTOPMOTION_DESKTOP_INSTALL_DIR "share/applications")
@@ -724,6 +729,12 @@ install(
 install(
     DIRECTORY graphics/
     DESTINATION ${QSTOPMOTION_GRAPHICS_INSTALL_DIR}
+)
+
+# installation of the content of the sounds directory
+install(
+    DIRECTORY sounds/
+    DESTINATION ${QSTOPMOTION_SOUNDS_INSTALL_DIR}
 )
 
 # installation of the content of the manual directory

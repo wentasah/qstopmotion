@@ -379,6 +379,10 @@ void RecordingTab::retranslateStrings()
 void RecordingTab::initialize()
 {
     qDebug() << "RecordingTab::initialize --> Start";
+
+    enableCaptureGroupBox(true);
+    enableTimelapseGroupBox(true);
+
     /*
     int videoSource = frontend->getProject()->getAnimationProject()->getVideoSource();
     this->videoSourceCombo->setCurrentIndex(videoSource);
@@ -1446,6 +1450,11 @@ void RecordingTab::enableTimelapseGroupBox(bool newState)
         beepCountSliderValue->setEnabled(newState);
         beepCountSliderCaption->setEnabled(newState);
         beepCountSlider->setEnabled(newState);
+    }
+    else {
+        beepCountSliderValue->setEnabled(false);
+        beepCountSliderCaption->setEnabled(false);
+        beepCountSlider->setEnabled(false);
     }
 
     qDebug() << "RecordingTab::enableTimelapseGroupBox --> End";

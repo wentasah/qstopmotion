@@ -314,7 +314,6 @@ void CameraControllerDialog::makeGUI()
     qualityLayout->addWidget(colorCheckBox);
     qualityLayout->addWidget(colorLabel);
     qualityLayout->addWidget(colorSlider);
-    qualityLayout->addStretch();
 
     controlLayout->addWidget(exposureCheckBox);
     controlLayout->addWidget(exposureLabel);
@@ -337,10 +336,10 @@ void CameraControllerDialog::makeGUI()
     controlLayout->addWidget(rollCheckBox);
     controlLayout->addWidget(rollLabel);
     controlLayout->addWidget(rollSlider);
-    controlLayout->addStretch();
 
     mainLayout->addWidget(qualityGroupBox);
     mainLayout->addWidget(controlGroupBox);
+    mainLayout->addStretch(10);
     mainLayout->addLayout(bottomLayout);
     this->setLayout(mainLayout);
 

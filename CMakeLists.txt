@@ -1,7 +1,7 @@
 ###############################################################################
 # CMake file for the qStopMotion project                                      #
 # (c) Ralf Lange, longsoft.de                                                 #
-# Last update: 2017-09-28                                                     #
+# Last update: 2017-09-30                                                     #
 #                                                                             #
 # Usage:                                                                      #
 #   * Qt-Creator (Windows, Linux)                                             #
@@ -113,8 +113,6 @@ IF(CMAKE_BUILD_TYPE STREQUAL "Release")
     add_definitions(-DQT_NO_DEBUG_OUTPUT)
     add_definitions(-DQT_NO_WARNING_OUTPUT)
 ENDIF(CMAKE_BUILD_TYPE STREQUAL "Release")
-
-add_definitions(-DQT_DEBUG_PLUGINS)
 
 ###############################################################################
 # File definitions

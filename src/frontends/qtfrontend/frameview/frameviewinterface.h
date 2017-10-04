@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2010-2016 by                                                *
+ *  Copyright (C) 2010-2017 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -68,7 +68,7 @@ public:
      * @param playbackSpeed which speed the playback has to be played in if
      * the playback mode is choosen
      */
-    FrameViewInterface(Frontend *f, QWidget *parent = 0, int pS = 10);
+    FrameViewInterface(Frontend *f, QWidget *parent = 0, double pS = 1.0);
 
 	/**
      * Cleans up after the frameview.
@@ -143,7 +143,7 @@ public:
      * Function to recieve notification when new live view frames per second value is set.
      * @param newFps the new frames per second
      */
-    virtual void updateLiveViewFps(int newFps);
+    virtual void updateLiveViewFps(double newFps);
 
     /**
      * Function to recieve notification when new video frames per second value is set.
@@ -322,7 +322,7 @@ public:
      * Sets the live view frames per second.
      * @param fps the speed to be set
      */
-    void setLiveViewFps(int fps);
+    void setLiveViewFps(double fps);
 
     /**
      * Sets the video frames per second for the playback.
@@ -418,7 +418,7 @@ protected:
     /**
      *
      */
-    int liveViewFps;
+    double liveViewFps;
 
     /**
      *

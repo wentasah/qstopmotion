@@ -28,7 +28,6 @@
 #include <QLabel>
 #include <QPushButton>
 #include <QShortcut>
-#include <QSlider>
 #include <QTimer>
 #include <QWidget>
 #include <QSoundEffect>
@@ -285,9 +284,8 @@ public slots:
 
     /**
      * Slot for updating the slider value when running in automatic mode.
-     * @param value the new slider value.
      */
-    void changeMixCount(double value);
+    void changeMixCount();
 
     /**
      * Slot for setting the mix mode to Mixing.
@@ -315,9 +313,8 @@ public slots:
 
     /**
      * Slot for updating the unit slider value when running in automatic mode.
-     * @param value the new slider value.
      */
-    void changeUnitCount(double value);
+    void changeUnitCount();
 
     /**
      * Slot for changing the beep status.
@@ -327,9 +324,8 @@ public slots:
 
     /**
      * Slot for updating the beep slider value when running in automatic mode.
-     * @param value the new slider value.
      */
-    void changeBeepCount(double value);
+    void changeBeepCount();
 
     /**
      * Slot for notified the recording tab when the camera button is pressed.
@@ -384,7 +380,7 @@ private:
     QPushButton *cameraButton;
 
     // QLabel      *fpuSliderCaption;    // Frames per unit
-    // QSlider     *fpuSlider;
+    // QwtSlider   *fpuSlider;
 
 private slots:
 

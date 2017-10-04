@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2015 by                                                *
+ *  Copyright (C) 2005-2017 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -80,6 +80,40 @@ public:
      * set to true this function will return true automaticaly.
      */
     bool setIntegerPreference(const QString &key, const int attribute);
+
+    /**
+     * Retrieves an double preference.
+     * @param key The key of the preference to retrieve.
+     * @param value The value of the preference.
+     * @return True if the preference was succesfully readed.
+     */
+    bool getDoublePreference(const QString &key, double &value);
+
+    /**
+     * Adds an double preference.
+     * @param key The key for retrieving the preference.
+     * @param attribute The attribute for the preference.
+     * @return True if the preference was succesfully saved. If flushLater is
+     * set to true this function will return true automaticaly.
+     */
+    bool setDoublePreference(const QString &key, const double attribute);
+
+    /**
+     * Retrieves an bool preference.
+     * @param key The key of the preference to retrieve.
+     * @param value The value of the preference.
+     * @return True if the preference was succesfully readed.
+     */
+    bool getBooleanPreference(const QString &key, bool &value);
+
+    /**
+     * Adds an bool preference.
+     * @param key The key for retrieving the preference.
+     * @param attribute The attribute for the preference.
+     * @return True if the preference was succesfully saved. If flushLater is
+     * set to true this function will return true automaticaly.
+     */
+    bool setBooleanPreference(const QString &key, const bool attribute);
 
     /**
      * Retrieves an int preference.

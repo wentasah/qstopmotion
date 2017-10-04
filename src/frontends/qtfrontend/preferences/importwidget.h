@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2015 by                                                *
+ *  Copyright (C) 2005-2017 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -31,11 +31,12 @@
 #include <QPushButton>
 #include <QRadioButton>
 #include <QSpinBox>
-#include <QSlider>
 #include <QTableWidget>
 #include <QTextEdit>
 #include <QToolBox>
 #include <QWidget>
+
+#include <qwt/qwt_slider.h>
 
 
 /**
@@ -83,8 +84,9 @@ private slots:
     /**
      * Slot for notified the image import tab when the image quality changes,
      * so that image import preferences can be updated.
+     * @param value The new image quality value
      */
-    void changeImageQuality();
+    void changeImageQuality(double value);
 
     /**
      * Slot for notified the image import tab when the image size changes,
@@ -96,8 +98,9 @@ private slots:
     /**
      * Slot for notified the image import tab when the live view fps changes,
      * so that image import preferences can be updated.
+     * @param value The new fps value
      */
-    void changeLiveViewFps();
+    void changeLiveViewFps(double value);
 
 private:
     Frontend     *frontend;
@@ -117,7 +120,7 @@ private:
     QComboBox    *imageFormatCombo;
     int           activeImageFormat;
     QLabel       *imageQualityLabel;
-    QSlider      *imageQualitySlider;
+    QwtSlider    *imageQualitySlider;
     int           activeImageQuality;
     QLabel       *qualityMinimumLabel;
     QLabel       *qualityMaximumLabel;
@@ -128,10 +131,8 @@ private:
     // Live view preferences
     QGroupBox    *liveViewPrefs;
     QLabel       *liveViewFpsLabel;
-    QSlider      *liveViewFpsSlider;
-    int           activeLiveViewFps;
-    QLabel       *fpsMinimumLabel;
-    QLabel       *fpsMaximumLabel;
+    QwtSlider    *liveViewFpsSlider;
+    double        activeLiveViewFps;
 
     void makeGUI();
 

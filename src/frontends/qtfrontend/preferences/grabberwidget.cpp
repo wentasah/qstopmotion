@@ -133,18 +133,18 @@ void GrabberWidget::initialize()
     qDebug() << "GrabberWidget::initialize --> Start";
 
     PreferencesTool *pref = frontend->getPreferences();
-    int              value;
+    bool             value;
 
 #ifdef Q_OS_LINUX
     // Video4Linux2 device
-    if (pref->getIntegerPreference("preferences", "v4l2grabber", value) == false) {
+    if (pref->getBooleanPreference("preferences", "v4l2grabber", value) == false) {
         value = true;
     }
     actualV4L2Grabber = value;
     v4l2GrabberCheck->setChecked(actualV4L2Grabber);
     changeV4L2GrabberCheckState(actualV4L2Grabber);
 
-    if (pref->getIntegerPreference("preferences", "v4l2controller", value) == false) {
+    if (pref->getBooleanPreference("preferences", "v4l2controller", value) == false) {
         value = false;
     }
     actualV4L2Controller = value;
@@ -160,14 +160,14 @@ void GrabberWidget::initialize()
 
 #if defined(Q_OS_WIN32) || defined(Q_OS_WIN64)
     // Media Foundation device
-    if (pref->getIntegerPreference("preferences", "mediafoundationgrabber", value) == false) {
+    if (pref->getBooleanPreference("preferences", "mediafoundationgrabber", value) == false) {
         value = true;
     }
     actualMediaFoundationGrabber = value;
     mediaFoundationGrabberCheck->setChecked(actualMediaFoundationGrabber);
     changeMediaFoundationGrabberCheckState(actualMediaFoundationGrabber);
 
-    if (pref->getIntegerPreference("preferences", "mediafoundationcontroller", value) == false) {
+    if (pref->getBooleanPreference("preferences", "mediafoundationcontroller", value) == false) {
         value = false;
     }
     actualMediaFoundationController = value;
@@ -179,14 +179,14 @@ void GrabberWidget::initialize()
 
 #ifdef Q_OS_LINUX
     // gphoto2 device
-    if (pref->getIntegerPreference("preferences", "gphoto2grabber", value) == false) {
+    if (pref->getBooleanPreference("preferences", "gphoto2grabber", value) == false) {
         value = false;
     }
     actualGphoto2Grabber = value;
     gphoto2GrabberCheck->setChecked(actualGphoto2Grabber);
     changeGphoto2GrabberCheckState(actualGphoto2Grabber);
 
-    if (pref->getIntegerPreference("preferences", "gphoto2controller", value) == false) {
+    if (pref->getBooleanPreference("preferences", "gphoto2controller", value) == false) {
         value = false;
     }
     actualGphoto2Controller = value;
@@ -220,7 +220,7 @@ void GrabberWidget::apply()
     bool newV4L2Grabber = v4l2GrabberCheck->isChecked();
     if (newV4L2Grabber != actualV4L2Grabber) {
         // Video 4 Linux 2 grabber changed
-        pref->setIntegerPreference("preferences", "v4l2grabber", newV4L2Grabber);
+        pref->setBooleanPreference("preferences", "v4l2grabber", newV4L2Grabber);
         actualV4L2Grabber = newV4L2Grabber;
         changes = true;
     }
@@ -228,7 +228,7 @@ void GrabberWidget::apply()
     bool newV4L2Controller = v4l2ControllerCheck->isChecked();
     if (newV4L2Controller != actualV4L2Controller) {
         // Video 4 Linux 2 controller changed
-        pref->setIntegerPreference("preferences", "v4l2controller", newV4L2Controller);
+        pref->setBooleanPreference("preferences", "v4l2controller", newV4L2Controller);
         actualV4L2Controller = newV4L2Controller;
         changes = true;
     }
@@ -236,7 +236,7 @@ void GrabberWidget::apply()
     bool newMediaFoundationGrabber = mediaFoundationGrabberCheck->isChecked();
     if (newMediaFoundationGrabber != actualMediaFoundationGrabber) {
         // Media Foundation grabber changed
-        pref->setIntegerPreference("preferences", "mediafoundationgrabber", newMediaFoundationGrabber);
+        pref->setBooleanPreference("preferences", "mediafoundationgrabber", newMediaFoundationGrabber);
         actualMediaFoundationGrabber = newMediaFoundationGrabber;
         changes = true;
     }
@@ -244,7 +244,7 @@ void GrabberWidget::apply()
     bool newMediaFoundationController = mediaFoundationControllerCheck->isChecked();
     if (newMediaFoundationController != actualMediaFoundationController) {
         // Media Foundation controller changed
-        pref->setIntegerPreference("preferences", "mediafoundationcontroller", newMediaFoundationController);
+        pref->setBooleanPreference("preferences", "mediafoundationcontroller", newMediaFoundationController);
         actualMediaFoundationController = newMediaFoundationController;
         changes = true;
     }
@@ -252,7 +252,7 @@ void GrabberWidget::apply()
     bool newGphoto2Grabber = gphoto2GrabberCheck->isChecked();
     if (newGphoto2Grabber != actualGphoto2Grabber) {
         // Gphoto 2 grabber changed
-        pref->setIntegerPreference("preferences", "gphoto2grabber", newGphoto2Grabber);
+        pref->setBooleanPreference("preferences", "gphoto2grabber", newGphoto2Grabber);
         actualGphoto2Grabber = newGphoto2Grabber;
         changes = true;
     }
@@ -260,7 +260,7 @@ void GrabberWidget::apply()
     bool newGphoto2Controller = gphoto2ControllerCheck->isChecked();
     if (newGphoto2Controller != actualGphoto2Controller) {
         // Gphoto 2 controller changed
-        pref->setIntegerPreference("preferences", "gphoto2controller", newGphoto2Controller);
+        pref->setBooleanPreference("preferences", "gphoto2controller", newGphoto2Controller);
         actualGphoto2Controller = newGphoto2Controller;
         changes = true;
     }

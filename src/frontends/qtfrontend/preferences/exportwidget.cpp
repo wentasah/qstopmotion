@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2016 by                                                *
+ *  Copyright (C) 2005-2017 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -237,6 +237,7 @@ void ExportWidget::initialize()
 
     PreferencesTool *pref = frontend->getPreferences();
     int              value;
+    bool             boolValue;
 
     // Read eEncoder preferences
     if (tabType) {
@@ -262,15 +263,10 @@ void ExportWidget::initialize()
         }
         activeVideoFps = value;
 
-        if (pref->getIntegerPreference("preferences", "defaultusedefaultoutputfile", value) == false) {
-            value = 0;
+        if (pref->getBooleanPreference("preferences", "defaultusedefaultoutputfile", boolValue) == false) {
+            boolValue = false;
         }
-        if (0 == value) {
-            activeUseDefaultOutputFile = false;
-        }
-        else {
-            activeUseDefaultOutputFile = true;
-        }
+        activeUseDefaultOutputFile = boolValue;
     }
     else {
         // This is a project dialog tab
@@ -399,7 +395,7 @@ void ExportWidget::apply()
             pref->setIntegerPreference("preferences", "defaultvideoformat", activeVideoFormat);
             pref->setIntegerPreference("preferences", "defaultvideosize", activeVideoSize);
             pref->setIntegerPreference("preferences", "defaultvideofps", activeVideoFps);
-            pref->setIntegerPreference("preferences", "defaultusedefaultoutputfile", (true == activeUseDefaultOutputFile ? 1 : 0));
+            pref->setBooleanPreference("preferences", "defaultusedefaultoutputfile", activeUseDefaultOutputFile);
         }
         else {
             // This is a project dialog tab

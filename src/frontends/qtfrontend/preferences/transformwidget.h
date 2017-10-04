@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2015 by                                                *
+ *  Copyright (C) 2005-2017 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -31,11 +31,12 @@
 #include <QPushButton>
 #include <QRadioButton>
 #include <QSpinBox>
-#include <QSlider>
 #include <QTableWidget>
 #include <QTextEdit>
 #include <QToolBox>
 #include <QWidget>
+
+#include <qwt/qwt_slider.h>
 
 
 /**

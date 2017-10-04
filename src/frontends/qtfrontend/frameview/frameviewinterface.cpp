@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2010-2016 by                                                *
+ *  Copyright (C) 2010-2017 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -36,7 +36,7 @@
 #include "technical/grabber/imagegrabber.h"
 
 
-FrameViewInterface::FrameViewInterface(Frontend *f, QWidget *parent, int fps)
+FrameViewInterface::FrameViewInterface(Frontend *f, QWidget *parent, double fps)
     :QWidget(0)
 {
     qDebug() << "FrameViewInterface::Constructor --> Start";
@@ -162,7 +162,7 @@ void FrameViewInterface::updateMixCount(int newMixCount)
 }
 
 
-void FrameViewInterface::updateLiveViewFps(int newFps)
+void FrameViewInterface::updateLiveViewFps(double newFps)
 {
     qDebug() << "FrameViewInterface::updateLiveViewFps --> Start";
 
@@ -256,7 +256,7 @@ bool FrameViewInterface::cameraOn()
     initCompleted();
 
     displayMode = liveImageMode;
-    grabTimer.start(1000 / liveViewFps * 10 );  // The liveViewFps = 20 means 2.0
+    grabTimer.start(1000 / liveViewFps);
 
     qDebug() << "FrameViewInterface::cameraOn --> End";
     return true;
@@ -307,7 +307,7 @@ bool FrameViewInterface::setMixMode(int mode)
     // Going out of playback mode.
     else if (mode != 2 && mixMode == 2) {
         playbackTimer.stop();
-        grabTimer.start(1000 / liveViewFps * 10);  // The liveViewFps = 20 means 2.0
+        grabTimer.start(1000 / liveViewFps);
     }
 
     mixMode = mode;
@@ -323,11 +323,11 @@ void FrameViewInterface::setMixCount(int mixCount)
 }
 
 
-void FrameViewInterface::setLiveViewFps(int fps)
+void FrameViewInterface::setLiveViewFps(double fps)
 {
     this->liveViewFps = fps;
     if (grabTimer.isActive()) {
-        grabTimer.setInterval(1000 / fps * 10);  // The liveViewFps = 20 means 2.0
+        grabTimer.setInterval(1000 / fps);
     }
 }
 

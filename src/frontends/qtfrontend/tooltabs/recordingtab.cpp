@@ -173,22 +173,15 @@ void RecordingTab::makeGUI()
     connect(mixModeCombo, SIGNAL(activated(int)), this, SLOT(changeMixMode(int)));
 
     mixCountSliderCaption = new QLabel();
-    /*
-    mixCountSlider = new QSlider(Qt::Horizontal);
-    mixCountSlider->setMinimum(0);
-    mixCountSlider->setMaximum(5);
-    mixCountSlider->setPageStep(1);
-    mixCountSlider->setValue(2);
-    mixCountSlider->setTickPosition(QSlider::TicksBelow);
-    mixCountSlider->setFocusPolicy(Qt::NoFocus);
-    connect(mixCountSlider, SIGNAL(valueChanged(int)), this, SLOT(changeMixCount(int)));
-    */
+
     mixCountSlider = new QwtSlider();
     mixCountSlider->setOrientation(Qt::Horizontal);
     mixCountSlider->setScalePosition(QwtSlider::LeadingScale);
     mixCountSlider->setGroove(true);
     mixCountSlider->setScale(0.0, 5.0);
-    connect(mixCountSlider, SIGNAL(valueChanged(double)), this, SLOT(changeMixCount(double)));
+    mixCountSlider->setTotalSteps(5);
+    mixCountSlider->setSingleSteps(1);
+    connect(mixCountSlider, SIGNAL(sliderReleased()), this, SLOT(changeMixCount()));
 
     QVBoxLayout *captureLayout = new QVBoxLayout;
     captureLayout->setMargin(4);
@@ -210,31 +203,18 @@ void RecordingTab::makeGUI()
 
     unitModeCombo = new QComboBox();
     unitModeCombo->setFocusPolicy(Qt::NoFocus);
-    // unitModeCombo->setEnabled(false);
     connect(unitModeCombo, SIGNAL(activated(int)), this, SLOT(changeUnitMode(int)));
 
     // "n Seconds between pictures"
     unitCountSliderValue = new QLabel("0");
     unitCountSliderCaption = new QLabel("unitCountSliderCaption");
 
-    /*
-    unitCountSlider = new QSlider(Qt::Horizontal);
-    unitCountSlider->setMinimum(0);
-    unitCountSlider->setMaximum(60);
-    unitCountSlider->setPageStep(5);
-    unitCountSlider->setValue(5);
-    unitCountSlider->setTickPosition(QSlider::TicksBelow);
-    unitCountSlider->setFocusPolicy(Qt::NoFocus);
-    connect(unitCountSlider, SIGNAL(valueChanged(int)), this, SLOT(changeUnitCount(int)));
-    */
     unitCountSlider = new QwtSlider();
     unitCountSlider->setOrientation(Qt::Horizontal);
     unitCountSlider->setScalePosition(QwtSlider::LeadingScale);
     unitCountSlider->setGroove(true);
-    unitCountSlider->setValue(30);
-    connect(unitCountSlider, SIGNAL(valueChanged(double)), this, SLOT(changeUnitCount(double)));
-
-    // beepCountSliderCaption = new QLabel();
+    unitCountSlider->setSingleSteps(1);
+    connect(unitCountSlider, SIGNAL(sliderReleased()), this, SLOT(changeUnitCount()));
 
     // "Beep n seconds before picture:"
     beepCheckBox = new QCheckBox("beepCheckBox");
@@ -244,21 +224,12 @@ void RecordingTab::makeGUI()
     beepCountSliderValue = new QLabel("0");
     beepCountSliderCaption = new QLabel("beepCountSliderCaption");
 
-    /*
-    beepCountSlider = new QSlider(Qt::Horizontal);
-    beepCountSlider->setMinimum(0);
-    beepCountSlider->setMaximum(60);
-    beepCountSlider->setPageStep(5);
-    beepCountSlider->setValue(5);
-    beepCountSlider->setTickPosition(QSlider::TicksBelow);
-    beepCountSlider->setFocusPolicy(Qt::NoFocus);
-    connect(beepCountSlider, SIGNAL(valueChanged(int)), this, SLOT(changeBeepCount(int)));
-    */
     beepCountSlider = new QwtSlider();
     beepCountSlider->setOrientation(Qt::Horizontal);
     beepCountSlider->setScalePosition(QwtSlider::LeadingScale);
     beepCountSlider->setGroove(true);
-    connect(beepCountSlider, SIGNAL(valueChanged(double)), this, SLOT(changeBeepCount(double)));
+    beepCountSlider->setSingleSteps(1);
+    connect(beepCountSlider, SIGNAL(sliderReleased()), this, SLOT(changeBeepCount()));
 
     QHBoxLayout *unitCountCaptionLayout = new QHBoxLayout;
     unitCountCaptionLayout->addWidget(unitCountSliderValue);
@@ -544,7 +515,7 @@ void RecordingTab::setMixMode(int mode)
 int RecordingTab::getMixCount()
 {
     if (mixModeCombo->currentIndex() == 0) {
-        return mixCountSlider->value();
+        return (int)(mixCountSlider->value());
     }
     else {
         return frontend->getProject()->getMixCount();
@@ -556,14 +527,14 @@ void RecordingTab::setMixCount(int count)
 {
     Q_ASSERT(mixModeCombo->currentIndex() == 0);
 
-    mixCountSlider->setValue(count);
+    mixCountSlider->setValue((double)count);
 }
 
 
 int RecordingTab::getPlaybackCount()
 {
     if (mixModeCombo->currentIndex() == 2) {
-        return mixCountSlider->value();
+        return (int)(mixCountSlider->value());
     }
     else {
         return frontend->getProject()->getPlaybackCount();
@@ -575,7 +546,7 @@ void RecordingTab::setPlaybackCount(int count)
 {
     Q_ASSERT(mixModeCombo->currentIndex() == 2);
 
-    mixCountSlider->setValue(count);
+    mixCountSlider->setValue((double)count);
 }
 
 
@@ -616,7 +587,7 @@ void RecordingTab::setUnitMode(int mode)
 int RecordingTab::getUnitCount()
 {
     if (unitModeCombo->currentIndex() == 0) {
-        return unitCountSlider->value();
+        return (int)(unitCountSlider->value());
     }
     else {
         return frontend->getProject()->getUnitCount();
@@ -626,7 +597,7 @@ int RecordingTab::getUnitCount()
 
 void RecordingTab::setUnitCount(int count)
 {
-    unitCountSlider->setValue(count);
+    unitCountSlider->setValue((double)count);
 }
 
 
@@ -655,7 +626,7 @@ void RecordingTab::setBeepState(bool checked)
 int RecordingTab::getBeepCount()
 {
     if (unitModeCombo->currentIndex() == 0) {
-        return beepCountSlider->value();
+        return (int)(beepCountSlider->value());
     }
     else {
         return frontend->getProject()->getBeepCount();
@@ -665,7 +636,7 @@ int RecordingTab::getBeepCount()
 
 void RecordingTab::setBeepCount(int count)
 {
-    beepCountSlider->setValue(count);
+    beepCountSlider->setValue((double)count);
 }
 
 
@@ -736,12 +707,10 @@ void RecordingTab::changeMixMode(int newMixMode)
 
     frontend->getProject()->getView()->notifyNewMixMode(newMixMode);
 
-    // mixingModeCombo->setCurrentIndex(newMixingMode);
     switch (newMixMode) {
     case 0:
         mixCountSliderCaption->setEnabled(true);
         mixCountSlider->setEnabled(true);
-        // mixCountSlider->setMaximum(5);
         mixCountSlider->setScale(0.0, 5.0);
         mixCountSlider->setValue(frontend->getProject()->getAnimationProject()->getMixCount());
         break;
@@ -753,7 +722,6 @@ void RecordingTab::changeMixMode(int newMixMode)
     case 2:
         mixCountSliderCaption->setEnabled(true);
         mixCountSlider->setEnabled(true);
-        // mixCountSlider->setMaximum(50);
         mixCountSlider->setScale(0.0, 50.0);
         mixCountSlider->setValue(frontend->getProject()->getAnimationProject()->getPlaybackCount());
         break;
@@ -766,9 +734,9 @@ void RecordingTab::changeMixMode(int newMixMode)
 }
 
 
-void RecordingTab::changeMixCount(double value)
+void RecordingTab::changeMixCount()
 {
-    int newMixCount = (int)value;
+    int newMixCount = (int)mixCountSlider->value();;
     int mixMode = mixModeCombo->currentIndex();
 
     switch (mixMode) {
@@ -803,6 +771,7 @@ void RecordingTab::changeUnitMode(int index)
         // Seconds
         unitCountSliderCaption->setText(tr("Seconds between pictures"));
         unitCountSlider->setScale(0, 60);
+        unitCountSlider->setTotalSteps(60);
         unitCountSlider->setValue(30);
 
         break;
@@ -810,6 +779,7 @@ void RecordingTab::changeUnitMode(int index)
         // Minutes
         unitCountSliderCaption->setText(tr("Minutes between pictures"));
         unitCountSlider->setScale(0, 60);
+        unitCountSlider->setTotalSteps(60);
         unitCountSlider->setValue(5);
 
         break;
@@ -817,6 +787,7 @@ void RecordingTab::changeUnitMode(int index)
         // Hours
         unitCountSliderCaption->setText(tr("Hours between pictures"));
         unitCountSlider->setScale(0, 25);
+        unitCountSlider->setTotalSteps(25);
         unitCountSlider->setValue(1);
 
         break;
@@ -824,6 +795,7 @@ void RecordingTab::changeUnitMode(int index)
         // Days
         unitCountSliderCaption->setText(tr("Days between pictures"));
         unitCountSlider->setScale(0, 30);
+        unitCountSlider->setTotalSteps(30);
         unitCountSlider->setValue(1);
 
         break;
@@ -837,18 +809,18 @@ void RecordingTab::changeUnitMode(int index)
 }
 
 
-void RecordingTab::changeUnitCount(double value)
+void RecordingTab::changeUnitCount()
 {
     qDebug() << "RecordingTab::changeUnitCount --> Start";
 
-    int newUnitCount = (int)value;
+    int newUnitCount = (int)unitCountSlider->value();
     int factor = 0;
     int unitMode = unitModeCombo->currentIndex();
 
     if (0 == newUnitCount) {
         newUnitCount = 1;
     }
-
+    /*
     switch (unitMode) {
     case 0:
         if (60 < newUnitCount) {
@@ -871,7 +843,7 @@ void RecordingTab::changeUnitCount(double value)
         }
         break;
     }
-
+    */
     if (frontend->getProject()->isActiveProject()) {
         frontend->getProject()->getAnimationProject()->setUnitCount(newUnitCount);
     }
@@ -923,11 +895,11 @@ void RecordingTab::changeBeep(int newState)
 }
 
 
-void RecordingTab::changeBeepCount(double value)
+void RecordingTab::changeBeepCount()
 {
     qDebug() << "RecordingTab::changeBeepCount --> Start";
 
-    int newBeepCount = (int)value;
+    int newBeepCount = (int)beepCountSlider->value();
 
     if (0 == newBeepCount) {
         newBeepCount = 1;

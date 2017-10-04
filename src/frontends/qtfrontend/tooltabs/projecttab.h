@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2010-2015 by Ralf Lange                                 *
+ *   Copyright (C) 2010-2017 by Ralf Lange                                 *
  *   ralf.lange@longsoft.de                                                *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -121,7 +121,7 @@ public:
      * Function to recieve notification when new live view frames per second value is set.
      * @param newFps the new frames per second value
      */
-    void updateLiveViewFps(int newFps);
+    void updateLiveViewFps(double newFps);
 
     /**
      * Function to recieve notification when new video frames per second value is set.

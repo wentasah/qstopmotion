@@ -398,13 +398,13 @@ public:
      * Get the live view fps of the project.
      * @return live view fps value.
      */
-    int getLiveViewFps();
+    double getLiveViewFps();
 
     /**
      * Set the live view fps of the project.
      * @param newValue The new live view fps value.
      */
-    void setLiveViewFps(int newValue);
+    void setLiveViewFps(double newValue);
 
     /**************************************************************************
      * Video export preferences

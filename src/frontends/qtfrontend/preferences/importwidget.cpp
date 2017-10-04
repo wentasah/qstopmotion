@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2015 by                                                *
+ *  Copyright (C) 2005-2017 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -63,9 +63,7 @@ ImportWidget::ImportWidget(Frontend *f, bool type, QWidget *parent) : QWidget(pa
     liveViewPrefs            = 0;
     liveViewFpsLabel         = 0;
     liveViewFpsSlider        = 0;
-    activeLiveViewFps        = 20;
-    fpsMinimumLabel          = 0;
-    fpsMaximumLabel          = 0;
+    activeLiveViewFps        = 2.0;
 
     this->setObjectName("ImportWidget");
 
@@ -117,17 +115,19 @@ void ImportWidget::makeGUI()
     imageFormatCombo->addItem(tr("BMP"));
 
     imageQualityLabel = new QLabel(tr("Image Quality:"));
-    imageQualitySlider = new QSlider();
-    imageQualitySlider->setMaximum(0);
-    imageQualitySlider->setMaximum(100);
+    imageQualitySlider = new QwtSlider();
     imageQualitySlider->setOrientation(Qt::Horizontal);
+    imageQualitySlider->setScalePosition(QwtSlider::LeadingScale);
+    imageQualitySlider->setGroove(true);
+    imageQualitySlider->setScale(0.0, 100.0);
     imageQualitySlider->setMinimumWidth(300);
     imageQualitySlider->setMaximumWidth(300);
-    imageQualitySlider->setTickPosition(QSlider::TicksBelow);
+    /*
     imageQualitySlider->setTickInterval(20);
     imageQualitySlider->setSingleStep(10);
     imageQualitySlider->setPageStep(20);
-    connect(imageQualitySlider, SIGNAL(sliderReleased()), this, SLOT(changeImageQuality()));
+    */
+    connect(imageQualitySlider, SIGNAL(valueChanged(double)), this, SLOT(changeImageQuality(double)));
     qualityMinimumLabel = new QLabel(tr("Min"));
     qualityMaximumLabel = new QLabel(tr("Max"));
 
@@ -155,9 +155,9 @@ void ImportWidget::makeGUI()
     imagePrefsLayout->setColumnStretch(0, 1);
     imagePrefsLayout->addWidget(imageFormatLabel, 0, 0, Qt::AlignLeft);
     imagePrefsLayout->addWidget(imageFormatCombo, 0, 1, Qt::AlignRight);
-    imagePrefsLayout->addWidget(imageQualityLabel, 1, 0, Qt::AlignLeft);
-    imagePrefsLayout->addWidget(imageQualitySlider, 1, 1, Qt::AlignRight);
-    imagePrefsLayout->addLayout(icLayout, 2, 1, Qt::AlignRight);
+    imagePrefsLayout->addWidget(imageQualityLabel, 1, 0, 1, 2, Qt::AlignLeft);
+    imagePrefsLayout->addLayout(icLayout, 1, 1, Qt::AlignRight);
+    imagePrefsLayout->addWidget(imageQualitySlider, 2, 1, Qt::AlignRight);
     imagePrefsLayout->addWidget(imageSizeLabel, 3, 0, Qt::AlignLeft);
     imagePrefsLayout->addWidget(imageSizeCombo, 3, 1, Qt::AlignRight);
     imagePrefs->setLayout(imagePrefsLayout);
@@ -167,30 +167,27 @@ void ImportWidget::makeGUI()
     liveViewPrefs->setTitle(tr("Live view settings"));
 
     liveViewFpsLabel = new QLabel(tr("Frames per second:"));
-    liveViewFpsSlider = new QSlider();
-    liveViewFpsSlider->setMaximum(1);
-    liveViewFpsSlider->setMaximum(50);
+    liveViewFpsSlider = new QwtSlider();
     liveViewFpsSlider->setOrientation(Qt::Horizontal);
+    liveViewFpsSlider->setScalePosition(QwtSlider::LeadingScale);
+    liveViewFpsSlider->setGroove(true);
+    liveViewFpsSlider->setScale(0.0, 5.0);
+    liveViewFpsSlider->setTotalSteps(5);
+    liveViewFpsSlider->setSingleSteps(1);
+    liveViewFpsSlider->setStepAlignment(true);
     liveViewFpsSlider->setMinimumWidth(300);
     liveViewFpsSlider->setMaximumWidth(300);
-    liveViewFpsSlider->setTickPosition(QSlider::TicksBelow);
+    /*
     liveViewFpsSlider->setTickInterval(2);
     liveViewFpsSlider->setSingleStep(5);
     liveViewFpsSlider->setPageStep(10);
-    connect(liveViewFpsSlider, SIGNAL(sliderReleased()), this, SLOT(changeLiveViewFps()));
-    fpsMinimumLabel = new QLabel(tr("0.1"));
-    fpsMaximumLabel = new QLabel(tr("5.0"));
-
-    QHBoxLayout *fpsLayout = new QHBoxLayout;
-    fpsLayout->addWidget(fpsMinimumLabel, 0, Qt::AlignLeft);
-    fpsLayout->addStretch();
-    fpsLayout->addWidget(fpsMaximumLabel, 0, Qt::AlignRight);
+    */
+    connect(liveViewFpsSlider, SIGNAL(valueChanged(double)), this, SLOT(changeLiveViewFps(double)));
 
     QGridLayout *liveViewPrefsLayout = new QGridLayout;
     liveViewPrefsLayout->setColumnStretch(0, 1);
     liveViewPrefsLayout->addWidget(liveViewFpsLabel, 1, 0, Qt::AlignLeft);
     liveViewPrefsLayout->addWidget(liveViewFpsSlider, 1, 1, Qt::AlignRight);
-    liveViewPrefsLayout->addLayout(fpsLayout, 2, 1, Qt::AlignRight);
     liveViewPrefs->setLayout(liveViewPrefsLayout);
 
     // Widget layout
@@ -212,6 +209,7 @@ void ImportWidget::initialize()
 
     PreferencesTool *pref = frontend->getPreferences();
     int              value;
+    double           doubleValue;
 
     // Read eEncoder preferences
     if (tabType) {
@@ -231,10 +229,10 @@ void ImportWidget::initialize()
         }
         activeImageSize = value;
 
-        if (pref->getIntegerPreference("preferences", "defaultliveviewfps", value) == false) {
-            value = 20;
+        if (pref->getDoublePreference("preferences", "defaultliveviewfps", doubleValue) == false) {
+            doubleValue = 2.0;
         }
-        activeLiveViewFps = value;
+        activeLiveViewFps = doubleValue;
     }
     else {
         // This is a project dialog tab
@@ -272,9 +270,10 @@ void ImportWidget::apply()
     qDebug() << "ImportWidget::apply --> Start";
 
     PreferencesTool *pref = frontend->getPreferences();
-    int index;
-    int value;
-    bool changings = false;
+    int              index;
+    int              value;
+    double           doubleValue;
+    bool             changings = false;
 
     index = imageFormatCombo->currentIndex();
     if (activeImageFormat != index) {
@@ -294,9 +293,9 @@ void ImportWidget::apply()
         changings = true;
     }
 
-    value = liveViewFpsSlider->value();
-    if (activeLiveViewFps != value) {
-        activeLiveViewFps = value;
+    doubleValue = liveViewFpsSlider->value();
+    if (activeLiveViewFps != doubleValue) {
+        activeLiveViewFps = doubleValue;
         changings = true;
     }
 
@@ -306,7 +305,7 @@ void ImportWidget::apply()
             pref->setIntegerPreference("preferences", "defaultimageformat", activeImageFormat);
             pref->setIntegerPreference("preferences", "defaultimagequality", activeImageQuality);
             pref->setIntegerPreference("preferences", "defaultimagesize", activeImageSize);
-            pref->setIntegerPreference("preferences", "defaultliveviewfps", activeLiveViewFps);
+            pref->setDoublePreference("preferences", "defaultliveviewfps", activeLiveViewFps);
         }
         else {
             // This is a project dialog tab
@@ -360,11 +359,11 @@ void ImportWidget::changeImageFormat(int index)
 }
 
 
-void ImportWidget::changeImageQuality()
+void ImportWidget::changeImageQuality(double newQuality)
 {
     qDebug() << "ImportWidget::changeImageQuality --> Start";
 
-    int value = imageQualitySlider->value();
+    int value = (int)newQuality;
 
     if (activeImageQuality == value) {
         return;
@@ -414,11 +413,9 @@ void ImportWidget::enableQuality()
 }
 
 
-void ImportWidget::changeLiveViewFps()
+void ImportWidget::changeLiveViewFps(double value)
 {
     qDebug() << "ImportWidget::changeLiveViewFps --> Start";
-
-    int value = liveViewFpsSlider->value();
 
     if (activeLiveViewFps == value) {
         return;

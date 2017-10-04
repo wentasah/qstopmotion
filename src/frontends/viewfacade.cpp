@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2015 by                                                *
+ *  Copyright (C) 2005-2017 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -165,7 +165,7 @@ void ViewFacade::notifyNewMixCount(int newMixCount)
 }
 
 
-void ViewFacade::notifyNewLiveViewFps(int newFps)
+void ViewFacade::notifyNewLiveViewFps(double newFps)
 {
     qDebug() << "ViewFacade::notifyNewLiveViewFps --> Start";
 

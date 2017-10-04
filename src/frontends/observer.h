@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2013 by                                                *
+ *  Copyright (C) 2005-2017 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -90,7 +90,7 @@ public:
      * per second value is set.
      * @param newFps the new frames per second
      */
-    virtual void updateLiveViewFps(int newFps) = 0;
+    virtual void updateLiveViewFps(double newFps) = 0;
 
     /**
      * Abstract function for recieving notification when a new video frames

@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2015 by                                                *
+ *  Copyright (C) 2005-2017 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -196,7 +196,7 @@ void TimeLine::updateMixMode(int) {}
 void TimeLine::updateMixCount(int) {}
 
 
-void TimeLine::updateLiveViewFps(int) {}
+void TimeLine::updateLiveViewFps(double) {}
 
 
 void TimeLine::updateVideoFps(int) {}

@@ -295,6 +295,78 @@ bool PreferencesTool::getIntegerPreference(const QString &name, const QString &k
 }
 
 
+bool PreferencesTool::setDoublePreference(const QString &name, const QString &key, const double attribute, bool flushLater)
+{
+    checkInitialized();
+    PreferencesElement *element = findPreferencesElement(name);
+
+    if (element == NULL) {
+        QDomElement elementDom = doc->createElement(name);
+        rootElement.appendChild(elementDom);
+        element = new PreferencesElement(name, elementDom);
+        elements.append(element);
+    }
+    else {
+        element->setDoublePreference(key, attribute);
+    }
+
+    if (!flushLater) {
+        flushPreferences();
+    }
+
+    return true;
+}
+
+
+bool PreferencesTool::getDoublePreference(const QString &name, const QString &key, double &value)
+{
+    checkInitialized();
+    PreferencesElement *element = findPreferencesElement(name);
+
+    if (element != NULL) {
+        return element->getDoublePreference(key, value);
+    }
+
+    return false;
+}
+
+
+bool PreferencesTool::setBooleanPreference(const QString &name, const QString &key, const bool attribute, bool flushLater)
+{
+    checkInitialized();
+    PreferencesElement *element = findPreferencesElement(name);
+
+    if (element == NULL) {
+        QDomElement elementDom = doc->createElement(name);
+        rootElement.appendChild(elementDom);
+        element = new PreferencesElement(name, elementDom);
+        elements.append(element);
+    }
+    else {
+        element->setBooleanPreference(key, attribute);
+    }
+
+    if (!flushLater) {
+        flushPreferences();
+    }
+
+    return true;
+}
+
+
+bool PreferencesTool::getBooleanPreference(const QString &name, const QString &key, bool &value)
+{
+    checkInitialized();
+    PreferencesElement *element = findPreferencesElement(name);
+
+    if (element != NULL) {
+        return element->getBooleanPreference(key, value);
+    }
+
+    return false;
+}
+
+
 void PreferencesTool::removePreference(const QString &name, const QString &key)
 {
     checkInitialized();
@@ -334,25 +406,29 @@ void PreferencesTool::setBasicPreferenceDefaults()
     setIntegerPreference("preferences", "defaultmixmode", 0);
     setIntegerPreference("preferences", "defaultmixcount", 2);
     setIntegerPreference("preferences", "defaultplaybackcount", 5);
+    setIntegerPreference("preferences", "defaultunitmode", 1);
+    setIntegerPreference("preferences", "defaultunitcount", 5);
+    setBooleanPreference("preferences", "defaultbeepcheck", true);
+    setIntegerPreference("preferences", "defaultbeepcount", 5);
     // Image import defaults
     setIntegerPreference("preferences", "defaultimageformat", ImageGrabber::jpegFormat);
     setIntegerPreference("preferences", "defaultimagesize", ImageGrabber::defaultSize);
     setIntegerPreference("preferences", "defaulttransformation", true);
     setIntegerPreference("preferences", "defaultimageadjustment", ImageGrabber::centerDown);
-    setIntegerPreference("preferences", "defaulliveviewfps", 20);
+    setDoublePreference("preferences", "defaulliveviewfps", 2.0);
     // Video export defaults
     setIntegerPreference("preferences", "defaultencoderapplication", VideoEncoder::ffmpegApplication);
     setIntegerPreference("preferences", "defaultvideoformat", VideoEncoder::mp4Format);
     setIntegerPreference("preferences", "defaultvideosize", VideoEncoder::defaultSize);
     setIntegerPreference("preferences", "defaultvideofps", 12);
-    setIntegerPreference("preferences", "defaultusedefaultoutputfile", false);
+    setBooleanPreference("preferences", "defaultusedefaultoutputfile", false);
     // Grabber defaults
-    setIntegerPreference("preferences", "v4l2grabber", true);
-    setIntegerPreference("preferences", "v4l2controller", false);
-    setIntegerPreference("preferences", "mediafoundationgrabber", true);
-    setIntegerPreference("preferences", "mediafoundationcontroller", false);
-    setIntegerPreference("preferences", "gphoto2grabber", false);
-    setIntegerPreference("preferences", "gphoto2controller", false);
+    setBooleanPreference("preferences", "v4l2grabber", true);
+    setBooleanPreference("preferences", "v4l2controller", false);
+    setBooleanPreference("preferences", "mediafoundationgrabber", true);
+    setBooleanPreference("preferences", "mediafoundationcontroller", false);
+    setBooleanPreference("preferences", "gphoto2grabber", false);
+    setBooleanPreference("preferences", "gphoto2controller", false);
 }
 
 

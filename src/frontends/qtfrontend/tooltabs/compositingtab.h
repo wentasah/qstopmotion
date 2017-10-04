@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2010-2015 by Ralf Lange                                 *
+ *   Copyright (C) 2010-2017 by Ralf Lange                                 *
  *   ralf.lange@longsoft.de                                                *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -25,8 +25,9 @@
 #include <QGroupBox>
 #include <QLabel>
 #include <QPushButton>
-#include <QSlider>
 #include <QWidget>
+
+#include <qwt/qwt_slider.h>
 
 #include "frontends/frontend.h"
 

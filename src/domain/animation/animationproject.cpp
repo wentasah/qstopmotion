@@ -58,7 +58,7 @@ AnimationProject::AnimationProject(Frontend* f)
     imageTransformation      = AnimationProject::ScaleImage;
     imageAdjustment          = 0;
     zoomValue                = 25;
-    liveViewFps              = 20;
+    liveViewFps              = 2.0;
     videoFormat              = 0;
     videoSize                = 0;
     videoFps                 = 12;
@@ -432,13 +432,13 @@ void AnimationProject::setZoomValue(int newZV)
 }
 
 
-int AnimationProject::getLiveViewFps()
+double AnimationProject::getLiveViewFps()
 {
     return liveViewFps;
 }
 
 
-void AnimationProject::setLiveViewFps(int newValue)
+void AnimationProject::setLiveViewFps(double newValue)
 {
     if (liveViewFps != newValue) {
         liveViewFps = newValue;
@@ -808,7 +808,7 @@ bool AnimationProject::readSettingsFromProject(QDomElement &settingsNode)
         }
         else if (nodeName.compare("liveviewfps") == 0) {
             QString tmp = currElement.text();
-            liveViewFps = tmp.toInt();
+            liveViewFps = tmp.toDouble();
         }
         // Save video export parameter
         else if (nodeName.compare("encoderapplication") == 0) {

@@ -458,13 +458,13 @@ void DomainFacade::setZoomValue(int newZV)
 }
 
 
-int DomainFacade::getLiveViewFps()
+double DomainFacade::getLiveViewFps()
 {
     return animationProject->getLiveViewFps();
 }
 
 
-void DomainFacade::setLiveViewFps(int newValue)
+void DomainFacade::setLiveViewFps(double newValue)
 {
     animationProject->setLiveViewFps(newValue);
     getView()->notifyNewLiveViewFps(newValue);
@@ -775,95 +775,112 @@ bool DomainFacade::recoverProject()
 void DomainFacade::setProjectSettingsToDefault()
 {
     PreferencesTool *pref = frontend->getPreferences();
-    int              value;
+    int              intValue;
+    bool             boolValue;
+    double           doubleValue;
 
     // Project preferences
-    if (pref->getIntegerPreference("preferences", "defaultrecordingmode", value) == false) {
-        value = 0;
+    if (pref->getIntegerPreference("preferences", "defaultrecordingmode", intValue) == false) {
+        intValue = 0;
     }
-    setRecordingMode(value);
+    setRecordingMode(intValue);
 
-    if (pref->getIntegerPreference("preferences", "defaultvideosource", value) == false) {
-        value = 0;
+    if (pref->getIntegerPreference("preferences", "defaultvideosource", intValue) == false) {
+        intValue = 0;
     }
-    setVideoSource(value);
+    setVideoSource(intValue);
 
-    if (pref->getIntegerPreference("preferences", "defaultmixingmode", value) == false) {
-        value = 0;
+    if (pref->getIntegerPreference("preferences", "defaultmixingmode", intValue) == false) {
+        intValue = 0;
     }
-    setMixMode(value);
+    setMixMode(intValue);
 
-    if (pref->getIntegerPreference("preferences", "defaultmixcount", value) == false) {
-        value = 0;
+    if (pref->getIntegerPreference("preferences", "defaultmixcount", intValue) == false) {
+        intValue = 0;
     }
-    setMixCount(value);
+    setMixCount(intValue);
 
-    if (pref->getIntegerPreference("preferences", "defaultplaybackcount", value) == false) {
-        value = 0;
+    if (pref->getIntegerPreference("preferences", "defaultplaybackcount", intValue) == false) {
+        intValue = 0;
     }
-    setPlaybackCount(value);
+    setPlaybackCount(intValue);
 
-    if (pref->getIntegerPreference("preferences", "defaultunitmode", value) == false) {
-        value = 0;
+    if (pref->getIntegerPreference("preferences", "defaultunitmode", intValue) == false) {
+        intValue = 0;
     }
-    setUnitMode(value);
+    setUnitMode(intValue);
+
+    if (pref->getIntegerPreference("preferences", "defaultunitcount", intValue) == false) {
+        intValue = 0;
+    }
+    setUnitCount(intValue);
+
+    if (pref->getBooleanPreference("preferences", "defaultbeepcheck", boolValue) == false) {
+        boolValue = false;
+    }
+    setBeepState(boolValue);
+
+    if (pref->getIntegerPreference("preferences", "defaultbeepcount", intValue) == false) {
+        intValue = 0;
+    }
+    setBeepCount(intValue);
 
     // Image import preferences
-    if (pref->getIntegerPreference("preferences", "defaultimageformat", value) == false) {
-        value = ImageGrabber::jpegFormat;
+    if (pref->getIntegerPreference("preferences", "defaultimageformat", intValue) == false) {
+        intValue = ImageGrabber::jpegFormat;
     }
-    setImageFormat(value);
+    setImageFormat(intValue);
 
-    if (pref->getIntegerPreference("preferences", "defaultimagequality", value) == false) {
-        value = 100;
+    if (pref->getIntegerPreference("preferences", "defaultimagequality", intValue) == false) {
+        intValue = 100;
     }
-    setImageQuality(value);
+    setImageQuality(intValue);
 
-    if (pref->getIntegerPreference("preferences", "defaultimagesize", value) == false) {
-        value = ImageGrabber::defaultSize;
+    if (pref->getIntegerPreference("preferences", "defaultimagesize", intValue) == false) {
+        intValue = ImageGrabber::defaultSize;
     }
-    setImageSize(value);
+    setImageSize(intValue);
 
-    if (pref->getIntegerPreference("preferences", "defaulttransformation", value) == false) {
-        value = 0;
+    if (pref->getIntegerPreference("preferences", "defaulttransformation", intValue) == false) {
+        intValue = 0;
     }
-    setImageTransformation(value);
+    setImageTransformation(intValue);
 
-    if (pref->getIntegerPreference("preferences", "defaultimageadjustment", value) == false) {
-        value = ImageGrabber::centerDown;
+    if (pref->getIntegerPreference("preferences", "defaultimageadjustment", intValue) == false) {
+        intValue = ImageGrabber::centerDown;
     }
-    setImageAdjustment(value);
+    setImageAdjustment(intValue);
 
-    if (pref->getIntegerPreference("preferences", "defaultliveviewfps", value) == false) {
-        value = 20;
+    if (pref->getDoublePreference("preferences", "defaultliveviewfps", doubleValue) == false) {
+        doubleValue = 2.0;
     }
-    setLiveViewFps(value);
+    setLiveViewFps(doubleValue);
 
     // Video export preferences
-    if (pref->getIntegerPreference("preferences", "defaultencoderapplication", value) == false) {
-        value = VideoEncoder::noneApplication;
+    if (pref->getIntegerPreference("preferences", "defaultencoderapplication", intValue) == false) {
+        intValue = VideoEncoder::noneApplication;
     }
-    setEncoderApplication(value);
+    setEncoderApplication(intValue);
 
-    if (pref->getIntegerPreference("preferences", "defaultvideoformat", value) == false) {
-        value = VideoEncoder::noneFormat;
+    if (pref->getIntegerPreference("preferences", "defaultvideoformat", intValue) == false) {
+        intValue = VideoEncoder::noneFormat;
     }
-    setVideoFormat(value);
+    setVideoFormat(intValue);
 
-    if (pref->getIntegerPreference("preferences", "defaultvideosize", value) == false) {
-        value = VideoEncoder::defaultSize;
+    if (pref->getIntegerPreference("preferences", "defaultvideosize", intValue) == false) {
+        intValue = VideoEncoder::defaultSize;
     }
-    setVideoSize(value);
+    setVideoSize(intValue);
 
-    if (pref->getIntegerPreference("preferences", "defaultvideofps", value) == false) {
-        value = 12;
+    if (pref->getIntegerPreference("preferences", "defaultvideofps", intValue) == false) {
+        intValue = 12;
     }
-    setVideoFps(value);
+    setVideoFps(intValue);
 
-    if (pref->getIntegerPreference("preferences", "defaultusedefaultoutputfile", value) == false) {
-        value = false;
+    if (pref->getBooleanPreference("preferences", "defaultusedefaultoutputfile", boolValue) == false) {
+        boolValue = false;
     }
-    setUseDefaultOutputFile(value);
+    setUseDefaultOutputFile(boolValue);
 }
 
 

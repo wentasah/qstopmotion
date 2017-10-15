@@ -22,10 +22,8 @@
 #define TOOLBAR_H
 
 #include <QGridLayout>
-// #include <QGroupBox>
 #include <QLabel>
 #include <QPushButton>
-// #include <QSlider>
 #include <QTimer>
 #include <QWidget>
 
@@ -197,7 +195,7 @@ public slots:
     /**
      * Overlay slider has changed his value.
      */
-    void overlaySliderChanged(int value);
+    void overlaySliderChanged();
 
     /**
      * Slot for playing the next frame. This slot is triggered by the timer.
@@ -205,25 +203,25 @@ public slots:
     void playNextFrame();
 
 private:
-    Frontend        *frontend;
-    QTimer          *runAnimationTimer;
-    int              actualState;
+    Frontend    *frontend;
+    QTimer      *runAnimationTimer;
+    int          actualState;
 
-    QLabel          *framesIcon;
-    QSlider         *overlaySlider;
-    QLabel          *cameraIcon;
+    QLabel      *framesIcon;
+    QwtSlider   *overlaySlider;
+    QLabel      *cameraIcon;
 
-    QPushButton     *toBeginButton;
-    QPushButton     *previousFrameButton;
-    QPushButton     *captureButton;
-    QPushButton     *playButton;
-    QPushButton     *nextFrameButton;
-    QPushButton     *toEndButton;
+    QPushButton *toBeginButton;
+    QPushButton *previousFrameButton;
+    QPushButton *captureButton;
+    QPushButton *playButton;
+    QPushButton *nextFrameButton;
+    QPushButton *toEndButton;
 
-    int              fps;
-    int              exposureCount;
-    bool             isLooping;
-    int              exposureIndex;
+    int          fps;
+    int          exposureCount;
+    bool         isLooping;
+    int          exposureIndex;
 
     void makeGUI();
 };

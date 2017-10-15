@@ -39,37 +39,37 @@ ExportWidget::ExportWidget(Frontend *f, bool type, QWidget *parent) : QWidget(pa
 {
     qDebug() << "ExportWidget::Constructor --> Start";
 
-    frontend                 = f;
-    tabType                  = type;
+    frontend                   = f;
+    tabType                    = type;
 
-    infoText                 = 0;
-    encoderTable             = 0;
+    infoText                   = 0;
+    encoderTable               = 0;
 
     // Encoder preferences
-    encoderPrefs             = 0;
-    encoderApplicationLabel  = 0;
-    encoderApplicationCombo  = 0;
-    activeEncoderApplication = VideoEncoder::noneApplication;
-    videoFormatLabel         = 0;
-    videoFormatCombo         = 0;
-    activeVideoFormat        = VideoEncoder::mp4Format;
-    videoSizeLabel           = 0;
-    videoSizeCombo           = 0;
-    activeVideoSize          = VideoEncoder::defaultSize;
-    videoFpsLabel            = 0;
-    videoFpsChooser          = 0;
-    activeVideoFps           = 12;
+    encoderPrefs               = 0;
+    encoderApplicationLabel    = 0;
+    encoderApplicationCombo    = 0;
+    activeEncoderApplication   = VideoEncoder::noneApplication;
+    videoFormatLabel           = 0;
+    videoFormatCombo           = 0;
+    activeVideoFormat          = VideoEncoder::mp4Format;
+    videoSizeLabel             = 0;
+    videoSizeCombo             = 0;
+    activeVideoSize            = VideoEncoder::defaultSize;
+    videoFpsLabel              = 0;
+    videoFpsChooser            = 0;
+    activeVideoFps             = 12;
 
     // Output file preferences
-    outputPrefs              = 0;
-    askForOutputLabel        = 0;
-    yesButton                = 0;
-    noButton                 = 0;
-    activeEncoderApplication = 0;
-    defaultOutputLabel       = 0;
-    defaultOutputEdit        = 0;
+    outputPrefs                = 0;
+    askForOutputLabel          = 0;
+    yesButton                  = 0;
+    noButton                   = 0;
+    activeEncoderApplication   = 0;
+    defaultOutputLabel         = 0;
+    defaultOutputEdit          = 0;
     activeDefaultOutputFileName.clear();
-    browseOutputButton       = 0;
+    browseOutputButton         = 0;
     activeUseDefaultOutputFile = false;
 
     this->setObjectName("ExportWidget");
@@ -236,32 +236,32 @@ void ExportWidget::initialize()
     qDebug() << "ExportWidget::initialize --> Start";
 
     PreferencesTool *pref = frontend->getPreferences();
-    int              value;
+    int              intValue;
     bool             boolValue;
 
     // Read eEncoder preferences
     if (tabType) {
         // This is a general dialog tab
 
-        if (pref->getIntegerPreference("preferences", "defaultencoderapplication", value) == false) {
-            value = VideoEncoder::noneApplication;
+        if (pref->getIntegerPreference("preferences", "defaultencoderapplication", intValue) == false) {
+            intValue = VideoEncoder::noneApplication;
         }
-        activeEncoderApplication = value;
+        activeEncoderApplication = intValue;
 
-        if (pref->getIntegerPreference("preferences", "defaultvideoformat", value) == false) {
-            value = VideoEncoder::noneFormat;
+        if (pref->getIntegerPreference("preferences", "defaultvideoformat", intValue) == false) {
+            intValue = VideoEncoder::noneFormat;
         }
-        activeVideoFormat = value;
+        activeVideoFormat = intValue;
 
-        if (pref->getIntegerPreference("preferences", "defaultvideosize", value) == false) {
-            value = VideoEncoder::defaultSize;
+        if (pref->getIntegerPreference("preferences", "defaultvideosize", intValue) == false) {
+            intValue = VideoEncoder::defaultSize;
         }
-        activeVideoSize = value;
+        activeVideoSize = intValue;
 
-        if (pref->getIntegerPreference("preferences", "defaultvideofps", value) == false) {
-            value = 12;
+        if (pref->getIntegerPreference("preferences", "defaultvideofps", intValue) == false) {
+            intValue = 12;
         }
-        activeVideoFps = value;
+        activeVideoFps = intValue;
 
         if (pref->getBooleanPreference("preferences", "defaultusedefaultoutputfile", boolValue) == false) {
             boolValue = false;

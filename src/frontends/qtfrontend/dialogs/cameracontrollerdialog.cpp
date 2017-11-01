@@ -28,6 +28,7 @@
 #include <QProgressDialog>
 #include <QUrl>
 
+#include "frontends/qtfrontend/preferences/controlerwidget.h"
 #include "technical/preferencestool.h"
 
 
@@ -61,10 +62,13 @@ void CameraControllerDialog::makeGUI()
     // Enable help window for modal dialoges
     this->setAttribute(Qt::WA_GroupLeader);
 
+    // -------------------------------------------------------------------------
+    // Quality controls
+    // -------------------------------------------------------------------------
+
     qualityGroupBox = new QGroupBox("qualityGroupBox");
     QVBoxLayout *qualityLayout = new QVBoxLayout;
     qualityGroupBox->setLayout(qualityLayout);
-    qualityCount = 0;
 
     brightnessCheckBox = new QCheckBox("brightnessCheckBox");
     brightnessCheckBox->setChecked(false);
@@ -176,10 +180,13 @@ void CameraControllerDialog::makeGUI()
     colorLabel->hide();
     colorSlider->hide();
 
+    // -------------------------------------------------------------------------
+    // Control controls
+    // -------------------------------------------------------------------------
+
     controlGroupBox = new QGroupBox("controlGroupBox");
     QVBoxLayout *controlLayout = new QVBoxLayout;
     controlGroupBox->setLayout(controlLayout);
-    controlCount = 0;
 
     exposureCheckBox = new QCheckBox("exposureCheckBox");
     exposureCheckBox->setChecked(false);
@@ -352,6 +359,10 @@ void CameraControllerDialog::retranslateStrings()
 
     setWindowTitle(tr("qStopMotion Camera Controller"));
 
+    // -------------------------------------------------------------------------
+    // Quality controls
+    // -------------------------------------------------------------------------
+
     qualityGroupBox->setTitle(tr("Video Quality"));
 
     brightnessCheckBox->setText(tr("Automatic Brightness"));
@@ -374,6 +385,10 @@ void CameraControllerDialog::retranslateStrings()
     gainLabel->setText(tr("Gain:"));
     colorCheckBox->setText(tr("Automatic Color Enable"));
     colorLabel->setText(tr("Color Enable:"));
+
+    // -------------------------------------------------------------------------
+    // Control controls
+    // -------------------------------------------------------------------------
 
     controlGroupBox->setTitle(tr("Camera Control"));
 
@@ -408,10 +423,12 @@ void CameraControllerDialog::initialize()
     bool                        boolValue;
     int                         intValue;
 
+    // -------------------------------------------------------------------------
+    // Quality controls
+    // -------------------------------------------------------------------------
+    // Brightness Controls
     capabilities = grabberController->getBrightnessCaps();
     if (capabilities->isAutomatic()) {
-        qualityCount++;
-        brightnessCheckBox->show();
         brightnessCheckBox->setEnabled(false);
         if (preferences->getBooleanPreference(deviceId, "automaticbrightness", boolValue) == false) {
             boolValue = false;
@@ -419,9 +436,6 @@ void CameraControllerDialog::initialize()
         brightnessCheckBox->setChecked(boolValue);
     }
     if (capabilities->isCapability()) {
-        qualityCount++;
-        brightnessLabel->show();
-        brightnessSlider->show();
         brightnessSlider->setEnabled(false);
         if (preferences->getIntegerPreference(deviceId, "brightness", intValue) == false) {
             // Calculate default value
@@ -432,8 +446,6 @@ void CameraControllerDialog::initialize()
 
     capabilities = grabberController->getContrastCaps();
     if (capabilities->isAutomatic()) {
-        qualityCount++;
-        contrastCheckBox->show();
         contrastCheckBox->setEnabled(false);
         if (preferences->getBooleanPreference(deviceId, "automaticcontrast", boolValue) == false) {
             boolValue = false;
@@ -441,9 +453,6 @@ void CameraControllerDialog::initialize()
         contrastCheckBox->setChecked(boolValue);
     }
     if (capabilities->isCapability()) {
-        qualityCount++;
-        contrastLabel->show();
-        contrastSlider->show();
         contrastSlider->setEnabled(false);
         if (preferences->getIntegerPreference(deviceId, "contrast", intValue) == false) {
             // Calculate default value
@@ -454,8 +463,6 @@ void CameraControllerDialog::initialize()
 
     capabilities = grabberController->getSaturationCaps();
     if (capabilities->isAutomatic()) {
-        qualityCount++;
-        saturationCheckBox->show();
         saturationCheckBox->setEnabled(false);
         if (preferences->getBooleanPreference(deviceId, "automaticsaturation", boolValue) == false) {
             boolValue = false;
@@ -463,9 +470,6 @@ void CameraControllerDialog::initialize()
         saturationCheckBox->setChecked(boolValue);
     }
     if (capabilities->isCapability()) {
-        qualityCount++;
-        saturationLabel->show();
-        saturationSlider->show();
         saturationSlider->setEnabled(false);
         if (preferences->getIntegerPreference(deviceId, "saturation", intValue) == false) {
             // Calculate default value
@@ -476,8 +480,6 @@ void CameraControllerDialog::initialize()
 
     capabilities = grabberController->getHueCaps();
     if (capabilities->isAutomatic()) {
-        qualityCount++;
-        hueCheckBox->show();
         hueCheckBox->setEnabled(false);
         if (preferences->getBooleanPreference(deviceId, "automatichue", boolValue) == false) {
             boolValue = false;
@@ -485,9 +487,6 @@ void CameraControllerDialog::initialize()
         hueCheckBox->setChecked(boolValue);
     }
     if (capabilities->isCapability()) {
-        qualityCount++;
-        hueLabel->show();
-        hueSlider->show();
         hueSlider->setEnabled(false);
         if (preferences->getIntegerPreference(deviceId, "hue", intValue) == false) {
             // Calculate default value
@@ -498,8 +497,6 @@ void CameraControllerDialog::initialize()
 
     capabilities = grabberController->getGammaCaps();
     if (capabilities->isAutomatic()) {
-        qualityCount++;
-        gammaCheckBox->show();
         gammaCheckBox->setEnabled(false);
         if (preferences->getBooleanPreference(deviceId, "automaticgamma", boolValue) == false) {
             boolValue = false;
@@ -507,9 +504,6 @@ void CameraControllerDialog::initialize()
         gammaCheckBox->setChecked(boolValue);
     }
     if (capabilities->isCapability()) {
-        qualityCount++;
-        gammaLabel->show();
-        gammaSlider->show();
         gammaSlider->setEnabled(false);
         if (preferences->getIntegerPreference(deviceId, "gamma", intValue) == false) {
             // Calculate default value
@@ -520,8 +514,6 @@ void CameraControllerDialog::initialize()
 
     capabilities = grabberController->getSharpnessCaps();
     if (capabilities->isAutomatic()) {
-        qualityCount++;
-        sharpnessCheckBox->show();
         sharpnessCheckBox->setEnabled(false);
         if (preferences->getBooleanPreference(deviceId, "automaticsharpness", boolValue) == false) {
             boolValue = false;
@@ -529,9 +521,6 @@ void CameraControllerDialog::initialize()
         sharpnessCheckBox->setChecked(boolValue);
     }
     if (capabilities->isCapability()) {
-        qualityCount++;
-        sharpnessLabel->show();
-        sharpnessSlider->show();
         sharpnessSlider->setEnabled(false);
         if (preferences->getIntegerPreference(deviceId, "sharpness", intValue) == false) {
             // Calculate default value
@@ -542,8 +531,6 @@ void CameraControllerDialog::initialize()
 
     capabilities = grabberController->getBacklightCaps();
     if (capabilities->isAutomatic()) {
-        qualityCount++;
-        backlightCheckBox->show();
         backlightCheckBox->setEnabled(false);
         if (preferences->getBooleanPreference(deviceId, "automaticbacklight", boolValue) == false) {
             boolValue = false;
@@ -551,9 +538,6 @@ void CameraControllerDialog::initialize()
         backlightCheckBox->setChecked(boolValue);
     }
     if (capabilities->isCapability()) {
-        qualityCount++;
-        backlightLabel->show();
-        backlightSlider->show();
         backlightSlider->setEnabled(false);
         if (preferences->getIntegerPreference(deviceId, "backlight", intValue) == false) {
             // Calculate default value
@@ -564,8 +548,6 @@ void CameraControllerDialog::initialize()
 
     capabilities = grabberController->getWhiteCaps();
     if (capabilities->isAutomatic()) {
-        qualityCount++;
-        whiteCheckBox->show();
         whiteCheckBox->setEnabled(false);
         if (preferences->getBooleanPreference(deviceId, "automaticwhite", boolValue) == false) {
             boolValue = false;
@@ -573,9 +555,6 @@ void CameraControllerDialog::initialize()
         whiteCheckBox->setChecked(boolValue);
     }
     if (capabilities->isCapability()) {
-        qualityCount++;
-        whiteLabel->show();
-        whiteSlider->show();
         whiteSlider->setEnabled(false);
         if (preferences->getIntegerPreference(deviceId, "white", intValue) == false) {
             // Calculate default value
@@ -586,8 +565,6 @@ void CameraControllerDialog::initialize()
 
     capabilities = grabberController->getGainCaps();
     if (capabilities->isAutomatic()) {
-        qualityCount++;
-        gainCheckBox->show();
         gainCheckBox->setEnabled(false);
         if (preferences->getBooleanPreference(deviceId, "automaticgain", boolValue) == false) {
             boolValue = false;
@@ -595,9 +572,6 @@ void CameraControllerDialog::initialize()
         gainCheckBox->setChecked(boolValue);
     }
     if (capabilities->isCapability()) {
-        qualityCount++;
-        gainLabel->show();
-        gainSlider->show();
         gainSlider->setEnabled(false);
         if (preferences->getIntegerPreference(deviceId, "gain", intValue) == false) {
             // Calculate default value
@@ -608,8 +582,6 @@ void CameraControllerDialog::initialize()
 
     capabilities = grabberController->getColorCaps();
     if (capabilities->isAutomatic()) {
-        qualityCount++;
-        colorCheckBox->show();
         colorCheckBox->setEnabled(false);
         if (preferences->getBooleanPreference(deviceId, "automaticcolor", boolValue) == false) {
             boolValue = false;
@@ -617,9 +589,6 @@ void CameraControllerDialog::initialize()
         colorCheckBox->setChecked(boolValue);
     }
     if (capabilities->isCapability()) {
-        qualityCount++;
-        colorLabel->show();
-        colorSlider->show();
         colorSlider->setEnabled(false);
         if (preferences->getIntegerPreference(deviceId, "color", intValue) == false) {
             // Calculate default value
@@ -628,17 +597,16 @@ void CameraControllerDialog::initialize()
         configureSlider(colorSlider, capabilities, intValue);
     }
 
-    // TODO: This will not work
-    mainLayout->setStretchFactor(qualityGroupBox, qualityCount);
-
     if (qualityCount == 0) {
         qualityGroupBox->hide();
     }
 
+    // -------------------------------------------------------------------------
+    // Control controls
+    // -------------------------------------------------------------------------
+
     capabilities = grabberController->getExposureCaps();
     if (capabilities->isAutomatic()) {
-        controlCount++;
-        exposureCheckBox->show();
         exposureCheckBox->setEnabled(false);
         if (preferences->getBooleanPreference(deviceId, "automaticexposure", boolValue) == false) {
             boolValue = false;
@@ -646,9 +614,6 @@ void CameraControllerDialog::initialize()
         exposureCheckBox->setChecked(boolValue);
     }
     if (capabilities->isCapability()) {
-        controlCount++;
-        exposureLabel->show();
-        exposureSlider->show();
         exposureSlider->setEnabled(false);
         if (preferences->getIntegerPreference(deviceId, "exposure", intValue) == false) {
             // Calculate default value
@@ -659,8 +624,6 @@ void CameraControllerDialog::initialize()
 
     capabilities = grabberController->getZoomCaps();
     if (capabilities->isAutomatic()) {
-        controlCount++;
-        zoomCheckBox->show();
         zoomCheckBox->setEnabled(false);
         if (preferences->getBooleanPreference(deviceId, "automaticzoom", boolValue) == false) {
             boolValue = false;
@@ -668,9 +631,6 @@ void CameraControllerDialog::initialize()
         zoomCheckBox->setChecked(boolValue);
     }
     if (capabilities->isCapability()) {
-        controlCount++;
-        zoomLabel->show();
-        zoomSlider->show();
         zoomSlider->setEnabled(false);
         if (preferences->getIntegerPreference(deviceId, "zoom", intValue) == false) {
             // Calculate default value
@@ -681,8 +641,6 @@ void CameraControllerDialog::initialize()
 
     capabilities = grabberController->getFocusCaps();
     if (capabilities->isAutomatic()) {
-        controlCount++;
-        focusCheckBox->show();
         focusCheckBox->setEnabled(false);
         if (preferences->getBooleanPreference(deviceId, "automaticfocus", boolValue) == false) {
             boolValue = false;
@@ -690,9 +648,6 @@ void CameraControllerDialog::initialize()
         focusCheckBox->setChecked(boolValue);
     }
     if (capabilities->isCapability()) {
-        controlCount++;
-        focusLabel->show();
-        focusSlider->show();
         focusSlider->setEnabled(false);
         if (preferences->getIntegerPreference(deviceId, "focus", intValue) == false) {
             // Calculate default value
@@ -703,8 +658,6 @@ void CameraControllerDialog::initialize()
 
     capabilities = grabberController->getPanCaps();
     if (capabilities->isAutomatic()) {
-        controlCount++;
-        panCheckBox->show();
         panCheckBox->setEnabled(false);
         if (preferences->getBooleanPreference(deviceId, "automaticpan", boolValue) == false) {
             boolValue = false;
@@ -712,9 +665,6 @@ void CameraControllerDialog::initialize()
         panCheckBox->setChecked(boolValue);
     }
     if (capabilities->isCapability()) {
-        controlCount++;
-        panLabel->show();
-        panSlider->show();
         panSlider->setEnabled(false);
         if (preferences->getIntegerPreference(deviceId, "pan", intValue) == false) {
             // Calculate default value
@@ -725,8 +675,6 @@ void CameraControllerDialog::initialize()
 
     capabilities = grabberController->getTiltCaps();
     if (capabilities->isAutomatic()) {
-        controlCount++;
-        tiltCheckBox->show();
         tiltCheckBox->setEnabled(false);
         if (preferences->getBooleanPreference(deviceId, "automatictilt", boolValue) == false) {
             boolValue = false;
@@ -734,9 +682,6 @@ void CameraControllerDialog::initialize()
         tiltCheckBox->setChecked(boolValue);
     }
     if (capabilities->isCapability()) {
-        controlCount++;
-        tiltLabel->show();
-        tiltSlider->show();
         tiltSlider->setEnabled(false);
         if (preferences->getIntegerPreference(deviceId, "tilt", intValue) == false) {
             // Calculate default value
@@ -747,8 +692,6 @@ void CameraControllerDialog::initialize()
 
     capabilities = grabberController->getIrisCaps();
     if (capabilities->isAutomatic()) {
-        controlCount++;
-        irisCheckBox->show();
         irisCheckBox->setEnabled(false);
         if (preferences->getBooleanPreference(deviceId, "automaticiris", boolValue) == false) {
             boolValue = false;
@@ -756,9 +699,6 @@ void CameraControllerDialog::initialize()
         irisCheckBox->setChecked(boolValue);
     }
     if (capabilities->isCapability()) {
-        controlCount++;
-        irisLabel->show();
-        irisSlider->show();
         irisSlider->setEnabled(false);
         if (preferences->getIntegerPreference(deviceId, "iris", intValue) == false) {
             // Calculate default value
@@ -769,8 +709,6 @@ void CameraControllerDialog::initialize()
 
     capabilities = grabberController->getRollCaps();
     if (capabilities->isAutomatic()) {
-        controlCount++;
-        rollCheckBox->show();
         rollCheckBox->setEnabled(false);
         if (preferences->getBooleanPreference(deviceId, "automaticroll", boolValue) == false) {
             boolValue = false;
@@ -778,9 +716,6 @@ void CameraControllerDialog::initialize()
         rollCheckBox->setChecked(boolValue);
     }
     if (capabilities->isCapability()) {
-        controlCount++;
-        rollLabel->show();
-        rollSlider->show();
         rollSlider->setEnabled(false);
         if (preferences->getIntegerPreference(deviceId, "roll", intValue) == false) {
             // Calculate default value
@@ -789,9 +724,6 @@ void CameraControllerDialog::initialize()
         configureSlider(rollSlider, capabilities, intValue);
     }
 
-    // TODO: This will not work
-    mainLayout->setStretchFactor(controlGroupBox, controlCount);
-
     if (controlCount == 0) {
         controlGroupBox->hide();
     }
@@ -799,6 +731,483 @@ void CameraControllerDialog::initialize()
     closeButton->setFocus();
 
     qDebug() << "CameraControllerDialog::initialize --> End";
+}
+
+
+void CameraControllerDialog::enableControls()
+{
+    qDebug() << "CameraControllerDialog::enableControls --> Start";
+
+    PreferencesTool            *preferences = frontend->getPreferences();
+    GrabberControlCapabilities *capabilities;
+    bool                        showControl;
+
+    // -------------------------------------------------------------------------
+    // Quality controls
+    // -------------------------------------------------------------------------
+    qualityCount = 0;
+    // Brightness control
+    capabilities = grabberController->getBrightnessCaps();
+    if (preferences->getBooleanPreference("preferences", "brightnesscontrol", showControl) == false) {
+        showControl = ControlerWidget::BRIGHTNESSDEFAULT;
+    }
+    if (capabilities->isAutomatic()) {
+        if (showControl) {
+            qualityCount++;
+            brightnessCheckBox->show();
+        }
+        else {
+            brightnessCheckBox->hide();
+        }
+    }
+    if (capabilities->isCapability()) {
+        if (showControl) {
+            qualityCount++;
+            brightnessLabel->show();
+            brightnessSlider->show();
+        }
+        else {
+            brightnessLabel->hide();
+            brightnessSlider->hide();
+        }
+    }
+
+    // Contrast control
+    capabilities = grabberController->getContrastCaps();
+    if (preferences->getBooleanPreference("preferences", "contrastcontrol", showControl) == false) {
+        showControl = ControlerWidget::CONTRASTDEFAULT;
+    }
+    if (capabilities->isAutomatic()) {
+        if (showControl) {
+            qualityCount++;
+            contrastCheckBox->show();
+        }
+        else {
+            contrastCheckBox->hide();
+        }
+    }
+    if (capabilities->isCapability()) {
+        if (showControl) {
+            qualityCount++;
+            contrastLabel->show();
+            contrastSlider->show();
+        }
+        else {
+            contrastLabel->hide();
+            contrastSlider->hide();
+        }
+    }
+
+    // Saturation control
+    capabilities = grabberController->getSaturationCaps();
+    if (preferences->getBooleanPreference("preferences", "saturationcontrol", showControl) == false) {
+        showControl = ControlerWidget::SATURATIONDEFAULT;
+    }
+    if (capabilities->isAutomatic()) {
+        if (showControl) {
+            qualityCount++;
+            saturationCheckBox->show();
+        }
+        else {
+            saturationCheckBox->hide();
+        }
+    }
+    if (capabilities->isCapability()) {
+        if (showControl) {
+            qualityCount++;
+            saturationLabel->show();
+            saturationSlider->show();
+        }
+        else {
+            saturationLabel->hide();
+            saturationSlider->hide();
+        }
+    }
+
+    // Hue control
+    capabilities = grabberController->getHueCaps();
+    if (preferences->getBooleanPreference("preferences", "huecontrol", showControl) == false) {
+        showControl = ControlerWidget::HUEDEFAULT;
+    }
+    if (capabilities->isAutomatic()) {
+        if (showControl) {
+            qualityCount++;
+            hueCheckBox->show();
+        }
+        else {
+            hueCheckBox->hide();
+        }
+    }
+    if (capabilities->isCapability()) {
+        if (showControl) {
+            qualityCount++;
+            hueLabel->show();
+            hueSlider->show();
+        }
+        else {
+            hueLabel->hide();
+            hueSlider->hide();
+        }
+    }
+
+    // Gamma control
+    capabilities = grabberController->getGammaCaps();
+    if (preferences->getBooleanPreference("preferences", "gammacontrol", showControl) == false) {
+        showControl = ControlerWidget::HUEDEFAULT;
+    }
+    if (capabilities->isAutomatic()) {
+        if (showControl) {
+            qualityCount++;
+            gammaCheckBox->show();
+        }
+        else {
+            gammaCheckBox->hide();
+        }
+    }
+    if (capabilities->isCapability()) {
+        if (showControl) {
+            qualityCount++;
+            gammaLabel->show();
+            gammaSlider->show();
+        }
+        else {
+            gammaLabel->hide();
+            gammaSlider->hide();
+        }
+    }
+
+    // Sharpness control
+    capabilities = grabberController->getSharpnessCaps();
+    if (preferences->getBooleanPreference("preferences", "sharpnesscontrol", showControl) == false) {
+        showControl = ControlerWidget::SHARPNESSDEFAULT;
+    }
+    if (capabilities->isAutomatic()) {
+        if (showControl) {
+            qualityCount++;
+            sharpnessCheckBox->show();
+        }
+        else {
+            sharpnessCheckBox->hide();
+        }
+    }
+    if (capabilities->isCapability()) {
+        if (showControl) {
+            qualityCount++;
+            sharpnessLabel->show();
+            sharpnessSlider->show();
+        }
+        else {
+            sharpnessLabel->hide();
+            sharpnessSlider->hide();
+        }
+    }
+
+    // Backlight control
+    capabilities = grabberController->getBacklightCaps();
+    if (preferences->getBooleanPreference("preferences", "backlightcontrol", showControl) == false) {
+        showControl = ControlerWidget::BACKLIGHTDEFAULT;
+    }
+    if (capabilities->isAutomatic()) {
+        if (showControl) {
+            qualityCount++;
+            backlightCheckBox->show();
+        }
+        else {
+            backlightCheckBox->hide();
+        }
+    }
+    if (capabilities->isCapability()) {
+        if (showControl) {
+            qualityCount++;
+            backlightLabel->show();
+            backlightSlider->show();
+        }
+        else {
+            backlightLabel->hide();
+            backlightSlider->hide();
+        }
+    }
+
+    // White control
+    capabilities = grabberController->getWhiteCaps();
+    if (preferences->getBooleanPreference("preferences", "whitecontrol", showControl) == false) {
+        showControl = ControlerWidget::WHITEDEFAULT;
+    }
+    if (capabilities->isAutomatic()) {
+        if (showControl) {
+            qualityCount++;
+            whiteCheckBox->show();
+        }
+        else {
+            whiteCheckBox->hide();
+        }
+    }
+    if (capabilities->isCapability()) {
+        if (showControl) {
+            qualityCount++;
+            whiteLabel->show();
+            whiteSlider->show();
+        }
+        else {
+            whiteLabel->hide();
+            whiteSlider->hide();
+        }
+    }
+
+    // Gain control
+    capabilities = grabberController->getGainCaps();
+    if (preferences->getBooleanPreference("preferences", "gaincontrol", showControl) == false) {
+        showControl = ControlerWidget::GAINDEFAULT;
+    }
+    if (capabilities->isAutomatic()) {
+        if (showControl) {
+            qualityCount++;
+            gainCheckBox->show();
+        }
+        else {
+            gainCheckBox->hide();
+        }
+    }
+    if (capabilities->isCapability()) {
+        if (showControl) {
+            qualityCount++;
+            gainLabel->show();
+            gainSlider->show();
+        }
+        else {
+            gainLabel->hide();
+            gainSlider->hide();
+        }
+    }
+
+    // Color control
+    capabilities = grabberController->getColorCaps();
+    if (preferences->getBooleanPreference("preferences", "colorcontrol", showControl) == false) {
+        showControl = ControlerWidget::COLORDEFAULT;
+    }
+    if (capabilities->isAutomatic()) {
+        if (showControl) {
+            qualityCount++;
+            colorCheckBox->show();
+        }
+        else {
+            colorCheckBox->hide();
+        }
+    }
+    if (capabilities->isCapability()) {
+        if (showControl) {
+            qualityCount++;
+            colorLabel->show();
+            colorSlider->show();
+        }
+        else {
+            colorLabel->hide();
+            colorSlider->hide();
+        }
+    }
+
+    // -------------------------------------------------------------------------
+    // Control controls
+    // -------------------------------------------------------------------------
+    controlCount = 0;
+    // Exposure control
+    capabilities = grabberController->getExposureCaps();
+    if (preferences->getBooleanPreference("preferences", "exposurecontrol", showControl) == false) {
+        showControl = ControlerWidget::EXPOSUREDEFAULT;
+    }
+    if (capabilities->isAutomatic()) {
+        if (showControl) {
+            controlCount++;
+            exposureCheckBox->show();
+        }
+        else {
+            exposureCheckBox->hide();
+        }
+    }
+    if (capabilities->isCapability()) {
+        if (showControl) {
+            controlCount++;
+            exposureLabel->show();
+            exposureSlider->show();
+        }
+        else {
+            exposureLabel->hide();
+            exposureSlider->hide();
+        }
+    }
+
+    // Zoom control
+    capabilities = grabberController->getZoomCaps();
+    if (preferences->getBooleanPreference("preferences", "zoomcontrol", showControl) == false) {
+        showControl = ControlerWidget::ZOOMDEFAULT;
+    }
+    if (capabilities->isAutomatic()) {
+        if (showControl) {
+            controlCount++;
+            zoomCheckBox->show();
+        }
+        else {
+            zoomCheckBox->hide();
+        }
+    }
+    if (capabilities->isCapability()) {
+        if (showControl) {
+            controlCount++;
+            zoomLabel->show();
+            zoomSlider->show();
+        }
+        else {
+            zoomLabel->hide();
+            zoomSlider->hide();
+        }
+    }
+
+    // Focus control
+    capabilities = grabberController->getFocusCaps();
+    if (preferences->getBooleanPreference("preferences", "focuscontrol", showControl) == false) {
+        showControl = ControlerWidget::FOCUSDEFAULT;
+    }
+    if (capabilities->isAutomatic()) {
+        if (showControl) {
+            controlCount++;
+            focusCheckBox->show();
+        }
+        else {
+            focusCheckBox->hide();
+        }
+    }
+    if (capabilities->isCapability()) {
+        if (showControl) {
+            controlCount++;
+            focusLabel->show();
+            focusSlider->show();
+        }
+        else {
+            focusLabel->hide();
+            focusSlider->hide();
+        }
+    }
+
+    // Pan control
+    capabilities = grabberController->getPanCaps();
+    if (preferences->getBooleanPreference("preferences", "pancontrol", showControl) == false) {
+        showControl = ControlerWidget::PANDEFAULT;
+    }
+    if (capabilities->isAutomatic()) {
+        if (showControl) {
+            controlCount++;
+            panCheckBox->show();
+        }
+        else {
+            panCheckBox->hide();
+        }
+    }
+    if (capabilities->isCapability()) {
+        if (showControl) {
+            controlCount++;
+            panLabel->show();
+            panSlider->show();
+        }
+        else {
+            panLabel->hide();
+            panSlider->hide();
+        }
+    }
+
+    // Tilt control
+    capabilities = grabberController->getTiltCaps();
+    if (preferences->getBooleanPreference("preferences", "tiltcontrol", showControl) == false) {
+        showControl = ControlerWidget::TILTDEFAULT;
+    }
+    if (capabilities->isAutomatic()) {
+        if (showControl) {
+            controlCount++;
+            tiltCheckBox->show();
+        }
+        else {
+            tiltCheckBox->hide();
+        }
+    }
+    if (capabilities->isCapability()) {
+        if (showControl) {
+            controlCount++;
+            tiltLabel->show();
+            tiltSlider->show();
+        }
+        else {
+            tiltLabel->hide();
+            tiltSlider->hide();
+        }
+    }
+
+    // Iris control
+    capabilities = grabberController->getIrisCaps();
+    if (preferences->getBooleanPreference("preferences", "iriscontrol", showControl) == false) {
+        showControl = ControlerWidget::IRISDEFAULT;
+    }
+    if (capabilities->isAutomatic()) {
+        if (showControl) {
+            controlCount++;
+            irisCheckBox->show();
+        }
+        else {
+            irisCheckBox->hide();
+        }
+    }
+    if (capabilities->isCapability()) {
+        if (showControl) {
+            controlCount++;
+            irisLabel->show();
+            irisSlider->show();
+        }
+        else {
+            irisLabel->hide();
+            irisSlider->hide();
+        }
+    }
+
+    // Roll control
+    capabilities = grabberController->getRollCaps();
+    if (preferences->getBooleanPreference("preferences", "rollcontrol", showControl) == false) {
+        showControl = ControlerWidget::ROLLDEFAULT;
+    }
+    if (capabilities->isAutomatic()) {
+        if (showControl) {
+            controlCount++;
+            rollCheckBox->show();
+        }
+        else {
+            rollCheckBox->hide();
+        }
+    }
+    if (capabilities->isCapability()) {
+        if (showControl) {
+            controlCount++;
+            rollLabel->show();
+            rollSlider->show();
+        }
+        else {
+            rollLabel->hide();
+            rollSlider->hide();
+        }
+    }
+
+    // Show/hide control group boxes
+    if (qualityCount == 0) {
+        qualityGroupBox->hide();
+    }
+    else {
+        qualityGroupBox->show();
+    }
+
+    if (controlCount == 0) {
+        controlGroupBox->hide();
+    }
+    else {
+        controlGroupBox->show();
+    }
+
+    qDebug() << "CameraControllerDialog::enableControls --> Stop";
 }
 
 
@@ -820,6 +1229,10 @@ bool CameraControllerDialog::setUp()
 
     grabberController->setUp();
 
+    // -------------------------------------------------------------------------
+    // Quality controls
+    // -------------------------------------------------------------------------
+
     progress.setValue(progressValue++);
     capabilities = grabberController->getBrightnessCaps();
     if (capabilities->isAutomatic()) {
@@ -837,7 +1250,6 @@ bool CameraControllerDialog::setUp()
         }
         changeBrightness(intValue, false);
     }
-    qDebug() << "CameraControllerDialog::setUp --> Brightness enabeled:" << brightnessSlider->isEnabled();
 
     progress.setValue(progressValue++);
     capabilities = grabberController->getContrastCaps();
@@ -1001,6 +1413,10 @@ bool CameraControllerDialog::setUp()
         changeColor(intValue, false);
     }
 
+    // -------------------------------------------------------------------------
+    // Control controls
+    // -------------------------------------------------------------------------
+
     progress.setValue(progressValue++);
     capabilities = grabberController->getExposureCaps();
     if (capabilities->isAutomatic()) {
@@ -1142,6 +1558,10 @@ bool CameraControllerDialog::tearDown()
 
     GrabberControlCapabilities *capabilities;
 
+    // -------------------------------------------------------------------------
+    // Quality controls
+    // -------------------------------------------------------------------------
+
     capabilities = grabberController->getBrightnessCaps();
     if (capabilities->isAutomatic()) {
         brightnessCheckBox->setEnabled(false);
@@ -1221,6 +1641,10 @@ bool CameraControllerDialog::tearDown()
     if (capabilities->isCapability()) {
         colorSlider->setEnabled(false);
     }
+
+    // -------------------------------------------------------------------------
+    // Control controls
+    // -------------------------------------------------------------------------
 
     capabilities = grabberController->getExposureCaps();
     if (capabilities->isAutomatic()) {

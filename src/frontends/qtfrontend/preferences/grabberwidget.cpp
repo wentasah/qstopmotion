@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2014-2015 by                                                *
+ *  Copyright (C) 2014-2017 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -141,18 +141,11 @@ void GrabberWidget::initialize()
         value = true;
     }
     actualV4L2Grabber = value;
-    v4l2GrabberCheck->setChecked(actualV4L2Grabber);
-    changeV4L2GrabberCheckState(actualV4L2Grabber);
 
     if (pref->getBooleanPreference("preferences", "v4l2controller", value) == false) {
         value = false;
     }
     actualV4L2Controller = value;
-    v4l2ControllerCheck->setChecked(actualV4L2Controller);
-
-    // Temporary not enabled
-    // v4l2GrabberCheck->setEnabled(false);
-    // v4l2ControllerCheck->setEnabled(false);
 #else
     v4l2GrabberCheck->hide();
     v4l2ControllerCheck->hide();
@@ -164,14 +157,11 @@ void GrabberWidget::initialize()
         value = true;
     }
     actualMediaFoundationGrabber = value;
-    mediaFoundationGrabberCheck->setChecked(actualMediaFoundationGrabber);
-    changeMediaFoundationGrabberCheckState(actualMediaFoundationGrabber);
 
     if (pref->getBooleanPreference("preferences", "mediafoundationcontroller", value) == false) {
         value = false;
     }
     actualMediaFoundationController = value;
-    mediaFoundationControllerCheck->setChecked(actualMediaFoundationController);
 #else
     mediaFoundationGrabberCheck->hide();
     mediaFoundationControllerCheck->hide();
@@ -183,18 +173,17 @@ void GrabberWidget::initialize()
         value = false;
     }
     actualGphoto2Grabber = value;
-    gphoto2GrabberCheck->setChecked(actualGphoto2Grabber);
-    changeGphoto2GrabberCheckState(actualGphoto2Grabber);
 
     if (pref->getBooleanPreference("preferences", "gphoto2controller", value) == false) {
         value = false;
     }
     actualGphoto2Controller = value;
-    gphoto2ControllerCheck->setChecked(actualGphoto2Controller);
 #else
     gphoto2GrabberCheck->hide();
     gphoto2ControllerCheck->hide();
 #endif
+
+    resetDialog();
 
     qDebug() << "GrabberWidget::initialize --> End";
 }
@@ -277,16 +266,29 @@ void GrabberWidget::reset()
 {
     qDebug() << "GrabberWidget::reset --> Start";
 
+    resetDialog();
+
+    qDebug() << "GrabberWidget::reset --> End";
+}
+
+
+void GrabberWidget::resetDialog()
+{
+    qDebug() << "GrabberWidget::resetDialog --> Start";
+
     v4l2GrabberCheck->setChecked(actualV4L2Grabber);
+    changeV4L2GrabberCheckState(actualV4L2Grabber);
     v4l2ControllerCheck->setChecked(actualV4L2Controller);
 
     mediaFoundationGrabberCheck->setChecked(actualMediaFoundationGrabber);
+    changeMediaFoundationGrabberCheckState(actualMediaFoundationGrabber);
     mediaFoundationControllerCheck->setChecked(actualMediaFoundationController);
 
     gphoto2GrabberCheck->setChecked(actualGphoto2Grabber);
+    changeGphoto2GrabberCheckState(actualGphoto2Grabber);
     gphoto2ControllerCheck->setChecked(actualGphoto2Controller);
 
-    qDebug() << "GrabberWidget::reset --> End";
+    qDebug() << "GrabberWidget::resetDialog --> End";
 }
 
 

@@ -27,6 +27,7 @@
 #include <QPushButton>
 
 #include "frontends/frontend.h"
+#include "frontends/qtfrontend/preferences/controlerwidget.h"
 #include "frontends/qtfrontend/preferences/exportwidget.h"
 #include "frontends/qtfrontend/preferences/generalwidget.h"
 #include "frontends/qtfrontend/preferences/grabberwidget.h"
@@ -63,6 +64,7 @@ private:
     TransformWidget *imageTransformationPage;
     ExportWidget    *videoExportPage;
     GrabberWidget   *grabberSelectPage;
+    ControlerWidget *cameraControlPage;
     QPushButton     *applyButton;
     QPushButton     *closeButton;
     QPushButton     *helpButton;
@@ -75,6 +77,7 @@ private:
     void makeImageTransformPage();
     void makeVideoExportPage();
     void makeGrabberSelectPage();
+    void makeCameraControlPage();
 
 private slots:
     /**

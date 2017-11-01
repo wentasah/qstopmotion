@@ -1818,9 +1818,10 @@ void MainWindowGUI::showCameraControllerDialog()
                                                             this);
         cameraControllerDialog->initialize();
         cameraControllerDialog->setGeometry(geometry().x() + fGeo.width(), geometry().y(),
-                                            200, height());
+                                            300, height());
     }
     cameraControllerDialog->show();
+    cameraControllerDialog->enableControls();
 
     if (frontend->isGrabberInited()) {
         cameraControllerDialog->setUp();

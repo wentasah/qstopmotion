@@ -75,7 +75,14 @@ public:
      */
     bool tearDown();
 
+    /**
+     * Enable/disable the controls selected on the control preferences.
+     * @brief enableControls
+     */
+    void enableControls();
+
 private slots:
+
     /**
      * Slot for notified the camera contoller when automatic brightness is changed, so that
      * camera contoller can be updaten.

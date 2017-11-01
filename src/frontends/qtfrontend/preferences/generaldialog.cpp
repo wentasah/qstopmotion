@@ -50,6 +50,7 @@ GeneralDialog::GeneralDialog(Frontend *f, QWidget *parent)
     imageTransformationPage = 0;
     videoExportPage         = 0;
     grabberSelectPage       = 0;
+    cameraControlPage       = 0;
     activePage              = 0;
 
     pageTree = new QTreeWidget();
@@ -106,6 +107,7 @@ GeneralDialog::GeneralDialog(Frontend *f, QWidget *parent)
     makeImageTransformPage();
     makeVideoExportPage();
     makeGrabberSelectPage();
+    makeCameraControlPage();
 
     pageLayout->addStretch(1);
 
@@ -242,6 +244,27 @@ void GeneralDialog::makeGrabberSelectPage()
 }
 
 
+void GeneralDialog::makeCameraControlPage()
+{
+    qDebug() << "GeneralDialog::makeCameraControlPage --> Start";
+
+    QTreeWidgetItem *newItem = new QTreeWidgetItem();
+    newItem->setText(0, tr("Camera Controler"));
+    newItem->setFlags(Qt::ItemIsEnabled |
+                      Qt::ItemIsSelectable);
+    this->pageTree->topLevelItem(0)->addChild(newItem);
+
+    cameraControlPage = new ControlerWidget(frontend);
+    cameraControlPage->initialize();
+    cameraControlPage->setMinimumSize(MIN_PAGE_WIDTH, MIN_PAGE_HEIGHT);
+    cameraControlPage->setMaximumSize(MAX_PAGE_WIDTH, MAX_PAGE_HEIGHT);
+    pageLayout->addWidget(cameraControlPage);
+    cameraControlPage->setVisible(false);
+
+    qDebug() << "GeneralDialog::makeCameraControlPage --> End";
+}
+
+
 void GeneralDialog::itemClicked(QTreeWidgetItem *pageItem,
                                 int               /*column*/)
 {
@@ -260,6 +283,7 @@ void GeneralDialog::itemClicked(QTreeWidgetItem *pageItem,
     imageTransformationPage->setVisible(false);
     videoExportPage->setVisible(false);
     grabberSelectPage->setVisible(false);
+    cameraControlPage->setVisible(false);
 
     switch (activePage)
     {
@@ -287,6 +311,10 @@ void GeneralDialog::itemClicked(QTreeWidgetItem *pageItem,
     case 5:
         // Grabber settings
         grabberSelectPage->setVisible(true);
+        break;
+    case 6:
+        // Camera control settings
+        cameraControlPage->setVisible(true);
         break;
     }
 
@@ -325,6 +353,10 @@ void GeneralDialog::help()
         // Grabber settings
         frontend->openOnlineHelp("#preferences-grabber");
         break;
+    case 6:
+        // Camera control settings
+        frontend->openOnlineHelp("#preferences-controler");
+        break;
     }
 
     qDebug() << "GeneralDialog::help --> End";
@@ -342,6 +374,7 @@ void GeneralDialog::apply()
     this->imageTransformationPage->apply();
     this->videoExportPage->apply();
     this->grabberSelectPage->apply();
+    this->cameraControlPage->apply();
     frontend->getPreferences()->flushPreferences();
     this->setResult(QDialog::Accepted);
     this->hide();
@@ -361,6 +394,7 @@ void GeneralDialog::close()
     this->imageTransformationPage->reset();
     this->videoExportPage->reset();
     this->grabberSelectPage->reset();
+    this->cameraControlPage->reset();
     this->hide();
 
     qDebug() << "GeneralDialog::close --> End";
@@ -380,6 +414,7 @@ void GeneralDialog::finish(int result)
         imageTransformationPage->reset();
         videoExportPage->reset();
         grabberSelectPage->reset();
+        cameraControlPage->reset();
     }
     this->hide();
 

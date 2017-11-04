@@ -994,6 +994,16 @@ void RecordingTab::cameraButtonClicked()
         // captureGroupBox->show();
         enableCaptureGroupBox(false);
         enableTimelapseGroupBox(false);
+
+        if (frontend->getSignal()) {
+            QString clickSoundFile(frontend->getSoundsDirName());
+            clickSoundFile.append(QLatin1String("click.wav"));
+
+            clickEffect = new QSoundEffect();
+            clickEffect->setSource(QUrl::fromLocalFile(clickSoundFile));
+            clickEffect->setVolume(0.25f);
+        }
+
         if (0 == getRecordingMode()) {
             // Capture mode
 
@@ -1004,13 +1014,6 @@ void RecordingTab::cameraButtonClicked()
 
             int msec;
             int factor;
-
-            QString clickSoundFile(frontend->getSoundsDirName());
-            clickSoundFile.append(QLatin1String("click.wav"));
-
-            clickEffect = new QSoundEffect();
-            clickEffect->setSource(QUrl::fromLocalFile(clickSoundFile));
-            clickEffect->setVolume(0.25f);
 
             if (beepCheckBox->isChecked()) {
                 // Create timer for the time between beep and frame capture
@@ -1157,18 +1160,9 @@ void RecordingTab::sendBeep()
 {
     qDebug() << "RecordingTab::sendBeep --> Start";
 
-
-    // Send a beep signal
-    // QApplication::beep();
-
-    // QMediaPlayer player;      // Works not under Linux!!!
-    // player.setMedia(QUrl::fromLocalFile("/usr/share/sounds/freedesktop/stereo/bell.oga")); //this seems to be default alert
-    // player.setVolume(50);
-    // player.play();
-
-    beepEffect->play();
-
     if (beepCheckBox->isChecked()) {
+        beepEffect->play();
+
         // Start the timer for the frame capture
         cameraTimer->start(beepCountSlider->value() * 1000);
     }
@@ -1211,8 +1205,6 @@ void RecordingTab::storeFrame()
 
     QImage newImage = clipAndScale(frontend->getRawImage());
 
-    clickEffect->play();
-
     if (!newImage.isNull()) {
         int activeSceneIndex = frontend->getProject()->getActiveSceneIndex();
         int activeTakeIndex = frontend->getProject()->getActiveTakeIndex();
@@ -1248,9 +1240,11 @@ void RecordingTab::storeFrame()
             frontend->getProject()->selectExposureToUndo(activeSceneIndex, activeTakeIndex, exposureSize);
             break;
         }
-    }// else {
-    //    cameraTimer->start(60);
-    // }
+
+        if (frontend->getSignal()) {
+            clickEffect->play();
+        }
+    }
 
     qDebug() << "RecordingTab::storeFrame --> End";
 }

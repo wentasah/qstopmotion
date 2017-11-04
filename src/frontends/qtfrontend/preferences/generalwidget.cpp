@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2015 by                                                *
+ *  Copyright (C) 2005-2017 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -32,6 +32,8 @@
 #include "technical/preferencestool.h"
 
 
+const QColor GeneralWidget::GRIDCOLORDEFAULT = Qt::black;
+
 GeneralWidget::GeneralWidget(Frontend *f, QWidget *parent)
     : QWidget(parent)
 {
@@ -41,26 +43,30 @@ GeneralWidget::GeneralWidget(Frontend *f, QWidget *parent)
 
     languageGroupBox = 0;
     languageCombo    = 0;
-    actualLanguage   = 0;
+    actualLanguage   = LANGUAGEDEFAULT;
 
     captureGroupBox  = 0;
     bevorButton      = 0;
     afterButton      = 0;
     appendButton     = 0;
-    actualButtonFunction = PreferencesTool::captureButtonAfter;
+    actualButtonFunction = BUTTONFUNCTIONDEFAULT;
 
     gridGroupBox          = 0;
     verticalGridCheck     = 0;
-    actualVerticalGrid    = false;
+    actualVerticalGrid    = VERTICALGRIDDEFAULT;
     verticalGridSpin      = 0;
-    actualVerticalSpin    = 10;
+    actualVerticalSpin    = VERTICALSPINDEFAULT;
     horizontalGridCheck   = 0;
-    actualHorizontalGrid  = false;
+    actualHorizontalGrid  = HORIZONTALGRIDDEFAULT;
     horizontalGridSpin    = 0;
-    actualHorizontalSpin  = 10;
+    actualHorizontalSpin  = HORIZONTALSPINDEFAULT;
     gridColorLabel        = 0;
     gridColorButton       = 0;
-    actualGridColor       = Qt::black;
+    actualGridColor       = GRIDCOLORDEFAULT;
+
+    signalGroupBox        = 0;
+    signalCheck           = 0;
+    actualSignal          = SIGNALDEFAULT;
 
     this->setObjectName("GeneralWidget");
 
@@ -163,10 +169,22 @@ void GeneralWidget::makeGUI()
     gridLayout->addWidget(gridColorButton, 2, 1);
     gridGroupBox->setLayout(gridLayout);
 
+    signalGroupBox = new QGroupBox;
+    signalGroupBox->setTitle(tr("Signal Functionality"));
+
+    signalCheck = new QCheckBox(tr("Take Picture Signal"));
+    signalCheck->setChecked(false);
+    // connect(signalCheck, SIGNAL(stateChanged(int)), this, SLOT(changeSignalState(int)));
+
+    QGridLayout *signalLayout = new QGridLayout;
+    signalLayout->addWidget(signalCheck, 0, 0);
+    signalGroupBox->setLayout(signalLayout);
+
     QVBoxLayout *mainLayout = new QVBoxLayout;
     mainLayout->addWidget(languageGroupBox);
     mainLayout->addWidget(captureGroupBox);
     mainLayout->addWidget(gridGroupBox);
+    mainLayout->addWidget(signalGroupBox);
     mainLayout->addStretch(1);
 
     setLayout(mainLayout);
@@ -180,7 +198,6 @@ void GeneralWidget::initialize()
     qDebug() << "GeneralWidget::initialize --> Start";
 
     PreferencesTool *pref = frontend->getPreferences();
-    int              value;
     QString          actualLocale;
     QString          colorName;
     QVector<QString> locales = frontend->getLocales();
@@ -191,51 +208,18 @@ void GeneralWidget::initialize()
             actualLanguage = index;
         }
     }
-    languageCombo->setCurrentIndex(actualLanguage);
 
-    if (pref->getIntegerPreference("preferences", "capturebutton", actualButtonFunction) == false) {
-        actualButtonFunction = PreferencesTool::captureButtonAfter;
-    }
-    switch (actualButtonFunction) {
-    case PreferencesTool::captureButtonBevor:
-        setBevorButtonOn();
-        break;
-    case PreferencesTool::captureButtonAfter:
-        setAfterButtonOn();
-        break;
-    case PreferencesTool::captureButtonAppend:
-        setAppendButtonOn();
-        break;
-    }
-
-    if (pref->getIntegerPreference("preferences", "verticalgrid", value) == false) {
-        value = false;
-    }
-    actualVerticalGrid = value;
-    verticalGridCheck->setChecked(actualVerticalGrid);
-
-    if (pref->getIntegerPreference("preferences", "verticalspin", value) == false) {
-        value = 5;
-    }
-    actualVerticalSpin = value;
-    verticalGridSpin->setValue(actualVerticalSpin);
-
-    if (pref->getIntegerPreference("preferences", "horizontalgrid", value) == false) {
-        value = false;
-    }
-    actualHorizontalGrid = value;
-    horizontalGridCheck->setChecked(actualHorizontalGrid);
-
-    if (pref->getIntegerPreference("preferences", "horizontalspin", value) == false) {
-        value = 5;
-    }
-    actualHorizontalSpin = value;
-    horizontalGridSpin->setValue(actualHorizontalSpin);
-
+    pref->getIntegerPreference("preferences", "capturebutton", actualButtonFunction);
+    pref->getBooleanPreference("preferences", "verticalgrid", actualVerticalGrid);
+    pref->getIntegerPreference("preferences", "verticalspin", actualVerticalSpin);
+    pref->getBooleanPreference("preferences", "horizontalgrid", actualHorizontalGrid);
+    pref->getIntegerPreference("preferences", "horizontalspin", actualHorizontalSpin);
     if (pref->getStringPreference("preferences", "gridcolor", colorName) == true) {
         actualGridColor.setNamedColor(colorName);
     }
-    gridColorButton->setText(actualGridColor.name());
+    pref->getBooleanPreference("preferences", "signal", actualSignal);
+
+    resetDialog();
 
     qDebug() << "GeneralWidget::initialize --> End";
 }
@@ -287,7 +271,7 @@ void GeneralWidget::apply()
     if (newVerticalGrid != actualVerticalGrid) {
         // Vertical grid changed
         frontend->setVerticalGrid(newVerticalGrid);
-        pref->setIntegerPreference("preferences", "verticalgrid", newVerticalGrid);
+        pref->setBooleanPreference("preferences", "verticalgrid", newVerticalGrid);
         actualVerticalGrid = newVerticalGrid;
     }
 
@@ -303,7 +287,7 @@ void GeneralWidget::apply()
     if (newHorizontalGrid != actualHorizontalGrid) {
         // Horizontal grid changed
         frontend->setHorizontalGrid(newHorizontalGrid);
-        pref->setIntegerPreference("preferences", "horizontalgrid", newHorizontalGrid);
+        pref->setBooleanPreference("preferences", "horizontalgrid", newHorizontalGrid);
         actualHorizontalGrid = newHorizontalGrid;
     }
 
@@ -324,6 +308,14 @@ void GeneralWidget::apply()
         actualGridColor = newGridColor;
     }
 
+    bool newSignal = signalCheck->isChecked();
+    if (newSignal != actualSignal) {
+        // Signal changed
+        frontend->setSignal(newSignal);
+        pref->setBooleanPreference("preferences", "signal", newSignal);
+        actualSignal = newSignal;
+    }
+
     qDebug() << "GeneralWidget::apply --> End";
 }
 
@@ -331,6 +323,16 @@ void GeneralWidget::apply()
 void GeneralWidget::reset()
 {
     qDebug() << "GeneralWidget::reset --> Start";
+
+    resetDialog();
+
+    qDebug() << "GeneralWidget::reset --> End";
+}
+
+
+void GeneralWidget::resetDialog()
+{
+    qDebug() << "GeneralWidget::resetDialog --> Start";
 
     changeLanguage(actualLanguage);
     frontend->changeCaptureButtonFunction(actualButtonFunction);
@@ -349,8 +351,9 @@ void GeneralWidget::reset()
     verticalGridSpin->setValue(actualVerticalSpin);
     horizontalGridCheck->setChecked(actualHorizontalGrid);
     horizontalGridSpin->setValue(actualHorizontalSpin);
+    signalCheck->setChecked(actualSignal);
 
-    qDebug() << "GeneralWidget::reset --> End";
+    qDebug() << "GeneralWidget::resetDialog --> End";
 }
 
 

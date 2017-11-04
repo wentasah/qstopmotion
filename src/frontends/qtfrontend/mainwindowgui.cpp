@@ -139,11 +139,12 @@ MainWindowGUI::MainWindowGUI(QApplication *stApp, Frontend *f)
 
     grabber              = 0;
 
-    verticalGrid         = false;
-    verticalSpin         = 5;
-    horizontalGrid       = false;
-    horizontalSpin       = 5;
-    gridColor.setNamedColor("#000000");     // RGB Black
+    verticalGrid         = GeneralWidget::VERTICALGRIDDEFAULT;
+    verticalSpin         = GeneralWidget::VERTICALSPINDEFAULT;
+    horizontalGrid       = GeneralWidget::HORIZONTALGRIDDEFAULT;
+    horizontalSpin       = GeneralWidget::HORIZONTALSPINDEFAULT;
+    gridColor            = GeneralWidget::GRIDCOLORDEFAULT;
+    signal               = GeneralWidget::SIGNALDEFAULT;
 
     this->setObjectName("MainWindowGUI");
     stApp->installTranslator(&appTranslator);
@@ -569,27 +570,14 @@ void MainWindowGUI::initialize()
     connect(this, SIGNAL(startOpenProject()), this, SLOT(openProject()));
     connect(this, SIGNAL(startExit()),  this, SLOT(closeApplication()));
 
-    if (pref->getIntegerPreference("preferences", "verticalgrid", value) == false) {
-        value = false;
-    }
-    verticalGrid = value;
-
-    if (pref->getIntegerPreference("preferences", "verticalspin", verticalSpin) == false) {
-        verticalSpin = 5;
-    }
-
-    if (pref->getIntegerPreference("preferences", "horizontalgrid", value) == false) {
-        value = false;
-    }
-    horizontalGrid = value;
-
-    if (pref->getIntegerPreference("preferences", "horizontalspin", horizontalSpin) == false) {
-        horizontalSpin = 5;
-    }
-
+    pref->getBooleanPreference("preferences", "verticalgrid", verticalGrid);
+    pref->getIntegerPreference("preferences", "verticalspin", verticalSpin);
+    pref->getBooleanPreference("preferences", "horizontalgrid", horizontalGrid);
+    pref->getIntegerPreference("preferences", "horizontalspin", horizontalSpin);
     if (pref->getStringPreference("preferences", "gridcolor", gridColorName) == true) {
         gridColor.setNamedColor(gridColorName);
     }
+    pref->getBooleanPreference("preferences", "signal", signal);
 
     qDebug() << "MainWindowGUI::initialize --> End";
 }
@@ -737,6 +725,18 @@ void MainWindowGUI::getGridColorRGB(int *r, int *g, int *b, int *a)
 void MainWindowGUI::setGridColorRGB(int r, int g, int b, int a)
 {
     gridColor.setRgb(r, g, b, a);
+}
+
+
+bool MainWindowGUI::getSignal()
+{
+    return signal;
+}
+
+
+void MainWindowGUI::setSignal(bool newState)
+{
+    signal = newState;
 }
 
 

@@ -28,11 +28,11 @@
 
 #include "technical/preferencestool.h"
 
-#define MIN_TREE_WIDTH   240
+#define MIN_TREE_WIDTH   300
 #define MAX_TREE_WIDTH   MIN_TREE_WIDTH
-#define MIN_PAGE_WIDTH   560
-#define MIN_PAGE_HEIGHT  500
+#define MIN_PAGE_WIDTH   600
 #define MAX_PAGE_WIDTH   MIN_PAGE_WIDTH
+#define MIN_PAGE_HEIGHT  500
 #define MAX_PAGE_HEIGHT  MIN_PAGE_HEIGHT
 
 

@@ -225,6 +225,18 @@ public:
     virtual void setGridColorRGB(int r, int g, int b, int a) = 0;
 
     /**
+     * Get the status of the signal feature.
+     * @return The new state of the signal feature.
+     */
+    virtual bool getSignal() = 0;
+
+    /**
+     * Set the status of the signal feature.
+     * @param newState The new state of the signal feature.
+     */
+    virtual void setSignal(bool newState) = 0;
+
+    /**
      * Abstract function for displaying progress on timeconsuming operations.
      * @param infoText the text to display to the user
      * @param numOperations the number of calculated operations to do

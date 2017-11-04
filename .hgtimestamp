@@ -293,7 +293,7 @@
 "src/frontends/qtfrontend/menuframe.cpp": {"timestamp": 1447831408.46},
 "src/frontends/qtfrontend/menuframe.h": {"timestamp": 1447831419.54},
 "src/frontends/qtfrontend/preferences/controlerwidget.cpp": {"timestamp": 1509292011.0},
-"src/frontends/qtfrontend/preferences/controlerwidget.h": {"timestamp": 1509291837.0},
+"src/frontends/qtfrontend/preferences/controlerwidget.h": {"timestamp": 1509648486.0},
 "src/frontends/qtfrontend/preferences/exportwidget.cpp": {"timestamp": 1507963175.0},
 "src/frontends/qtfrontend/preferences/exportwidget.h": {"timestamp": 1448137544.94},
 "src/frontends/qtfrontend/preferences/generaldialog.cpp": {"timestamp": 1509648937.0},

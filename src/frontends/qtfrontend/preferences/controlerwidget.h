@@ -42,20 +42,20 @@ public:
     const static bool CONTRASTDEFAULT   = true;
     const static bool SATURATIONDEFAULT = true;
     const static bool HUEDEFAULT        = true;
-    const static bool GAMMADEFAULT      = true;
+    const static bool GAMMADEFAULT      = false;
     const static bool SHARPNESSDEFAULT  = true;
-    const static bool BACKLIGHTDEFAULT  = true;
-    const static bool WHITEDEFAULT      = true;
-    const static bool GAINDEFAULT       = true;
-    const static bool COLORDEFAULT      = true;
+    const static bool BACKLIGHTDEFAULT  = false;
+    const static bool WHITEDEFAULT      = false;
+    const static bool GAINDEFAULT       = false;
+    const static bool COLORDEFAULT      = false;
 
     const static bool EXPOSUREDEFAULT   = true;
     const static bool ZOOMDEFAULT       = true;
     const static bool FOCUSDEFAULT      = true;
-    const static bool PANDEFAULT        = true;
-    const static bool TILTDEFAULT       = true;
-    const static bool IRISDEFAULT       = true;
-    const static bool ROLLDEFAULT       = true;
+    const static bool PANDEFAULT        = false;
+    const static bool TILTDEFAULT       = false;
+    const static bool IRISDEFAULT       = false;
+    const static bool ROLLDEFAULT       = false;
 
     /**
      * Sets up the tab.

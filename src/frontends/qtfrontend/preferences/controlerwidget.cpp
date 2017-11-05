@@ -212,93 +212,25 @@ void ControlerWidget::initialize()
     qDebug() << "ControlerWidget::initialize --> Start";
 
     PreferencesTool *pref = frontend->getPreferences();
-    bool             boolValue;
 
-    if (pref->getBooleanPreference("preferences", "brightnesscontrol", boolValue) == false) {
-        boolValue = BRIGHTNESSDEFAULT;
-    }
-    actualBrightness = boolValue;
+    pref->getBooleanPreference("preferences", "brightnesscontrol", actualBrightness);
+    pref->getBooleanPreference("preferences", "contrastcontrol", actualContrast);
+    pref->getBooleanPreference("preferences", "saturationcontrol", actualSaturation);
+    pref->getBooleanPreference("preferences", "huecontrol", actualHue);
+    pref->getBooleanPreference("preferences", "gammacontrol", actualGamma);
+    pref->getBooleanPreference("preferences", "sharpnesscontrol", actualSharpness);
+    pref->getBooleanPreference("preferences", "backlightcontrol", actualBacklight);
+    pref->getBooleanPreference("preferences", "whitecontrol", actualWhite);
+    pref->getBooleanPreference("preferences", "gaincontrol", actualGain);
+    pref->getBooleanPreference("preferences", "colorcontrol", actualColor);
 
-    if (pref->getBooleanPreference("preferences", "contrastcontrol", boolValue) == false) {
-        boolValue = CONTRASTDEFAULT;
-    }
-    actualContrast = boolValue;
-
-    if (pref->getBooleanPreference("preferences", "saturationcontrol", boolValue) == false) {
-        boolValue = SATURATIONDEFAULT;
-    }
-    actualSaturation = boolValue;
-
-    if (pref->getBooleanPreference("preferences", "huecontrol", boolValue) == false) {
-        boolValue = HUEDEFAULT;
-    }
-    actualHue = boolValue;
-
-    if (pref->getBooleanPreference("preferences", "gammacontrol", boolValue) == false) {
-        boolValue = GAMMADEFAULT;
-    }
-    actualGamma = boolValue;
-
-    if (pref->getBooleanPreference("preferences", "sharpnesscontrol", boolValue) == false) {
-        boolValue = SHARPNESSDEFAULT;
-    }
-    actualSharpness = boolValue;
-
-    if (pref->getBooleanPreference("preferences", "backlightcontrol", boolValue) == false) {
-        boolValue = BACKLIGHTDEFAULT;
-    }
-    actualBacklight = boolValue;
-
-    if (pref->getBooleanPreference("preferences", "whitecontrol", boolValue) == false) {
-        boolValue = WHITEDEFAULT;
-    }
-    actualWhite = boolValue;
-
-    if (pref->getBooleanPreference("preferences", "gaincontrol", boolValue) == false) {
-        boolValue = GAINDEFAULT;
-    }
-    actualGain = boolValue;
-
-    if (pref->getBooleanPreference("preferences", "colorcontrol", boolValue) == false) {
-        boolValue = COLORDEFAULT;
-    }
-    actualColor = boolValue;
-
-
-    if (pref->getBooleanPreference("preferences", "exposurecontrol", boolValue) == false) {
-        boolValue = EXPOSUREDEFAULT;
-    }
-    actualExposure = boolValue;
-
-    if (pref->getBooleanPreference("preferences", "zoomcontrol", boolValue) == false) {
-        boolValue = ZOOMDEFAULT;
-    }
-    actualZoom = boolValue;
-
-    if (pref->getBooleanPreference("preferences", "focuscontrol", boolValue) == false) {
-        boolValue = FOCUSDEFAULT;
-    }
-    actualFocus = boolValue;
-
-    if (pref->getBooleanPreference("preferences", "pancontrol", boolValue) == false) {
-        boolValue = PANDEFAULT;
-    }
-    actualPan = boolValue;
-
-    if (pref->getBooleanPreference("preferences", "tiltcontrol", boolValue) == false) {
-        boolValue = TILTDEFAULT;
-    }
-    actualTilt = boolValue;
-
-    if (pref->getBooleanPreference("preferences", "iriscontrol", boolValue) == false) {
-        boolValue = IRISDEFAULT;
-    }
-    actualIris = boolValue;
-
-    if (pref->getBooleanPreference("preferences", "rollcontrol", boolValue) == false) {
-        boolValue = ROLLDEFAULT;
-    }
-    actualRoll = boolValue;
+    pref->getBooleanPreference("preferences", "exposurecontrol", actualExposure);
+    pref->getBooleanPreference("preferences", "zoomcontrol", actualZoom);
+    pref->getBooleanPreference("preferences", "focuscontrol", actualFocus);
+    pref->getBooleanPreference("preferences", "pancontrol", actualPan);
+    pref->getBooleanPreference("preferences", "tiltcontrol", actualTilt);
+    pref->getBooleanPreference("preferences", "iriscontrol", actualIris);
+    pref->getBooleanPreference("preferences", "rollcontrol", actualRoll);
 
     resetDialog();
 

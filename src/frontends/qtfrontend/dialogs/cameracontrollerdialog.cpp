@@ -42,8 +42,12 @@ CameraControllerDialog::CameraControllerDialog(Frontend *f,
     frontend = f;
     grabberDevice = device;
     deviceId = grabberDevice->getDeviceId();
-    deviceId.remove(QLatin1Char(' '));   // Remove all spaces (Windows)
-    deviceId.remove(QLatin1Char('/'));   // Remove all slashs (Linux)
+    // Remove all non alpha numeric caracters from the device id (XML problem)
+    for (int index = deviceId.length() -1 ; index >= 0 ; index--) {
+        if (!(deviceId.at(index).isLetterOrNumber())) {
+            deviceId.remove(index, 1);
+        }
+    }
     grabberController = device->getController();
 
     makeGUI();

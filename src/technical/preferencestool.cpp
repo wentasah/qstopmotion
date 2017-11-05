@@ -235,6 +235,12 @@ bool PreferencesTool::setStringPreference(const QString &name, const QString &ke
         elements.append(element);
     }
     else {
+        QString stringValue;
+        if (element->getStringPreference(key, stringValue) == true) {
+            if (stringValue.compare(attribute) == 0) {
+                return true;
+            }
+        }
         element->setStringPreference(key, attribute);
     }
 
@@ -271,6 +277,13 @@ bool PreferencesTool::setIntegerPreference(const QString &name, const QString &k
         elements.append(element);
     }
     else {
+        int intValue;
+
+        if (element->getIntegerPreference(key, intValue) == true) {
+            if (intValue == attribute) {
+                return true;
+            }
+        }
         element->setIntegerPreference(key, attribute);
     }
 
@@ -307,6 +320,13 @@ bool PreferencesTool::setDoublePreference(const QString &name, const QString &ke
         elements.append(element);
     }
     else {
+        double doubleValue;
+
+        if (element->getDoublePreference(key, doubleValue) == true) {
+            if (doubleValue == attribute) {
+                return true;
+            }
+        }
         element->setDoublePreference(key, attribute);
     }
 
@@ -343,6 +363,13 @@ bool PreferencesTool::setBooleanPreference(const QString &name, const QString &k
         elements.append(element);
     }
     else {
+        bool boolValue;
+
+        if (element->getBooleanPreference(key, boolValue) == true) {
+            if (boolValue == attribute) {
+                return true;
+            }
+        }
         element->setBooleanPreference(key, attribute);
     }
 

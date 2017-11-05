@@ -2668,6 +2668,13 @@ void MainWindowGUI::setMostRecentProject()
     Q_ASSERT(!newFirst.isEmpty());
 
     PreferencesTool *pref = frontend->getPreferences();
+
+    const QString oldFirst = pref->getProject(0);
+    if (oldFirst.compare(newFirst) == 0) {
+        // Old first is new first -> nothing to do
+        return;
+    }
+
     pref->removeProject(newFirst);
     pref->addProject(newFirst);
     pref->flushPreferences();

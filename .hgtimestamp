@@ -324,7 +324,7 @@
 "src/frontends/qtfrontend/tooltabs/compositingtab.h": {"timestamp": 1506838589.0},
 "src/frontends/qtfrontend/tooltabs/projecttab.cpp": {"timestamp": 1507142425.0},
 "src/frontends/qtfrontend/tooltabs/projecttab.h": {"timestamp": 1507142456.0},
-"src/frontends/qtfrontend/tooltabs/recordingtab.cpp": {"timestamp": 1509774598.0},
+"src/frontends/qtfrontend/tooltabs/recordingtab.cpp": {"timestamp": 1510037864.0},
 "src/frontends/qtfrontend/tooltabs/recordingtab.h": {"timestamp": 1506923370.0},
 "src/frontends/qtfrontend/tooltabs/viewtab.cpp": {"timestamp": 1506839211.0},
 "src/frontends/qtfrontend/tooltabs/viewtab.h": {"timestamp": 1506839186.0},

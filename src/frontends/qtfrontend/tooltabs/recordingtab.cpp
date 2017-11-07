@@ -598,6 +598,7 @@ int RecordingTab::getUnitCount()
 void RecordingTab::setUnitCount(int count)
 {
     unitCountSlider->setValue((double)count);
+    unitCountSliderValue->setText(QString("%1").arg(count));
 }
 
 
@@ -637,6 +638,7 @@ int RecordingTab::getBeepCount()
 void RecordingTab::setBeepCount(int count)
 {
     beepCountSlider->setValue((double)count);
+    beepCountSliderValue->setText(QString("%1").arg(count));
 }
 
 

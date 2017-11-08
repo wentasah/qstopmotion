@@ -47,6 +47,12 @@ class GrabberWidget : public QWidget
 {
     Q_OBJECT
 public:
+    const static bool V4L2GRABBERDEFAULT = true;
+    const static bool V4L2CONTROLERDEFAULT = true;
+    const static bool MEDIAFOUNDATIONGRABBERDEFAULT = true;
+    const static bool MEDIAFOUNDATIONCONTROLERDEFAULT = true;
+    const static bool GPHOTO2GRABBERDEFAULT = false;
+    const static bool GPHOTO2CONTROLERDEFAULT = false;
 
     /**
      * Sets up the tab.

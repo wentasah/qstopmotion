@@ -32,6 +32,7 @@
 
 #include "v4l2controller.h"
 
+#include "frontends/qtfrontend/preferences/grabberwidget.h"
 #include "technical/util.h"
 #include "technical/grabber/imageconverter.h"
 
@@ -99,7 +100,7 @@ bool V4L2Grabber::initialization(QVector<ImageGrabberDevice*> &devices)
 
             // Add the Controller to the new device
             if (pref->getBooleanPreference("preferences", "v4l2controller", value) == false) {
-                value = false;
+                value = GrabberWidget::V4L2CONTROLERDEFAULT;
             }
             if ((int)true == value) {
                 deviceController = new V4L2Controller(0);

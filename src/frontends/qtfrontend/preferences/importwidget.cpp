@@ -32,7 +32,6 @@
 #include "domain/domainfacade.h"
 #include "frontends/qtfrontend/elements/flexiblelineedit.h"
 #include "technical/preferencestool.h"
-#include "technical/grabber/imagegrabber.h"
 
 
 ImportWidget::ImportWidget(Frontend *f, bool type, QWidget *parent) : QWidget(parent)
@@ -49,21 +48,21 @@ ImportWidget::ImportWidget(Frontend *f, bool type, QWidget *parent) : QWidget(pa
     imagePrefs               = 0;
     imageFormatLabel         = 0;
     imageFormatCombo         = 0;
-    activeImageFormat        = ImageGrabber::jpegFormat;
+    activeImageFormat        = IMAGEFORMATDEFAULT;
     imageQualityLabel        = 0;
     imageQualitySlider       = 0;
-    activeImageQuality       = 100;
+    activeImageQuality       = IMAGEQUALITYDEFAULT;
     qualityMinimumLabel      = 0;
     qualityMaximumLabel      = 0;
     imageSizeLabel           = 0;
     imageSizeCombo           = 0;
-    activeImageSize          = ImageGrabber::defaultSize;
+    activeImageSize          = IMAGESIZEDEFAULT;
 
     // Live view preferences
     liveViewPrefs            = 0;
     liveViewFpsLabel         = 0;
     liveViewFpsSlider        = 0;
-    activeLiveViewFps        = 2.0;
+    activeLiveViewFps        = LIVEVIEWFPSDEFAULT;
 
     this->setObjectName("ImportWidget");
 
@@ -208,31 +207,14 @@ void ImportWidget::initialize()
     qDebug() << "ImportWidget::initialize --> Start";
 
     PreferencesTool *pref = frontend->getPreferences();
-    int              value;
-    double           doubleValue;
 
     // Read eEncoder preferences
     if (tabType) {
         // This is a general dialog tab
-        if (pref->getIntegerPreference("preferences", "defaultimageformat", value) == false) {
-            value = ImageGrabber::jpegFormat;
-        }
-        activeImageFormat = value;
-
-        if (pref->getIntegerPreference("preferences", "defaultimagequality", value) == false) {
-            value = 100;
-        }
-        activeImageQuality = value;
-
-        if (pref->getIntegerPreference("preferences", "defaultimagesize", value) == false) {
-            value = ImageGrabber::defaultSize;
-        }
-        activeImageSize = value;
-
-        if (pref->getDoublePreference("preferences", "defaultliveviewfps", doubleValue) == false) {
-            doubleValue = 2.0;
-        }
-        activeLiveViewFps = doubleValue;
+        pref->getIntegerPreference("preferences", "defaultimageformat", activeImageFormat);
+        pref->getIntegerPreference("preferences", "defaultimagequality", activeImageQuality);
+        pref->getIntegerPreference("preferences", "defaultimagesize", activeImageSize);
+        pref->getDoublePreference("preferences", "defaultliveviewfps", activeLiveViewFps);
     }
     else {
         // This is a project dialog tab
@@ -242,14 +224,7 @@ void ImportWidget::initialize()
         activeLiveViewFps = frontend->getProject()->getLiveViewFps();
     }
 
-    imageFormatCombo->setCurrentIndex(activeImageFormat);
-    enableQuality();
-
-    imageQualitySlider->setValue(activeImageQuality);
-
-    imageSizeCombo->setCurrentIndex(activeImageSize);
-
-    liveViewFpsSlider->setValue(activeLiveViewFps);
+    resetDialog();
 
     qDebug() << "ImportWidget::initialize --> End";
 }
@@ -321,6 +296,16 @@ void ImportWidget::apply()
 
 
 void ImportWidget::reset()
+{
+    qDebug() << "ImportWidget::reset --> Start";
+
+    resetDialog();
+
+    qDebug() << "ImportWidget::reset --> End";
+}
+
+
+void ImportWidget::resetDialog()
 {
     qDebug() << "ImportWidget::reset --> Start";
 

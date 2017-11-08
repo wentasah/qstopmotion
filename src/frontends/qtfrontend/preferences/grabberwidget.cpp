@@ -44,17 +44,17 @@ GrabberWidget::GrabberWidget(Frontend *f, QWidget *parent)
     // Image grabber preferences
     grabberGroupBox                        = 0;
     v4l2GrabberCheck                       = 0;
-    actualV4L2Grabber                      = false;
+    actualV4L2Grabber                      = V4L2GRABBERDEFAULT;
     v4l2ControllerCheck                    = 0;
-    actualV4L2Controller                   = false;
+    actualV4L2Controller                   = V4L2CONTROLERDEFAULT;
     mediaFoundationGrabberCheck            = 0;
-    actualMediaFoundationGrabber           = false;
+    actualMediaFoundationGrabber           = MEDIAFOUNDATIONGRABBERDEFAULT;
     mediaFoundationControllerCheck         = 0;
-    actualMediaFoundationController        = false;
+    actualMediaFoundationController        = MEDIAFOUNDATIONCONTROLERDEFAULT;
     gphoto2GrabberCheck                    = 0;
-    actualGphoto2Grabber                   = false;
+    actualGphoto2Grabber                   = GPHOTO2GRABBERDEFAULT;
     gphoto2ControllerCheck                 = 0;
-    actualGphoto2Controller                = false;
+    actualGphoto2Controller                = GPHOTO2CONTROLERDEFAULT;
 
     this->setObjectName("GrabberWidget");
 
@@ -133,19 +133,11 @@ void GrabberWidget::initialize()
     qDebug() << "GrabberWidget::initialize --> Start";
 
     PreferencesTool *pref = frontend->getPreferences();
-    bool             value;
 
 #ifdef Q_OS_LINUX
     // Video4Linux2 device
-    if (pref->getBooleanPreference("preferences", "v4l2grabber", value) == false) {
-        value = true;
-    }
-    actualV4L2Grabber = value;
-
-    if (pref->getBooleanPreference("preferences", "v4l2controller", value) == false) {
-        value = false;
-    }
-    actualV4L2Controller = value;
+    pref->getBooleanPreference("preferences", "v4l2grabber", actualV4L2Grabber);
+    pref->getBooleanPreference("preferences", "v4l2controller", actualV4L2Controller);
 #else
     v4l2GrabberCheck->hide();
     v4l2ControllerCheck->hide();
@@ -153,15 +145,8 @@ void GrabberWidget::initialize()
 
 #if defined(Q_OS_WIN32) || defined(Q_OS_WIN64)
     // Media Foundation device
-    if (pref->getBooleanPreference("preferences", "mediafoundationgrabber", value) == false) {
-        value = true;
-    }
-    actualMediaFoundationGrabber = value;
-
-    if (pref->getBooleanPreference("preferences", "mediafoundationcontroller", value) == false) {
-        value = false;
-    }
-    actualMediaFoundationController = value;
+    pref->getBooleanPreference("preferences", "mediafoundationgrabber", actualMediaFoundationGrabber);
+    pref->getBooleanPreference("preferences", "mediafoundationcontroller", actualMediaFoundationController);
 #else
     mediaFoundationGrabberCheck->hide();
     mediaFoundationControllerCheck->hide();
@@ -169,15 +154,8 @@ void GrabberWidget::initialize()
 
 #ifdef Q_OS_LINUX
     // gphoto2 device
-    if (pref->getBooleanPreference("preferences", "gphoto2grabber", value) == false) {
-        value = false;
-    }
-    actualGphoto2Grabber = value;
-
-    if (pref->getBooleanPreference("preferences", "gphoto2controller", value) == false) {
-        value = false;
-    }
-    actualGphoto2Controller = value;
+    pref->getBooleanPreference("preferences", "gphoto2grabber", actualGphoto2Grabber);
+    pref->getBooleanPreference("preferences", "gphoto2controller", actualGphoto2Controller);
 #else
     gphoto2GrabberCheck->hide();
     gphoto2ControllerCheck->hide();

@@ -45,6 +45,7 @@
 #include "domain/undo/undotakeremove.h"
 #include "domain/undo/undotakeselect.h"
 #include "frontends/qtfrontend/toolbar.h"
+#include "frontends/qtfrontend/preferences/importwidget.h"
 #include "technical/grabber/imagegrabber.h"
 #include "technical/videoencoder/videoencoder.h"
 
@@ -827,19 +828,24 @@ void DomainFacade::setProjectSettingsToDefault()
 
     // Image import preferences
     if (pref->getIntegerPreference("preferences", "defaultimageformat", intValue) == false) {
-        intValue = ImageGrabber::jpegFormat;
+        intValue = ImportWidget::IMAGEFORMATDEFAULT;
     }
     setImageFormat(intValue);
 
     if (pref->getIntegerPreference("preferences", "defaultimagequality", intValue) == false) {
-        intValue = 100;
+        intValue = ImportWidget::IMAGEQUALITYDEFAULT;
     }
     setImageQuality(intValue);
 
     if (pref->getIntegerPreference("preferences", "defaultimagesize", intValue) == false) {
-        intValue = ImageGrabber::defaultSize;
+        intValue = ImportWidget::IMAGESIZEDEFAULT;
     }
     setImageSize(intValue);
+
+    if (pref->getDoublePreference("preferences", "defaultliveviewfps", doubleValue) == false) {
+        doubleValue = ImportWidget::LIVEVIEWFPSDEFAULT;
+    }
+    setLiveViewFps(doubleValue);
 
     if (pref->getIntegerPreference("preferences", "defaulttransformation", intValue) == false) {
         intValue = 0;
@@ -850,11 +856,6 @@ void DomainFacade::setProjectSettingsToDefault()
         intValue = ImageGrabber::centerDown;
     }
     setImageAdjustment(intValue);
-
-    if (pref->getDoublePreference("preferences", "defaultliveviewfps", doubleValue) == false) {
-        doubleValue = 2.0;
-    }
-    setLiveViewFps(doubleValue);
 
     // Video export preferences
     if (pref->getIntegerPreference("preferences", "defaultencoderapplication", intValue) == false) {

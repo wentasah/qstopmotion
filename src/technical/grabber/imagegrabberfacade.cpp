@@ -24,6 +24,9 @@
 
 #include <QDebug>
 
+#include "frontends/qtfrontend/preferences/grabberwidget.h"
+
+
 #if defined(Q_OS_WIN32) || defined(Q_OS_WIN64)
   #include "technical/grabber/mediafoundation/mfgrabber.h"
 #endif
@@ -114,7 +117,7 @@ void ImageGrabberFacade::initialization()
 #ifdef Q_OS_LINUX
     // video4linux2 device
     if (pref->getBooleanPreference("preferences", "v4l2grabber", value) == false) {
-        value = true;
+        value = GrabberWidget::V4L2GRABBERDEFAULT;
     }
     if ((int)true == value) {
         v4l2Grabber = new V4L2Grabber(frontend);
@@ -127,7 +130,7 @@ void ImageGrabberFacade::initialization()
 #if defined(Q_OS_WIN32) || defined(Q_OS_WIN64)
     // Microsoft Media Foundation device
     if (pref->getBooleanPreference("preferences", "mediafoundationgrabber", value) == false) {
-        value = true;
+        value = GrabberWidget::MEDIAFOUNDATIONGRABBERDEFAULT;
     }
     if ((int)true == value) {
         mediaFoundationGrabber = new MfGrabber(frontend);
@@ -140,7 +143,7 @@ void ImageGrabberFacade::initialization()
 #ifdef Q_OS_LINUX
     // gphoto2 device
     if (pref->getBooleanPreference("preferences", "gphoto2grabber", value) == false) {
-        value = false;
+        value = GrabberWidget::GPHOTO2GRABBERDEFAULT;
     }
     if ((int)true == value) {
         gphotoGrabber = new GphotoGrabber(frontend);

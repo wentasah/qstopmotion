@@ -29,7 +29,8 @@
 #include <QTextStream>
 #include <QtGlobal>
 
-#include "technical/grabber/imagegrabber.h"
+#include "frontends/qtfrontend/preferences/grabberwidget.h"
+#include "frontends/qtfrontend/preferences/importwidget.h"
 #include "technical/videoencoder/videoencoder.h"
 
 
@@ -438,11 +439,13 @@ void PreferencesTool::setBasicPreferenceDefaults()
     setBooleanPreference("preferences", "defaultbeepcheck", true);
     setIntegerPreference("preferences", "defaultbeepcount", 5);
     // Image import defaults
-    setIntegerPreference("preferences", "defaultimageformat", ImageGrabber::jpegFormat);
-    setIntegerPreference("preferences", "defaultimagesize", ImageGrabber::defaultSize);
+    setIntegerPreference("preferences", "defaultimageformat", ImportWidget::IMAGEFORMATDEFAULT);
+    setIntegerPreference("preferences", "defaultimagequality", ImportWidget::IMAGEQUALITYDEFAULT);
+    setIntegerPreference("preferences", "defaultimagesize", ImportWidget::IMAGESIZEDEFAULT);
+    setDoublePreference("preferences", "defaultliveviewfps", ImportWidget::LIVEVIEWFPSDEFAULT);
+    // Image transformation defaults
     setIntegerPreference("preferences", "defaulttransformation", true);
     setIntegerPreference("preferences", "defaultimageadjustment", ImageGrabber::centerDown);
-    setDoublePreference("preferences", "defaulliveviewfps", 2.0);
     // Video export defaults
     setIntegerPreference("preferences", "defaultencoderapplication", VideoEncoder::ffmpegApplication);
     setIntegerPreference("preferences", "defaultvideoformat", VideoEncoder::mp4Format);
@@ -450,12 +453,12 @@ void PreferencesTool::setBasicPreferenceDefaults()
     setIntegerPreference("preferences", "defaultvideofps", 12);
     setBooleanPreference("preferences", "defaultusedefaultoutputfile", false);
     // Grabber defaults
-    setBooleanPreference("preferences", "v4l2grabber", true);
-    setBooleanPreference("preferences", "v4l2controller", false);
-    setBooleanPreference("preferences", "mediafoundationgrabber", true);
-    setBooleanPreference("preferences", "mediafoundationcontroller", false);
-    setBooleanPreference("preferences", "gphoto2grabber", false);
-    setBooleanPreference("preferences", "gphoto2controller", false);
+    setBooleanPreference("preferences", "v4l2grabber", GrabberWidget::V4L2GRABBERDEFAULT);
+    setBooleanPreference("preferences", "v4l2controller", GrabberWidget::V4L2CONTROLERDEFAULT);
+    setBooleanPreference("preferences", "mediafoundationgrabber", GrabberWidget::MEDIAFOUNDATIONGRABBERDEFAULT);
+    setBooleanPreference("preferences", "mediafoundationcontroller", GrabberWidget::MEDIAFOUNDATIONCONTROLERDEFAULT);
+    setBooleanPreference("preferences", "gphoto2grabber", GrabberWidget::GPHOTO2GRABBERDEFAULT);
+    setBooleanPreference("preferences", "gphoto2controller", GrabberWidget::GPHOTO2CONTROLERDEFAULT);
 }
 
 

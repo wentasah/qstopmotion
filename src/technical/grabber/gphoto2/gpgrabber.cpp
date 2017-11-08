@@ -27,6 +27,7 @@
 #include <QApplication>
 
 #include "gpcontroller.h"
+#include "frontends/qtfrontend/preferences/grabberwidget.h"
 #include "technical/grabber/imagegrabberdevice.h"
 #include "technical/util.h"
 
@@ -161,7 +162,7 @@ bool GphotoGrabber::initialization(QVector<ImageGrabberDevice*> &devices)
 
     // Create grabber controller
     if (pref->getBooleanPreference("preferences", "gphoto2controller", value) == false) {
-        value = false;
+        value = GrabberWidget::GPHOTO2CONTROLERDEFAULT;
     }
     if ((int)true == value) {
         deviceController = new GphotoController(0);

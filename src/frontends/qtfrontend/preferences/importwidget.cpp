@@ -224,7 +224,7 @@ void ImportWidget::initialize()
         activeLiveViewFps = frontend->getProject()->getLiveViewFps();
     }
 
-    resetDialog();
+    reset();
 
     qDebug() << "ImportWidget::initialize --> End";
 }
@@ -296,16 +296,6 @@ void ImportWidget::apply()
 
 
 void ImportWidget::reset()
-{
-    qDebug() << "ImportWidget::reset --> Start";
-
-    resetDialog();
-
-    qDebug() << "ImportWidget::reset --> End";
-}
-
-
-void ImportWidget::resetDialog()
 {
     qDebug() << "ImportWidget::reset --> Start";
 

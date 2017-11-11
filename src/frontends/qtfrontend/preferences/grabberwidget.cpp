@@ -161,7 +161,7 @@ void GrabberWidget::initialize()
     gphoto2ControllerCheck->hide();
 #endif
 
-    resetDialog();
+    reset();
 
     qDebug() << "GrabberWidget::initialize --> End";
 }
@@ -244,16 +244,6 @@ void GrabberWidget::reset()
 {
     qDebug() << "GrabberWidget::reset --> Start";
 
-    resetDialog();
-
-    qDebug() << "GrabberWidget::reset --> End";
-}
-
-
-void GrabberWidget::resetDialog()
-{
-    qDebug() << "GrabberWidget::resetDialog --> Start";
-
     v4l2GrabberCheck->setChecked(actualV4L2Grabber);
     changeV4L2GrabberCheckState(actualV4L2Grabber);
     v4l2ControllerCheck->setChecked(actualV4L2Controller);
@@ -266,7 +256,7 @@ void GrabberWidget::resetDialog()
     changeGphoto2GrabberCheckState(actualGphoto2Grabber);
     gphoto2ControllerCheck->setChecked(actualGphoto2Controller);
 
-    qDebug() << "GrabberWidget::resetDialog --> End";
+    qDebug() << "GrabberWidget::reset --> End";
 }
 
 

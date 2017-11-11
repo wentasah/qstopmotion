@@ -133,8 +133,6 @@ private:
     bool actualRoll;
 
     void makeGUI();
-
-    void resetDialog();
 };
 
 #endif

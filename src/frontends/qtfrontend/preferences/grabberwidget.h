@@ -129,8 +129,6 @@ private:
     bool          actualMediaFoundationController;
     bool          actualGphoto2Grabber;
     bool          actualGphoto2Controller;
-
-    void resetDialog();
 };
 
 #endif

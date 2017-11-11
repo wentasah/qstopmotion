@@ -45,7 +45,9 @@
 #include "domain/undo/undotakeremove.h"
 #include "domain/undo/undotakeselect.h"
 #include "frontends/qtfrontend/toolbar.h"
+#include "frontends/qtfrontend/preferences/exportwidget.h"
 #include "frontends/qtfrontend/preferences/importwidget.h"
+#include "frontends/qtfrontend/preferences/transformwidget.h"
 #include "technical/grabber/imagegrabber.h"
 #include "technical/videoencoder/videoencoder.h"
 
@@ -847,39 +849,45 @@ void DomainFacade::setProjectSettingsToDefault()
     }
     setLiveViewFps(doubleValue);
 
+    // Image transformation preferences
     if (pref->getIntegerPreference("preferences", "defaulttransformation", intValue) == false) {
-        intValue = 0;
+        intValue = TransformWidget::TRANSFORMDEFAULT;
     }
     setImageTransformation(intValue);
 
     if (pref->getIntegerPreference("preferences", "defaultimageadjustment", intValue) == false) {
-        intValue = ImageGrabber::centerDown;
+        intValue = TransformWidget::IMAGEADJUSTMENTDEFAULT;
     }
     setImageAdjustment(intValue);
 
+    if (pref->getIntegerPreference("preferences", "defaultzoomvalue", intValue) == false) {
+        intValue = TransformWidget::ZOOMVALUEDEFAULT;
+    }
+    setZoomValue(intValue);
+
     // Video export preferences
     if (pref->getIntegerPreference("preferences", "defaultencoderapplication", intValue) == false) {
-        intValue = VideoEncoder::noneApplication;
+        intValue = ExportWidget::ENCODERAPPLICATIONDEFAULT;
     }
     setEncoderApplication(intValue);
 
     if (pref->getIntegerPreference("preferences", "defaultvideoformat", intValue) == false) {
-        intValue = VideoEncoder::noneFormat;
+        intValue = ExportWidget::VIDEOFORMATDEFAULT;
     }
     setVideoFormat(intValue);
 
     if (pref->getIntegerPreference("preferences", "defaultvideosize", intValue) == false) {
-        intValue = VideoEncoder::defaultSize;
+        intValue = ExportWidget::VIDEOSIZEDEFAULT;
     }
     setVideoSize(intValue);
 
     if (pref->getIntegerPreference("preferences", "defaultvideofps", intValue) == false) {
-        intValue = 12;
+        intValue = ExportWidget::VIDEOFPSDEFAULT;
     }
     setVideoFps(intValue);
 
     if (pref->getBooleanPreference("preferences", "defaultusedefaultoutputfile", boolValue) == false) {
-        boolValue = false;
+        boolValue = ExportWidget::USEDEFAULTOUTPUTFILENAMEDEFAULT;
     }
     setUseDefaultOutputFile(boolValue);
 }

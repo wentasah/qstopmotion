@@ -219,7 +219,7 @@ void GeneralWidget::initialize()
     }
     pref->getBooleanPreference("preferences", "signal", actualSignal);
 
-    resetDialog();
+    reset();
 
     qDebug() << "GeneralWidget::initialize --> End";
 }
@@ -324,16 +324,6 @@ void GeneralWidget::reset()
 {
     qDebug() << "GeneralWidget::reset --> Start";
 
-    resetDialog();
-
-    qDebug() << "GeneralWidget::reset --> End";
-}
-
-
-void GeneralWidget::resetDialog()
-{
-    qDebug() << "GeneralWidget::resetDialog --> Start";
-
     changeLanguage(actualLanguage);
     frontend->changeCaptureButtonFunction(actualButtonFunction);
     switch (actualButtonFunction) {
@@ -353,7 +343,7 @@ void GeneralWidget::resetDialog()
     horizontalGridSpin->setValue(actualHorizontalSpin);
     signalCheck->setChecked(actualSignal);
 
-    qDebug() << "GeneralWidget::resetDialog --> End";
+    qDebug() << "GeneralWidget::reset --> End";
 }
 
 

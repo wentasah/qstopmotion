@@ -29,8 +29,10 @@
 #include <QTextStream>
 #include <QtGlobal>
 
+#include "frontends/qtfrontend/preferences/exportwidget.h"
 #include "frontends/qtfrontend/preferences/grabberwidget.h"
 #include "frontends/qtfrontend/preferences/importwidget.h"
+#include "frontends/qtfrontend/preferences/transformwidget.h"
 #include "technical/videoencoder/videoencoder.h"
 
 
@@ -444,14 +446,15 @@ void PreferencesTool::setBasicPreferenceDefaults()
     setIntegerPreference("preferences", "defaultimagesize", ImportWidget::IMAGESIZEDEFAULT);
     setDoublePreference("preferences", "defaultliveviewfps", ImportWidget::LIVEVIEWFPSDEFAULT);
     // Image transformation defaults
-    setIntegerPreference("preferences", "defaulttransformation", true);
-    setIntegerPreference("preferences", "defaultimageadjustment", ImageGrabber::centerDown);
+    setIntegerPreference("preferences", "defaulttransformation", TransformWidget::TRANSFORMDEFAULT);
+    setIntegerPreference("preferences", "defaultimageadjustment", TransformWidget::IMAGEADJUSTMENTDEFAULT);
+    setIntegerPreference("preferences", "defaultzoomvalue", TransformWidget::ZOOMVALUEDEFAULT);
     // Video export defaults
-    setIntegerPreference("preferences", "defaultencoderapplication", VideoEncoder::ffmpegApplication);
-    setIntegerPreference("preferences", "defaultvideoformat", VideoEncoder::mp4Format);
-    setIntegerPreference("preferences", "defaultvideosize", VideoEncoder::defaultSize);
-    setIntegerPreference("preferences", "defaultvideofps", 12);
-    setBooleanPreference("preferences", "defaultusedefaultoutputfile", false);
+    setIntegerPreference("preferences", "defaultencoderapplication", ExportWidget::ENCODERAPPLICATIONDEFAULT);
+    setIntegerPreference("preferences", "defaultvideoformat", ExportWidget::VIDEOFORMATDEFAULT);
+    setIntegerPreference("preferences", "defaultvideosize", ExportWidget::VIDEOSIZEDEFAULT);
+    setIntegerPreference("preferences", "defaultvideofps", ExportWidget::VIDEOFPSDEFAULT);
+    setBooleanPreference("preferences", "defaultusedefaultoutputfile", ExportWidget::USEDEFAULTOUTPUTFILENAMEDEFAULT);
     // Grabber defaults
     setBooleanPreference("preferences", "v4l2grabber", GrabberWidget::V4L2GRABBERDEFAULT);
     setBooleanPreference("preferences", "v4l2controller", GrabberWidget::V4L2CONTROLERDEFAULT);

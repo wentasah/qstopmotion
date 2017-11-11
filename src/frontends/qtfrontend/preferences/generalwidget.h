@@ -161,8 +161,6 @@ private:
     QColor        actualGridColor;
     QColor        newGridColor;
     bool          actualSignal;
-
-    void resetDialog();
 };
 
 #endif

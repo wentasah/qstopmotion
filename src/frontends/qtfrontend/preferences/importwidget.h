@@ -144,12 +144,6 @@ private:
     void makeGUI();
 
     void enableQuality();
-
-    /**
-     * Reset the settings in the import tab.
-     */
-    void resetDialog();
-
 };
 
 #endif

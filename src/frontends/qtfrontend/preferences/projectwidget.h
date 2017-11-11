@@ -41,6 +41,16 @@ class ProjectWidget : public QWidget
     Q_OBJECT
 
 public:
+    const static int  RECORDINGMODEDEFAULT = 0;
+    const static int  GRABBERSOURCEDEFAULT = 0;
+    const static int  MIXMODEDEFAULT = 0;
+    const static int  MIXCOUNTDEFAULT = 0;
+    const static int  PLAYBACKCOUNTDEFAULT = 0;
+    const static int  UNITMODEDEFAULT = 0;
+    const static int  UNITCOUNTDEFAULT = 0;
+    const static bool BEEPCHECKDEFAULT = false;
+    const static int  BEEPCOUNTDEFAULT = 0;
+
     /**
      * Sets up the tab.
      * @param f frontend of the application
@@ -80,21 +90,21 @@ protected:
 
 private slots:
     /**
-     * Slot for notified the default tab when the recording mode changes, so that widgets
+     * Slot for notified the project widget when the recording mode changes, so that widgets
      * can be updated.
      * @param index the new recording mode.
      */
     void changeRecordingMode(int index);
 
     /**
-     * Slot for notified the default tab when the grabber source changes, so that grabber
+     * Slot for notified the project widget when the grabber source changes, so that grabber
      * can be updated.
      * @param index the new viewing mode.
      */
     void changeGrabberSource(int index);
 
     /**
-     * Slot for notified the default tab when the mix mode changes, so that widgets
+     * Slot for notified the project widget when the mix mode changes, so that widgets
      * can be updated.
      * @param index the new mix mode.
      */
@@ -106,24 +116,24 @@ private slots:
     void changeMixCount();
 
     /**
-     * Slot for notified the default tab when the unit mode changes.
+     * Slot for notified the project widget when the unit mode changes.
      * @param index the new unit mode.
      */
     void changeUnitMode(int index);
 
     /**
-     * Slot for updating the unit slider value when running in automatic mode.
+     * Slot for notified the project widget when the unit slider changes.
      */
     void changeUnitCount();
 
     /**
-     * Slot for changing the beep status.
+     * Slot for notified the project widget when the beep status changes.
      * @param newState the new check box state.
      */
     void changeBeep(int newState);
 
     /**
-     * Slot for updating the beep slider value when running in automatic mode.
+     * Slot for notified the project widget when the beep slider changes.
      */
     void changeBeepCount();
 
@@ -157,15 +167,15 @@ private:
     QLabel      *beepCountSliderCaption;
     QwtSlider   *beepCountSlider;
 
-    int          defaultRecordingMode;
-    int          defaultGrabberSource;
-    int          defaultMixMode;
-    int          defaultMixCount;
-    int          defaultPlaybackCount;
-    int          defaultUnitMode;
-    int          defaultUnitCount;
-    bool         defaultBeepCheck;
-    int          defaultBeepCount;
+    int          actualRecordingMode;
+    int          actualGrabberSource;
+    int          actualMixMode;
+    int          actualMixCount;
+    int          actualPlaybackCount;
+    int          actualUnitMode;
+    int          actualUnitCount;
+    bool         actualBeepCheck;
+    int          actualBeepCount;
 };
 
 #endif

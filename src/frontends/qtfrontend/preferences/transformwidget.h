@@ -38,6 +38,8 @@
 
 #include <qwt/qwt_slider.h>
 
+#include "technical/grabber/imagegrabber.h"
+
 
 /**
  * The image import tab in the preferences menu
@@ -48,6 +50,10 @@ class TransformWidget : public QWidget
     Q_OBJECT
 
 public:
+    const static int TRANSFORMDEFAULT = 0;
+    const static int IMAGEADJUSTMENTDEFAULT = ImageGrabber::centerDown;
+    const static int ZOOMVALUEDEFAULT = 20;
+
     /**
      * Sets up the tab.
      * @param f frontend of the application

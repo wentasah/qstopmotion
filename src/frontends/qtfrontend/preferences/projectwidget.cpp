@@ -44,33 +44,34 @@ ProjectWidget::ProjectWidget(Frontend *f, bool type, QWidget *parent)
 
     recordingGroupBox      = 0;
     recordingModeCombo     = 0;
+    actualRecordingMode    = RECORDINGMODEDEFAULT;
 
     grabberGroupBox        = 0;
     grabberSourceCombo     = 0;
-    defaultGrabberSource   = 0;
+    actualGrabberSource    = GRABBERSOURCEDEFAULT;
 
     captureGroupBox        = 0;
     mixModeCombo           = 0;
-    defaultMixMode         = 0;
+    actualMixMode          = MIXMODEDEFAULT;
     mixCountSliderCaption  = 0;
     mixCountSlider         = 0;
-    defaultMixCount        = 0;
-    defaultPlaybackCount   = 0;
+    actualMixCount         = MIXCOUNTDEFAULT;
+    actualPlaybackCount    = PLAYBACKCOUNTDEFAULT;
 
     timelapseGroupBox      = 0;
     unitModeComboCaption   = 0;
     unitModeCombo          = 0;
+    actualUnitMode         = UNITMODEDEFAULT;
     unitCountSliderValue   = 0;
     unitCountSliderCaption = 0;
     unitCountSlider        = 0;
+    actualUnitCount        = UNITCOUNTDEFAULT;
     beepCheckBox           = 0;
+    actualBeepCheck        = BEEPCHECKDEFAULT;
     beepCountSliderValue   = 0;
     beepCountSliderCaption = 0;
     beepCountSlider        = 0;
-    defaultUnitMode        = 0;
-    defaultUnitCount       = 0;
-    defaultBeepCheck       = false;
-    defaultBeepCount       = 0;
+    actualBeepCount        = BEEPCOUNTDEFAULT;
 
     this->setObjectName("ProjectWidget");
 
@@ -180,7 +181,7 @@ void ProjectWidget::makeGUI()
     unitModeCombo->addItem(tr("Minutes"));
     unitModeCombo->addItem(tr("Hours"));
     unitModeCombo->addItem(tr("Days"));
-    unitModeCombo->setCurrentIndex(defaultUnitMode);
+    unitModeCombo->setCurrentIndex(actualUnitMode);
     connect(unitModeCombo, SIGNAL(activated(int)), this, SLOT(changeUnitMode(int)));
 
     // "n Seconds between pictures"
@@ -251,53 +252,16 @@ void ProjectWidget::initialize()
     qDebug() << "ProjectWidget::initialize --> Start";
 
     PreferencesTool *pref = frontend->getPreferences();
-    int              intValue;
-    bool             boolValue;
 
-    if (pref->getIntegerPreference("preferences", "defaultrecordingmode", intValue) == false) {
-        intValue = 0;
-    }
-    defaultRecordingMode = intValue;
-
-    if (pref->getIntegerPreference("preferences", "defaultgrabbersource", intValue) == false) {
-        intValue = 0;
-    }
-    defaultGrabberSource = intValue;
-
-    if (pref->getIntegerPreference("preferences", "defaultmixingmode", intValue) == false) {
-        intValue = 0;
-    }
-    defaultMixMode = intValue;
-
-    if (pref->getIntegerPreference("preferences", "defaultmixcount", intValue) == false) {
-        intValue = 0;
-    }
-    defaultMixCount = intValue;
-
-    if (pref->getIntegerPreference("preferences", "defaultplaybackcount", intValue) == false) {
-        intValue = 0;
-    }
-    defaultPlaybackCount = intValue;
-
-    if (pref->getIntegerPreference("preferences", "defaultunitmode", intValue) == false) {
-        intValue = 0;
-    }
-    defaultUnitMode = intValue;
-
-    if (pref->getIntegerPreference("preferences", "defaultunitcount", intValue) == false) {
-        intValue = 0;
-    }
-    defaultUnitCount = intValue;
-
-    if (pref->getBooleanPreference("preferences", "defaultbeepcheck", boolValue) == false) {
-        boolValue = 0;
-    }
-    defaultBeepCheck = boolValue;
-
-    if (pref->getIntegerPreference("preferences", "defaultbeepcount", intValue) == false) {
-        intValue = 0;
-    }
-    defaultBeepCount = intValue;
+    pref->getIntegerPreference("preferences", "defaultrecordingmode", actualRecordingMode);
+    pref->getIntegerPreference("preferences", "defaultgrabbersource", actualGrabberSource);
+    pref->getIntegerPreference("preferences", "defaultmixingmode", actualMixMode);
+    pref->getIntegerPreference("preferences", "defaultmixcount", actualMixCount);
+    pref->getIntegerPreference("preferences", "defaultplaybackcount", actualPlaybackCount);
+    pref->getIntegerPreference("preferences", "defaultunitmode", actualUnitMode);
+    pref->getIntegerPreference("preferences", "defaultunitcount", actualUnitCount);
+    pref->getBooleanPreference("preferences", "defaultbeepcheck", actualBeepCheck);
+    pref->getIntegerPreference("preferences", "defaultbeepcount", actualBeepCount);
 
     reset();
 
@@ -338,37 +302,37 @@ void ProjectWidget::apply()
         break;
     }
 
-    if (defaultGrabberSource != index) {
-        defaultGrabberSource = index;
-        pref->setIntegerPreference("preferences", "defaultgrabbersource", defaultGrabberSource);
+    if (actualGrabberSource != index) {
+        actualGrabberSource = index;
+        pref->setIntegerPreference("preferences", "defaultgrabbersource", actualGrabberSource);
     }
 
     int newRecordingMode = recordingModeCombo->currentIndex();
-    if (defaultRecordingMode != newRecordingMode) {
-        defaultRecordingMode = newRecordingMode;
-        pref->setIntegerPreference("preferences", "defaultrecordingmode", defaultRecordingMode);
+    if (actualRecordingMode != newRecordingMode) {
+        actualRecordingMode = newRecordingMode;
+        pref->setIntegerPreference("preferences", "defaultrecordingmode", actualRecordingMode);
     }
 
     int newMixMode = mixModeCombo->currentIndex();
-    if (defaultMixMode != newMixMode) {
-        defaultMixMode = newMixMode;
-        pref->setIntegerPreference("preferences", "defaultmixmode", defaultMixMode);
+    if (actualMixMode != newMixMode) {
+        actualMixMode = newMixMode;
+        pref->setIntegerPreference("preferences", "defaultmixmode", actualMixMode);
     }
 
     int newMixCount = (int)mixCountSlider->value();
     switch (newMixMode) {
     case 0:
-        if (defaultMixCount != newMixCount) {
-            defaultMixCount = newMixCount;
-            pref->setIntegerPreference("preferences", "defaultmixcount", defaultMixCount);
+        if (actualMixCount != newMixCount) {
+            actualMixCount = newMixCount;
+            pref->setIntegerPreference("preferences", "defaultmixcount", actualMixCount);
         }
         break;
     case 1:
         break;
     case 2:
-        if (defaultPlaybackCount != newMixCount) {
-            defaultPlaybackCount = newMixCount;
-            pref->setIntegerPreference("preferences", "defaultplaybackcount", defaultPlaybackCount);
+        if (actualPlaybackCount != newMixCount) {
+            actualPlaybackCount = newMixCount;
+            pref->setIntegerPreference("preferences", "defaultplaybackcount", actualPlaybackCount);
         }
         break;
     case 3:
@@ -376,27 +340,27 @@ void ProjectWidget::apply()
     }
 
     int newUnitMode = unitModeCombo->currentIndex();
-    if (defaultUnitMode != newUnitMode) {
-        defaultUnitMode = newUnitMode;
-        pref->setIntegerPreference("preferences", "defaultunitmode", defaultUnitMode);
+    if (actualUnitMode != newUnitMode) {
+        actualUnitMode = newUnitMode;
+        pref->setIntegerPreference("preferences", "defaultunitmode", actualUnitMode);
     }
 
     int newUnitCount = (int)unitCountSlider->value();
-    if (defaultUnitCount != newUnitCount) {
-        defaultUnitCount = newUnitCount;
-        pref->setIntegerPreference("preferences", "defaultunitcount", defaultUnitCount);
+    if (actualUnitCount != newUnitCount) {
+        actualUnitCount = newUnitCount;
+        pref->setIntegerPreference("preferences", "defaultunitcount", actualUnitCount);
     }
 
     bool newBeepCheck = beepCheckBox->isChecked();
-    if (defaultBeepCheck != newBeepCheck) {
-        defaultBeepCheck = newBeepCheck;
-        pref->setBooleanPreference("preferences", "defaultbeepcheck", defaultBeepCheck);
+    if (actualBeepCheck != newBeepCheck) {
+        actualBeepCheck = newBeepCheck;
+        pref->setBooleanPreference("preferences", "defaultbeepcheck", actualBeepCheck);
     }
 
     int newBeepCount = (int)beepCountSlider->value();
-    if (defaultBeepCount != newBeepCount) {
-        defaultBeepCount = newBeepCount;
-        pref->setIntegerPreference("preferences", "defaultbeepcount", defaultBeepCount);
+    if (actualBeepCount != newBeepCount) {
+        actualBeepCount = newBeepCount;
+        pref->setIntegerPreference("preferences", "defaultbeepcount", actualBeepCount);
     }
 
     qDebug() << "ProjectWidget::apply --> End";
@@ -407,24 +371,24 @@ void ProjectWidget::reset()
 {
     qDebug() << "ProjectWidget::reset --> Start";
 
-    setImageGrabberSource(defaultGrabberSource);
+    setImageGrabberSource(actualGrabberSource);
 
-    recordingModeCombo->setCurrentIndex(defaultRecordingMode);
-    changeRecordingMode(defaultRecordingMode);
+    recordingModeCombo->setCurrentIndex(actualRecordingMode);
+    changeRecordingMode(actualRecordingMode);
 
-    mixModeCombo->setCurrentIndex(defaultMixMode);
-    changeMixMode(defaultMixMode);
+    mixModeCombo->setCurrentIndex(actualMixMode);
+    changeMixMode(actualMixMode);
 
-    unitModeCombo->setCurrentIndex(defaultUnitMode);
-    changeUnitMode(defaultUnitMode);
+    unitModeCombo->setCurrentIndex(actualUnitMode);
+    changeUnitMode(actualUnitMode);
 
-    unitCountSlider->setValue((double)defaultUnitCount);
+    unitCountSlider->setValue((double)actualUnitCount);
     changeUnitCount();
 
-    beepCheckBox->setChecked(defaultBeepCheck);
-    changeBeep(defaultBeepCheck);
+    beepCheckBox->setChecked(actualBeepCheck);
+    changeBeep(actualBeepCheck);
 
-    beepCountSlider->setValue((double)defaultBeepCount);
+    beepCountSlider->setValue((double)actualBeepCount);
     changeBeepCount();
 
     qDebug() << "ProjectWidget::reset --> End";
@@ -487,7 +451,7 @@ void ProjectWidget::changeMixMode(int index)
         mixCountSliderCaption->setEnabled(true);
         mixCountSlider->setEnabled(true);
         mixCountSlider->setScale(0.0, 5.0);
-        mixCountSlider->setValue(defaultMixCount);
+        mixCountSlider->setValue(actualMixCount);
         break;
     case 1:
         mixCountSliderCaption->setEnabled(false);
@@ -497,7 +461,7 @@ void ProjectWidget::changeMixMode(int index)
         mixCountSliderCaption->setEnabled(true);
         mixCountSlider->setEnabled(true);
         mixCountSlider->setScale(0.0, 50.0);
-        mixCountSlider->setValue(defaultPlaybackCount);
+        mixCountSlider->setValue(actualPlaybackCount);
         break;
     default:
         Q_ASSERT(index < 3);

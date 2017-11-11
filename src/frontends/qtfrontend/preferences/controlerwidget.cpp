@@ -232,7 +232,7 @@ void ControlerWidget::initialize()
     pref->getBooleanPreference("preferences", "iriscontrol", actualIris);
     pref->getBooleanPreference("preferences", "rollcontrol", actualRoll);
 
-    resetDialog();
+    reset();
 
     qDebug() << "ControlerWidget::initialize --> End";
 }
@@ -366,16 +366,6 @@ void ControlerWidget::reset()
 {
     qDebug() << "ControlerWidget::reset --> Start";
 
-    resetDialog();
-
-    qDebug() << "ControlerWidget::reset --> End";
-}
-
-
-void ControlerWidget::resetDialog()
-{
-    qDebug() << "ControlerWidget::resetDialog --> Start";
-
     brightnessCheckBox->setChecked(actualBrightness);
     contrastCheckBox->setChecked(actualContrast);
     saturationCheckBox->setChecked(actualSaturation);
@@ -395,5 +385,5 @@ void ControlerWidget::resetDialog()
     irisCheckBox->setChecked(actualIris);
     rollCheckBox->setChecked(actualRoll);
 
-    qDebug() << "ControlerWidget::resetDialog --> End";
+    qDebug() << "ControlerWidget::reset --> End";
 }

@@ -32,7 +32,6 @@
 #include "domain/domainfacade.h"
 #include "frontends/qtfrontend/elements/flexiblelineedit.h"
 #include "technical/preferencestool.h"
-#include "technical/grabber/imagegrabber.h"
 
 
 TransformWidget::TransformWidget(Frontend *f, bool type, QWidget *parent) : QWidget(parent)
@@ -49,7 +48,7 @@ TransformWidget::TransformWidget(Frontend *f, bool type, QWidget *parent) : QWid
     scaleButton              = 0;
     clipButton               = 0;
     zoomButton               = 0;
-    activeTransform          = 0;
+    activeTransform          = TRANSFORMDEFAULT;
 
     // Adjustment preferences
     adjustmentPrefs          = 0;
@@ -62,13 +61,13 @@ TransformWidget::TransformWidget(Frontend *f, bool type, QWidget *parent) : QWid
     leftDownButton           = 0;
     centerDownButton         = 0;
     rightDownButton          = 0;
-    activeImageAdjustment    = ImageGrabber::centerDown;
+    activeImageAdjustment    = IMAGEADJUSTMENTDEFAULT;
 
     // Zoomw preferences
     zoomPrefs                = 0;
     zoomLabel                = 0;
     zoomSlider               = 0;
-    activeZoomValue          = 20;
+    activeZoomValue          = ZOOMVALUEDEFAULT;
     zoomMinimumLabel         = 0;
     zoomMaximumLabel         = 0;
 
@@ -285,25 +284,13 @@ void TransformWidget::initialize()
     qDebug() << "TransformWidget::initialize --> Start";
 
     PreferencesTool *pref = frontend->getPreferences();
-    int              value;
 
     // Read eEncoder preferences
     if (tabType) {
         // This is a general dialog tab
-        if (pref->getIntegerPreference("preferences", "defaulttransformation", value) == false) {
-            value = 0;
-        }
-        activeTransform = value;
-
-        if (pref->getIntegerPreference("preferences", "defaultimageadjustment", value) == false) {
-            value = ImageGrabber::centerDown;
-        }
-        activeImageAdjustment = value;
-
-        if (pref->getIntegerPreference("preferences", "defaultzoomvalue", value) == false) {
-            value = 25;
-        }
-        activeZoomValue = value;
+        pref->getIntegerPreference("preferences", "defaulttransformation", activeTransform);
+        pref->getIntegerPreference("preferences", "defaultimageadjustment", activeImageAdjustment);
+        pref->getIntegerPreference("preferences", "defaultzoomvalue", activeZoomValue);
     }
     else {
         // This is a project dialog tab
@@ -312,22 +299,7 @@ void TransformWidget::initialize()
         activeZoomValue = frontend->getProject()->getZoomValue();
     }
 
-    // Transformation preferences
-    switch (activeTransform) {
-    case 0:
-        setScaleButtonOn();
-        break;
-    case 1:
-        setClipButtonOn();
-        break;
-    case 2:
-        setZoomButtonOn();
-        break;
-    }
-
-    setAdjustment(activeImageAdjustment);
-    zoomSlider->setValue(activeZoomValue);
-
+    reset();
 
     qDebug() << "TransformWidget::initialize --> End";
 }
@@ -533,13 +505,6 @@ void TransformWidget::changeZoom()
     if (activeZoomValue == value) {
         return;
     }
-
-    /*
-    if (!tabType) {
-        // Project settings are changed
-
-    }
-    */
 
     qDebug() << "TransformWidget::changeZoom --> End";
 }

@@ -132,16 +132,16 @@ void ControlerWidget::makeGUI()
     sharpnessCheckBox = new QCheckBox(tr("Sharpness control"));
     sharpnessCheckBox->setChecked(false);
 
-    backlightCheckBox = new QCheckBox(tr("Backlight"));
+    backlightCheckBox = new QCheckBox(tr("Backlight compensation control"));
     backlightCheckBox->setChecked(false);
 
-    whiteCheckBox = new QCheckBox(tr("White control"));
+    whiteCheckBox = new QCheckBox(tr("White balance control"));
     whiteCheckBox->setChecked(false);
 
     gainCheckBox = new QCheckBox(tr("Gain control"));
     gainCheckBox->setChecked(false);
 
-    colorCheckBox = new QCheckBox(tr("Color control"));
+    colorCheckBox = new QCheckBox(tr("Color enable control"));
     colorCheckBox->setChecked(false);
 
     QGridLayout *qualityPrefsLayout = new QGridLayout;

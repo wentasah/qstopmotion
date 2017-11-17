@@ -34,6 +34,8 @@
 #include "technical/preferencestool.h"
 
 
+const double ImportWidget::LIVEVIEWFPSDEFAULT = 2.0f;
+
 ImportWidget::ImportWidget(Frontend *f, bool type, QWidget *parent) : QWidget(parent)
 {
     qDebug() << "ImportWidget::Constructor --> Start";

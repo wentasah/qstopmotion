@@ -496,7 +496,6 @@ void MainWindowGUI::initialize()
 {
     qDebug() << "MainWindowGUI::initialize --> Start";
 
-    int     value;
     QString gridColorName;
 
     lastVisitedDir.clear();

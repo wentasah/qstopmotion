@@ -49,10 +49,10 @@ class ImportWidget : public QWidget
 {
     Q_OBJECT
 public:
-    const     static int    IMAGEFORMATDEFAULT = ImageGrabber::jpegFormat;
-    const     static int    IMAGEQUALITYDEFAULT = 100;
-    const     static int    IMAGESIZEDEFAULT = ImageGrabber::defaultSize;
-    constexpr static double LIVEVIEWFPSDEFAULT = 2.0f;
+    const static int    IMAGEFORMATDEFAULT = ImageGrabber::jpegFormat;
+    const static int    IMAGEQUALITYDEFAULT = 100;
+    const static int    IMAGESIZEDEFAULT = ImageGrabber::defaultSize;
+    const static double LIVEVIEWFPSDEFAULT;
 
     /**
      * Sets up the tab.

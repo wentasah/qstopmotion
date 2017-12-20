@@ -26,7 +26,8 @@
 #include <QDir>
 #include <QFile>
 
-#include "domain/animation/animationproject.h"
+#include "domain/domainfacade.h"
+// #include "domain/animation/animationproject.h"
 #include "domain/undo/undoexposureadd.h"
 #include "domain/undo/undoexposureinsert.h"
 #include "domain/undo/undoexposuremove.h"
@@ -50,6 +51,7 @@
 #include "frontends/qtfrontend/preferences/transformwidget.h"
 #include "technical/grabber/imagegrabber.h"
 #include "technical/videoencoder/videoencoder.h"
+#include "frontends/qtfrontend/preferences/projectwidget.h"
 
 
 DomainFacade::DomainFacade(Frontend *f)
@@ -353,18 +355,6 @@ void DomainFacade::setMixCount(int newMixCount)
 {
     animationProject->setMixCount(newMixCount);
     frontend->setMixCount(newMixCount);
-}
-
-
-int DomainFacade::getPlaybackCount()
-{
-    return animationProject->getPlaybackCount();
-}
-
-
-void DomainFacade::setPlaybackCount(int newPlaybackCount)
-{
-    animationProject->setPlaybackCount(newPlaybackCount);
 }
 
 
@@ -784,47 +774,42 @@ void DomainFacade::setProjectSettingsToDefault()
 
     // Project preferences
     if (pref->getIntegerPreference("preferences", "defaultrecordingmode", intValue) == false) {
-        intValue = 0;
+        intValue = DomainFacade::RECORDINGMODEDEFAULT;
     }
     setRecordingMode(intValue);
 
     if (pref->getIntegerPreference("preferences", "defaultvideosource", intValue) == false) {
-        intValue = 0;
+        intValue = DomainFacade::GRABBERSOURCEDEFAULT;
     }
     setVideoSource(intValue);
 
     if (pref->getIntegerPreference("preferences", "defaultmixingmode", intValue) == false) {
-        intValue = 0;
+        intValue = DomainFacade::MIXMODEDEFAULT;
     }
     setMixMode(intValue);
 
     if (pref->getIntegerPreference("preferences", "defaultmixcount", intValue) == false) {
-        intValue = 0;
+        intValue = DomainFacade::MIXCOUNTDEFAULT;
     }
     setMixCount(intValue);
 
-    if (pref->getIntegerPreference("preferences", "defaultplaybackcount", intValue) == false) {
-        intValue = 0;
-    }
-    setPlaybackCount(intValue);
-
     if (pref->getIntegerPreference("preferences", "defaultunitmode", intValue) == false) {
-        intValue = 0;
+        intValue = DomainFacade::UNITMODEDEFAULT;
     }
     setUnitMode(intValue);
 
     if (pref->getIntegerPreference("preferences", "defaultunitcount", intValue) == false) {
-        intValue = 0;
+        intValue = DomainFacade::UNITCOUNTDEFAULT;
     }
     setUnitCount(intValue);
 
     if (pref->getBooleanPreference("preferences", "defaultbeepcheck", boolValue) == false) {
-        boolValue = false;
+        boolValue = DomainFacade::BEEPCHECKDEFAULT;
     }
     setBeepState(boolValue);
 
     if (pref->getIntegerPreference("preferences", "defaultbeepcount", intValue) == false) {
-        intValue = 0;
+        intValue = DomainFacade::BEEPCOUNTDEFAULT;
     }
     setBeepCount(intValue);
 

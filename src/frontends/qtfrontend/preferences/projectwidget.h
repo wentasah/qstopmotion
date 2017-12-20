@@ -41,16 +41,6 @@ class ProjectWidget : public QWidget
     Q_OBJECT
 
 public:
-    const static int  RECORDINGMODEDEFAULT = 0;
-    const static int  GRABBERSOURCEDEFAULT = 0;
-    const static int  MIXMODEDEFAULT = 0;
-    const static int  MIXCOUNTDEFAULT = 0;
-    const static int  PLAYBACKCOUNTDEFAULT = 0;
-    const static int  UNITMODEDEFAULT = 0;
-    const static int  UNITCOUNTDEFAULT = 0;
-    const static bool BEEPCHECKDEFAULT = false;
-    const static int  BEEPCOUNTDEFAULT = 0;
-
     /**
      * Sets up the tab.
      * @param f frontend of the application
@@ -171,7 +161,6 @@ private:
     int          actualGrabberSource;
     int          actualMixMode;
     int          actualMixCount;
-    int          actualPlaybackCount;
     int          actualUnitMode;
     int          actualUnitCount;
     bool         actualBeepCheck;

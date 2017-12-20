@@ -147,18 +147,6 @@ public:
     void setMixCount(int count);
 
     /**
-     * Get the playback count.
-     * @return The playback count.
-     */
-    int getPlaybackCount();
-
-    /**
-     * Set the playback count.
-     * @param count The new playback count.
-     */
-    void setPlaybackCount(int count);
-
-    /**
      * Get the unit mode.
      * @return The unit mode.
      */
@@ -298,12 +286,6 @@ public slots:
      * Used by the shortcut key.
      */
     void setMixModeDiffing();
-
-    /**
-     * Slot for setting the mix mode to Playback.
-     * Used by the shortcut key.
-     */
-    void setMixModePlayback();
 
     /**
      * Slot for notified the recording tab when the unit mode changes.

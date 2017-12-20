@@ -497,18 +497,6 @@ public:
     void setMixCount(int count);
 
     /**
-     * Get the playback count.
-     * @return The playback count.
-     */
-    int getPlaybackCount();
-
-    /**
-     * Set the playback count.
-     * @param count The new playback count.
-     */
-    void setPlaybackCount(int count);
-
-    /**
      * Get the overlay intensity value.
      * @return The overlay intensity value.
      */

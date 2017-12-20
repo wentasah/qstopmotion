@@ -245,18 +245,6 @@ public:
     void setMixCount(int newMixCount);
 
     /**
-     * Get the active playback count of the project.
-     * @return active playback count.
-     */
-    int getPlaybackCount() const;
-
-    /**
-     * Set the active playback count of the project.
-     * @param newPlaybackCount the new playback count source.
-     */
-    void setPlaybackCount(int newPlaybackCount);
-
-    /**
      * Get the overlay intensity value.
      * @return The overlay intensity value.
      */
@@ -984,11 +972,6 @@ private:
      * Active mix count of the project.
      */
     int mixCount;
-
-    /**
-     * Active playback count of the project.
-     */
-    int playbackCount;
 
     /**
      * Active encoder application of the project.

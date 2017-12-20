@@ -61,7 +61,6 @@ FrameViewInterface::FrameViewInterface(Frontend *f, QWidget *parent, double fps)
     qDebug() << "FrameViewInterface::Constructor --> FrameView is attached to the ViewFacade";
 
     connect(&grabTimer, SIGNAL(timeout()), this, SLOT(redraw()));
-    connect(&playbackTimer, SIGNAL(timeout()), this, SLOT(nextPlayBack()));
 
     qDebug() << "FrameViewInterface::Constructor --> End";
 }
@@ -256,6 +255,7 @@ bool FrameViewInterface::cameraOn()
     initCompleted();
 
     displayMode = liveImageMode;
+
     grabTimer.start(1000 / liveViewFps);
 
     qDebug() << "FrameViewInterface::cameraOn --> End";
@@ -268,7 +268,6 @@ void FrameViewInterface::cameraOff()
     qDebug() << "FrameViewInterface::cameraOff --> Start";
 
     grabTimer.stop();
-    playbackTimer.stop();
 
     clearImageBuffer();
 
@@ -298,17 +297,6 @@ int FrameViewInterface::getMixMode() const
 bool FrameViewInterface::setMixMode(int mode)
 {
     qDebug() << "FrameViewInterface::setMixMode --> Start";
-
-    // Going into playback mode.
-    if (mode == 2 && this->mixMode != 2) {
-        grabTimer.stop();
-        playbackTimer.start(1000 / videoFps);
-    }
-    // Going out of playback mode.
-    else if (mode != 2 && mixMode == 2) {
-        playbackTimer.stop();
-        grabTimer.start(1000 / liveViewFps);
-    }
 
     mixMode = mode;
 

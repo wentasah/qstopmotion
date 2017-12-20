@@ -610,18 +610,6 @@ public:
     virtual void setMixCount(int count) = 0;
 
     /**
-     * Get the playback count.
-     * @return The playback count.
-     */
-    virtual int getPlaybackCount() = 0;
-
-    /**
-     * Set the playback count.
-     * @param count The new playback count.
-     */
-    virtual void setPlaybackCount(int count) = 0;
-
-    /**
      * Get the overlay intensity value.
      * @return The overlay intensity value.
      */

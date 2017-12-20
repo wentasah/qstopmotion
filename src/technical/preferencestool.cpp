@@ -29,6 +29,7 @@
 #include <QTextStream>
 #include <QtGlobal>
 
+#include "domain/domainfacade.h"
 #include "frontends/qtfrontend/preferences/exportwidget.h"
 #include "frontends/qtfrontend/preferences/grabberwidget.h"
 #include "frontends/qtfrontend/preferences/importwidget.h"
@@ -431,15 +432,14 @@ void PreferencesTool::setBasicPreferenceDefaults()
     setStringPreference("preferences", "language", "en");
     setIntegerPreference("preferences", "capturebutton", captureButtonAfter);
     // Project defaults
-    setIntegerPreference("preferences", "defaultrecordingmode", 0);
-    setIntegerPreference("preferences", "defaultgrabbersource", 0);
-    setIntegerPreference("preferences", "defaultmixmode", 0);
-    setIntegerPreference("preferences", "defaultmixcount", 2);
-    setIntegerPreference("preferences", "defaultplaybackcount", 5);
-    setIntegerPreference("preferences", "defaultunitmode", 1);
-    setIntegerPreference("preferences", "defaultunitcount", 5);
-    setBooleanPreference("preferences", "defaultbeepcheck", true);
-    setIntegerPreference("preferences", "defaultbeepcount", 5);
+    setIntegerPreference("preferences", "defaultrecordingmode", DomainFacade::RECORDINGMODEDEFAULT);
+    setIntegerPreference("preferences", "defaultgrabbersource", DomainFacade::GRABBERSOURCEDEFAULT);
+    setIntegerPreference("preferences", "defaultmixmode", DomainFacade::MIXMODEDEFAULT);
+    setIntegerPreference("preferences", "defaultmixcount", DomainFacade::MIXCOUNTDEFAULT);
+    setIntegerPreference("preferences", "defaultunitmode", DomainFacade::UNITMODEDEFAULT);
+    setIntegerPreference("preferences", "defaultunitcount", DomainFacade::UNITCOUNTDEFAULT);
+    setBooleanPreference("preferences", "defaultbeepcheck", DomainFacade::BEEPCHECKDEFAULT);
+    setIntegerPreference("preferences", "defaultbeepcount", DomainFacade::BEEPCOUNTDEFAULT);
     // Image import defaults
     setIntegerPreference("preferences", "defaultimageformat", ImportWidget::IMAGEFORMATDEFAULT);
     setIntegerPreference("preferences", "defaultimagequality", ImportWidget::IMAGEQUALITYDEFAULT);

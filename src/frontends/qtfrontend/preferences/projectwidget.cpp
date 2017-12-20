@@ -44,34 +44,33 @@ ProjectWidget::ProjectWidget(Frontend *f, bool type, QWidget *parent)
 
     recordingGroupBox      = 0;
     recordingModeCombo     = 0;
-    actualRecordingMode    = RECORDINGMODEDEFAULT;
+    actualRecordingMode    = DomainFacade::RECORDINGMODEDEFAULT;
 
     grabberGroupBox        = 0;
     grabberSourceCombo     = 0;
-    actualGrabberSource    = GRABBERSOURCEDEFAULT;
+    actualGrabberSource    = DomainFacade::GRABBERSOURCEDEFAULT;
 
     captureGroupBox        = 0;
     mixModeCombo           = 0;
-    actualMixMode          = MIXMODEDEFAULT;
+    actualMixMode          = DomainFacade::MIXMODEDEFAULT;
     mixCountSliderCaption  = 0;
     mixCountSlider         = 0;
-    actualMixCount         = MIXCOUNTDEFAULT;
-    actualPlaybackCount    = PLAYBACKCOUNTDEFAULT;
+    actualMixCount         = DomainFacade::MIXCOUNTDEFAULT;
 
     timelapseGroupBox      = 0;
     unitModeComboCaption   = 0;
     unitModeCombo          = 0;
-    actualUnitMode         = UNITMODEDEFAULT;
+    actualUnitMode         = DomainFacade::UNITMODEDEFAULT;
     unitCountSliderValue   = 0;
     unitCountSliderCaption = 0;
     unitCountSlider        = 0;
-    actualUnitCount        = UNITCOUNTDEFAULT;
+    actualUnitCount        = DomainFacade::UNITCOUNTDEFAULT;
     beepCheckBox           = 0;
-    actualBeepCheck        = BEEPCHECKDEFAULT;
+    actualBeepCheck        = DomainFacade::BEEPCHECKDEFAULT;
     beepCountSliderValue   = 0;
     beepCountSliderCaption = 0;
     beepCountSlider        = 0;
-    actualBeepCount        = BEEPCOUNTDEFAULT;
+    actualBeepCount        = DomainFacade::BEEPCOUNTDEFAULT;
 
     this->setObjectName("ProjectWidget");
 
@@ -139,13 +138,11 @@ void ProjectWidget::makeGUI()
     connect(mixModeCombo, SIGNAL(activated(int)), this, SLOT(changeMixMode(int)));
     mixModeCombo->addItem(tr("Mix"));
     mixModeCombo->addItem(tr("Diff"));
-    mixModeCombo->addItem(tr("Playback"));
     mixCountSliderCaption = new QLabel(tr("Number of images:"));
     QString infoText =
         tr("<h4>Number of images</h4> "
            "<p>By changing the value in this slidebar you can specify how many images "
-           "backwards in the animation which should be mixed on top of the camera or "
-           "if you are in playback mode: how many images to play. </p> "
+           "backwards in the animation which should be mixed on top of the camera.</p> "
            "<p>By mixing the previous image(s) onto the camera you can more easily see "
            "how the next shot will be in relation to the other, therby making a smoother "
            "stop motion animation!</p>");
@@ -257,7 +254,6 @@ void ProjectWidget::initialize()
     pref->getIntegerPreference("preferences", "defaultgrabbersource", actualGrabberSource);
     pref->getIntegerPreference("preferences", "defaultmixingmode", actualMixMode);
     pref->getIntegerPreference("preferences", "defaultmixcount", actualMixCount);
-    pref->getIntegerPreference("preferences", "defaultplaybackcount", actualPlaybackCount);
     pref->getIntegerPreference("preferences", "defaultunitmode", actualUnitMode);
     pref->getIntegerPreference("preferences", "defaultunitcount", actualUnitCount);
     pref->getBooleanPreference("preferences", "defaultbeepcheck", actualBeepCheck);
@@ -321,21 +317,13 @@ void ProjectWidget::apply()
 
     int newMixCount = (int)mixCountSlider->value();
     switch (newMixMode) {
-    case 0:
+    case DomainFacade::mixImageMode:
         if (actualMixCount != newMixCount) {
             actualMixCount = newMixCount;
             pref->setIntegerPreference("preferences", "defaultmixcount", actualMixCount);
         }
         break;
-    case 1:
-        break;
-    case 2:
-        if (actualPlaybackCount != newMixCount) {
-            actualPlaybackCount = newMixCount;
-            pref->setIntegerPreference("preferences", "defaultplaybackcount", actualPlaybackCount);
-        }
-        break;
-    case 3:
+    case DomainFacade::diffImageMode:
         break;
     }
 
@@ -447,26 +435,18 @@ void ProjectWidget::changeGrabberSource(int index)
 void ProjectWidget::changeMixMode(int index)
 {
     switch (index) {
-    case 0:
+    case DomainFacade::mixImageMode:
         mixCountSliderCaption->setEnabled(true);
         mixCountSlider->setEnabled(true);
         mixCountSlider->setScale(0.0, 5.0);
         mixCountSlider->setValue(actualMixCount);
         break;
-    case 1:
+    case DomainFacade::diffImageMode:
         mixCountSliderCaption->setEnabled(false);
         mixCountSlider->setEnabled(false);
         break;
-    case 2:
-        mixCountSliderCaption->setEnabled(true);
-        mixCountSlider->setEnabled(true);
-        mixCountSlider->setScale(0.0, 50.0);
-        mixCountSlider->setValue(actualPlaybackCount);
-        break;
     default:
-        Q_ASSERT(index < 3);
-
-        break;
+        Q_ASSERT(index < 2);
     }
 }
 
@@ -482,7 +462,7 @@ void ProjectWidget::changeUnitMode(int index)
     qDebug() << "ImportWidget::changeUnitMode --> Start";
 
     switch (index) {
-    case 0:
+    case DomainFacade::secondsMode:
         // Seconds
         unitCountSliderCaption->setText(tr("Seconds between pictures"));
         unitCountSlider->setScale(0, 60);
@@ -490,7 +470,7 @@ void ProjectWidget::changeUnitMode(int index)
         unitCountSlider->setValue(30);
 
         break;
-    case 1:
+    case DomainFacade::minutesMode:
         // Minutes
         unitCountSliderCaption->setText(tr("Minutes between pictures"));
         unitCountSlider->setScale(0, 60);
@@ -498,7 +478,7 @@ void ProjectWidget::changeUnitMode(int index)
         unitCountSlider->setValue(5);
 
         break;
-    case 2:
+    case DomainFacade::hoursMode:
         // Hours
         unitCountSliderCaption->setText(tr("Hours between pictures"));
         unitCountSlider->setScale(0, 25);
@@ -506,7 +486,7 @@ void ProjectWidget::changeUnitMode(int index)
         unitCountSlider->setValue(1);
 
         break;
-    case 3:
+    case DomainFacade::daysMode:
         // Days
         unitCountSliderCaption->setText(tr("Days between pictures"));
         unitCountSlider->setScale(0, 30);

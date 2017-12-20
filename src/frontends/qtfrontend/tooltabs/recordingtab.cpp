@@ -308,7 +308,6 @@ void RecordingTab::retranslateStrings()
     mixModeCombo->clear();
     mixModeCombo->addItem(tr("Mix"));
     mixModeCombo->addItem(tr("Diff"));
-    mixModeCombo->addItem(tr("Playback"));
 
     QString infoText =
         tr("<h4>Toggle camera on/off (C)</h4> "
@@ -505,19 +504,22 @@ int RecordingTab::getMixMode()
 
 void RecordingTab::setMixMode(int mode)
 {
-    Q_ASSERT(mode >= 0);
-    Q_ASSERT(mode < 3);
+    Q_ASSERT(mode >= DomainFacade::mixImageMode);
+    Q_ASSERT(mode < DomainFacade::lastImageMixMode);
 
     mixModeCombo->setCurrentIndex(mode);
+    changeMixMode(mode);
 }
 
 
 int RecordingTab::getMixCount()
 {
     if (mixModeCombo->currentIndex() == 0) {
+        // Mix mode
         return (int)(mixCountSlider->value());
     }
     else {
+        // Diff mode
         return frontend->getProject()->getMixCount();
     }
 }
@@ -525,28 +527,10 @@ int RecordingTab::getMixCount()
 
 void RecordingTab::setMixCount(int count)
 {
-    Q_ASSERT(mixModeCombo->currentIndex() == 0);
-
-    mixCountSlider->setValue((double)count);
-}
-
-
-int RecordingTab::getPlaybackCount()
-{
-    if (mixModeCombo->currentIndex() == 2) {
-        return (int)(mixCountSlider->value());
+    if (DomainFacade::diffImageMode != getMixMode()) {
+        // Diff mode
+        mixCountSlider->setValue((double)count);
     }
-    else {
-        return frontend->getProject()->getPlaybackCount();
-    }
-}
-
-
-void RecordingTab::setPlaybackCount(int count)
-{
-    Q_ASSERT(mixModeCombo->currentIndex() == 2);
-
-    mixCountSlider->setValue((double)count);
 }
 
 
@@ -562,12 +546,6 @@ void RecordingTab::setMixModeDiffing()
 }
 
 
-void RecordingTab::setMixModePlayback()
-{
-    changeMixMode(2);
-}
-
-
 int RecordingTab::getUnitMode()
 {
     return unitModeCombo->currentIndex();
@@ -576,8 +554,8 @@ int RecordingTab::getUnitMode()
 
 void RecordingTab::setUnitMode(int mode)
 {
-    Q_ASSERT(mode >= 0);
-    Q_ASSERT(mode < 4);
+    Q_ASSERT(mode >= DomainFacade::secondsMode);
+    Q_ASSERT(mode < DomainFacade::lastUnitMode);
 
     unitModeCombo->setCurrentIndex(mode);
     changeUnitMode(mode);
@@ -710,25 +688,20 @@ void RecordingTab::changeMixMode(int newMixMode)
     frontend->getProject()->getView()->notifyNewMixMode(newMixMode);
 
     switch (newMixMode) {
-    case 0:
+    case DomainFacade::mixImageMode:
         mixCountSliderCaption->setEnabled(true);
         mixCountSlider->setEnabled(true);
         mixCountSlider->setScale(0.0, 5.0);
-        mixCountSlider->setValue(frontend->getProject()->getAnimationProject()->getMixCount());
+        mixCountSlider->setValue((double)frontend->getProject()->getAnimationProject()->getMixCount());
         break;
-    case 1:
+    case DomainFacade::diffImageMode:
         mixCountSliderCaption->setEnabled(false);
         mixCountSlider->setEnabled(false);
-        mixCountSlider->setValue(1);
-        break;
-    case 2:
-        mixCountSliderCaption->setEnabled(true);
-        mixCountSlider->setEnabled(true);
-        mixCountSlider->setScale(0.0, 50.0);
-        mixCountSlider->setValue(frontend->getProject()->getAnimationProject()->getPlaybackCount());
+        mixCountSlider->setScale(0.0, 5.0);
+        mixCountSlider->setValue((double)1);
         break;
     default:
-        Q_ASSERT(newMixMode < 3);
+        Q_ASSERT(newMixMode < 2);
         break;
     }
 
@@ -742,19 +715,12 @@ void RecordingTab::changeMixCount()
     int mixMode = mixModeCombo->currentIndex();
 
     switch (mixMode) {
-    case 0:
+    case DomainFacade::mixImageMode:
         if (frontend->getProject()->getAnimationProject()->getMixCount() != newMixCount) {
             frontend->getProject()->getAnimationProject()->setMixCount(newMixCount);
         }
         break;
-    case 1:
-        break;
-    case 2:
-        if (frontend->getProject()->getAnimationProject()->getPlaybackCount() != newMixCount) {
-            frontend->getProject()->getAnimationProject()->setPlaybackCount(newMixCount);
-        }
-        break;
-    case 3:
+    case DomainFacade::diffImageMode:
         break;
     }
 
@@ -769,7 +735,7 @@ void RecordingTab::changeUnitMode(int index)
     // frontend->getProject()->getAnimationProject()->setUnitMode(index);
 
     switch (index) {
-    case 0:
+    case DomainFacade::secondsMode:
         // Seconds
         unitCountSliderCaption->setText(tr("Seconds between pictures"));
         unitCountSlider->setScale(0, 60);
@@ -777,7 +743,7 @@ void RecordingTab::changeUnitMode(int index)
         unitCountSlider->setValue(30);
 
         break;
-    case 1:
+    case DomainFacade::minutesMode:
         // Minutes
         unitCountSliderCaption->setText(tr("Minutes between pictures"));
         unitCountSlider->setScale(0, 60);
@@ -785,7 +751,7 @@ void RecordingTab::changeUnitMode(int index)
         unitCountSlider->setValue(5);
 
         break;
-    case 2:
+    case DomainFacade::hoursMode:
         // Hours
         unitCountSliderCaption->setText(tr("Hours between pictures"));
         unitCountSlider->setScale(0, 25);
@@ -793,7 +759,7 @@ void RecordingTab::changeUnitMode(int index)
         unitCountSlider->setValue(1);
 
         break;
-    case 3:
+    case DomainFacade::daysMode:
         // Days
         unitCountSliderCaption->setText(tr("Days between pictures"));
         unitCountSlider->setScale(0, 30);
@@ -1151,9 +1117,6 @@ void RecordingTab::createAccelerators()
 
     diffAccel = new QShortcut(QKeySequence(Qt::Key_2), this);
     connect(diffAccel, SIGNAL(activated()), this, SLOT(setMixModeDiffing()));
-
-    playbackAccel = new QShortcut(QKeySequence(Qt::Key_3), this);
-    connect(playbackAccel, SIGNAL(activated()), this, SLOT(setMixModePlayback()));
     */
 }
 

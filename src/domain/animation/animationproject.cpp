@@ -39,16 +39,15 @@ AnimationProject::AnimationProject(Frontend* f)
     frontend                 = f;
     serializer               = new ProjectSerializer(f);
 
-    recordingMode            = 0;
-    unitMode                 = 0;
-    unitCount                = 5;
-    beepState                = true;
-    beepCount                = 1;
-    videoSource              = 0;
+    videoSource              = DomainFacade::GRABBERSOURCEDEFAULT;
     videoResolution          = 0;
-    mixMode                  = 0;
-    mixCount                 = 2;
-    playbackCount            = 0;
+    mixMode                  = DomainFacade::MIXMODEDEFAULT;
+    mixCount                 = DomainFacade::MIXCOUNTDEFAULT;
+    recordingMode            = DomainFacade::RECORDINGMODEDEFAULT;
+    unitMode                 = DomainFacade::UNITMODEDEFAULT;
+    unitCount                = DomainFacade::UNITCOUNTDEFAULT;
+    beepState                = DomainFacade::BEEPCHECKDEFAULT;
+    beepCount                = DomainFacade::BEEPCOUNTDEFAULT;
     overlayIntensity         = 100;
 
     encoderApplication       = 0;
@@ -64,7 +63,6 @@ AnimationProject::AnimationProject(Frontend* f)
     videoFps                 = 12;
 
     useDefaultOutputFile     = false;
-    unitMode                 = 0;
     activeSceneIndex         = -1;
     nextSceneIndex           = 0;
     nextTotalExposureIndex   = 0;
@@ -304,21 +302,6 @@ void AnimationProject::setMixCount(int newMixCount)
 {
     if (mixCount != newMixCount) {
         mixCount = newMixCount;
-        incSettingsChanges();
-    }
-}
-
-
-int AnimationProject::getPlaybackCount() const
-{
-    return playbackCount;
-}
-
-
-void AnimationProject::setPlaybackCount(int newPlaybackCount)
-{
-    if (playbackCount != newPlaybackCount) {
-        playbackCount = newPlaybackCount;
         incSettingsChanges();
     }
 }
@@ -716,17 +699,17 @@ bool AnimationProject::readSettingsFromProject(QDomElement &settingsNode)
         if (nodeName.compare("recordingmode") == 0) {
             QString tmp = currElement.text();
             recordingMode = tmp.toInt();
-            frontend->setRecordingMode(tmp.toInt());
+            frontend->setRecordingMode(recordingMode);
         }
         else if (nodeName.compare("unitmode") == 0) {
             QString tmp = currElement.text();
             unitMode = tmp.toInt();
-            frontend->setUnitMode(tmp.toInt());
+            frontend->setUnitMode(unitMode);
         }
         else if (nodeName.compare("unitcount") == 0) {
             QString tmp = currElement.text();
             unitCount = tmp.toInt();
-            frontend->setUnitCount(tmp.toInt());
+            frontend->setUnitCount(unitCount);
         }
         else if (nodeName.compare("beepstate") == 0) {
             QString tmp = currElement.text();
@@ -741,7 +724,7 @@ bool AnimationProject::readSettingsFromProject(QDomElement &settingsNode)
         else if (nodeName.compare("beepcount") == 0) {
             QString tmp = currElement.text();
             beepCount = tmp.toInt();
-            frontend->setBeepCount(tmp.toInt());
+            frontend->setBeepCount(beepCount);
         }
         else if (nodeName.compare("videosource") == 0) {
             QString tmp = currElement.text();
@@ -765,16 +748,16 @@ bool AnimationProject::readSettingsFromProject(QDomElement &settingsNode)
         else if (nodeName.compare("mixmode") == 0) {
             QString tmp = currElement.text();
             mixMode = tmp.toInt();
-            frontend->setMixMode(tmp.toInt());
+            if (mixMode >= DomainFacade::lastImageMixMode) {
+                // Unsupported mix mode (e.g. old playback mode)
+                mixMode = DomainFacade::MIXMODEDEFAULT;
+            }
+            frontend->setMixMode(mixMode);
         }
         else if (nodeName.compare("mixcount") == 0) {
             QString tmp = currElement.text();
             mixCount = tmp.toInt();
-            frontend->setMixCount(tmp.toInt());
-        }
-        else if (nodeName.compare("playbackcount") == 0) {
-            QString tmp = currElement.text();
-            playbackCount = tmp.toInt();
+            frontend->setMixCount(mixCount);
         }
         else if (nodeName.compare("overlayintensity") == 0) {
             QString tmp = currElement.text();
@@ -912,12 +895,6 @@ bool AnimationProject::saveSettingsToProject(QDomDocument &doc, QDomElement &set
     QDomText mixCountText = doc.createTextNode(QString("%1").arg(mixCount));
     mixCountElement.appendChild(mixCountText);
     settingsNode.appendChild(mixCountElement);
-
-    // Save playback count parameter
-    QDomElement playbackCountElement = doc.createElement("playbackcount");
-    QDomText playbackCountText = doc.createTextNode(QString("%1").arg(playbackCount));
-    playbackCountElement.appendChild(playbackCountText);
-    settingsNode.appendChild(playbackCountElement);
 
     // Save overlay intensity parameter
     QDomElement overlayIntensityElement = doc.createElement("overlayintensity");

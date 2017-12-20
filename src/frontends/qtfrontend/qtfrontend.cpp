@@ -1092,18 +1092,6 @@ void QtFrontend::setMixCount(int count)
 }
 
 
-int QtFrontend::getPlaybackCount()
-{
-    return mw->getPlaybackCount();
-}
-
-
-void QtFrontend::setPlaybackCount(int count)
-{
-    mw->setPlaybackCount(count);
-}
-
-
 int QtFrontend::getOverlayIntensity()
 {
     return mw->getOverlayIntensity();

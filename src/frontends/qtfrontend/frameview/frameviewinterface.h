@@ -342,11 +342,6 @@ public slots:
      */
     virtual void redraw() = 0;
 
-    /**
-     * Function for performing playbacks. Will call redraw with regular intervals.
-     */
-    virtual void nextPlayBack() = 0;
-
 protected:
     /**
      * Activate a new scene.

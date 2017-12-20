@@ -56,6 +56,75 @@ class DomainFacade : public QObject
     Q_OBJECT
 public:
     /**
+     * @brief Enum with all possible recording modes
+     */
+    enum recordingMode {
+        singleFrameMode,    // Singe frame capture
+        timeLapseMode,      // Time lapse automatic recording
+        lastRecordingMode   // Last mode marker for asserts
+    };
+
+    /**
+     * @brief Default recording mode for new installations
+     */
+    const static int  RECORDINGMODEDEFAULT = singleFrameMode;
+
+    /**
+     * @brief Default grabber source index for new installations
+     */
+    const static int  GRABBERSOURCEDEFAULT = 0;
+
+    /**
+     * @brief Enum with all possible project mix modes
+     */
+    enum imageMixMode {
+        mixImageMode,       // Mix the actual image with the last mixCount images
+        diffImageMode,      // Differentiate the actual image with the last image
+        lastImageMixMode    // Last mode marker for asserts
+    };
+
+    /**
+     * @brief Default mix mode for new installations
+     */
+    const static int  MIXMODEDEFAULT = mixImageMode;
+
+    /**
+     * @brief Default mix count for new installations
+     */
+    const static int  MIXCOUNTDEFAULT = 2;
+
+    /**
+     * @brief Enum with all possible project mix modes
+     */
+    enum unitMode {
+        secondsMode,        // Seconds are the units for time lapse intervall
+        minutesMode,        // Minutes are the units for time lapse intervall
+        hoursMode,          // Hours are the units for time lapse intervall
+        daysMode,           // Minutes are the units for time lapse intervall
+        lastUnitMode        // Last mode marker for asserts
+    };
+
+    /**
+     * @brief Default unit mode for new installations
+     */
+    const static int  UNITMODEDEFAULT = minutesMode;
+
+    /**
+     * @brief Default unit count for new installations
+     */
+    const static int  UNITCOUNTDEFAULT = 5;
+
+    /**
+     * @brief Default beep check box state for new installations
+     */
+    const static bool BEEPCHECKDEFAULT = true;
+
+    /**
+     * @brief Default beep count for new installations
+     */
+    const static int  BEEPCOUNTDEFAULT = 5;
+
+    /**
      * The constructor. It is protected so that it will be impossible for other classes,
      * which don't inherit from it to instanciate the singleton.
      * @param f the GUI frontend
@@ -293,18 +362,6 @@ public:
      * @param newSource the new mix count source.
      */
     void setMixCount(int newMixCount);
-
-    /**
-     * Get the active playback count of the project.
-     * @return active playback count.
-     */
-    int getPlaybackCount();
-
-    /**
-     * Set the active playback count of the project.
-     * @param newPlaybackCount the new playback count source.
-     */
-    void setPlaybackCount(int newPlaybackCount);
 
     /**
      * Get the overlay intensity value.

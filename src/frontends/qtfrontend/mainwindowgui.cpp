@@ -1184,18 +1184,6 @@ void MainWindowGUI::setMixCount(int count)
 }
 
 
-int MainWindowGUI::getPlaybackCount()
-{
-    return recordingTab->getPlaybackCount();
-}
-
-
-void MainWindowGUI::setPlaybackCount(int count)
-{
-    recordingTab->setPlaybackCount(count);
-}
-
-
 int MainWindowGUI::getOverlayIntensity()
 {
     return toolBar->getOverlayIntensity();

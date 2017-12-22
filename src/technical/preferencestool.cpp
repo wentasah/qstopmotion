@@ -30,9 +30,6 @@
 #include <QtGlobal>
 
 #include "domain/domainfacade.h"
-#include "frontends/qtfrontend/preferences/grabberwidget.h"
-#include "frontends/qtfrontend/preferences/transformwidget.h"
-#include "technical/videoencoder/videoencoder.h"
 
 
 const QString PreferencesTool::applicationShowName = QLatin1String("qStopMotion");
@@ -454,12 +451,12 @@ void PreferencesTool::setBasicPreferenceDefaults()
     setIntegerPreference("preferences", "defaultvideofps", DomainFacade::VIDEOFPSDEFAULT);
     setBooleanPreference("preferences", "defaultusedefaultoutputfile", DomainFacade::USEDEFAULTOUTPUTFILENAMEDEFAULT);
     // Grabber defaults
-    setBooleanPreference("preferences", "v4l2grabber", GrabberWidget::V4L2GRABBERDEFAULT);
-    setBooleanPreference("preferences", "v4l2controller", GrabberWidget::V4L2CONTROLERDEFAULT);
-    setBooleanPreference("preferences", "mediafoundationgrabber", GrabberWidget::MEDIAFOUNDATIONGRABBERDEFAULT);
-    setBooleanPreference("preferences", "mediafoundationcontroller", GrabberWidget::MEDIAFOUNDATIONCONTROLERDEFAULT);
-    setBooleanPreference("preferences", "gphoto2grabber", GrabberWidget::GPHOTO2GRABBERDEFAULT);
-    setBooleanPreference("preferences", "gphoto2controller", GrabberWidget::GPHOTO2CONTROLERDEFAULT);
+    setBooleanPreference("preferences", "v4l2grabber", Frontend::V4L2GRABBERDEFAULT);
+    setBooleanPreference("preferences", "v4l2controller", Frontend::V4L2CONTROLERDEFAULT);
+    setBooleanPreference("preferences", "mediafoundationgrabber", Frontend::MEDIAFOUNDATIONGRABBERDEFAULT);
+    setBooleanPreference("preferences", "mediafoundationcontroller", Frontend::MEDIAFOUNDATIONCONTROLERDEFAULT);
+    setBooleanPreference("preferences", "gphoto2grabber", Frontend::GPHOTO2GRABBERDEFAULT);
+    setBooleanPreference("preferences", "gphoto2controller", Frontend::GPHOTO2CONTROLERDEFAULT);
 }
 
 

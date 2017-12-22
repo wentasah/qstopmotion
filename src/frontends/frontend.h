@@ -46,6 +46,40 @@ class ImageGrabberDevice;
 class Frontend
 {
 public:
+
+    /**
+     * @brief V4L2 grabber enable default for new installations
+     */
+    const static bool V4L2GRABBERDEFAULT = true;
+
+    /**
+     * @brief V4L2 controler enable default for new installations
+     */
+    const static bool V4L2CONTROLERDEFAULT = true;
+
+    /**
+     * @brief MediaFoundation grabber enable default for new installations
+     */
+    const static bool MEDIAFOUNDATIONGRABBERDEFAULT = true;
+
+    /**
+     * @brief MesiaFoundation controler enable default for new installations
+     */
+    const static bool MEDIAFOUNDATIONCONTROLERDEFAULT = true;
+
+    /**
+     * @brief GPhoto2 grabber enable default for new installations
+     */
+    const static bool GPHOTO2GRABBERDEFAULT = false;
+
+    /**
+     * @brief GPhoto2 controler enable default for new installations
+     */
+    const static bool GPHOTO2CONTROLERDEFAULT = false;
+
+    /**
+     * @brief Destructor
+     */
     virtual ~Frontend() {}
 
     /**

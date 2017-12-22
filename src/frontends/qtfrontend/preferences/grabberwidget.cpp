@@ -44,17 +44,17 @@ GrabberWidget::GrabberWidget(Frontend *f, QWidget *parent)
     // Image grabber preferences
     grabberGroupBox                        = 0;
     v4l2GrabberCheck                       = 0;
-    actualV4L2Grabber                      = V4L2GRABBERDEFAULT;
+    actualV4L2Grabber                      = Frontend::V4L2GRABBERDEFAULT;
     v4l2ControllerCheck                    = 0;
-    actualV4L2Controller                   = V4L2CONTROLERDEFAULT;
+    actualV4L2Controller                   = Frontend::V4L2CONTROLERDEFAULT;
     mediaFoundationGrabberCheck            = 0;
-    actualMediaFoundationGrabber           = MEDIAFOUNDATIONGRABBERDEFAULT;
+    actualMediaFoundationGrabber           = Frontend::MEDIAFOUNDATIONGRABBERDEFAULT;
     mediaFoundationControllerCheck         = 0;
-    actualMediaFoundationController        = MEDIAFOUNDATIONCONTROLERDEFAULT;
+    actualMediaFoundationController        = Frontend::MEDIAFOUNDATIONCONTROLERDEFAULT;
     gphoto2GrabberCheck                    = 0;
-    actualGphoto2Grabber                   = GPHOTO2GRABBERDEFAULT;
+    actualGphoto2Grabber                   = Frontend::GPHOTO2GRABBERDEFAULT;
     gphoto2ControllerCheck                 = 0;
-    actualGphoto2Controller                = GPHOTO2CONTROLERDEFAULT;
+    actualGphoto2Controller                = Frontend::GPHOTO2CONTROLERDEFAULT;
 
     this->setObjectName("GrabberWidget");
 

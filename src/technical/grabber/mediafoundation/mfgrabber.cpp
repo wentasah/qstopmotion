@@ -157,7 +157,7 @@ bool MfGrabber::initialization(QVector<ImageGrabberDevice*> &devices)
 
                 // Add the Controller to the new device
                 if (pref->getIntegerPreference("preferences", "mediafoundationcontroller", value) == false) {
-                    value = GrabberWidget::MEDIAFOUNDATIONCONTROLERDEFAULT;
+                    value = Frontend::MEDIAFOUNDATIONCONTROLERDEFAULT;
                 }
                 if ((int)true == value) {
                     deviceController = new MfController(0);

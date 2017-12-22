@@ -162,7 +162,7 @@ bool GphotoGrabber::initialization(QVector<ImageGrabberDevice*> &devices)
 
     // Create grabber controller
     if (pref->getBooleanPreference("preferences", "gphoto2controller", value) == false) {
-        value = GrabberWidget::GPHOTO2CONTROLERDEFAULT;
+        value = Frontend::GPHOTO2CONTROLERDEFAULT;
     }
     if ((int)true == value) {
         deviceController = new GphotoController(0);

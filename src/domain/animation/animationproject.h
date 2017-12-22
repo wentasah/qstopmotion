@@ -53,12 +53,6 @@ public:
         InTempPath,
     };
 
-    enum ImageTransformationMode {
-        ScaleImage,      // Scale the image to the output size
-        ClipImage,       // Clip the image to the output size according to the adjustment setting
-        ZoomImage,       // Zoom the image to the output size according to the zoom setting
-    };
-
     /**
      * Initializes the variables of the animation to starting values.
      * @param f The frontend of the application.

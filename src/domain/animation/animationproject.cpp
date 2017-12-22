@@ -49,17 +49,17 @@ AnimationProject::AnimationProject(Frontend* f)
     beepCount                = DomainFacade::BEEPCOUNTDEFAULT;
     overlayIntensity         = 100;
 
-    encoderApplication       = 0;
-    imageFormat              = 0;
-    imageQuality             = 100;
-    imageSize                = 0;
-    imageTransformation      = AnimationProject::ScaleImage;
-    imageAdjustment          = 0;
-    zoomValue                = 25;
-    liveViewFps              = 2.0;
-    videoFormat              = 0;
-    videoSize                = 0;
-    videoFps                 = 12;
+    encoderApplication       = DomainFacade::ENCODERAPPLICATIONDEFAULT;
+    imageFormat              = DomainFacade::IMAGEFORMATDEFAULT;
+    imageQuality             = DomainFacade::IMAGEQUALITYDEFAULT;
+    imageSize                = DomainFacade::IMAGESIZEDEFAULT;
+    imageTransformation      = DomainFacade::IMAGETRANSFORMDEFAULT;
+    imageAdjustment          = DomainFacade::IMAGEADJUSTMENTDEFAULT;
+    zoomValue                = DomainFacade::ZOOMVALUEDEFAULT;
+    liveViewFps              = DomainFacade::LIVEVIEWFPSDEFAULT;
+    videoFormat              = DomainFacade::VIDEOFORMATDEFAULT;
+    videoSize                = DomainFacade::VIDEOSIZEDEFAULT;
+    videoFps                 = DomainFacade::VIDEOFPSDEFAULT;
 
     useDefaultOutputFile     = false;
     activeSceneIndex         = -1;

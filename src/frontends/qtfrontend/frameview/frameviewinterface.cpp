@@ -32,7 +32,7 @@
 #include <QSize>
 #include <QString>
 
-#include "domain/animation/animationproject.h"
+#include "domain/domainfacade.h"
 
 
 FrameViewInterface::FrameViewInterface(Frontend *f, QWidget *parent, double fps)
@@ -403,7 +403,7 @@ QImage FrameViewInterface::clipImage(QImage image)
         }
 
         switch (trans) {
-        case AnimationProject::ScaleImage:
+        case DomainFacade::ScaleImage:
             // Scale the image to the output size
 
             widthScale = imageWidth / frameViewWidth;
@@ -417,7 +417,7 @@ QImage FrameViewInterface::clipImage(QImage image)
             }
 
             break;
-        case AnimationProject::ClipImage:
+        case DomainFacade::ClipImage:
             // Clip the image to the output size
 
             switch (frontend->getProject()->getImageAdjustment()) {
@@ -470,7 +470,7 @@ QImage FrameViewInterface::clipImage(QImage image)
 
             break;
 
-        case AnimationProject::ZoomImage:
+        case DomainFacade::ZoomImage:
             // Zoom the image
 
             int zoomValue = frontend->getProject()->getZoomValue();

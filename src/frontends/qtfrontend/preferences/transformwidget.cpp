@@ -47,7 +47,7 @@ TransformWidget::TransformWidget(Frontend *f, bool type, QWidget *parent) : QWid
     scaleButton              = 0;
     clipButton               = 0;
     zoomButton               = 0;
-    activeTransform          = TRANSFORMDEFAULT;
+    activeTransform          = DomainFacade::IMAGETRANSFORMDEFAULT;
 
     // Adjustment preferences
     adjustmentPrefs          = 0;
@@ -60,13 +60,13 @@ TransformWidget::TransformWidget(Frontend *f, bool type, QWidget *parent) : QWid
     leftDownButton           = 0;
     centerDownButton         = 0;
     rightDownButton          = 0;
-    activeImageAdjustment    = IMAGEADJUSTMENTDEFAULT;
+    activeImageAdjustment    = DomainFacade::IMAGEADJUSTMENTDEFAULT;
 
     // Zoomw preferences
     zoomPrefs                = 0;
     zoomLabel                = 0;
     zoomSlider               = 0;
-    activeZoomValue          = ZOOMVALUEDEFAULT;
+    activeZoomValue          = DomainFacade::ZOOMVALUEDEFAULT;
     zoomMinimumLabel         = 0;
     zoomMaximumLabel         = 0;
 

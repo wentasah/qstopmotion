@@ -45,8 +45,6 @@
 #include "domain/undo/undotakeremove.h"
 #include "domain/undo/undotakeselect.h"
 #include "frontends/qtfrontend/toolbar.h"
-#include "frontends/qtfrontend/preferences/transformwidget.h"
-#include "frontends/qtfrontend/preferences/projectwidget.h"
 
 
 const double DomainFacade::LIVEVIEWFPSDEFAULT = 2.0f;
@@ -821,17 +819,17 @@ void DomainFacade::setProjectSettingsToDefault()
 
     // Image transformation preferences
     if (pref->getIntegerPreference("preferences", "defaulttransformation", intValue) == false) {
-        intValue = TransformWidget::TRANSFORMDEFAULT;
+        intValue = IMAGETRANSFORMDEFAULT;
     }
     setImageTransformation(intValue);
 
     if (pref->getIntegerPreference("preferences", "defaultimageadjustment", intValue) == false) {
-        intValue = TransformWidget::IMAGEADJUSTMENTDEFAULT;
+        intValue = IMAGEADJUSTMENTDEFAULT;
     }
     setImageAdjustment(intValue);
 
     if (pref->getIntegerPreference("preferences", "defaultzoomvalue", intValue) == false) {
-        intValue = TransformWidget::ZOOMVALUEDEFAULT;
+        intValue = ZOOMVALUEDEFAULT;
     }
     setZoomValue(intValue);
 

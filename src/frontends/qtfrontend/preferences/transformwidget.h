@@ -50,9 +50,6 @@ class TransformWidget : public QWidget
     Q_OBJECT
 
 public:
-    const static int TRANSFORMDEFAULT = 0;
-    const static int IMAGEADJUSTMENTDEFAULT = DomainFacade::centerDown;
-    const static int ZOOMVALUEDEFAULT = 20;
 
     /**
      * Sets up the tab.

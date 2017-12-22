@@ -444,9 +444,9 @@ void PreferencesTool::setBasicPreferenceDefaults()
     setIntegerPreference("preferences", "defaultimagesize", DomainFacade::IMAGESIZEDEFAULT);
     setDoublePreference("preferences", "defaultliveviewfps", DomainFacade::LIVEVIEWFPSDEFAULT);
     // Image transformation defaults
-    setIntegerPreference("preferences", "defaulttransformation", TransformWidget::TRANSFORMDEFAULT);
-    setIntegerPreference("preferences", "defaultimageadjustment", TransformWidget::IMAGEADJUSTMENTDEFAULT);
-    setIntegerPreference("preferences", "defaultzoomvalue", TransformWidget::ZOOMVALUEDEFAULT);
+    setIntegerPreference("preferences", "defaulttransformation", DomainFacade::IMAGETRANSFORMDEFAULT);
+    setIntegerPreference("preferences", "defaultimageadjustment", DomainFacade::IMAGEADJUSTMENTDEFAULT);
+    setIntegerPreference("preferences", "defaultzoomvalue", DomainFacade::ZOOMVALUEDEFAULT);
     // Video export defaults
     setIntegerPreference("preferences", "defaultencoderapplication", DomainFacade::ENCODERAPPLICATIONDEFAULT);
     setIntegerPreference("preferences", "defaultvideoformat", DomainFacade::VIDEOFORMATDEFAULT);

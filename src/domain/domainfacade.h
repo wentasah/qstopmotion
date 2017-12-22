@@ -163,7 +163,21 @@ public:
     const static int    IMAGESIZEDEFAULT = defaultImageSize;
 
     /**
-     * Enum with all possible image adjustments
+     * @brief Enum with all possible image transformation modes
+     */
+    enum ImageTransformationMode {
+        ScaleImage,      // Scale the image to the output size
+        ClipImage,       // Clip the image to the output size according to the adjustment setting
+        ZoomImage,       // Zoom the image to the output size according to the zoom setting
+    };
+
+    /**
+     * @brief Default image transformation mode for new installations
+     */
+    const static int IMAGETRANSFORMDEFAULT = ScaleImage;
+
+    /**
+     * @brief Enum with all possible image adjustments
      */
     enum imageAdjustment {
         leftUp,               // Left up corner
@@ -177,6 +191,16 @@ public:
         rightDown,            // Right down corner
         lastImageAdjustment   // Last adjustment marker for asserts
     };
+
+    /**
+     * @brief Default image adgustment for new installations
+     */
+    const static int IMAGEADJUSTMENTDEFAULT = centerDown;
+
+    /**
+     * @brief Default image zoom value for new installations
+     */
+    const static int ZOOMVALUEDEFAULT = 20;
 
     /**
      * @brief Default live view FPS for new installations

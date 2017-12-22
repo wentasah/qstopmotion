@@ -42,6 +42,7 @@ class Take;
 class Exposure;
 class ViewFacade;
 
+
 /**
  * Singleton facade for the domain level. All requests into the domain layer
  * has to pass through this facade. The only exception is observer requests
@@ -123,6 +124,66 @@ public:
      * @brief Default beep count for new installations
      */
     const static int  BEEPCOUNTDEFAULT = 5;
+
+    /**
+     * @brief Enum with all possible image output formats
+     */
+    enum imageFormat {
+        jpegFormat,            // JPEG format
+        tiffFormat,            // TIFF format
+        bmpFormat,             // BMP format
+        lastImageFormat        // Last format marker for asserts
+    };
+
+    /**
+     * @brief Default image format for new installations
+     */
+    const static int    IMAGEFORMATDEFAULT = jpegFormat;
+
+    /**
+     * @brief Default image quality for new installations
+     */
+    const static int    IMAGEQUALITYDEFAULT = 100;
+
+    /**
+     * @brief Enum with all possible image sizes
+     */
+    enum imageSize {
+        defaultSize,          // Source size
+        qvgaSize,             // 320x240 (QVGA)
+        vgaSize,              // 640x480 (VGA)
+        svgaSize,             // 800x600 (SVGA)
+        paldSize,             // 704x576 (PAL D)
+        hdreadySize,          // 1280x720 (HD Ready)
+        fullhdSize,           // 1900x1080 (Full HD)
+        lastImageSize         // Last size marker for asserts
+    };
+
+    /**
+     * @brief Default image size for new installations
+     */
+    const static int    IMAGESIZEDEFAULT = defaultSize;
+
+    /**
+     * Enum with all possible image adjustments
+     */
+    enum imageAdjustment {
+        leftUp,               // Left up corner
+        centerUp,             // Center up
+        rightUp,              // Right up corner
+        leftMiddle,           // Left middle
+        centerMiddle,         // Center middle
+        rightMiddle,          // Right middle
+        leftDown,             // Left down corner
+        centerDown,           // Center down
+        rightDown,            // Right down corner
+        lastImageAdjustment   // Last adjustment marker for asserts
+    };
+
+    /**
+     * @brief Default live view FPS for new installations
+     */
+    const static double LIVEVIEWFPSDEFAULT;
 
     /**
      * The constructor. It is protected so that it will be impossible for other classes,
@@ -538,20 +599,6 @@ public:
      * @param newDOFN The new default output file name.
      */
     void setDefaultOutputFileName(const QString newDOFN);
-
-    /**
-     * Exports the current project to a video file as specified by the video encoder.
-     * @param encoder the video encoder to use for export to video
-     * @return true on success, false otherwise
-     */
-    bool exportToVideo(VideoEncoder *encoder);
-
-    /**
-     * Exports the current project to a cinelerra-cv project.
-     * @param file the cinelerra-cv project file
-     * @return true on success, false otherwise
-     */
-    bool exportToCinelerra(const QString file);
 
     /**************************************************************************
      * Project functions

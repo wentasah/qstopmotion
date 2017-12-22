@@ -497,20 +497,6 @@ public:
     // void animationChanged(const QString &alteredFile);
 
     /**
-     * Exports the current project to a video file as specified by the video encoder.
-     * @param encoder the video encoder to use for export to video
-     * @return true on success, false otherwise
-     */
-    bool exportToVideo(VideoEncoder *encoder);
-
-    /**
-     * Exports the current project to a cinelerra-cv project.
-     * @param file the cinelerra-cv project file
-     * @return true on success, false otherwise
-     */
-    bool exportToCinelerra(const QString &file);
-
-    /**
      * Get the data of the settings from the project file
      */
     bool readSettingsFromProject(QDomElement &settingsNode);

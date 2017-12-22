@@ -38,7 +38,7 @@
 
 #include <qwt/qwt_slider.h>
 
-#include "technical/grabber/imagegrabber.h"
+#include "domain/domainfacade.h"
 
 
 /**
@@ -51,7 +51,7 @@ class TransformWidget : public QWidget
 
 public:
     const static int TRANSFORMDEFAULT = 0;
-    const static int IMAGEADJUSTMENTDEFAULT = ImageGrabber::centerDown;
+    const static int IMAGEADJUSTMENTDEFAULT = DomainFacade::centerDown;
     const static int ZOOMVALUEDEFAULT = 20;
 
     /**

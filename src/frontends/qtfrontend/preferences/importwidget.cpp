@@ -34,8 +34,6 @@
 #include "technical/preferencestool.h"
 
 
-const double ImportWidget::LIVEVIEWFPSDEFAULT = 2.0f;
-
 ImportWidget::ImportWidget(Frontend *f, bool type, QWidget *parent) : QWidget(parent)
 {
     qDebug() << "ImportWidget::Constructor --> Start";
@@ -50,21 +48,21 @@ ImportWidget::ImportWidget(Frontend *f, bool type, QWidget *parent) : QWidget(pa
     imagePrefs               = 0;
     imageFormatLabel         = 0;
     imageFormatCombo         = 0;
-    activeImageFormat        = IMAGEFORMATDEFAULT;
+    activeImageFormat        = DomainFacade::IMAGEFORMATDEFAULT;
     imageQualityLabel        = 0;
     imageQualitySlider       = 0;
-    activeImageQuality       = IMAGEQUALITYDEFAULT;
+    activeImageQuality       = DomainFacade::IMAGEQUALITYDEFAULT;
     qualityMinimumLabel      = 0;
     qualityMaximumLabel      = 0;
     imageSizeLabel           = 0;
     imageSizeCombo           = 0;
-    activeImageSize          = IMAGESIZEDEFAULT;
+    activeImageSize          = DomainFacade::IMAGESIZEDEFAULT;
 
     // Live view preferences
     liveViewPrefs            = 0;
     liveViewFpsLabel         = 0;
     liveViewFpsSlider        = 0;
-    activeLiveViewFps        = LIVEVIEWFPSDEFAULT;
+    activeLiveViewFps        = DomainFacade::LIVEVIEWFPSDEFAULT;
 
     this->setObjectName("ImportWidget");
 
@@ -375,7 +373,7 @@ void ImportWidget::changeImageSize(int /*index*/)
 
 void ImportWidget::enableQuality()
 {
-    if (imageFormatCombo->currentIndex() == ImageGrabber::jpegFormat) {
+    if (imageFormatCombo->currentIndex() == DomainFacade::jpegFormat) {
         imageQualityLabel->setEnabled(true);
         imageQualitySlider->setEnabled(true);
         qualityMinimumLabel->setEnabled(true);

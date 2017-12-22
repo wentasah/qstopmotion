@@ -23,7 +23,7 @@
 
 #include <QString>
 
-#include "domain/animation/animationproject.h"
+#include "domain/domainfacade.h"
 #include "technical/videoencoder/videoencoder.h"
 
 class AnimationProject;

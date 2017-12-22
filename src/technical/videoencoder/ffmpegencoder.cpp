@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2015 by                                                *
+ *  Copyright (C) 2005-2017 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -27,7 +27,6 @@
 
 #include "domain/animation/projectserializer.h"
 #include "frontends/frontend.h"
-#include "technical/grabber/imagegrabber.h"
 
 
 /**
@@ -117,13 +116,13 @@ const QStringList FfmpegEncoder::getEncoderArguments() const
         imageFiles.append(QLatin1String("/"));
         imageFiles.append(QLatin1String("%6d."));
         switch (animationProject->getImageFormat()) {
-        case ImageGrabber::jpegFormat:
+        case DomainFacade::jpegFormat:
             imageFiles.append(PreferencesTool::jpegSuffix);
             break;
-        case ImageGrabber::tiffFormat:
+        case DomainFacade::tiffFormat:
             imageFiles.append(PreferencesTool::tiffSuffix);
             break;
-        case ImageGrabber::bmpFormat:
+        case DomainFacade::bmpFormat:
             imageFiles.append(PreferencesTool::bmpSuffix);
             break;
         }

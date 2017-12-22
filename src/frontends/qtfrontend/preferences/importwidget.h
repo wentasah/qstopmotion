@@ -38,8 +38,6 @@
 
 #include <qwt/qwt_slider.h>
 
-#include "technical/grabber/imagegrabber.h"
-
 
 /**
  * The image import tab in the preferences menu
@@ -49,11 +47,6 @@ class ImportWidget : public QWidget
 {
     Q_OBJECT
 public:
-    const static int    IMAGEFORMATDEFAULT = ImageGrabber::jpegFormat;
-    const static int    IMAGEQUALITYDEFAULT = 100;
-    const static int    IMAGESIZEDEFAULT = ImageGrabber::defaultSize;
-    const static double LIVEVIEWFPSDEFAULT;
-
     /**
      * Sets up the tab.
      * @param f frontend of the application

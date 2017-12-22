@@ -27,10 +27,10 @@
 #include <QImage>
 #include <QString>
 
+#include "domain/domainfacade.h"
 #include "domain/animation/projectserializer.h"
 #include "technical/util.h"
 #include "technical/preferencestool.h"
-#include "technical/grabber/imagegrabber.h"
 
 
 unsigned int Exposure::tempNumber = 0;
@@ -278,13 +278,13 @@ void Exposure::convertToTemp(int newFormat, int quality)
     QString toImageName(theFrame.left(theFrame.lastIndexOf('.') + 1));  // Including the '.')
 
     switch(newFormat) {
-    case ImageGrabber::jpegFormat:
+    case DomainFacade::jpegFormat:
         toImageName.append(PreferencesTool::jpegSuffix);
         break;
-    case ImageGrabber::tiffFormat:
+    case DomainFacade::tiffFormat:
         toImageName.append(PreferencesTool::tiffSuffix);
         break;
-    case ImageGrabber::bmpFormat:
+    case DomainFacade::bmpFormat:
         toImageName.append(PreferencesTool::bmpSuffix);
         break;
     }

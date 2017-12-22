@@ -25,7 +25,7 @@
 
 #include "domain/animation/projectserializer.h"
 #include "frontends/frontend.h"
-#include "technical/grabber/imagegrabber.h"
+// #include "technical/grabber/imagegrabber.h"
 
 
 /**
@@ -115,13 +115,13 @@ const QStringList LibavEncoder::getEncoderArguments() const
         imageFiles.append(QLatin1String("/"));
         imageFiles.append(QLatin1String("%6d."));
         switch (animationProject->getImageFormat()) {
-        case ImageGrabber::jpegFormat:
+        case DomainFacade::jpegFormat:
             imageFiles.append(PreferencesTool::jpegSuffix);
             break;
-        case ImageGrabber::tiffFormat:
+        case DomainFacade::tiffFormat:
             imageFiles.append(PreferencesTool::tiffSuffix);
             break;
-        case ImageGrabber::bmpFormat:
+        case DomainFacade::bmpFormat:
             imageFiles.append(PreferencesTool::bmpSuffix);
             break;
         }

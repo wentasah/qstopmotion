@@ -29,7 +29,6 @@
 
 #include "domain/domainfacade.h"
 // #include "technical/audio/ossdriver.h"
-#include "technical/videoencoder/videoencoderfactory.h"
 
 
 AnimationProject::AnimationProject(Frontend* f)
@@ -662,26 +661,6 @@ void AnimationProject::shutdownAudioDevice()
     isAudioDriverInitialized = false;
 
     qDebug() << "AnimationProject::shutdownAudioDevice --> End";
-}
-
-
-bool AnimationProject::exportToVideo(VideoEncoder * encoder)
-{
-    qDebug() << "AnimationProject::exportToVideo --> Start";
-
-    VideoEncoderFactory factory(this->getFrontend());
-    if (factory.createVideoFile(encoder) != NULL) {
-        return true;
-    }
-
-    qDebug() << "AnimationProject::exportToVideo --> End";
-    return false;
-}
-
-
-bool AnimationProject::exportToCinelerra(const QString&)
-{
-    return false;
 }
 
 

@@ -32,7 +32,6 @@
 #include "domain/domainfacade.h"
 #include "frontends/qtfrontend/preferences/exportwidget.h"
 #include "frontends/qtfrontend/preferences/grabberwidget.h"
-#include "frontends/qtfrontend/preferences/importwidget.h"
 #include "frontends/qtfrontend/preferences/transformwidget.h"
 #include "technical/videoencoder/videoencoder.h"
 
@@ -441,10 +440,10 @@ void PreferencesTool::setBasicPreferenceDefaults()
     setBooleanPreference("preferences", "defaultbeepcheck", DomainFacade::BEEPCHECKDEFAULT);
     setIntegerPreference("preferences", "defaultbeepcount", DomainFacade::BEEPCOUNTDEFAULT);
     // Image import defaults
-    setIntegerPreference("preferences", "defaultimageformat", ImportWidget::IMAGEFORMATDEFAULT);
-    setIntegerPreference("preferences", "defaultimagequality", ImportWidget::IMAGEQUALITYDEFAULT);
-    setIntegerPreference("preferences", "defaultimagesize", ImportWidget::IMAGESIZEDEFAULT);
-    setDoublePreference("preferences", "defaultliveviewfps", ImportWidget::LIVEVIEWFPSDEFAULT);
+    setIntegerPreference("preferences", "defaultimageformat", DomainFacade::IMAGEFORMATDEFAULT);
+    setIntegerPreference("preferences", "defaultimagequality", DomainFacade::IMAGEQUALITYDEFAULT);
+    setIntegerPreference("preferences", "defaultimagesize", DomainFacade::IMAGESIZEDEFAULT);
+    setDoublePreference("preferences", "defaultliveviewfps", DomainFacade::LIVEVIEWFPSDEFAULT);
     // Image transformation defaults
     setIntegerPreference("preferences", "defaulttransformation", TransformWidget::TRANSFORMDEFAULT);
     setIntegerPreference("preferences", "defaultimageadjustment", TransformWidget::IMAGEADJUSTMENTDEFAULT);

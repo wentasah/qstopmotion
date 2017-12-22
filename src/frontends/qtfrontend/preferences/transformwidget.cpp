@@ -29,7 +29,6 @@
 #include <QRect>
 #include <QSpacerItem>
 
-#include "domain/domainfacade.h"
 #include "frontends/qtfrontend/elements/flexiblelineedit.h"
 #include "technical/preferencestool.h"
 
@@ -346,31 +345,31 @@ void TransformWidget::apply()
     }
 
     if (leftUpButton->isChecked()) {
-        index = ImageGrabber::leftUp;
+        index = DomainFacade::leftUp;
     }
     if (centerUpButton->isChecked()) {
-        index = ImageGrabber::centerUp;
+        index = DomainFacade::centerUp;
     }
     if (rightUpButton->isChecked()) {
-        index = ImageGrabber::rightUp;
+        index = DomainFacade::rightUp;
     }
     if (leftMiddleButton->isChecked()) {
-        index = ImageGrabber::leftMiddle;
+        index = DomainFacade::leftMiddle;
     }
     if (centerMiddleButton->isChecked()) {
-        index = ImageGrabber::centerMiddle;
+        index = DomainFacade::centerMiddle;
     }
     if (rightMiddleButton->isChecked()) {
-        index = ImageGrabber::rightMiddle;
+        index = DomainFacade::rightMiddle;
     }
     if (leftDownButton->isChecked()) {
-        index = ImageGrabber::leftDown;
+        index = DomainFacade::leftDown;
     }
     if (centerDownButton->isChecked()) {
-        index = ImageGrabber::centerDown;
+        index = DomainFacade::centerDown;
     }
     if (rightDownButton->isChecked()) {
-        index = ImageGrabber::rightDown;
+        index = DomainFacade::rightDown;
     }
     if (activeImageAdjustment != index)
     {
@@ -430,31 +429,31 @@ void TransformWidget::setAdjustment(int newAdjustment)
     qDebug() << "TransformWidget::setAdjustment --> Start";
 
     switch (newAdjustment) {
-    case ImageGrabber::leftUp:
+    case DomainFacade::leftUp:
         leftUpButton->setChecked(true);
         break;
-    case ImageGrabber::centerUp:
+    case DomainFacade::centerUp:
         centerUpButton->setChecked(true);
         break;
-    case ImageGrabber::rightUp:
+    case DomainFacade::rightUp:
         rightUpButton->setChecked(true);
         break;
-    case ImageGrabber::leftMiddle:
+    case DomainFacade::leftMiddle:
         leftMiddleButton->setChecked(true);
         break;
-    case ImageGrabber::centerMiddle:
+    case DomainFacade::centerMiddle:
         centerMiddleButton->setChecked(true);
         break;
-    case ImageGrabber::rightMiddle:
+    case DomainFacade::rightMiddle:
         rightMiddleButton->setChecked(true);
         break;
-    case ImageGrabber::leftDown:
+    case DomainFacade::leftDown:
         leftDownButton->setChecked(true);
         break;
-    case ImageGrabber::centerDown:
+    case DomainFacade::centerDown:
         centerDownButton->setChecked(true);
         break;
-    case ImageGrabber::rightDown:
+    case DomainFacade::rightDown:
         rightDownButton->setChecked(true);
         break;
     }

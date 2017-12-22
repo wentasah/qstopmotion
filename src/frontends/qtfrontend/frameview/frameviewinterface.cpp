@@ -33,7 +33,6 @@
 #include <QString>
 
 #include "domain/animation/animationproject.h"
-#include "technical/grabber/imagegrabber.h"
 
 
 FrameViewInterface::FrameViewInterface(Frontend *f, QWidget *parent, double fps)
@@ -373,27 +372,27 @@ QImage FrameViewInterface::clipImage(QImage image)
         // Cliping and zooming is only necessary for live image mode
 
         switch (frontend->getProject()->getVideoSize()) {
-        case ImageGrabber::qvgaSize:    // QVGA
+        case DomainFacade::qvgaSize:    // QVGA
             destWidth = 320;
             destHeight = 240;
             break;
-        case ImageGrabber::vgaSize:     // VGA
+        case DomainFacade::vgaSize:     // VGA
             destWidth = 640;
             destHeight = 480;
             break;
-        case ImageGrabber::svgaSize:    // SVGA
+        case DomainFacade::svgaSize:    // SVGA
             destWidth = 800;
             destHeight = 600;
             break;
-        case ImageGrabber::paldSize:    // PAL D
+        case DomainFacade::paldSize:    // PAL D
             destWidth = 704;
             destHeight = 576;
             break;
-        case ImageGrabber::hdreadySize: // HD Ready
+        case DomainFacade::hdreadySize: // HD Ready
             destWidth = 1280;
             destHeight = 720;
             break;
-        case ImageGrabber::fullhdSize:  // Full HD
+        case DomainFacade::fullhdSize:  // Full HD
             destWidth = 1900;
             destHeight = 1080;
             break;
@@ -422,37 +421,37 @@ QImage FrameViewInterface::clipImage(QImage image)
             // Clip the image to the output size
 
             switch (frontend->getProject()->getImageAdjustment()) {
-            case ImageGrabber::leftUp:
-            case ImageGrabber::leftMiddle:
-            case ImageGrabber::leftDown:
+            case DomainFacade::leftUp:
+            case DomainFacade::leftMiddle:
+            case DomainFacade::leftDown:
                 x = 0;
                 break;
-            case ImageGrabber::centerUp:
-            case ImageGrabber::centerMiddle:
-            case ImageGrabber::centerDown:
+            case DomainFacade::centerUp:
+            case DomainFacade::centerMiddle:
+            case DomainFacade::centerDown:
                 x = (int)((imageWidth-destWidth)/2);
                 break;
-            case ImageGrabber::rightUp:
-            case ImageGrabber::rightMiddle:
-            case ImageGrabber::rightDown:
+            case DomainFacade::rightUp:
+            case DomainFacade::rightMiddle:
+            case DomainFacade::rightDown:
                 x = (int)(imageWidth-destWidth);
                 break;
             }
 
             switch (frontend->getProject()->getImageAdjustment()) {
-            case ImageGrabber::leftUp:
-            case ImageGrabber::centerUp:
-            case ImageGrabber::rightUp:
+            case DomainFacade::leftUp:
+            case DomainFacade::centerUp:
+            case DomainFacade::rightUp:
                 y = 0;
                 break;
-            case ImageGrabber::leftMiddle:
-            case ImageGrabber::centerMiddle:
-            case ImageGrabber::rightMiddle:
+            case DomainFacade::leftMiddle:
+            case DomainFacade::centerMiddle:
+            case DomainFacade::rightMiddle:
                 y = (int)((imageHeight-destHeight)/2);
                 break;
-            case ImageGrabber::leftDown:
-            case ImageGrabber::centerDown:
-            case ImageGrabber::rightDown:
+            case DomainFacade::leftDown:
+            case DomainFacade::centerDown:
+            case DomainFacade::rightDown:
                 y = (int)(imageHeight-destHeight);
                 break;
             }

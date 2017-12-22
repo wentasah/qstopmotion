@@ -47,12 +47,12 @@
 #include "domain/undo/undotakeselect.h"
 #include "frontends/qtfrontend/toolbar.h"
 #include "frontends/qtfrontend/preferences/exportwidget.h"
-#include "frontends/qtfrontend/preferences/importwidget.h"
 #include "frontends/qtfrontend/preferences/transformwidget.h"
 #include "technical/grabber/imagegrabber.h"
 #include "technical/videoencoder/videoencoder.h"
 #include "frontends/qtfrontend/preferences/projectwidget.h"
 
+const double DomainFacade::LIVEVIEWFPSDEFAULT = 2.0f;
 
 DomainFacade::DomainFacade(Frontend *f)
 {
@@ -539,18 +539,6 @@ void DomainFacade::setDefaultOutputFileName(const QString newDOFN)
     animationProject->setDefaultOutputFileName(newDOFN);
 }
 
-
-bool DomainFacade::exportToVideo(VideoEncoder *encoder)
-{
-    return animationProject->exportToVideo(encoder);
-}
-
-
-bool DomainFacade::exportToCinelerra(const QString file)
-{
-    return animationProject->exportToCinelerra(file);
-}
-
 /**************************************************************************
  * Project functions
  **************************************************************************/
@@ -774,63 +762,63 @@ void DomainFacade::setProjectSettingsToDefault()
 
     // Project preferences
     if (pref->getIntegerPreference("preferences", "defaultrecordingmode", intValue) == false) {
-        intValue = DomainFacade::RECORDINGMODEDEFAULT;
+        intValue = RECORDINGMODEDEFAULT;
     }
     setRecordingMode(intValue);
 
     if (pref->getIntegerPreference("preferences", "defaultvideosource", intValue) == false) {
-        intValue = DomainFacade::GRABBERSOURCEDEFAULT;
+        intValue = GRABBERSOURCEDEFAULT;
     }
     setVideoSource(intValue);
 
     if (pref->getIntegerPreference("preferences", "defaultmixingmode", intValue) == false) {
-        intValue = DomainFacade::MIXMODEDEFAULT;
+        intValue = MIXMODEDEFAULT;
     }
     setMixMode(intValue);
 
     if (pref->getIntegerPreference("preferences", "defaultmixcount", intValue) == false) {
-        intValue = DomainFacade::MIXCOUNTDEFAULT;
+        intValue = MIXCOUNTDEFAULT;
     }
     setMixCount(intValue);
 
     if (pref->getIntegerPreference("preferences", "defaultunitmode", intValue) == false) {
-        intValue = DomainFacade::UNITMODEDEFAULT;
+        intValue = UNITMODEDEFAULT;
     }
     setUnitMode(intValue);
 
     if (pref->getIntegerPreference("preferences", "defaultunitcount", intValue) == false) {
-        intValue = DomainFacade::UNITCOUNTDEFAULT;
+        intValue = UNITCOUNTDEFAULT;
     }
     setUnitCount(intValue);
 
     if (pref->getBooleanPreference("preferences", "defaultbeepcheck", boolValue) == false) {
-        boolValue = DomainFacade::BEEPCHECKDEFAULT;
+        boolValue = BEEPCHECKDEFAULT;
     }
     setBeepState(boolValue);
 
     if (pref->getIntegerPreference("preferences", "defaultbeepcount", intValue) == false) {
-        intValue = DomainFacade::BEEPCOUNTDEFAULT;
+        intValue = BEEPCOUNTDEFAULT;
     }
     setBeepCount(intValue);
 
     // Image import preferences
     if (pref->getIntegerPreference("preferences", "defaultimageformat", intValue) == false) {
-        intValue = ImportWidget::IMAGEFORMATDEFAULT;
+        intValue = IMAGEFORMATDEFAULT;
     }
     setImageFormat(intValue);
 
     if (pref->getIntegerPreference("preferences", "defaultimagequality", intValue) == false) {
-        intValue = ImportWidget::IMAGEQUALITYDEFAULT;
+        intValue = IMAGEQUALITYDEFAULT;
     }
     setImageQuality(intValue);
 
     if (pref->getIntegerPreference("preferences", "defaultimagesize", intValue) == false) {
-        intValue = ImportWidget::IMAGESIZEDEFAULT;
+        intValue = IMAGESIZEDEFAULT;
     }
     setImageSize(intValue);
 
     if (pref->getDoublePreference("preferences", "defaultliveviewfps", doubleValue) == false) {
-        doubleValue = ImportWidget::LIVEVIEWFPSDEFAULT;
+        doubleValue = LIVEVIEWFPSDEFAULT;
     }
     setLiveViewFps(doubleValue);
 
@@ -1303,13 +1291,13 @@ const QString DomainFacade::copyToTemp(const QImage &rawImage)
                         .arg(Exposure::tempNumber)
                         .arg(QLatin1String(".")));
     switch (animationProject->getImageFormat()) {
-    case ImageGrabber::jpegFormat:
+    case jpegFormat:
         toImageName.append(PreferencesTool::jpegSuffix);
         break;
-    case ImageGrabber::tiffFormat:
+    case tiffFormat:
         toImageName.append(PreferencesTool::tiffSuffix);
         break;
-    case ImageGrabber::bmpFormat:
+    case bmpFormat:
         toImageName.append(PreferencesTool::bmpSuffix);
         break;
     }
@@ -1322,13 +1310,13 @@ const QString DomainFacade::copyToTemp(const QImage &rawImage)
 
     // Copy file to temp directory
     switch (animationProject->getImageFormat()) {
-    case ImageGrabber::jpegFormat:
+    case jpegFormat:
         ret = rawImage.save(toImagePath, "JPEG", 100);
         break;
-    case ImageGrabber::tiffFormat:
+    case tiffFormat:
         ret = rawImage.save(toImagePath, "TIFF", 100);
         break;
-    case ImageGrabber::bmpFormat:
+    case bmpFormat:
         ret = rawImage.save(toImagePath, "BMP", 100);
         break;
     }

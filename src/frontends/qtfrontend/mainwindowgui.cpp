@@ -41,6 +41,7 @@
 #include "technical/util.h"
 #include "technical/videoencoder/ffmpegencoder.h"
 #include "technical/videoencoder/libavencoder.h"
+#include "technical/videoencoder/videoencoderfactory.h"
 
 using namespace Qt;
 
@@ -1474,7 +1475,7 @@ void MainWindowGUI::exportToVideo()
 {
     qDebug() << "MainWindowGUI::exportToVideo --> Start";
 
-    VideoEncoder    *enc = NULL;
+    VideoEncoder    *encoder = NULL;
     int              activeEncoderApplication;
     bool             useDefaultOutputFile;
 
@@ -1493,11 +1494,11 @@ void MainWindowGUI::exportToVideo()
     switch (activeEncoderApplication)
     {
     case VideoEncoder::ffmpegApplication:
-        enc = new FfmpegEncoder(this->frontend->getProject()->getAnimationProject());
+        encoder = new FfmpegEncoder(this->frontend->getProject()->getAnimationProject());
 
         break;
     case VideoEncoder::libavApplication:
-        enc = new LibavEncoder(this->frontend->getProject()->getAnimationProject());
+        encoder = new LibavEncoder(this->frontend->getProject()->getAnimationProject());
 
         break;
     default:
@@ -1540,15 +1541,15 @@ void MainWindowGUI::exportToVideo()
             outputFile.append(openFiles[0]);
         }
         if (outputFile.isEmpty()) {
-            delete enc;
-            enc = NULL;
+            delete encoder;
+            encoder = NULL;
             return;
         } else {
             if (!outputFile.endsWith(exportSuffix)) {
                 outputFile.append(".");
                 outputFile.append(exportSuffix);
             }
-            enc->setOutputFile(outputFile);
+            encoder->setOutputFile(outputFile);
         }
     } else {
         QString  outputFileName;
@@ -1575,28 +1576,35 @@ void MainWindowGUI::exportToVideo()
             }
             break;
         }
-        enc->setOutputFile(outputFileName);
+        encoder->setOutputFile(outputFileName);
     }
 
     // Remove an existing file
-    QFile::remove(enc->getOutputFile());
+    QFile::remove(encoder->getOutputFile());
 
-    if (!enc->isValid()) {
+    if (!encoder->isValid()) {
         frontend->showWarning(tr("Warning"),
                               tr("The selected encoder is not installed on your computer.\n"
                                  "Install the encoder or select another one!"));
-        delete enc;
-        enc = NULL;
+        delete encoder;
+        encoder = NULL;
         return;
     }
     checkSaved();
 
     frontend->showProgress(tr("Exporting ..."), frontend->getProject()->getTotalExposureSize());
-    frontend->getProject()->exportToVideo(enc);
+    // frontend->getProject()->exportToVideo(encoder);
+
+    VideoEncoderFactory factory(frontend);
+    if (factory.createVideoFile(encoder) != NULL) {
+        // Success
+        // return true;
+    }
+
     frontend->hideProgress();
 
-    delete enc;
-    enc = NULL;
+    delete encoder;
+    encoder = NULL;
 
     qDebug() << "MainWindowGUI::exportToVideo --> End";
 }
@@ -1621,7 +1629,7 @@ void MainWindowGUI::exportToCinelerra()
     }
 
     if (!outputFile.isNull()) {
-        frontend->getProject()->exportToCinelerra(outputFile);
+        // Not implemented jet
     }
 }
 

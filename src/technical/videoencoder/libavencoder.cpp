@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2015 by                                                *
+ *  Copyright (C) 2005-2017 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -25,7 +25,6 @@
 
 #include "domain/animation/projectserializer.h"
 #include "frontends/frontend.h"
-// #include "technical/grabber/imagegrabber.h"
 
 
 /**
@@ -154,22 +153,22 @@ const QStringList LibavEncoder::getEncoderArguments() const
     // Video size (default = Input size)
     arguments << QLatin1String("-s");
     switch(animationProject->getVideoSize()) {
-    case VideoEncoder::qvgaSize:
+    case DomainFacade::qvgaVideoSize:
         arguments << QLatin1String("qvga");
         break;
-    case VideoEncoder::vgaSize:
+    case DomainFacade::vgaVideoSize:
         arguments << QLatin1String("vga");
         break;
-    case VideoEncoder::svgaSize:
+    case DomainFacade::svgaVideoSize:
         arguments << QLatin1String("svga");
         break;
-    case VideoEncoder::paldSize:
+    case DomainFacade::paldVideoSize:
         arguments << QLatin1String("4cif");
         break;
-    case VideoEncoder::hdreadySize:
+    case DomainFacade::hdreadyVideoSize:
         arguments << QLatin1String("hd720");
         break;
-    case VideoEncoder::fullhdSize:
+    case DomainFacade::fullhdVideoSize:
         arguments << QLatin1String("hd1080");
         break;
     default:
@@ -181,10 +180,10 @@ const QStringList LibavEncoder::getEncoderArguments() const
     // Video format
     arguments << QLatin1String("-f");
     switch(animationProject->getVideoFormat()) {
-    case VideoEncoder::aviFormat:
+    case DomainFacade::aviFormat:
         arguments << QLatin1String("avi");
         break;
-    case VideoEncoder::mp4Format:
+    case DomainFacade::mp4Format:
         arguments << QLatin1String("mp4");
         break;
     default:

@@ -27,7 +27,6 @@
 #include <QFile>
 
 #include "domain/domainfacade.h"
-// #include "domain/animation/animationproject.h"
 #include "domain/undo/undoexposureadd.h"
 #include "domain/undo/undoexposureinsert.h"
 #include "domain/undo/undoexposuremove.h"
@@ -46,11 +45,9 @@
 #include "domain/undo/undotakeremove.h"
 #include "domain/undo/undotakeselect.h"
 #include "frontends/qtfrontend/toolbar.h"
-#include "frontends/qtfrontend/preferences/exportwidget.h"
 #include "frontends/qtfrontend/preferences/transformwidget.h"
-#include "technical/grabber/imagegrabber.h"
-#include "technical/videoencoder/videoencoder.h"
 #include "frontends/qtfrontend/preferences/projectwidget.h"
+
 
 const double DomainFacade::LIVEVIEWFPSDEFAULT = 2.0f;
 
@@ -840,27 +837,27 @@ void DomainFacade::setProjectSettingsToDefault()
 
     // Video export preferences
     if (pref->getIntegerPreference("preferences", "defaultencoderapplication", intValue) == false) {
-        intValue = ExportWidget::ENCODERAPPLICATIONDEFAULT;
+        intValue = ENCODERAPPLICATIONDEFAULT;
     }
     setEncoderApplication(intValue);
 
     if (pref->getIntegerPreference("preferences", "defaultvideoformat", intValue) == false) {
-        intValue = ExportWidget::VIDEOFORMATDEFAULT;
+        intValue = VIDEOFORMATDEFAULT;
     }
     setVideoFormat(intValue);
 
     if (pref->getIntegerPreference("preferences", "defaultvideosize", intValue) == false) {
-        intValue = ExportWidget::VIDEOSIZEDEFAULT;
+        intValue = VIDEOSIZEDEFAULT;
     }
     setVideoSize(intValue);
 
     if (pref->getIntegerPreference("preferences", "defaultvideofps", intValue) == false) {
-        intValue = ExportWidget::VIDEOFPSDEFAULT;
+        intValue = VIDEOFPSDEFAULT;
     }
     setVideoFps(intValue);
 
     if (pref->getBooleanPreference("preferences", "defaultusedefaultoutputfile", boolValue) == false) {
-        boolValue = ExportWidget::USEDEFAULTOUTPUTFILENAMEDEFAULT;
+        boolValue = USEDEFAULTOUTPUTFILENAMEDEFAULT;
     }
     setUseDefaultOutputFile(boolValue);
 }

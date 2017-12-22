@@ -48,16 +48,16 @@ ExportWidget::ExportWidget(Frontend *f, bool type, QWidget *parent) : QWidget(pa
     encoderPrefs               = 0;
     encoderApplicationLabel    = 0;
     encoderApplicationCombo    = 0;
-    activeEncoderApplication   = ENCODERAPPLICATIONDEFAULT;
+    activeEncoderApplication   = DomainFacade::ENCODERAPPLICATIONDEFAULT;
     videoFormatLabel           = 0;
     videoFormatCombo           = 0;
-    activeVideoFormat          = VIDEOFORMATDEFAULT;
+    activeVideoFormat          = DomainFacade::VIDEOFORMATDEFAULT;
     videoSizeLabel             = 0;
     videoSizeCombo             = 0;
-    activeVideoSize            = VIDEOSIZEDEFAULT;
+    activeVideoSize            = DomainFacade::VIDEOSIZEDEFAULT;
     videoFpsLabel              = 0;
     videoFpsChooser            = 0;
-    activeVideoFps             = VIDEOFPSDEFAULT;
+    activeVideoFps             = DomainFacade::VIDEOFPSDEFAULT;
 
     // Output file preferences
     outputPrefs                = 0;
@@ -69,7 +69,7 @@ ExportWidget::ExportWidget(Frontend *f, bool type, QWidget *parent) : QWidget(pa
     defaultOutputEdit          = 0;
     activeDefaultOutputFileName.clear();
     browseOutputButton         = 0;
-    activeUseDefaultOutputFile = USEDEFAULTOUTPUTFILENAMEDEFAULT;
+    activeUseDefaultOutputFile = DomainFacade::USEDEFAULTOUTPUTFILENAMEDEFAULT;
 
     this->setObjectName("ExportWidget");
 
@@ -351,21 +351,21 @@ void ExportWidget::reset()
 {
     qDebug() << "ExportWidget::reset --> Start";
 
-    if (activeEncoderApplication == VideoEncoder::noneApplication) {
+    if (activeEncoderApplication == DomainFacade::noneEncoderApplication) {
         encoderApplicationCombo->setCurrentIndex(0);
     }
     else {
         encoderApplicationCombo->setCurrentIndex(activeEncoderApplication);
     }
 
-    if (activeVideoFormat == VideoEncoder::noneFormat) {
+    if (activeVideoFormat == DomainFacade::noneFormat) {
         videoFormatCombo->setCurrentIndex(0);
     }
     else {
         videoFormatCombo->setCurrentIndex(activeVideoFormat);
     }
 
-    if (activeVideoSize == VideoEncoder::defaultSize) {
+    if (activeVideoSize == DomainFacade::defaultVideoSize) {
         videoSizeCombo->setCurrentIndex(0);
     }
     else {

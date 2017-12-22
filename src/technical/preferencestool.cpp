@@ -30,7 +30,6 @@
 #include <QtGlobal>
 
 #include "domain/domainfacade.h"
-#include "frontends/qtfrontend/preferences/exportwidget.h"
 #include "frontends/qtfrontend/preferences/grabberwidget.h"
 #include "frontends/qtfrontend/preferences/transformwidget.h"
 #include "technical/videoencoder/videoencoder.h"
@@ -449,11 +448,11 @@ void PreferencesTool::setBasicPreferenceDefaults()
     setIntegerPreference("preferences", "defaultimageadjustment", TransformWidget::IMAGEADJUSTMENTDEFAULT);
     setIntegerPreference("preferences", "defaultzoomvalue", TransformWidget::ZOOMVALUEDEFAULT);
     // Video export defaults
-    setIntegerPreference("preferences", "defaultencoderapplication", ExportWidget::ENCODERAPPLICATIONDEFAULT);
-    setIntegerPreference("preferences", "defaultvideoformat", ExportWidget::VIDEOFORMATDEFAULT);
-    setIntegerPreference("preferences", "defaultvideosize", ExportWidget::VIDEOSIZEDEFAULT);
-    setIntegerPreference("preferences", "defaultvideofps", ExportWidget::VIDEOFPSDEFAULT);
-    setBooleanPreference("preferences", "defaultusedefaultoutputfile", ExportWidget::USEDEFAULTOUTPUTFILENAMEDEFAULT);
+    setIntegerPreference("preferences", "defaultencoderapplication", DomainFacade::ENCODERAPPLICATIONDEFAULT);
+    setIntegerPreference("preferences", "defaultvideoformat", DomainFacade::VIDEOFORMATDEFAULT);
+    setIntegerPreference("preferences", "defaultvideosize", DomainFacade::VIDEOSIZEDEFAULT);
+    setIntegerPreference("preferences", "defaultvideofps", DomainFacade::VIDEOFPSDEFAULT);
+    setBooleanPreference("preferences", "defaultusedefaultoutputfile", DomainFacade::USEDEFAULTOUTPUTFILENAMEDEFAULT);
     // Grabber defaults
     setBooleanPreference("preferences", "v4l2grabber", GrabberWidget::V4L2GRABBERDEFAULT);
     setBooleanPreference("preferences", "v4l2controller", GrabberWidget::V4L2CONTROLERDEFAULT);

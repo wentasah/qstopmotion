@@ -1482,7 +1482,7 @@ void MainWindowGUI::exportToVideo()
     recordingTab->checkCameraOff();
 
     activeEncoderApplication = this->frontend->getProject()->getEncoderApplication();
-    if (activeEncoderApplication == VideoEncoder::noneApplication) {
+    if (activeEncoderApplication == DomainFacade::noneEncoderApplication) {
         frontend->showWarning(tr("Warning"),
                               tr("No encoder selected for the video export.\n"
                                  "This can be set in the properties dialog of the project.\n"
@@ -1493,11 +1493,11 @@ void MainWindowGUI::exportToVideo()
 
     switch (activeEncoderApplication)
     {
-    case VideoEncoder::ffmpegApplication:
+    case DomainFacade::ffmpegApplication:
         encoder = new FfmpegEncoder(this->frontend->getProject()->getAnimationProject());
 
         break;
-    case VideoEncoder::libavApplication:
+    case DomainFacade::libavApplication:
         encoder = new LibavEncoder(this->frontend->getProject()->getAnimationProject());
 
         break;
@@ -1510,19 +1510,19 @@ void MainWindowGUI::exportToVideo()
         QStringList  filters;
         QString      exportSuffix;
         QString      outputFile;
-        int          videoFormat = VideoEncoder::noneFormat;
+        int          videoFormat = DomainFacade::noneFormat;
 
         videoFormat = this->frontend->getProject()->getVideoFormat();
         switch(videoFormat) {
-        case VideoEncoder::aviFormat:
+        case DomainFacade::aviFormat:
             filters << tr("AVI Videos (*.avi)");
             exportSuffix.append("avi");
             break;
-        case VideoEncoder::mp4Format:
+        case DomainFacade::mp4Format:
             filters << tr("MP4 Videos (*.mp4)");
             exportSuffix.append("mp4");
             break;
-        case VideoEncoder::noneFormat:
+        case DomainFacade::noneFormat:
             frontend->showWarning(tr("Warning"),
                                   tr("No video format selected for the video export.\n"
                                      "This can be set in the properties dialog of the project.\n"
@@ -1553,7 +1553,7 @@ void MainWindowGUI::exportToVideo()
         }
     } else {
         QString  outputFileName;
-        int      videoFormat = VideoEncoder::noneFormat;
+        int      videoFormat = DomainFacade::noneFormat;
 
         outputFileName = this->frontend->getProject()->getDefaultOutputFileName();
         if (outputFileName.isEmpty()) {
@@ -1565,12 +1565,12 @@ void MainWindowGUI::exportToVideo()
 
         videoFormat = this->frontend->getProject()->getVideoFormat();
         switch(videoFormat) {
-        case VideoEncoder::aviFormat:
+        case DomainFacade::aviFormat:
             if (outputFileName.indexOf(".avi") == -1) {
                 outputFileName.append(".avi");
             }
             break;
-        case VideoEncoder::mp4Format:
+        case DomainFacade::mp4Format:
             if (outputFileName.indexOf(".mp4") == -1 ) {
                 outputFileName.append(".mp4");
             }

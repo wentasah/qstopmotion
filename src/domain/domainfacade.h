@@ -32,8 +32,6 @@
 
 #include "domain/animation/animationproject.h"
 #include "frontends/frontend.h"
-// #include "frontends/viewfacade.h"
-#include "technical/videoencoder/videoencoder.h"
 
 class AnimationProject;
 class Frontend;
@@ -149,20 +147,20 @@ public:
      * @brief Enum with all possible image sizes
      */
     enum imageSize {
-        defaultSize,          // Source size
-        qvgaSize,             // 320x240 (QVGA)
-        vgaSize,              // 640x480 (VGA)
-        svgaSize,             // 800x600 (SVGA)
-        paldSize,             // 704x576 (PAL D)
-        hdreadySize,          // 1280x720 (HD Ready)
-        fullhdSize,           // 1900x1080 (Full HD)
-        lastImageSize         // Last size marker for asserts
+        defaultImageSize,     // Source size
+        qvgaImageSize,        // 320x240 (QVGA)
+        vgaImageSize,         // 640x480 (VGA)
+        svgaImageSize,        // 800x600 (SVGA)
+        paldImageSize,        // 704x576 (PAL D)
+        hdreadyImageSize,     // 1280x720 (HD Ready)
+        fullhdImageSize,      // 1900x1080 (Full HD)
+        lastImageImageSize    // Last size marker for asserts
     };
 
     /**
      * @brief Default image size for new installations
      */
-    const static int    IMAGESIZEDEFAULT = defaultSize;
+    const static int    IMAGESIZEDEFAULT = defaultImageSize;
 
     /**
      * Enum with all possible image adjustments
@@ -184,6 +182,62 @@ public:
      * @brief Default live view FPS for new installations
      */
     const static double LIVEVIEWFPSDEFAULT;
+
+    /**
+     * @brief Enum with all possible encoder applications.
+     */
+    enum encoderApplication {
+        ffmpegApplication,
+        libavApplication,
+        noneEncoderApplication
+    };
+
+    /**
+     * @brief Default video encoder application for new installations
+     */
+    const static int  ENCODERAPPLICATIONDEFAULT = noneEncoderApplication;
+
+    /**
+     * @brief Enum with all possible video output formats
+     */
+    enum videoFormat {
+        aviFormat,            // AVI format
+        mp4Format,            // MP4 format
+        noneFormat
+    };
+
+    /**
+     * @brief Default video format for new installations
+     */
+    const static int  VIDEOFORMATDEFAULT = mp4Format;
+
+    /**
+     * @brief Enum with all possible video sizes
+     */
+    enum videoSize {
+        defaultVideoSize,     // Source size
+        qvgaVideoSize,        // 320x240 (QVGA)
+        vgaVideoSize,         // 640x480 (VGA)
+        svgaVideoSize,        // 800x600 (SVGA)
+        paldVideoSize,        // 704x576 (PAL D)
+        hdreadyVideoSize,     // 1280x720 (HD Ready)
+        fullhdVideoSize       // 1900x1080 (Full HD)
+    };
+
+    /**
+     * @brief Default video size for new installations
+     */
+    const static int  VIDEOSIZEDEFAULT = defaultVideoSize;
+
+    /**
+     * @brief Default video frames per second for new instalations
+     */
+    const static int  VIDEOFPSDEFAULT = 12;
+
+    /**
+     * @brief Default usage of the default output file name for new installations
+     */
+    const static bool USEDEFAULTOUTPUTFILENAMEDEFAULT = false;
 
     /**
      * The constructor. It is protected so that it will be impossible for other classes,

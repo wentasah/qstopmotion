@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2015 by                                                *
+ *  Copyright (C) 2005-2017 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -38,8 +38,6 @@
 #include <QToolBox>
 #include <QWidget>
 
-#include "technical/videoencoder/videoencoder.h"
-
 
 /**
  * The export tab in the preferences menu
@@ -49,11 +47,6 @@ class ExportWidget : public QWidget
 {
     Q_OBJECT
 public:
-    const static int  ENCODERAPPLICATIONDEFAULT       = VideoEncoder::noneApplication;
-    const static int  VIDEOFORMATDEFAULT              = VideoEncoder::mp4Format;
-    const static int  VIDEOSIZEDEFAULT                = VideoEncoder::defaultSize;
-    const static int  VIDEOFPSDEFAULT                 = 12;
-    const static bool USEDEFAULTOUTPUTFILENAMEDEFAULT = false;
 
     /**
      * Sets up the tab.

@@ -372,27 +372,27 @@ QImage FrameViewInterface::clipImage(QImage image)
         // Cliping and zooming is only necessary for live image mode
 
         switch (frontend->getProject()->getVideoSize()) {
-        case DomainFacade::qvgaSize:    // QVGA
+        case DomainFacade::qvgaImageSize:    // QVGA
             destWidth = 320;
             destHeight = 240;
             break;
-        case DomainFacade::vgaSize:     // VGA
+        case DomainFacade::vgaImageSize:     // VGA
             destWidth = 640;
             destHeight = 480;
             break;
-        case DomainFacade::svgaSize:    // SVGA
+        case DomainFacade::svgaImageSize:    // SVGA
             destWidth = 800;
             destHeight = 600;
             break;
-        case DomainFacade::paldSize:    // PAL D
+        case DomainFacade::paldImageSize:    // PAL D
             destWidth = 704;
             destHeight = 576;
             break;
-        case DomainFacade::hdreadySize: // HD Ready
+        case DomainFacade::hdreadyImageSize: // HD Ready
             destWidth = 1280;
             destHeight = 720;
             break;
-        case DomainFacade::fullhdSize:  // Full HD
+        case DomainFacade::fullhdImageSize:  // Full HD
             destWidth = 1900;
             destHeight = 1080;
             break;

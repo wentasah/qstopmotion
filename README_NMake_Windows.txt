@@ -1,5 +1,5 @@
 Building qStopMotion using MS Windows SDK
-Last Change: 2016-05-10
+Last Change: 2017-01-02
 
 1. Preparation of the development environment
 ================================================================================
@@ -117,23 +117,28 @@ Last Change: 2016-05-10
 --------------------------------------------------------------------------------
 
 * Create a build directory
+
+3.3.1 Using the CMake GUI
+
 * Start the CMake GUI using the shortcut to the start script.
-  - Select the directory with the cmakelist.txt file as the source code directory.
-  - Select a separate directory as the destination directory.
-  - Set the 'Grouped' and 'Advanced' checkboxes.
-  - To build the release version add a new string entry with the name
-    'CMAKE_BUILD_TYPE' and the value 'Release'. The default build type is 'Debug'.
-  - Press the configure button.
-  - Select the generator "NMake Makefiles".
-  - Select the entry CPACK - CPACK_BINARY_NSIS.
-  - Select the entry CPACK - CPACK_BINARY_ZIP.
-  - Select the entry CPACK - CPACK_SOURCE_ZIP.
-  - Press the configure button again.
-  - Press the generate button.
-or
+* Select the directory with the cmakelist.txt file as the source code directory.
+* Select a separate directory as the destination directory.
+* Set the 'Grouped' and 'Advanced' checkboxes.
+* To build the release version add a new string entry with the name
+  'CMAKE_BUILD_TYPE' and the value 'Release'. The default build type is 'Debug'.
+* Press the configure button.
+* Select the generator "NMake Makefiles".
+* Select the entry CPACK - CPACK_BINARY_NSIS.
+* Select the entry CPACK - CPACK_BINARY_ZIP.
+* Select the entry CPACK - CPACK_SOURCE_ZIP.
+* Press the configure button again.
+* Press the generate button.
+
+3.3.2 Using the command line
+
 * Start the "Visua Studio 2013 - Visual Studio Tools - VS2013 x64 Native Tools Command Prompt"
-  - move to the build directory
-  - cmake -G „NMake Makefiles“ -D CMAKE_BUILD_TYPE:STRING=Release -D CPACK_BINARY_NSIS:BOOL=ON -D CPACK_BINARY_ZIP:BOOL=ON ../qstopmotion
+* move to the build directory
+* cmake -G "NMake Makefiles" -D CMAKE_BUILD_TYPE:STRING=Release -D CPACK_BINARY_NSIS:BOOL=ON -D CPACK_BINARY_ZIP:BOOL=ON ../qstopmotion
 
 3.4 Build the application
 --------------------------------------------------------------------------------

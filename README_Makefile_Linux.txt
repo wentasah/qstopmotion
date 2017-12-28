@@ -1,44 +1,52 @@
 Building qStopMotion using Unix makefile on Linux
-Last Change: 2014-12-16
+Last Change: 2017-01-02
 
 1. Preparation of the development environment
 ================================================================================
 
-1.1 Install necessary libraries with the package manager
+1.1 C++ Compiler
 --------------------------------------------------------------------------------
 
-* g++ (Version >= 4.4.3)
-* qt4 libraries (32 or 64 bit, Version >= 4.8.2)
-  - libqt4, libqt4-dev, libqt4-dbg (qt4-core, qt4-gui, qt4-xml)
-  - qt4-examples / qt4-demos
-  - qt4-dev-tools
-  - qt4-qmake
-  - qt4-help, qt4-doc
-* CMake (Version >= 2.8.7)
-  - The version 2.8.7 ist the first that can create working Debian packages
-  - If the package in the package manager is an older version install CMake
-    from the source
-* Mercurial Client (Version >= 2.2.2)
-* gstreamer (Version >= 0.10.36)
-  - gstreamer
-  - gstreamer-dev
-  - gstreamer-dbg
-  - gstreamer-plugins-base (videotestsrc, ffmpegcolorspace, videorate, videoscale)
-  - gstreamer-plugins-base-dev
-  - gstreamer-plugins-base-dbg
-  - gstreamer-plugins-good (v4l2src, dv1394src, dvdemux, dvdec, jpegenc, multifilesink)
-  - gstreamer-plugins-good-dbg
-  - (gstreamer-plugins-ugly)
-  - (gstreamer-plugins-ugly-dbg)
-  - (gstreamer-plugins-bad) (dshowvideosrc)
-  - (gstreamer-plugins-bad-dbg)
-  - gstreamer-ffmpeg (ffdemux_dv, ffdec_dvvideo, ffdeinterlace)
-  - gstreamer-ffmpeg-dev
-  - gstreamer-ffmpeg-dbg
-* ffmpeg (Version >= 0.8.6)
+* g++ (Version >= 4.9.2)
+* pkg-config
+
+1.2 Libraries
+--------------------------------------------------------------------------------
 * libxml2, libxml2-dev, libxml-dbg
 * libv4l, libv4l-devel, v4l-utils, v4l-utils-dev
 * libgphoto2, libgphoto2-devel
+
+1.3 Qt5 for Windows and Visual Studio
+--------------------------------------------------------------------------------
+
+* qt5 libraries (64 bit, Version >= 5.3.2)
+* qt5-default
+* libqt5, libqt5-dev, libqt5-dbg (qt5-core, qt5-gui, qt5-xml)
+* qt5-image-formats-plugins
+* qtmultimedia5-examples
+* qt5-examples / qt5-demos
+* qt5-dev-tools
+* qt5-qmake
+* qt5-help, qt5-doc
+
+1.4 CMake
+--------------------------------------------------------------------------------
+
+* CMake (Version >= 3.0.2)
+  - The version 2.8.7 ist the first that can create working Debian packages
+  - If the package in the package manager is an older version install CMake
+    from the source
+
+1.5 Mercurial SCM (Developers only)
+--------------------------------------------------------------------------------
+
+* Mercurial Client (Version >= 3.1.2)
+* or TortoiseHg as a graphical frontend
+
+1.6 Tools
+--------------------------------------------------------------------------------
+
+* ffmpeg (Version >= 0.8.6) to generate movie files from the pictures
 
 2. Access to the sources of qStopMotion
 ================================================================================
@@ -80,8 +88,11 @@ Last Change: 2014-12-16
 3.1 Create the Makefile
 --------------------------------------------------------------------------------
 
-* Create a build directory 'qstopmotion-build' parallel to the qstopmotion
+* Create a build directory 'qstopmotion-build-make' parallel to the qstopmotion
   directory.
+
+3.1.1 Using the CMake GUI
+
 * Start the CMake GUI
 * Select the qstopmotion directory as the source directory
 * Select the qstopmotion-build directory as the build directory
@@ -89,6 +100,14 @@ Last Change: 2014-12-16
 * Select 'Unix Makefile' as target platform
 * Press the 'Configure' button again
 * Press the 'Generate' button
+
+3.1.2 Using the command line
+
+* move to the build directory
+* On Debian/Ubuntu systems
+  cmake -G "Unix Makefiles" -D CMAKE_BUILD_TYPE:STRING=Release -D CPACK_BINARY_DEB:BOOL=ON ../qstopmotion
+* On Fedora/CentOS/openSUSE systems
+  cmake -G "Unix Makefiles" -D CMAKE_BUILD_TYPE:STRING=Release -D CPACK_BINARY_RPM:BOOL=ON ../qstopmotion
 
 3.2 Build
 --------------------------------------------------------------------------------

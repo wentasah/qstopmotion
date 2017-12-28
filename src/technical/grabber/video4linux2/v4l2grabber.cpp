@@ -102,7 +102,7 @@ bool V4L2Grabber::initialization(QVector<ImageGrabberDevice*> &devices)
             if (pref->getBooleanPreference("preferences", "v4l2controller", value) == false) {
                 value = Frontend::V4L2CONTROLERDEFAULT;
             }
-            if ((int)true == value) {
+            if (true == value) {
                 deviceController = new V4L2Controller(0);
                 device->setController(deviceController);
 

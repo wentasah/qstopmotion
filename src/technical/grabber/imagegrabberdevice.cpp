@@ -98,7 +98,12 @@ const QString ImageGrabberDevice::getDeviceId()
 
 void ImageGrabberDevice::setDeviceId(const QString id)
 {
-    deviceId.append(id);
+    QString newId = id;
+
+    // Only use a-z, A-Z, 0-9 and space
+    newId.remove(QRegExp("[^a-zA-Z\\d\\s]"));
+
+    deviceId.append(newId);
 }
 
 

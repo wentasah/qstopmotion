@@ -689,7 +689,7 @@ void FrameViewImage::showLogo()
     qDebug() << "FrameViewImage::showLogo --> Start";
 
     QString iconFile(frontend->getGraphicsDirName());
-    iconFile.append(QLatin1String("qstopmotion_logo_60.png"));
+    iconFile.append(QLatin1String("qstopmotion_logo_120.png"));
 
     activeImage = scaleImage(QImage(iconFile));
 

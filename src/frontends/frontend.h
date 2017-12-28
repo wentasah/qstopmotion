@@ -46,6 +46,40 @@ class ImageGrabberDevice;
 class Frontend
 {
 public:
+
+    /**
+     * @brief V4L2 grabber enable default for new installations
+     */
+    const static bool V4L2GRABBERDEFAULT = true;
+
+    /**
+     * @brief V4L2 controler enable default for new installations
+     */
+    const static bool V4L2CONTROLERDEFAULT = true;
+
+    /**
+     * @brief MediaFoundation grabber enable default for new installations
+     */
+    const static bool MEDIAFOUNDATIONGRABBERDEFAULT = true;
+
+    /**
+     * @brief MesiaFoundation controler enable default for new installations
+     */
+    const static bool MEDIAFOUNDATIONCONTROLERDEFAULT = true;
+
+    /**
+     * @brief GPhoto2 grabber enable default for new installations
+     */
+    const static bool GPHOTO2GRABBERDEFAULT = false;
+
+    /**
+     * @brief GPhoto2 controler enable default for new installations
+     */
+    const static bool GPHOTO2CONTROLERDEFAULT = false;
+
+    /**
+     * @brief Destructor
+     */
     virtual ~Frontend() {}
 
     /**
@@ -223,6 +257,18 @@ public:
      * @param a The alpha-channel component of the color's RGB value.
      */
     virtual void setGridColorRGB(int r, int g, int b, int a) = 0;
+
+    /**
+     * Get the status of the signal feature.
+     * @return The new state of the signal feature.
+     */
+    virtual bool getSignal() = 0;
+
+    /**
+     * Set the status of the signal feature.
+     * @param newState The new state of the signal feature.
+     */
+    virtual void setSignal(bool newState) = 0;
 
     /**
      * Abstract function for displaying progress on timeconsuming operations.
@@ -596,18 +642,6 @@ public:
      * @param count The new mix count.
      */
     virtual void setMixCount(int count) = 0;
-
-    /**
-     * Get the playback count.
-     * @return The playback count.
-     */
-    virtual int getPlaybackCount() = 0;
-
-    /**
-     * Set the playback count.
-     * @param count The new playback count.
-     */
-    virtual void setPlaybackCount(int count) = 0;
 
     /**
      * Get the overlay intensity value.

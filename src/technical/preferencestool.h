@@ -259,6 +259,54 @@ public:
     bool getIntegerPreference(const QString &name, const QString &key, int &value);
 
     /**
+     * Adds an double preference.
+     * @param name The element name for the key for retrieving the preference.
+     * @param key The key for retrieving the preference.
+     * @param attribute The attribute for the preference.
+     * @param flushLater True if you don't want the preferencesTool to flush
+     * the preferences to disk at once. This is given for to allow
+     * optimalization when several preferences ar saved at the same time.
+     * flushPreferences() should be called at once after the preferences are
+     * set to store them to disk.
+     * @return True if the preference was succesfully saved. If flushLater is
+     * set to true this function will return true automaticaly.
+     */
+    bool setDoublePreference(const QString &name, const QString &key, const double attribute, bool flushLater = false);
+
+    /**
+     * Retrieves an doble preference.
+     * @param name The element name for the key for retrieving the preference.
+     * @param key The key of the preference to retrieve.
+     * @param value The value of the preference.
+     * @return true if the preference was succesfully readed.
+     */
+    bool getDoublePreference(const QString &name, const QString &key, double &value);
+
+    /**
+     * Adds an bool preference.
+     * @param name The element name for the key for retrieving the preference.
+     * @param key The key for retrieving the preference.
+     * @param attribute The attribute for the preference.
+     * @param flushLater True if you don't want the preferencesTool to flush
+     * the preferences to disk at once. This is given for to allow
+     * optimalization when several preferences ar saved at the same time.
+     * flushPreferences() should be called at once after the preferences are
+     * set to store them to disk.
+     * @return True if the preference was succesfully saved. If flushLater is
+     * set to true this function will return true automaticaly.
+     */
+    bool setBooleanPreference(const QString &name, const QString &key, const bool attribute, bool flushLater = false);
+
+    /**
+     * Retrieves an bool preference.
+     * @param name The element name for the key for retrieving the preference.
+     * @param key The key of the preference to retrieve.
+     * @param value The value of the preference.
+     * @return true if the preference was succesfully readed.
+     */
+    bool getBooleanPreference(const QString &name, const QString &key, bool &value);
+
+    /**
      * Set the default preferences
      */
     void setBasicPreferenceDefaults();

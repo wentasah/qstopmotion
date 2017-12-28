@@ -41,6 +41,7 @@
 #include "technical/util.h"
 #include "technical/videoencoder/ffmpegencoder.h"
 #include "technical/videoencoder/libavencoder.h"
+#include "technical/videoencoder/videoencoderfactory.h"
 
 using namespace Qt;
 
@@ -139,11 +140,12 @@ MainWindowGUI::MainWindowGUI(QApplication *stApp, Frontend *f)
 
     grabber              = 0;
 
-    verticalGrid         = false;
-    verticalSpin         = 5;
-    horizontalGrid       = false;
-    horizontalSpin       = 5;
-    gridColor.setNamedColor("#000000");     // RGB Black
+    verticalGrid         = GeneralWidget::VERTICALGRIDDEFAULT;
+    verticalSpin         = GeneralWidget::VERTICALSPINDEFAULT;
+    horizontalGrid       = GeneralWidget::HORIZONTALGRIDDEFAULT;
+    horizontalSpin       = GeneralWidget::HORIZONTALSPINDEFAULT;
+    gridColor            = GeneralWidget::GRIDCOLORDEFAULT;
+    signal               = GeneralWidget::SIGNALDEFAULT;
 
     this->setObjectName("MainWindowGUI");
     stApp->installTranslator(&appTranslator);
@@ -495,7 +497,6 @@ void MainWindowGUI::initialize()
 {
     qDebug() << "MainWindowGUI::initialize --> Start";
 
-    int     value;
     QString gridColorName;
 
     lastVisitedDir.clear();
@@ -569,27 +570,14 @@ void MainWindowGUI::initialize()
     connect(this, SIGNAL(startOpenProject()), this, SLOT(openProject()));
     connect(this, SIGNAL(startExit()),  this, SLOT(closeApplication()));
 
-    if (pref->getIntegerPreference("preferences", "verticalgrid", value) == false) {
-        value = false;
-    }
-    verticalGrid = value;
-
-    if (pref->getIntegerPreference("preferences", "verticalspin", verticalSpin) == false) {
-        verticalSpin = 5;
-    }
-
-    if (pref->getIntegerPreference("preferences", "horizontalgrid", value) == false) {
-        value = false;
-    }
-    horizontalGrid = value;
-
-    if (pref->getIntegerPreference("preferences", "horizontalspin", horizontalSpin) == false) {
-        horizontalSpin = 5;
-    }
-
+    pref->getBooleanPreference("preferences", "verticalgrid", verticalGrid);
+    pref->getIntegerPreference("preferences", "verticalspin", verticalSpin);
+    pref->getBooleanPreference("preferences", "horizontalgrid", horizontalGrid);
+    pref->getIntegerPreference("preferences", "horizontalspin", horizontalSpin);
     if (pref->getStringPreference("preferences", "gridcolor", gridColorName) == true) {
         gridColor.setNamedColor(gridColorName);
     }
+    pref->getBooleanPreference("preferences", "signal", signal);
 
     qDebug() << "MainWindowGUI::initialize --> End";
 }
@@ -737,6 +725,18 @@ void MainWindowGUI::getGridColorRGB(int *r, int *g, int *b, int *a)
 void MainWindowGUI::setGridColorRGB(int r, int g, int b, int a)
 {
     gridColor.setRgb(r, g, b, a);
+}
+
+
+bool MainWindowGUI::getSignal()
+{
+    return signal;
+}
+
+
+void MainWindowGUI::setSignal(bool newState)
+{
+    signal = newState;
 }
 
 
@@ -1185,18 +1185,6 @@ void MainWindowGUI::setMixCount(int count)
 }
 
 
-int MainWindowGUI::getPlaybackCount()
-{
-    return recordingTab->getPlaybackCount();
-}
-
-
-void MainWindowGUI::setPlaybackCount(int count)
-{
-    recordingTab->setPlaybackCount(count);
-}
-
-
 int MainWindowGUI::getOverlayIntensity()
 {
     return toolBar->getOverlayIntensity();
@@ -1487,14 +1475,14 @@ void MainWindowGUI::exportToVideo()
 {
     qDebug() << "MainWindowGUI::exportToVideo --> Start";
 
-    VideoEncoder    *enc = NULL;
+    VideoEncoder    *encoder = NULL;
     int              activeEncoderApplication;
     bool             useDefaultOutputFile;
 
     recordingTab->checkCameraOff();
 
     activeEncoderApplication = this->frontend->getProject()->getEncoderApplication();
-    if (activeEncoderApplication == VideoEncoder::noneApplication) {
+    if (activeEncoderApplication == DomainFacade::noneEncoderApplication) {
         frontend->showWarning(tr("Warning"),
                               tr("No encoder selected for the video export.\n"
                                  "This can be set in the properties dialog of the project.\n"
@@ -1505,12 +1493,12 @@ void MainWindowGUI::exportToVideo()
 
     switch (activeEncoderApplication)
     {
-    case VideoEncoder::ffmpegApplication:
-        enc = new FfmpegEncoder(this->frontend->getProject()->getAnimationProject());
+    case DomainFacade::ffmpegApplication:
+        encoder = new FfmpegEncoder(this->frontend->getProject()->getAnimationProject());
 
         break;
-    case VideoEncoder::libavApplication:
-        enc = new LibavEncoder(this->frontend->getProject()->getAnimationProject());
+    case DomainFacade::libavApplication:
+        encoder = new LibavEncoder(this->frontend->getProject()->getAnimationProject());
 
         break;
     default:
@@ -1522,19 +1510,19 @@ void MainWindowGUI::exportToVideo()
         QStringList  filters;
         QString      exportSuffix;
         QString      outputFile;
-        int          videoFormat = VideoEncoder::noneFormat;
+        int          videoFormat = DomainFacade::noneFormat;
 
         videoFormat = this->frontend->getProject()->getVideoFormat();
         switch(videoFormat) {
-        case VideoEncoder::aviFormat:
+        case DomainFacade::aviFormat:
             filters << tr("AVI Videos (*.avi)");
             exportSuffix.append("avi");
             break;
-        case VideoEncoder::mp4Format:
+        case DomainFacade::mp4Format:
             filters << tr("MP4 Videos (*.mp4)");
             exportSuffix.append("mp4");
             break;
-        case VideoEncoder::noneFormat:
+        case DomainFacade::noneFormat:
             frontend->showWarning(tr("Warning"),
                                   tr("No video format selected for the video export.\n"
                                      "This can be set in the properties dialog of the project.\n"
@@ -1553,19 +1541,19 @@ void MainWindowGUI::exportToVideo()
             outputFile.append(openFiles[0]);
         }
         if (outputFile.isEmpty()) {
-            delete enc;
-            enc = NULL;
+            delete encoder;
+            encoder = NULL;
             return;
         } else {
             if (!outputFile.endsWith(exportSuffix)) {
                 outputFile.append(".");
                 outputFile.append(exportSuffix);
             }
-            enc->setOutputFile(outputFile);
+            encoder->setOutputFile(outputFile);
         }
     } else {
         QString  outputFileName;
-        int      videoFormat = VideoEncoder::noneFormat;
+        int      videoFormat = DomainFacade::noneFormat;
 
         outputFileName = this->frontend->getProject()->getDefaultOutputFileName();
         if (outputFileName.isEmpty()) {
@@ -1577,39 +1565,46 @@ void MainWindowGUI::exportToVideo()
 
         videoFormat = this->frontend->getProject()->getVideoFormat();
         switch(videoFormat) {
-        case VideoEncoder::aviFormat:
+        case DomainFacade::aviFormat:
             if (outputFileName.indexOf(".avi") == -1) {
                 outputFileName.append(".avi");
             }
             break;
-        case VideoEncoder::mp4Format:
+        case DomainFacade::mp4Format:
             if (outputFileName.indexOf(".mp4") == -1 ) {
                 outputFileName.append(".mp4");
             }
             break;
         }
-        enc->setOutputFile(outputFileName);
+        encoder->setOutputFile(outputFileName);
     }
 
     // Remove an existing file
-    QFile::remove(enc->getOutputFile());
+    QFile::remove(encoder->getOutputFile());
 
-    if (!enc->isValid()) {
+    if (!encoder->isValid()) {
         frontend->showWarning(tr("Warning"),
                               tr("The selected encoder is not installed on your computer.\n"
                                  "Install the encoder or select another one!"));
-        delete enc;
-        enc = NULL;
+        delete encoder;
+        encoder = NULL;
         return;
     }
     checkSaved();
 
     frontend->showProgress(tr("Exporting ..."), frontend->getProject()->getTotalExposureSize());
-    frontend->getProject()->exportToVideo(enc);
+    // frontend->getProject()->exportToVideo(encoder);
+
+    VideoEncoderFactory factory(frontend);
+    if (factory.createVideoFile(encoder) != NULL) {
+        // Success
+        // return true;
+    }
+
     frontend->hideProgress();
 
-    delete enc;
-    enc = NULL;
+    delete encoder;
+    encoder = NULL;
 
     qDebug() << "MainWindowGUI::exportToVideo --> End";
 }
@@ -1634,7 +1629,7 @@ void MainWindowGUI::exportToCinelerra()
     }
 
     if (!outputFile.isNull()) {
-        frontend->getProject()->exportToCinelerra(outputFile);
+        // Not implemented jet
     }
 }
 
@@ -1818,9 +1813,10 @@ void MainWindowGUI::showCameraControllerDialog()
                                                             this);
         cameraControllerDialog->initialize();
         cameraControllerDialog->setGeometry(geometry().x() + fGeo.width(), geometry().y(),
-                                            200, height());
+                                            300, height());
     }
     cameraControllerDialog->show();
+    cameraControllerDialog->enableControls();
 
     if (frontend->isGrabberInited()) {
         cameraControllerDialog->setUp();
@@ -2667,6 +2663,13 @@ void MainWindowGUI::setMostRecentProject()
     Q_ASSERT(!newFirst.isEmpty());
 
     PreferencesTool *pref = frontend->getPreferences();
+
+    const QString oldFirst = pref->getProject(0);
+    if (oldFirst.compare(newFirst) == 0) {
+        // Old first is new first -> nothing to do
+        return;
+    }
+
     pref->removeProject(newFirst);
     pref->addProject(newFirst);
     pref->flushPreferences();

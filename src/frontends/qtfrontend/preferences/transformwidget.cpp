@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2015 by                                                *
+ *  Copyright (C) 2005-2017 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -29,10 +29,8 @@
 #include <QRect>
 #include <QSpacerItem>
 
-#include "domain/domainfacade.h"
 #include "frontends/qtfrontend/elements/flexiblelineedit.h"
 #include "technical/preferencestool.h"
-#include "technical/grabber/imagegrabber.h"
 
 
 TransformWidget::TransformWidget(Frontend *f, bool type, QWidget *parent) : QWidget(parent)
@@ -49,7 +47,7 @@ TransformWidget::TransformWidget(Frontend *f, bool type, QWidget *parent) : QWid
     scaleButton              = 0;
     clipButton               = 0;
     zoomButton               = 0;
-    activeTransform          = 0;
+    activeTransform          = DomainFacade::IMAGETRANSFORMDEFAULT;
 
     // Adjustment preferences
     adjustmentPrefs          = 0;
@@ -62,13 +60,13 @@ TransformWidget::TransformWidget(Frontend *f, bool type, QWidget *parent) : QWid
     leftDownButton           = 0;
     centerDownButton         = 0;
     rightDownButton          = 0;
-    activeImageAdjustment    = ImageGrabber::centerDown;
+    activeImageAdjustment    = DomainFacade::IMAGEADJUSTMENTDEFAULT;
 
     // Zoomw preferences
     zoomPrefs                = 0;
     zoomLabel                = 0;
     zoomSlider               = 0;
-    activeZoomValue          = 20;
+    activeZoomValue          = DomainFacade::ZOOMVALUEDEFAULT;
     zoomMinimumLabel         = 0;
     zoomMaximumLabel         = 0;
 
@@ -285,25 +283,13 @@ void TransformWidget::initialize()
     qDebug() << "TransformWidget::initialize --> Start";
 
     PreferencesTool *pref = frontend->getPreferences();
-    int              value;
 
     // Read eEncoder preferences
     if (tabType) {
         // This is a general dialog tab
-        if (pref->getIntegerPreference("preferences", "defaulttransformation", value) == false) {
-            value = 0;
-        }
-        activeTransform = value;
-
-        if (pref->getIntegerPreference("preferences", "defaultimageadjustment", value) == false) {
-            value = ImageGrabber::centerDown;
-        }
-        activeImageAdjustment = value;
-
-        if (pref->getIntegerPreference("preferences", "defaultzoomvalue", value) == false) {
-            value = 25;
-        }
-        activeZoomValue = value;
+        pref->getIntegerPreference("preferences", "defaulttransformation", activeTransform);
+        pref->getIntegerPreference("preferences", "defaultimageadjustment", activeImageAdjustment);
+        pref->getIntegerPreference("preferences", "defaultzoomvalue", activeZoomValue);
     }
     else {
         // This is a project dialog tab
@@ -312,22 +298,7 @@ void TransformWidget::initialize()
         activeZoomValue = frontend->getProject()->getZoomValue();
     }
 
-    // Transformation preferences
-    switch (activeTransform) {
-    case 0:
-        setScaleButtonOn();
-        break;
-    case 1:
-        setClipButtonOn();
-        break;
-    case 2:
-        setZoomButtonOn();
-        break;
-    }
-
-    setAdjustment(activeImageAdjustment);
-    zoomSlider->setValue(activeZoomValue);
-
+    reset();
 
     qDebug() << "TransformWidget::initialize --> End";
 }
@@ -374,31 +345,31 @@ void TransformWidget::apply()
     }
 
     if (leftUpButton->isChecked()) {
-        index = ImageGrabber::leftUp;
+        index = DomainFacade::leftUp;
     }
     if (centerUpButton->isChecked()) {
-        index = ImageGrabber::centerUp;
+        index = DomainFacade::centerUp;
     }
     if (rightUpButton->isChecked()) {
-        index = ImageGrabber::rightUp;
+        index = DomainFacade::rightUp;
     }
     if (leftMiddleButton->isChecked()) {
-        index = ImageGrabber::leftMiddle;
+        index = DomainFacade::leftMiddle;
     }
     if (centerMiddleButton->isChecked()) {
-        index = ImageGrabber::centerMiddle;
+        index = DomainFacade::centerMiddle;
     }
     if (rightMiddleButton->isChecked()) {
-        index = ImageGrabber::rightMiddle;
+        index = DomainFacade::rightMiddle;
     }
     if (leftDownButton->isChecked()) {
-        index = ImageGrabber::leftDown;
+        index = DomainFacade::leftDown;
     }
     if (centerDownButton->isChecked()) {
-        index = ImageGrabber::centerDown;
+        index = DomainFacade::centerDown;
     }
     if (rightDownButton->isChecked()) {
-        index = ImageGrabber::rightDown;
+        index = DomainFacade::rightDown;
     }
     if (activeImageAdjustment != index)
     {
@@ -436,13 +407,13 @@ void TransformWidget::reset()
     qDebug() << "TransformWidget::reset --> Start";
 
     switch (activeTransform) {
-    case 0:
+    case DomainFacade::ScaleImage:
         setScaleButtonOn();
         break;
-    case 1:
+    case DomainFacade::ClipImage:
         setClipButtonOn();
         break;
-    case 2:
+    case DomainFacade::ZoomImage:
         setZoomButtonOn();
         break;
     }
@@ -458,31 +429,31 @@ void TransformWidget::setAdjustment(int newAdjustment)
     qDebug() << "TransformWidget::setAdjustment --> Start";
 
     switch (newAdjustment) {
-    case ImageGrabber::leftUp:
+    case DomainFacade::leftUp:
         leftUpButton->setChecked(true);
         break;
-    case ImageGrabber::centerUp:
+    case DomainFacade::centerUp:
         centerUpButton->setChecked(true);
         break;
-    case ImageGrabber::rightUp:
+    case DomainFacade::rightUp:
         rightUpButton->setChecked(true);
         break;
-    case ImageGrabber::leftMiddle:
+    case DomainFacade::leftMiddle:
         leftMiddleButton->setChecked(true);
         break;
-    case ImageGrabber::centerMiddle:
+    case DomainFacade::centerMiddle:
         centerMiddleButton->setChecked(true);
         break;
-    case ImageGrabber::rightMiddle:
+    case DomainFacade::rightMiddle:
         rightMiddleButton->setChecked(true);
         break;
-    case ImageGrabber::leftDown:
+    case DomainFacade::leftDown:
         leftDownButton->setChecked(true);
         break;
-    case ImageGrabber::centerDown:
+    case DomainFacade::centerDown:
         centerDownButton->setChecked(true);
         break;
-    case ImageGrabber::rightDown:
+    case DomainFacade::rightDown:
         rightDownButton->setChecked(true);
         break;
     }
@@ -533,13 +504,6 @@ void TransformWidget::changeZoom()
     if (activeZoomValue == value) {
         return;
     }
-
-    /*
-    if (!tabType) {
-        // Project settings are changed
-
-    }
-    */
 
     qDebug() << "TransformWidget::changeZoom --> End";
 }

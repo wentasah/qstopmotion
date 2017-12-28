@@ -29,14 +29,13 @@
 #include <QTextStream>
 #include <QtGlobal>
 
-#include "technical/grabber/imagegrabber.h"
-#include "technical/videoencoder/videoencoder.h"
+#include "domain/domainfacade.h"
 
 
 const QString PreferencesTool::applicationShowName = QLatin1String("qStopMotion");
 const QString PreferencesTool::applicationName = QLatin1String("qstopmotion");
-const QString PreferencesTool::applicationVersion = QLatin1String("2.3.2");
-const QString PreferencesTool::applicationYear = QLatin1String("2016");
+const QString PreferencesTool::applicationVersion = QLatin1String("2.4.0");
+const QString PreferencesTool::applicationYear = QLatin1String("2017");
 const QString PreferencesTool::preferencesVersion = QLatin1String("0.9");
 const QString PreferencesTool::preferencesSuffix = QLatin1String("qsmp");
 const QString PreferencesTool::preferencesName = QLatin1String("preferences");
@@ -235,6 +234,12 @@ bool PreferencesTool::setStringPreference(const QString &name, const QString &ke
         elements.append(element);
     }
     else {
+        QString stringValue;
+        if (element->getStringPreference(key, stringValue) == true) {
+            if (stringValue.compare(attribute) == 0) {
+                return true;
+            }
+        }
         element->setStringPreference(key, attribute);
     }
 
@@ -271,6 +276,13 @@ bool PreferencesTool::setIntegerPreference(const QString &name, const QString &k
         elements.append(element);
     }
     else {
+        int intValue;
+
+        if (element->getIntegerPreference(key, intValue) == true) {
+            if (intValue == attribute) {
+                return true;
+            }
+        }
         element->setIntegerPreference(key, attribute);
     }
 
@@ -289,6 +301,92 @@ bool PreferencesTool::getIntegerPreference(const QString &name, const QString &k
 
     if (element != NULL) {
         return element->getIntegerPreference(key, value);
+    }
+
+    return false;
+}
+
+
+bool PreferencesTool::setDoublePreference(const QString &name, const QString &key, const double attribute, bool flushLater)
+{
+    checkInitialized();
+    PreferencesElement *element = findPreferencesElement(name);
+
+    if (element == NULL) {
+        QDomElement elementDom = doc->createElement(name);
+        rootElement.appendChild(elementDom);
+        element = new PreferencesElement(name, elementDom);
+        elements.append(element);
+    }
+    else {
+        double doubleValue;
+
+        if (element->getDoublePreference(key, doubleValue) == true) {
+            if (doubleValue == attribute) {
+                return true;
+            }
+        }
+        element->setDoublePreference(key, attribute);
+    }
+
+    if (!flushLater) {
+        flushPreferences();
+    }
+
+    return true;
+}
+
+
+bool PreferencesTool::getDoublePreference(const QString &name, const QString &key, double &value)
+{
+    checkInitialized();
+    PreferencesElement *element = findPreferencesElement(name);
+
+    if (element != NULL) {
+        return element->getDoublePreference(key, value);
+    }
+
+    return false;
+}
+
+
+bool PreferencesTool::setBooleanPreference(const QString &name, const QString &key, const bool attribute, bool flushLater)
+{
+    checkInitialized();
+    PreferencesElement *element = findPreferencesElement(name);
+
+    if (element == NULL) {
+        QDomElement elementDom = doc->createElement(name);
+        rootElement.appendChild(elementDom);
+        element = new PreferencesElement(name, elementDom);
+        elements.append(element);
+    }
+    else {
+        bool boolValue;
+
+        if (element->getBooleanPreference(key, boolValue) == true) {
+            if (boolValue == attribute) {
+                return true;
+            }
+        }
+        element->setBooleanPreference(key, attribute);
+    }
+
+    if (!flushLater) {
+        flushPreferences();
+    }
+
+    return true;
+}
+
+
+bool PreferencesTool::getBooleanPreference(const QString &name, const QString &key, bool &value)
+{
+    checkInitialized();
+    PreferencesElement *element = findPreferencesElement(name);
+
+    if (element != NULL) {
+        return element->getBooleanPreference(key, value);
     }
 
     return false;
@@ -329,30 +427,36 @@ void PreferencesTool::setBasicPreferenceDefaults()
     setStringPreference("preferences", "language", "en");
     setIntegerPreference("preferences", "capturebutton", captureButtonAfter);
     // Project defaults
-    setIntegerPreference("preferences", "defaultrecordingmode", 0);
-    setIntegerPreference("preferences", "defaultgrabbersource", 0);
-    setIntegerPreference("preferences", "defaultmixmode", 0);
-    setIntegerPreference("preferences", "defaultmixcount", 2);
-    setIntegerPreference("preferences", "defaultplaybackcount", 5);
+    setIntegerPreference("preferences", "defaultrecordingmode", DomainFacade::RECORDINGMODEDEFAULT);
+    setIntegerPreference("preferences", "defaultgrabbersource", DomainFacade::GRABBERSOURCEDEFAULT);
+    setIntegerPreference("preferences", "defaultmixmode", DomainFacade::MIXMODEDEFAULT);
+    setIntegerPreference("preferences", "defaultmixcount", DomainFacade::MIXCOUNTDEFAULT);
+    setIntegerPreference("preferences", "defaultunitmode", DomainFacade::UNITMODEDEFAULT);
+    setIntegerPreference("preferences", "defaultunitcount", DomainFacade::UNITCOUNTDEFAULT);
+    setBooleanPreference("preferences", "defaultbeepcheck", DomainFacade::BEEPCHECKDEFAULT);
+    setIntegerPreference("preferences", "defaultbeepcount", DomainFacade::BEEPCOUNTDEFAULT);
     // Image import defaults
-    setIntegerPreference("preferences", "defaultimageformat", ImageGrabber::jpegFormat);
-    setIntegerPreference("preferences", "defaultimagesize", ImageGrabber::defaultSize);
-    setIntegerPreference("preferences", "defaulttransformation", true);
-    setIntegerPreference("preferences", "defaultimageadjustment", ImageGrabber::centerDown);
-    setIntegerPreference("preferences", "defaulliveviewfps", 20);
+    setIntegerPreference("preferences", "defaultimageformat", DomainFacade::IMAGEFORMATDEFAULT);
+    setIntegerPreference("preferences", "defaultimagequality", DomainFacade::IMAGEQUALITYDEFAULT);
+    setIntegerPreference("preferences", "defaultimagesize", DomainFacade::IMAGESIZEDEFAULT);
+    setDoublePreference("preferences", "defaultliveviewfps", DomainFacade::LIVEVIEWFPSDEFAULT);
+    // Image transformation defaults
+    setIntegerPreference("preferences", "defaulttransformation", DomainFacade::IMAGETRANSFORMDEFAULT);
+    setIntegerPreference("preferences", "defaultimageadjustment", DomainFacade::IMAGEADJUSTMENTDEFAULT);
+    setIntegerPreference("preferences", "defaultzoomvalue", DomainFacade::ZOOMVALUEDEFAULT);
     // Video export defaults
-    setIntegerPreference("preferences", "defaultencoderapplication", VideoEncoder::ffmpegApplication);
-    setIntegerPreference("preferences", "defaultvideoformat", VideoEncoder::mp4Format);
-    setIntegerPreference("preferences", "defaultvideosize", VideoEncoder::defaultSize);
-    setIntegerPreference("preferences", "defaultvideofps", 12);
-    setIntegerPreference("preferences", "defaultusedefaultoutputfile", false);
+    setIntegerPreference("preferences", "defaultencoderapplication", DomainFacade::ENCODERAPPLICATIONDEFAULT);
+    setIntegerPreference("preferences", "defaultvideoformat", DomainFacade::VIDEOFORMATDEFAULT);
+    setIntegerPreference("preferences", "defaultvideosize", DomainFacade::VIDEOSIZEDEFAULT);
+    setIntegerPreference("preferences", "defaultvideofps", DomainFacade::VIDEOFPSDEFAULT);
+    setBooleanPreference("preferences", "defaultusedefaultoutputfile", DomainFacade::USEDEFAULTOUTPUTFILENAMEDEFAULT);
     // Grabber defaults
-    setIntegerPreference("preferences", "v4l2grabber", true);
-    setIntegerPreference("preferences", "v4l2controller", false);
-    setIntegerPreference("preferences", "mediafoundationgrabber", true);
-    setIntegerPreference("preferences", "mediafoundationcontroller", false);
-    setIntegerPreference("preferences", "gphoto2grabber", false);
-    setIntegerPreference("preferences", "gphoto2controller", false);
+    setBooleanPreference("preferences", "v4l2grabber", Frontend::V4L2GRABBERDEFAULT);
+    setBooleanPreference("preferences", "v4l2controller", Frontend::V4L2CONTROLERDEFAULT);
+    setBooleanPreference("preferences", "mediafoundationgrabber", Frontend::MEDIAFOUNDATIONGRABBERDEFAULT);
+    setBooleanPreference("preferences", "mediafoundationcontroller", Frontend::MEDIAFOUNDATIONCONTROLERDEFAULT);
+    setBooleanPreference("preferences", "gphoto2grabber", Frontend::GPHOTO2GRABBERDEFAULT);
+    setBooleanPreference("preferences", "gphoto2controller", Frontend::GPHOTO2CONTROLERDEFAULT);
 }
 
 

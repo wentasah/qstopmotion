@@ -18,41 +18,51 @@
  *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                 *
  ******************************************************************************/
 
-#ifndef IMPORTWIDGET_H
-#define IMPORTWIDGET_H
+#ifndef CONTROLERWIDGET_H
+#define CONTROLERWIDGET_H
 
 #include "frontends/frontend.h"
 
-#include <QComboBox>
+#include <QCheckBox>
 #include <QGridLayout>
 #include <QGroupBox>
-#include <QLabel>
-#include <QLineEdit>
-#include <QPushButton>
-#include <QRadioButton>
-#include <QSpinBox>
-#include <QTableWidget>
 #include <QTextEdit>
-#include <QToolBox>
 #include <QWidget>
-
-#include <qwt/qwt_slider.h>
 
 
 /**
  * The image import tab in the preferences menu
  * @author Ralf Lange
  */
-class ImportWidget : public QWidget
+class ControlerWidget : public QWidget
 {
     Q_OBJECT
 public:
+    const static bool BRIGHTNESSDEFAULT = true;
+    const static bool CONTRASTDEFAULT   = true;
+    const static bool SATURATIONDEFAULT = true;
+    const static bool HUEDEFAULT        = true;
+    const static bool GAMMADEFAULT      = false;
+    const static bool SHARPNESSDEFAULT  = true;
+    const static bool BACKLIGHTDEFAULT  = false;
+    const static bool WHITEDEFAULT      = false;
+    const static bool GAINDEFAULT       = false;
+    const static bool COLORDEFAULT      = false;
+
+    const static bool EXPOSUREDEFAULT   = true;
+    const static bool ZOOMDEFAULT       = true;
+    const static bool FOCUSDEFAULT      = true;
+    const static bool PANDEFAULT        = false;
+    const static bool TILTDEFAULT       = false;
+    const static bool IRISDEFAULT       = false;
+    const static bool ROLLDEFAULT       = false;
+
     /**
      * Sets up the tab.
      * @param f frontend of the application
      * @param parent the parent of the this widget
      */
-    ImportWidget(Frontend *f, bool type, QWidget *parent = 0);
+    ControlerWidget(Frontend *f, QWidget *parent = 0);
 
     /**
      * Applies the settings in the import tab.
@@ -73,70 +83,56 @@ protected:
     // void resizeEvent(QResizeEvent *event);
 
 private slots:
-    // image import preferences
-    /**
-     * Slot for notified the image import tab when the image format changes,
-     * so that image import preferences can be updated.
-     * @param index the new image format.
-     */
-    void changeImageFormat(int index);
-
-    /**
-     * Slot for notified the image import tab when the image quality changes,
-     * so that image import preferences can be updated.
-     * @param value The new image quality value
-     */
-    void changeImageQuality(double value);
-
-    /**
-     * Slot for notified the image import tab when the image size changes,
-     * so that image import preferences can be updated.
-     * @param index the new image size.
-     */
-    void changeImageSize(int index);
-
-    /**
-     * Slot for notified the image import tab when the live view fps changes,
-     * so that image import preferences can be updated.
-     * @param value The new fps value
-     */
-    void changeLiveViewFps(double value);
 
 private:
     Frontend     *frontend;
 
-    /**
-     * Type of the tab: true = general dialog tab, false = project dialog tab
-     */
-    bool          tabType;
-
     QTextEdit    *infoText;
 
-    QTableWidget *encoderTable;
-
-    // Image preferences
-    QGroupBox    *imagePrefs;
-    QLabel       *imageFormatLabel;
-    QComboBox    *imageFormatCombo;
-    int           activeImageFormat;
-    QLabel       *imageQualityLabel;
-    QwtSlider    *imageQualitySlider;
-    int           activeImageQuality;
-    QLabel       *qualityMinimumLabel;
-    QLabel       *qualityMaximumLabel;
-    QLabel       *imageSizeLabel;
-    QComboBox    *imageSizeCombo;
-    int           activeImageSize;
+    // Image quality preferences
+    QGroupBox    *qualityPrefs;
+    QCheckBox    *brightnessCheckBox;
+    QCheckBox    *contrastCheckBox;
+    QCheckBox    *saturationCheckBox;
+    QCheckBox    *hueCheckBox;
+    QCheckBox    *gammaCheckBox;
+    QCheckBox    *sharpnessCheckBox;
+    QCheckBox    *backlightCheckBox;
+    QCheckBox    *whiteCheckBox;
+    QCheckBox    *gainCheckBox;
+    QCheckBox    *colorCheckBox;
 
     // Live view preferences
-    QGroupBox    *liveViewPrefs;
-    QLabel       *liveViewFpsLabel;
-    QwtSlider    *liveViewFpsSlider;
-    double        activeLiveViewFps;
+    QGroupBox    *controlPrefs;
+    QCheckBox    *exposureCheckBox;
+    QCheckBox    *zoomCheckBox;
+    QCheckBox    *focusCheckBox;
+    QCheckBox    *panCheckBox;
+    QCheckBox    *tiltCheckBox;
+    QCheckBox    *irisCheckBox;
+    QCheckBox    *rollCheckBox;
+
+    // Actual values
+    bool actualBrightness;
+    bool actualContrast;
+    bool actualSaturation;
+    bool actualHue;
+    bool actualGamma;
+    bool actualSharpness;
+    bool actualBacklight;
+    bool actualWhite;
+    bool actualGain;
+    bool actualColor;
+
+    bool actualExposure;
+    bool actualZoom;
+    bool actualFocus;
+    bool actualPan;
+    bool actualTilt;
+    bool actualIris;
+    bool actualRoll;
 
     void makeGUI();
-
-    void enableQuality();
 };
 
 #endif

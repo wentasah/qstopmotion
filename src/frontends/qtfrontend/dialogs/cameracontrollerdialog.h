@@ -24,12 +24,13 @@
 #define CAMERACONTROLLERDIALOG_H
 
 #include <QCheckBox>
-#include <QSlider>
 #include <QDialog>
 #include <QGroupBox>
 #include <QLabel>
 #include <QPushButton>
 #include <QVBoxLayout>
+
+#include <qwt/qwt_slider.h>
 
 #include "frontends/frontend.h"
 #include "technical/grabber/grabbercontroller.h"
@@ -74,7 +75,14 @@ public:
      */
     bool tearDown();
 
+    /**
+     * Enable/disable the controls selected on the control preferences.
+     * @brief enableControls
+     */
+    void enableControls();
+
 private slots:
+
     /**
      * Slot for notified the camera contoller when automatic brightness is changed, so that
      * camera contoller can be updaten.
@@ -93,9 +101,8 @@ private slots:
     /**
      * Slot for notified the camera controller when the brightness changes,
      * so that brightness can be updated.
-     * @param value the new brightness value.
      */
-    void changeBrightness(int value);
+    void changeBrightness();
 
     /**
      * Slot for notified the camera controller when the brightness changes,
@@ -123,9 +130,8 @@ private slots:
     /**
      * Slot for notified the camera controller when the contrast changes,
      * so that contrast can be updated.
-     * @param value the new contrast value.
      */
-    void changeContrast(int value);
+    void changeContrast();
 
     /**
      * Slot for notified the camera controller when the contrast changes,
@@ -153,9 +159,8 @@ private slots:
     /**
      * Slot for notified the camera controller when the saturation changes,
      * so that saturation can be updated.
-     * @param value the new saturation value.
      */
-    void changeSaturation(int value);
+    void changeSaturation();
 
     /**
      * Slot for notified the camera controller when the saturation changes,
@@ -183,9 +188,8 @@ private slots:
     /**
      * Slot for notified the camera controller when the hue changes,
      * so that hue can be updated.
-     * @param value the new hue value.
      */
-    void changeHue(int value);
+    void changeHue();
 
     /**
      * Slot for notified the camera controller when the hue changes,
@@ -213,9 +217,8 @@ private slots:
     /**
      * Slot for notified the camera controller when the gamma changes,
      * so that gamma can be updated.
-     * @param value the new gamma value.
      */
-    void changeGamma(int value);
+    void changeGamma();
 
     /**
      * Slot for notified the camera controller when the gamma changes,
@@ -243,9 +246,8 @@ private slots:
     /**
      * Slot for notified the camera controller when the sharpness changes,
      * so that sharpness can be updated.
-     * @param value the new sharpness value.
      */
-    void changeSharpness(int value);
+    void changeSharpness();
 
     /**
      * Slot for notified the camera controller when the sharpness changes,
@@ -273,9 +275,8 @@ private slots:
     /**
      * Slot for notified the camera controller when the backlight compensation changes,
      * so that backlight compensation can be updated.
-     * @param value the new backlight compensation value.
      */
-    void changeBacklight(int value);
+    void changeBacklight();
 
     /**
      * Slot for notified the camera controller when the backlight compensation changes,
@@ -303,9 +304,8 @@ private slots:
     /**
      * Slot for notified the camera controller when the gain changes,
      * so that gain can be updated.
-     * @param value the new gain value.
      */
-    void changeGain(int value);
+    void changeGain();
 
     /**
      * Slot for notified the camera controller when the gain changes,
@@ -333,9 +333,8 @@ private slots:
     /**
      * Slot for notified the camera controller when the color enable changes,
      * so that color enable can be updated.
-     * @param value the new white balance value.
      */
-    void changeColor(int value);
+    void changeColor();
 
     /**
      * Slot for notified the camera controller when the color enable changes,
@@ -363,9 +362,8 @@ private slots:
     /**
      * Slot for notified the camera controller when the white balance changes,
      * so that white balance can be updated.
-     * @param value the new white balance value.
      */
-    void changeWhite(int value);
+    void changeWhite();
 
     /**
      * Slot for notified the camera controller when the white balance changes,
@@ -393,9 +391,8 @@ private slots:
     /**
      * Slot for notified the camera controller when the exposure changes,
      * so that exposure can be updated.
-     * @param value the new exposure value.
      */
-    void changeExposure(int value);
+    void changeExposure();
 
     /**
      * Slot for notified the camera controller when the exposure changes,
@@ -423,9 +420,8 @@ private slots:
     /**
      * Slot for notified the camera controller when the zoom changes,
      * so that zoom can be updated.
-     * @param value the new zoo value.
      */
-    void changeZoom(int value);
+    void changeZoom();
 
     /**
      * Slot for notified the camera controller when the zoom changes,
@@ -453,9 +449,8 @@ private slots:
     /**
      * Slot for notified the camera controller when the focus changes,
      * so that focus can be updated.
-     * @param value the new focus value.
      */
-    void changeFocus(int value);
+    void changeFocus();
 
     /**
      * Slot for notified the camera controller when the focus changes,
@@ -483,9 +478,8 @@ private slots:
     /**
      * Slot for notified the camera controller when the pan changes,
      * so that pan can be updated.
-     * @param value the new pan value.
      */
-    void changePan(int value);
+    void changePan();
 
     /**
      * Slot for notified the camera controller when the pan changes,
@@ -513,9 +507,8 @@ private slots:
     /**
      * Slot for notified the camera controller when the tilt changes,
      * so that tilt can be updated.
-     * @param value the new tilt value.
      */
-    void changeTilt(int value);
+    void changeTilt();
 
     /**
      * Slot for notified the camera controller when the tilt changes,
@@ -543,9 +536,8 @@ private slots:
     /**
      * Slot for notified the camera controller when the iris changes,
      * so that iris can be updated.
-     * @param value the new iris value.
      */
-    void changeIris(int value);
+    void changeIris();
 
     /**
      * Slot for notified the camera controller when the iris changes,
@@ -573,9 +565,8 @@ private slots:
     /**
      * Slot for notified the camera controller when the roll changes,
      * so that iris can be updated.
-     * @param value the new roll value.
      */
-    void changeRoll(int value);
+    void changeRoll();
 
     /**
      * Slot for notified the camera controller when the roll changes,
@@ -612,7 +603,7 @@ private:
      * @param value The actual value of the slider.
      * @return The step lengt for the values of the slider.
      */
-    void configureSlider(QSlider *slider, GrabberControlCapabilities *controlCaps, int value);
+    void configureSlider(QwtSlider *slider, GrabberControlCapabilities *controlCaps, int value);
 
     Frontend     *frontend;
 
@@ -625,74 +616,74 @@ private:
 
     QCheckBox    *brightnessCheckBox;
     QLabel       *brightnessLabel;
-    QSlider      *brightnessSlider;
+    QwtSlider    *brightnessSlider;
 
     QCheckBox    *contrastCheckBox;
     QLabel       *contrastLabel;
-    QSlider      *contrastSlider;
+    QwtSlider    *contrastSlider;
 
     QCheckBox    *saturationCheckBox;
     QLabel       *saturationLabel;
-    QSlider      *saturationSlider;
+    QwtSlider    *saturationSlider;
 
     QCheckBox    *hueCheckBox;
     QLabel       *hueLabel;
-    QSlider      *hueSlider;
+    QwtSlider    *hueSlider;
 
     QCheckBox    *gammaCheckBox;
     QLabel       *gammaLabel;
-    QSlider      *gammaSlider;
+    QwtSlider    *gammaSlider;
 
     QCheckBox    *sharpnessCheckBox;
     QLabel       *sharpnessLabel;
-    QSlider      *sharpnessSlider;
+    QwtSlider    *sharpnessSlider;
 
     QCheckBox    *backlightCheckBox;
     QLabel       *backlightLabel;
-    QSlider      *backlightSlider;
+    QwtSlider    *backlightSlider;
 
     QCheckBox    *whiteCheckBox;
     QLabel       *whiteLabel;
-    QSlider      *whiteSlider;
+    QwtSlider    *whiteSlider;
 
     QCheckBox    *gainCheckBox;
     QLabel       *gainLabel;
-    QSlider      *gainSlider;
+    QwtSlider    *gainSlider;
 
     QCheckBox    *colorCheckBox;
     QLabel       *colorLabel;
-    QSlider      *colorSlider;
+    QwtSlider    *colorSlider;
 
     QGroupBox    *controlGroupBox;
     int           controlCount;
 
     QCheckBox    *exposureCheckBox;
     QLabel       *exposureLabel;
-    QSlider      *exposureSlider;
+    QwtSlider    *exposureSlider;
 
     QCheckBox    *zoomCheckBox;
     QLabel       *zoomLabel;
-    QSlider      *zoomSlider;
+    QwtSlider    *zoomSlider;
 
     QCheckBox    *focusCheckBox;
     QLabel       *focusLabel;
-    QSlider      *focusSlider;
+    QwtSlider    *focusSlider;
 
     QCheckBox    *panCheckBox;
     QLabel       *panLabel;
-    QSlider      *panSlider;
+    QwtSlider    *panSlider;
 
     QCheckBox    *tiltCheckBox;
     QLabel       *tiltLabel;
-    QSlider      *tiltSlider;
+    QwtSlider    *tiltSlider;
 
     QCheckBox    *irisCheckBox;
     QLabel       *irisLabel;
-    QSlider      *irisSlider;
+    QwtSlider    *irisSlider;
 
     QCheckBox    *rollCheckBox;
     QLabel       *rollLabel;
-    QSlider      *rollSlider;
+    QwtSlider    *rollSlider;
 
     QVBoxLayout  *mainLayout;
 

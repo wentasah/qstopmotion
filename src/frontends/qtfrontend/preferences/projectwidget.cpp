@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2016 by                                                *
+ *  Copyright (C) 2005-2017 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -44,22 +44,33 @@ ProjectWidget::ProjectWidget(Frontend *f, bool type, QWidget *parent)
 
     recordingGroupBox      = 0;
     recordingModeCombo     = 0;
+    actualRecordingMode    = DomainFacade::RECORDINGMODEDEFAULT;
 
     grabberGroupBox        = 0;
     grabberSourceCombo     = 0;
-    defaultGrabberSource   = 0;
+    actualGrabberSource    = DomainFacade::GRABBERSOURCEDEFAULT;
 
     captureGroupBox        = 0;
     mixModeCombo           = 0;
-    defaultMixMode         = 0;
+    actualMixMode          = DomainFacade::MIXMODEDEFAULT;
     mixCountSliderCaption  = 0;
     mixCountSlider         = 0;
-    defaultMixCount        = 0;
-    defaultPlaybackCount   = 0;
+    actualMixCount         = DomainFacade::MIXCOUNTDEFAULT;
 
-    // autoGroupBox           = 0;
-    // unitModeCombo          = 0;
-    // defaultUnitMode        = 0;
+    timelapseGroupBox      = 0;
+    unitModeComboCaption   = 0;
+    unitModeCombo          = 0;
+    actualUnitMode         = DomainFacade::UNITMODEDEFAULT;
+    unitCountSliderValue   = 0;
+    unitCountSliderCaption = 0;
+    unitCountSlider        = 0;
+    actualUnitCount        = DomainFacade::UNITCOUNTDEFAULT;
+    beepCheckBox           = 0;
+    actualBeepCheck        = DomainFacade::BEEPCHECKDEFAULT;
+    beepCountSliderValue   = 0;
+    beepCountSliderCaption = 0;
+    beepCountSlider        = 0;
+    actualBeepCount        = DomainFacade::BEEPCOUNTDEFAULT;
 
     this->setObjectName("ProjectWidget");
 
@@ -75,24 +86,8 @@ void ProjectWidget::makeGUI()
 
     QVBoxLayout *mainLayout = new QVBoxLayout;
 
-    recordingGroupBox = new QGroupBox(tr("Recording"));
-    // recordingGroupBox->setFlat(true);
-
-    recordingModeCombo = new QComboBox();
-    recordingModeCombo->setFocusPolicy(Qt::NoFocus);
-    connect(recordingModeCombo, SIGNAL(activated(int)), this, SLOT(changeRecordingMode(int)));
-    recordingModeCombo->addItem(tr("Single frame capture"));
-    // recordingModeCombo->addItem(tr("Automated recording"));
-
-    QVBoxLayout *recordingLayout = new QVBoxLayout;
-    // recordingLayout->setMargin(0);
-    // recordingLayout->setSpacing(2);
-    // recordingLayout->addStretch(1);
-    recordingLayout->addWidget(recordingModeCombo);
-    recordingLayout->addStretch(10);
-    recordingGroupBox->setLayout(recordingLayout);
-    mainLayout->addWidget(recordingGroupBox);
-
+    // ========================================================================
+    // Camera group box
     grabberGroupBox = new QGroupBox;
     grabberGroupBox->setTitle(tr("Image grabber settings"));
     // grabberGroupBox->setFlat(true);
@@ -110,42 +105,57 @@ void ProjectWidget::makeGUI()
 #endif
 
     QVBoxLayout *grabberLayout = new QVBoxLayout;
-    // grabberLayout->setMargin(0);
-    // grabberLayout->setSpacing(2);
-    // grabberLayout->addStretch(1);
     grabberLayout->addWidget(grabberSourceCombo);
     grabberLayout->addStretch(10);
     grabberGroupBox->setLayout(grabberLayout);
     mainLayout->addWidget(grabberGroupBox);
 
+    // ========================================================================
+    // Recording group box
+    recordingGroupBox = new QGroupBox(tr("Recording"));
+
+    recordingModeCombo = new QComboBox();
+    recordingModeCombo->setFocusPolicy(Qt::NoFocus);
+    connect(recordingModeCombo, SIGNAL(activated(int)), this, SLOT(changeRecordingMode(int)));
+    recordingModeCombo->addItem(tr("Single frame capture"));
+    recordingModeCombo->addItem(tr("Time-lapse capture"));
+
+    QVBoxLayout *recordingLayout = new QVBoxLayout;
+    // recordingLayout->setMargin(0);
+    // recordingLayout->setSpacing(2);
+    // recordingLayout->addStretch(1);
+    recordingLayout->addWidget(recordingModeCombo);
+    recordingLayout->addStretch(10);
+    recordingGroupBox->setLayout(recordingLayout);
+    mainLayout->addWidget(recordingGroupBox);
+
+    // ========================================================================
+    // Capture group box
     captureGroupBox = new QGroupBox(tr("Capture"));
-    // secondGroupBox->setFlat(true);
 
     mixModeCombo = new QComboBox();
     mixModeCombo->setFocusPolicy(Qt::NoFocus);
     connect(mixModeCombo, SIGNAL(activated(int)), this, SLOT(changeMixMode(int)));
     mixModeCombo->addItem(tr("Mix"));
     mixModeCombo->addItem(tr("Diff"));
-    mixModeCombo->addItem(tr("Playback"));
     mixCountSliderCaption = new QLabel(tr("Number of images:"));
     QString infoText =
         tr("<h4>Number of images</h4> "
            "<p>By changing the value in this slidebar you can specify how many images "
-           "backwards in the animation which should be mixed on top of the camera or "
-           "if you are in playback mode: how many images to play. </p> "
+           "backwards in the animation which should be mixed on top of the camera.</p> "
            "<p>By mixing the previous image(s) onto the camera you can more easily see "
            "how the next shot will be in relation to the other, therby making a smoother "
            "stop motion animation!</p>");
     mixCountSliderCaption->setWhatsThis(infoText);
 
-    mixCountSlider = new QSlider(Qt::Horizontal);
-    mixCountSlider->setMinimum(0);
-    mixCountSlider->setMaximum(5);
-    mixCountSlider->setPageStep(1);
-    mixCountSlider->setValue(2);
-    mixCountSlider->setTickPosition(QSlider::TicksBelow);
-    mixCountSlider->setFocusPolicy(Qt::NoFocus);
-    connect(mixCountSlider, SIGNAL(valueChanged(int)), this, SLOT(changeMixCount(int)));
+    mixCountSlider = new QwtSlider();
+    mixCountSlider->setOrientation(Qt::Horizontal);
+    mixCountSlider->setScalePosition(QwtSlider::LeadingScale);
+    mixCountSlider->setGroove(true);
+    mixCountSlider->setScale(0.0, 5.0);
+    mixCountSlider->setTotalSteps(5);
+    mixCountSlider->setSingleSteps(1);
+    connect(mixCountSlider, SIGNAL(sliderReleased()), this, SLOT(changeMixCount()));
     mixCountSlider->setWhatsThis(infoText);
 
     QVBoxLayout *captureLayout = new QVBoxLayout;
@@ -156,24 +166,75 @@ void ProjectWidget::makeGUI()
     captureGroupBox->setLayout(captureLayout);
     mainLayout->addWidget(captureGroupBox);
 
-    /*
-    autoGroupBox = new QGroupBox(tr("Auto"));
-    // autoGroupBox->setFlat(true);
+    // ========================================================================
+    // Time-lapse group box
+    timelapseGroupBox = new QGroupBox(tr("Time-lapse"));
+
+    unitModeComboCaption = new QLabel(tr("Unit:"));
 
     unitModeCombo = new QComboBox();
     unitModeCombo->setFocusPolicy(Qt::NoFocus);
-    // unitModeCombo->setEnabled(false);
+    unitModeCombo->addItem(tr("Seconds"));
+    unitModeCombo->addItem(tr("Minutes"));
+    unitModeCombo->addItem(tr("Hours"));
+    unitModeCombo->addItem(tr("Days"));
+    unitModeCombo->setCurrentIndex(actualUnitMode);
     connect(unitModeCombo, SIGNAL(activated(int)), this, SLOT(changeUnitMode(int)));
-    unitModeCombo->addItem("");
-    unitModeCombo->addItem(tr("Pr sec"));
-    unitModeCombo->addItem(tr("Pr min"));
-    unitModeCombo->addItem(tr("Pr hr"));
 
-    QVBoxLayout *autoLayout = new QVBoxLayout;
-    autoLayout->addWidget(unitModeCombo);
-    autoGroupBox->setLayout(autoLayout);
-    // mainLayout->addWidget(autoGroupBox);
-    */
+    // "n Seconds between pictures"
+    unitCountSliderValue = new QLabel("0");
+    unitCountSliderCaption = new QLabel("unitCountSliderCaption");
+
+    unitCountSlider = new QwtSlider();
+    unitCountSlider->setOrientation(Qt::Horizontal);
+    unitCountSlider->setScalePosition(QwtSlider::LeadingScale);
+    unitCountSlider->setGroove(true);
+    unitCountSlider->setSingleSteps(1);
+    connect(unitCountSlider, SIGNAL(sliderReleased()), this, SLOT(changeUnitCount()));
+
+    // beepCountSliderCaption->setText(tr("Beep ?? seconds before picture:"));
+    beepCheckBox = new QCheckBox(tr("Beep"));
+    beepCheckBox->setChecked(false);
+    connect(beepCheckBox, SIGNAL(stateChanged(int)), this, SLOT(changeBeep(int)));
+
+    beepCountSliderValue = new QLabel("0");
+    beepCountSliderCaption = new QLabel(tr("seconds before picture:"));
+
+    beepCountSlider = new QwtSlider();
+    beepCountSlider->setOrientation(Qt::Horizontal);
+    beepCountSlider->setScalePosition(QwtSlider::LeadingScale);
+    beepCountSlider->setGroove(true);
+    beepCountSlider->setSingleSteps(1);
+    connect(beepCountSlider, SIGNAL(sliderReleased()), this, SLOT(changeBeepCount()));
+
+    QHBoxLayout *unitCountCaptionLayout = new QHBoxLayout;
+    unitCountCaptionLayout->addWidget(unitCountSliderValue);
+    unitCountCaptionLayout->addSpacing(1);
+    unitCountCaptionLayout->addWidget(unitCountSliderCaption);
+    unitCountCaptionLayout->addStretch(1);
+
+    QHBoxLayout *beepCountCaptionLayout = new QHBoxLayout;
+    beepCountCaptionLayout->addWidget(beepCheckBox);
+    beepCountCaptionLayout->addSpacing(1);
+    beepCountCaptionLayout->addWidget(beepCountSliderValue);
+    beepCountCaptionLayout->addSpacing(1);
+    beepCountCaptionLayout->addWidget(beepCountSliderCaption);
+    beepCountCaptionLayout->addStretch(1);
+
+    QVBoxLayout *timelapseLayout = new QVBoxLayout;
+    timelapseLayout->setMargin(4);
+    // timelapseLayout->setSpacing(2);
+    timelapseLayout->addWidget(unitModeComboCaption);
+    timelapseLayout->addWidget(unitModeCombo);
+    timelapseLayout->addSpacing(10);
+    timelapseLayout->addLayout(unitCountCaptionLayout);
+    timelapseLayout->addWidget(unitCountSlider);
+    timelapseLayout->addSpacing(10);
+    timelapseLayout->addLayout(beepCountCaptionLayout);
+    timelapseLayout->addWidget(beepCountSlider);
+    timelapseGroupBox->setLayout(timelapseLayout);
+
+    mainLayout->addWidget(timelapseGroupBox);
 
     mainLayout->addStretch(1);
 
@@ -188,61 +249,17 @@ void ProjectWidget::initialize()
     qDebug() << "ProjectWidget::initialize --> Start";
 
     PreferencesTool *pref = frontend->getPreferences();
-    int              value;
 
-    if (pref->getIntegerPreference("preferences", "defaultrecordingmode", value) == false) {
-        value = 0;
-    }
-    defaultRecordingMode = value;
+    pref->getIntegerPreference("preferences", "defaultrecordingmode", actualRecordingMode);
+    pref->getIntegerPreference("preferences", "defaultgrabbersource", actualGrabberSource);
+    pref->getIntegerPreference("preferences", "defaultmixingmode", actualMixMode);
+    pref->getIntegerPreference("preferences", "defaultmixcount", actualMixCount);
+    pref->getIntegerPreference("preferences", "defaultunitmode", actualUnitMode);
+    pref->getIntegerPreference("preferences", "defaultunitcount", actualUnitCount);
+    pref->getBooleanPreference("preferences", "defaultbeepcheck", actualBeepCheck);
+    pref->getIntegerPreference("preferences", "defaultbeepcount", actualBeepCount);
 
-    if (pref->getIntegerPreference("preferences", "defaultgrabbersource", value) == false) {
-        value = 0;
-    }
-    defaultGrabberSource = value;
-
-    if (pref->getIntegerPreference("preferences", "defaultmixingmode", value) == false) {
-        value = 0;
-    }
-    defaultMixMode = value;
-
-    if (pref->getIntegerPreference("preferences", "defaultmixcount", value) == false) {
-        value = 0;
-    }
-    defaultMixCount = value;
-
-    if (pref->getIntegerPreference("preferences", "defaultplaybackcount", value) == false) {
-        value = 0;
-    }
-    defaultPlaybackCount = value;
-
-    // if (pref->getIntegerPreference("preferences", "defaultunitmode", value) == false) {
-    //     value = 0;
-    // }
-    // bdefaultUnitMode = value;
-
-    recordingModeCombo->setCurrentIndex(defaultRecordingMode);
-    changeRecordingMode(defaultRecordingMode);
-
-    setImageGrabberSource(defaultGrabberSource);
-
-    mixModeCombo->setCurrentIndex(defaultMixMode);
-    changeMixMode(defaultMixMode);
-
-    switch (defaultMixMode) {
-    case 0:
-        mixCountSlider->setValue(defaultMixCount);
-        break;
-    case 1:
-        break;
-    case 2:
-        mixCountSlider->setValue(defaultPlaybackCount);
-        break;
-    }
-
-    /*
-    unitModeCombo->setCurrentIndex(defaultUnitMode);
-    changeUnitMode(defaultUnitMode);
-    */
+    reset();
 
     qDebug() << "ProjectWidget::initialize --> End";
 }
@@ -262,12 +279,8 @@ void ProjectWidget::apply()
 {
     qDebug() << "ProjectWidget::apply --> Start";
 
-    int index;
-    int newRecordingMode = recordingModeCombo->currentIndex();
-
-    if (defaultRecordingMode != newRecordingMode) {
-        defaultRecordingMode = newRecordingMode;
-    }
+    PreferencesTool *pref = frontend->getPreferences();
+    int              index;
 
     switch (grabberSourceCombo->currentIndex()) {
     case 0:
@@ -285,46 +298,58 @@ void ProjectWidget::apply()
         break;
     }
 
-    if (defaultGrabberSource != index) {
-        defaultGrabberSource = index;
+    if (actualGrabberSource != index) {
+        actualGrabberSource = index;
+        pref->setIntegerPreference("preferences", "defaultgrabbersource", actualGrabberSource);
+    }
+
+    int newRecordingMode = recordingModeCombo->currentIndex();
+    if (actualRecordingMode != newRecordingMode) {
+        actualRecordingMode = newRecordingMode;
+        pref->setIntegerPreference("preferences", "defaultrecordingmode", actualRecordingMode);
     }
 
     int newMixMode = mixModeCombo->currentIndex();
-    if (defaultMixMode != newMixMode) {
-        defaultMixMode = newMixMode;
+    if (actualMixMode != newMixMode) {
+        actualMixMode = newMixMode;
+        pref->setIntegerPreference("preferences", "defaultmixmode", actualMixMode);
     }
 
-    int newMixCount = mixCountSlider->value();
+    int newMixCount = (int)mixCountSlider->value();
     switch (newMixMode) {
-    case 0:
-        if (defaultMixCount != newMixCount) {
-            defaultMixCount = newMixCount;
+    case DomainFacade::mixImageMode:
+        if (actualMixCount != newMixCount) {
+            actualMixCount = newMixCount;
+            pref->setIntegerPreference("preferences", "defaultmixcount", actualMixCount);
         }
         break;
-    case 1:
-        break;
-    case 2:
-        if (defaultPlaybackCount != newMixCount) {
-            defaultPlaybackCount = newMixCount;
-        }
-        break;
-    case 3:
+    case DomainFacade::diffImageMode:
         break;
     }
-/*
-    int newUnitMode = unitModeChooseCombo->currentIndex();
-    if (defaultUnitMode != newUnitMode) {
-        defaultUnitMode = newUnitMode;
-    }
-*/
-    PreferencesTool *pref = frontend->getPreferences();
 
-    pref->setIntegerPreference("preferences", "defaultrecordingmode", defaultRecordingMode);
-    pref->setIntegerPreference("preferences", "defaultgrabbersource", defaultGrabberSource);
-    pref->setIntegerPreference("preferences", "defaultmixmode", defaultMixMode);
-    pref->setIntegerPreference("preferences", "defaultmixcount", defaultMixCount);
-    pref->setIntegerPreference("preferences", "defaultplaybackcount", defaultPlaybackCount);
-    // pref->setIntegerPreference("preferences", "defaultunitmode", defaultUnitMode);
+    int newUnitMode = unitModeCombo->currentIndex();
+    if (actualUnitMode != newUnitMode) {
+        actualUnitMode = newUnitMode;
+        pref->setIntegerPreference("preferences", "defaultunitmode", actualUnitMode);
+    }
+
+    int newUnitCount = (int)unitCountSlider->value();
+    if (actualUnitCount != newUnitCount) {
+        actualUnitCount = newUnitCount;
+        pref->setIntegerPreference("preferences", "defaultunitcount", actualUnitCount);
+    }
+
+    bool newBeepCheck = beepCheckBox->isChecked();
+    if (actualBeepCheck != newBeepCheck) {
+        actualBeepCheck = newBeepCheck;
+        pref->setBooleanPreference("preferences", "defaultbeepcheck", actualBeepCheck);
+    }
+
+    int newBeepCount = (int)beepCountSlider->value();
+    if (actualBeepCount != newBeepCount) {
+        actualBeepCount = newBeepCount;
+        pref->setIntegerPreference("preferences", "defaultbeepcount", actualBeepCount);
+    }
 
     qDebug() << "ProjectWidget::apply --> End";
 }
@@ -334,25 +359,26 @@ void ProjectWidget::reset()
 {
     qDebug() << "ProjectWidget::reset --> Start";
 
-    changeRecordingMode(defaultRecordingMode);
+    setImageGrabberSource(actualGrabberSource);
 
-    changeGrabberSource(defaultGrabberSource);
+    recordingModeCombo->setCurrentIndex(actualRecordingMode);
+    changeRecordingMode(actualRecordingMode);
 
-    changeMixMode(defaultMixMode);
+    mixModeCombo->setCurrentIndex(actualMixMode);
+    changeMixMode(actualMixMode);
 
-    switch (defaultMixMode) {
-    case 0:
-        mixCountSlider->setValue(defaultMixCount);
-        break;
-    case 1:
-        break;
-    case 2:
-        mixCountSlider->setValue(defaultPlaybackCount);
-        break;
-    }
-/*
-    changeUnitMode(defaultUnitMode);
-*/
+    unitModeCombo->setCurrentIndex(actualUnitMode);
+    changeUnitMode(actualUnitMode);
+
+    unitCountSlider->setValue((double)actualUnitCount);
+    changeUnitCount();
+
+    beepCheckBox->setChecked(actualBeepCheck);
+    changeBeep(actualBeepCheck);
+
+    beepCountSlider->setValue((double)actualBeepCount);
+    changeBeepCount();
+
     qDebug() << "ProjectWidget::reset --> End";
 }
 
@@ -379,89 +405,152 @@ void ProjectWidget::setImageGrabberSource(int newSource)
 
 void ProjectWidget::changeRecordingMode(int index)
 {
-    this->recordingModeCombo->setCurrentIndex(index);
+    qDebug() << "ProjectWidget::changeRecordingMode --> Start";
+
+    switch(index) {
+      case DomainFacade::singleFrameMode:
+        // Singe picture
+        timelapseGroupBox->hide();
+        captureGroupBox->show();
+
+        break;
+      case DomainFacade::timeLapseMode:
+        // Time-lapse picture
+        timelapseGroupBox->show();
+        captureGroupBox->hide();
+
+        break;
+    }
+
+    qDebug() << "ProjectWidget::changeRecordingMode --> End";
 }
 
 
 void ProjectWidget::changeGrabberSource(int index)
 {
-    this->grabberSourceCombo->setCurrentIndex(index);
+    // this->grabberSourceCombo->setCurrentIndex(index);
 }
 
 
 void ProjectWidget::changeMixMode(int index)
 {
     switch (index) {
-    case 0:
+    case DomainFacade::mixImageMode:
         mixCountSliderCaption->setEnabled(true);
         mixCountSlider->setEnabled(true);
-        mixCountSlider->setMaximum(5);
-        mixCountSlider->setValue(defaultMixCount);
+        mixCountSlider->setScale(0.0, 5.0);
+        mixCountSlider->setValue(actualMixCount);
         break;
-    case 1:
+    case DomainFacade::diffImageMode:
         mixCountSliderCaption->setEnabled(false);
         mixCountSlider->setEnabled(false);
         break;
-    case 2:
-        mixCountSliderCaption->setEnabled(true);
-        mixCountSlider->setEnabled(true);
-        mixCountSlider->setMaximum(50);
-        mixCountSlider->setValue(defaultPlaybackCount);
-        break;
     default:
-        Q_ASSERT(index < 3);
-
-        break;
+        Q_ASSERT(index < 2);
     }
 }
 
 
-void ProjectWidget::changeMixCount(int /*sliderValue*/)
+void ProjectWidget::changeMixCount()
 {
+    // qDebug() << "ImportWidget::changeMixCount --> Empty";
 }
 
-/*
+
 void ProjectWidget::changeUnitMode(int index)
 {
-    int sliderValue = mixCountSlider->value();
-    if (sliderValue == 0 || index == 0) {
-        return;
-    }
+    qDebug() << "ImportWidget::changeUnitMode --> Start";
 
-    int factor = 0;
     switch (index) {
-    case 1:
-        factor = 1000;
+    case DomainFacade::secondsMode:
+        // Seconds
+        unitCountSliderCaption->setText(tr("Seconds between pictures"));
+        unitCountSlider->setScale(0, 60);
+        unitCountSlider->setTotalSteps(60);
+        unitCountSlider->setValue(30);
+
         break;
-    case 2:
-        factor = 60000;
+    case DomainFacade::minutesMode:
+        // Minutes
+        unitCountSliderCaption->setText(tr("Minutes between pictures"));
+        unitCountSlider->setScale(0, 60);
+        unitCountSlider->setTotalSteps(60);
+        unitCountSlider->setValue(5);
+
         break;
-    case 3:
-        factor = 3600000;
+    case DomainFacade::hoursMode:
+        // Hours
+        unitCountSliderCaption->setText(tr("Hours between pictures"));
+        unitCountSlider->setScale(0, 25);
+        unitCountSlider->setTotalSteps(25);
+        unitCountSlider->setValue(1);
+
         break;
-    default:
+    case DomainFacade::daysMode:
+        // Days
+        unitCountSliderCaption->setText(tr("Days between pictures"));
+        unitCountSlider->setScale(0, 30);
+        unitCountSlider->setTotalSteps(30);
+        unitCountSlider->setValue(1);
+
         break;
     }
+
+    qDebug() << "ImportWidget::changeUnitMode --> End";
 }
 
 
-void ProjectWidget::updateSliderValue(int sliderValue)
+void ProjectWidget::changeUnitCount()
 {
-    if (sliderValue != 0) {
-        int factor = 0;
-        int index = unitModeCombo->currentIndex();
-        switch (index) {
-        case 1:
-            factor = 1000;
-            break;
-        case 2:
-            factor = 60000;
-            break;
-        case 3:
-            factor = 3600000;
-            break;
-        }
-        captureTimer->setInterval(factor / sliderValue);
+    qDebug() << "ImportWidget::changeUnitCount --> Start";
+
+    int count = (int)unitCountSlider->value();
+
+    if (0 == count) {
+        count = 1;
+        unitCountSlider->setValue(1.0);
     }
+
+    unitCountSliderValue->setText(QString("%1").arg(count));
+
+    qDebug() << "ImportWidget::changeUnitCount --> End";
 }
-*/
+
+
+void ProjectWidget::changeBeep(int newState)
+{
+    qDebug() << "ProjectWidget::changeBeep --> Start";
+
+    bool check;
+
+    if (Qt::Unchecked == newState) {
+        check = false;
+    }
+    else {
+        check = true;
+    }
+
+    beepCountSlider->setEnabled(check);
+    // beepCheckBox->setEnabled(check);
+    beepCountSliderValue->setEnabled(check);
+    beepCountSliderCaption->setEnabled(check);
+
+    qDebug() << "ProjectWidget::changeBeep --> End";
+}
+
+
+void ProjectWidget::changeBeepCount()
+{
+    qDebug() << "ImportWidget::changeBeepCount --> Start";
+
+    int count = (int)beepCountSlider->value();
+
+    if (0 == count) {
+        count = 1;
+        beepCountSlider->setValue(1.0);
+    }
+
+    beepCountSliderValue->setText(QString("%1").arg(count));
+
+    qDebug() << "ImportWidget::changeBeepCount --> End";
+}

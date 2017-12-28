@@ -264,6 +264,18 @@ public:
     void setGridColorRGB(int r, int g, int b, int a);
 
     /**
+     * Get the status of the signal feature.
+     * @return The new state of the signal feature.
+     */
+    bool getSignal();
+
+    /**
+     * Set the status of the signal feature.
+     * @param newState The new state of the signal feature.
+     */
+    void setSignal(bool newState);
+
+    /**
      * Function for displaying progress on timeconsuming operations.
      * @param infoText the text to display to the user
      * @param numOperations the number of calculated operations to do
@@ -571,18 +583,6 @@ public:
      * @param count The new mix count.
      */
     void setMixCount(int count);
-
-    /**
-     * Get the playback count.
-     * @return The playback count.
-     */
-    int getPlaybackCount();
-
-    /**
-     * Set the playback count.
-     * @param count The new playback count.
-     */
-    void setPlaybackCount(int count);
 
     /**
      * Get the overlay intensity value.

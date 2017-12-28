@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2015 by                                                *
+ *  Copyright (C) 2005-2017 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -124,7 +124,7 @@ public:
      * Notify the observers that a new live view frames per second value is selected.
      * @param newFps the new frames per second.
      */
-    void notifyNewLiveViewFps(int newFps);
+    void notifyNewLiveViewFps(double newFps);
 
     /**
      * Notify the observers that a new video frames per second value is selected.

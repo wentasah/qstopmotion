@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2010-2016 by                                                *
+ *  Copyright (C) 2010-2017 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -68,11 +68,16 @@ void ToolBar::makeGUI()
     iconFile.append(QLatin1String("frames.png"));
     framesIcon->setPixmap(QPixmap(iconFile));
 
-    overlaySlider = new QSlider(Qt::Horizontal);
-    connect(overlaySlider, SIGNAL(valueChanged(int)), this, SLOT(overlaySliderChanged(int)));
-    overlaySlider->setMinimum(0);
-    overlaySlider->setMaximum(255);
-    overlaySlider->setValue(100);
+    overlaySlider = new QwtSlider(Qt::Horizontal);
+    overlaySlider->setScalePosition(QwtSlider::NoScale);
+    overlaySlider->setTrough(false);
+    overlaySlider->setGroove(true);
+    overlaySlider->setHandleSize(QSize(12, 25));
+    overlaySlider->setScale(0.0, 250.0);
+    overlaySlider->setTotalSteps(10);
+    overlaySlider->setSingleSteps(25);
+    overlaySlider->setValue(100.0);
+    connect(overlaySlider, SIGNAL(sliderReleased()), this, SLOT(overlaySliderChanged()));
 
     cameraIcon = new QLabel();
     iconFile.clear();
@@ -549,8 +554,10 @@ void ToolBar::toggleLooping()
 }
 
 
-void ToolBar::overlaySliderChanged(int value)
+void ToolBar::overlaySliderChanged()
 {
+    int value = (int)(overlaySlider->value());
+
     frontend->getProject()->setOverlayIntensity(value);
 }
 

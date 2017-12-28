@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2010-2015 by                                                *
+ *  Copyright (C) 2010-2017 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -32,6 +32,7 @@
 
 #include "v4l2controller.h"
 
+#include "frontends/qtfrontend/preferences/grabberwidget.h"
 #include "technical/util.h"
 #include "technical/grabber/imageconverter.h"
 
@@ -70,7 +71,7 @@ bool V4L2Grabber::initialization(QVector<ImageGrabberDevice*> &devices)
     qDebug() << "V4L2Grabber::initialization --> Start";
 
     PreferencesTool *pref = frontend->getPreferences();
-    int              value;
+    bool             value;
     int              deviceCount = 0;
 
     // Enumerate over all /dev/videoN (N = 0...x, x big enought)
@@ -98,8 +99,8 @@ bool V4L2Grabber::initialization(QVector<ImageGrabberDevice*> &devices)
             deviceCount++;
 
             // Add the Controller to the new device
-            if (pref->getIntegerPreference("preferences", "v4l2controller", value) == false) {
-                value = false;
+            if (pref->getBooleanPreference("preferences", "v4l2controller", value) == false) {
+                value = Frontend::V4L2CONTROLERDEFAULT;
             }
             if ((int)true == value) {
                 deviceController = new V4L2Controller(0);

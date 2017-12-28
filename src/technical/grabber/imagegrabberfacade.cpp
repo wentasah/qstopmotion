@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2016 by                                                *
+ *  Copyright (C) 2005-2017 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -107,14 +107,14 @@ void ImageGrabberFacade::initialization()
     qDebug() << "ImageGrabberFacade::initialization --> Start";
 
     PreferencesTool *pref = frontend->getPreferences();
-    int              value;
+    bool             value;
 
     clearDevices();
 
 #ifdef Q_OS_LINUX
     // video4linux2 device
-    if (pref->getIntegerPreference("preferences", "v4l2grabber", value) == false) {
-        value = true;
+    if (pref->getBooleanPreference("preferences", "v4l2grabber", value) == false) {
+        value = Frontend::V4L2GRABBERDEFAULT;
     }
     if ((int)true == value) {
         v4l2Grabber = new V4L2Grabber(frontend);
@@ -126,8 +126,8 @@ void ImageGrabberFacade::initialization()
 
 #if defined(Q_OS_WIN32) || defined(Q_OS_WIN64)
     // Microsoft Media Foundation device
-    if (pref->getIntegerPreference("preferences", "mediafoundationgrabber", value) == false) {
-        value = true;
+    if (pref->getBooleanPreference("preferences", "mediafoundationgrabber", value) == false) {
+        value = Frontend::MEDIAFOUNDATIONGRABBERDEFAULT;
     }
     if ((int)true == value) {
         mediaFoundationGrabber = new MfGrabber(frontend);
@@ -139,8 +139,8 @@ void ImageGrabberFacade::initialization()
 
 #ifdef Q_OS_LINUX
     // gphoto2 device
-    if (pref->getIntegerPreference("preferences", "gphoto2grabber", value) == false) {
-        value = false;
+    if (pref->getBooleanPreference("preferences", "gphoto2grabber", value) == false) {
+        value = Frontend::GPHOTO2GRABBERDEFAULT;
     }
     if ((int)true == value) {
         gphotoGrabber = new GphotoGrabber(frontend);

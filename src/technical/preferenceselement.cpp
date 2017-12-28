@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2015 by                                                *
+ *  Copyright (C) 2005-2017 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -116,6 +116,88 @@ bool PreferencesElement::getIntegerPreference(const QString &key, int &value)
     if (!node.isNull()) {
         QString tmp = node.text();
         value = tmp.toInt();
+        return true;
+    }
+
+    return false;
+}
+
+
+bool PreferencesElement::setDoublePreference(const QString &key, const double attribute)
+{
+    QDomElement element = findPreferencesNode(key);
+
+    if (element.isNull()) {
+        element = createElement(key);
+        elementDom.appendChild(element);
+    } else {
+        // Remove all existing text nodes
+        QDomNode node = element.firstChild();
+        while (!node.isNull()) {
+            if (node.isText())
+                element.removeChild(node);
+            node = node.nextSibling();
+        }
+    }
+
+    QDomText newText = createTextNode(QString("%1").arg(attribute));
+    element.appendChild(newText);
+
+    return true;
+}
+
+
+bool PreferencesElement::getDoublePreference(const QString &key, double &value)
+{
+    QDomElement node = findPreferencesNode(key);
+
+    if (!node.isNull()) {
+        QString tmp = node.text();
+        value = tmp.toDouble();
+        return true;
+    }
+
+    return false;
+}
+
+
+bool PreferencesElement::setBooleanPreference(const QString &key, const bool attribute)
+{
+    QDomElement element = findPreferencesNode(key);
+
+    if (element.isNull()) {
+        element = createElement(key);
+        elementDom.appendChild(element);
+    } else {
+        // Remove all existing text nodes
+        QDomNode node = element.firstChild();
+        while (!node.isNull()) {
+            if (node.isText())
+                element.removeChild(node);
+            node = node.nextSibling();
+        }
+    }
+
+    QDomText newText = createTextNode(QString("%1").arg(attribute));
+    element.appendChild(newText);
+
+    return true;
+}
+
+
+bool PreferencesElement::getBooleanPreference(const QString &key, bool &value)
+{
+    QDomElement node = findPreferencesNode(key);
+
+    if (!node.isNull()) {
+        QString tmp = node.text();
+        int intValue = tmp.toInt();
+        if (0 == intValue) {
+            value = false;
+        }
+        else {
+            value = true;
+        }
         return true;
     }
 

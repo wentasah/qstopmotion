@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2010-2016 by                                                *
+ *  Copyright (C) 2010-2017 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -27,6 +27,7 @@
 #include <QApplication>
 
 #include "gpcontroller.h"
+#include "frontends/qtfrontend/preferences/grabberwidget.h"
 #include "technical/grabber/imagegrabberdevice.h"
 #include "technical/util.h"
 
@@ -139,7 +140,7 @@ bool GphotoGrabber::initialization(QVector<ImageGrabberDevice*> &devices)
     CameraAbilities   abilities;
     int               ret;
     bool              returnValue = true;
-    int               value;
+    bool              value;
 
     if (!isInitSuccess) {
         qDebug() << "GphotoGrabber::initialization --> End (Error)";
@@ -160,8 +161,8 @@ bool GphotoGrabber::initialization(QVector<ImageGrabberDevice*> &devices)
     readImageSettings(device);
 
     // Create grabber controller
-    if (pref->getIntegerPreference("preferences", "gphoto2controller", value) == false) {
-        value = false;
+    if (pref->getBooleanPreference("preferences", "gphoto2controller", value) == false) {
+        value = Frontend::GPHOTO2CONTROLERDEFAULT;
     }
     if ((int)true == value) {
         deviceController = new GphotoController(0);

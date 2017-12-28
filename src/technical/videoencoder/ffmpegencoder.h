@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2015 by                                                *
+ *  Copyright (C) 2005-2017 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -25,10 +25,11 @@
 
 #include <QString>
 
-#include "domain/animation/animationproject.h"
+#include "domain/domainfacade.h"
 #include "technical/videoencoder/videoencoder.h"
 
 class AnimationProject;
+class VideoEncoder;
 
 
 /**

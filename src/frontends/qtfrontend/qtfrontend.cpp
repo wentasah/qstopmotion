@@ -558,6 +558,18 @@ void QtFrontend::setGridColorRGB(int r, int g, int b, int a)
 }
 
 
+bool QtFrontend::getSignal()
+{
+    return mw->getSignal();
+}
+
+
+void QtFrontend::setSignal(bool newState)
+{
+    mw->setSignal(newState);
+}
+
+
 void QtFrontend::showProgress(const QString &operation, unsigned int numOperations)
 {
     mw->showProgress(operation, numOperations);
@@ -1077,18 +1089,6 @@ int QtFrontend::getMixCount()
 void QtFrontend::setMixCount(int count)
 {
     mw->setMixCount(count);
-}
-
-
-int QtFrontend::getPlaybackCount()
-{
-    return mw->getPlaybackCount();
-}
-
-
-void QtFrontend::setPlaybackCount(int count)
-{
-    mw->setPlaybackCount(count);
 }
 
 

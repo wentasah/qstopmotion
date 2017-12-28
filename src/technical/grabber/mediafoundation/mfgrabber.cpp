@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2010-2016 by                                                *
+ *  Copyright (C) 2010-2017 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -21,6 +21,7 @@
 #include "mfgrabber.h"
 #include "mfcontroller.h"
 #include "mfutil.h"
+#include "frontends/qtfrontend/preferences/grabberwidget.h"
 #include "technical/grabber/imageconverter.h"
 #include "technical/preferencestool.h"
 #include "technical/util.h"
@@ -156,7 +157,7 @@ bool MfGrabber::initialization(QVector<ImageGrabberDevice*> &devices)
 
                 // Add the Controller to the new device
                 if (pref->getIntegerPreference("preferences", "mediafoundationcontroller", value) == false) {
-                    value = false;
+                    value = Frontend::MEDIAFOUNDATIONCONTROLERDEFAULT;
                 }
                 if ((int)true == value) {
                     deviceController = new MfController(0);

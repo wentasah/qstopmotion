@@ -53,12 +53,6 @@ public:
         InTempPath,
     };
 
-    enum ImageTransformationMode {
-        ScaleImage,      // Scale the image to the output size
-        ClipImage,       // Clip the image to the output size according to the adjustment setting
-        ZoomImage,       // Zoom the image to the output size according to the zoom setting
-    };
-
     /**
      * Initializes the variables of the animation to starting values.
      * @param f The frontend of the application.
@@ -245,18 +239,6 @@ public:
     void setMixCount(int newMixCount);
 
     /**
-     * Get the active playback count of the project.
-     * @return active playback count.
-     */
-    int getPlaybackCount() const;
-
-    /**
-     * Set the active playback count of the project.
-     * @param newPlaybackCount the new playback count source.
-     */
-    void setPlaybackCount(int newPlaybackCount);
-
-    /**
      * Get the overlay intensity value.
      * @return The overlay intensity value.
      */
@@ -348,13 +330,13 @@ public:
      * Get the live view fps of the project.
      * @return live view fps value.
      */
-    int getLiveViewFps();
+    double getLiveViewFps();
 
     /**
      * Set the live view fps of the project.
      * @param newValue The new live view fps value.
      */
-    void setLiveViewFps(int newValue);
+    void setLiveViewFps(double newValue);
 
     /**************************************************************************
      * Video export preferences
@@ -507,20 +489,6 @@ public:
      * @param alteredFile the file which has been altered.
      */
     // void animationChanged(const QString &alteredFile);
-
-    /**
-     * Exports the current project to a video file as specified by the video encoder.
-     * @param encoder the video encoder to use for export to video
-     * @return true on success, false otherwise
-     */
-    bool exportToVideo(VideoEncoder *encoder);
-
-    /**
-     * Exports the current project to a cinelerra-cv project.
-     * @param file the cinelerra-cv project file
-     * @return true on success, false otherwise
-     */
-    bool exportToCinelerra(const QString &file);
 
     /**
      * Get the data of the settings from the project file
@@ -986,11 +954,6 @@ private:
     int mixCount;
 
     /**
-     * Active playback count of the project.
-     */
-    int playbackCount;
-
-    /**
      * Active encoder application of the project.
      */
     int encoderApplication;
@@ -1028,7 +991,7 @@ private:
     /**
      * Active live view fps of the project.
      */
-    int liveViewFps;
+    double liveViewFps;
 
     /**
      * Active video format of the project.

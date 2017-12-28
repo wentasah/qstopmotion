@@ -1,7 +1,7 @@
 ###############################################################################
 # CMake file for the qStopMotion project                                      #
 # (c) Ralf Lange, longsoft.de                                                 #
-# Last update: 2017-09-28                                                     #
+# Last update: 2017-10-25                                                     #
 #                                                                             #
 # Usage:                                                                      #
 #   * Qt-Creator (Windows, Linux)                                             #
@@ -88,8 +88,8 @@ ENDIF(NOT DEFINED CMAKE_BUILD_TYPE)
 SET(CMAKE_PROJECT_NAME "qstopmotion")
 SET(QSTOPMOTION_HOMEPAGE "http://www.qstopmotion.org")
 SET(QSTOPMOTION_VERSION_MAJOR "2")
-SET(QSTOPMOTION_VERSION_MINOR "3")
-SET(QSTOPMOTION_VERSION_PATCH "2")
+SET(QSTOPMOTION_VERSION_MINOR "4")
+SET(QSTOPMOTION_VERSION_PATCH "0")
 
 SET(FILES_TO_TRANSLATE )
 
@@ -113,8 +113,6 @@ IF(CMAKE_BUILD_TYPE STREQUAL "Release")
     add_definitions(-DQT_NO_DEBUG_OUTPUT)
     add_definitions(-DQT_NO_WARNING_OUTPUT)
 ENDIF(CMAKE_BUILD_TYPE STREQUAL "Release")
-
-add_definitions(-DQT_DEBUG_PLUGINS)
 
 ###############################################################################
 # File definitions
@@ -204,6 +202,7 @@ SET(
     src/frontends/qtfrontend/elements/flexiblespinbox.h
     src/frontends/qtfrontend/frameview/frameviewimage.h
     src/frontends/qtfrontend/frameview/frameviewinterface.h
+    src/frontends/qtfrontend/preferences/controlerwidget.h
     src/frontends/qtfrontend/preferences/exportwidget.h
     src/frontends/qtfrontend/preferences/generaldialog.h
     src/frontends/qtfrontend/preferences/generalwidget.h
@@ -285,6 +284,7 @@ SET(
     src/frontends/qtfrontend/elements/flexiblespinbox.cpp
     src/frontends/qtfrontend/frameview/frameviewimage.cpp
     src/frontends/qtfrontend/frameview/frameviewinterface.cpp
+    src/frontends/qtfrontend/preferences/controlerwidget.cpp
     src/frontends/qtfrontend/preferences/exportwidget.cpp
     src/frontends/qtfrontend/preferences/generaldialog.cpp
     src/frontends/qtfrontend/preferences/generalwidget.cpp

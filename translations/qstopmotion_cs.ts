@@ -303,6 +303,93 @@ rozhodnete pro přehrání, přehrána bez zvuku.</translation>
         <source>Brightness:</source>
         <translation>Jas:</translation>
     </message>
+    <message>
+        <source>Help</source>
+        <translation type="unfinished">Nápověda</translation>
+    </message>
+</context>
+<context>
+    <name>ControlerWidget</name>
+    <message>
+        <source>Below you can set which features of the camera should be used in the camera control dialog.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Image quality controls</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Brightness control</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Contrast control</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Saturation control</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hue control</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Gamma control</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sharpness control</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Gain control</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Camera controls</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Exposure control</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Zoom control</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Focus control</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pan control</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tilt control</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Iris control</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Roll control</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Backlight compensation control</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>White balance control</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Color enable control</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>DescriptionDialog</name>
@@ -353,6 +440,10 @@ rozhodnete pro přehrání, přehrána bez zvuku.</translation>
     <message>
         <source>&amp;Scene Description:</source>
         <translation>Popis &amp;výjevu:</translation>
+    </message>
+    <message>
+        <source>Help</source>
+        <translation type="unfinished">Nápověda</translation>
     </message>
 </context>
 <context>
@@ -538,6 +629,10 @@ rozhodnete pro přehrání, přehrána bez zvuku.</translation>
         <source>Input to program:</source>
         <translation>Vstup do programu:</translation>
     </message>
+    <message>
+        <source>Help</source>
+        <translation type="unfinished">Nápověda</translation>
+    </message>
 </context>
 <context>
     <name>GeneralDialog</name>
@@ -581,6 +676,14 @@ rozhodnete pro přehrání, přehrána bez zvuku.</translation>
         <source>Grabber</source>
         <translation>Zachytávač obrazu</translation>
     </message>
+    <message>
+        <source>Help</source>
+        <translation type="unfinished">Nápověda</translation>
+    </message>
+    <message>
+        <source>Camera Controler</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>GeneralWidget</name>
@@ -623,6 +726,14 @@ rozhodnete pro přehrání, přehrána bez zvuku.</translation>
     <message>
         <source>Insert new frame bevor selected frame</source>
         <translation>Vložení nového okénka před vybrané okénko (snímek filmu)</translation>
+    </message>
+    <message>
+        <source>Signal Functionality</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Take Picture Signal</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -746,11 +857,11 @@ zařízení pro práci s obrazem k počítači.</translation>
     <name>ImportWidget</name>
     <message>
         <source>0.1</source>
-        <translation>0,1</translation>
+        <translation type="vanished">0,1</translation>
     </message>
     <message>
         <source>5.0</source>
-        <translation>5,0</translation>
+        <translation type="vanished">5,0</translation>
     </message>
     <message>
         <source>BMP</source>
@@ -1280,6 +1391,10 @@ Install the encoder or select another one!</source>
         <translation>Vybraný kodér není nainstalován na vašem počítači.
 Kodér nainstalujte nebo vyberte jiný!</translation>
     </message>
+    <message>
+        <source>&amp;Online Help</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PreferencesTool</name>
@@ -1343,6 +1458,10 @@ Kodér nainstalujte nebo vyberte jiný!</translation>
     <message>
         <source>Animation Project Properties</source>
         <translation>Vlastnosti projektu animace</translation>
+    </message>
+    <message>
+        <source>Help</source>
+        <translation type="unfinished">Nápověda</translation>
     </message>
 </context>
 <context>
@@ -1587,6 +1706,58 @@ Kodér nainstalujte nebo vyberte jiný!</translation>
         <source>Video 4 Linux 2 (USB WebCam)</source>
         <translation>Video 4 Linux (USB WebCam)</translation>
     </message>
+    <message>
+        <source>Time-lapse capture</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Time-lapse</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unit:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Seconds</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Minutes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hours</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Days</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Beep</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>seconds before picture:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Seconds between pictures</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Minutes between pictures</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hours between pictures</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Days between pictures</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QtFrontend</name>
@@ -1693,7 +1864,7 @@ Potřebujete oprávnění ke čtení, zápisu a spouštění adresáře .qstopmo
     </message>
     <message>
         <source>Recording</source>
-        <translation>Nahrávání</translation>
+        <translation type="vanished">Nahrávání</translation>
     </message>
     <message>
         <source>No scene and no take selected. Please select a scene and a take on the project tab.</source>
@@ -1706,6 +1877,62 @@ Potřebujete oprávnění ke čtení, zápisu a spouštění adresáře .qstopmo
     <message>
         <source>No active project. Please create a new project or open an existing project.</source>
         <translation>Žádný projekt není činný. Vytvořte, prosím, nový projekt nebo otevřete stávající projekt.</translation>
+    </message>
+    <message>
+        <source>Recording mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Time-lapse capture</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Time-lapse</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unit:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Seconds</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Minutes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hours</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Days</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Beep</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>seconds before picture:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Seconds between pictures</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Minutes between pictures</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hours between pictures</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Days between pictures</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1756,6 +1983,10 @@ Potřebujete oprávnění ke čtení, zápisu a spouštění adresáře .qstopmo
     <message>
         <source>Project path: </source>
         <translation>Cesta k projektu:</translation>
+    </message>
+    <message>
+        <source>Help</source>
+        <translation type="unfinished">Nápověda</translation>
     </message>
 </context>
 <context>

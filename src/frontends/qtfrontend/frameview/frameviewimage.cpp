@@ -25,6 +25,8 @@
 #include <QRect>
 #include <QSize>
 
+#include "domain/domainfacade.h"
+
 
 // const int FrameViewImage::alphaLut[5] = { 128, 64, 43, 32, 26 };
 const int FrameViewImage::alphaLut[5] = { 255, 128, 64, 32, 16 };
@@ -284,6 +286,7 @@ void FrameViewImage::nextPlayBack()
     Q_ASSERT(activeTakeIndex >= 0);
     Q_ASSERT(activeExposureIndex >= 0);
 
+    // Step 1: Draw the last mixCount images of the project
     if ((int)i < mixCount && i < (int)activeExposureIndex + 1) {
 
         Exposure *exposure;
@@ -303,18 +306,27 @@ void FrameViewImage::nextPlayBack()
         //Exit from function/skip redraw(). This is better than having a bool which is
         //set because this is a play function run "often".
 
-        qDebug() << "FrameViewImage::nextPlayBack --> End";
+        qDebug() << "FrameViewImage::nextPlayBack --> End (project image)";
         return;
     }
 
-    // This code is run if one of the two above tests fail. Can't be an else because
-    // then I would have to have two such elses, and I think the return is better.
-    i = 0;
-    redraw();
+    // Step 2: Draw the live image
+    const QImage liveImage = frontend->getLiveImage();
+    if (liveImage.isNull()) {
+        qDebug() << "FrameViewImage::nextPlayBack --> End (empty live image)";
+    }
+    else {
+        activeImage = clipImage(liveImage);
+        QPainter widgetPainter(this);
+        widgetPainter.drawImage(0, 0, scaleImage(activeImage));
+        this->update();
+        // Restart the playback
+        i = 0;
+        // redraw();
 
-    qDebug() << "FrameViewImage::nextPlayBack --> End";
+        qDebug() << "FrameViewImage::nextPlayBack --> End (Live Image)";
+    }
 }
-
 
 /**************************************************************************
  * QWidget functions
@@ -353,7 +365,7 @@ void FrameViewImage::paintEvent(QPaintEvent *)
         int offset;
 
         switch (mixMode) {
-        case 0:
+        case DomainFacade::mixImageMode:
             // Image mixing
 
             // Set the composite mode for the images in the buffer
@@ -367,14 +379,18 @@ void FrameViewImage::paintEvent(QPaintEvent *)
                 imagePainter.drawImage(0, 0, scaleImage(alphaImage));
             }
             break;
-        case 1:
+        case DomainFacade::diffImageMode:
             // Image differentiating
 
+            // Set the composite mode for the images in the buffer
+            imagePainter.setCompositionMode(QPainter::CompositionMode_SoftLight);
+
             if (imageBuffer.count() > 0) {
-                QImage image(imageBuffer.last());
-                QImage diffImage(this->createDifferentiatedImage(activeImage, image));
-                imagePainter.eraseRect(activeImage.rect());
-                imagePainter.drawImage(0, 0, scaleImage(diffImage));
+                // QImage image(imageBuffer.last());
+                // QImage diffImage(this->createDifferentiatedImage(activeImage, image));
+                // imagePainter.eraseRect(activeImage.rect());
+                // imagePainter.drawImage(0, 0, scaleImage(diffImage));
+                imagePainter.drawImage(0, 0, scaleImage(imageBuffer.last()));
             }
             break;
         }
@@ -673,7 +689,7 @@ void FrameViewImage::showLogo()
     qDebug() << "FrameViewImage::showLogo --> Start";
 
     QString iconFile(frontend->getGraphicsDirName());
-    iconFile.append(QLatin1String("qstopmotion_logo_60.png"));
+    iconFile.append(QLatin1String("qstopmotion_logo_120.png"));
 
     activeImage = scaleImage(QImage(iconFile));
 

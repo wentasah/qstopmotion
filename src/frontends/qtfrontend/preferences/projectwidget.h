@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2010-2016 by                                                *
+ *  Copyright (C) 2010-2017 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -21,11 +21,13 @@
 #ifndef PROJECTWIDGET_H
 #define PROJECTWIDGET_H
 
+#include <QCheckBox>
 #include <QComboBox>
 #include <QGroupBox>
 #include <QLabel>
-#include <QSlider>
 #include <QWidget>
+
+#include <qwt/qwt_slider.h>
 
 #include "frontends/frontend.h"
 
@@ -78,21 +80,21 @@ protected:
 
 private slots:
     /**
-     * Slot for notified the default tab when the recording mode changes, so that widgets
+     * Slot for notified the project widget when the recording mode changes, so that widgets
      * can be updated.
      * @param index the new recording mode.
      */
     void changeRecordingMode(int index);
 
     /**
-     * Slot for notified the default tab when the grabber source changes, so that grabber
+     * Slot for notified the project widget when the grabber source changes, so that grabber
      * can be updated.
      * @param index the new viewing mode.
      */
     void changeGrabberSource(int index);
 
     /**
-     * Slot for notified the default tab when the mix mode changes, so that widgets
+     * Slot for notified the project widget when the mix mode changes, so that widgets
      * can be updated.
      * @param index the new mix mode.
      */
@@ -100,15 +102,30 @@ private slots:
 
     /**
      * Slot for updating the mix count slider value.
-     * @param value the new slider value.
      */
-    void changeMixCount(int value);
+    void changeMixCount();
 
     /**
-     * Slot for notified the default tab when the unit mode changes.
+     * Slot for notified the project widget when the unit mode changes.
      * @param index the new unit mode.
      */
-    // void changeUnitMode(int index);
+    void changeUnitMode(int index);
+
+    /**
+     * Slot for notified the project widget when the unit slider changes.
+     */
+    void changeUnitCount();
+
+    /**
+     * Slot for notified the project widget when the beep status changes.
+     * @param newState the new check box state.
+     */
+    void changeBeep(int newState);
+
+    /**
+     * Slot for notified the project widget when the beep slider changes.
+     */
+    void changeBeepCount();
 
 private:
     Frontend    *frontend;
@@ -118,26 +135,36 @@ private:
      */
     bool         tabType;
 
-    QGroupBox   *recordingGroupBox;
-    QComboBox   *recordingModeCombo;
-
     QGroupBox   *grabberGroupBox;
     QComboBox   *grabberSourceCombo;
+
+    QGroupBox   *recordingGroupBox;
+    QComboBox   *recordingModeCombo;
 
     QGroupBox   *captureGroupBox;
     QComboBox   *mixModeCombo;
     QLabel      *mixCountSliderCaption;
-    QSlider     *mixCountSlider;
+    QwtSlider   *mixCountSlider;
 
-    // QGroupBox   *autoGroupBox;
-    // QComboBox   *unitModeCombo;
+    QGroupBox   *timelapseGroupBox;
+    QLabel      *unitModeComboCaption;
+    QComboBox   *unitModeCombo;
+    QLabel      *unitCountSliderValue;
+    QLabel      *unitCountSliderCaption;
+    QwtSlider   *unitCountSlider;
+    QCheckBox   *beepCheckBox;
+    QLabel      *beepCountSliderValue;
+    QLabel      *beepCountSliderCaption;
+    QwtSlider   *beepCountSlider;
 
-    int          defaultRecordingMode;
-    int          defaultGrabberSource;
-    int          defaultMixMode;
-    int          defaultMixCount;
-    int          defaultPlaybackCount;
-    // int          defaultUnitMode;
+    int          actualRecordingMode;
+    int          actualGrabberSource;
+    int          actualMixMode;
+    int          actualMixCount;
+    int          actualUnitMode;
+    int          actualUnitCount;
+    bool         actualBeepCheck;
+    int          actualBeepCount;
 };
 
 #endif

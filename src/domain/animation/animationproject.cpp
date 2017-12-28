@@ -29,7 +29,6 @@
 
 #include "domain/domainfacade.h"
 // #include "technical/audio/ossdriver.h"
-#include "technical/videoencoder/videoencoderfactory.h"
 
 
 AnimationProject::AnimationProject(Frontend* f)
@@ -39,32 +38,30 @@ AnimationProject::AnimationProject(Frontend* f)
     frontend                 = f;
     serializer               = new ProjectSerializer(f);
 
-    recordingMode            = 0;
-    unitMode                 = 0;
-    unitCount                = 5;
-    beepState                = true;
-    beepCount                = 1;
-    videoSource              = 0;
+    videoSource              = DomainFacade::GRABBERSOURCEDEFAULT;
     videoResolution          = 0;
-    mixMode                  = 0;
-    mixCount                 = 2;
-    playbackCount            = 0;
+    mixMode                  = DomainFacade::MIXMODEDEFAULT;
+    mixCount                 = DomainFacade::MIXCOUNTDEFAULT;
+    recordingMode            = DomainFacade::RECORDINGMODEDEFAULT;
+    unitMode                 = DomainFacade::UNITMODEDEFAULT;
+    unitCount                = DomainFacade::UNITCOUNTDEFAULT;
+    beepState                = DomainFacade::BEEPCHECKDEFAULT;
+    beepCount                = DomainFacade::BEEPCOUNTDEFAULT;
     overlayIntensity         = 100;
 
-    encoderApplication       = 0;
-    imageFormat              = 0;
-    imageQuality             = 100;
-    imageSize                = 0;
-    imageTransformation      = AnimationProject::ScaleImage;
-    imageAdjustment          = 0;
-    zoomValue                = 25;
-    liveViewFps              = 20;
-    videoFormat              = 0;
-    videoSize                = 0;
-    videoFps                 = 12;
+    encoderApplication       = DomainFacade::ENCODERAPPLICATIONDEFAULT;
+    imageFormat              = DomainFacade::IMAGEFORMATDEFAULT;
+    imageQuality             = DomainFacade::IMAGEQUALITYDEFAULT;
+    imageSize                = DomainFacade::IMAGESIZEDEFAULT;
+    imageTransformation      = DomainFacade::IMAGETRANSFORMDEFAULT;
+    imageAdjustment          = DomainFacade::IMAGEADJUSTMENTDEFAULT;
+    zoomValue                = DomainFacade::ZOOMVALUEDEFAULT;
+    liveViewFps              = DomainFacade::LIVEVIEWFPSDEFAULT;
+    videoFormat              = DomainFacade::VIDEOFORMATDEFAULT;
+    videoSize                = DomainFacade::VIDEOSIZEDEFAULT;
+    videoFps                 = DomainFacade::VIDEOFPSDEFAULT;
 
     useDefaultOutputFile     = false;
-    unitMode                 = 0;
     activeSceneIndex         = -1;
     nextSceneIndex           = 0;
     nextTotalExposureIndex   = 0;
@@ -309,21 +306,6 @@ void AnimationProject::setMixCount(int newMixCount)
 }
 
 
-int AnimationProject::getPlaybackCount() const
-{
-    return playbackCount;
-}
-
-
-void AnimationProject::setPlaybackCount(int newPlaybackCount)
-{
-    if (playbackCount != newPlaybackCount) {
-        playbackCount = newPlaybackCount;
-        incSettingsChanges();
-    }
-}
-
-
 int AnimationProject::getOverlayIntensity()
 {
     return overlayIntensity;
@@ -432,13 +414,13 @@ void AnimationProject::setZoomValue(int newZV)
 }
 
 
-int AnimationProject::getLiveViewFps()
+double AnimationProject::getLiveViewFps()
 {
     return liveViewFps;
 }
 
 
-void AnimationProject::setLiveViewFps(int newValue)
+void AnimationProject::setLiveViewFps(double newValue)
 {
     if (liveViewFps != newValue) {
         liveViewFps = newValue;
@@ -682,26 +664,6 @@ void AnimationProject::shutdownAudioDevice()
 }
 
 
-bool AnimationProject::exportToVideo(VideoEncoder * encoder)
-{
-    qDebug() << "AnimationProject::exportToVideo --> Start";
-
-    VideoEncoderFactory factory(this->getFrontend());
-    if (factory.createVideoFile(encoder) != NULL) {
-        return true;
-    }
-
-    qDebug() << "AnimationProject::exportToVideo --> End";
-    return false;
-}
-
-
-bool AnimationProject::exportToCinelerra(const QString&)
-{
-    return false;
-}
-
-
 bool AnimationProject::readSettingsFromProject(QDomElement &settingsNode)
 {
     qDebug() << "AnimationProject::readSettingsFromProject --> Start";
@@ -716,17 +678,17 @@ bool AnimationProject::readSettingsFromProject(QDomElement &settingsNode)
         if (nodeName.compare("recordingmode") == 0) {
             QString tmp = currElement.text();
             recordingMode = tmp.toInt();
-            frontend->setRecordingMode(tmp.toInt());
+            frontend->setRecordingMode(recordingMode);
         }
         else if (nodeName.compare("unitmode") == 0) {
             QString tmp = currElement.text();
             unitMode = tmp.toInt();
-            frontend->setUnitMode(tmp.toInt());
+            frontend->setUnitMode(unitMode);
         }
         else if (nodeName.compare("unitcount") == 0) {
             QString tmp = currElement.text();
             unitCount = tmp.toInt();
-            frontend->setUnitCount(tmp.toInt());
+            frontend->setUnitCount(unitCount);
         }
         else if (nodeName.compare("beepstate") == 0) {
             QString tmp = currElement.text();
@@ -741,7 +703,7 @@ bool AnimationProject::readSettingsFromProject(QDomElement &settingsNode)
         else if (nodeName.compare("beepcount") == 0) {
             QString tmp = currElement.text();
             beepCount = tmp.toInt();
-            frontend->setBeepCount(tmp.toInt());
+            frontend->setBeepCount(beepCount);
         }
         else if (nodeName.compare("videosource") == 0) {
             QString tmp = currElement.text();
@@ -765,16 +727,16 @@ bool AnimationProject::readSettingsFromProject(QDomElement &settingsNode)
         else if (nodeName.compare("mixmode") == 0) {
             QString tmp = currElement.text();
             mixMode = tmp.toInt();
-            frontend->setMixMode(tmp.toInt());
+            if (mixMode >= DomainFacade::lastImageMixMode) {
+                // Unsupported mix mode (e.g. old playback mode)
+                mixMode = DomainFacade::MIXMODEDEFAULT;
+            }
+            frontend->setMixMode(mixMode);
         }
         else if (nodeName.compare("mixcount") == 0) {
             QString tmp = currElement.text();
             mixCount = tmp.toInt();
-            frontend->setMixCount(tmp.toInt());
-        }
-        else if (nodeName.compare("playbackcount") == 0) {
-            QString tmp = currElement.text();
-            playbackCount = tmp.toInt();
+            frontend->setMixCount(mixCount);
         }
         else if (nodeName.compare("overlayintensity") == 0) {
             QString tmp = currElement.text();
@@ -808,7 +770,7 @@ bool AnimationProject::readSettingsFromProject(QDomElement &settingsNode)
         }
         else if (nodeName.compare("liveviewfps") == 0) {
             QString tmp = currElement.text();
-            liveViewFps = tmp.toInt();
+            liveViewFps = tmp.toDouble();
         }
         // Save video export parameter
         else if (nodeName.compare("encoderapplication") == 0) {
@@ -912,12 +874,6 @@ bool AnimationProject::saveSettingsToProject(QDomDocument &doc, QDomElement &set
     QDomText mixCountText = doc.createTextNode(QString("%1").arg(mixCount));
     mixCountElement.appendChild(mixCountText);
     settingsNode.appendChild(mixCountElement);
-
-    // Save playback count parameter
-    QDomElement playbackCountElement = doc.createElement("playbackcount");
-    QDomText playbackCountText = doc.createTextNode(QString("%1").arg(playbackCount));
-    playbackCountElement.appendChild(playbackCountText);
-    settingsNode.appendChild(playbackCountElement);
 
     // Save overlay intensity parameter
     QDomElement overlayIntensityElement = doc.createElement("overlayintensity");

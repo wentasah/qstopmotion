@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2010-2016 by                                                *
+ *  Copyright (C) 2010-2017 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -32,11 +32,10 @@
 #include <QSize>
 #include <QString>
 
-#include "domain/animation/animationproject.h"
-#include "technical/grabber/imagegrabber.h"
+#include "domain/domainfacade.h"
 
 
-FrameViewInterface::FrameViewInterface(Frontend *f, QWidget *parent, int fps)
+FrameViewInterface::FrameViewInterface(Frontend *f, QWidget *parent, double fps)
     :QWidget(0)
 {
     qDebug() << "FrameViewInterface::Constructor --> Start";
@@ -61,7 +60,6 @@ FrameViewInterface::FrameViewInterface(Frontend *f, QWidget *parent, int fps)
     qDebug() << "FrameViewInterface::Constructor --> FrameView is attached to the ViewFacade";
 
     connect(&grabTimer, SIGNAL(timeout()), this, SLOT(redraw()));
-    connect(&playbackTimer, SIGNAL(timeout()), this, SLOT(nextPlayBack()));
 
     qDebug() << "FrameViewInterface::Constructor --> End";
 }
@@ -162,7 +160,7 @@ void FrameViewInterface::updateMixCount(int newMixCount)
 }
 
 
-void FrameViewInterface::updateLiveViewFps(int newFps)
+void FrameViewInterface::updateLiveViewFps(double newFps)
 {
     qDebug() << "FrameViewInterface::updateLiveViewFps --> Start";
 
@@ -256,7 +254,8 @@ bool FrameViewInterface::cameraOn()
     initCompleted();
 
     displayMode = liveImageMode;
-    grabTimer.start(1000 / liveViewFps * 10 );  // The liveViewFps = 20 means 2.0
+
+    grabTimer.start(1000 / liveViewFps);
 
     qDebug() << "FrameViewInterface::cameraOn --> End";
     return true;
@@ -268,7 +267,6 @@ void FrameViewInterface::cameraOff()
     qDebug() << "FrameViewInterface::cameraOff --> Start";
 
     grabTimer.stop();
-    playbackTimer.stop();
 
     clearImageBuffer();
 
@@ -299,17 +297,6 @@ bool FrameViewInterface::setMixMode(int mode)
 {
     qDebug() << "FrameViewInterface::setMixMode --> Start";
 
-    // Going into playback mode.
-    if (mode == 2 && this->mixMode != 2) {
-        grabTimer.stop();
-        playbackTimer.start(1000 / videoFps);
-    }
-    // Going out of playback mode.
-    else if (mode != 2 && mixMode == 2) {
-        playbackTimer.stop();
-        grabTimer.start(1000 / liveViewFps * 10);  // The liveViewFps = 20 means 2.0
-    }
-
     mixMode = mode;
 
     qDebug() << "FrameViewInterface::setMixMode --> End (true)";
@@ -323,11 +310,11 @@ void FrameViewInterface::setMixCount(int mixCount)
 }
 
 
-void FrameViewInterface::setLiveViewFps(int fps)
+void FrameViewInterface::setLiveViewFps(double fps)
 {
     this->liveViewFps = fps;
     if (grabTimer.isActive()) {
-        grabTimer.setInterval(1000 / fps * 10);  // The liveViewFps = 20 means 2.0
+        grabTimer.setInterval(1000 / fps);
     }
 }
 
@@ -385,27 +372,27 @@ QImage FrameViewInterface::clipImage(QImage image)
         // Cliping and zooming is only necessary for live image mode
 
         switch (frontend->getProject()->getVideoSize()) {
-        case ImageGrabber::qvgaSize:    // QVGA
+        case DomainFacade::qvgaImageSize:    // QVGA
             destWidth = 320;
             destHeight = 240;
             break;
-        case ImageGrabber::vgaSize:     // VGA
+        case DomainFacade::vgaImageSize:     // VGA
             destWidth = 640;
             destHeight = 480;
             break;
-        case ImageGrabber::svgaSize:    // SVGA
+        case DomainFacade::svgaImageSize:    // SVGA
             destWidth = 800;
             destHeight = 600;
             break;
-        case ImageGrabber::paldSize:    // PAL D
+        case DomainFacade::paldImageSize:    // PAL D
             destWidth = 704;
             destHeight = 576;
             break;
-        case ImageGrabber::hdreadySize: // HD Ready
+        case DomainFacade::hdreadyImageSize: // HD Ready
             destWidth = 1280;
             destHeight = 720;
             break;
-        case ImageGrabber::fullhdSize:  // Full HD
+        case DomainFacade::fullhdImageSize:  // Full HD
             destWidth = 1900;
             destHeight = 1080;
             break;
@@ -416,7 +403,7 @@ QImage FrameViewInterface::clipImage(QImage image)
         }
 
         switch (trans) {
-        case AnimationProject::ScaleImage:
+        case DomainFacade::ScaleImage:
             // Scale the image to the output size
 
             widthScale = imageWidth / frameViewWidth;
@@ -430,41 +417,41 @@ QImage FrameViewInterface::clipImage(QImage image)
             }
 
             break;
-        case AnimationProject::ClipImage:
+        case DomainFacade::ClipImage:
             // Clip the image to the output size
 
             switch (frontend->getProject()->getImageAdjustment()) {
-            case ImageGrabber::leftUp:
-            case ImageGrabber::leftMiddle:
-            case ImageGrabber::leftDown:
+            case DomainFacade::leftUp:
+            case DomainFacade::leftMiddle:
+            case DomainFacade::leftDown:
                 x = 0;
                 break;
-            case ImageGrabber::centerUp:
-            case ImageGrabber::centerMiddle:
-            case ImageGrabber::centerDown:
+            case DomainFacade::centerUp:
+            case DomainFacade::centerMiddle:
+            case DomainFacade::centerDown:
                 x = (int)((imageWidth-destWidth)/2);
                 break;
-            case ImageGrabber::rightUp:
-            case ImageGrabber::rightMiddle:
-            case ImageGrabber::rightDown:
+            case DomainFacade::rightUp:
+            case DomainFacade::rightMiddle:
+            case DomainFacade::rightDown:
                 x = (int)(imageWidth-destWidth);
                 break;
             }
 
             switch (frontend->getProject()->getImageAdjustment()) {
-            case ImageGrabber::leftUp:
-            case ImageGrabber::centerUp:
-            case ImageGrabber::rightUp:
+            case DomainFacade::leftUp:
+            case DomainFacade::centerUp:
+            case DomainFacade::rightUp:
                 y = 0;
                 break;
-            case ImageGrabber::leftMiddle:
-            case ImageGrabber::centerMiddle:
-            case ImageGrabber::rightMiddle:
+            case DomainFacade::leftMiddle:
+            case DomainFacade::centerMiddle:
+            case DomainFacade::rightMiddle:
                 y = (int)((imageHeight-destHeight)/2);
                 break;
-            case ImageGrabber::leftDown:
-            case ImageGrabber::centerDown:
-            case ImageGrabber::rightDown:
+            case DomainFacade::leftDown:
+            case DomainFacade::centerDown:
+            case DomainFacade::rightDown:
                 y = (int)(imageHeight-destHeight);
                 break;
             }
@@ -483,7 +470,7 @@ QImage FrameViewInterface::clipImage(QImage image)
 
             break;
 
-        case AnimationProject::ZoomImage:
+        case DomainFacade::ZoomImage:
             // Zoom the image
 
             int zoomValue = frontend->getProject()->getZoomValue();

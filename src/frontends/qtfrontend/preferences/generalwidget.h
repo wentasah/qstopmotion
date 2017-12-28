@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2010-2015 by                                                *
+ *  Copyright (C) 2010-2017 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -47,6 +47,15 @@ class GeneralWidget : public QWidget
 {
     Q_OBJECT
 public:
+
+    const static int    LANGUAGEDEFAULT       = 0;
+    const static int    BUTTONFUNCTIONDEFAULT = PreferencesTool::captureButtonAfter;
+    const static bool   VERTICALGRIDDEFAULT   = false;
+    const static int    VERTICALSPINDEFAULT   = 5;
+    const static bool   HORIZONTALGRIDDEFAULT = false;
+    const static int    HORIZONTALSPINDEFAULT = 5;
+    const static QColor GRIDCOLORDEFAULT;
+    const static bool   SIGNALDEFAULT         = true;
 
     /**
      * Sets up the tab.
@@ -140,6 +149,8 @@ private:
     QSpinBox     *horizontalGridSpin;
     QLabel       *gridColorLabel;
     QPushButton  *gridColorButton;
+    QGroupBox    *signalGroupBox;
+    QCheckBox    *signalCheck;
 
     int           actualLanguage;
     int           actualButtonFunction;
@@ -149,6 +160,7 @@ private:
     int           actualHorizontalSpin;
     QColor        actualGridColor;
     QColor        newGridColor;
+    bool          actualSignal;
 };
 
 #endif

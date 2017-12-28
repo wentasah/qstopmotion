@@ -26,7 +26,7 @@
 #include <QDir>
 #include <QFile>
 
-#include "domain/animation/animationproject.h"
+#include "domain/domainfacade.h"
 #include "domain/undo/undoexposureadd.h"
 #include "domain/undo/undoexposureinsert.h"
 #include "domain/undo/undoexposuremove.h"
@@ -45,9 +45,9 @@
 #include "domain/undo/undotakeremove.h"
 #include "domain/undo/undotakeselect.h"
 #include "frontends/qtfrontend/toolbar.h"
-#include "technical/grabber/imagegrabber.h"
-#include "technical/videoencoder/videoencoder.h"
 
+
+const double DomainFacade::LIVEVIEWFPSDEFAULT = 2.0f;
 
 DomainFacade::DomainFacade(Frontend *f)
 {
@@ -353,18 +353,6 @@ void DomainFacade::setMixCount(int newMixCount)
 }
 
 
-int DomainFacade::getPlaybackCount()
-{
-    return animationProject->getPlaybackCount();
-}
-
-
-void DomainFacade::setPlaybackCount(int newPlaybackCount)
-{
-    animationProject->setPlaybackCount(newPlaybackCount);
-}
-
-
 int DomainFacade::getOverlayIntensity()
 {
     return animationProject->getOverlayIntensity();
@@ -458,13 +446,13 @@ void DomainFacade::setZoomValue(int newZV)
 }
 
 
-int DomainFacade::getLiveViewFps()
+double DomainFacade::getLiveViewFps()
 {
     return animationProject->getLiveViewFps();
 }
 
 
-void DomainFacade::setLiveViewFps(int newValue)
+void DomainFacade::setLiveViewFps(double newValue)
 {
     animationProject->setLiveViewFps(newValue);
     getView()->notifyNewLiveViewFps(newValue);
@@ -544,18 +532,6 @@ const QString DomainFacade::getDefaultOutputFileName()
 void DomainFacade::setDefaultOutputFileName(const QString newDOFN)
 {
     animationProject->setDefaultOutputFileName(newDOFN);
-}
-
-
-bool DomainFacade::exportToVideo(VideoEncoder *encoder)
-{
-    return animationProject->exportToVideo(encoder);
-}
-
-
-bool DomainFacade::exportToCinelerra(const QString file)
-{
-    return animationProject->exportToCinelerra(file);
 }
 
 /**************************************************************************
@@ -775,95 +751,113 @@ bool DomainFacade::recoverProject()
 void DomainFacade::setProjectSettingsToDefault()
 {
     PreferencesTool *pref = frontend->getPreferences();
-    int              value;
+    int              intValue;
+    bool             boolValue;
+    double           doubleValue;
 
     // Project preferences
-    if (pref->getIntegerPreference("preferences", "defaultrecordingmode", value) == false) {
-        value = 0;
+    if (pref->getIntegerPreference("preferences", "defaultrecordingmode", intValue) == false) {
+        intValue = RECORDINGMODEDEFAULT;
     }
-    setRecordingMode(value);
+    setRecordingMode(intValue);
 
-    if (pref->getIntegerPreference("preferences", "defaultvideosource", value) == false) {
-        value = 0;
+    if (pref->getIntegerPreference("preferences", "defaultvideosource", intValue) == false) {
+        intValue = GRABBERSOURCEDEFAULT;
     }
-    setVideoSource(value);
+    setVideoSource(intValue);
 
-    if (pref->getIntegerPreference("preferences", "defaultmixingmode", value) == false) {
-        value = 0;
+    if (pref->getIntegerPreference("preferences", "defaultmixingmode", intValue) == false) {
+        intValue = MIXMODEDEFAULT;
     }
-    setMixMode(value);
+    setMixMode(intValue);
 
-    if (pref->getIntegerPreference("preferences", "defaultmixcount", value) == false) {
-        value = 0;
+    if (pref->getIntegerPreference("preferences", "defaultmixcount", intValue) == false) {
+        intValue = MIXCOUNTDEFAULT;
     }
-    setMixCount(value);
+    setMixCount(intValue);
 
-    if (pref->getIntegerPreference("preferences", "defaultplaybackcount", value) == false) {
-        value = 0;
+    if (pref->getIntegerPreference("preferences", "defaultunitmode", intValue) == false) {
+        intValue = UNITMODEDEFAULT;
     }
-    setPlaybackCount(value);
+    setUnitMode(intValue);
 
-    if (pref->getIntegerPreference("preferences", "defaultunitmode", value) == false) {
-        value = 0;
+    if (pref->getIntegerPreference("preferences", "defaultunitcount", intValue) == false) {
+        intValue = UNITCOUNTDEFAULT;
     }
-    setUnitMode(value);
+    setUnitCount(intValue);
+
+    if (pref->getBooleanPreference("preferences", "defaultbeepcheck", boolValue) == false) {
+        boolValue = BEEPCHECKDEFAULT;
+    }
+    setBeepState(boolValue);
+
+    if (pref->getIntegerPreference("preferences", "defaultbeepcount", intValue) == false) {
+        intValue = BEEPCOUNTDEFAULT;
+    }
+    setBeepCount(intValue);
 
     // Image import preferences
-    if (pref->getIntegerPreference("preferences", "defaultimageformat", value) == false) {
-        value = ImageGrabber::jpegFormat;
+    if (pref->getIntegerPreference("preferences", "defaultimageformat", intValue) == false) {
+        intValue = IMAGEFORMATDEFAULT;
     }
-    setImageFormat(value);
+    setImageFormat(intValue);
 
-    if (pref->getIntegerPreference("preferences", "defaultimagequality", value) == false) {
-        value = 100;
+    if (pref->getIntegerPreference("preferences", "defaultimagequality", intValue) == false) {
+        intValue = IMAGEQUALITYDEFAULT;
     }
-    setImageQuality(value);
+    setImageQuality(intValue);
 
-    if (pref->getIntegerPreference("preferences", "defaultimagesize", value) == false) {
-        value = ImageGrabber::defaultSize;
+    if (pref->getIntegerPreference("preferences", "defaultimagesize", intValue) == false) {
+        intValue = IMAGESIZEDEFAULT;
     }
-    setImageSize(value);
+    setImageSize(intValue);
 
-    if (pref->getIntegerPreference("preferences", "defaulttransformation", value) == false) {
-        value = 0;
+    if (pref->getDoublePreference("preferences", "defaultliveviewfps", doubleValue) == false) {
+        doubleValue = LIVEVIEWFPSDEFAULT;
     }
-    setImageTransformation(value);
+    setLiveViewFps(doubleValue);
 
-    if (pref->getIntegerPreference("preferences", "defaultimageadjustment", value) == false) {
-        value = ImageGrabber::centerDown;
+    // Image transformation preferences
+    if (pref->getIntegerPreference("preferences", "defaulttransformation", intValue) == false) {
+        intValue = IMAGETRANSFORMDEFAULT;
     }
-    setImageAdjustment(value);
+    setImageTransformation(intValue);
 
-    if (pref->getIntegerPreference("preferences", "defaultliveviewfps", value) == false) {
-        value = 20;
+    if (pref->getIntegerPreference("preferences", "defaultimageadjustment", intValue) == false) {
+        intValue = IMAGEADJUSTMENTDEFAULT;
     }
-    setLiveViewFps(value);
+    setImageAdjustment(intValue);
+
+    if (pref->getIntegerPreference("preferences", "defaultzoomvalue", intValue) == false) {
+        intValue = ZOOMVALUEDEFAULT;
+    }
+    setZoomValue(intValue);
 
     // Video export preferences
-    if (pref->getIntegerPreference("preferences", "defaultencoderapplication", value) == false) {
-        value = VideoEncoder::noneApplication;
+    if (pref->getIntegerPreference("preferences", "defaultencoderapplication", intValue) == false) {
+        intValue = ENCODERAPPLICATIONDEFAULT;
     }
-    setEncoderApplication(value);
+    setEncoderApplication(intValue);
 
-    if (pref->getIntegerPreference("preferences", "defaultvideoformat", value) == false) {
-        value = VideoEncoder::noneFormat;
+    if (pref->getIntegerPreference("preferences", "defaultvideoformat", intValue) == false) {
+        intValue = VIDEOFORMATDEFAULT;
     }
-    setVideoFormat(value);
+    setVideoFormat(intValue);
 
-    if (pref->getIntegerPreference("preferences", "defaultvideosize", value) == false) {
-        value = VideoEncoder::defaultSize;
+    if (pref->getIntegerPreference("preferences", "defaultvideosize", intValue) == false) {
+        intValue = VIDEOSIZEDEFAULT;
     }
-    setVideoSize(value);
+    setVideoSize(intValue);
 
-    if (pref->getIntegerPreference("preferences", "defaultvideofps", value) == false) {
-        value = 12;
+    if (pref->getIntegerPreference("preferences", "defaultvideofps", intValue) == false) {
+        intValue = VIDEOFPSDEFAULT;
     }
-    setVideoFps(value);
+    setVideoFps(intValue);
 
-    if (pref->getIntegerPreference("preferences", "defaultusedefaultoutputfile", value) == false) {
-        value = false;
+    if (pref->getBooleanPreference("preferences", "defaultusedefaultoutputfile", boolValue) == false) {
+        boolValue = USEDEFAULTOUTPUTFILENAMEDEFAULT;
     }
-    setUseDefaultOutputFile(value);
+    setUseDefaultOutputFile(boolValue);
 }
 
 
@@ -1292,13 +1286,13 @@ const QString DomainFacade::copyToTemp(const QImage &rawImage)
                         .arg(Exposure::tempNumber)
                         .arg(QLatin1String(".")));
     switch (animationProject->getImageFormat()) {
-    case ImageGrabber::jpegFormat:
+    case jpegFormat:
         toImageName.append(PreferencesTool::jpegSuffix);
         break;
-    case ImageGrabber::tiffFormat:
+    case tiffFormat:
         toImageName.append(PreferencesTool::tiffSuffix);
         break;
-    case ImageGrabber::bmpFormat:
+    case bmpFormat:
         toImageName.append(PreferencesTool::bmpSuffix);
         break;
     }
@@ -1311,13 +1305,13 @@ const QString DomainFacade::copyToTemp(const QImage &rawImage)
 
     // Copy file to temp directory
     switch (animationProject->getImageFormat()) {
-    case ImageGrabber::jpegFormat:
+    case jpegFormat:
         ret = rawImage.save(toImagePath, "JPEG", 100);
         break;
-    case ImageGrabber::tiffFormat:
+    case tiffFormat:
         ret = rawImage.save(toImagePath, "TIFF", 100);
         break;
-    case ImageGrabber::bmpFormat:
+    case bmpFormat:
         ret = rawImage.save(toImagePath, "BMP", 100);
         break;
     }

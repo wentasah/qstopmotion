@@ -32,8 +32,6 @@
 
 #include "domain/animation/animationproject.h"
 #include "frontends/frontend.h"
-// #include "frontends/viewfacade.h"
-#include "technical/videoencoder/videoencoder.h"
 
 class AnimationProject;
 class Frontend;
@@ -41,6 +39,7 @@ class Scene;
 class Take;
 class Exposure;
 class ViewFacade;
+
 
 /**
  * Singleton facade for the domain level. All requests into the domain layer
@@ -55,6 +54,215 @@ class DomainFacade : public QObject
 {
     Q_OBJECT
 public:
+    /**
+     * @brief Enum with all possible recording modes
+     */
+    enum recordingMode {
+        singleFrameMode,    // Singe frame capture
+        timeLapseMode,      // Time lapse automatic recording
+        lastRecordingMode   // Last mode marker for asserts
+    };
+
+    /**
+     * @brief Default recording mode for new installations
+     */
+    const static int  RECORDINGMODEDEFAULT = singleFrameMode;
+
+    /**
+     * @brief Default grabber source index for new installations
+     */
+    const static int  GRABBERSOURCEDEFAULT = 0;
+
+    /**
+     * @brief Enum with all possible project mix modes
+     */
+    enum imageMixMode {
+        mixImageMode,       // Mix the actual image with the last mixCount images
+        diffImageMode,      // Differentiate the actual image with the last image
+        lastImageMixMode    // Last mode marker for asserts
+    };
+
+    /**
+     * @brief Default mix mode for new installations
+     */
+    const static int  MIXMODEDEFAULT = mixImageMode;
+
+    /**
+     * @brief Default mix count for new installations
+     */
+    const static int  MIXCOUNTDEFAULT = 2;
+
+    /**
+     * @brief Enum with all possible project mix modes
+     */
+    enum unitMode {
+        secondsMode,        // Seconds are the units for time lapse intervall
+        minutesMode,        // Minutes are the units for time lapse intervall
+        hoursMode,          // Hours are the units for time lapse intervall
+        daysMode,           // Minutes are the units for time lapse intervall
+        lastUnitMode        // Last mode marker for asserts
+    };
+
+    /**
+     * @brief Default unit mode for new installations
+     */
+    const static int  UNITMODEDEFAULT = minutesMode;
+
+    /**
+     * @brief Default unit count for new installations
+     */
+    const static int  UNITCOUNTDEFAULT = 5;
+
+    /**
+     * @brief Default beep check box state for new installations
+     */
+    const static bool BEEPCHECKDEFAULT = true;
+
+    /**
+     * @brief Default beep count for new installations
+     */
+    const static int  BEEPCOUNTDEFAULT = 5;
+
+    /**
+     * @brief Enum with all possible image output formats
+     */
+    enum imageFormat {
+        jpegFormat,            // JPEG format
+        tiffFormat,            // TIFF format
+        bmpFormat,             // BMP format
+        lastImageFormat        // Last format marker for asserts
+    };
+
+    /**
+     * @brief Default image format for new installations
+     */
+    const static int    IMAGEFORMATDEFAULT = jpegFormat;
+
+    /**
+     * @brief Default image quality for new installations
+     */
+    const static int    IMAGEQUALITYDEFAULT = 100;
+
+    /**
+     * @brief Enum with all possible image sizes
+     */
+    enum imageSize {
+        defaultImageSize,     // Source size
+        qvgaImageSize,        // 320x240 (QVGA)
+        vgaImageSize,         // 640x480 (VGA)
+        svgaImageSize,        // 800x600 (SVGA)
+        paldImageSize,        // 704x576 (PAL D)
+        hdreadyImageSize,     // 1280x720 (HD Ready)
+        fullhdImageSize,      // 1900x1080 (Full HD)
+        lastImageImageSize    // Last size marker for asserts
+    };
+
+    /**
+     * @brief Default image size for new installations
+     */
+    const static int    IMAGESIZEDEFAULT = defaultImageSize;
+
+    /**
+     * @brief Enum with all possible image transformation modes
+     */
+    enum ImageTransformationMode {
+        ScaleImage,      // Scale the image to the output size
+        ClipImage,       // Clip the image to the output size according to the adjustment setting
+        ZoomImage,       // Zoom the image to the output size according to the zoom setting
+    };
+
+    /**
+     * @brief Default image transformation mode for new installations
+     */
+    const static int IMAGETRANSFORMDEFAULT = ScaleImage;
+
+    /**
+     * @brief Enum with all possible image adjustments
+     */
+    enum imageAdjustment {
+        leftUp,               // Left up corner
+        centerUp,             // Center up
+        rightUp,              // Right up corner
+        leftMiddle,           // Left middle
+        centerMiddle,         // Center middle
+        rightMiddle,          // Right middle
+        leftDown,             // Left down corner
+        centerDown,           // Center down
+        rightDown,            // Right down corner
+        lastImageAdjustment   // Last adjustment marker for asserts
+    };
+
+    /**
+     * @brief Default image adgustment for new installations
+     */
+    const static int IMAGEADJUSTMENTDEFAULT = centerDown;
+
+    /**
+     * @brief Default image zoom value for new installations
+     */
+    const static int ZOOMVALUEDEFAULT = 20;
+
+    /**
+     * @brief Default live view FPS for new installations
+     */
+    const static double LIVEVIEWFPSDEFAULT;
+
+    /**
+     * @brief Enum with all possible encoder applications.
+     */
+    enum encoderApplication {
+        ffmpegApplication,
+        libavApplication,
+        noneEncoderApplication
+    };
+
+    /**
+     * @brief Default video encoder application for new installations
+     */
+    const static int  ENCODERAPPLICATIONDEFAULT = noneEncoderApplication;
+
+    /**
+     * @brief Enum with all possible video output formats
+     */
+    enum videoFormat {
+        aviFormat,            // AVI format
+        mp4Format,            // MP4 format
+        noneFormat
+    };
+
+    /**
+     * @brief Default video format for new installations
+     */
+    const static int  VIDEOFORMATDEFAULT = mp4Format;
+
+    /**
+     * @brief Enum with all possible video sizes
+     */
+    enum videoSize {
+        defaultVideoSize,     // Source size
+        qvgaVideoSize,        // 320x240 (QVGA)
+        vgaVideoSize,         // 640x480 (VGA)
+        svgaVideoSize,        // 800x600 (SVGA)
+        paldVideoSize,        // 704x576 (PAL D)
+        hdreadyVideoSize,     // 1280x720 (HD Ready)
+        fullhdVideoSize       // 1900x1080 (Full HD)
+    };
+
+    /**
+     * @brief Default video size for new installations
+     */
+    const static int  VIDEOSIZEDEFAULT = defaultVideoSize;
+
+    /**
+     * @brief Default video frames per second for new instalations
+     */
+    const static int  VIDEOFPSDEFAULT = 12;
+
+    /**
+     * @brief Default usage of the default output file name for new installations
+     */
+    const static bool USEDEFAULTOUTPUTFILENAMEDEFAULT = false;
+
     /**
      * The constructor. It is protected so that it will be impossible for other classes,
      * which don't inherit from it to instanciate the singleton.
@@ -295,18 +503,6 @@ public:
     void setMixCount(int newMixCount);
 
     /**
-     * Get the active playback count of the project.
-     * @return active playback count.
-     */
-    int getPlaybackCount();
-
-    /**
-     * Set the active playback count of the project.
-     * @param newPlaybackCount the new playback count source.
-     */
-    void setPlaybackCount(int newPlaybackCount);
-
-    /**
      * Get the overlay intensity value.
      * @return The overlay intensity value.
      */
@@ -398,13 +594,13 @@ public:
      * Get the live view fps of the project.
      * @return live view fps value.
      */
-    int getLiveViewFps();
+    double getLiveViewFps();
 
     /**
      * Set the live view fps of the project.
      * @param newValue The new live view fps value.
      */
-    void setLiveViewFps(int newValue);
+    void setLiveViewFps(double newValue);
 
     /**************************************************************************
      * Video export preferences
@@ -481,20 +677,6 @@ public:
      * @param newDOFN The new default output file name.
      */
     void setDefaultOutputFileName(const QString newDOFN);
-
-    /**
-     * Exports the current project to a video file as specified by the video encoder.
-     * @param encoder the video encoder to use for export to video
-     * @return true on success, false otherwise
-     */
-    bool exportToVideo(VideoEncoder *encoder);
-
-    /**
-     * Exports the current project to a cinelerra-cv project.
-     * @param file the cinelerra-cv project file
-     * @return true on success, false otherwise
-     */
-    bool exportToCinelerra(const QString file);
 
     /**************************************************************************
      * Project functions

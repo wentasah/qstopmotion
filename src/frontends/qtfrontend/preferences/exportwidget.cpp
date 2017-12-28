@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2016 by                                                *
+ *  Copyright (C) 2005-2017 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -32,45 +32,44 @@
 #include "domain/domainfacade.h"
 #include "frontends/qtfrontend/elements/flexiblelineedit.h"
 #include "technical/preferencestool.h"
-#include "technical/videoencoder/videoencoder.h"
 
 
 ExportWidget::ExportWidget(Frontend *f, bool type, QWidget *parent) : QWidget(parent)
 {
     qDebug() << "ExportWidget::Constructor --> Start";
 
-    frontend                 = f;
-    tabType                  = type;
+    frontend                   = f;
+    tabType                    = type;
 
-    infoText                 = 0;
-    encoderTable             = 0;
+    infoText                   = 0;
+    encoderTable               = 0;
 
     // Encoder preferences
-    encoderPrefs             = 0;
-    encoderApplicationLabel  = 0;
-    encoderApplicationCombo  = 0;
-    activeEncoderApplication = VideoEncoder::noneApplication;
-    videoFormatLabel         = 0;
-    videoFormatCombo         = 0;
-    activeVideoFormat        = VideoEncoder::mp4Format;
-    videoSizeLabel           = 0;
-    videoSizeCombo           = 0;
-    activeVideoSize          = VideoEncoder::defaultSize;
-    videoFpsLabel            = 0;
-    videoFpsChooser          = 0;
-    activeVideoFps           = 12;
+    encoderPrefs               = 0;
+    encoderApplicationLabel    = 0;
+    encoderApplicationCombo    = 0;
+    activeEncoderApplication   = DomainFacade::ENCODERAPPLICATIONDEFAULT;
+    videoFormatLabel           = 0;
+    videoFormatCombo           = 0;
+    activeVideoFormat          = DomainFacade::VIDEOFORMATDEFAULT;
+    videoSizeLabel             = 0;
+    videoSizeCombo             = 0;
+    activeVideoSize            = DomainFacade::VIDEOSIZEDEFAULT;
+    videoFpsLabel              = 0;
+    videoFpsChooser            = 0;
+    activeVideoFps             = DomainFacade::VIDEOFPSDEFAULT;
 
     // Output file preferences
-    outputPrefs              = 0;
-    askForOutputLabel        = 0;
-    yesButton                = 0;
-    noButton                 = 0;
-    activeEncoderApplication = 0;
-    defaultOutputLabel       = 0;
-    defaultOutputEdit        = 0;
+    outputPrefs                = 0;
+    askForOutputLabel          = 0;
+    yesButton                  = 0;
+    noButton                   = 0;
+    activeEncoderApplication   = 0;
+    defaultOutputLabel         = 0;
+    defaultOutputEdit          = 0;
     activeDefaultOutputFileName.clear();
-    browseOutputButton       = 0;
-    activeUseDefaultOutputFile = false;
+    browseOutputButton         = 0;
+    activeUseDefaultOutputFile = DomainFacade::USEDEFAULTOUTPUTFILENAMEDEFAULT;
 
     this->setObjectName("ExportWidget");
 
@@ -236,41 +235,16 @@ void ExportWidget::initialize()
     qDebug() << "ExportWidget::initialize --> Start";
 
     PreferencesTool *pref = frontend->getPreferences();
-    int              value;
 
     // Read eEncoder preferences
     if (tabType) {
         // This is a general dialog tab
 
-        if (pref->getIntegerPreference("preferences", "defaultencoderapplication", value) == false) {
-            value = VideoEncoder::noneApplication;
-        }
-        activeEncoderApplication = value;
-
-        if (pref->getIntegerPreference("preferences", "defaultvideoformat", value) == false) {
-            value = VideoEncoder::noneFormat;
-        }
-        activeVideoFormat = value;
-
-        if (pref->getIntegerPreference("preferences", "defaultvideosize", value) == false) {
-            value = VideoEncoder::defaultSize;
-        }
-        activeVideoSize = value;
-
-        if (pref->getIntegerPreference("preferences", "defaultvideofps", value) == false) {
-            value = 12;
-        }
-        activeVideoFps = value;
-
-        if (pref->getIntegerPreference("preferences", "defaultusedefaultoutputfile", value) == false) {
-            value = 0;
-        }
-        if (0 == value) {
-            activeUseDefaultOutputFile = false;
-        }
-        else {
-            activeUseDefaultOutputFile = true;
-        }
+        pref->getIntegerPreference("preferences", "defaultencoderapplication", activeEncoderApplication);
+        pref->getIntegerPreference("preferences", "defaultvideoformat", activeVideoFormat);
+        pref->getIntegerPreference("preferences", "defaultvideosize", activeVideoSize);
+        pref->getIntegerPreference("preferences", "defaultvideofps", activeVideoFps);
+        pref->getBooleanPreference("preferences", "defaultusedefaultoutputfile", activeUseDefaultOutputFile);
     }
     else {
         // This is a project dialog tab
@@ -282,46 +256,7 @@ void ExportWidget::initialize()
         activeDefaultOutputFileName = frontend->getProject()->getDefaultOutputFileName();
     }
 
-    if (activeEncoderApplication == VideoEncoder::noneApplication)
-    {
-        encoderApplicationCombo->setCurrentIndex(0);
-    }
-    else
-    {
-        encoderApplicationCombo->setCurrentIndex(activeEncoderApplication);
-    }
-
-    if (activeVideoFormat == VideoEncoder::noneFormat)
-    {
-        videoFormatCombo->setCurrentIndex(0);
-    }
-    else
-    {
-        videoFormatCombo->setCurrentIndex(activeVideoFormat);
-    }
-
-    if (activeVideoSize == VideoEncoder::defaultSize)
-    {
-        videoSizeCombo->setCurrentIndex(0);
-    }
-    else
-    {
-        videoSizeCombo->setCurrentIndex(activeVideoSize);
-    }
-
-    this->videoFpsChooser->setValue(activeVideoFps);
-
-    // Output file preferences
-    if (true == activeUseDefaultOutputFile)
-    {
-        setNoButtonOn();
-    }
-    else
-    {
-        setYesButtonOn();
-    }
-
-    defaultOutputEdit->setText(activeDefaultOutputFileName);
+    reset();
 
     qDebug() << "ExportWidget::initialize --> End";
 }
@@ -346,22 +281,19 @@ void ExportWidget::apply()
     bool changings = false;
 
     index = encoderApplicationCombo->currentIndex();
-    if (activeEncoderApplication != index)
-    {
+    if (activeEncoderApplication != index) {
         activeEncoderApplication = index;
         changings = true;
     }
 
     index = videoFormatCombo->currentIndex();
-    if (activeVideoFormat != index)
-    {
+    if (activeVideoFormat != index) {
         activeVideoFormat = index;
         changings = true;
     }
 
     index = videoSizeCombo->currentIndex();
-    if (activeVideoSize != index)
-    {
+    if (activeVideoSize != index) {
         activeVideoSize = index;
         changings = true;
     }
@@ -385,8 +317,7 @@ void ExportWidget::apply()
         }
     }
 
-    if (activeDefaultOutputFileName.compare(defaultOutputEdit->text()) != 0)
-    {
+    if (activeDefaultOutputFileName.compare(defaultOutputEdit->text()) != 0) {
         activeDefaultOutputFileName.clear();
         activeDefaultOutputFileName.append(defaultOutputEdit->text());
         changings = true;
@@ -399,7 +330,7 @@ void ExportWidget::apply()
             pref->setIntegerPreference("preferences", "defaultvideoformat", activeVideoFormat);
             pref->setIntegerPreference("preferences", "defaultvideosize", activeVideoSize);
             pref->setIntegerPreference("preferences", "defaultvideofps", activeVideoFps);
-            pref->setIntegerPreference("preferences", "defaultusedefaultoutputfile", (true == activeUseDefaultOutputFile ? 1 : 0));
+            pref->setBooleanPreference("preferences", "defaultusedefaultoutputfile", activeUseDefaultOutputFile);
         }
         else {
             // This is a project dialog tab
@@ -420,18 +351,36 @@ void ExportWidget::reset()
 {
     qDebug() << "ExportWidget::reset --> Start";
 
-    encoderApplicationCombo->setCurrentIndex(activeEncoderApplication);
-    videoFormatCombo->setCurrentIndex(activeVideoFormat);
-    videoSizeCombo->setCurrentIndex(activeVideoSize);
+    if (activeEncoderApplication == DomainFacade::noneEncoderApplication) {
+        encoderApplicationCombo->setCurrentIndex(0);
+    }
+    else {
+        encoderApplicationCombo->setCurrentIndex(activeEncoderApplication);
+    }
+
+    if (activeVideoFormat == DomainFacade::noneFormat) {
+        videoFormatCombo->setCurrentIndex(0);
+    }
+    else {
+        videoFormatCombo->setCurrentIndex(activeVideoFormat);
+    }
+
+    if (activeVideoSize == DomainFacade::defaultVideoSize) {
+        videoSizeCombo->setCurrentIndex(0);
+    }
+    else {
+        videoSizeCombo->setCurrentIndex(activeVideoSize);
+    }
+
     videoFpsChooser->setValue(activeVideoFps);
-    if (activeUseDefaultOutputFile)
-    {
+
+    if (activeUseDefaultOutputFile) {
         setYesButtonOn();
     }
-    else
-    {
+    else {
         setNoButtonOn();
     }
+
     defaultOutputEdit->setText(activeDefaultOutputFileName);
 
     qDebug() << "ExportWidget::reset --> End";

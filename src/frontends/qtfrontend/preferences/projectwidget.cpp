@@ -408,13 +408,13 @@ void ProjectWidget::changeRecordingMode(int index)
     qDebug() << "ProjectWidget::changeRecordingMode --> Start";
 
     switch(index) {
-      case 0:
+      case DomainFacade::singleFrameMode:
         // Singe picture
         timelapseGroupBox->hide();
         captureGroupBox->show();
 
         break;
-      case 1:
+      case DomainFacade::timeLapseMode:
         // Time-lapse picture
         timelapseGroupBox->show();
         captureGroupBox->hide();

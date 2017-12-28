@@ -659,13 +659,13 @@ void RecordingTab::changeRecordingMode(int index)
     qDebug() << "RecordingTab::changeRecordingMode --> Start";
 
     switch(index) {
-      case 0:
+      case DomainFacade::singleFrameMode:
         // Singe picture
         timelapseGroupBox->hide();
         captureGroupBox->show();
 
         break;
-      case 1:
+      case DomainFacade::timeLapseMode:
         // Time-lapse picture
         timelapseGroupBox->show();
         captureGroupBox->hide();
@@ -788,24 +788,25 @@ void RecordingTab::changeUnitCount()
     if (0 == newUnitCount) {
         newUnitCount = 1;
     }
+
     /*
     switch (unitMode) {
-    case 0:
+    case DomainFacade::secondsMode:
         if (60 < newUnitCount) {
             newUnitCount = 60;
         }
         break;
-    case 1:
+    case DomainFacade::minutesMode:
         if (60 < newUnitCount) {
             newUnitCount = 60;
         }
         break;
-    case 2:
+    case DomainFacade::hoursMode:
         if (24 < newUnitCount) {
             newUnitCount = 24;
         }
         break;
-    case 3:
+    case DomainFacade::daysMode:
         if (30 < newUnitCount) {
             newUnitCount = 30;
         }
@@ -817,7 +818,7 @@ void RecordingTab::changeUnitCount()
     }
     unitCountSliderValue->setText(QString("%1").arg(newUnitCount));
     /*
-    if (newUnitCount == 0 || unitMode == 0) {
+    if (newUnitCount == 0 || unitMode == DomainFacade::secondsMode) {
         if (timelapseTimer->isActive()) {
             timelapseTimer->stop();
         }
@@ -1004,22 +1005,22 @@ void RecordingTab::cameraButtonClicked()
 
             // Calculate the time between the beeps
             switch (unitModeCombo->currentIndex()) {
-            case 0:
+            case DomainFacade::secondsMode:
                 // Seconds
                 factor = 1000;
 
                 break;
-            case 1:
+            case DomainFacade::minutesMode:
                 // Minutes
                 factor = 60000;
 
                 break;
-            case 2:
+            case DomainFacade::hoursMode:
                 // Hours
                 factor = 3600000;
 
                 break;
-            case 3:
+            case DomainFacade::daysMode:
                 // Days
                 factor = 86400000;
 
@@ -1070,7 +1071,6 @@ void RecordingTab::cameraButtonClicked()
     qDebug() << "RecordingTab::cameraButtonClicked --> End";
 }
 
-
 /*
 void RecordingTab::changeFpuCount(int newFpuCount)
 {
@@ -1078,13 +1078,13 @@ void RecordingTab::changeFpuCount(int newFpuCount)
         int factor = 0;
         int unitMode = unitModeChooseCombo->currentIndex();
         switch (unitMode) {
-        case 1:
+        case DomainFacade::minutesMode:
             factor = 1000;
             break;
-        case 2:
+        case DomainFacade::hoursMode:
             factor = 60000;
             break;
-        case 3:
+        case DomainFacade::daysMode:
             factor = 3600000;
             break;
         }
@@ -1093,15 +1093,10 @@ void RecordingTab::changeFpuCount(int newFpuCount)
 
     int viewingMode = viewingModeChooseCombo->currentIndex();
     switch (viewingMode) {
-    case 0:
+    case DomainFacade::mixImageMode:
         frontend->getProject()->getAnimationProject()->setMixCount(newMixCount);
         break;
-    case 1:
-        break;
-    case 2:
-        frontend->getProject()->getAnimationProject()->setPlaybackCount(newMixCount);
-        break;
-    case 3:
+    case DomainFacade::diffImageMode:
         break;
     }
 
@@ -1264,7 +1259,7 @@ QImage RecordingTab::clipAndScale(QImage image)
     }
 
     switch (trans) {
-    case 0:
+    case DomainFacade::ScaleImage:
         // Scale the image to the output size
 
         widthScale = imageWidth / destWidth;
@@ -1279,7 +1274,7 @@ QImage RecordingTab::clipAndScale(QImage image)
 
         break;
 
-    case 1:
+    case DomainFacade::ClipImage:
         // Clip the image to the output size
         switch (frontend->getProject()->getImageAdjustment()) {
         case DomainFacade::leftUp:
@@ -1321,7 +1316,7 @@ QImage RecordingTab::clipAndScale(QImage image)
 
         break;
 
-    case 2:
+    case DomainFacade::ZoomImage:
         // Zoom the image
 
         int zoomValue = frontend->getProject()->getZoomValue();

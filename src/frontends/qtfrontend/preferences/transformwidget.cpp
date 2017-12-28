@@ -407,13 +407,13 @@ void TransformWidget::reset()
     qDebug() << "TransformWidget::reset --> Start";
 
     switch (activeTransform) {
-    case 0:
+    case DomainFacade::ScaleImage:
         setScaleButtonOn();
         break;
-    case 1:
+    case DomainFacade::ClipImage:
         setClipButtonOn();
         break;
-    case 2:
+    case DomainFacade::ZoomImage:
         setZoomButtonOn();
         break;
     }

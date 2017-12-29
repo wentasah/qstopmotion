@@ -99,7 +99,7 @@ bool MfGrabber::initialization(QVector<ImageGrabberDevice*> &devices)
     qDebug() << "MfGrabber::initialization --> Start";
 
     PreferencesTool *pref = frontend->getPreferences();
-    int              value;
+    bool             value;
 
     HRESULT             hr = S_OK;
     IMFAttributes*      pAttributes = NULL;
@@ -156,10 +156,10 @@ bool MfGrabber::initialization(QVector<ImageGrabberDevice*> &devices)
                 devices.append(device);
 
                 // Add the Controller to the new device
-                if (pref->getIntegerPreference("preferences", "mediafoundationcontroller", value) == false) {
+                if (pref->getBooleanPreference("preferences", "mediafoundationcontroller", value) == false) {
                     value = Frontend::MEDIAFOUNDATIONCONTROLERDEFAULT;
                 }
-                if ((int)true == value) {
+                if (true == value) {
                     deviceController = new MfController(0);
                     device->setController(deviceController);
 

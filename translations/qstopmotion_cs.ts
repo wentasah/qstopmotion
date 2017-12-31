@@ -1656,7 +1656,7 @@ Kodér nainstalujte nebo vyberte jiný!</translation>
     </message>
     <message>
         <source>Playback</source>
-        <translation>Přehrávání</translation>
+        <translation type="vanished">Přehrávání</translation>
     </message>
     <message>
         <source>Video 4 Linux (USB WebCam)</source>
@@ -1700,7 +1700,7 @@ Kodér nainstalujte nebo vyberte jiný!</translation>
     </message>
     <message>
         <source>&lt;h4&gt;Number of images&lt;/h4&gt; &lt;p&gt;By changing the value in this slidebar you can specify how many images backwards in the animation which should be mixed on top of the camera or if you are in playback mode: how many images to play. &lt;/p&gt; &lt;p&gt;By mixing the previous image(s) onto the camera you can more easily see how the next shot will be in relation to the other, therby making a smoother stop motion animation!&lt;/p&gt;</source>
-        <translation>&lt;h4&gt;Počet obrázků&lt;/h4&gt; &lt;p&gt;Tímto posuvníkem (změnou hodnoty) můžete nastavit, kolik předcházejících obrázků v animaci se má zařadit v obrazu kamery. Nebo, pokud jste v režimu přehrávání: Kolik obrázků bude přehráno. &lt;/p&gt; &lt;p&gt;Tím (míšením předchozího obrázku(ů) do kamery) lépe uvidíte, jak je následující obrázek ve vztahu k předcházejícím obrázkům. To umožňuje stejnoměrný (hladší) průběh pohybu!&lt;/p&gt;</translation>
+        <translation type="vanished">&lt;h4&gt;Počet obrázků&lt;/h4&gt; &lt;p&gt;Tímto posuvníkem (změnou hodnoty) můžete nastavit, kolik předcházejících obrázků v animaci se má zařadit v obrazu kamery. Nebo, pokud jste v režimu přehrávání: Kolik obrázků bude přehráno. &lt;/p&gt; &lt;p&gt;Tím (míšením předchozího obrázku(ů) do kamery) lépe uvidíte, jak je následující obrázek ve vztahu k předcházejícím obrázkům. To umožňuje stejnoměrný (hladší) průběh pohybu!&lt;/p&gt;</translation>
     </message>
     <message>
         <source>Video 4 Linux 2 (USB WebCam)</source>
@@ -1756,6 +1756,10 @@ Kodér nainstalujte nebo vyberte jiný!</translation>
     </message>
     <message>
         <source>Days between pictures</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;h4&gt;Number of images&lt;/h4&gt; &lt;p&gt;By changing the value in this slidebar you can specify how many images backwards in the animation which should be mixed on top of the camera.&lt;/p&gt; &lt;p&gt;By mixing the previous image(s) onto the camera you can more easily see how the next shot will be in relation to the other, therby making a smoother stop motion animation!&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1824,7 +1828,7 @@ Potřebujete oprávnění ke čtení, zápisu a spouštění adresáře .qstopmo
     </message>
     <message>
         <source>Playback</source>
-        <translation>Přehrávání</translation>
+        <translation type="vanished">Přehrávání</translation>
     </message>
     <message>
         <source>No take selected. Please select a take on the project tab.</source>

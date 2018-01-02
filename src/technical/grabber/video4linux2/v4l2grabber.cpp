@@ -592,8 +592,21 @@ bool V4L2Grabber::readDeviceInfo(int fd, ImageGrabberDevice *device)
     qDebug() << "V4L2Grabber::initialization --> Driver:" << (char*)(video_cap.driver);
     qDebug() << "V4L2Grabber::initialization --> Name:" << (char*)(video_cap.card);
 
-    device->setDeviceId(QLatin1String((const char*)video_cap.card));
-    device->setDeviceName(QLatin1String((const char*)video_cap.card) + " (V4L2)");
+    QString deviceCard = QLatin1String((const char*)video_cap.card);
+    QString deviceId = deviceCard;
+    QString deviceName = deviceCard;
+    int     separator = deviceCard.indexOf(':');
+    if (-1 != separator) {
+        // With separator
+        deviceId = deviceCard.left(separator);
+        deviceId = deviceId.trimmed();
+        deviceName = deviceCard.mid(separator + 1);
+        deviceName = deviceName.trimmed();
+
+    }
+
+    device->setDeviceId(deviceId);
+    device->setDeviceName(deviceName + " (V4L2)");
     device->setDeviceSource(ImageGrabberDevice::video4Linux2Source);
 
     enumerateCaptureFormats(fd, device);

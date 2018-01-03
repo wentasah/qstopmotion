@@ -63,6 +63,7 @@ GeneralWidget::GeneralWidget(Frontend *f, QWidget *parent)
     gridColorLabel        = 0;
     gridColorButton       = 0;
     actualGridColor       = GRIDCOLORDEFAULT;
+    newGridColor          = GRIDCOLORDEFAULT;
 
     signalGroupBox        = 0;
     signalCheck           = 0;
@@ -208,6 +209,7 @@ void GeneralWidget::initialize()
             actualLanguage = index;
         }
     }
+    languageCombo->setCurrentIndex(actualLanguage);
 
     pref->getIntegerPreference("preferences", "capturebutton", actualButtonFunction);
     pref->getBooleanPreference("preferences", "verticalgrid", actualVerticalGrid);

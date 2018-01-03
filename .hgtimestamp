@@ -299,7 +299,7 @@
 "src/frontends/qtfrontend/preferences/exportwidget.h": {"timestamp": 1513928521.0},
 "src/frontends/qtfrontend/preferences/generaldialog.cpp": {"timestamp": 1509648937.0},
 "src/frontends/qtfrontend/preferences/generaldialog.h": {"timestamp": 1508958682.0},
-"src/frontends/qtfrontend/preferences/generalwidget.cpp": {"timestamp": 1510346163.0},
+"src/frontends/qtfrontend/preferences/generalwidget.cpp": {"timestamp": 1514964767.0},
 "src/frontends/qtfrontend/preferences/generalwidget.h": {"timestamp": 1510346108.0},
 "src/frontends/qtfrontend/preferences/grabberwidget.cpp": {"timestamp": 1513974458.0},
 "src/frontends/qtfrontend/preferences/grabberwidget.h": {"timestamp": 1513973808.0},

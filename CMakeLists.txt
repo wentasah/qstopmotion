@@ -1,7 +1,7 @@
 ###############################################################################
 # CMake file for the qStopMotion project                                      #
 # (c) Ralf Lange, longsoft.de                                                 #
-# Last update: 2017-10-25                                                     #
+# Last update: 2018-01-04                                                     #
 #                                                                             #
 # Usage:                                                                      #
 #   * Qt-Creator (Windows, Linux)                                             #
@@ -29,7 +29,7 @@
 
 project(qStopMotion)
 
-cmake_minimum_required(VERSION 2.8.8)
+cmake_minimum_required(VERSION 3.0.2)
 
 # set path to additional CMake modules
 SET(
@@ -1111,6 +1111,7 @@ SET(
     true
 )
 INCLUDE(InstallRequiredSystemLibraries)
+MESSAGE("CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS: ${CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS}")
 INSTALL(
     PROGRAMS ${CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS}
     DESTINATION ${QSTOPMOTION_BIN_INSTALL_DIR}

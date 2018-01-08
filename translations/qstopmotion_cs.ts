@@ -2035,11 +2035,11 @@ Potřebujete oprávnění ke čtení, zápisu a spouštění adresáře .qstopmo
     <name>TransformWidget</name>
     <message>
         <source>0%</source>
-        <translation>0 %</translation>
+        <translation type="vanished">0 %</translation>
     </message>
     <message>
         <source>100%</source>
-        <translation>100 %</translation>
+        <translation type="vanished">100 %</translation>
     </message>
     <message>
         <source>Zoom the image</source>
@@ -2051,7 +2051,7 @@ Potřebujete oprávnění ke čtení, zápisu a spouštění adresáře .qstopmo
     </message>
     <message>
         <source>Zoom value:</source>
-        <translation>Hodnota zvětšení:</translation>
+        <translation type="vanished">Hodnota zvětšení:</translation>
     </message>
     <message>
         <source>Scale the whole image</source>
@@ -2072,6 +2072,18 @@ Potřebujete oprávnění ke čtení, zápisu a spouštění adresáře .qstopmo
     <message>
         <source>Transformation settings</source>
         <translation>Nastavení proměny obrázku</translation>
+    </message>
+    <message>
+        <source>Zoom value (%):</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Min</source>
+        <translation type="unfinished">Nejmenší</translation>
+    </message>
+    <message>
+        <source>Max</source>
+        <translation type="unfinished">Největší</translation>
     </message>
 </context>
 <context>

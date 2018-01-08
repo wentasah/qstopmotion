@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2017 by                                                *
+ *  Copyright (C) 2005-2018 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -47,6 +47,7 @@
 #include "frontends/qtfrontend/toolbar.h"
 
 
+const double DomainFacade::ZOOMVALUEDEFAULT = 20.0f;
 const double DomainFacade::LIVEVIEWFPSDEFAULT = 2.0f;
 
 DomainFacade::DomainFacade(Frontend *f)
@@ -434,13 +435,13 @@ void DomainFacade::setImageAdjustment(int newIA)
 }
 
 
-int DomainFacade::getZoomValue()
+double DomainFacade::getZoomValue()
 {
     return animationProject->getZoomValue();
 }
 
 
-void DomainFacade::setZoomValue(int newZV)
+void DomainFacade::setZoomValue(double newZV)
 {
     animationProject->setZoomValue(newZV);
 }
@@ -828,10 +829,10 @@ void DomainFacade::setProjectSettingsToDefault()
     }
     setImageAdjustment(intValue);
 
-    if (pref->getIntegerPreference("preferences", "defaultzoomvalue", intValue) == false) {
-        intValue = ZOOMVALUEDEFAULT;
+    if (pref->getDoublePreference("preferences", "defaultzoomvalue", doubleValue) == false) {
+        doubleValue = ZOOMVALUEDEFAULT;
     }
-    setZoomValue(intValue);
+    setZoomValue(doubleValue);
 
     // Video export preferences
     if (pref->getIntegerPreference("preferences", "defaultencoderapplication", intValue) == false) {

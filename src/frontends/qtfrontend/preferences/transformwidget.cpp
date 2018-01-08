@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2017 by                                                *
+ *  Copyright (C) 2005-2018 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -206,20 +206,22 @@ void TransformWidget::makeGUI()
     zoomPrefs = new QGroupBox;
     zoomPrefs->setTitle(tr("Zoom settings"));
 
-    zoomLabel = new QLabel(tr("Zoom value:"));
-    zoomSlider = new QSlider();
-    zoomSlider->setMaximum(1);
-    zoomSlider->setMaximum(100);
+    zoomLabel = new QLabel(tr("Zoom value (%):"));
+    zoomSlider = new QwtSlider();
     zoomSlider->setOrientation(Qt::Horizontal);
+    zoomSlider->setScalePosition(QwtSlider::LeadingScale);
+    zoomSlider->setGroove(true);
+    zoomSlider->setScale(0.0, 100.0);
     zoomSlider->setMinimumWidth(300);
     zoomSlider->setMaximumWidth(300);
-    zoomSlider->setTickPosition(QSlider::TicksBelow);
+    /*
     zoomSlider->setTickInterval(5);
     zoomSlider->setSingleStep(5);
     zoomSlider->setPageStep(20);
-    connect(zoomSlider, SIGNAL(sliderReleased()), this, SLOT(changeZoom()));
-    zoomMinimumLabel = new QLabel(tr("0%"));
-    zoomMaximumLabel = new QLabel(tr("100%"));
+    */
+    connect(zoomSlider, SIGNAL(valueChanged(double)), this, SLOT(changeZoom(double)));
+    zoomMinimumLabel = new QLabel(tr("Min"));
+    zoomMaximumLabel = new QLabel(tr("Max"));
 
     QHBoxLayout *zoomLayout = new QHBoxLayout;
     zoomLayout->addWidget(zoomMinimumLabel, 0, Qt::AlignLeft);
@@ -229,8 +231,8 @@ void TransformWidget::makeGUI()
     QGridLayout *zoomPrefsLayout = new QGridLayout;
     zoomPrefsLayout->setColumnStretch(0, 1);
     zoomPrefsLayout->addWidget(zoomLabel, 1, 0, Qt::AlignLeft);
-    zoomPrefsLayout->addWidget(zoomSlider, 1, 1, Qt::AlignRight);
-    zoomPrefsLayout->addLayout(zoomLayout, 2, 1, Qt::AlignRight);
+    zoomPrefsLayout->addLayout(zoomLayout, 1, 1, Qt::AlignRight);
+    zoomPrefsLayout->addWidget(zoomSlider, 2, 1, Qt::AlignRight);
     zoomPrefs->setLayout(zoomPrefsLayout);
 
     // Transform preferences
@@ -289,7 +291,7 @@ void TransformWidget::initialize()
         // This is a general dialog tab
         pref->getIntegerPreference("preferences", "defaulttransformation", activeTransform);
         pref->getIntegerPreference("preferences", "defaultimageadjustment", activeImageAdjustment);
-        pref->getIntegerPreference("preferences", "defaultzoomvalue", activeZoomValue);
+        pref->getDoublePreference("preferences", "defaultzoomvalue", activeZoomValue);
     }
     else {
         // This is a project dialog tab
@@ -320,7 +322,7 @@ void TransformWidget::apply()
 
     PreferencesTool *pref = frontend->getPreferences();
     int index;
-    int value;
+    double doubleValue;
     bool changings = false;
 
     if (scaleButton->isChecked()) {
@@ -376,9 +378,9 @@ void TransformWidget::apply()
         activeImageAdjustment = index;
         changings = true;
     }
-    value = zoomSlider->value();
-    if (activeZoomValue != value) {
-        activeZoomValue = value;
+    doubleValue = zoomSlider->value();
+    if (activeZoomValue != doubleValue) {
+        activeZoomValue = doubleValue;
         changings = true;
     }
 
@@ -495,13 +497,11 @@ void TransformWidget::setZoomButtonOn()
 }
 
 
-void TransformWidget::changeZoom()
+void TransformWidget::changeZoom(double doubleValue)
 {
     qDebug() << "TransformWidget::changeZoom --> Start";
 
-    int value = zoomSlider->value();
-
-    if (activeZoomValue == value) {
+    if (activeZoomValue == doubleValue) {
         return;
     }
 

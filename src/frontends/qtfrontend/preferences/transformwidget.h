@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2017 by                                                *
+ *  Copyright (C) 2005-2018 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -106,8 +106,9 @@ private slots:
     /**
      * Slot for notified the import tab when the zoom changes,
      * so that image transformation preferences can be updated.
+     * @param value The new zoom value
      */
-    void changeZoom();
+    void changeZoom(double value);
 
 private:
     Frontend     *frontend;
@@ -142,8 +143,8 @@ private:
     // Zoom preferences
     QGroupBox    *zoomPrefs;
     QLabel       *zoomLabel;
-    QSlider      *zoomSlider;
-    int           activeZoomValue;
+    QwtSlider    *zoomSlider;
+    double        activeZoomValue;
     QLabel       *zoomMinimumLabel;
     QLabel       *zoomMaximumLabel;
 

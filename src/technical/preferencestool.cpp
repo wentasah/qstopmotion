@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2017 by                                                *
+ *  Copyright (C) 2005-2018 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -443,7 +443,7 @@ void PreferencesTool::setBasicPreferenceDefaults()
     // Image transformation defaults
     setIntegerPreference("preferences", "defaulttransformation", DomainFacade::IMAGETRANSFORMDEFAULT);
     setIntegerPreference("preferences", "defaultimageadjustment", DomainFacade::IMAGEADJUSTMENTDEFAULT);
-    setIntegerPreference("preferences", "defaultzoomvalue", DomainFacade::ZOOMVALUEDEFAULT);
+    setDoublePreference("preferences", "defaultzoomvalue", DomainFacade::ZOOMVALUEDEFAULT);
     // Video export defaults
     setIntegerPreference("preferences", "defaultencoderapplication", DomainFacade::ENCODERAPPLICATIONDEFAULT);
     setIntegerPreference("preferences", "defaultvideoformat", DomainFacade::VIDEOFORMATDEFAULT);

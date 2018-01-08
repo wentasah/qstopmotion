@@ -590,9 +590,9 @@ L&apos;animation est visualisée sans son si vous choisissez de le lire.</transl
 <context>
     <name>DomainFacade</name>
     <message>
-        <location filename="../src/domain/domainfacade.cpp" line="151"/>
-        <location filename="../src/domain/domainfacade.cpp" line="550"/>
-        <location filename="../src/domain/domainfacade.cpp" line="1320"/>
+        <location filename="../src/domain/domainfacade.cpp" line="152"/>
+        <location filename="../src/domain/domainfacade.cpp" line="551"/>
+        <location filename="../src/domain/domainfacade.cpp" line="1321"/>
         <source>Critical</source>
         <translation>Problématique</translation>
     </message>
@@ -601,17 +601,17 @@ L&apos;animation est visualisée sans son si vous choisissez de le lire.</transl
         <translation type="obsolete">Le fichier histoire ne peut pas être effacé.</translation>
     </message>
     <message>
-        <location filename="../src/domain/domainfacade.cpp" line="152"/>
+        <location filename="../src/domain/domainfacade.cpp" line="153"/>
         <source>Can&apos;t open history file to write entry!</source>
         <translation>Le fichier histoire ne peut pas être ouvert pour ajouter une nouvelle entrée!</translation>
     </message>
     <message>
-        <location filename="../src/domain/domainfacade.cpp" line="551"/>
+        <location filename="../src/domain/domainfacade.cpp" line="552"/>
         <source>Can&apos;t open history file to recover project!</source>
         <translation>Le fichier histoire ne peut pas être ouvert pour récupérer le projet!</translation>
     </message>
     <message>
-        <location filename="../src/domain/domainfacade.cpp" line="1321"/>
+        <location filename="../src/domain/domainfacade.cpp" line="1322"/>
         <source>Can&apos;t copy image to temp directory!</source>
         <translation>L&apos;image ne peut pas être copié dans le dossier temporaire!</translation>
     </message>
@@ -950,62 +950,62 @@ L&apos;animation est visualisée sans son si vous choisissez de le lire.</transl
 <context>
     <name>GeneralWidget</name>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/generalwidget.cpp" line="85"/>
+        <location filename="../src/frontends/qtfrontend/preferences/generalwidget.cpp" line="86"/>
         <source>Language</source>
         <translation>Langue</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/generalwidget.cpp" line="107"/>
+        <location filename="../src/frontends/qtfrontend/preferences/generalwidget.cpp" line="108"/>
         <source>Capture Button Functionality</source>
         <translation>Fonction du bouton d&apos;enregistrement</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/generalwidget.cpp" line="109"/>
+        <location filename="../src/frontends/qtfrontend/preferences/generalwidget.cpp" line="110"/>
         <source>Insert new frame bevor selected frame</source>
         <translation>Insertion d&apos;une nouvelle image avant l&apos;image mise en relief</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/generalwidget.cpp" line="114"/>
+        <location filename="../src/frontends/qtfrontend/preferences/generalwidget.cpp" line="115"/>
         <source>Insert new frame after selected frame</source>
         <translation>Insertion d&apos;une nouvelle image après l&apos;image mis en relief</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/generalwidget.cpp" line="119"/>
+        <location filename="../src/frontends/qtfrontend/preferences/generalwidget.cpp" line="120"/>
         <source>Append new frame at the end of the take</source>
         <translation>Insertion d&apos;une nouvelle image à la fin de la prise de vue</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/generalwidget.cpp" line="135"/>
+        <location filename="../src/frontends/qtfrontend/preferences/generalwidget.cpp" line="136"/>
         <source>Grid Functionality</source>
         <translation>Lignes de grille</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/generalwidget.cpp" line="137"/>
+        <location filename="../src/frontends/qtfrontend/preferences/generalwidget.cpp" line="138"/>
         <source>Vertical Lines</source>
         <translation>Lignes verticales</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/generalwidget.cpp" line="148"/>
+        <location filename="../src/frontends/qtfrontend/preferences/generalwidget.cpp" line="149"/>
         <source>Horizontal Lines</source>
         <translation>Lignes horizontales</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/generalwidget.cpp" line="159"/>
+        <location filename="../src/frontends/qtfrontend/preferences/generalwidget.cpp" line="160"/>
         <source>Grid Color:</source>
         <translation>Couleur de grille:</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/generalwidget.cpp" line="160"/>
+        <location filename="../src/frontends/qtfrontend/preferences/generalwidget.cpp" line="161"/>
         <source>Color</source>
         <translation>Couleur</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/generalwidget.cpp" line="173"/>
+        <location filename="../src/frontends/qtfrontend/preferences/generalwidget.cpp" line="174"/>
         <source>Signal Functionality</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/generalwidget.cpp" line="175"/>
+        <location filename="../src/frontends/qtfrontend/preferences/generalwidget.cpp" line="176"/>
         <source>Take Picture Signal</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2910,18 +2910,30 @@ Il vous faut des droits d&apos;accès pour lire, écrire et exécuter dans .qsto
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/transformwidget.cpp" line="209"/>
+        <source>Zoom value (%):</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontends/qtfrontend/preferences/transformwidget.cpp" line="223"/>
+        <source>Min</source>
+        <translation type="unfinished">Min</translation>
+    </message>
+    <message>
+        <location filename="../src/frontends/qtfrontend/preferences/transformwidget.cpp" line="224"/>
+        <source>Max</source>
+        <translation type="unfinished">Max</translation>
+    </message>
+    <message>
         <source>Zoom value:</source>
-        <translation>Valeur de zoom</translation>
+        <translation type="vanished">Valeur de zoom</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/transformwidget.cpp" line="221"/>
         <source>0%</source>
-        <translation>0%</translation>
+        <translation type="vanished">0%</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/transformwidget.cpp" line="222"/>
         <source>100%</source>
-        <translation>100%</translation>
+        <translation type="vanished">100%</translation>
     </message>
 </context>
 <context>

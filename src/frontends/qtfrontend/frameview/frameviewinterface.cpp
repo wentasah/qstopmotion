@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2010-2017 by                                                *
+ *  Copyright (C) 2010-2018 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -473,12 +473,12 @@ QImage FrameViewInterface::clipImage(QImage image)
         case DomainFacade::ZoomImage:
             // Zoom the image
 
-            int zoomValue = frontend->getProject()->getZoomValue();
+            double zoomValue = frontend->getProject()->getZoomValue();
 
             // 1. Step: Clip the image to the output size
 
-            newImageWidth = imageWidth - ((imageWidth - destWidth) * zoomValue / 100);
-            newImageHeight = imageHeight - ((imageHeight - destHeight) * zoomValue / 100);
+            newImageWidth = imageWidth - ((imageWidth - destWidth) * zoomValue / 100.0);
+            newImageHeight = imageHeight - ((imageHeight - destHeight) * zoomValue / 100.0);
 
             x = (int)((imageWidth-newImageWidth)/2);
             y = (int)((imageHeight-newImageHeight)/2);

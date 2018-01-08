@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2017 by                                                *
+ *  Copyright (C) 2005-2018 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -399,13 +399,13 @@ void AnimationProject::setImageAdjustment(int newIA)
 }
 
 
-int AnimationProject::getZoomValue()
+double AnimationProject::getZoomValue()
 {
     return zoomValue;
 }
 
 
-void AnimationProject::setZoomValue(int newZV)
+void AnimationProject::setZoomValue(double newZV)
 {
     if (zoomValue != newZV) {
         zoomValue = newZV;

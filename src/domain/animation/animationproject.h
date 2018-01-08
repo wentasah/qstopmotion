@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2017 by                                                *
+ *  Copyright (C) 2005-2018 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -318,13 +318,13 @@ public:
      * Get the zoom value of the project.
      * @return Zoom value.
      */
-    int getZoomValue();
+    double getZoomValue();
 
     /**
      * Set the zoom value of the project.
      * @param newZV The new zoom value.
      */
-    void setZoomValue(int newZV);
+    void setZoomValue(double newZV);
 
     /**
      * Get the live view fps of the project.
@@ -986,7 +986,7 @@ private:
     /**
      * Active zoom value of the project.
      */
-    int zoomValue;
+    double zoomValue;
 
     /**
      * Active live view fps of the project.

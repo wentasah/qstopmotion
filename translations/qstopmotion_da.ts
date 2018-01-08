@@ -651,24 +651,24 @@ uden lyd hvis du vælger afspil.</translation>
 <context>
     <name>DomainFacade</name>
     <message>
-        <location filename="../src/domain/domainfacade.cpp" line="151"/>
-        <location filename="../src/domain/domainfacade.cpp" line="550"/>
-        <location filename="../src/domain/domainfacade.cpp" line="1320"/>
+        <location filename="../src/domain/domainfacade.cpp" line="152"/>
+        <location filename="../src/domain/domainfacade.cpp" line="551"/>
+        <location filename="../src/domain/domainfacade.cpp" line="1321"/>
         <source>Critical</source>
         <translation>Kritisk</translation>
     </message>
     <message>
-        <location filename="../src/domain/domainfacade.cpp" line="152"/>
+        <location filename="../src/domain/domainfacade.cpp" line="153"/>
         <source>Can&apos;t open history file to write entry!</source>
         <translation>Kan ikke åbne historie filen og skrive post!</translation>
     </message>
     <message>
-        <location filename="../src/domain/domainfacade.cpp" line="551"/>
+        <location filename="../src/domain/domainfacade.cpp" line="552"/>
         <source>Can&apos;t open history file to recover project!</source>
         <translation>Kan ikke åbne historie filen og genskabe projekt!</translation>
     </message>
     <message>
-        <location filename="../src/domain/domainfacade.cpp" line="1321"/>
+        <location filename="../src/domain/domainfacade.cpp" line="1322"/>
         <source>Can&apos;t copy image to temp directory!</source>
         <translation>Kan ikke kopiere billede til midlertidig mappe!</translation>
     </message>
@@ -1097,62 +1097,62 @@ uden lyd hvis du vælger afspil.</translation>
 <context>
     <name>GeneralWidget</name>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/generalwidget.cpp" line="85"/>
+        <location filename="../src/frontends/qtfrontend/preferences/generalwidget.cpp" line="86"/>
         <source>Language</source>
         <translation>Sprog</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/generalwidget.cpp" line="107"/>
+        <location filename="../src/frontends/qtfrontend/preferences/generalwidget.cpp" line="108"/>
         <source>Capture Button Functionality</source>
         <translation>Optageknap Funktionalitet</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/generalwidget.cpp" line="109"/>
+        <location filename="../src/frontends/qtfrontend/preferences/generalwidget.cpp" line="110"/>
         <source>Insert new frame bevor selected frame</source>
         <translation>Indsæt nyt billede før valgte billede</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/generalwidget.cpp" line="114"/>
+        <location filename="../src/frontends/qtfrontend/preferences/generalwidget.cpp" line="115"/>
         <source>Insert new frame after selected frame</source>
         <translation>Indsæt nyt billede efter valgte billede</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/generalwidget.cpp" line="119"/>
+        <location filename="../src/frontends/qtfrontend/preferences/generalwidget.cpp" line="120"/>
         <source>Append new frame at the end of the take</source>
         <translation>Tilføj nyt billede i slutningen af optagelsen</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/generalwidget.cpp" line="135"/>
+        <location filename="../src/frontends/qtfrontend/preferences/generalwidget.cpp" line="136"/>
         <source>Grid Functionality</source>
         <translation>Gitter funktionalitet</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/generalwidget.cpp" line="137"/>
+        <location filename="../src/frontends/qtfrontend/preferences/generalwidget.cpp" line="138"/>
         <source>Vertical Lines</source>
         <translation>Lodrette linjer</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/generalwidget.cpp" line="148"/>
+        <location filename="../src/frontends/qtfrontend/preferences/generalwidget.cpp" line="149"/>
         <source>Horizontal Lines</source>
         <translation>Vandrette Linjer</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/generalwidget.cpp" line="159"/>
+        <location filename="../src/frontends/qtfrontend/preferences/generalwidget.cpp" line="160"/>
         <source>Grid Color:</source>
         <translation>Gitter farve:</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/generalwidget.cpp" line="160"/>
+        <location filename="../src/frontends/qtfrontend/preferences/generalwidget.cpp" line="161"/>
         <source>Color</source>
         <translation>Farve</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/generalwidget.cpp" line="173"/>
+        <location filename="../src/frontends/qtfrontend/preferences/generalwidget.cpp" line="174"/>
         <source>Signal Functionality</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/generalwidget.cpp" line="175"/>
+        <location filename="../src/frontends/qtfrontend/preferences/generalwidget.cpp" line="176"/>
         <source>Take Picture Signal</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2954,18 +2954,30 @@ sidst. Ønsker du at genoprette?</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/transformwidget.cpp" line="209"/>
+        <source>Zoom value (%):</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontends/qtfrontend/preferences/transformwidget.cpp" line="223"/>
+        <source>Min</source>
+        <translation type="unfinished">Min</translation>
+    </message>
+    <message>
+        <location filename="../src/frontends/qtfrontend/preferences/transformwidget.cpp" line="224"/>
+        <source>Max</source>
+        <translation type="unfinished">Max</translation>
+    </message>
+    <message>
         <source>Zoom value:</source>
-        <translation>Zoom værdi:</translation>
+        <translation type="vanished">Zoom værdi:</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/transformwidget.cpp" line="221"/>
         <source>0%</source>
-        <translation>0%</translation>
+        <translation type="vanished">0%</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/transformwidget.cpp" line="222"/>
         <source>100%</source>
-        <translation>100%</translation>
+        <translation type="vanished">100%</translation>
     </message>
 </context>
 <context>

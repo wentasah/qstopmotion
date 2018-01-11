@@ -383,14 +383,15 @@ void FrameViewImage::paintEvent(QPaintEvent *)
             // Image differentiating
 
             // Set the composite mode for the images in the buffer
-            imagePainter.setCompositionMode(QPainter::CompositionMode_SoftLight);
+            imagePainter.setCompositionMode(QPainter::CompositionMode_Difference);
 
             if (imageBuffer.count() > 0) {
-                // QImage image(imageBuffer.last());
+                QImage image(imageBuffer.last());
                 // QImage diffImage(this->createDifferentiatedImage(activeImage, image));
                 // imagePainter.eraseRect(activeImage.rect());
                 // imagePainter.drawImage(0, 0, scaleImage(diffImage));
-                imagePainter.drawImage(0, 0, scaleImage(imageBuffer.last()));
+                QImage alphaImage(this->createGrayAlphaImage(image));
+                imagePainter.drawImage(0, 0, scaleImage(alphaImage));
             }
             break;
         }

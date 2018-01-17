@@ -1,5 +1,5 @@
 {
-"Version": "0.2.3.05141102",
+"Version": "0.1.2.4",
 "FileData":{
 ".hgignore": {"timestamp": 1452239748.88},
 ".hgtags": {"timestamp": 1479107260.0},
@@ -208,11 +208,11 @@
 "qstopmotion.png": {"timestamp": 1352751913.35},
 "qstopmotion.pro": {"timestamp": 1510776363.0},
 "README.txt": {"timestamp": 1462873677.0},
-"README_Makefile_Linux.txt": {"timestamp": 1483379910.0},
-"README_NMake_Windows.txt": {"timestamp": 1483378585.0},
-"README_QtCreator_Linux.txt": {"timestamp": 1418714827.06},
-"README_QtCreator_Windows.txt": {"timestamp": 1418630243.24},
-"README_VisualStudio_Windows.txt": {"timestamp": 1462874178.0},
+"README_Makefile_Linux.txt": {"timestamp": 1516173706.0},
+"README_NMake_Windows.txt": {"timestamp": 1516173453.0},
+"README_QtCreator_Linux.txt": {"timestamp": 1516173967.0},
+"README_QtCreator_Windows.txt": {"timestamp": 1516173483.0},
+"README_VisualStudio_Windows.txt": {"timestamp": 1516173501.0},
 "rpm/qstopmotion.png": {"timestamp": 1352751913.35},
 "sounds/beep.wav": {"timestamp": 1506321431.0},
 "sounds/click.wav": {"timestamp": 1506623066.0},

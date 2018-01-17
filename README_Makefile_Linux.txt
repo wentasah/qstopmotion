@@ -1,5 +1,5 @@
 Building qStopMotion using Unix makefile on Linux
-Last Change: 2017-01-02
+Last Change: 2018-01-17
 
 1. Preparation of the development environment
 ================================================================================
@@ -9,14 +9,35 @@ Last Change: 2017-01-02
 
 * g++ (Version >= 4.9.2)
 * pkg-config
+* lsb-release / redhat-lsb-core
 
-1.2 Libraries
+1.2 CMake
+--------------------------------------------------------------------------------
+
+* CMake (Version >= 3.0.2)
+  - The version 2.8.7 ist the first that can create working Debian packages
+  - If the package in the package manager is an older version install CMake
+    from the source
+
+1.3 Mercurial SCM (Developers only)
+--------------------------------------------------------------------------------
+
+* Mercurial Client (Version >= 3.1.2)
+* or TortoiseHg as a graphical frontend
+
+1.4 Tools
+--------------------------------------------------------------------------------
+
+* ffmpeg (Version >= 0.8.6) to generate movie files from the pictures
+
+1.5 Libraries
 --------------------------------------------------------------------------------
 * libxml2, libxml2-dev, libxml-dbg
 * libv4l, libv4l-devel, v4l-utils, v4l-utils-dev
 * libgphoto2, libgphoto2-devel
+* libqwt-qt5-6, libqwt-qt5-dev
 
-1.3 Qt5 for Windows and Visual Studio
+1.6 Qt5 for Linux
 --------------------------------------------------------------------------------
 
 * qt5 libraries (64 bit, Version >= 5.3.2)
@@ -28,25 +49,6 @@ Last Change: 2017-01-02
 * qt5-dev-tools
 * qt5-qmake
 * qt5-help, qt5-doc
-
-1.4 CMake
---------------------------------------------------------------------------------
-
-* CMake (Version >= 3.0.2)
-  - The version 2.8.7 ist the first that can create working Debian packages
-  - If the package in the package manager is an older version install CMake
-    from the source
-
-1.5 Mercurial SCM (Developers only)
---------------------------------------------------------------------------------
-
-* Mercurial Client (Version >= 3.1.2)
-* or TortoiseHg as a graphical frontend
-
-1.6 Tools
---------------------------------------------------------------------------------
-
-* ffmpeg (Version >= 0.8.6) to generate movie files from the pictures
 
 2. Access to the sources of qStopMotion
 ================================================================================

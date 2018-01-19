@@ -92,6 +92,7 @@ void ToolBar::makeGUI()
     iconFile.append(frontend->getIconsDirName());
     iconFile.append(QLatin1String("firstexposure.png"));
     toBeginButton->setIcon(QPixmap(iconFile));
+    toBeginButton->setIconSize(QSize(30,30));
     // toBeginButton->setFlat(true);
     // toBeginButton->setFocusPolicy( Qt::NoFocus );
     connect(toBeginButton, SIGNAL(clicked()), this, SLOT(selectFirstFrame()));
@@ -102,6 +103,7 @@ void ToolBar::makeGUI()
     iconFile.append(frontend->getIconsDirName());
     iconFile.append(QLatin1String("previousexposure.png"));
     previousFrameButton->setIcon(QPixmap(iconFile));
+    previousFrameButton->setIconSize(QSize(30,30));
     // previousFrameButton->setFlat(true);
     connect(previousFrameButton, SIGNAL(clicked()), this, SLOT(selectPreviousFrame()));
     previousFrameButton->setEnabled(false);
@@ -111,6 +113,7 @@ void ToolBar::makeGUI()
     iconFile.append(frontend->getIconsDirName());
     iconFile.append(QLatin1String("capture.png"));
     captureButton->setIcon(QPixmap(iconFile));
+    captureButton->setIconSize(QSize(30,30));
     // captureButton->setFlat(true);
     // captureButton->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Minimum);
     captureButton->setEnabled(false);
@@ -120,6 +123,7 @@ void ToolBar::makeGUI()
     iconFile.append(frontend->getIconsDirName());
     iconFile.append(QLatin1String("play.png"));
     playButton->setIcon(QPixmap(iconFile));
+    playButton->setIconSize(QSize(30,30));
     // playButton->setFlat(true);
     connect(playButton, SIGNAL(clicked()), this, SLOT(runAnimation()));
     playButton->setEnabled(false);
@@ -129,6 +133,7 @@ void ToolBar::makeGUI()
     iconFile.append(frontend->getIconsDirName());
     iconFile.append(QLatin1String("nextexposure.png"));
     nextFrameButton->setIcon(QPixmap(iconFile));
+    nextFrameButton->setIconSize(QSize(30,30));
     // nextFrameButton->setFlat(true);
     // nextFrameButton->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Minimum);
     connect(nextFrameButton, SIGNAL(clicked()), this, SLOT(selectNextFrame()));
@@ -139,6 +144,7 @@ void ToolBar::makeGUI()
     iconFile.append(frontend->getIconsDirName());
     iconFile.append(QLatin1String("lastexposure.png"));
     toEndButton->setIcon(QPixmap(iconFile));
+    toEndButton->setIconSize(QSize(30,30));
     // toEndButton->setFlat(true);
     // toEndButton->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Minimum);
     connect(toEndButton, SIGNAL(clicked()), this, SLOT(selectLastFrame()));

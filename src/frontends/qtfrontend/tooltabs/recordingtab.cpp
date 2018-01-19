@@ -268,7 +268,7 @@ void RecordingTab::makeGUI()
     cameraButton->setIconSize(ic.availableSizes().first());
     // cameraButton->setFlat(true);
     cameraButton->setFocusPolicy(Qt::NoFocus);
-    cameraButton->setMinimumHeight(80);
+    cameraButton->setIconSize(QSize(90, 60));
     connect(cameraButton, SIGNAL(clicked()), this, SLOT(cameraButtonClicked()));
     // cameraButton->setEnabled(false);
 

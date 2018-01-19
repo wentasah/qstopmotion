@@ -1,6 +1,11 @@
 Last Changes in the sources on qStopMotion
 ===============================================================================
 
+qStopMotion (2.4.0) - 2018-01-18
+  * Add time lapse recording mode
+  * Add online manual in english and german language
+  * Improve camera control functionality
+  * Use new slider controls
 qStopMotion (2.3.2) - 2016-11-10
   * Some spelling corrections.
   * Update of the Czech translation.
@@ -202,9 +207,9 @@ qStopMotion (0.8.1)
   * Separation of the frame view implementation in SDL using a interface.
   * Implementation of a new frame view based on QImage.
 qStopMotion (0.8.0)
-  * 
+  *
 qStopMotion (0.7.0)
-  * 
+  *
 
 ===============================================================================
 
@@ -213,4 +218,3 @@ stopmotion (0.6.2)
   * Base of the qStopMotion fork
 
 ===============================================================================
-

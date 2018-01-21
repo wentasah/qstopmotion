@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2010-2017 by                                                *
+ *  Copyright (C) 2010-2018 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -138,6 +138,7 @@ void ProjectTab::makeGUI()
     insertSceneButton = new QPushButton;
     iconFile.append(QLatin1String("insertscene.png"));
     insertSceneButton->setIcon(QPixmap(iconFile));
+    insertSceneButton->setIconSize(QSize(30,30));
     // insertSceneButton->setFlat(true);
     // insertSceneButton->setFocusPolicy( Qt::NoFocus );
     connect(insertSceneButton, SIGNAL(clicked()), this, SLOT(insertSceneSlot()));
@@ -147,6 +148,7 @@ void ProjectTab::makeGUI()
     iconFile.append(frontend->getIconsDirName());
     iconFile.append(QLatin1String("appendscene.png"));
     addSceneButton->setIcon(QPixmap(iconFile));
+    addSceneButton->setIconSize(QSize(30,30));
     // addSceneButton->setFlat(true);
     // addSceneButton->setFocusPolicy( Qt::NoFocus );
     connect(addSceneButton, SIGNAL(clicked()), this, SLOT(addSceneSlot()));
@@ -156,6 +158,7 @@ void ProjectTab::makeGUI()
     iconFile.append(frontend->getIconsDirName());
     iconFile.append(QLatin1String("removescene.png"));
     removeSceneButton->setIcon(QPixmap(iconFile));
+    removeSceneButton->setIconSize(QSize(30,30));
     // removeSceneButton->setFlat(true);
     // removeSceneButton->setFocusPolicy( Qt::NoFocus );
     connect(removeSceneButton, SIGNAL(clicked()), this, SLOT(removeSceneSlot()));
@@ -180,6 +183,7 @@ void ProjectTab::makeGUI()
     iconFile.append(frontend->getIconsDirName());
     iconFile.append(QLatin1String("inserttake.png"));
     insertTakeButton->setIcon(QPixmap(iconFile));
+    insertTakeButton->setIconSize(QSize(30,30));
     // insertTakeButton->setFlat(true);
     // insertTakeButton->setFocusPolicy( Qt::NoFocus );
     connect(insertTakeButton, SIGNAL(clicked()), this, SLOT(insertTakeSlot()));
@@ -189,6 +193,7 @@ void ProjectTab::makeGUI()
     iconFile.append(frontend->getIconsDirName());
     iconFile.append(QLatin1String("appendtake.png"));
     addTakeButton->setIcon(QPixmap(iconFile));
+    addTakeButton->setIconSize(QSize(30,30));
     // addTakeButton->setFlat(true);
     // addTakeButton->setFocusPolicy( Qt::NoFocus );
     connect(addTakeButton, SIGNAL(clicked()), this, SLOT(addTakeSlot()));
@@ -198,6 +203,7 @@ void ProjectTab::makeGUI()
     iconFile.append(frontend->getIconsDirName());
     iconFile.append(QLatin1String("removetake.png"));
     removeTakeButton->setIcon(QPixmap(iconFile));
+    removeTakeButton->setIconSize(QSize(30,30));
     // removeTakeButton->setFlat(true);
     // removeTakeButton->setFocusPolicy( Qt::NoFocus );
     connect(removeTakeButton, SIGNAL(clicked()), this, SLOT(removeTakeSlot()));
@@ -222,6 +228,7 @@ void ProjectTab::makeGUI()
     iconFile.append(frontend->getIconsDirName());
     iconFile.append(QLatin1String("insertframes.png"));
     insertFramesButton->setIcon(QPixmap(iconFile));
+    insertFramesButton->setIconSize(QSize(30,30));
     // insertFramesButton->setFlat(true);
     // insertFramesButton->setFocusPolicy( Qt::NoFocus );
     connect(insertFramesButton, SIGNAL(clicked()), this, SLOT(insertFramesSlot()));
@@ -231,6 +238,7 @@ void ProjectTab::makeGUI()
     iconFile.append(frontend->getIconsDirName());
     iconFile.append(QLatin1String("appendframes.png"));
     addFramesButton->setIcon(QPixmap(iconFile));
+    addFramesButton->setIconSize(QSize(30,30));
     // addFramesButton->setFlat(true);
     // addFramesButton->setFocusPolicy( Qt::NoFocus );
     connect(addFramesButton, SIGNAL(clicked()), this, SLOT(addFramesSlot()));
@@ -240,6 +248,7 @@ void ProjectTab::makeGUI()
     iconFile.append(frontend->getIconsDirName());
     iconFile.append(QLatin1String("removeframes.png"));
     removeFramesButton->setIcon(QPixmap(iconFile));
+    removeFramesButton->setIconSize(QSize(30,30));
     // removeFramesButton->setFlat(true);
     // removeFramesButton->setFocusPolicy( Qt::NoFocus );
     connect(removeFramesButton, SIGNAL(clicked()), this, SLOT(removeFramesSlot()));
@@ -264,6 +273,7 @@ void ProjectTab::makeGUI()
     iconFile.append(frontend->getIconsDirName());
     iconFile.append(QLatin1String("launchgimp.png"));
     editFrameButton->setIcon(QPixmap(iconFile));
+    editFrameButton->setIconSize(QSize(30,30));
     // editFrameButton->setFlat(true);
     // editFrameButton->setFocusPolicy( Qt::NoFocus );
     connect(editFrameButton, SIGNAL(clicked()), this, SLOT(editFrameSlot()));

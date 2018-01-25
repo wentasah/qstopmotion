@@ -1169,7 +1169,7 @@ SET(
 # DEB package - Linux only (Debian, OpenSuse, Ubuntu, ...)
 ###############################################################################
 
-IF ("${LSB_DISTRIB}" MATCHES "Ubuntu|Debian")
+IF ("${LSB_DISTRIB}" MATCHES "Ubuntu|Debian|MintLinux")
     # We need to alter the architecture names as per distro rules
     IF ("${CPACK_PACKAGE_ARCHITECTURE}" MATCHES "i[3-6]86")
         SET(
@@ -1191,18 +1191,18 @@ IF ("${LSB_DISTRIB}" MATCHES "Ubuntu|Debian")
     # Set the dependencies based on the distro version
     # thus only one package is build you must list here *any* depending libraries,
     # even if they are only used in one module
-    IF ("${LSB_DISTRIB}" MATCHES "Ubuntu14.04")
-        SET(
-            CPACK_DEBIAN_PACKAGE_DEPENDS
-            "libc6 (>=2.11), libavbin0 (>=7-1), libqt5core5 (>=5.2.1) | libqt5core5a (>=5.2.1), libqt5gui5 (>=5.2.1), libqt5widgets5 (>=5.2.1), libqt5xml5 (>=5.2.1), libv4l-0 (>=1.0.0), libgphoto2-6 (>=2.5.3), qt5-image-formats-plugins (>=5.2.1)"
-        )
-    ENDIF ("${LSB_DISTRIB}" MATCHES "Ubuntu14.04")
     IF ("${LSB_DISTRIB}" MATCHES "Ubuntu16.04")
         SET(
             CPACK_DEBIAN_PACKAGE_DEPENDS
             "libc6 (>=2.11), ffmpeg (>=2.8.6), libqt5core5 (>=5.3.2) | libqt5core5a (>=5.3.2), libqt5gui5 (>=5.3.2), libqt5widgets5 (>=5.3.2), libqt5xml5 (>=5.3.2), libqwt-qt5-6 (>=6.1.0), libv4l-0 (>=1.0.0), libgphoto2-6 (>=2.5.3), qt5-image-formats-plugins (>=5.3.2)"
         )
     ENDIF ("${LSB_DISTRIB}" MATCHES "Ubuntu16.04")
+    IF ("${LSB_DISTRIB}" MATCHES "MintLinux18.2")
+        SET(
+            CPACK_DEBIAN_PACKAGE_DEPENDS
+            "libc6 (>=2.11), ffmpeg (>=2.8.6), libqt5core5 (>=5.3.2) | libqt5core5a (>=5.3.2), libqt5gui5 (>=5.3.2), libqt5widgets5 (>=5.3.2), libqt5xml5 (>=5.3.2), libqwt-qt5-6 (>=6.1.0), libv4l-0 (>=1.0.0), libgphoto2-6 (>=2.5.3), qt5-image-formats-plugins (>=5.3.2)"
+        )
+    ENDIF ("${LSB_DISTRIB}" MATCHES "MintLinux18.2")
     IF ("${LSB_DISTRIB}" MATCHES "Debian7.*")
         SET(
             CPACK_DEBIAN_PACKAGE_DEPENDS
@@ -1215,6 +1215,12 @@ IF ("${LSB_DISTRIB}" MATCHES "Ubuntu|Debian")
             "libc6 (>=2.11), libav-tools (>=6:11.3), libqt5core5 (>=5.3.2) | libqt5core5a (>=5.3.2), libqt5gui5 (>=5.3.2), libqt5widgets5 (>=5.3.2), libqt5xml5 (>=5.3.2), libv4l-0 (>=1.0.0), libgphoto2-6 (>=2.5.3), qt5-image-formats-plugins (>=5.3.2)"
         )
     ENDIF ("${LSB_DISTRIB}" MATCHES "Debian8.*")
+    IF ("${LSB_DISTRIB}" MATCHES "Debian9.*")
+        SET(
+            CPACK_DEBIAN_PACKAGE_DEPENDS
+            "libc6 (>=2.11), ffmpeg (>=7:3.2), libqt5core5 (>=5.3.2) | libqt5core5a (>=5.3.2), libqt5gui5 (>=5.3.2), libqt5widgets5 (>=5.3.2), libqt5xml5 (>=5.3.2), libv4l-0 (>=1.0.0), libgphoto2-6 (>=2.5.3), qt5-image-formats-plugins (>=5.3.2)"
+        )
+    ENDIF ("${LSB_DISTRIB}" MATCHES "Debian9.*")
     IF (NOT CPACK_DEBIAN_PACKAGE_DEPENDS)
         MESSAGE ("WARNING: ${LSB_DISTRIB} not supported yet.\nPlease set deps in CMakeLists.txt before packaging.")
     ENDIF (NOT CPACK_DEBIAN_PACKAGE_DEPENDS)

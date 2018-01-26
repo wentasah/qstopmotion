@@ -1194,13 +1194,13 @@ IF ("${LSB_DISTRIB}" MATCHES "Ubuntu|Debian|MintLinux")
     IF ("${LSB_DISTRIB}" MATCHES "Ubuntu16.04")
         SET(
             CPACK_DEBIAN_PACKAGE_DEPENDS
-            "libc6 (>=2.11), ffmpeg (>=2.8.6), libqt5core5 (>=5.3.2) | libqt5core5a (>=5.3.2), libqt5gui5 (>=5.3.2), libqt5widgets5 (>=5.3.2), libqt5xml5 (>=5.3.2), libqwt-qt5-6 (>=6.1.0), libv4l-0 (>=1.0.0), libgphoto2-6 (>=2.5.3), qt5-image-formats-plugins (>=5.3.2)"
+            "libc6 (>=2.11), ffmpeg (>=7:2.8.6), libqt5core5 (>=5.3.2) | libqt5core5a (>=5.3.2), libqt5gui5 (>=5.3.2), libqt5widgets5 (>=5.3.2), libqt5xml5 (>=5.3.2), libqwt-qt5-6 (>=6.1.0), libv4l-0 (>=1.0.0), libgphoto2-6 (>=2.5.3), qt5-image-formats-plugins (>=5.3.2)"
         )
     ENDIF ("${LSB_DISTRIB}" MATCHES "Ubuntu16.04")
     IF ("${LSB_DISTRIB}" MATCHES "MintLinux18.2")
         SET(
             CPACK_DEBIAN_PACKAGE_DEPENDS
-            "libc6 (>=2.11), ffmpeg (>=2.8.6), libqt5core5 (>=5.3.2) | libqt5core5a (>=5.3.2), libqt5gui5 (>=5.3.2), libqt5widgets5 (>=5.3.2), libqt5xml5 (>=5.3.2), libqwt-qt5-6 (>=6.1.0), libv4l-0 (>=1.0.0), libgphoto2-6 (>=2.5.3), qt5-image-formats-plugins (>=5.3.2)"
+            "libc6 (>=2.11), ffmpeg (>=7:2.8.6), libqt5core5 (>=5.3.2) | libqt5core5a (>=5.3.2), libqt5gui5 (>=5.3.2), libqt5widgets5 (>=5.3.2), libqt5xml5 (>=5.3.2), libqwt-qt5-6 (>=6.1.0), libv4l-0 (>=1.0.0), libgphoto2-6 (>=2.5.3), qt5-image-formats-plugins (>=5.3.2)"
         )
     ENDIF ("${LSB_DISTRIB}" MATCHES "MintLinux18.2")
     IF ("${LSB_DISTRIB}" MATCHES "Debian7.*")

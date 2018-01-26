@@ -1224,7 +1224,7 @@ IF ("${LSB_DISTRIB}" MATCHES "Ubuntu|Debian|MintLinux")
     IF (NOT CPACK_DEBIAN_PACKAGE_DEPENDS)
         MESSAGE ("WARNING: ${LSB_DISTRIB} not supported yet.\nPlease set deps in CMakeLists.txt before packaging.")
     ENDIF (NOT CPACK_DEBIAN_PACKAGE_DEPENDS)
-ENDIF ("${LSB_DISTRIB}" MATCHES "Ubuntu|Debian")
+ENDIF ("${LSB_DISTRIB}" MATCHES "Ubuntu|Debian|MintLinux")
 MESSAGE("CPACK_DEBIAN_PACKAGE_DEPENDS: ${CPACK_DEBIAN_PACKAGE_DEPENDS}")
 
 # Mandatory

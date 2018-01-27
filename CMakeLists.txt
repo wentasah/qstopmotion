@@ -1,7 +1,7 @@
 ###############################################################################
 # CMake file for the qStopMotion project                                      #
 # (c) Ralf Lange, longsoft.de                                                 #
-# Last update: 2018-01-04                                                     #
+# Last update: 2018-01-27                                                     #
 #                                                                             #
 # Usage:                                                                      #
 #   * Qt-Creator (Windows, Linux)                                             #
@@ -1067,109 +1067,112 @@ ENDIF(UNIX AND NOT APPLE)
 # NSIS - Windows only
 ###############################################################################
 
-# Installers for 32- vs. 64-bit CMake:
-#  - Root install directory (displayed to end user at installer-run time)
-#  - "NSIS package/display name" (text used in the installer GUI)
-#  - Registry key used to store info about the installation
-IF(CMAKE_CL_64)
-    # 64-bit Windows
-    SET(
-        CPACK_NSIS_INSTALL_ROOT
-        "$PROGRAMFILES64"
-    )
-    SET(
-        CPACK_NSIS_PACKAGE_NAME
-        "${CPACK_PACKAGE_INSTALL_DIRECTORY} (Win64)"
-    )
-    SET(
-        CPACK_PACKAGE_INSTALL_REGISTRY_KEY
-        "${CPACK_PACKAGE_NAME} ${CPACK_PACKAGE_VERSION} (Win64)"
-    )
-ELSE(CMAKE_CL_64)
-    # 32-bit Windows
-    SET(
-        CPACK_NSIS_INSTALL_ROOT
-        "$PROGRAMFILES"
-    )
-    SET(
-        CPACK_NSIS_PACKAGE_NAME
-        "${CPACK_PACKAGE_INSTALL_DIRECTORY}"
-    )
-    SET(
-        CPACK_PACKAGE_INSTALL_REGISTRY_KEY
-        "${CPACK_PACKAGE_NAME} ${CPACK_PACKAGE_VERSION}"
-    )
-ENDIF(CMAKE_CL_64)
+IF(WIN32)
+    # Installers for 32- vs. 64-bit CMake:
+    #  - Root install directory (displayed to end user at installer-run time)
+    #  - "NSIS package/display name" (text used in the installer GUI)
+    #  - Registry key used to store info about the installation
+    IF(CMAKE_CL_64)
+        # 64-bit Windows
+        SET(
+            CPACK_NSIS_INSTALL_ROOT
+            "$PROGRAMFILES64"
+        )
+        SET(
+            CPACK_NSIS_PACKAGE_NAME
+            "${CPACK_PACKAGE_INSTALL_DIRECTORY} (Win64)"
+        )
+        SET(
+            CPACK_PACKAGE_INSTALL_REGISTRY_KEY
+            "${CPACK_PACKAGE_NAME} ${CPACK_PACKAGE_VERSION} (Win64)"
+        )
+    ELSE(CMAKE_CL_64)
+        # 32-bit Windows
+        SET(
+            CPACK_NSIS_INSTALL_ROOT
+            "$PROGRAMFILES"
+        )
+        SET(
+            CPACK_NSIS_PACKAGE_NAME
+            "${CPACK_PACKAGE_INSTALL_DIRECTORY}"
+        )
+        SET(
+            CPACK_PACKAGE_INSTALL_REGISTRY_KEY
+            "${CPACK_PACKAGE_NAME} ${CPACK_PACKAGE_VERSION}"
+        )
+    ENDIF(CMAKE_CL_64)
 
-MESSAGE("CPACK_NSIS_INSTALL_ROOT: ${CPACK_NSIS_INSTALL_ROOT}")
-MESSAGE("CPACK_NSIS_PACKAGE_NAME: ${CPACK_NSIS_PACKAGE_NAME}")
-MESSAGE("CPACK_PACKAGE_INSTALL_REGISTRY_KEY: ${CPACK_PACKAGE_INSTALL_REGISTRY_KEY}")
+    MESSAGE("CPACK_NSIS_INSTALL_ROOT: ${CPACK_NSIS_INSTALL_ROOT}")
+    MESSAGE("CPACK_NSIS_PACKAGE_NAME: ${CPACK_NSIS_PACKAGE_NAME}")
+    MESSAGE("CPACK_PACKAGE_INSTALL_REGISTRY_KEY: ${CPACK_PACKAGE_INSTALL_REGISTRY_KEY}")
 
-# Installing Microsoft run time libraries in the same directory as the executables
-SET(
-    CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS_SKIP
-    true
-)
-INCLUDE(InstallRequiredSystemLibraries)
-MESSAGE("CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS: ${CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS}")
-INSTALL(
-    PROGRAMS ${CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS}
-    DESTINATION ${QSTOPMOTION_BIN_INSTALL_DIR}
-)
+    # Installing Microsoft run time libraries in the same directory as the executables
+    SET(
+        CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS_SKIP
+        true
+    )
+    INCLUDE(InstallRequiredSystemLibraries)
+    MESSAGE("CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS: ${CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS}")
+    INSTALL(
+        PROGRAMS ${CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS}
+        DESTINATION ${QSTOPMOTION_BIN_INSTALL_DIR}
+    )
 
-# There is a bug in NSI that does not handle full unix paths properly. Make
-# sure there is at least one set of four (4) backlasshes.
-  
-# Set the icons for the installer and the uninstaller
-SET(
-    CPACK_NSIS_MUI_ICON
-    "${CMAKE_CURRENT_SOURCE_DIR}/graphics/qstopmotion.ico"
-)
-SET(
-    CPACK_NSIS_MUI_UNIICON
-    "${CMAKE_CURRENT_SOURCE_DIR}/graphics/qstopmotion.ico"
-)
-# Set the project name on the first page
-# Use CPACK_PACKAGE_INSTALL_DIRECTORY
-# Set the bitmap for the second and following pages
-# Use CPACK_PACKAGE_ICON
-# Set the licence text for the second page
-# Use CPACK_RESOURCE_FILE_LICENSE
-# Enable modify path environment variable on third page
-SET(
-    CPACK_NSIS_MODIFY_PATH
-    ON
-)
-# Set the executable name for the desktop icon on third page
-SET(
-    CPACK_CREATE_DESKTOP_LINKS
-    qstopmotion
-)
-# Create shortcuts in the start menu
-# Use CPACK_PACKAGE_EXECUTABLES
-SET(CPACK_NSIS_MENU_LINKS
-    "manual/index.html" "qStopMotion Help"
-    "http://www.qstopmotion.org" "qStopMotion Web Site"
-)
+    # There is a bug in NSI that does not handle full unix paths properly. Make
+    # sure there is at least one set of four (4) backlasshes.
 
-# SET(CPACK_NSIS_INSTALLED_ICON_NAME "qstopmotion.exe")
-# SET(CPACK_NSIS_DISPLAY_NAME "qStopMotion")
-# SET(CPACK_NSIS_PACKAGE_NAME "qStopMotion")
-# SET(CPACK_NSIS_HELP_LINK "http:\\\\\\\\www.qstopmotion.org")
-# SET(CPACK_NSIS_URL_INFO_ABOUT "http:\\\\\\\\www.longsoft.de")
-SET(
-    CPACK_NSIS_CONTACT
-    ${CPACK_PACKAGE_VENDOR}
-)
+    # Set the icons for the installer and the uninstaller
+    SET(
+        CPACK_NSIS_MUI_ICON
+        "${CMAKE_CURRENT_SOURCE_DIR}/graphics/qstopmotion.ico"
+    )
+    SET(
+        CPACK_NSIS_MUI_UNIICON
+        "${CMAKE_CURRENT_SOURCE_DIR}/graphics/qstopmotion.ico"
+    )
+    # Set the project name on the first page
+    # Use CPACK_PACKAGE_INSTALL_DIRECTORY
+    # Set the bitmap for the second and following pages
+    # Use CPACK_PACKAGE_ICON
+    # Set the licence text for the second page
+    # Use CPACK_RESOURCE_FILE_LICENSE
+    # Enable modify path environment variable on third page
+    SET(
+        CPACK_NSIS_MODIFY_PATH
+        ON
+    )
+    # Set the executable name for the desktop icon on third page
+    SET(
+        CPACK_CREATE_DESKTOP_LINKS
+        qstopmotion
+    )
+    # Create shortcuts in the start menu
+    # Use CPACK_PACKAGE_EXECUTABLES
+    SET(CPACK_NSIS_MENU_LINKS
+        "manual/index.html" "qStopMotion Help"
+        "http://www.qstopmotion.org" "qStopMotion Web Site"
+    )
 
-# Run the application on the finish page
-# SET(CPACK_NSIS_MUI_FINISHPAGE_RUN "qstopmotion.exe"
+    # SET(CPACK_NSIS_INSTALLED_ICON_NAME "qstopmotion.exe")
+    # SET(CPACK_NSIS_DISPLAY_NAME "qStopMotion")
+    # SET(CPACK_NSIS_PACKAGE_NAME "qStopMotion")
+    # SET(CPACK_NSIS_HELP_LINK "http:\\\\\\\\www.qstopmotion.org")
+    # SET(CPACK_NSIS_URL_INFO_ABOUT "http:\\\\\\\\www.longsoft.de")
+    SET(
+        CPACK_NSIS_CONTACT
+        ${CPACK_PACKAGE_VENDOR}
+    )
+
+    # Run the application on the finish page
+    # SET(CPACK_NSIS_MUI_FINISHPAGE_RUN "qstopmotion.exe"
+
+ENDIF(WIN32)
 
 ###############################################################################
 # DEB package - Linux only (Debian, OpenSuse, Ubuntu, ...)
 ###############################################################################
 
-IF ("${LSB_DISTRIB}" MATCHES "Ubuntu|Debian|MintLinux")
+IF ("${LSB_DISTRIB}" MATCHES "Ubuntu|Debian|LinuxMint")
     # We need to alter the architecture names as per distro rules
     IF ("${CPACK_PACKAGE_ARCHITECTURE}" MATCHES "i[3-6]86")
         SET(
@@ -1197,12 +1200,12 @@ IF ("${LSB_DISTRIB}" MATCHES "Ubuntu|Debian|MintLinux")
             "libc6 (>=2.11), ffmpeg (>=7:2.8.6), libqt5core5 (>=5.3.2) | libqt5core5a (>=5.3.2), libqt5gui5 (>=5.3.2), libqt5widgets5 (>=5.3.2), libqt5xml5 (>=5.3.2), libqwt-qt5-6 (>=6.1.0), libv4l-0 (>=1.0.0), libgphoto2-6 (>=2.5.3), qt5-image-formats-plugins (>=5.3.2)"
         )
     ENDIF ("${LSB_DISTRIB}" MATCHES "Ubuntu16.04")
-    IF ("${LSB_DISTRIB}" MATCHES "MintLinux18.2")
+    IF ("${LSB_DISTRIB}" MATCHES "LinuxMint18.2")
         SET(
             CPACK_DEBIAN_PACKAGE_DEPENDS
             "libc6 (>=2.11), ffmpeg (>=7:2.8.6), libqt5core5 (>=5.3.2) | libqt5core5a (>=5.3.2), libqt5gui5 (>=5.3.2), libqt5widgets5 (>=5.3.2), libqt5xml5 (>=5.3.2), libqwt-qt5-6 (>=6.1.0), libv4l-0 (>=1.0.0), libgphoto2-6 (>=2.5.3), qt5-image-formats-plugins (>=5.3.2)"
         )
-    ENDIF ("${LSB_DISTRIB}" MATCHES "MintLinux18.2")
+    ENDIF ("${LSB_DISTRIB}" MATCHES "LinuxMint18.2")
     IF ("${LSB_DISTRIB}" MATCHES "Debian7.*")
         SET(
             CPACK_DEBIAN_PACKAGE_DEPENDS
@@ -1224,119 +1227,132 @@ IF ("${LSB_DISTRIB}" MATCHES "Ubuntu|Debian|MintLinux")
     IF (NOT CPACK_DEBIAN_PACKAGE_DEPENDS)
         MESSAGE ("WARNING: ${LSB_DISTRIB} not supported yet.\nPlease set deps in CMakeLists.txt before packaging.")
     ENDIF (NOT CPACK_DEBIAN_PACKAGE_DEPENDS)
-ENDIF ("${LSB_DISTRIB}" MATCHES "Ubuntu|Debian|MintLinux")
-MESSAGE("CPACK_DEBIAN_PACKAGE_DEPENDS: ${CPACK_DEBIAN_PACKAGE_DEPENDS}")
+    IF ("${CPACK_DEBIAN_PACKAGE_DEPENDS}" STREQUAL "")
+        MESSAGE ("WARNING: ${LSB_DISTRIB} not supported yet.\nPlease set deps in CMakeLists.txt before packaging.")
+    ENDIF ("${CPACK_DEBIAN_PACKAGE_DEPENDS}" STREQUAL "")
+    MESSAGE("CPACK_DEBIAN_PACKAGE_DEPENDS: ${CPACK_DEBIAN_PACKAGE_DEPENDS}")
 
-# Mandatory
-# CPACK_DEBIAN_PACKAGE_NAME = CPACK_PACKAGE_NAME
-MESSAGE("CPACK_DEBIAN_PACKAGE_NAME: ${CPACK_DEBIAN_PACKAGE_NAME}")
-# CPACK_DEBIAN_PACKAGE_VERSION = CPACK_PACKAGE_VERSION
-MESSAGE("CPACK_DEBIAN_PACKAGE_VERSION: ${CPACK_DEBIAN_PACKAGE_VERSION}")
-# CPACK_DEBIAN_PACKAGE_ARCHITECTURE = dpkg output       # dpkg --print-architecture ???
-MESSAGE("CPACK_DEBIAN_PACKAGE_ARCHITECTURE: ${CPACK_DEBIAN_PACKAGE_ARCHITECTURE}")
-# CPACK_DEBIAN_PACKAGE_MAINTAINER = CPACK_PACKAGE_CONTACT
-MESSAGE("CPACK_DEBIAN_PACKAGE_MAINTAINER: ${CPACK_DEBIAN_PACKAGE_MAINTAINER}")
-SET(
-    CPACK_DEBIAN_PACKAGE_DESCRIPTION
-    "create stop motion animations\n qStopMotion can be used to create stop motion animations."
-)
-MESSAGE("CPACK_DEBIAN_PACKAGE_DESCRIPTION: ${CPACK_DEBIAN_PACKAGE_DESCRIPTION}")
-SET(
-    CPACK_DEBIAN_PACKAGE_SECTION
-    "graphics"
-)
-MESSAGE("CPACK_DEBIAN_PACKAGE_SECTION: ${CPACK_DEBIAN_PACKAGE_SECTION}")
-SET(
-    CPACK_DEBIAN_PACKAGE_PRIORITY
-    "optional"
-)
-MESSAGE("CPACK_DEBIAN_PACKAGE_PRIORITY: ${CPACK_DEBIAN_PACKAGE_PRIORITY}")
+    # Mandatory
+    # CPACK_DEBIAN_PACKAGE_NAME = CPACK_PACKAGE_NAME
+    MESSAGE("CPACK_DEBIAN_PACKAGE_NAME: ${CPACK_DEBIAN_PACKAGE_NAME}")
+    # CPACK_DEBIAN_PACKAGE_VERSION = CPACK_PACKAGE_VERSION
+    MESSAGE("CPACK_DEBIAN_PACKAGE_VERSION: ${CPACK_DEBIAN_PACKAGE_VERSION}")
+    # CPACK_DEBIAN_PACKAGE_ARCHITECTURE = dpkg output       # dpkg --print-architecture ???
+    MESSAGE("CPACK_DEBIAN_PACKAGE_ARCHITECTURE: ${CPACK_DEBIAN_PACKAGE_ARCHITECTURE}")
+    # CPACK_DEBIAN_PACKAGE_MAINTAINER = CPACK_PACKAGE_CONTACT
+    MESSAGE("CPACK_DEBIAN_PACKAGE_MAINTAINER: ${CPACK_DEBIAN_PACKAGE_MAINTAINER}")
+    SET(
+        CPACK_DEBIAN_PACKAGE_DESCRIPTION
+        "create stop motion animations\n qStopMotion can be used to create stop motion animations."
+    )
+    MESSAGE("CPACK_DEBIAN_PACKAGE_DESCRIPTION: ${CPACK_DEBIAN_PACKAGE_DESCRIPTION}")
+    SET(
+        CPACK_DEBIAN_PACKAGE_SECTION
+        "graphics"
+    )
+    MESSAGE("CPACK_DEBIAN_PACKAGE_SECTION: ${CPACK_DEBIAN_PACKAGE_SECTION}")
+    SET(
+        CPACK_DEBIAN_PACKAGE_PRIORITY
+        "optional"
+    )
+    MESSAGE("CPACK_DEBIAN_PACKAGE_PRIORITY: ${CPACK_DEBIAN_PACKAGE_PRIORITY}")
 
-# Options
+    # Options
 
-SET(CPACK_DEBIAN_PACKAGE_HOMEPAGE ${QSTOPMOTION_HOMEPAGE})
-# CPACK_DEBIAN_PACKAGE_SHLIBDEPS
-# SET(CPACK_DEBIAN_PACKAGE_DEBUG "ON")
-# CPACK_DEBIAN_PACKAGE_DEBUG
-# CPACK_DEBIAN_PACKAGE_ENHANCES
-# CPACK_DEBIAN_PACKAGE_BREAKS
-# CPACK_DEBIAN_PACKAGE_CONFLICTS
-# CPACK_DEBIAN_PACKAGE_PROVIDES
-# CPACK_DEBIAN_PACKAGE_REPLACES
-SET(
-    CPACK_DEBIAN_PACKAGE_CONTROL_EXTRA
-    "${CMAKE_SOURCE_DIR}/deb/postinst"
-)
+    SET(
+        CPACK_DEBIAN_PACKAGE_HOMEPAGE
+        ${QSTOPMOTION_HOMEPAGE}
+    )
+
+    # CPACK_DEBIAN_PACKAGE_SHLIBDEPS
+    # SET(CPACK_DEBIAN_PACKAGE_DEBUG "ON")
+    # CPACK_DEBIAN_PACKAGE_DEBUG
+    # CPACK_DEBIAN_PACKAGE_ENHANCES
+    # CPACK_DEBIAN_PACKAGE_BREAKS
+    # CPACK_DEBIAN_PACKAGE_CONFLICTS
+    # CPACK_DEBIAN_PACKAGE_PROVIDES
+    # CPACK_DEBIAN_PACKAGE_REPLACES
+
+    SET(
+        CPACK_DEBIAN_PACKAGE_CONTROL_EXTRA
+        "${CMAKE_SOURCE_DIR}/deb/postinst"
+    )
+
+ENDIF ("${LSB_DISTRIB}" MATCHES "Ubuntu|Debian|LinuxMint")
 
 ###############################################################################
 # RPM package - Linux only (Fedora, Red Hat, CentOS, Mandriva, ...)
 ###############################################################################
 
-# Mandatory
-SET(
-    CPACK_RPM_PACKAGE_SUMMARY
-    ${CPACK_PACKAGE_DESCRIPTION_SUMMARY}
-)
-MESSAGE("CPACK_RPM_PACKAGE_SUMMARY: ${CPACK_RPM_PACKAGE_SUMMARY}")
-# CPACK_RPM_PACKAGE_NAME = CPACK_PACKAGE_NAME
-MESSAGE("CPACK_RPM_PACKAGE_NAME: ${CPACK_RPM_PACKAGE_NAME}")
-# CPACK_RPM_PACKAGE_VERSION = CPACK_PACKAGE_VERSION
-MESSAGE("CPACK_RPM_PACKAGE_VERSION: ${CPACK_RPM_PACKAGE_VERSION}")
-# SET(CPACK_RPM_PACKAGE_RELEASE "1")
-MESSAGE("CPACK_RPM_PACKAGE_RELEASE: ${CPACK_RPM_PACKAGE_RELEASE}")
-SET(
-    CPACK_RPM_PACKAGE_LICENSE
-    "GPLv2"
-)
-MESSAGE("CPACK_RPM_PACKAGE_LICENSE: ${CPACK_RPM_PACKAGE_LICENSE}")
-SET(
-    CPACK_RPM_PACKAGE_GROUP
-    "Applications/Multimedia"
-)
-MESSAGE("CPACK_RPM_PACKAGE_GROUP: ${CPACK_RPM_PACKAGE_GROUP}")
-# CPACK_RPM_PACKAGE_VENDOR = CPACK_PACKAGE_VENDOR
-MESSAGE("CPACK_RPM_PACKAGE_VENDOR: ${CPACK_RPM_PACKAGE_VENDOR}")
-# CPACK_RPM_PACKAGE_MAINTAINER = CPACK_PACKAGE_CONTACT
-MESSAGE("CPACK_RPM_PACKAGE_MAINTAINER: ${CPACK_RPM_PACKAGE_MAINTAINER}")
+IF ("${LSB_DISTRIB}" MATCHES "Fedora|CentOS")
+    # Mandatory
+    SET(
+        CPACK_RPM_PACKAGE_SUMMARY
+        ${CPACK_PACKAGE_DESCRIPTION_SUMMARY}
+    )
+    MESSAGE("CPACK_RPM_PACKAGE_SUMMARY: ${CPACK_RPM_PACKAGE_SUMMARY}")
+    # CPACK_RPM_PACKAGE_NAME = CPACK_PACKAGE_NAME
+    MESSAGE("CPACK_RPM_PACKAGE_NAME: ${CPACK_RPM_PACKAGE_NAME}")
+    # CPACK_RPM_PACKAGE_VERSION = CPACK_PACKAGE_VERSION
+    MESSAGE("CPACK_RPM_PACKAGE_VERSION: ${CPACK_RPM_PACKAGE_VERSION}")
+    # SET(CPACK_RPM_PACKAGE_RELEASE "1")
+    MESSAGE("CPACK_RPM_PACKAGE_RELEASE: ${CPACK_RPM_PACKAGE_RELEASE}")
+    SET(
+        CPACK_RPM_PACKAGE_LICENSE
+        "GPLv2"
+    )
+    MESSAGE("CPACK_RPM_PACKAGE_LICENSE: ${CPACK_RPM_PACKAGE_LICENSE}")
+    SET(
+        CPACK_RPM_PACKAGE_GROUP
+        "Applications/Multimedia"
+    )
+    MESSAGE("CPACK_RPM_PACKAGE_GROUP: ${CPACK_RPM_PACKAGE_GROUP}")
+    # CPACK_RPM_PACKAGE_VENDOR = CPACK_PACKAGE_VENDOR
+    MESSAGE("CPACK_RPM_PACKAGE_VENDOR: ${CPACK_RPM_PACKAGE_VENDOR}")
+    # CPACK_RPM_PACKAGE_MAINTAINER = CPACK_PACKAGE_CONTACT
+    MESSAGE("CPACK_RPM_PACKAGE_MAINTAINER: ${CPACK_RPM_PACKAGE_MAINTAINER}")
 
-# Options
-# SET(CPACK_RPM_PACKAGE_ARCHITECTURE "noarch")
-SET(
-    CPACK_RPM_PACKAGE_URL
-    ${QSTOPMOTION_HOMEPAGE}
-)
-# CPACK_RPM_PACKAGE_DESCRIPTION = CPACK_PACKAGE_DESCRIPTION_FILE
-# CPACK_RPM_COMPRESSION_TYPE
-# requireses must be in a aphabetic order
-# Qt5: qt5-qtbase - Core, Concurrent, DBus, Network, Sql, Test, Xml
-# Qt5: qt5-qtbase-gui - Gui, OpenGL, PrintSupport, Widgets, XcbQpa
-# Qt5: qt5-qtimageformats - Qt5 image format plugins
-# Qt5: qt5-qtmultimedia - Multimedia, MultimediaQuick, MultimediaWidgets
-SET(
-    CPACK_RPM_PACKAGE_REQUIRES
-    "glibc >= 2.12, libgphoto2 >= 2.4.7, libv4l >= 0.6.3, qt5-qtbase >= 5.2.0, qt5-qtbase-gui >= 5.2.0, qt5-qtimageformats >= 5.2.0"
-)
-MESSAGE("CPACK_RPM_PACKAGE_REQUIRES: ${CPACK_RPM_PACKAGE_REQUIRES}")
-# CPACK_RPM_PACKAGE_SUGGESTS
-# CPACK_RPM_PACKAGE_PROVIDES
+    # Options
+    # SET(CPACK_RPM_PACKAGE_ARCHITECTURE "noarch")
+    SET(
+        CPACK_RPM_PACKAGE_URL
+        ${QSTOPMOTION_HOMEPAGE}
+    )
+    # CPACK_RPM_PACKAGE_DESCRIPTION = CPACK_PACKAGE_DESCRIPTION_FILE
+    # CPACK_RPM_COMPRESSION_TYPE
+    # requireses must be in a aphabetic order
+    # Qt5: qt5-qtbase - Core, Concurrent, DBus, Network, Sql, Test, Xml
+    # Qt5: qt5-qtbase-gui - Gui, OpenGL, PrintSupport, Widgets, XcbQpa
+    # Qt5: qt5-qtimageformats - Qt5 image format plugins
+    # Qt5: qt5-qtmultimedia - Multimedia, MultimediaQuick, MultimediaWidgets
+    # Qwt: qwt-qt5 - Qwt for Qt5
+    SET(
+        CPACK_RPM_PACKAGE_REQUIRES
+        "glibc >= 2.12, libgphoto2 >= 2.4.7, libv4l >= 0.6.3, qt5-qtbase >= 5.2.0, qt5-qtbase-gui >= 5.2.0, qt5-qtimageformats >= 5.2.0, qwt-qt5 >= 6.1.0"
+    )
+    MESSAGE("CPACK_RPM_PACKAGE_REQUIRES: ${CPACK_RPM_PACKAGE_REQUIRES}")
+    # CPACK_RPM_PACKAGE_SUGGESTS
+    # CPACK_RPM_PACKAGE_PROVIDES
 
-# SET(CPACK_RPM_SPEC_INSTALL_POST "desktop-file-validate /usr/share/applications/qstopmotion.desktop")
+    # SET(CPACK_RPM_SPEC_INSTALL_POST "desktop-file-validate /usr/share/applications/qstopmotion.desktop")
 
-# SET(CPACK_RPM_PRE_INSTALL_SCRIPT_FILE "pre_install.sh")
-# SET(CPACK_RPM_POST_INSTALL_SCRIPT_FILE "post_install.sh")
-# SET(CPACK_RPM_PRE_UNINSTALL_SCRIPT_FILE "pre_install.sh")
-# SET(CPACK_RPM_POST_UNINSTALL_SCRIPT_FILE "post_install.sh")
+    # SET(CPACK_RPM_PRE_INSTALL_SCRIPT_FILE "pre_install.sh")
+    # SET(CPACK_RPM_POST_INSTALL_SCRIPT_FILE "post_install.sh")
+    # SET(CPACK_RPM_PRE_UNINSTALL_SCRIPT_FILE "pre_install.sh")
+    # SET(CPACK_RPM_POST_UNINSTALL_SCRIPT_FILE "post_install.sh")
 
-# Prevent conflicts with the filesystem package
-SET(
-    CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION
-    "/usr/bin"
-    "/usr/share/applications"
-    "/usr/share/icons"
-    "/usr/share/pixmaps"
-    "/usr/share/man"
-    "/usr/share/man/man1"
-)
+    # Prevent conflicts with the filesystem package
+    SET(
+        CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION
+        "/usr/bin"
+        "/usr/share/applications"
+        "/usr/share/icons"
+        "/usr/share/pixmaps"
+        "/usr/share/man"
+        "/usr/share/man/man1"
+    )
+
+ENDIF ("${LSB_DISTRIB}" MATCHES "Fedora|CentOS")
 
 ###############################################################################
 # Activate packaging functionality

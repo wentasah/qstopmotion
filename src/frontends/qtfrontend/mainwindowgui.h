@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2017 by                                                *
+ *  Copyright (C) 2005-2018 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -658,14 +658,19 @@ private slots:
     void whatsThis();
 
     /**
-     * Brings up an help dialog with the qstopmotion user manua.
+     * Brings up an help dialog with the qstopmotion user manual.
      */
     void showHelpDialog();
 
     /**
-     * Brings up an help dialog with the qstopmotion user manua.
+     * Brings up the browser with the qstopmotion user manual in different languages.
      */
     void showOnlineHelp();
+
+    /**
+     * Brings up the browser with the qstopmotion support us page.
+     */
+    void showSupportUs();
 
     /**
      * Brings up an about dialog with information about the application.
@@ -748,6 +753,7 @@ private:
     QAction *whatsthisAct;
     QAction *helpAct;
     QAction *onlineHelpAct;
+    QAction *supportUsAct;
     QAction *aboutQtAct;
     QAction *aboutAct;
 

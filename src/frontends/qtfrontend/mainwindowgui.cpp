@@ -97,6 +97,7 @@ MainWindowGUI::MainWindowGUI(QApplication *stApp, Frontend *f)
     whatsthisAct         = 0;
     helpAct              = 0;
     onlineHelpAct        = 0;
+    supportUsAct         = 0;
     aboutQtAct           = 0;
     aboutAct             = 0;
 
@@ -209,6 +210,7 @@ void MainWindowGUI::retranslateStrings()
     cameraControllerAct->setText(tr("&Camera Controller"));
     helpAct->setText(tr("&Help"));
     onlineHelpAct->setText(tr("&Online Help"));
+    supportUsAct->setText(tr("Support Us"));
     aboutQtAct->setText(tr("About &Qt"));
     aboutAct->setText(tr("&About"));
 
@@ -413,6 +415,22 @@ void MainWindowGUI::retranslateHelpText()
     infoText =
         helpAct->toolTip().prepend(tr("Help"));
     helpAct->setToolTip(infoText);
+
+    infoText =
+        tr("<h4>Online Help</h4> "
+           "<p>This button will bring up the browser with the qStopMotion manual in different languages</p>");
+    onlineHelpAct->setWhatsThis(infoText);
+    infoText =
+        onlineHelpAct->toolTip().prepend(tr("Help"));
+    onlineHelpAct->setToolTip(infoText);
+
+    infoText =
+        tr("<h4>Support Us</h4> "
+           "<p>This button will bring up the browser with the qStopMotion support us page</p>");
+    supportUsAct->setWhatsThis(infoText);
+    infoText =
+        supportUsAct->toolTip().prepend(tr("Help"));
+    supportUsAct->setToolTip(infoText);
 
     infoText =
         tr("<h4>About Qt</h4> "
@@ -1847,6 +1865,21 @@ void MainWindowGUI::showOnlineHelp()
 }
 
 
+void MainWindowGUI::showSupportUs()
+{
+    qDebug() << "MainWindowGUI::showSupportUs --> Start";
+
+    if ("de" == activeLocale) {
+        QDesktopServices::openUrl(QUrl("http://www.qstopmotion.org/index_deutsch.html#unterstuetzt_uns"));
+    }
+    else {
+        QDesktopServices::openUrl(QUrl("http://www.qstopmotion.org/index.html#support_us"));
+    }
+
+    qDebug() << "MainWindowGUI::showSupportUs --> End";
+}
+
+
 void MainWindowGUI::showAboutDialog()
 {
     AboutDialog *aboutDialog = new AboutDialog(frontend, this);
@@ -2371,6 +2404,14 @@ void MainWindowGUI::createActions()
     onlineHelpAct->setIconVisibleInMenu(true);
     connect(onlineHelpAct, SIGNAL(triggered()), this, SLOT(showOnlineHelp()));
 
+    supportUsAct = new QAction(this);
+    iconFile.clear();
+    iconFile.append(frontend->getIconsDirName());
+    iconFile.append(QLatin1String("window.png"));
+    supportUsAct->setIcon(QIcon(iconFile));
+    supportUsAct->setIconVisibleInMenu(true);
+    connect(supportUsAct, SIGNAL(triggered()), this, SLOT(showSupportUs()));
+
     aboutQtAct = new QAction(this);
     iconFile.clear();
     iconFile.append(frontend->getIconsDirName());
@@ -2451,6 +2492,7 @@ void MainWindowGUI::createMenus()
     helpMenu->addAction(helpAct);
     helpMenu->addAction(onlineHelpAct);
     helpMenu->addSeparator();
+    helpMenu->addAction(supportUsAct);
     helpMenu->addAction(aboutQtAct);
     helpMenu->addAction(aboutAct);
     menuBar()->addMenu(helpMenu);

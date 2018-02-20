@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2017 by                                                *
+ *  Copyright (C) 2005-2018 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -53,9 +53,9 @@ public:
     const static bool V4L2GRABBERDEFAULT = true;
 
     /**
-     * @brief V4L2 controler enable default for new installations
+     * @brief V4L2 controller enable default for new installations
      */
-    const static bool V4L2CONTROLERDEFAULT = true;
+    const static bool V4L2CONTROLLERDEFAULT = true;
 
     /**
      * @brief MediaFoundation grabber enable default for new installations
@@ -63,9 +63,9 @@ public:
     const static bool MEDIAFOUNDATIONGRABBERDEFAULT = true;
 
     /**
-     * @brief MesiaFoundation controler enable default for new installations
+     * @brief MesiaFoundation controller enable default for new installations
      */
-    const static bool MEDIAFOUNDATIONCONTROLERDEFAULT = true;
+    const static bool MEDIAFOUNDATIONCONTROLLERDEFAULT = true;
 
     /**
      * @brief GPhoto2 grabber enable default for new installations
@@ -73,9 +73,9 @@ public:
     const static bool GPHOTO2GRABBERDEFAULT = false;
 
     /**
-     * @brief GPhoto2 controler enable default for new installations
+     * @brief GPhoto2 controller enable default for new installations
      */
-    const static bool GPHOTO2CONTROLERDEFAULT = false;
+    const static bool GPHOTO2CONTROLLERDEFAULT = false;
 
     /**
      * @brief Destructor

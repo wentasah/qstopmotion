@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2017 by                                                *
+ *  Copyright (C) 2005-2018 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -28,7 +28,7 @@
 #include <QProgressDialog>
 #include <QUrl>
 
-#include "frontends/qtfrontend/preferences/controlerwidget.h"
+#include "frontends/qtfrontend/preferences/controllerwidget.h"
 #include "technical/preferencestool.h"
 
 
@@ -747,7 +747,7 @@ void CameraControllerDialog::enableControls()
     // Brightness control
     capabilities = grabberController->getBrightnessCaps();
     if (preferences->getBooleanPreference("preferences", "brightnesscontrol", showControl) == false) {
-        showControl = ControlerWidget::BRIGHTNESSDEFAULT;
+        showControl = ControllerWidget::BRIGHTNESSDEFAULT;
     }
     if (capabilities->isAutomatic()) {
         if (showControl) {
@@ -773,7 +773,7 @@ void CameraControllerDialog::enableControls()
     // Contrast control
     capabilities = grabberController->getContrastCaps();
     if (preferences->getBooleanPreference("preferences", "contrastcontrol", showControl) == false) {
-        showControl = ControlerWidget::CONTRASTDEFAULT;
+        showControl = ControllerWidget::CONTRASTDEFAULT;
     }
     if (capabilities->isAutomatic()) {
         if (showControl) {
@@ -799,7 +799,7 @@ void CameraControllerDialog::enableControls()
     // Saturation control
     capabilities = grabberController->getSaturationCaps();
     if (preferences->getBooleanPreference("preferences", "saturationcontrol", showControl) == false) {
-        showControl = ControlerWidget::SATURATIONDEFAULT;
+        showControl = ControllerWidget::SATURATIONDEFAULT;
     }
     if (capabilities->isAutomatic()) {
         if (showControl) {
@@ -825,7 +825,7 @@ void CameraControllerDialog::enableControls()
     // Hue control
     capabilities = grabberController->getHueCaps();
     if (preferences->getBooleanPreference("preferences", "huecontrol", showControl) == false) {
-        showControl = ControlerWidget::HUEDEFAULT;
+        showControl = ControllerWidget::HUEDEFAULT;
     }
     if (capabilities->isAutomatic()) {
         if (showControl) {
@@ -851,7 +851,7 @@ void CameraControllerDialog::enableControls()
     // Gamma control
     capabilities = grabberController->getGammaCaps();
     if (preferences->getBooleanPreference("preferences", "gammacontrol", showControl) == false) {
-        showControl = ControlerWidget::HUEDEFAULT;
+        showControl = ControllerWidget::HUEDEFAULT;
     }
     if (capabilities->isAutomatic()) {
         if (showControl) {
@@ -877,7 +877,7 @@ void CameraControllerDialog::enableControls()
     // Sharpness control
     capabilities = grabberController->getSharpnessCaps();
     if (preferences->getBooleanPreference("preferences", "sharpnesscontrol", showControl) == false) {
-        showControl = ControlerWidget::SHARPNESSDEFAULT;
+        showControl = ControllerWidget::SHARPNESSDEFAULT;
     }
     if (capabilities->isAutomatic()) {
         if (showControl) {
@@ -903,7 +903,7 @@ void CameraControllerDialog::enableControls()
     // Backlight control
     capabilities = grabberController->getBacklightCaps();
     if (preferences->getBooleanPreference("preferences", "backlightcontrol", showControl) == false) {
-        showControl = ControlerWidget::BACKLIGHTDEFAULT;
+        showControl = ControllerWidget::BACKLIGHTDEFAULT;
     }
     if (capabilities->isAutomatic()) {
         if (showControl) {
@@ -929,7 +929,7 @@ void CameraControllerDialog::enableControls()
     // White control
     capabilities = grabberController->getWhiteCaps();
     if (preferences->getBooleanPreference("preferences", "whitecontrol", showControl) == false) {
-        showControl = ControlerWidget::WHITEDEFAULT;
+        showControl = ControllerWidget::WHITEDEFAULT;
     }
     if (capabilities->isAutomatic()) {
         if (showControl) {
@@ -955,7 +955,7 @@ void CameraControllerDialog::enableControls()
     // Gain control
     capabilities = grabberController->getGainCaps();
     if (preferences->getBooleanPreference("preferences", "gaincontrol", showControl) == false) {
-        showControl = ControlerWidget::GAINDEFAULT;
+        showControl = ControllerWidget::GAINDEFAULT;
     }
     if (capabilities->isAutomatic()) {
         if (showControl) {
@@ -981,7 +981,7 @@ void CameraControllerDialog::enableControls()
     // Color control
     capabilities = grabberController->getColorCaps();
     if (preferences->getBooleanPreference("preferences", "colorcontrol", showControl) == false) {
-        showControl = ControlerWidget::COLORDEFAULT;
+        showControl = ControllerWidget::COLORDEFAULT;
     }
     if (capabilities->isAutomatic()) {
         if (showControl) {
@@ -1011,7 +1011,7 @@ void CameraControllerDialog::enableControls()
     // Exposure control
     capabilities = grabberController->getExposureCaps();
     if (preferences->getBooleanPreference("preferences", "exposurecontrol", showControl) == false) {
-        showControl = ControlerWidget::EXPOSUREDEFAULT;
+        showControl = ControllerWidget::EXPOSUREDEFAULT;
     }
     if (capabilities->isAutomatic()) {
         if (showControl) {
@@ -1037,7 +1037,7 @@ void CameraControllerDialog::enableControls()
     // Zoom control
     capabilities = grabberController->getZoomCaps();
     if (preferences->getBooleanPreference("preferences", "zoomcontrol", showControl) == false) {
-        showControl = ControlerWidget::ZOOMDEFAULT;
+        showControl = ControllerWidget::ZOOMDEFAULT;
     }
     if (capabilities->isAutomatic()) {
         if (showControl) {
@@ -1063,7 +1063,7 @@ void CameraControllerDialog::enableControls()
     // Focus control
     capabilities = grabberController->getFocusCaps();
     if (preferences->getBooleanPreference("preferences", "focuscontrol", showControl) == false) {
-        showControl = ControlerWidget::FOCUSDEFAULT;
+        showControl = ControllerWidget::FOCUSDEFAULT;
     }
     if (capabilities->isAutomatic()) {
         if (showControl) {
@@ -1089,7 +1089,7 @@ void CameraControllerDialog::enableControls()
     // Pan control
     capabilities = grabberController->getPanCaps();
     if (preferences->getBooleanPreference("preferences", "pancontrol", showControl) == false) {
-        showControl = ControlerWidget::PANDEFAULT;
+        showControl = ControllerWidget::PANDEFAULT;
     }
     if (capabilities->isAutomatic()) {
         if (showControl) {
@@ -1115,7 +1115,7 @@ void CameraControllerDialog::enableControls()
     // Tilt control
     capabilities = grabberController->getTiltCaps();
     if (preferences->getBooleanPreference("preferences", "tiltcontrol", showControl) == false) {
-        showControl = ControlerWidget::TILTDEFAULT;
+        showControl = ControllerWidget::TILTDEFAULT;
     }
     if (capabilities->isAutomatic()) {
         if (showControl) {
@@ -1141,7 +1141,7 @@ void CameraControllerDialog::enableControls()
     // Iris control
     capabilities = grabberController->getIrisCaps();
     if (preferences->getBooleanPreference("preferences", "iriscontrol", showControl) == false) {
-        showControl = ControlerWidget::IRISDEFAULT;
+        showControl = ControllerWidget::IRISDEFAULT;
     }
     if (capabilities->isAutomatic()) {
         if (showControl) {
@@ -1167,7 +1167,7 @@ void CameraControllerDialog::enableControls()
     // Roll control
     capabilities = grabberController->getRollCaps();
     if (preferences->getBooleanPreference("preferences", "rollcontrol", showControl) == false) {
-        showControl = ControlerWidget::ROLLDEFAULT;
+        showControl = ControllerWidget::ROLLDEFAULT;
     }
     if (capabilities->isAutomatic()) {
         if (showControl) {

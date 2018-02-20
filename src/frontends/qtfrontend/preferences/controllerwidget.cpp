@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2017 by                                                *
+ *  Copyright (C) 2005-2018 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -18,7 +18,7 @@
  *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                 *
  ******************************************************************************/
 
-#include "controlerwidget.h"
+#include "controllerwidget.h"
 
 #include <QDebug>
 #include <QFileDialog>
@@ -35,9 +35,9 @@
 #include "technical/grabber/imagegrabber.h"
 
 
-ControlerWidget::ControlerWidget(Frontend *f, QWidget *parent) : QWidget(parent)
+ControllerWidget::ControllerWidget(Frontend *f, QWidget *parent) : QWidget(parent)
 {
-    qDebug() << "ControlerWidget::Constructor --> Start";
+    qDebug() << "ControllerWidget::Constructor --> Start";
 
     frontend                 = f;
 
@@ -85,17 +85,17 @@ ControlerWidget::ControlerWidget(Frontend *f, QWidget *parent) : QWidget(parent)
     actualIris        = IRISDEFAULT;
     actualRoll        = ROLLDEFAULT;
 
-    this->setObjectName("ControlerWidget");
+    this->setObjectName("ControllerWidget");
 
     makeGUI();
 
-    qDebug() << "ControlerWidget::Constructor --> End";
+    qDebug() << "ControllerWidget::Constructor --> End";
 }
 
 
-void ControlerWidget::makeGUI()
+void ControllerWidget::makeGUI()
 {
-    qDebug() << "ControlerWidget::makeGUI --> Start";
+    qDebug() << "ControllerWidget::makeGUI --> Start";
 
     infoText = new QTextEdit;
     infoText->setReadOnly(true);
@@ -203,13 +203,13 @@ void ControlerWidget::makeGUI()
 
     setLayout(mainLayout);
 
-    qDebug() << "ControlerWidget::makeGUI --> End";
+    qDebug() << "ControllerWidget::makeGUI --> End";
 }
 
 
-void ControlerWidget::initialize()
+void ControllerWidget::initialize()
 {
-    qDebug() << "ControlerWidget::initialize --> Start";
+    qDebug() << "ControllerWidget::initialize --> Start";
 
     PreferencesTool *pref = frontend->getPreferences();
 
@@ -234,23 +234,23 @@ void ControlerWidget::initialize()
 
     reset();
 
-    qDebug() << "ControlerWidget::initialize --> End";
+    qDebug() << "ControllerWidget::initialize --> End";
 }
 
 /*
-void ControlerWidget::resizeEvent(QResizeEvent *event)
+void ControllerWidget::resizeEvent(QResizeEvent *event)
 {
-    qDebug() << "ControlerWidget::resizeEvent --> Start";
+    qDebug() << "ControllerWidget::resizeEvent --> Start";
 
     QWidget::resizeEvent(event);
 
-    qDebug() << "ControlerWidget::resizeEvent --> End";
+    qDebug() << "ControllerWidget::resizeEvent --> End";
 }
 */
 
-void ControlerWidget::apply()
+void ControllerWidget::apply()
 {
-    qDebug() << "ControlerWidget::apply --> Start";
+    qDebug() << "ControllerWidget::apply --> Start";
 
     PreferencesTool *pref = frontend->getPreferences();
     bool             boolValue;
@@ -358,13 +358,13 @@ void ControlerWidget::apply()
         actualRoll = boolValue;
     }
 
-    qDebug() << "ControlerWidget::apply --> End";
+    qDebug() << "ControllerWidget::apply --> End";
 }
 
 
-void ControlerWidget::reset()
+void ControllerWidget::reset()
 {
-    qDebug() << "ControlerWidget::reset --> Start";
+    qDebug() << "ControllerWidget::reset --> Start";
 
     brightnessCheckBox->setChecked(actualBrightness);
     contrastCheckBox->setChecked(actualContrast);
@@ -385,5 +385,5 @@ void ControlerWidget::reset()
     irisCheckBox->setChecked(actualIris);
     rollCheckBox->setChecked(actualRoll);
 
-    qDebug() << "ControlerWidget::reset --> End";
+    qDebug() << "ControllerWidget::reset --> End";
 }

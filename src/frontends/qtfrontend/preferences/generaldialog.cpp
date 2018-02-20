@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2017 by                                                *
+ *  Copyright (C) 2005-2018 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -249,12 +249,12 @@ void GeneralDialog::makeCameraControlPage()
     qDebug() << "GeneralDialog::makeCameraControlPage --> Start";
 
     QTreeWidgetItem *newItem = new QTreeWidgetItem();
-    newItem->setText(0, tr("Camera Controler"));
+    newItem->setText(0, tr("Camera Controller"));
     newItem->setFlags(Qt::ItemIsEnabled |
                       Qt::ItemIsSelectable);
     this->pageTree->topLevelItem(0)->addChild(newItem);
 
-    cameraControlPage = new ControlerWidget(frontend);
+    cameraControlPage = new ControllerWidget(frontend);
     cameraControlPage->initialize();
     cameraControlPage->setMinimumSize(MIN_PAGE_WIDTH, MIN_PAGE_HEIGHT);
     cameraControlPage->setMaximumSize(MAX_PAGE_WIDTH, MAX_PAGE_HEIGHT);
@@ -355,7 +355,7 @@ void GeneralDialog::help()
         break;
     case 6:
         // Camera control settings
-        frontend->openOnlineHelp("#preferences-controler");
+        frontend->openOnlineHelp("#preferences-controller");
         break;
     }
 

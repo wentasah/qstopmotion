@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2017 by                                                *
+ *  Copyright (C) 2005-2018 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -18,8 +18,8 @@
  *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                 *
  ******************************************************************************/
 
-#ifndef CONTROLERWIDGET_H
-#define CONTROLERWIDGET_H
+#ifndef CONTROLLERWIDGET_H
+#define CONTROLLERWIDGET_H
 
 #include "frontends/frontend.h"
 
@@ -34,7 +34,7 @@
  * The image import tab in the preferences menu
  * @author Ralf Lange
  */
-class ControlerWidget : public QWidget
+class ControllerWidget : public QWidget
 {
     Q_OBJECT
 public:
@@ -62,7 +62,7 @@ public:
      * @param f frontend of the application
      * @param parent the parent of the this widget
      */
-    ControlerWidget(Frontend *f, QWidget *parent = 0);
+    ControllerWidget(Frontend *f, QWidget *parent = 0);
 
     /**
      * Applies the settings in the import tab.

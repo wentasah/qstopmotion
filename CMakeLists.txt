@@ -1,7 +1,7 @@
 ###############################################################################
 # CMake file for the qStopMotion project                                      #
 # (c) Ralf Lange, longsoft.de                                                 #
-# Last update: 2018-01-27                                                     #
+# Last update: 2018-02-20                                                     #
 #                                                                             #
 # Usage:                                                                      #
 #   * Qt-Creator (Windows, Linux)                                             #
@@ -202,7 +202,7 @@ SET(
     src/frontends/qtfrontend/elements/flexiblespinbox.h
     src/frontends/qtfrontend/frameview/frameviewimage.h
     src/frontends/qtfrontend/frameview/frameviewinterface.h
-    src/frontends/qtfrontend/preferences/controlerwidget.h
+    src/frontends/qtfrontend/preferences/controllerwidget.h
     src/frontends/qtfrontend/preferences/exportwidget.h
     src/frontends/qtfrontend/preferences/generaldialog.h
     src/frontends/qtfrontend/preferences/generalwidget.h
@@ -284,7 +284,7 @@ SET(
     src/frontends/qtfrontend/elements/flexiblespinbox.cpp
     src/frontends/qtfrontend/frameview/frameviewimage.cpp
     src/frontends/qtfrontend/frameview/frameviewinterface.cpp
-    src/frontends/qtfrontend/preferences/controlerwidget.cpp
+    src/frontends/qtfrontend/preferences/controllerwidget.cpp
     src/frontends/qtfrontend/preferences/exportwidget.cpp
     src/frontends/qtfrontend/preferences/generaldialog.cpp
     src/frontends/qtfrontend/preferences/generalwidget.cpp

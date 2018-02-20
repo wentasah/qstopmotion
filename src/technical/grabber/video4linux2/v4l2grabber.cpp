@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2010-2017 by                                                *
+ *  Copyright (C) 2010-2018 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -100,7 +100,7 @@ bool V4L2Grabber::initialization(QVector<ImageGrabberDevice*> &devices)
 
             // Add the Controller to the new device
             if (pref->getBooleanPreference("preferences", "v4l2controller", value) == false) {
-                value = Frontend::V4L2CONTROLERDEFAULT;
+                value = Frontend::V4L2CONTROLLERDEFAULT;
             }
             if (true == value) {
                 deviceController = new V4L2Controller(0);

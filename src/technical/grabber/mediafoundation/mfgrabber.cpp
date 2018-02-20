@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2010-2017 by                                                *
+ *  Copyright (C) 2010-2018 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -157,7 +157,7 @@ bool MfGrabber::initialization(QVector<ImageGrabberDevice*> &devices)
 
                 // Add the Controller to the new device
                 if (pref->getBooleanPreference("preferences", "mediafoundationcontroller", value) == false) {
-                    value = Frontend::MEDIAFOUNDATIONCONTROLERDEFAULT;
+                    value = Frontend::MEDIAFOUNDATIONCONTROLLERDEFAULT;
                 }
                 if (true == value) {
                     deviceController = new MfController(0);

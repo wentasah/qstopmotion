@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2014-2017 by                                                *
+ *  Copyright (C) 2014-2018 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -46,15 +46,15 @@ GrabberWidget::GrabberWidget(Frontend *f, QWidget *parent)
     v4l2GrabberCheck                       = 0;
     actualV4L2Grabber                      = Frontend::V4L2GRABBERDEFAULT;
     v4l2ControllerCheck                    = 0;
-    actualV4L2Controller                   = Frontend::V4L2CONTROLERDEFAULT;
+    actualV4L2Controller                   = Frontend::V4L2CONTROLLERDEFAULT;
     mediaFoundationGrabberCheck            = 0;
     actualMediaFoundationGrabber           = Frontend::MEDIAFOUNDATIONGRABBERDEFAULT;
     mediaFoundationControllerCheck         = 0;
-    actualMediaFoundationController        = Frontend::MEDIAFOUNDATIONCONTROLERDEFAULT;
+    actualMediaFoundationController        = Frontend::MEDIAFOUNDATIONCONTROLLERDEFAULT;
     gphoto2GrabberCheck                    = 0;
     actualGphoto2Grabber                   = Frontend::GPHOTO2GRABBERDEFAULT;
     gphoto2ControllerCheck                 = 0;
-    actualGphoto2Controller                = Frontend::GPHOTO2CONTROLERDEFAULT;
+    actualGphoto2Controller                = Frontend::GPHOTO2CONTROLLERDEFAULT;
 
     this->setObjectName("GrabberWidget");
 

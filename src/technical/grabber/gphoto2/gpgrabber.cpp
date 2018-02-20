@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2010-2017 by                                                *
+ *  Copyright (C) 2010-2018 by                                                *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
  *                                                                            *
  *  This program is free software; you can redistribute it and/or modify      *
@@ -162,7 +162,7 @@ bool GphotoGrabber::initialization(QVector<ImageGrabberDevice*> &devices)
 
     // Create grabber controller
     if (pref->getBooleanPreference("preferences", "gphoto2controller", value) == false) {
-        value = Frontend::GPHOTO2CONTROLERDEFAULT;
+        value = Frontend::GPHOTO2CONTROLLERDEFAULT;
     }
     if (true == value) {
         deviceController = new GphotoController(0);

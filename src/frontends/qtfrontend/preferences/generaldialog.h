@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2017 by                                                *
+ *  Copyright (C) 2005-2018 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -11,7 +11,7 @@
  *                                                                            *
  *  This program is distributed in the hope that it will be useful,           *
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of            *
- *  MERCHANPageILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             *
+ *  MERCHANPageILITY or FITNESS FOR A PARTICULAR PURPOSE. See the             *
  *  GNU General Public License for more details.                              *
  *                                                                            *
  *  You should have received a copy of the GNU General Public License         *
@@ -27,7 +27,7 @@
 #include <QPushButton>
 
 #include "frontends/frontend.h"
-#include "frontends/qtfrontend/preferences/controlerwidget.h"
+#include "frontends/qtfrontend/preferences/controllerwidget.h"
 #include "frontends/qtfrontend/preferences/exportwidget.h"
 #include "frontends/qtfrontend/preferences/generalwidget.h"
 #include "frontends/qtfrontend/preferences/grabberwidget.h"
@@ -58,18 +58,18 @@ private:
     QTreeWidget     *pageTree;
     QHBoxLayout     *pageLayout;
 
-    GeneralWidget   *generalSettingsPage;
-    ProjectWidget   *projectValuePage;
-    ImportWidget    *imageImportPage;
-    TransformWidget *imageTransformationPage;
-    ExportWidget    *videoExportPage;
-    GrabberWidget   *grabberSelectPage;
-    ControlerWidget *cameraControlPage;
-    QPushButton     *applyButton;
-    QPushButton     *closeButton;
-    QPushButton     *helpButton;
+    GeneralWidget    *generalSettingsPage;
+    ProjectWidget    *projectValuePage;
+    ImportWidget     *imageImportPage;
+    TransformWidget  *imageTransformationPage;
+    ExportWidget     *videoExportPage;
+    GrabberWidget    *grabberSelectPage;
+    ControllerWidget *cameraControlPage;
+    QPushButton      *applyButton;
+    QPushButton      *closeButton;
+    QPushButton      *helpButton;
 
-    int              activePage;
+    int               activePage;
 
     void makeGeneralSettingsPage();
     void makeProjectValuePage();

@@ -452,11 +452,11 @@ void PreferencesTool::setBasicPreferenceDefaults()
     setBooleanPreference("preferences", "defaultusedefaultoutputfile", DomainFacade::USEDEFAULTOUTPUTFILENAMEDEFAULT);
     // Grabber defaults
     setBooleanPreference("preferences", "v4l2grabber", Frontend::V4L2GRABBERDEFAULT);
-    setBooleanPreference("preferences", "v4l2controller", Frontend::V4L2CONTROLERDEFAULT);
+    setBooleanPreference("preferences", "v4l2controller", Frontend::V4L2CONTROLLERDEFAULT);
     setBooleanPreference("preferences", "mediafoundationgrabber", Frontend::MEDIAFOUNDATIONGRABBERDEFAULT);
-    setBooleanPreference("preferences", "mediafoundationcontroller", Frontend::MEDIAFOUNDATIONCONTROLERDEFAULT);
+    setBooleanPreference("preferences", "mediafoundationcontroller", Frontend::MEDIAFOUNDATIONCONTROLLERDEFAULT);
     setBooleanPreference("preferences", "gphoto2grabber", Frontend::GPHOTO2GRABBERDEFAULT);
-    setBooleanPreference("preferences", "gphoto2controller", Frontend::GPHOTO2CONTROLERDEFAULT);
+    setBooleanPreference("preferences", "gphoto2controller", Frontend::GPHOTO2CONTROLLERDEFAULT);
 }
 
 

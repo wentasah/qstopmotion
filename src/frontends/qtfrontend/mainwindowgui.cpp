@@ -205,14 +205,14 @@ void MainWindowGUI::retranslateStrings()
     // copyAct->setText(tr("&Copy"));
     // pasteAct->setText(tr("&Paste"));
     preferencesAct->setText(tr("Preferences"));
-    whatsthisAct->setText(tr("What's &This"));
     undoViewAct->setText(tr("&Undo stack"));
     cameraControllerAct->setText(tr("&Camera Controller"));
+    whatsthisAct->setText(tr("What's &This"));
     helpAct->setText(tr("&Help"));
-    onlineHelpAct->setText(tr("&Online Help"));
+    onlineHelpAct->setText(tr("Online Help"));
     supportUsAct->setText(tr("Support Us"));
-    aboutQtAct->setText(tr("About &Qt"));
-    aboutAct->setText(tr("&About"));
+    aboutQtAct->setText(tr("About Qt"));
+    aboutAct->setText(tr("About"));
 
     // The menus
     fileMenu->setTitle(tr("&File"));
@@ -421,7 +421,7 @@ void MainWindowGUI::retranslateHelpText()
            "<p>This button will bring up the browser with the qStopMotion manual in different languages</p>");
     onlineHelpAct->setWhatsThis(infoText);
     infoText =
-        onlineHelpAct->toolTip().prepend(tr("Help"));
+        onlineHelpAct->toolTip().prepend(tr("Online Help"));
     onlineHelpAct->setToolTip(infoText);
 
     infoText =
@@ -429,7 +429,7 @@ void MainWindowGUI::retranslateHelpText()
            "<p>This button will bring up the browser with the qStopMotion support us page</p>");
     supportUsAct->setWhatsThis(infoText);
     infoText =
-        supportUsAct->toolTip().prepend(tr("Help"));
+        supportUsAct->toolTip().prepend(tr("Support Us"));
     supportUsAct->setToolTip(infoText);
 
     infoText =
@@ -2391,7 +2391,7 @@ void MainWindowGUI::createActions()
     iconFile.append(frontend->getIconsDirName());
     iconFile.append(QLatin1String("window.png"));
     helpAct->setIcon(QIcon(iconFile));
-    helpAct->setShortcut(Key_F1);
+    helpAct->setShortcut(ControlModifier + Key_F1);
     helpAct->setIconVisibleInMenu(true);
     connect(helpAct, SIGNAL(triggered()), this, SLOT(showHelpDialog()));
 
@@ -2400,7 +2400,7 @@ void MainWindowGUI::createActions()
     iconFile.append(frontend->getIconsDirName());
     iconFile.append(QLatin1String("window.png"));
     onlineHelpAct->setIcon(QIcon(iconFile));
-    onlineHelpAct->setShortcut(ControlModifier + Key_F1);
+    onlineHelpAct->setShortcut(Key_F1);
     onlineHelpAct->setIconVisibleInMenu(true);
     connect(onlineHelpAct, SIGNAL(triggered()), this, SLOT(showOnlineHelp()));
 

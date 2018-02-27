@@ -309,7 +309,7 @@ rozhodnete pro přehrání, přehrána bez zvuku.</translation>
     </message>
 </context>
 <context>
-    <name>ControlerWidget</name>
+    <name>ControllerWidget</name>
     <message>
         <source>Below you can set which features of the camera should be used in the camera control dialog.</source>
         <translation type="unfinished"></translation>
@@ -343,7 +343,19 @@ rozhodnete pro přehrání, přehrána bez zvuku.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Backlight compensation control</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>White balance control</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Gain control</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Color enable control</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -376,18 +388,6 @@ rozhodnete pro přehrání, přehrána bez zvuku.</translation>
     </message>
     <message>
         <source>Roll control</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Backlight compensation control</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>White balance control</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Color enable control</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -681,7 +681,7 @@ rozhodnete pro přehrání, přehrána bez zvuku.</translation>
         <translation type="unfinished">Nápověda</translation>
     </message>
     <message>
-        <source>Camera Controler</source>
+        <source>Camera Controller</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1067,7 +1067,7 @@ nabídce pro nastavení.</translation>
     </message>
     <message>
         <source>&amp;About</source>
-        <translation>&amp;O programu</translation>
+        <translation type="vanished">&amp;O programu</translation>
     </message>
     <message>
         <source>Remove Scene</source>
@@ -1179,7 +1179,7 @@ teprve, až vyberete nějaký kodér. Chcete to udělat nyní?</translation>
     </message>
     <message>
         <source>About &amp;Qt</source>
-        <translation>O &amp;Qt</translation>
+        <translation type="vanished">O &amp;Qt</translation>
     </message>
     <message>
         <source>Properties</source>
@@ -1392,7 +1392,19 @@ Install the encoder or select another one!</source>
 Kodér nainstalujte nebo vyberte jiný!</translation>
     </message>
     <message>
-        <source>&amp;Online Help</source>
+        <source>Online Help</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Support Us</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;h4&gt;Online Help&lt;/h4&gt; &lt;p&gt;This button will bring up the browser with the qStopMotion manual in different languages&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;h4&gt;Support Us&lt;/h4&gt; &lt;p&gt;This button will bring up the browser with the qStopMotion support us page&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

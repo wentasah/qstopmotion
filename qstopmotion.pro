@@ -1,7 +1,7 @@
 ###############################################################################
 # QtCreator file for the qStopMotion project                                  #
 # (c) Ralf Lange, longsoft.de                                                 #
-# Last update: 2018-02-20                                                     #
+# Last update: 2018-02-28                                                     #
 #                                                                             #
 # Please use CMake and the CMakeLists.txt file to build qStopMotion!          #
 ###############################################################################
@@ -192,16 +192,16 @@ TRANSLATIONS += translations/qstopmotion_fr.ts \
                 translations/qstopmotion_cs.ts \
                 translations/qstopmotion_da.ts \
 #                translations/qt_da.ts \
-#                translations/qstopmotion_es.ts \
+                translations/qstopmotion_es.ts \
 #                translations/qstopmotion_fi.ts \
 #                translations/qstopmotion_gr.ts \
-#                translations/qstopmotion_it.ts \
+                translations/qstopmotion_it.ts \
 #                translations/qstopmotion_kl.ts \
 #                translations/qstopmotion_no_nb.ts \
 #                translations/qstopmotion_no_nn.ts \
 #                translations/qstopmotion_no_se.ts \
-#                translations/qstopmotion_pt.ts \
-#                translations/qstopmotion_ru.ts \
+                translations/qstopmotion_pt.ts \
+                translations/qstopmotion_ru.ts \
                 translations/qstopmotion_se.ts \
 #                translations/qt_se.ts \
 #                translations/qstopmotion_sl.ts \
@@ -253,7 +253,7 @@ DISTFILES += $$system(ls -x manual/*.html) \
 
 DISTFILES -= qstopmotion.pro \
              src/config.cpp
-             
+
 CONFIG += debug
 # CONFIG += release warn_off
 # DEFINES += NO_DEBUG
@@ -271,7 +271,7 @@ htmldoc.extra = $(INSTALL_DIR) manual/graphic $(INSTALL_ROOT)/usr/local/share/do
 htmldoc.extra += $(INSTALL_DIR) manual/icons $(INSTALL_ROOT)/usr/local/share/doc/qstopmotion/html;
 htmldoc.extra += $(INSTALL_DIR) manual/screenshots $(INSTALL_ROOT)/usr/local/share/doc/qstopmotion/html;
 
-# Dummy target to fix permissions. 
+# Dummy target to fix permissions.
 dummy.path = /usr/local/bin
 dummy.extra += chmod 644 $(INSTALL_ROOT)/usr/local/share/qstopmotion/translations/*.qm \
     $(INSTALL_ROOT)/usr/local/share/doc/qstopmotion/html/*.html \

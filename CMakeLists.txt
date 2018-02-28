@@ -1,7 +1,7 @@
 ###############################################################################
 # CMake file for the qStopMotion project                                      #
 # (c) Ralf Lange, longsoft.de                                                 #
-# Last update: 2018-02-20                                                     #
+# Last update: 2018-02-28                                                     #
 #                                                                             #
 # Usage:                                                                      #
 #   * Qt-Creator (Windows, Linux)                                             #
@@ -346,17 +346,17 @@ SET(
     translations/qstopmotion_fr.ts
     translations/qstopmotion_se.ts
 #    translations/qstopmotion_br.ts
-#    translations/qstopmotion_cz.ts
-#    translations/qstopmotion_es.ts
+    translations/qstopmotion_cz.ts
+    translations/qstopmotion_es.ts
 #    translations/qstopmotion_fi.ts
 #    translations/qstopmotion_gr.ts
-#    translations/qstopmotion_it.ts
+    translations/qstopmotion_it.ts
 #    translations/qstopmotion_kl.ts
 #    translations/qstopmotion_no_nb.ts
 #    translations/qstopmotion_no_nn.ts
 #    translations/qstopmotion_no_se.ts
-#    translations/qstopmotion_pt.ts
-#    translations/qstopmotion_ru.ts
+    translations/qstopmotion_pt.ts
+    translations/qstopmotion_ru.ts
 #    translations/qstopmotion_sl.ts
 #    translations/qstopmotion_tr.ts
 )
@@ -642,7 +642,7 @@ IF(WIN32)
 
     IF(CMAKE_CL_64)
         # Windows 64bit
-        
+
         IF(CMAKE_BUILD_TYPE STREQUAL "Release")
             file(COPY qt5runtime64bit/release/ DESTINATION "qtruntime")
         ELSE(CMAKE_BUILD_TYPE STREQUAL "Release")
@@ -654,7 +654,7 @@ IF(WIN32)
         file(COPY qwt64bit/ DESTINATION "qwt")
     ELSE(CMAKE_CL_64)
         # Windows 32bit
-        
+
         IF(CMAKE_BUILD_TYPE STREQUAL "Release")
             file(COPY qt5runtime32bit/release/ DESTINATION "qtruntime")
         ELSE(CMAKE_BUILD_TYPE STREQUAL "Release")
@@ -686,7 +686,7 @@ ENDIF(UNIX AND NOT APPLE)
 
 IF(WIN32)
     # The predefined windows installer path include the qstopmotion subdirectory
-    
+
     SET(QSTOPMOTION_GENERALS_INSTALL_DIR ".")
     SET(QSTOPMOTION_BIN_INSTALL_DIR "bin")
     SET(QSTOPMOTION_GRAPHICS_INSTALL_DIR "graphics")
@@ -752,7 +752,7 @@ install(
 # installation only on Windows systems
 IF(WIN32)
     message("Special task for windows package!")
-    
+
     # installation of the general-purpose files
     install(
         FILES ${GENERAL_FILES}
@@ -790,7 +790,7 @@ ENDIF(UNIX AND NOT APPLE)
 # installation on DEB systems
 IF(CPACK_BINARY_DEB)
     message("Special task for deb package!")
-    
+
     # installation of the icon file
     install(
         FILES "deb/qstopmotion.xpm"
@@ -819,7 +819,7 @@ ENDIF(CPACK_BINARY_DEB)
 # installation on RPM systems
 IF(CPACK_BINARY_RPM)
     message("Special task for rpm package!")
-    
+
     # installation of the general-purpose files
     install(
         FILES ${GENERAL_FILES}
@@ -837,7 +837,7 @@ ENDIF(CPACK_BINARY_RPM)
 IF(WIN32)
     IF(CMAKE_CL_64)
         # Windows 64bit
-        
+
         # installation of Qt runtime
         IF(CMAKE_BUILD_TYPE STREQUAL "Release")
             install(
@@ -864,16 +864,16 @@ IF(WIN32)
             DIRECTORY ffmpeg64bit/
             DESTINATION "${QSTOPMOTION_GENERALS_INSTALL_DIR}/ffmpeg"
         )
-    
+
         # installation of libav
         install(
             DIRECTORY libav64bit/
             DESTINATION "${QSTOPMOTION_GENERALS_INSTALL_DIR}/libav"
         )
-    
+
     ELSE(CMAKE_CL_64)
         # Windows 32bit
-        
+
         # installation of Qt runtime
         IF(CMAKE_BUILD_TYPE STREQUAL "Release")
             install(
@@ -900,15 +900,15 @@ IF(WIN32)
             DIRECTORY ffmpeg32bit/
             DESTINATION "${QSTOPMOTION_GENERALS_INSTALL_DIR}/ffmpeg"
         )
-    
+
         # installation of libav
         install(
             DIRECTORY libav32bit/
             DESTINATION "${QSTOPMOTION_GENERALS_INSTALL_DIR}/libav"
         )
-    
+
     ENDIF(CMAKE_CL_64)
-        
+
 ENDIF(WIN32)
 
 ###############################################################################

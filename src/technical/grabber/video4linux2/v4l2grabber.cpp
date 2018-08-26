@@ -505,6 +505,11 @@ const QImage V4L2Grabber::getImage()
         imageLoaded = 1;
     }
 
+    if (NULL != pixels) {
+        free(pixels);
+        pixels = NULL;
+    }
+
     if (firstImage) {
         firstImage = false;
     }

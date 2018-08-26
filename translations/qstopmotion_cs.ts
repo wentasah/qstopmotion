@@ -177,7 +177,7 @@ rozhodnete pro přehrání, přehrána bez zvuku.</translation>
     </message>
     <message>
         <source>Camera Control</source>
-        <translation>Řízení kamery</translation>
+        <translation>Ovládání kamery</translation>
     </message>
     <message>
         <source>&amp;Close</source>
@@ -305,90 +305,90 @@ rozhodnete pro přehrání, přehrána bez zvuku.</translation>
     </message>
     <message>
         <source>Help</source>
-        <translation type="unfinished">Nápověda</translation>
+        <translation>Nápověda</translation>
     </message>
 </context>
 <context>
     <name>ControllerWidget</name>
     <message>
         <source>Below you can set which features of the camera should be used in the camera control dialog.</source>
-        <translation type="unfinished"></translation>
+        <translation>Níže můžete vybrat, které funkce kamery se mají použít v dialogu pro ovládání kamery.</translation>
     </message>
     <message>
         <source>Image quality controls</source>
-        <translation type="unfinished"></translation>
+        <translation>Ovládání jakosti obrázku</translation>
     </message>
     <message>
         <source>Brightness control</source>
-        <translation type="unfinished"></translation>
+        <translation>Ovládání jasu</translation>
     </message>
     <message>
         <source>Contrast control</source>
-        <translation type="unfinished"></translation>
+        <translation>Ovládání kontrastu</translation>
     </message>
     <message>
         <source>Saturation control</source>
-        <translation type="unfinished"></translation>
+        <translation>Ovládání sytosti</translation>
     </message>
     <message>
         <source>Hue control</source>
-        <translation type="unfinished"></translation>
+        <translation>Ovládání barevného tónu</translation>
     </message>
     <message>
         <source>Gamma control</source>
-        <translation type="unfinished"></translation>
+        <translation>Ovládání gamy</translation>
     </message>
     <message>
         <source>Sharpness control</source>
-        <translation type="unfinished"></translation>
+        <translation>Ovládání ostrosti</translation>
     </message>
     <message>
         <source>Backlight compensation control</source>
-        <translation type="unfinished"></translation>
+        <translation>Ovládání vyrovnání osvětlení zezadu</translation>
     </message>
     <message>
         <source>White balance control</source>
-        <translation type="unfinished"></translation>
+        <translation>Ovládání vyvážení bílé</translation>
     </message>
     <message>
         <source>Gain control</source>
-        <translation type="unfinished"></translation>
+        <translation>Ovládání zesílení</translation>
     </message>
     <message>
         <source>Color enable control</source>
-        <translation type="unfinished"></translation>
+        <translation>Ovládání povolení barvy</translation>
     </message>
     <message>
         <source>Camera controls</source>
-        <translation type="unfinished"></translation>
+        <translation>Ovládání kamery</translation>
     </message>
     <message>
         <source>Exposure control</source>
-        <translation type="unfinished"></translation>
+        <translation>Ovládání osvitu</translation>
     </message>
     <message>
         <source>Zoom control</source>
-        <translation type="unfinished"></translation>
+        <translation>Ovládání přiblížení a oddálení</translation>
     </message>
     <message>
         <source>Focus control</source>
-        <translation type="unfinished"></translation>
+        <translation>Ovládání ostření</translation>
     </message>
     <message>
         <source>Pan control</source>
-        <translation type="unfinished"></translation>
+        <translation>Ovládání smyku (pohyb kamery)</translation>
     </message>
     <message>
         <source>Tilt control</source>
-        <translation type="unfinished"></translation>
+        <translation>Ovládání naklonění</translation>
     </message>
     <message>
         <source>Iris control</source>
-        <translation type="unfinished"></translation>
+        <translation>Ovládání duhovky</translation>
     </message>
     <message>
         <source>Roll control</source>
-        <translation type="unfinished"></translation>
+        <translation>Ovládání točení</translation>
     </message>
 </context>
 <context>
@@ -443,7 +443,7 @@ rozhodnete pro přehrání, přehrána bez zvuku.</translation>
     </message>
     <message>
         <source>Help</source>
-        <translation type="unfinished">Nápověda</translation>
+        <translation>Nápověda</translation>
     </message>
 </context>
 <context>
@@ -631,7 +631,7 @@ rozhodnete pro přehrání, přehrána bez zvuku.</translation>
     </message>
     <message>
         <source>Help</source>
-        <translation type="unfinished">Nápověda</translation>
+        <translation>Nápověda</translation>
     </message>
 </context>
 <context>
@@ -678,11 +678,11 @@ rozhodnete pro přehrání, přehrána bez zvuku.</translation>
     </message>
     <message>
         <source>Help</source>
-        <translation type="unfinished">Nápověda</translation>
+        <translation>Nápověda</translation>
     </message>
     <message>
         <source>Camera Controller</source>
-        <translation type="unfinished"></translation>
+        <translation>Ovládací spínač kamery</translation>
     </message>
 </context>
 <context>
@@ -729,11 +729,11 @@ rozhodnete pro přehrání, přehrána bez zvuku.</translation>
     </message>
     <message>
         <source>Signal Functionality</source>
-        <translation type="unfinished"></translation>
+        <translation>Funkce signálu</translation>
     </message>
     <message>
         <source>Take Picture Signal</source>
-        <translation type="unfinished"></translation>
+        <translation>Signál k udělání záběru</translation>
     </message>
 </context>
 <context>
@@ -1115,7 +1115,7 @@ nabídce pro nastavení.</translation>
     </message>
     <message>
         <source>Exposure ID: </source>
-        <translation>ID snímku: </translation>
+        <translation>ID osvitu snímku: </translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -1393,19 +1393,19 @@ Kodér nainstalujte nebo vyberte jiný!</translation>
     </message>
     <message>
         <source>Online Help</source>
-        <translation type="unfinished"></translation>
+        <translation>Nápověda na internetu</translation>
     </message>
     <message>
         <source>Support Us</source>
-        <translation type="unfinished"></translation>
+        <translation>Podpořte nás</translation>
     </message>
     <message>
         <source>&lt;h4&gt;Online Help&lt;/h4&gt; &lt;p&gt;This button will bring up the browser with the qStopMotion manual in different languages&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;h4&gt;Nápověda na internetu&lt;/h4&gt; &lt;p&gt;Tímto tlačítkem se vyvolá prohlížeč s příručkou k qStopMotion v různých jazycích&lt;/p&gt;</translation>
     </message>
     <message>
         <source>&lt;h4&gt;Support Us&lt;/h4&gt; &lt;p&gt;This button will bring up the browser with the qStopMotion support us page&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;h4&gt;Podpořte nás&lt;/h4&gt; &lt;p&gt;Tímto tlačítkem se vyvolá prohlížeč se stránkou k qStopMotion Podpořte nás&lt;/p&gt;</translation>
     </message>
 </context>
 <context>
@@ -1473,7 +1473,7 @@ Kodér nainstalujte nebo vyberte jiný!</translation>
     </message>
     <message>
         <source>Help</source>
-        <translation type="unfinished">Nápověda</translation>
+        <translation>Nápověda</translation>
     </message>
 </context>
 <context>
@@ -1720,59 +1720,59 @@ Kodér nainstalujte nebo vyberte jiný!</translation>
     </message>
     <message>
         <source>Time-lapse capture</source>
-        <translation type="unfinished"></translation>
+        <translation>Časosběrné zachytávání</translation>
     </message>
     <message>
         <source>Time-lapse</source>
-        <translation type="unfinished"></translation>
+        <translation>Časosběr</translation>
     </message>
     <message>
         <source>Unit:</source>
-        <translation type="unfinished"></translation>
+        <translation>Jednotka:</translation>
     </message>
     <message>
         <source>Seconds</source>
-        <translation type="unfinished"></translation>
+        <translation>Sekundy</translation>
     </message>
     <message>
         <source>Minutes</source>
-        <translation type="unfinished"></translation>
+        <translation>Minuty</translation>
     </message>
     <message>
         <source>Hours</source>
-        <translation type="unfinished"></translation>
+        <translation>Hodiny</translation>
     </message>
     <message>
         <source>Days</source>
-        <translation type="unfinished"></translation>
+        <translation>Dny</translation>
     </message>
     <message>
         <source>Beep</source>
-        <translation type="unfinished"></translation>
+        <translation>Pípnutí</translation>
     </message>
     <message>
         <source>seconds before picture:</source>
-        <translation type="unfinished"></translation>
+        <translation>sekund před záběrem:</translation>
     </message>
     <message>
         <source>Seconds between pictures</source>
-        <translation type="unfinished"></translation>
+        <translation>Sekund mezi záběry</translation>
     </message>
     <message>
         <source>Minutes between pictures</source>
-        <translation type="unfinished"></translation>
+        <translation>Minut mezi záběry</translation>
     </message>
     <message>
         <source>Hours between pictures</source>
-        <translation type="unfinished"></translation>
+        <translation>Hodin mezi záběry</translation>
     </message>
     <message>
         <source>Days between pictures</source>
-        <translation type="unfinished"></translation>
+        <translation>Dnů mezi záběry</translation>
     </message>
     <message>
         <source>&lt;h4&gt;Number of images&lt;/h4&gt; &lt;p&gt;By changing the value in this slidebar you can specify how many images backwards in the animation which should be mixed on top of the camera.&lt;/p&gt; &lt;p&gt;By mixing the previous image(s) onto the camera you can more easily see how the next shot will be in relation to the other, therby making a smoother stop motion animation!&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;h4&gt;Počet obrázků&lt;/h4&gt; &lt;p&gt;Tímto posuvníkem (změnou hodnoty) můžete nastavit, kolik předcházejících obrázků v animaci se má zařadit v obrazu kamery.&lt;/p&gt; &lt;p&gt;Tím (míšením předchozího obrázku(ů) do kamery) lépe uvidíte, jak je následující obrázek ve vztahu k předcházejícím obrázkům. To umožňuje stejnoměrný (hladší) průběh pohybu!&lt;/p&gt;</translation>
     </message>
 </context>
 <context>
@@ -1896,59 +1896,59 @@ Potřebujete oprávnění ke čtení, zápisu a spouštění adresáře .qstopmo
     </message>
     <message>
         <source>Recording mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Režim nahrávání</translation>
     </message>
     <message>
         <source>Time-lapse capture</source>
-        <translation type="unfinished"></translation>
+        <translation>Časosběrné zachytávání</translation>
     </message>
     <message>
         <source>Time-lapse</source>
-        <translation type="unfinished"></translation>
+        <translation>Časosběr</translation>
     </message>
     <message>
         <source>Unit:</source>
-        <translation type="unfinished"></translation>
+        <translation>Jednotka:</translation>
     </message>
     <message>
         <source>Seconds</source>
-        <translation type="unfinished"></translation>
+        <translation>Sekundy</translation>
     </message>
     <message>
         <source>Minutes</source>
-        <translation type="unfinished"></translation>
+        <translation>Minuty</translation>
     </message>
     <message>
         <source>Hours</source>
-        <translation type="unfinished"></translation>
+        <translation>Hodiny</translation>
     </message>
     <message>
         <source>Days</source>
-        <translation type="unfinished"></translation>
+        <translation>Dny</translation>
     </message>
     <message>
         <source>Beep</source>
-        <translation type="unfinished"></translation>
+        <translation>Pípnutí</translation>
     </message>
     <message>
         <source>seconds before picture:</source>
-        <translation type="unfinished"></translation>
+        <translation>sekund před záběrem:</translation>
     </message>
     <message>
         <source>Seconds between pictures</source>
-        <translation type="unfinished"></translation>
+        <translation>Sekund mezi záběry</translation>
     </message>
     <message>
         <source>Minutes between pictures</source>
-        <translation type="unfinished"></translation>
+        <translation>Minut mezi záběry</translation>
     </message>
     <message>
         <source>Hours between pictures</source>
-        <translation type="unfinished"></translation>
+        <translation>Hodin mezi záběry</translation>
     </message>
     <message>
         <source>Days between pictures</source>
-        <translation type="unfinished"></translation>
+        <translation>Dnů mezi záběry</translation>
     </message>
 </context>
 <context>
@@ -2002,7 +2002,7 @@ Potřebujete oprávnění ke čtení, zápisu a spouštění adresáře .qstopmo
     </message>
     <message>
         <source>Help</source>
-        <translation type="unfinished">Nápověda</translation>
+        <translation>Nápověda</translation>
     </message>
 </context>
 <context>
@@ -2087,15 +2087,15 @@ Potřebujete oprávnění ke čtení, zápisu a spouštění adresáře .qstopmo
     </message>
     <message>
         <source>Zoom value (%):</source>
-        <translation type="unfinished"></translation>
+        <translation>Hodnota zvětšení:</translation>
     </message>
     <message>
         <source>Min</source>
-        <translation type="unfinished">Nejmenší</translation>
+        <translation>Nejmenší</translation>
     </message>
     <message>
         <source>Max</source>
-        <translation type="unfinished">Největší</translation>
+        <translation>Největší</translation>
     </message>
 </context>
 <context>

@@ -191,7 +191,7 @@ uden lyd hvis du vælger afspil.</translation>
     <message>
         <location filename="../src/frontends/qtfrontend/dialogs/cameracontrollerdialog.cpp" line="270"/>
         <source>Help</source>
-        <translation type="unfinished">Hjælp</translation>
+        <translation>Hjælp</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/dialogs/cameracontrollerdialog.cpp" line="368"/>
@@ -256,7 +256,7 @@ uden lyd hvis du vælger afspil.</translation>
     <message>
         <location filename="../src/frontends/qtfrontend/dialogs/cameracontrollerdialog.cpp" line="382"/>
         <source>Automatic Gain</source>
-        <translation>AutomatiskForstærkning </translation>
+        <translation>Automatisk Forstærkning</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/dialogs/cameracontrollerdialog.cpp" line="383"/>
@@ -417,102 +417,102 @@ uden lyd hvis du vælger afspil.</translation>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/controllerwidget.cpp" line="104"/>
         <source>Below you can set which features of the camera should be used in the camera control dialog.</source>
-        <translation type="unfinished"></translation>
+        <translation>Herunder kan du sætte hvilke funktioner for kameraet der skal bruges i kamera kontrol dialogen.</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/controllerwidget.cpp" line="115"/>
         <source>Image quality controls</source>
-        <translation type="unfinished"></translation>
+        <translation>Billed kvalitetskontroller</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/controllerwidget.cpp" line="117"/>
         <source>Brightness control</source>
-        <translation type="unfinished"></translation>
+        <translation>Lysstyrke kontrol</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/controllerwidget.cpp" line="120"/>
         <source>Contrast control</source>
-        <translation type="unfinished"></translation>
+        <translation>Kontrast kontrol</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/controllerwidget.cpp" line="123"/>
         <source>Saturation control</source>
-        <translation type="unfinished"></translation>
+        <translation>Mætning kontrol</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/controllerwidget.cpp" line="126"/>
         <source>Hue control</source>
-        <translation type="unfinished"></translation>
+        <translation>Nuance kontrol</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/controllerwidget.cpp" line="129"/>
         <source>Gamma control</source>
-        <translation type="unfinished"></translation>
+        <translation>Gamma kontrol</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/controllerwidget.cpp" line="132"/>
         <source>Sharpness control</source>
-        <translation type="unfinished"></translation>
+        <translation>Skarphedskontrol</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/controllerwidget.cpp" line="135"/>
         <source>Backlight compensation control</source>
-        <translation type="unfinished"></translation>
+        <translation>Baggrundsbelysning kompensering kontrol</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/controllerwidget.cpp" line="138"/>
         <source>White balance control</source>
-        <translation type="unfinished"></translation>
+        <translation>Hvidbalance kontrol</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/controllerwidget.cpp" line="141"/>
         <source>Gain control</source>
-        <translation type="unfinished"></translation>
+        <translation>Forstærknings-kontrol</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/controllerwidget.cpp" line="144"/>
         <source>Color enable control</source>
-        <translation type="unfinished"></translation>
+        <translation>Farveaktiveringskontrol</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/controllerwidget.cpp" line="163"/>
         <source>Camera controls</source>
-        <translation type="unfinished"></translation>
+        <translation>Kamerakontroller</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/controllerwidget.cpp" line="165"/>
         <source>Exposure control</source>
-        <translation type="unfinished"></translation>
+        <translation>Eksponeringskontrol</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/controllerwidget.cpp" line="168"/>
         <source>Zoom control</source>
-        <translation type="unfinished"></translation>
+        <translation>Zoom kontrol</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/controllerwidget.cpp" line="171"/>
         <source>Focus control</source>
-        <translation type="unfinished"></translation>
+        <translation>Fokus kontrol</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/controllerwidget.cpp" line="174"/>
         <source>Pan control</source>
-        <translation type="unfinished"></translation>
+        <translation>Panoreringskontrol</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/controllerwidget.cpp" line="177"/>
         <source>Tilt control</source>
-        <translation type="unfinished"></translation>
+        <translation>Tilt kontrol</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/controllerwidget.cpp" line="180"/>
         <source>Iris control</source>
-        <translation type="unfinished"></translation>
+        <translation>Irisblænde kontrol</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/controllerwidget.cpp" line="183"/>
         <source>Roll control</source>
-        <translation type="unfinished"></translation>
+        <translation>Rull kontrol</translation>
     </message>
 </context>
 <context>
@@ -608,7 +608,7 @@ uden lyd hvis du vælger afspil.</translation>
     <message>
         <location filename="../src/frontends/qtfrontend/dialogs/descriptiondialog.cpp" line="58"/>
         <source>Help</source>
-        <translation type="unfinished">Hjælp</translation>
+        <translation>Hjælp</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/dialogs/descriptiondialog.cpp" line="84"/>
@@ -802,7 +802,7 @@ uden lyd hvis du vælger afspil.</translation>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="117"/>
         <source>libav</source>
-        <translation type="unfinished"></translation>
+        <translation>libav</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="119"/>
@@ -971,7 +971,7 @@ uden lyd hvis du vælger afspil.</translation>
     <message>
         <location filename="../src/frontends/qtfrontend/dialogs/externalcommanddialog.cpp" line="64"/>
         <source>Help</source>
-        <translation type="unfinished">Hjælp</translation>
+        <translation>Hjælp</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/dialogs/externalcommanddialog.cpp" line="75"/>
@@ -1010,7 +1010,7 @@ uden lyd hvis du vælger afspil.</translation>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/generaldialog.cpp" line="72"/>
         <source>Help</source>
-        <translation type="unfinished">Hjælp</translation>
+        <translation>Hjælp</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/generaldialog.cpp" line="78"/>
@@ -1060,7 +1060,7 @@ uden lyd hvis du vælger afspil.</translation>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/generaldialog.cpp" line="252"/>
         <source>Camera Controller</source>
-        <translation type="unfinished"></translation>
+        <translation>Kamera controller</translation>
     </message>
     <message>
         <source>&amp;General Settings</source>
@@ -1149,12 +1149,12 @@ uden lyd hvis du vælger afspil.</translation>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/generalwidget.cpp" line="174"/>
         <source>Signal Functionality</source>
-        <translation type="unfinished"></translation>
+        <translation>Signal funktionalitet</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/generalwidget.cpp" line="176"/>
         <source>Take Picture Signal</source>
-        <translation type="unfinished"></translation>
+        <translation>Tag billede signal</translation>
     </message>
 </context>
 <context>
@@ -1676,12 +1676,12 @@ Dette vælges i foretrukne menuen.</translation>
     <message>
         <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="420"/>
         <source>&lt;h4&gt;Online Help&lt;/h4&gt; &lt;p&gt;This button will bring up the browser with the qStopMotion manual in different languages&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;h4&gt;Online Hjælp&lt;/h4&gt; &lt;p&gt;Denne knap frembringer en browser qStopMotion manualen i forskellige sprog&lt;/p&gt;</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="428"/>
         <source>&lt;h4&gt;Support Us&lt;/h4&gt; &lt;p&gt;This button will bring up the browser with the qStopMotion support us page&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;h4&gt;Støt os&lt;/h4&gt; &lt;p&gt;Denne knap frembringer en browser med qStopMotions støt os side&lt;/p&gt;</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="764"/>
@@ -1774,7 +1774,8 @@ Dette kan ske i optage-fanen.</translation>
         <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1605"/>
         <source>The selected encoder is not installed on your computer.
 Install the encoder or select another one!</source>
-        <translation type="unfinished"></translation>
+        <translation>Den valgte encoder er ikke installeret på din computer
+Installer encoderen eller vælg en anden!</translation>
     </message>
     <message>
         <source>Cannot find any registered encoder to be used for video export.
@@ -1983,13 +1984,13 @@ Tjek dine indstillinger i foretrukne menuen!</translation>
         <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="212"/>
         <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="424"/>
         <source>Online Help</source>
-        <translation type="unfinished"></translation>
+        <translation>Online hjælp</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="213"/>
         <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="432"/>
         <source>Support Us</source>
-        <translation type="unfinished"></translation>
+        <translation>Støt os</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="457"/>
@@ -2145,7 +2146,7 @@ Kontroller dine indstillinger for projektet!</translation>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/projectdialog.cpp" line="70"/>
         <source>Help</source>
-        <translation type="unfinished">Hjælp</translation>
+        <translation>Hjælp</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/projectdialog.cpp" line="76"/>
@@ -2478,7 +2479,7 @@ Kontroller dine indstillinger for projektet!</translation>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/projectwidget.cpp" line="99"/>
         <source>Video 4 Linux 2 (USB WebCam)</source>
-        <translation type="unfinished"></translation>
+        <translation>Video 4 Linux 2 (USB WebCam)</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/projectwidget.cpp" line="100"/>
@@ -2493,7 +2494,7 @@ Kontroller dine indstillinger for projektet!</translation>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/projectwidget.cpp" line="121"/>
         <source>Time-lapse capture</source>
-        <translation type="unfinished"></translation>
+        <translation>Time-lapse optagelse</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/projectwidget.cpp" line="134"/>
@@ -2526,67 +2527,67 @@ Kontroller dine indstillinger for projektet!</translation>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/projectwidget.cpp" line="143"/>
         <source>&lt;h4&gt;Number of images&lt;/h4&gt; &lt;p&gt;By changing the value in this slidebar you can specify how many images backwards in the animation which should be mixed on top of the camera.&lt;/p&gt; &lt;p&gt;By mixing the previous image(s) onto the camera you can more easily see how the next shot will be in relation to the other, therby making a smoother stop motion animation!&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;h4&gt;Antal billeder&lt;/h4&gt; &lt;p&gt;Ved at ændre på værdien her, kan du vælge hvor mange billeder bagud i animationen der skal mikses oveni kameraet. &lt;/p&gt; &lt;p&gt;Ved at mikse de forudgående billeder med det kameraet ser nu, kan du lettere se hvordan det næste billede bliver i relation til det forudgående, og derme lave noget bedre stop motion animation!&lt;/p&gt;</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/projectwidget.cpp" line="171"/>
         <source>Time-lapse</source>
-        <translation type="unfinished"></translation>
+        <translation>Time-lapse</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/projectwidget.cpp" line="173"/>
         <source>Unit:</source>
-        <translation type="unfinished"></translation>
+        <translation>Enhed:</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/projectwidget.cpp" line="177"/>
         <source>Seconds</source>
-        <translation type="unfinished"></translation>
+        <translation>Sekunder</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/projectwidget.cpp" line="178"/>
         <source>Minutes</source>
-        <translation type="unfinished"></translation>
+        <translation>Minutter</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/projectwidget.cpp" line="179"/>
         <source>Hours</source>
-        <translation type="unfinished"></translation>
+        <translation>Timer</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/projectwidget.cpp" line="180"/>
         <source>Days</source>
-        <translation type="unfinished"></translation>
+        <translation>Dage</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/projectwidget.cpp" line="196"/>
         <source>Beep</source>
-        <translation type="unfinished"></translation>
+        <translation>Beep</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/projectwidget.cpp" line="201"/>
         <source>seconds before picture:</source>
-        <translation type="unfinished"></translation>
+        <translation>sekunder før billede:</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/projectwidget.cpp" line="467"/>
         <source>Seconds between pictures</source>
-        <translation type="unfinished"></translation>
+        <translation>Sekunder mellem billeder</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/projectwidget.cpp" line="475"/>
         <source>Minutes between pictures</source>
-        <translation type="unfinished"></translation>
+        <translation>Minutter mellem billeder</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/projectwidget.cpp" line="483"/>
         <source>Hours between pictures</source>
-        <translation type="unfinished"></translation>
+        <translation>Timer mellem billeder</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/projectwidget.cpp" line="491"/>
         <source>Days between pictures</source>
-        <translation type="unfinished"></translation>
+        <translation>Dage mellem billeder</translation>
     </message>
 </context>
 <context>
@@ -2688,12 +2689,12 @@ sidst. Ønsker du at genoprette?</translation>
     <message>
         <location filename="../src/frontends/qtfrontend/tooltabs/recordingtab.cpp" line="302"/>
         <source>Recording mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Optagelses-tilstand</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/tooltabs/recordingtab.cpp" line="305"/>
         <source>Time-lapse capture</source>
-        <translation type="unfinished"></translation>
+        <translation>Time-lapse optagelse</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/tooltabs/recordingtab.cpp" line="309"/>
@@ -2727,42 +2728,42 @@ sidst. Ønsker du at genoprette?</translation>
     <message>
         <location filename="../src/frontends/qtfrontend/tooltabs/recordingtab.cpp" line="330"/>
         <source>Time-lapse</source>
-        <translation type="unfinished"></translation>
+        <translation>Time-lapse</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/tooltabs/recordingtab.cpp" line="332"/>
         <source>Unit:</source>
-        <translation type="unfinished"></translation>
+        <translation>Enhed:</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/tooltabs/recordingtab.cpp" line="335"/>
         <source>Seconds</source>
-        <translation type="unfinished"></translation>
+        <translation>Sekunder</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/tooltabs/recordingtab.cpp" line="336"/>
         <source>Minutes</source>
-        <translation type="unfinished"></translation>
+        <translation>Minutter</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/tooltabs/recordingtab.cpp" line="337"/>
         <source>Hours</source>
-        <translation type="unfinished"></translation>
+        <translation>Timer</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/tooltabs/recordingtab.cpp" line="338"/>
         <source>Days</source>
-        <translation type="unfinished"></translation>
+        <translation>Dage</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/tooltabs/recordingtab.cpp" line="344"/>
         <source>Beep</source>
-        <translation type="unfinished"></translation>
+        <translation>Beep</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/tooltabs/recordingtab.cpp" line="345"/>
         <source>seconds before picture:</source>
-        <translation type="unfinished"></translation>
+        <translation>sekunder før billede:</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/tooltabs/recordingtab.cpp" line="454"/>
@@ -2772,22 +2773,22 @@ sidst. Ønsker du at genoprette?</translation>
     <message>
         <location filename="../src/frontends/qtfrontend/tooltabs/recordingtab.cpp" line="740"/>
         <source>Seconds between pictures</source>
-        <translation type="unfinished"></translation>
+        <translation>Sekunder mellem billeder</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/tooltabs/recordingtab.cpp" line="748"/>
         <source>Minutes between pictures</source>
-        <translation type="unfinished"></translation>
+        <translation>Minutter mellem billeder</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/tooltabs/recordingtab.cpp" line="756"/>
         <source>Hours between pictures</source>
-        <translation type="unfinished"></translation>
+        <translation>Timer mellem billeder</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/tooltabs/recordingtab.cpp" line="764"/>
         <source>Days between pictures</source>
-        <translation type="unfinished"></translation>
+        <translation>Dage mellem billeder</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/tooltabs/recordingtab.cpp" line="900"/>
@@ -2872,7 +2873,7 @@ sidst. Ønsker du at genoprette?</translation>
     <message>
         <location filename="../src/frontends/qtfrontend/dialogs/startdialog.cpp" line="112"/>
         <source>Help</source>
-        <translation type="unfinished">Hjælp</translation>
+        <translation>Hjælp</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/dialogs/startdialog.cpp" line="118"/>
@@ -2972,17 +2973,17 @@ sidst. Ønsker du at genoprette?</translation>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/transformwidget.cpp" line="209"/>
         <source>Zoom value (%):</source>
-        <translation type="unfinished"></translation>
+        <translation>Zoom værdi (%):</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/transformwidget.cpp" line="223"/>
         <source>Min</source>
-        <translation type="unfinished">Min</translation>
+        <translation>Min</translation>
     </message>
     <message>
         <location filename="../src/frontends/qtfrontend/preferences/transformwidget.cpp" line="224"/>
         <source>Max</source>
-        <translation type="unfinished">Max</translation>
+        <translation>Max</translation>
     </message>
     <message>
         <source>Zoom value:</source>

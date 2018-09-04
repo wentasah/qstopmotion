@@ -77,57 +77,62 @@
         <translation>Τσέχικα</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="115"/>
+        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="90"/>
+        <source>Greek</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="116"/>
         <source>&amp;Thanks To</source>
         <translation>&amp;Χάρη Σε</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="119"/>
+        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="120"/>
         <source>This program is distributed under the terms of the GPL v2.</source>
         <translation>Το πρόγραμμα αυτό διανέμεται υπό τους όρους της GPL v2.</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="125"/>
+        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="126"/>
         <source>&amp;Licence Agreement</source>
         <translation>&amp;Όροι Χρήσης</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="131"/>
+        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="132"/>
         <source>Qt runtime version: </source>
         <translation>Έκδοση Qt runtime: </translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="134"/>
+        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="135"/>
         <source>Operating system name and version: </source>
         <translation>Όνομα λειτουργικού συστήματος και έκδοση: </translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="163"/>
+        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="164"/>
         <source>Unknown Windows OS</source>
         <translation>Άγνωστο ΛΣ Windows</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="192"/>
+        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="193"/>
         <source>Unknown Mac OS</source>
         <translation>Άγνωστο ΛΣ MAC</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="207"/>
+        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="208"/>
         <source>Build time: %1 %2</source>
         <translation>Διάρκεια μεταγλώττισης: %1 %2</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="211"/>
+        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="212"/>
         <source>&amp;System Info</source>
         <translation>&amp;Πληροφορίες Συστήματος</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="213"/>
+        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="214"/>
         <source>OK</source>
         <translation>ΟΚ</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="226"/>
+        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="227"/>
         <source>About</source>
         <translation>Σχετικά</translation>
     </message>
@@ -1132,482 +1137,482 @@ select another device on the recording tool tab.</source>
 <context>
     <name>MainWindowGUI</name>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="186"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="185"/>
         <source>&amp;New</source>
         <translation>&amp;Νέο</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="187"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="186"/>
         <source>&amp;Open</source>
         <translation>&amp;Άνοιγμα</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="188"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="187"/>
         <source>&amp;Save</source>
         <translation>&amp;Αποθήκευση</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="189"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="188"/>
         <source>Save &amp;As</source>
         <translation>Αποθήκευση &amp;Ως</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="190"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="189"/>
         <source>Video</source>
         <translation>Βίντεο</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="191"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="190"/>
         <source>Cinelerra</source>
         <translation>Cinelerra</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="192"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="191"/>
         <source>Properties</source>
         <translation>Ιδιότητες</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="193"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="192"/>
         <source>&amp;Quit</source>
         <translation>&amp;Τερματισμός</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="194"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="193"/>
         <source>&amp;Undo</source>
         <translation>&amp;Αναίρεση</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="195"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="194"/>
         <source>Re&amp;do</source>
         <translation>&amp;Επανάληψη</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="196"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="195"/>
         <source>Insert Scene</source>
         <translation>Εισαγωγή Σκηνής</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="197"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="196"/>
         <source>Add Scene</source>
         <translation>Προσθήκη Σκηνής</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="198"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="197"/>
         <source>Remove Scene</source>
         <translation>Αφαίρεση Σκηνής</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="199"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="198"/>
         <source>Insert Take</source>
         <translation>Εισαγωγή Λήψης</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="200"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="199"/>
         <source>Add Take</source>
         <translation>Προσθήκη Λήψης</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="201"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="200"/>
         <source>Remove Take</source>
         <translation>Αφαίρεση Λήψης</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="202"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="201"/>
         <source>Insert Frames</source>
         <translation>Εισαγωγή Πλαισίου</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="203"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="202"/>
         <source>Add Frames</source>
         <translation>Προσθήκη Πλαισίου</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="204"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="203"/>
         <source>Remove Frames</source>
         <translation>Αφαίρεση Πλαισίου</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="208"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="207"/>
         <source>Preferences</source>
         <translation>Προτιμήσεις</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="209"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="208"/>
         <source>&amp;Undo stack</source>
         <translation>&amp;Σωρός Αναίρεσης</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="210"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="209"/>
         <source>&amp;Camera Controller</source>
         <translation>&amp;Ελεγκτής Κάμερας</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="211"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="210"/>
         <source>What&apos;s &amp;This</source>
         <translation>&amp;Τι&apos;ναι αυτό</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="212"/>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="224"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="211"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="223"/>
         <source>&amp;Help</source>
         <translation>&amp;Βοήθεια</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="213"/>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="425"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="212"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="424"/>
         <source>Online Help</source>
         <translation>Διαδικτυακή Βοήθεια</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="214"/>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="433"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="213"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="432"/>
         <source>Support Us</source>
         <translation>Υποστηρίξτε μας</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="215"/>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="442"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="214"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="441"/>
         <source>About Qt</source>
         <translation>Σχετικά με το Qt</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="216"/>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="452"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="215"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="451"/>
         <source>About</source>
         <translation>Σχετικά</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="219"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="218"/>
         <source>&amp;File</source>
         <translation>&amp;Αρχείο</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="220"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="219"/>
         <source>Open &amp;Recent</source>
         <translation>&amp;Άνοιγμα Πρόσφατου</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="221"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="220"/>
         <source>&amp;Export</source>
         <translation>&amp;Εξαγωγή</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="222"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="221"/>
         <source>&amp;Edit</source>
         <translation>&amp;Διόρθωση</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="223"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="222"/>
         <source>&amp;Windows</source>
         <translation>&amp;Παράθυρα</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="229"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="228"/>
         <source>Project ID: </source>
         <translation>Ταυτότητα Εργασίας: </translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="230"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="229"/>
         <source>Scene ID: </source>
         <translation>Ταυτότητα Σκηνής: </translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="231"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="230"/>
         <source>Take ID: </source>
         <translation>Ταυτότητα Λήψης: </translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="232"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="231"/>
         <source>Exposure ID: </source>
         <translation>Ταυτότητα Έκθεσης: </translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="237"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="236"/>
         <source>Recording</source>
         <translation>Καταγραφή</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="239"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="238"/>
         <source>Project</source>
         <translation>Εργασία</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="267"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="266"/>
         <source>&lt;h4&gt;New&lt;/h4&gt; &lt;p&gt;Creates a &lt;em&gt;new&lt;/em&gt; project.&lt;/p&gt;</source>
         <translation>&lt;h4&gt;Νέο&lt;/h4&gt; &lt;p&gt;Δημιουργεί μία&lt;em&gt;νέα&lt;/em&gt; εργασία.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="272"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="271"/>
         <source>New project</source>
         <translation>Νέα εργασία</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="276"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="275"/>
         <source>&lt;h4&gt;Open&lt;/h4&gt; &lt;p&gt;&lt;em&gt;Opens&lt;/em&gt; a qStopMotion project file.&lt;/p&gt;</source>
         <translation>&lt;h4&gt;Άνοιγμα&lt;/h4&gt; &lt;p&gt;&lt;em&gt;Ανοίγει&lt;/em&gt; ένα αρχείο εργασίας qStopMotion.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="280"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="279"/>
         <source>Open project</source>
         <translation>Άνοιγμα εργασίας</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="284"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="283"/>
         <source>&lt;h4&gt;Save&lt;/h4&gt; &lt;p&gt;&lt;em&gt;Saves&lt;/em&gt; the current animation as a qStopMotion project file. &lt;BR&gt;If this project has been saved before it will automatically be saved to the previously selected file.&lt;/p&gt;</source>
         <translation>&lt;h4&gt;Αποθήκευση&lt;/h4&gt; &lt;p&gt;&lt;em&gt;Αποθηκεύει&lt;/em&gt; το τρέχων animation ως ένα αρχείο εργασίας qStopMotion. &lt;BR&gt;Εάν η εργασία έχει αποθηκευτεί προηγουμένως, θα αποθηκευτεί αυτόματα στο προηγούμενο επιλεγμένο αρχείο.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="290"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="289"/>
         <source>Save project</source>
         <translation>Αποθήκευση εργασίας</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="294"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="293"/>
         <source>&lt;h4&gt;Save As&lt;/h4&gt; &lt;p&gt;&lt;em&gt;Saves&lt;/em&gt; the current animation as a qStopMotion project file.&lt;/p&gt;</source>
         <translation>&lt;h4&gt;Αποθήκευση Ως&lt;/h4&gt; &lt;p&gt;&lt;em&gt;Αποθηκεύει&lt;/em&gt; το τρέχω animation ως ένα αρχείο εργασίας qStopMotion.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="299"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="298"/>
         <source>Save project As</source>
         <translation>Αποθήκευση εργασίας ως</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="303"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="302"/>
         <source>&lt;h4&gt;Video&lt;/h4&gt; &lt;p&gt;Exports the current project as &lt;em&gt;video&lt;/em&gt;.&lt;/p&gt;You will be given a wizard to guide you.</source>
         <translation>&lt;h4&gt;Βίντεο&lt;/h4&gt; &lt;p&gt;Εξαγωγή της τρέχουσας εργασία ως &lt;em&gt;βίντεο&lt;/em&gt;.&lt;/p&gt;Θα σας δωθεί ένας οδηγός για να σας καθοδηγήσει.</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="310"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="309"/>
         <source>&lt;h4&gt;Cinelerra&lt;/h4&gt; &lt;p&gt;Exports the current animation as a &lt;em&gt;cinelerra-cv&lt;/em&gt; project.&lt;/p&gt;You will be given a wizard to guide you.</source>
         <translation>&lt;h4&gt;Cinelerra&lt;/h4&gt; &lt;p&gt;Εξάγει την τρέχουσα εργασία ως μία &lt;em&gt;cinelerra-cv&lt;/em&gt; εργασία.&lt;/p&gt;Θα σας δωθεί ένας οδηγός για να σας καθοδηγήσει.</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="317"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="316"/>
         <source>&lt;h4&gt;Properties of the project&lt;/h4&gt; &lt;p&gt;This will opens a window where you can &lt;em&gt;change&lt;/em&gt; properties of the animation project.&lt;/p&gt;</source>
         <translation>&lt;h4&gt;Ιδιότητες της εργασίας&lt;/h4&gt; &lt;p&gt;Αυτό θα ανοίξει ένα παράθυρο όπου μπορείτε να &lt;em&gt;αλλάξετε&lt;/em&gt; τις ιδιότητες της εργασίας του animation.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="322"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="321"/>
         <source>Properties of the animation project</source>
         <translation>Ιδιότητες της εργασίας του animation</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="326"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="325"/>
         <source>&lt;h4&gt;Quit&lt;/h4&gt; &lt;p&gt;&lt;em&gt;Quits&lt;/em&gt; the program.&lt;/p&gt;</source>
         <translation>&lt;h4&gt;Τερματισμός&lt;/h4&gt; &lt;p&gt;&lt;em&gt;Τερματίζει&lt;/em&gt; το πρόγραμμα.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="330"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="329"/>
         <source>Quit</source>
         <translation>Τερματισμός</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="336"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="335"/>
         <source>&lt;h4&gt;Undo&lt;/h4&gt; &lt;p&gt;&lt;em&gt;Undoes&lt;/em&gt; your last operation. You can press undo several time to undo earlier operations.&lt;/p&gt;</source>
         <translation>&lt;h4&gt;Αναίρεση&lt;/h4&gt; &lt;p&gt;&lt;em&gt;Αναιρεί&lt;/em&gt; την τελευταία σας δραστηριότητα. Μπορείτε να πιέσετε το κουμπί αναίρεσης αρκετές φορές για να αναιρέσετε παλαιότερες δραστηριότητες.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="341"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="340"/>
         <source>Undo</source>
         <translation>Αναίρεση</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="345"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="344"/>
         <source>&lt;h4&gt;Redo&lt;/h4&gt; &lt;p&gt;&lt;em&gt;Redoes&lt;/em&gt; your last operation. You can press redo several times to redo several operations.&lt;/p&gt;</source>
         <translation>&lt;h4&gt;Επανάληψη&lt;/h4&gt; &lt;p&gt;&lt;em&gt;Επαναλαμβάνει&lt;/em&gt; την τελευταία σας δραστηριότητα. Μπορείτε να πιέσετε το κουμπί επανάληψης αρκετές φορές για να επαναλάβετε αρκετές δραστηριότητες.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="350"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="349"/>
         <source>Redo</source>
         <translation>Επανάληψη</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="391"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="390"/>
         <source>&lt;h4&gt;Preferences of the application&lt;/h4&gt; &lt;p&gt;This will opens a window where you can &lt;em&gt;change&lt;/em&gt; the preferences of the application.&lt;/p&gt;</source>
         <translation>&lt;h4&gt;Προτιμήσεις της εφαρμογής&lt;/h4&gt; &lt;p&gt;Αυτό θα ανοίξει ένα παράθυρο όπου μπορείτε να &lt;em&gt;αλλάξετε&lt;/em&gt; τις προτιμήσεις της εφαρμογής.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="396"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="395"/>
         <source>Preferences of qStopMotion</source>
         <translation>Προτιμήσεις του qStopMotion</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="404"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="403"/>
         <source>&lt;h4&gt;What&apos;s This&lt;/h4&gt; &lt;p&gt;This will give you a WhatsThis mouse cursor which can be used to bring up helpful information like this.&lt;/p&gt;</source>
         <translation>&lt;h4&gt;Τι&apos;ναι Αυτό;&lt;/h4&gt; &lt;p&gt;Αυτό θα σας δώσει έναν κέρσορα Τι&apos;ναι Αυτό ο οποίος μπορεί να χρησιμοποιηθεί για την εμφάνιση χρήσιμων πληροφοριών όπως αυτή.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="409"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="408"/>
         <source>What&apos;s This</source>
         <translation>Τι&apos;ναι Αυτό</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="413"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="412"/>
         <source>&lt;h4&gt;Help&lt;/h4&gt; &lt;p&gt;This button will bring up a dialog with the qStopMotion manual&lt;/p&gt;</source>
         <translation>&lt;h4&gt;Βοήθεια&lt;/h4&gt; &lt;p&gt;Αυτό το κουμπί θα εμφανίσει ένα παράθυρο με το εγχειρίδιο χρήσης του qStopMotion&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="417"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="416"/>
         <source>Help</source>
         <translation>Βοήθεια</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="421"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="420"/>
         <source>&lt;h4&gt;Online Help&lt;/h4&gt; &lt;p&gt;This button will bring up the browser with the qStopMotion manual in different languages&lt;/p&gt;</source>
         <translation>&lt;h4&gt;Διαδικτυακή Βοήθεια&lt;/h4&gt; &lt;p&gt;Αυτό το κουμπί θα εμφανίσει τον φυλλομετρητή με το εγχειρίδιο χρήσης του qStopMotion σε διάφορες γλώσσες&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="429"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="428"/>
         <source>&lt;h4&gt;Support Us&lt;/h4&gt; &lt;p&gt;This button will bring up the browser with the qStopMotion support us page&lt;/p&gt;</source>
         <translation>&lt;h4&gt;Υποστηρίξτε μας&lt;/h4&gt; &lt;p&gt;Αυτό το κουμπι θα εμφανίσει τον φυλλομετρητή με τη σελίδα υποστήριξης του qStopMotion&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="437"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="436"/>
         <source>&lt;h4&gt;About Qt&lt;/h4&gt; &lt;p&gt;This will display a small information box where you can read general information about the Qt library.&lt;/p&gt;</source>
         <translation>&lt;h4&gt;Σχετικά με το Qt&lt;/h4&gt; &lt;p&gt;Αυτό θα εμφανίσει μία μικρή σελίδα ενημέρωσης όπου μπορείτε να διαβάσετε γενικές πληροφορίες για τη βιβλιοθήκη Qt.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="446"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="445"/>
         <source>&lt;h4&gt;About&lt;/h4&gt; &lt;p&gt;This will display a small information box where you can read general information as well as the names of the developers behind this excellent piece of software.&lt;/p&gt;</source>
         <translation>&lt;h4&gt;Σχετικά&lt;/h4&gt; &lt;p&gt;Αυτο θα εμαφανίσει μία μικρή σελίδα πληροφοριών όπου μπορείτε να διαβάσετε γενικές πληροφορίες καθώς επίσης και τα ονόματα των προγραμματιστών αυτού του εξαιρετικού λογισμικόυ.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="458"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="457"/>
         <source>&lt;h4&gt;Project ID&lt;/h4&gt;&lt;p&gt;This area displays the id of the currently active project&lt;/p&gt;</source>
         <translation>&lt;h4&gt;Ταυτότητα Εργασίας&lt;/h4&gt;&lt;p&gt;Αυτή η περιοχή εμφανίσει την ταυτότητα της τρέχουσας ενεργής εργασίας&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="466"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="465"/>
         <source>&lt;h4&gt;Scene ID&lt;/h4&gt;&lt;p&gt;This area displays the id of the currently selected scene&lt;/p&gt;</source>
         <translation>&lt;h4&gt;Ταυτότητα Σκηνής&lt;/h4&gt;&lt;p&gt;Αυτή η περιοχή εμφανίζει την ταυτότητα της τρέχουσας επιλεγμένης σκηνής&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="474"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="473"/>
         <source>&lt;h4&gt;Take ID&lt;/h4&gt;&lt;p&gt;This area displays the id of the currently selected take&lt;/p&gt;</source>
         <translation>&lt;h4&gt;Ταυτότητα Λήψης&lt;/h4&gt;&lt;p&gt;Αυτή η περιοχή εμφανίζει την ταυτότητα της τρέχουσας επιλεγμένης λήψης&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="482"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="481"/>
         <source>&lt;h4&gt;Exposure ID&lt;/h4&gt;&lt;p&gt;This area displays the id of the currently selected exposure&lt;/p&gt;</source>
         <translation>&lt;h4&gt;Ταυτότητα Έκθεσης&lt;/h4&gt;&lt;p&gt;Αυτή η περιοχή εμφανίζει την ταυητότητα της τρέχουσας επιλεγμένης έκθεσης&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="491"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="490"/>
         <source>&lt;h4&gt;FrameView&lt;/h4&gt;&lt;p&gt; In this area you can see the selected frame. You can also play animations in this window by pressing the &lt;b&gt;Play&lt;/b&gt; button.&lt;/p&gt;</source>
         <translation>&lt;h4&gt;FrameView&lt;/h4&gt;&lt;p&gt; Σε αυτή την περιοχή μπορείτε να επιλέξετε το πλαίσιο. Επίσης μπορείτε να αναπαράγεται τα animations σε αυτό το παράθυρο πιέζοντας το κουμπί&lt;b&gt;Αναπαραγωη&lt;/b&gt;.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="504"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="503"/>
         <source>&lt;h4&gt;TimeLine&lt;/h4&gt; &lt;p&gt;In this area you can see the frames and scenes in the animations and build the animation by moving the them around.&lt;/p&gt;&lt;p&gt;You can switch to the next and the previous frame using the &lt;b&gt;arrow buttons&lt;/b&gt; or &lt;b&gt;x&lt;/b&gt; and &lt;b&gt;z&lt;/b&gt;&lt;/p&gt; </source>
         <translation>&lt;h4&gt;Χρονοδιάγραμμα&lt;/h4&gt; &lt;p&gt;Σε αυτή την περιοχή μπορείτε να δείτε τα πλαίσια και τις σκηνές στα animations και να δημιουργήσετε το animation μετακινόντας τα.&lt;/p&gt;&lt;p&gt;Μπορείτε να μετακινηθείτε στο επόμενο και το προηγούμενο πλαίσιο χρησιμοποιώντας τα &lt;b&gt;πλήκτρα βέλη&lt;/b&gt; ή &lt;b&gt;το x&lt;/b&gt; και &lt;b&gt;το z&lt;/b&gt;&lt;/p&gt; </translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="534"/>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="891"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="533"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="890"/>
         <source>Select image grabber</source>
         <translation>Επιλέξτε λήπτη εικόνας</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="535"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="534"/>
         <source>You have to define an image grabber to use.
 This can be set in the preferences menu.</source>
         <translation>Πρέπει να ορίσετε έναν λήπτη εικόνας για χρήση.
 Αυτο μπορεί να οριστεί στο μενού προτιμήσεων.</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="581"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="580"/>
         <source>Ready to rumble ;-)</source>
         <translation>Πάμε ;-)</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="765"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="764"/>
         <source>Cancel</source>
         <translation>Ακύρωση</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="887"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="886"/>
         <source>Connecting camera...</source>
         <translation>Σύνδεση κάμερας...</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="892"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="891"/>
         <source>You have to define an image grabber to use.
 This can be set on the recording tool tab.</source>
         <translation>Πρέπει να ορίσετε έναν λήπτη εικόνας για χρήση.
 Αυτό μπορεί να οριστεί στην καρτέλα του εργαλείου καταγραφής.</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1159"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1158"/>
         <source>Existing Images</source>
         <translation>Υπάρχουσες Εικόνες</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1160"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1159"/>
         <source>There are some images in the open project. Do you want to convert the images to the new file format or quality?</source>
         <translation>Υπάρχουν κάποιες εικόνες στην ανοιχτή εργασία. Θέλετε να μετατρέψετε τις εικόνες στο νέο τύπο αρχείου ή ποιότητα;</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1297"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1296"/>
         <source>The Project</source>
         <translation>Η Εργασία</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1298"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1297"/>
         <source>Scene 001</source>
         <translation>Σκηνή 001</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1299"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1298"/>
         <source>Take 01</source>
         <translation>Λήψη 01</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1339"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1338"/>
         <source>qStopMotion - New Animation Project</source>
         <translation>qStopMotion   Νέα Εργασία Animation</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1351"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1350"/>
         <source>Choose project file</source>
         <translation>Επιλέξτε αρχείο εργασίας</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1353"/>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1438"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1352"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1437"/>
         <source>Project (*.%1)</source>
         <translation>Εργασία (*.%1)</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1434"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1433"/>
         <source>Save As</source>
         <translation>Αποθήκευση Ως</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1461"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1460"/>
         <source>Information</source>
         <translation>Πληροφορίες</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1461"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1460"/>
         <source>The character &apos;|&apos; is not allowed in the project file name and will be removed.</source>
         <translation>Ο χαρακτήρας &apos;|&apos; δεν επιτρέπετε στο όνομα αρχείου της εργασίας και θα αφαιρεθεί.</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1475"/>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1505"/>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1545"/>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1579"/>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1605"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1474"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1504"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1544"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1578"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1604"/>
         <source>Warning</source>
         <translation>Προειδοποίηση</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1475"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1474"/>
         <source>The project directory must not contain more than one project file.</source>
         <translation>Ο φάκελος της εργασίας δεν πρέπει να περιλαμβάνει περισσότερα από ένα αρχεία εργασίας.</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1506"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1505"/>
         <source>No encoder selected for the video export.
 This can be set in the properties dialog of the project.
 Export to video will not be possible until you
@@ -1618,17 +1623,17 @@ have set an encoder to use!</source>
 ορίσετε έναν κωδικοποιητή για χρήση!</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1537"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1536"/>
         <source>AVI Videos (*.avi)</source>
         <translation>Βίντεο AVI (*.avi)</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1541"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1540"/>
         <source>MP4 Videos (*.mp4)</source>
         <translation>Βίντεο MP4 (*.mp4)</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1546"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1545"/>
         <source>No video format selected for the video export.
 This can be set in the properties dialog of the project.
 Export to video will not be possible until you
@@ -1639,52 +1644,52 @@ have set an video format to use!</source>
 ορίσετε έναν τύπο βίντεο προς χρήση!</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1553"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1552"/>
         <source>Export to video file</source>
         <translation>Εξαγωγή σε αρχείο βίντεο</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1580"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1579"/>
         <source>No default output file name defined.
 Check your settings in the properties dialo of the project!</source>
         <translation>Δεν ορίστηκε προκαθορισμένο αρχείο εξαγωγής.
 Ελέγξτε τις ρυθμίσεις σας στη σελίδα προτιμήσεων της εργασίας!</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1606"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1605"/>
         <source>The selected encoder is not installed on your computer.
 Install the encoder or select another one!</source>
         <translation>Ο επιλεγμένος κωδικοποιητής δεν είναι εγκατεστημένος στον υπολογιστή σας.
 Εγκαταστήστε τον κωδικοποιητή ή επιλέξτε κάποιον άλλο!</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1614"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1613"/>
         <source>Exporting ...</source>
         <translation>Εξαγωγή ...</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1638"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1637"/>
         <source>Export to file</source>
         <translation>Εξαγωγή σε αρχείο</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1813"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1812"/>
         <source>qStopMotion - Undo stack</source>
         <translation>qStopMotion - Λίστα αναιρέσεων</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1966"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="1965"/>
         <source>English</source>
         <comment>This should be translated to the name of the language you are translating to, in that language. Example: English = Deutsch (Deutsch is &quot;German&quot; in German)</comment>
         <translation>Ελληνικά</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="2779"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="2772"/>
         <source>Unsaved changes</source>
         <translation>Μη αποθηκευμένες αλλαγές</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="2780"/>
+        <location filename="../src/frontends/qtfrontend/mainwindowgui.cpp" line="2773"/>
         <source>There are unsaved changes. Do you want to save?</source>
         <translation>Υπάρχουν μη αποθηκευμένες αλλαγές. Επιθυμείτε να τις σώσετε;</translation>
     </message>
@@ -1859,161 +1864,161 @@ Install the encoder or select another one!</source>
 <context>
     <name>ProjectTab</name>
     <message>
-        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="312"/>
+        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="311"/>
         <source>Project Tree</source>
         <translation>Δέντρο Εργασίας</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="314"/>
+        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="313"/>
         <source>Scenes</source>
         <translation>Σκηνές</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="317"/>
+        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="316"/>
         <source>&lt;h4&gt;Insert new Scene (CTRL+E)&lt;/h4&gt; &lt;p&gt;Click this button to create a new &lt;em&gt;scene&lt;/em&gt; and &lt;em&gt;insert&lt;/em&gt; it bevor the selected scene.&lt;/p&gt;</source>
         <translation>&lt;h4&gt;Εισαγωγή νέας Σκηνής (CTRL+E)&lt;/h4&gt; &lt;p&gt;Κάντε κλικ σε αυτό το κουμπι για να δημιουργήσετε μία νέα &lt;em&gt;σκηνή&lt;/em&gt; και &lt;em&gt;να την εισάγετε&lt;/em&gt; πριν απο την επιλεγμένη σκηνή.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="324"/>
+        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="323"/>
         <source>&lt;h4&gt;Append new Scene (CTRL+E)&lt;/h4&gt; &lt;p&gt;Click this button to create a new &lt;em&gt;scene&lt;/em&gt; and &lt;em&gt;append&lt;/em&gt; it at the end of the animation.&lt;/p&gt;</source>
         <translation>&lt;h4&gt;Προσθήκη νέας Σκηνής (CTRL+E)&lt;/h4&gt; &lt;p&gt;Κάντε κλικ σε αυτό το κουμπι για να δημιουργήσετε μία νέα &lt;em&gt;σκηνή&lt;/em&gt; και&lt;em&gt;να την προσθέσετε&lt;/em&gt; στο τέλος του animation.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="331"/>
+        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="330"/>
         <source>&lt;h4&gt;Remove Scene (SHIFT+Delete)&lt;/h4&gt; &lt;p&gt;Click this button to &lt;em&gt;remove&lt;/em&gt; the selected &lt;em&gt;scene&lt;/em&gt; from the animation.&lt;/p&gt;</source>
         <translation>&lt;h4&gt;Αφαίρεση Σκηνής (SHIFT+Delete)&lt;/h4&gt; &lt;p&gt;Κάντε κλικ σε αυτό το κουμπι για να &lt;em&gt;αφαιρέσετε&lt;/em&gt; την επιλεγμένη &lt;em&gt;σκηνή&lt;/em&gt; από το animation.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="337"/>
+        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="336"/>
         <source>Takes</source>
         <translation>Λήψεις</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="340"/>
+        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="339"/>
         <source>&lt;h4&gt;Insert new Take (CTRL+E)&lt;/h4&gt; &lt;p&gt;Click this button to create a new &lt;em&gt;take&lt;/em&gt; and &lt;em&gt;insert&lt;/em&gt; it bevor the selected take.&lt;/p&gt;</source>
         <translation>&lt;h4&gt;Εισαγωγή νέας Λήψης (CTRL+E)&lt;/h4&gt; &lt;p&gt;Κάντε κλικ σε αυτό το κουμπι για να δημιουργήσετε μία νέα &lt;em&gt;λήψη&lt;/em&gt; και &lt;em&gt;να την εισάγετε&lt;/em&gt; πριν απο την επιλεγμένη λήψη.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="347"/>
+        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="346"/>
         <source>&lt;h4&gt;Append new Take (CTRL+E)&lt;/h4&gt; &lt;p&gt;Click this button to create a new &lt;em&gt;take&lt;/em&gt; and &lt;em&gt;append&lt;/em&gt; it to the end of the scene.&lt;/p&gt;</source>
         <translatorcomment>Is the new take appended at the end of the scene, or maybe is it a typo and take was meant instead?</translatorcomment>
         <translation>&lt;h4&gt;Προσθήκη νέας Λήψης (CTRL+E)&lt;/h4&gt; &lt;p&gt;Κάντε κλικ σε αυτό το κουμπι για να δημιουργήσετε μία νέα &lt;em&gt;λήψη&lt;/em&gt; και &lt;em&gt;να την προσθέσετε&lt;/em&gt; στο τέλος της σκηνής.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="354"/>
+        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="353"/>
         <source>&lt;h4&gt;Remove Take (SHIFT+Delete)&lt;/h4&gt; &lt;p&gt;Click this button to &lt;em&gt;remove&lt;/em&gt; the selected &lt;em&gt;take&lt;/em&gt; from the animation.&lt;/p&gt;</source>
         <translation>&lt;h4&gt;Αφαίρεση Λήψης (SHIFT+Delete)&lt;/h4&gt; &lt;p&gt;Κάντε κλικ σε αυτό το κουμπί για να &lt;em&gt;αφαιρέσετε&lt;/em&gt; την επιλεγμένη &lt;em&gt;λήψη&lt;/em&gt; απο το animation.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="360"/>
+        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="359"/>
         <source>Frames</source>
         <translation>Πλαίσια</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="363"/>
+        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="362"/>
         <source>&lt;h4&gt;Insert Frames (CTRL+F)&lt;/h4&gt; &lt;p&gt;Click on this button to &lt;em&gt;insert frames&lt;/em&gt; bevor the selected frame.&lt;/p&gt;</source>
         <translation>&lt;h4&gt;Εισαγωγή Πλαισίων (CTRL+F)&lt;/h4&gt; &lt;p&gt;Κάντε κλικ σε αυτό το κουμπί για να  &lt;em&gt;εισάγετε πλαίσια&lt;/em&gt; πριν απο το επιλεγμένο πλαίσιο.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="370"/>
+        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="369"/>
         <source>&lt;h4&gt;Append Frames (CTRL+F)&lt;/h4&gt; &lt;p&gt;Click on this button to &lt;em&gt;append frames&lt;/em&gt; at the end of the take.&lt;/p&gt;</source>
         <translation>&lt;h4&gt;Προσθήκη Πλαισίων (CTRL+F)&lt;/h4&gt; &lt;p&gt;Κάντε κλικ σε αυτό το κουμπί για να &lt;em&gt;προσθέσετε πλαίσια&lt;/em&gt; στο τέλος της λήψης.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="377"/>
+        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="376"/>
         <source>&lt;h4&gt;Remove Frame (Delete)&lt;/h4&gt; &lt;p&gt;Click this button to &lt;em&gt;remove&lt;/em&gt; the selected &lt;em&gt;frame&lt;/em&gt; from the take.&lt;/p&gt;</source>
         <translation>&lt;h4&gt;Αφαίρεση Πλαισίου (Delete)&lt;/h4&gt; &lt;p&gt;Κάντε κλικ σε αυτό το κουμπί για να &lt;em&gt;αφαιρέσετε&lt;/em&gt; το επιλεγμένο &lt;em&gt;πλαίσιο&lt;/em&gt; από την λήψη.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="383"/>
+        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="382"/>
         <source>Edit</source>
         <translation>Διόρθωση</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="386"/>
+        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="385"/>
         <source>&lt;h4&gt;Launch Photo Editor&lt;/h4&gt; &lt;p&gt;Click this button to open the active frame in the photo editor&lt;/p&gt; &lt;p&gt;Note that you can also drag images from the frame bar and drop them on the photo editor&lt;/p&gt;</source>
         <translation>&lt;h4&gt;Εκτέλεση Προγράμματος Επεξεργασίας Φωτογραφίας&lt;/h4&gt; &lt;p&gt;Κάντε κλικ σε αυτό το κουμπί για να ανοίξετε το ενεργό πλαίσιο στο πρόγραμμα επεξεργασίας φωτογραφίας&lt;/p&gt; &lt;p&gt;Σημειώνεται ότι μπορείτε επίσης να σύρετε εικόνες από το πλαίσιο και να τα αφήσετε στο πρόγραμμα επεξεργασίας φωτογραφίας&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1145"/>
-        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1180"/>
+        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1144"/>
+        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1179"/>
         <source>Scene 000</source>
         <translation>Σκηνή 000</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1146"/>
-        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1181"/>
-        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1276"/>
-        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1312"/>
+        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1145"/>
+        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1180"/>
+        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1275"/>
+        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1311"/>
         <source>Take 00</source>
         <translation>Λήψη 00</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1269"/>
+        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1268"/>
         <source>Insert Take</source>
         <translation>Εισαγωγή Λήψης</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1269"/>
-        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1305"/>
-        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1394"/>
-        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1432"/>
+        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1268"/>
+        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1304"/>
+        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1393"/>
+        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1431"/>
         <source>No scene selected. Please select a scene in the project tree.</source>
         <translation>Δεν έχει επιλεχτεί σκηνή. Παρακαλώ επιλέξτε μία σκηνή στο δέντρο εργασίας.</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1305"/>
+        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1304"/>
         <source>Add Take</source>
         <translation>Προσθήκη Λήψης</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1394"/>
-        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1399"/>
+        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1393"/>
+        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1398"/>
         <source>Insert Frames</source>
         <translation>Εισαγωγή Πλαισίου</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1399"/>
-        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1437"/>
+        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1398"/>
+        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1436"/>
         <source>No take selected. Please select a take in the project tree.</source>
         <translation>Δεν έχει επιλεχθεί λήψη. Παρακαλώ επιλέξτε μία λήψη στο δέντρο εργασίας</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1432"/>
-        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1437"/>
+        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1431"/>
+        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1436"/>
         <source>Add Frames</source>
         <translation>Προσθήκη Πλαισίων</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1494"/>
-        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1501"/>
-        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1713"/>
-        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1749"/>
+        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1493"/>
+        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1500"/>
+        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1712"/>
+        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1748"/>
         <source>Warning</source>
         <translation>Πρoειδοποίηση</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1495"/>
+        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1494"/>
         <source>There is no active frame to open</source>
         <translation>Δεν υπάρχει ενεργό πλαίσιο για άνοιγμα</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1502"/>
+        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1501"/>
         <source>The active frame is corrupt</source>
         <translation>Το ενεργό πλαίσιο είναι κατεστραμμένο</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1662"/>
+        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1661"/>
         <source>Choose frames to add</source>
         <translation>Επιλέξτε πλαίσιο για προσθήκη</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1714"/>
+        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1713"/>
         <source>You do not have Gimp installed on your system</source>
         <translation>Δεν έχετε το Gimp εγκατεστημένο στο σύστημά σας</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1750"/>
+        <location filename="../src/frontends/qtfrontend/tooltabs/projecttab.cpp" line="1749"/>
         <source>Failed to start Gimp!</source>
         <translation>Αδυναμία εκκίνησης του Gimp!</translation>
     </message>
@@ -2168,36 +2173,36 @@ You need permission to read, write and execute on the .qstopmotion directory.</s
 Χρειάζεστε δικαιώματα για ανάγνωση, εγγραφή και εκτέλεση στον φάκελο qstopmotion.</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="703"/>
+        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="693"/>
         <source>&amp;Yes</source>
         <translation>&amp;Ναι</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="704"/>
+        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="694"/>
         <source>&amp;No</source>
         <translation>&amp;Όχι</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="724"/>
-        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="739"/>
-        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="754"/>
+        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="714"/>
+        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="729"/>
+        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="744"/>
         <source>&amp;OK</source>
         <translation>&amp;ΟΚ</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="938"/>
+        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="928"/>
         <source>Recovery</source>
         <translation>Ανάκτηση</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="939"/>
+        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="929"/>
         <source>Something caused qStopmotion to exit abnormally
 last time it was run. Do you want to recover?</source>
         <translation>Κάτι ανάγκασε το qStopMotion να τερματίσει ασυνήθιστα
 την τελευταία φορά που εκτελέστηκε. Επιθυμείτε ανάκτηση;</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="947"/>
+        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="937"/>
         <source>qStopMotion - Recovered Project</source>
         <translation>qStopMotion - Ανακτημένη Εργασία</translation>
     </message>

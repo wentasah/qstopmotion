@@ -77,57 +77,62 @@
         <translation>Tjeckiska</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="115"/>
+        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="90"/>
+        <source>Greek</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="116"/>
         <source>&amp;Thanks To</source>
         <translation>&amp;Tack till</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="119"/>
+        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="120"/>
         <source>This program is distributed under the terms of the GPL v2.</source>
         <translation>Detta program är distribuerat under GPL v2.</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="125"/>
+        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="126"/>
         <source>&amp;Licence Agreement</source>
         <translation>&amp;Licensavtal</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="131"/>
+        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="132"/>
         <source>Qt runtime version: </source>
         <translation>Qt runtimeversion:</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="134"/>
+        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="135"/>
         <source>Operating system name and version: </source>
         <translation>Operativsystemets namn och version:</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="163"/>
+        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="164"/>
         <source>Unknown Windows OS</source>
         <translation>Okänt Windows OS</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="192"/>
+        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="193"/>
         <source>Unknown Mac OS</source>
         <translation>Okänt MacOs</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="207"/>
+        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="208"/>
         <source>Build time: %1 %2</source>
         <translation>Byggtid: %1 %2</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="211"/>
+        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="212"/>
         <source>&amp;System Info</source>
         <translation>&amp;Systeminformation</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="213"/>
+        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="214"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="226"/>
+        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="227"/>
         <source>About</source>
         <translation>Om</translation>
     </message>

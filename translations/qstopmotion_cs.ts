@@ -103,6 +103,10 @@
         <source>Czech</source>
         <translation>Čeština</translation>
     </message>
+    <message>
+        <source>Greek</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>AnimationProject</name>

@@ -1,7 +1,7 @@
 ###############################################################################
 # QtCreator file for the qStopMotion project                                  #
 # (c) Ralf Lange, longsoft.de                                                 #
-# Last update: 2018-09-03                                                     #
+# Last update: 2018-09-04                                                     #
 #                                                                             #
 # Please use CMake and the CMakeLists.txt file to build qStopMotion!          #
 ###############################################################################
@@ -192,7 +192,7 @@ TRANSLATIONS += translations/qstopmotion_fr.ts \
 #                translations/qt_cs.ts \
                 translations/qstopmotion_da.ts \
 #                translations/qt_da.ts \
-                translations/qstopmotion_de.ts
+                translations/qstopmotion_de.ts \
 #                translations/qt_de.ts \
                 translations/qstopmotion_el.ts \
                 translations/qstopmotion_es.ts \
@@ -207,7 +207,7 @@ TRANSLATIONS += translations/qstopmotion_fr.ts \
                 translations/qstopmotion_se.ts \
 #                translations/qt_se.ts \
 #                translations/qstopmotion_sl.ts \
-#                translations/qstopmotion_tr.ts \
+#                translations/qstopmotion_tr.ts
 
 DEPENDPATH += src
 

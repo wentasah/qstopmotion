@@ -1,7 +1,7 @@
 ###############################################################################
 # CMake file for the qStopMotion project                                      #
 # (c) Ralf Lange, longsoft.de                                                 #
-# Last update: 2018-02-28                                                     #
+# Last update: 2018-09-04                                                     #
 #                                                                             #
 # Usage:                                                                      #
 #   * Qt-Creator (Windows, Linux)                                             #
@@ -341,24 +341,22 @@ ENDIF(UNIX AND NOT APPLE)
 
 SET(
     TRANSLATIONS
-    translations/qstopmotion_da.ts
-    translations/qstopmotion_de.ts
-    translations/qstopmotion_fr.ts
-    translations/qstopmotion_se.ts
-#    translations/qstopmotion_br.ts
-    translations/qstopmotion_cz.ts
-    translations/qstopmotion_es.ts
-#    translations/qstopmotion_fi.ts
-#    translations/qstopmotion_gr.ts
-    translations/qstopmotion_it.ts
-#    translations/qstopmotion_kl.ts
-#    translations/qstopmotion_no_nb.ts
-#    translations/qstopmotion_no_nn.ts
-#    translations/qstopmotion_no_se.ts
-    translations/qstopmotion_pt.ts
-    translations/qstopmotion_ru.ts
-#    translations/qstopmotion_sl.ts
-#    translations/qstopmotion_tr.ts
+#    translations/qstopmotion_br.ts       # Brazilian
+    translations/qstopmotion_cz.ts       # Czech
+    translations/qstopmotion_da.ts       # Danish
+    translations/qstopmotion_de.ts       # German
+    translations/qstopmotion_el.ts       # Greek
+    translations/qstopmotion_fr.ts       # French
+    translations/qstopmotion_es.ts       # Spanish
+#    translations/qstopmotion_fi.ts       # Finnish
+    translations/qstopmotion_it.ts       # Italian
+#    translations/qstopmotion_kl.ts       # 
+#    translations/qstopmotion_nb.ts       # Norwegian
+    translations/qstopmotion_pt.ts       # Portuguese
+    translations/qstopmotion_ru.ts       # Russian
+    translations/qstopmotion_se.ts       # Swedish
+#    translations/qstopmotion_sl.ts       # Slovene
+#    translations/qstopmotion_tr.ts       # Turkish
 )
 
 SET(

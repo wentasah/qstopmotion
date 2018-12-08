@@ -52,4 +52,4 @@ graphics, code, +++
 Your help is very much appreciated.
 
 ralf.lange@qstopmotion.org
-2018-01-18
+2018-12-08

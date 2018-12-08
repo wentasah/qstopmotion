@@ -1,6 +1,10 @@
 Last Changes in the sources on qStopMotion
 ===============================================================================
 
+qStopMotion (2.4.1) - 2018-12-08
+  * Add greek translation
+  * Update translations
+  * Bug fixing
 qStopMotion (2.4.0) - 2018-01-18
   * Add time lapse recording mode
   * Add online manual in english and german language

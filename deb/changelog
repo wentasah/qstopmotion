@@ -1,3 +1,16 @@
+qStopMotion (2.4.1) stable; urgency=low
+  * Add greek translation
+  * Update translations
+  * Bug fixing
+-- Ralf Lange <ralf.lange@qstopmotion.org>  Sat, 08 Dez 2018 00:09:12 +0100
+
+qStopMotion (2.4.0) unstable; urgency=low
+  * Add time lapse recording mode
+  * Add online manual in english and german language
+  * Improve camera control functionality
+  * Use new slider controls
+-- Ralf Lange <ralf.lange@qstopmotion.org>  Thu, 18 Jan 2018 00:09:12 +0100
+
 qStopMotion (2.3.2) unstable; urgency=low
   * Some spelling corrections.
   * Update of the Czech translation.

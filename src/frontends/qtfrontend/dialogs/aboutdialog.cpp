@@ -88,6 +88,7 @@ AboutDialog::AboutDialog(Frontend *f,
                 "Ralf Lange &lt;ralf.lange@longsoft.de&gt; (" + tr("German") + ")<br>"
                 "Pavel Fric &lt;pavelfric@seznam.cz&gt; (" + tr("Czech") + ")<br>"
                 "Nikos &lt;kosnickx@gmail.com&gt; (" + tr("Greek") + ")<br>"
+                "Dmitry &lt;decobramegra@gmail.com&gt; (" + tr("Russian") + ")<br>"
                 /*
                 "Gorazd Bizjak and Matej Lavreni &lt;info@zapstudio.net&gt; (" + tr("Slovenian") + ")<br>"
                 "José Jorge &lt;jjorge@free.fr&gt; (" + tr("Portuguese") + ")<br>"

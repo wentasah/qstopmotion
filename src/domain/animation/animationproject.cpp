@@ -60,6 +60,7 @@ AnimationProject::AnimationProject(Frontend* f)
     videoFormat              = DomainFacade::VIDEOFORMATDEFAULT;
     videoSize                = DomainFacade::VIDEOSIZEDEFAULT;
     videoFps                 = DomainFacade::VIDEOFPSDEFAULT;
+    splittingMode            = DomainFacade::MOVIESPLITTINGMODEDEFAULT;
 
     useDefaultOutputFile     = false;
     activeSceneIndex         = -1;
@@ -492,6 +493,21 @@ void AnimationProject::setVideoFps(int newFPS)
 }
 
 
+int AnimationProject::getMovieExportSplittingMode() const
+{
+    return splittingMode;
+}
+
+
+void AnimationProject::setMovieExportSplittingMode(int newSplittingMode)
+{
+    if (splittingMode != newSplittingMode) {
+        splittingMode = newSplittingMode;
+        incSettingsChanges();
+    }
+}
+
+
 bool AnimationProject::getUseDefaultOutputFile() const
 {
     return useDefaultOutputFile;
@@ -792,6 +808,10 @@ bool AnimationProject::readSettingsFromProject(QDomElement &settingsNode)
                 videoFps = 12;
             }
         }
+        else if (nodeName.compare("movieexportsplittingmode") == 0) {
+            QString tmp = currElement.text();
+            splittingMode = tmp.toInt();
+        }
         else if (nodeName.compare("usedefaultoutputfile") == 0) {
             QString tmp = currElement.text();
             if (1 == tmp.toInt()) {
@@ -950,6 +970,12 @@ bool AnimationProject::saveSettingsToProject(QDomDocument &doc, QDomElement &set
     QDomText fpsText = doc.createTextNode(QString("%1").arg(videoFps));
     fpsElement.appendChild(fpsText);
     settingsNode.appendChild(fpsElement);
+
+    // Save splittingMode parameter
+    QDomElement splittingElement = doc.createElement("movieexportsplittingmode");
+    QDomText splittingText = doc.createTextNode(QString("%1").arg(splittingMode));
+    splittingElement.appendChild(splittingText);
+    settingsNode.appendChild(splittingElement);
 
     // Save useDefaultOutputFile parameter
     QDomElement udofElement = doc.createElement("usedefaultoutputfile");

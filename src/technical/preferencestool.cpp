@@ -449,6 +449,7 @@ void PreferencesTool::setBasicPreferenceDefaults()
     setIntegerPreference("preferences", "defaultvideoformat", DomainFacade::VIDEOFORMATDEFAULT);
     setIntegerPreference("preferences", "defaultvideosize", DomainFacade::VIDEOSIZEDEFAULT);
     setIntegerPreference("preferences", "defaultvideofps", DomainFacade::VIDEOFPSDEFAULT);
+    setBooleanPreference("preferences", "defaultmovieexportsplittingmode", DomainFacade::MOVIESPLITTINGMODEDEFAULT);
     setBooleanPreference("preferences", "defaultusedefaultoutputfile", DomainFacade::USEDEFAULTOUTPUTFILENAMEDEFAULT);
     // Grabber defaults
     setBooleanPreference("preferences", "v4l2grabber", Frontend::V4L2GRABBERDEFAULT);

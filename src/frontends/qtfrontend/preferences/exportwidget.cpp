@@ -59,6 +59,13 @@ ExportWidget::ExportWidget(Frontend *f, bool type, QWidget *parent) : QWidget(pa
     videoFpsChooser            = 0;
     activeVideoFps             = DomainFacade::VIDEOFPSDEFAULT;
 
+    // Movie's splitting preferences
+    splittingPrefs             = 0;
+    wholeMovieButton           = 0;
+    splittedOnScenesButton     = 0;
+    splittedOnTakesButton      = 0;
+    splittingMode              = DomainFacade::MOVIESPLITTINGMODEDEFAULT;
+
     // Output file preferences
     outputPrefs                = 0;
     askForOutputLabel          = 0;
@@ -159,6 +166,22 @@ void ExportWidget::makeGUI()
 
     videoFpsLabel->setBuddy(videoFpsChooser);
 
+    // Movie's splitting preferences
+    splittingPrefs = new QGroupBox;
+    splittingPrefs->setTitle(tr("Splitting up the movie on several files"));
+
+    wholeMovieButton = new QRadioButton(tr("All scenes and takes will be united in one movie"));
+    wholeMovieButton->setChecked(true);
+    wholeMovieButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+
+    splittedOnScenesButton = new QRadioButton(tr("Movie will be splitted up by scenes"));
+    splittedOnScenesButton->setChecked(false);
+    splittedOnScenesButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+
+    splittedOnTakesButton = new QRadioButton(tr("Movie will be splitted up by takes"));
+    splittedOnTakesButton->setChecked(false);
+    splittedOnTakesButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+
     // Output file preferences
     outputPrefs = new QGroupBox;
     outputPrefs->setTitle(tr("Output file settings"));
@@ -200,6 +223,17 @@ void ExportWidget::makeGUI()
     encoderPrefsLayout->addWidget(videoFpsChooser, 3, 1);
     encoderPrefs->setLayout(encoderPrefsLayout);
 
+    // Movie's splitting preferences
+    QVBoxLayout *splittingPrefsLayout = new QVBoxLayout;
+    splittingPrefsLayout->addStretch(1);
+    splittingPrefsLayout->addWidget(wholeMovieButton);
+    splittingPrefsLayout->addStretch(1);
+    splittingPrefsLayout->addWidget(splittedOnScenesButton);
+    splittingPrefsLayout->addStretch(1);
+    splittingPrefsLayout->addWidget(splittedOnTakesButton);
+    splittingPrefsLayout->addStretch(1);
+    splittingPrefs->setLayout(splittingPrefsLayout);
+
     // Output file preferences
     QVBoxLayout *outputPrefsLayout = new QVBoxLayout;
     outputPrefsLayout->addWidget(askForOutputLabel);
@@ -221,6 +255,7 @@ void ExportWidget::makeGUI()
     QVBoxLayout *mainLayout = new QVBoxLayout;
     mainLayout->addWidget(infoText);
     mainLayout->addWidget(encoderPrefs);
+    mainLayout->addWidget(splittingPrefs);
     mainLayout->addWidget(outputPrefs);
     mainLayout->addStretch(1);
 
@@ -244,6 +279,7 @@ void ExportWidget::initialize()
         pref->getIntegerPreference("preferences", "defaultvideoformat", activeVideoFormat);
         pref->getIntegerPreference("preferences", "defaultvideosize", activeVideoSize);
         pref->getIntegerPreference("preferences", "defaultvideofps", activeVideoFps);
+        pref->getIntegerPreference("preferences", "defaultmovieexportsplittingmode", splittingMode);
         pref->getBooleanPreference("preferences", "defaultusedefaultoutputfile", activeUseDefaultOutputFile);
     }
     else {
@@ -252,6 +288,7 @@ void ExportWidget::initialize()
         activeVideoFormat = frontend->getProject()->getVideoFormat();
         activeVideoSize = frontend->getProject()->getVideoSize();
         activeVideoFps = frontend->getProject()->getVideoFps();
+        splittingMode = frontend->getProject()->getMovieExportSplittingMode();
         activeUseDefaultOutputFile = frontend->getProject()->getUseDefaultOutputFile();
         activeDefaultOutputFileName = frontend->getProject()->getDefaultOutputFileName();
     }
@@ -304,6 +341,21 @@ void ExportWidget::apply()
         changings = true;
     }
 
+    int currentSplittingMode = DomainFacade::MOVIESPLITTINGMODEDEFAULT;
+    if (wholeMovieButton->isChecked()) {
+        currentSplittingMode = DomainFacade::exportAsWholeMovie;
+    } else if (splittedOnScenesButton->isChecked()) {
+        currentSplittingMode = DomainFacade::exportAsSplittedOnScenes;
+    } else if (splittedOnTakesButton->isChecked()) {
+        currentSplittingMode = DomainFacade::exportAsSplittedOnTakes;
+    } else {
+        qWarning() << "unexpected buttons state: use default movie export mode";
+    }
+    if (currentSplittingMode != splittingMode) {
+        splittingMode = currentSplittingMode;
+        changings = true;
+    }
+
     if (noButton->isChecked()) {
         if (false == activeUseDefaultOutputFile) {
             activeUseDefaultOutputFile = true;
@@ -330,6 +382,7 @@ void ExportWidget::apply()
             pref->setIntegerPreference("preferences", "defaultvideoformat", activeVideoFormat);
             pref->setIntegerPreference("preferences", "defaultvideosize", activeVideoSize);
             pref->setIntegerPreference("preferences", "defaultvideofps", activeVideoFps);
+            pref->setIntegerPreference("preferences", "defaultmovieexportsplittingmode", splittingMode);
             pref->setBooleanPreference("preferences", "defaultusedefaultoutputfile", activeUseDefaultOutputFile);
         }
         else {
@@ -338,6 +391,7 @@ void ExportWidget::apply()
             frontend->getProject()->setVideoFormat(activeVideoFormat);
             frontend->getProject()->setVideoSize(activeVideoSize);
             frontend->getProject()->setVideoFps(activeVideoFps);
+            frontend->getProject()->setMovieExportSplittingMode(splittingMode);
             frontend->getProject()->setUseDefaultOutputFile(activeUseDefaultOutputFile);
             frontend->getProject()->setDefaultOutputFileName(activeDefaultOutputFileName);
         }
@@ -373,6 +427,8 @@ void ExportWidget::reset()
     }
 
     videoFpsChooser->setValue(activeVideoFps);
+
+    changeSplittingMode(splittingMode);
 
     if (activeUseDefaultOutputFile) {
         setYesButtonOn();
@@ -413,6 +469,30 @@ void ExportWidget::changeVideoSize(int /*index*/)
 
 void ExportWidget::changeFps(int newFps)
 {
+}
+
+void ExportWidget::changeSplittingMode(int value)
+{
+    switch (value) {
+    case DomainFacade::exportAsWholeMovie:
+        wholeMovieButton->setChecked(true);
+        splittedOnScenesButton->setChecked(false);
+        splittedOnTakesButton->setChecked(false);
+        break;
+    case DomainFacade::exportAsSplittedOnScenes:
+        splittedOnScenesButton->setChecked(true);
+        wholeMovieButton->setChecked(false);
+        splittedOnTakesButton->setChecked(false);
+        break;
+    case DomainFacade::exportAsSplittedOnTakes:
+        splittedOnTakesButton->setChecked(true);
+        wholeMovieButton->setChecked(false);
+        splittedOnScenesButton->setChecked(false);
+        break;
+    default:
+        qWarning() << "ExportWidget::changeSplittingMode Invalid splitting mode:" << value;
+        break;
+    }
 }
 
 

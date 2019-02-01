@@ -80,7 +80,8 @@ ExternalCommandDialog::ExternalCommandDialog(Frontend *f, QWidget *parent)
     process = new QProcess(this);
     connect(process, SIGNAL(readyReadStandardOutput()), this, SLOT(readFromStandardOutput()));
     connect(process, SIGNAL(readyReadStandardError()), this, SLOT(readFromStandardError()));
-    connect(process, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(displayExitStatus(int, QProcess::ExitStatus)));
+    connect(process, SIGNAL(finished(int, QProcess::ExitStatus)),
+            this, SLOT(checkExitStatus(int, QProcess::ExitStatus)));
 
     resize(QSize(593, 363).expandedTo(minimumSizeHint()));
 
@@ -91,13 +92,21 @@ ExternalCommandDialog::ExternalCommandDialog(Frontend *f, QWidget *parent)
 
 void ExternalCommandDialog::run(const QString &command, const QStringList &arguments)
 {
+    QList<ExternalCommand> commands;
+    commands.append(ExternalCommand(command, arguments));
+    run(commands);
+}
+
+void ExternalCommandDialog::run(const QList<ExternalCommand> &commands)
+{
+    if (commands.isEmpty()) {
+        qWarning() << "ExternalCommandDialog::run Nothing commands to run";
+        return;
+    }
+
     qDebug() << "ExternalCommandDialog::run --> Start";
-
-    QString osCommand(Util::convertPathToOsSpecific(command));
-    qDebug() << "ExternalCommandDialog::run --> Command";
-    qDebug() << osCommand;
-
-    process->start(osCommand, arguments);
+    externalCommands = commands;
+    runNextCommand();
 
     qDebug() << "ExternalCommandDialog::run --> End";
 }
@@ -107,8 +116,10 @@ void ExternalCommandDialog::readFromStandardOutput()
 {
     textBrowser->ensureCursorVisible();
     QTextCursor curs = textBrowser->textCursor();
-    curs.movePosition(QTextCursor::StartOfLine, QTextCursor::KeepAnchor);
-    curs.insertText(process->readAllStandardOutput());
+    curs.movePosition(QTextCursor::EndOfLine, QTextCursor::MoveAnchor);
+    const QByteArray processOutput = process->readAllStandardOutput();
+    curs.insertText(processOutput);
+    qDebug() << processOutput;
 }
 
 
@@ -116,8 +127,10 @@ void ExternalCommandDialog::readFromStandardError()
 {
     textBrowser->ensureCursorVisible();
     QTextCursor curs = textBrowser->textCursor();
-    curs.movePosition(QTextCursor::StartOfLine, QTextCursor::KeepAnchor);
-    curs.insertText(process->readAllStandardError());
+    curs.movePosition(QTextCursor::EndOfLine, QTextCursor::MoveAnchor);
+    const QByteArray processError = process->readAllStandardError();
+    curs.insertText(processError);
+    qDebug() << processError;
 }
 
 
@@ -130,9 +143,33 @@ void ExternalCommandDialog::submitInputToProgram()
 }
 
 
-void ExternalCommandDialog::displayExitStatus(int exitCode, QProcess::ExitStatus)
+void ExternalCommandDialog::checkExitStatus(int exitCode, QProcess::ExitStatus exitStatus)
 {
-    if (exitCode != 0) {
+    if ((exitCode != 0) || (exitStatus != QProcess::NormalExit)) {
+        qCritical() << "command has been failed. exitCode:" << exitCode
+                    << "exitStatus:" << exitStatus << "error:"
+                    << process->errorString();
+        displayFinishStatus(false);
+        return;
+    }
+
+    if (externalCommands.isEmpty()) {
+        qDebug() << "all commands have been successfully finished";
+        displayFinishStatus(true);
+        return;
+    }
+
+    bool started = runNextCommand();
+    if (!started) {
+        qCritical() << "commands execution is interrupted";
+        displayFinishStatus(false);
+        return;
+    }
+}
+
+void ExternalCommandDialog::displayFinishStatus(bool successfully)
+{
+    if (!successfully) {
         QMessageBox::warning(this,
                              tr("Result"),
                              tr("Failed!"));
@@ -145,6 +182,7 @@ void ExternalCommandDialog::displayExitStatus(int exitCode, QProcess::ExitStatus
     lineEdit->setEnabled(false);
     submitButton->setEnabled(false);
     closeButton->setEnabled(true);
+    externalCommands.clear();
 }
 
 
@@ -155,4 +193,25 @@ void ExternalCommandDialog::help()
     frontend->openOnlineHelp("#export");
 
     qDebug() << "ExternalCommandDialog::help --> End";
+}
+
+bool ExternalCommandDialog::runNextCommand()
+{
+    if (externalCommands.isEmpty()) {
+        return false;
+    }
+    if (process->state() != QProcess::NotRunning) {
+        qCritical() << "Coulnd't run next command while previous hasn't been finished."
+                    << "State:" << process->state();
+        return false;
+    }
+
+    ExternalCommand command = externalCommands.takeFirst();
+    QString osCommand(Util::convertPathToOsSpecific(command.first));
+    qDebug() << "ExternalCommandDialog::runNextCommand --> Command";
+    qDebug() << osCommand << command.second;
+
+    process->start(osCommand, command.second);
+
+    return true;
 }

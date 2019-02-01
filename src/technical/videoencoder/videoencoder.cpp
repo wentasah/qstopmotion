@@ -113,3 +113,12 @@ bool VideoEncoder::isValid()
     }
     return true;
 }
+
+const QStringList VideoEncoder::createInputFilelists(QMap<QString, QStringList> moviesFiles,
+                                                     QString tmpDir) const
+{
+    Q_UNUSED(moviesFiles);
+    Q_UNUSED(tmpDir);
+
+    return QStringList();
+}

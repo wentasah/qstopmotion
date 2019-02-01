@@ -50,9 +50,10 @@ public:
 
     /**
      * Gets the arguments for the encoder.
+     * @param inputFilelistPath path to file, which contain list of input files
      * @return the encoder argument list
      */
-    virtual const QStringList getEncoderArguments() const = 0;
+    virtual const QStringList getEncoderArguments(const QString inputFilelistPath) const = 0;
 
     /**
      * Gets the command line registerd by the user in the preferences menu.
@@ -78,6 +79,16 @@ public:
      * @return true if valid, false otherwise
      */
     bool isValid();
+
+    /**
+     * Create files which contains lists of input files.
+     * @param moviesFiles information about images which will united in movie.
+     * key - generated movie's path, values - exposures list.
+     * @param tmpDir path to the application's temporary directory
+     * @return list of paths to input filelists
+     */
+    virtual const QStringList createInputFilelists(QMap<QString, QStringList> moviesFiles,
+                                                   QString tmpDir) const;
 
 protected:
 

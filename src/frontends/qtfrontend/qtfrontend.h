@@ -391,6 +391,13 @@ public:
     int runExternalCommand(const QString &command, const QStringList &arguments);
 
     /**
+     * Function to run several external commands
+     * @param commands commands with arguments to run
+     * @return return value of the command
+     */
+    int runExternalCommands(const QList<ExternalCommand> &commands);
+
+    /**
      * Turns on the webcamera/video import mode.
      */
     bool startGrabber();

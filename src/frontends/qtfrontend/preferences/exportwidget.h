@@ -104,16 +104,16 @@ private slots:
 
     // Output file preferences
     /**
-     * Slot for notified the export tab when yes button is selected, so that
-     * encoder preferences can be updated.
+     * Update widgets in order to display that user will be asked about
+     * output destination everytime.
      */
-    void setYesButtonOn();
+    void setAskingUserAboutOutputDestination();
 
     /**
-     * Slot for notified the export tab when no button is selected, so that
-     * encoder preferences can be updated.
+     * Update widgets in order to display that default output destination
+     * will be used everytime without user prompting.
      */
-    void setNoButtonOn();
+    void setUsingDefaultOutputDestination();
 
     /**
      * Slot for notified the export tab when an new default output file name
@@ -157,8 +157,8 @@ private:
 
     // Output file preferences
     QGroupBox    *outputPrefs;
-    QRadioButton *yesButton;
-    QRadioButton *noButton;
+    QRadioButton *askUserEveryTimeButton;
+    QRadioButton *useDefaultOutputButton;
     bool          activeUseDefaultOutputFile;
     QLabel       *askForOutputLabel;
     QLabel       *defaultOutputLabel;

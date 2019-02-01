@@ -57,9 +57,7 @@ public:
     int getSelectedPossibility();
 
 private slots:
-    void newClick();
-    void lastClick();
-    void openClick();
+    void highlightSelection();
     void help();
 
 private:

@@ -108,6 +108,12 @@ private slots:
      */
     void changeSplittingMode(int value);
 
+    /**
+     * Slot for updating the avalability of splitting mode options.
+     * @param enable enable or disable radio buttons.
+     */
+    void enableSplittingOptions(bool enable);
+
     // Output file preferences
     /**
      * Slot for notified the export tab when yes button is selected, so that

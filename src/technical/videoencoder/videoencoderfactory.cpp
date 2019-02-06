@@ -39,75 +39,86 @@ VideoEncoderFactory::~VideoEncoderFactory()
 }
 
 
+QMap<QString, QStringList> VideoEncoderFactory::splitMovieOnParts(DomainFacade *domain,
+                                                                  const QString outputFile) const
+{
+    QMap<QString, QStringList> movies; // key - generated movie's path, values - exposures list
+    const int splittingMode = domain->getMovieExportSplittingMode();
+    AnimationProject *project = domain->getAnimationProject();
+    const int scenesCount = project->getSceneSize();
+    for (int s = 0; s < scenesCount; s++) {
+        Scene *scene = project->getScene(s);
+        const unsigned int takesCount = static_cast<unsigned int>(scene->getTakeSize());
+        for (unsigned int t = 0; t < takesCount; t++) {
+            Take *take = scene->getTake(t);
+            const unsigned int exposuresCount = static_cast<unsigned int>(take->getExposureSize());
+            QStringList exposures;
+            for (unsigned int e = 0; e < exposuresCount; e++) {
+                const Exposure *exposure = take->getExposure(e);
+                const QString imagePath = exposure->getImagePath();
+                exposures.append(imagePath);
+            }
+            const QFileInfo fileInfo(outputFile);
+            const QString baseMovieName = fileInfo.completeBaseName();
+            if (splittingMode == DomainFacade::exportAsWholeMovie) {
+                movies[baseMovieName].append(exposures);
+            } else if (splittingMode == DomainFacade::exportAsSplittedOnScenes) {
+                const QString sceneName = scene->getDescription();
+                const QString movieName = baseMovieName + " - " + sceneName;
+                movies[movieName].append(exposures);
+            } else if (splittingMode == DomainFacade::exportAsSplittedOnTakes) {
+                const QString sceneName = scene->getDescription();
+                const QString takeName = take->getDescription();
+                const QString movieName = baseMovieName + " - " + sceneName + " - " + takeName;
+                movies[movieName] = exposures;
+            } else {
+                qCritical() << "MainWindowGUI::splitMovieOnParts unknown export splitting mode" << splittingMode;
+            }
+        }
+    }
+    return movies;
+}
+
+
 const QString VideoEncoderFactory::createVideoFile(VideoEncoder *encoder)
 {
     qDebug() << "VideoEncoderFactory::createVideoFile --> Start";
 
+    const QString command = encoder->getEncoderCommand();
     const int activeEncoderApplication = frontend->getProject()->getEncoderApplication();
-    if (activeEncoderApplication == DomainFacade::ffmpegApplication) {
-        QMap<QString, QStringList> movies; // key - generated movie's path, values - exposures list
-        const int splittingMode = frontend->getProject()->getMovieExportSplittingMode();
-        AnimationProject *project = frontend->getProject()->getAnimationProject();
-        const int scenesCount = project->getSceneSize();
-        for (int s = 0; s < scenesCount; s++) {
-            Scene *scene = project->getScene(s);
-            const unsigned int takesCount = static_cast<unsigned int>(scene->getTakeSize());
-            for (unsigned int t = 0; t < takesCount; t++) {
-                Take *take = scene->getTake(t);
-                const unsigned int exposuresCount = static_cast<unsigned int>(take->getExposureSize());
-                QStringList exposures;
-                for (unsigned int e = 0; e < exposuresCount; e++) {
-                    const Exposure *exposure = take->getExposure(e);
-                    const QString imagePath = exposure->getImagePath();
-                    exposures.append(imagePath);
-                    qDebug() << imagePath;
-                }
-                if (splittingMode == DomainFacade::exportAsWholeMovie) {
-                    const QFileInfo fileInfo(encoder->getOutputFile());
-                    const QString wholeMovieName = fileInfo.completeBaseName();
-                    movies[wholeMovieName].append(exposures);
-                } else if (splittingMode == DomainFacade::exportAsSplittedOnScenes) {
-                    const QString sceneName = scene->getDescription();
-                    movies[sceneName].append(exposures);
-                } else if (splittingMode == DomainFacade::exportAsSplittedOnTakes) {
-                    const QString sceneName = scene->getDescription();
-                    const QString takeName = take->getDescription();
-                    const QString moviePath = sceneName + " - " + takeName;
-                    movies[moviePath] = exposures;
-                } else {
-                    qCritical() << "MainWindowGUI::exportToVideo unknown export splitting mode" << splittingMode;
-                }
-            }
-        }
 
-        const QString command = encoder->getEncoderCommand();
+    switch (activeEncoderApplication) {
+    case DomainFacade::ffmpegApplication: {
         QList<ExternalCommand> commands;
+        const QMap<QString, QStringList> movies = splitMovieOnParts(frontend->getProject(),
+                                                                    encoder->getOutputFile());
         const QStringList filePaths = encoder->createInputFilelists(movies, frontend->getTempDirName());
         foreach (const QString &filePath, filePaths) {
-            const QStringList arguments = encoder->getEncoderArguments(filePath);
+            const QFileInfo fileInfo(encoder->getOutputFile());
+            const QString outputDirectory = fileInfo.absolutePath();
+            const QStringList arguments = encoder->getEncoderArguments(filePath, outputDirectory);
             if (arguments.isEmpty()) {
-                qCritical() << "MainWindowGUI::exportToVideo couldn't get arguments for encoder."
+                qCritical() << "MainWindowGUI::createVideoFile couldn't get arguments for encoder."
                             << "file path:" << filePath;
+                return QString();
             }
             ExternalCommand cmd(command, arguments);
             commands << cmd;
         }
         frontend->runExternalCommands(commands);
-        qDebug() << "VideoEncoderFactory::createVideoFile --> End (Nothing)";
-        return QString();
+        break;
     }
+    default: {
+        const QStringList arguments = encoder->getEncoderArguments(QString(""), QString(""));
 
-    QString command = encoder->getEncoderCommand();
-    QStringList arguments = encoder->getEncoderArguments(QString(""));
-
-    qDebug() << "VideoEncoderFactory::createVideoFile --> Command:";
-    qDebug() << command << arguments;
-
-    if (!command.isEmpty()) {
-        if (frontend->runExternalCommand(command, arguments) == 0) {
-            qDebug() << "VideoEncoderFactory::createVideoFile --> End (Done)";
-            return encoder->getOutputFile();
+        if (!command.isEmpty()) {
+            if (frontend->runExternalCommand(command, arguments) == 0) {
+                qDebug() << "VideoEncoderFactory::createVideoFile --> End (Done)";
+                return encoder->getOutputFile();
+            }
         }
+        break;
+    }
     }
 
     qDebug() << "VideoEncoderFactory::createVideoFile --> End (Nothing)";

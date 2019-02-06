@@ -120,8 +120,8 @@ void ExportWidget::makeGUI()
     encoderApplicationLabel->setBuddy(encoderApplicationCombo);
     encoderApplicationCombo->setFocusPolicy(Qt::NoFocus);
     connect(encoderApplicationCombo, SIGNAL(activated(int)), this, SLOT(changeEncoderApplication(int)));
-    encoderApplicationCombo->addItem(tr("ffmpeg"));
-    encoderApplicationCombo->addItem(tr("libav"));
+    encoderApplicationCombo->addItem(tr("ffmpeg"), DomainFacade::ffmpegApplication);
+    encoderApplicationCombo->addItem(tr("libav"), DomainFacade::libavApplication);
 
     videoFormatLabel = new QLabel(tr("Video Format:"));
     videoFormatCombo = new QComboBox();
@@ -428,7 +428,13 @@ void ExportWidget::reset()
 
     videoFpsChooser->setValue(activeVideoFps);
 
-    changeSplittingMode(splittingMode);
+    if (activeEncoderApplication == DomainFacade::libavApplication) {
+        changeSplittingMode(DomainFacade::exportAsWholeMovie);
+        enableSplittingOptions(false);
+    } else {
+        enableSplittingOptions(true);
+        changeSplittingMode(splittingMode);
+    }
 
     if (activeUseDefaultOutputFile) {
         setYesButtonOn();
@@ -443,11 +449,20 @@ void ExportWidget::reset()
 }
 
 
-void ExportWidget::changeEncoderApplication(int /*index*/)
+void ExportWidget::changeEncoderApplication(int index)
 {
-    // qDebug() << "ExportWidget::changeEncoderApplication --> Start";
+    qDebug() << "ExportWidget::changeEncoderApplication --> Start. Index:" << index;
 
-    // qDebug() << "ExportWidget::changeEncoderApplication --> End";
+    const int userData = encoderApplicationCombo->itemData(index).toInt();
+    const DomainFacade::encoderApplication encoderType = static_cast<DomainFacade::encoderApplication>(userData);
+    if (encoderType == DomainFacade::libavApplication) {
+        changeSplittingMode(DomainFacade::exportAsWholeMovie);
+        enableSplittingOptions(false);
+    } else {
+        enableSplittingOptions(true);
+    }
+
+    qDebug() << "ExportWidget::changeEncoderApplication --> End";
 }
 
 
@@ -473,26 +488,29 @@ void ExportWidget::changeFps(int newFps)
 
 void ExportWidget::changeSplittingMode(int value)
 {
+    qDebug() << "ExportWidget::changeSplittingMode --> change to" << value;
     switch (value) {
     case DomainFacade::exportAsWholeMovie:
         wholeMovieButton->setChecked(true);
-        splittedOnScenesButton->setChecked(false);
-        splittedOnTakesButton->setChecked(false);
         break;
     case DomainFacade::exportAsSplittedOnScenes:
         splittedOnScenesButton->setChecked(true);
-        wholeMovieButton->setChecked(false);
-        splittedOnTakesButton->setChecked(false);
         break;
     case DomainFacade::exportAsSplittedOnTakes:
         splittedOnTakesButton->setChecked(true);
-        wholeMovieButton->setChecked(false);
-        splittedOnScenesButton->setChecked(false);
         break;
     default:
         qWarning() << "ExportWidget::changeSplittingMode Invalid splitting mode:" << value;
         break;
     }
+}
+
+
+void ExportWidget::enableSplittingOptions(bool enable)
+{
+    wholeMovieButton->setEnabled(enable);
+    splittedOnScenesButton->setEnabled(enable);
+    splittedOnTakesButton->setEnabled(enable);
 }
 
 

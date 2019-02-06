@@ -51,9 +51,11 @@ public:
     /**
      * Gets the arguments for the encoder.
      * @param inputFilelistPath path to file, which contain list of input files
+     * @param outputDirectory path to folder, where output files must be stored
      * @return the encoder argument list
      */
-    virtual const QStringList getEncoderArguments(const QString inputFilelistPath) const = 0;
+    virtual const QStringList getEncoderArguments(const QString inputFilelistPath,
+                                                  const QString outputDirectory) const = 0;
 
     /**
      * Gets the command line registerd by the user in the preferences menu.

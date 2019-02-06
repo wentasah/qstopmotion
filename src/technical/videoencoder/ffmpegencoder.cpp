@@ -93,7 +93,8 @@ FfmpegEncoder::~FfmpegEncoder()
 }
 
 
-const QStringList FfmpegEncoder::getEncoderArguments(const QString inputFilelistPath) const
+const QStringList FfmpegEncoder::getEncoderArguments(const QString inputFilelistPath,
+                                                     const QString outputDirectory) const
 {
     QStringList arguments;
 
@@ -112,7 +113,7 @@ const QStringList FfmpegEncoder::getEncoderArguments(const QString inputFilelist
     arguments << QLatin1String("-safe");
     arguments << QLatin1String("0");
     arguments << QLatin1String("-i");
-    arguments << QString("\"%1\"").arg("C:\\Users\\Usver\\.qstopmotion\\tmp\\list.txt"); // fileListPath
+    arguments << fileListPath;
 
     // ===============================
     // Output options
@@ -124,7 +125,8 @@ const QStringList FfmpegEncoder::getEncoderArguments(const QString inputFilelist
     }
 
     const QString movieName = inputFilelistPath.mid(namePos + MOVIENAMEPREFIX.length());
-    arguments << outputOptions(movieName);
+    const QFileInfo outputFileInfo(outputDirectory, movieName);
+    arguments << outputOptions(outputFileInfo.absoluteFilePath());
 
     return arguments;
 }
@@ -233,15 +235,19 @@ const QStringList FfmpegEncoder::outputOptions(const QString &movieName) const
 
     // Video format
     arguments << QLatin1String("-f");
+    QString fileExtension("");
     switch(animationProject->getVideoFormat()) {
     case DomainFacade::aviFormat:
+        fileExtension = QLatin1String(".avi");
         arguments << QLatin1String("avi");
         break;
     case DomainFacade::mp4Format:
+        fileExtension = QLatin1String(".mp4");
         arguments << QLatin1String("mp4");
         break;
     default:
         // Default value is AVI output
+        fileExtension = QLatin1String(".avi");
         arguments << QLatin1String("avi");
         break;
     }
@@ -258,7 +264,11 @@ const QStringList FfmpegEncoder::outputOptions(const QString &movieName) const
     // ===============================
     // Output file
     // ===============================
-    arguments << QString("\"%1\"").arg(movieName);
+    QString fullName = movieName;
+    if (!fullName.endsWith(fileExtension, Qt::CaseInsensitive)) {
+        fullName.append(fileExtension);
+    }
+    arguments << fullName;
 
     return arguments;
 }

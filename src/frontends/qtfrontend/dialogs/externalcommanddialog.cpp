@@ -65,7 +65,6 @@ ExternalCommandDialog::ExternalCommandDialog(Frontend *f, QWidget *parent)
     helpButton->setDefault(false);
     connect(helpButton, SIGNAL(clicked()), this, SLOT(help()));
     helpButton->setShortcut(QKeySequence::HelpContents);
-    connect(helpButton, SIGNAL(triggered()), this, SLOT(help()));
     hboxLayout->addWidget(helpButton);
 
     closeButton = new QPushButton(this);

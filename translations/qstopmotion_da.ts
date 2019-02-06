@@ -82,57 +82,62 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="116"/>
+        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="91"/>
+        <source>Russian</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="117"/>
         <source>&amp;Thanks To</source>
         <translation>&amp;Tak til</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="120"/>
+        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="121"/>
         <source>This program is distributed under the terms of the GPL v2.</source>
         <translation>Dette program er distribueret under reglerne for GPL v2.</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="126"/>
+        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="127"/>
         <source>&amp;Licence Agreement</source>
         <translation>&amp;Licensaftale</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="132"/>
+        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="133"/>
         <source>Qt runtime version: </source>
         <translation>Qt runtime version: </translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="135"/>
+        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="136"/>
         <source>Operating system name and version: </source>
         <translation>Operativsystem og version: </translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="164"/>
+        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="165"/>
         <source>Unknown Windows OS</source>
         <translation>Ukendt Windows OS</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="193"/>
+        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="194"/>
         <source>Unknown Mac OS</source>
         <translation>Ukendt Mac OS</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="208"/>
+        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="209"/>
         <source>Build time: %1 %2</source>
         <translation>Build tid: %1 %2</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="212"/>
+        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="213"/>
         <source>&amp;System Info</source>
         <translation>&amp;System Info</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="214"/>
+        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="215"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="227"/>
+        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="228"/>
         <source>About</source>
         <translation>Om</translation>
     </message>
@@ -140,18 +145,18 @@
 <context>
     <name>AnimationProject</name>
     <message>
-        <location filename="../src/domain/animation/animationproject.cpp" line="561"/>
+        <location filename="../src/domain/animation/animationproject.cpp" line="577"/>
         <source>Saving scenes to disk ...</source>
         <translation>Gemmer scener til disk ...</translation>
     </message>
     <message>
-        <location filename="../src/domain/animation/animationproject.cpp" line="1523"/>
-        <location filename="../src/domain/animation/animationproject.cpp" line="1530"/>
+        <location filename="../src/domain/animation/animationproject.cpp" line="1549"/>
+        <location filename="../src/domain/animation/animationproject.cpp" line="1556"/>
         <source>Add Sound</source>
         <translation>Tilføj lyd</translation>
     </message>
     <message>
-        <location filename="../src/domain/animation/animationproject.cpp" line="1524"/>
+        <location filename="../src/domain/animation/animationproject.cpp" line="1550"/>
         <source>Cannot open the selected audio file for reading.
 Check that you have the right permissions set.
 The animation will be run without sound if you
@@ -162,7 +167,7 @@ Animationen vil blive spillet uden lyd,
 hvis du vælger afspil.</translation>
     </message>
     <message>
-        <location filename="../src/domain/animation/animationproject.cpp" line="1531"/>
+        <location filename="../src/domain/animation/animationproject.cpp" line="1557"/>
         <source>The selected audio file is not valid within the
 given audio format. The animation will be run
 without sound if you choose to play.</source>
@@ -657,8 +662,8 @@ uden lyd hvis du vælger afspil.</translation>
     <name>DomainFacade</name>
     <message>
         <location filename="../src/domain/domainfacade.cpp" line="152"/>
-        <location filename="../src/domain/domainfacade.cpp" line="551"/>
-        <location filename="../src/domain/domainfacade.cpp" line="1321"/>
+        <location filename="../src/domain/domainfacade.cpp" line="563"/>
+        <location filename="../src/domain/domainfacade.cpp" line="1338"/>
         <source>Critical</source>
         <translation>Kritisk</translation>
     </message>
@@ -668,12 +673,12 @@ uden lyd hvis du vælger afspil.</translation>
         <translation>Kan ikke åbne historie filen og skrive post!</translation>
     </message>
     <message>
-        <location filename="../src/domain/domainfacade.cpp" line="552"/>
+        <location filename="../src/domain/domainfacade.cpp" line="564"/>
         <source>Can&apos;t open history file to recover project!</source>
         <translation>Kan ikke åbne historie filen og genskabe projekt!</translation>
     </message>
     <message>
-        <location filename="../src/domain/domainfacade.cpp" line="1322"/>
+        <location filename="../src/domain/domainfacade.cpp" line="1339"/>
         <source>Can&apos;t copy image to temp directory!</source>
         <translation>Kan ikke kopiere billede til midlertidig mappe!</translation>
     </message>
@@ -780,132 +785,152 @@ uden lyd hvis du vælger afspil.</translation>
 <context>
     <name>ExportWidget</name>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="91"/>
+        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="98"/>
         <source>Below you can set which program should be used for encoding a new project to a video file.</source>
         <translation>Herunder kan du vælge hvilket program der skal bruges for at lave dit nye projekt til en video fil.</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="98"/>
+        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="105"/>
         <source>Below you can set which program should be used for encoding the currently active project to a video file.</source>
         <translation>Herunder kan du vælge hvilket program der skal bruges for at lave dit aktive projekt om til en video fil.</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="109"/>
+        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="116"/>
         <source>Encoder settings</source>
         <translation>Encoder instillinger</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="111"/>
+        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="118"/>
         <source>Encoder Application:</source>
         <translation>Encoder Applikation:</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="116"/>
+        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="123"/>
         <source>ffmpeg</source>
         <translation>ffmpeg</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="117"/>
+        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="124"/>
         <source>libav</source>
         <translation>libav</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="119"/>
+        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="126"/>
         <source>Video Format:</source>
         <translation>Video Format:</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="124"/>
+        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="131"/>
         <source>AVI</source>
         <translation>AVI</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="125"/>
+        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="132"/>
         <source>MP4</source>
         <translation>MP4</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="127"/>
+        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="134"/>
         <source>Video Size:</source>
         <translation>Video Størrelse:</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="132"/>
+        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="139"/>
         <source>Frame Size</source>
         <translation>Billed størrelse</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="133"/>
+        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="140"/>
         <source>QVGA (320x240)</source>
         <translation>QVGA (320x240)</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="134"/>
+        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="141"/>
         <source>VGA (640x480)</source>
         <translation>VGA (640x480)</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="135"/>
+        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="142"/>
         <source>SVGA (800x600)</source>
         <translation>SVGA (800x600)</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="136"/>
+        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="143"/>
         <source>PAL D (704x576)</source>
         <translation>PAL D (704x576)</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="137"/>
+        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="144"/>
         <source>HD Ready (1280x720)</source>
         <translation>HD Ready (1280x720)</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="138"/>
+        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="145"/>
         <source>Full HD (1900x1080)</source>
         <translation>Fuld HD (1900x1080)</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="140"/>
+        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="147"/>
         <source>Frames per Second:</source>
         <translation>Billeder per sekund:</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="144"/>
+        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="151"/>
         <source>&lt;h4&gt;FPS chooser&lt;/h4&gt; &lt;p&gt;By changing the value in this chooser you set which speed the animation in the &lt;b&gt;FrameView&lt;/b&gt; should run at.&lt;/p&gt; &lt;p&gt;To start an animation press the &lt;b&gt;Run Animation&lt;/b&gt; button.&lt;/p&gt;</source>
         <translation>&lt;h4&gt;BPS vælger&lt;/h4&gt; &lt;p&gt;Ved at ændre værdien i dette felt, vælger du hastigheden som animationen i &lt;b&gt;Fremviseren&lt;/b&gt; vil køre med.&lt;/p&gt; &lt;p&gt;Start animationen ved at presse &lt;b&gt;Kør Animation&lt;/b&gt; knappen.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="164"/>
+        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="171"/>
+        <source>Splitting up the movie on several files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="173"/>
+        <source>All scenes and takes will be united in one movie</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="177"/>
+        <source>Movie will be splitted up by scenes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="181"/>
+        <source>Movie will be splitted up by takes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="187"/>
         <source>Output file settings</source>
         <translation>Output fil indstillinger</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="167"/>
+        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="190"/>
         <source>Do you want to be asked for an output file everytime you choose to export?</source>
         <translation>Vil du spørges om output fil hver gang du vælger at eksportere en fil?</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="170"/>
+        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="193"/>
         <source>Yes</source>
         <translation>Ja</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="175"/>
+        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="198"/>
         <source>No</source>
         <translation>Nej</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="180"/>
+        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="203"/>
         <source>Set default output file:</source>
         <translation>Indstil standard output fil:</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="186"/>
+        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="209"/>
         <source>Browse</source>
         <translation>Gennemse</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="453"/>
+        <location filename="../src/frontends/qtfrontend/preferences/exportwidget.cpp" line="551"/>
         <source>Choose output file</source>
         <translation>Vælg output fil</translation>
     </message>
@@ -979,7 +1004,7 @@ uden lyd hvis du vælger afspil.</translation>
         <translation>Hjælp</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/externalcommanddialog.cpp" line="75"/>
+        <location filename="../src/frontends/qtfrontend/dialogs/externalcommanddialog.cpp" line="74"/>
         <source>Close</source>
         <translation>Luk</translation>
     </message>
@@ -989,18 +1014,18 @@ uden lyd hvis du vælger afspil.</translation>
         <translation>Output fra ekstern kommando</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/externalcommanddialog.cpp" line="137"/>
-        <location filename="../src/frontends/qtfrontend/dialogs/externalcommanddialog.cpp" line="141"/>
+        <location filename="../src/frontends/qtfrontend/dialogs/externalcommanddialog.cpp" line="173"/>
+        <location filename="../src/frontends/qtfrontend/dialogs/externalcommanddialog.cpp" line="177"/>
         <source>Result</source>
         <translation>Resultat</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/externalcommanddialog.cpp" line="138"/>
+        <location filename="../src/frontends/qtfrontend/dialogs/externalcommanddialog.cpp" line="174"/>
         <source>Failed!</source>
         <translation>Mislykkedes!</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/externalcommanddialog.cpp" line="142"/>
+        <location filename="../src/frontends/qtfrontend/dialogs/externalcommanddialog.cpp" line="178"/>
         <source>Successful!</source>
         <translation>Succes!</translation>
     </message>
@@ -2125,18 +2150,18 @@ Kontroller dine indstillinger for projektet!</translation>
 %4</translation>
     </message>
     <message>
-        <location filename="../src/technical/preferencestool.cpp" line="548"/>
-        <location filename="../src/technical/preferencestool.cpp" line="555"/>
+        <location filename="../src/technical/preferencestool.cpp" line="549"/>
+        <location filename="../src/technical/preferencestool.cpp" line="556"/>
         <source>Critical</source>
         <translation>Kritisk</translation>
     </message>
     <message>
-        <location filename="../src/technical/preferencestool.cpp" line="549"/>
+        <location filename="../src/technical/preferencestool.cpp" line="550"/>
         <source>Can&apos;t remove preferences backup file!</source>
         <translation>Kan ikke flytte foretrukne backup fil!</translation>
     </message>
     <message>
-        <location filename="../src/technical/preferencestool.cpp" line="556"/>
+        <location filename="../src/technical/preferencestool.cpp" line="557"/>
         <source>Can&apos;t copy preferences file to backup file!</source>
         <translation>Kan ikke kopiere foretrukne fil til backup fil!</translation>
     </message>
@@ -2639,19 +2664,19 @@ Du behøver ret til at læse, skrive og eksekvere i .qstopmotion mappen.</transl
         <translation>&amp;OK</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="928"/>
+        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="936"/>
         <source>Recovery</source>
         <translation>Genopretning</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="929"/>
+        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="937"/>
         <source>Something caused qStopmotion to exit abnormally
 last time it was run. Do you want to recover?</source>
         <translation>Noget fik qStopmotion til at stoppe uregelmæssigt
 sidst. Ønsker du at genoprette?</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="937"/>
+        <location filename="../src/frontends/qtfrontend/qtfrontend.cpp" line="945"/>
         <source>qStopMotion - Recovered Project</source>
         <translation>qStopMotion - Genopret Projekt</translation>
     </message>

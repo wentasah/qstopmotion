@@ -107,6 +107,10 @@
         <source>Greek</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Russian</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>AnimationProject</name>
@@ -574,6 +578,22 @@ rozhodnete pro přehrání, přehrána bez zvuku.</translation>
     <message>
         <source>libav</source>
         <translation>libav</translation>
+    </message>
+    <message>
+        <source>Splitting up the movie on several files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>All scenes and takes will be united in one movie</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Movie will be splitted up by scenes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Movie will be splitted up by takes</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

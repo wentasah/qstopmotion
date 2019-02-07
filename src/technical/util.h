@@ -50,6 +50,11 @@ public:
      */
     static const QString convertPathFromOsSpecific(const QString &path);
 
+    /**
+     * Try to find location of default photo editor - Gimp, then MsPaint.
+     * @return Absolute file path to default photo editor or empty string.
+     */
+    static const QString findDefaultPhotoEditor();
 };
 
 #endif

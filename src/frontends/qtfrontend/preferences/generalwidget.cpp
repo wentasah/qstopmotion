@@ -75,29 +75,7 @@ GeneralWidget::GeneralWidget(Frontend *f, QWidget *parent)
     photoEditorLabel      = 0;
     photoEditorEdit       = 0;
     photoEditorButton     = 0;
-
-#if defined(Q_OS_WIN32) || defined(Q_OS_WIN64)
-    // Windows version
-    const QString gimpPath(Util::checkCommand("gimp-?.?"));
-    if (!gimpPath.isEmpty()) {
-        actualPhotoEditorPath = gimpPath;
-    } else {
-        const QString mspaintPath(Util::checkCommand("mspaint"));
-        if (!mspaintPath.isEmpty()) {
-            actualPhotoEditorPath = mspaintPath;
-        } else {
-            actualPhotoEditorPath = QString("");
-        }
-    }
-#else
-    // Linux and Apple OS X version
-    const QString gimpCommand = Util::checkCommand("gimp");
-    if (!gimpPath.isEmpty()) {
-        actualPhotoEditorPath = gimpPath;
-    } else {
-        actualPhotoEditorPath = QString("");
-    }
-#endif
+    actualPhotoEditorPath = Util::findDefaultPhotoEditor();
 
     this->setObjectName("GeneralWidget");
 

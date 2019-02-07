@@ -107,6 +107,10 @@
         <source>Greek</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Russian</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>AnimationProject</name>
@@ -738,6 +742,22 @@ rozhodnete pro přehrání, přehrána bez zvuku.</translation>
     <message>
         <source>Take Picture Signal</source>
         <translation>Signál k udělání záběru</translation>
+    </message>
+    <message>
+        <source>Image editor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Select application for edit exposures:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Choose</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Choose image editor</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1569,7 +1589,7 @@ Kodér nainstalujte nebo vyberte jiný!</translation>
     </message>
     <message>
         <source>You do not have Gimp installed on your system</source>
-        <translation>GIMP není nainstalován v systému</translation>
+        <translation type="vanished">GIMP není nainstalován v systému</translation>
     </message>
     <message>
         <source>Insert Frames</source>
@@ -1597,7 +1617,7 @@ Kodér nainstalujte nebo vyberte jiný!</translation>
     </message>
     <message>
         <source>Failed to start Gimp!</source>
-        <translation>Nepodařilo se spustit GIMP!</translation>
+        <translation type="vanished">Nepodařilo se spustit GIMP!</translation>
     </message>
     <message>
         <source>There is no active frame to open</source>
@@ -1658,6 +1678,14 @@ Kodér nainstalujte nebo vyberte jiný!</translation>
     <message>
         <source>Project Tree</source>
         <translation>Projektový strom</translation>
+    </message>
+    <message>
+        <source>You do not have any photo editor installed on your system</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Failed to start Photo editor!</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

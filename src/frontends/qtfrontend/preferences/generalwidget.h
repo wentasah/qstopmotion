@@ -133,6 +133,11 @@ private slots:
      */
     void clickedGridColorButton();
 
+    /**
+     * Slot for display file dialog for selecting photo editor.
+     */
+    void choosePhotoEditor();
+
 private:
     Frontend     *frontend;
 
@@ -151,6 +156,10 @@ private:
     QPushButton  *gridColorButton;
     QGroupBox    *signalGroupBox;
     QCheckBox    *signalCheck;
+    QGroupBox    *photoEditorBox;
+    QLabel       *photoEditorLabel;
+    QLineEdit    *photoEditorEdit;
+    QPushButton  *photoEditorButton;
 
     int           actualLanguage;
     int           actualButtonFunction;
@@ -161,6 +170,7 @@ private:
     QColor        actualGridColor;
     QColor        newGridColor;
     bool          actualSignal;
+    QString       actualPhotoEditorPath;
 };
 
 #endif

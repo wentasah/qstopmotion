@@ -22,6 +22,7 @@
 
 #include <QDebug>
 #include <QColorDialog>
+#include <QFileDialog>
 #include <QGridLayout>
 #include <QHeaderView>
 #include <QInputDialog>
@@ -30,6 +31,7 @@
 #include "domain/domainfacade.h"
 #include "frontends/qtfrontend/elements/flexiblelineedit.h"
 #include "technical/preferencestool.h"
+#include "technical/util.h"
 
 
 const QColor GeneralWidget::GRIDCOLORDEFAULT = Qt::black;
@@ -68,6 +70,34 @@ GeneralWidget::GeneralWidget(Frontend *f, QWidget *parent)
     signalGroupBox        = 0;
     signalCheck           = 0;
     actualSignal          = SIGNALDEFAULT;
+
+    photoEditorBox        = 0;
+    photoEditorLabel      = 0;
+    photoEditorEdit       = 0;
+    photoEditorButton     = 0;
+
+#if defined(Q_OS_WIN32) || defined(Q_OS_WIN64)
+    // Windows version
+    const QString gimpPath(Util::checkCommand("gimp-?.?"));
+    if (!gimpPath.isEmpty()) {
+        actualPhotoEditorPath = gimpPath;
+    } else {
+        const QString mspaintPath(Util::checkCommand("mspaint"));
+        if (!mspaintPath.isEmpty()) {
+            actualPhotoEditorPath = mspaintPath;
+        } else {
+            actualPhotoEditorPath = QString("");
+        }
+    }
+#else
+    // Linux and Apple OS X version
+    const QString gimpCommand = Util::checkCommand("gimp");
+    if (!gimpPath.isEmpty()) {
+        actualPhotoEditorPath = gimpPath;
+    } else {
+        actualPhotoEditorPath = QString("");
+    }
+#endif
 
     this->setObjectName("GeneralWidget");
 
@@ -181,11 +211,33 @@ void GeneralWidget::makeGUI()
     signalLayout->addWidget(signalCheck, 0, 0);
     signalGroupBox->setLayout(signalLayout);
 
+    // Photo editor's preferences
+    photoEditorBox = new QGroupBox;
+    photoEditorBox->setTitle(tr("Image editor"));
+
+    photoEditorLabel = new QLabel(tr("Select application for edit exposures:"));
+    photoEditorEdit = new FlexibleLineEdit;
+    photoEditorButton = new QPushButton(tr("Choose"));
+    photoEditorButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    connect(photoEditorButton, SIGNAL(clicked()),
+            this, SLOT(choosePhotoEditor()));
+
+    QVBoxLayout *photoEditorLayout = new QVBoxLayout;
+    photoEditorLayout->addWidget(photoEditorLabel);
+    QHBoxLayout *hbLayout = new QHBoxLayout;
+    hbLayout->addWidget(photoEditorEdit);
+    hbLayout->addWidget(photoEditorButton);
+    photoEditorLayout->addLayout(hbLayout);
+
+    photoEditorBox->setLayout(photoEditorLayout);
+
+    // Main layout
     QVBoxLayout *mainLayout = new QVBoxLayout;
     mainLayout->addWidget(languageGroupBox);
     mainLayout->addWidget(captureGroupBox);
     mainLayout->addWidget(gridGroupBox);
     mainLayout->addWidget(signalGroupBox);
+    mainLayout->addWidget(photoEditorBox);
     mainLayout->addStretch(1);
 
     setLayout(mainLayout);
@@ -201,6 +253,7 @@ void GeneralWidget::initialize()
     PreferencesTool *pref = frontend->getPreferences();
     QString          actualLocale;
     QString          colorName;
+    QString          photoEditorPath;
     QVector<QString> locales = frontend->getLocales();
 
     pref->getStringPreference("preferences", "language", actualLocale);
@@ -220,6 +273,9 @@ void GeneralWidget::initialize()
         actualGridColor.setNamedColor(colorName);
     }
     pref->getBooleanPreference("preferences", "signal", actualSignal);
+    if (pref->getStringPreference("preferences", "photoeditor", photoEditorPath) == true) {
+        actualPhotoEditorPath = photoEditorPath;
+    }
 
     reset();
 
@@ -318,6 +374,13 @@ void GeneralWidget::apply()
         actualSignal = newSignal;
     }
 
+    const QString newPhotoEditorPath = photoEditorEdit->text();
+    if (newPhotoEditorPath != actualPhotoEditorPath) {
+        // Photo editor changed
+        pref->setStringPreference("preferences", "photoeditor", newPhotoEditorPath);
+        actualPhotoEditorPath = newPhotoEditorPath;
+    }
+
     qDebug() << "GeneralWidget::apply --> End";
 }
 
@@ -344,6 +407,7 @@ void GeneralWidget::reset()
     horizontalGridCheck->setChecked(actualHorizontalGrid);
     horizontalGridSpin->setValue(actualHorizontalSpin);
     signalCheck->setChecked(actualSignal);
+    photoEditorEdit->setText(actualPhotoEditorPath);
 
     qDebug() << "GeneralWidget::reset --> End";
 }
@@ -405,4 +469,18 @@ void GeneralWidget::clickedGridColorButton()
 {
     newGridColor = QColorDialog::getColor(actualGridColor);
     gridColorButton->setText(newGridColor.name());
+}
+
+void GeneralWidget::choosePhotoEditor()
+{
+    QString currentApp = photoEditorEdit->text();
+    if (!QFileInfo::exists(currentApp)) {
+        currentApp = QDir::home().absolutePath();
+    }
+
+    QString appPath = QFileDialog::getOpenFileName(this, tr("Choose image editor"),
+                                                   currentApp);
+    if (!appPath.isEmpty()) {
+        photoEditorEdit->setText(appPath);
+    }
 }

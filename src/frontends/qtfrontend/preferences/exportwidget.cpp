@@ -62,8 +62,8 @@ ExportWidget::ExportWidget(Frontend *f, bool type, QWidget *parent) : QWidget(pa
     // Output file preferences
     outputPrefs                = 0;
     askForOutputLabel          = 0;
-    yesButton                  = 0;
-    noButton                   = 0;
+    askUserEveryTimeButton     = 0;
+    useDefaultOutputButton     = 0;
     activeEncoderApplication   = 0;
     defaultOutputLabel         = 0;
     defaultOutputEdit          = 0;
@@ -167,15 +167,17 @@ void ExportWidget::makeGUI()
         tr("Do you want to be asked for an output file everytime you choose to export?"));
     askForOutputLabel->setWordWrap(true);
 
-    yesButton = new QRadioButton(tr("Yes"));
-    yesButton->setChecked(true);
-    yesButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-    connect(yesButton, SIGNAL(clicked()), this, SLOT(setYesButtonOn()));
+    askUserEveryTimeButton = new QRadioButton(tr("Yes"));
+    askUserEveryTimeButton->setChecked(true);
+    askUserEveryTimeButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    connect(askUserEveryTimeButton, SIGNAL(clicked()),
+            this, SLOT(setAskingUserAboutOutputDestination()));
 
-    noButton = new QRadioButton(tr("No"));
-    noButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-    noButton->setChecked(false);
-    connect(noButton, SIGNAL(clicked()), this, SLOT(setNoButtonOn()));
+    useDefaultOutputButton = new QRadioButton(tr("No"));
+    useDefaultOutputButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    useDefaultOutputButton->setChecked(false);
+    connect(useDefaultOutputButton, SIGNAL(clicked()),
+            this, SLOT(setUsingDefaultOutputDestination()));
 
     defaultOutputLabel = new QLabel(tr("Set default output file:"));
     defaultOutputEdit = new FlexibleLineEdit;
@@ -205,8 +207,8 @@ void ExportWidget::makeGUI()
     outputPrefsLayout->addWidget(askForOutputLabel);
 
     QHBoxLayout *hbLayout = new QHBoxLayout;
-    hbLayout->addWidget(yesButton);
-    hbLayout->addWidget(noButton);
+    hbLayout->addWidget(askUserEveryTimeButton);
+    hbLayout->addWidget(useDefaultOutputButton);
     hbLayout->addStretch(1);
     outputPrefsLayout->addLayout(hbLayout);
     if (!tabType) {
@@ -304,7 +306,7 @@ void ExportWidget::apply()
         changings = true;
     }
 
-    if (noButton->isChecked()) {
+    if (useDefaultOutputButton->isChecked()) {
         if (false == activeUseDefaultOutputFile) {
             activeUseDefaultOutputFile = true;
             changings = true;
@@ -375,10 +377,10 @@ void ExportWidget::reset()
     videoFpsChooser->setValue(activeVideoFps);
 
     if (activeUseDefaultOutputFile) {
-        setYesButtonOn();
+        setUsingDefaultOutputDestination();
     }
     else {
-        setNoButtonOn();
+        setAskingUserAboutOutputDestination();
     }
 
     defaultOutputEdit->setText(activeDefaultOutputFileName);
@@ -416,10 +418,10 @@ void ExportWidget::changeFps(int newFps)
 }
 
 
-void ExportWidget::setYesButtonOn()
+void ExportWidget::setAskingUserAboutOutputDestination()
 {
-    yesButton->setChecked(true);
-    noButton->setChecked(false);
+    askUserEveryTimeButton->setChecked(true);
+    useDefaultOutputButton->setChecked(false);
     if (!tabType) {
         defaultOutputEdit->setEnabled(false);
         browseOutputButton->setEnabled(false);
@@ -427,10 +429,10 @@ void ExportWidget::setYesButtonOn()
 }
 
 
-void ExportWidget::setNoButtonOn()
+void ExportWidget::setUsingDefaultOutputDestination()
 {
-    noButton->setChecked(true);
-    yesButton->setChecked(false);
+    useDefaultOutputButton->setChecked(true);
+    askUserEveryTimeButton->setChecked(false);
     if (!tabType) {
         defaultOutputEdit->setEnabled(true);
         browseOutputButton->setEnabled(true);

@@ -2468,37 +2468,42 @@ last time it was run. Do you want to recover?</source>
     <name>ToolBar</name>
     <message>
         <location filename="../src/frontends/qtfrontend/toolbar.cpp" line="175"/>
+        <source>&lt;h4&gt;Degree of overlay&lt;/h4&gt;&lt;p&gt;Change the degree of superposition of the previous exposure to live video from camera&lt;/p&gt;</source>
+        <translation>&lt;h4&gt;Степень наложения&lt;/h4&gt;&lt;p&gt;Изменение степени наложения предыдущего кадрика на текущее видео с камеры&lt;/p&gt;</translation>
+    </message>
+    <message>
+        <location filename="../src/frontends/qtfrontend/toolbar.cpp" line="180"/>
         <source>&lt;h4&gt;Play animation (K, P)&lt;/h4&gt;</source>
         <translation>&lt;h4&gt;Запустить анимацию (K, P)&lt;/h4&gt;</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/toolbar.cpp" line="184"/>
+        <location filename="../src/frontends/qtfrontend/toolbar.cpp" line="189"/>
         <source>&lt;h4&gt;First frame of the take (J, Left)&lt;/h4&gt;</source>
         <translation>&lt;h4&gt;Первый кадрик из кадра (J, Left)&lt;/h4&gt;</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/toolbar.cpp" line="187"/>
-        <location filename="../src/frontends/qtfrontend/toolbar.cpp" line="190"/>
+        <location filename="../src/frontends/qtfrontend/toolbar.cpp" line="192"/>
+        <location filename="../src/frontends/qtfrontend/toolbar.cpp" line="195"/>
         <source>&lt;h4&gt;Previous frame (J, Left)&lt;/h4&gt;</source>
         <translation>&lt;h4&gt;Предыдущий кадрик (J, Left)&lt;/h4&gt;</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/toolbar.cpp" line="193"/>
+        <location filename="../src/frontends/qtfrontend/toolbar.cpp" line="198"/>
         <source>&lt;h4&gt;Next frame (L, Right)&lt;/h4&gt;</source>
         <translation>&lt;h4&gt;Следующий кадрик (L, Right)&lt;/h4&gt;</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/toolbar.cpp" line="196"/>
+        <location filename="../src/frontends/qtfrontend/toolbar.cpp" line="201"/>
         <source>&lt;h4&gt;Last frame of the take (L, Right)&lt;/h4&gt;</source>
         <translation>&lt;h4&gt;Последний кадрик из кадра (L, Right)&lt;/h4&gt;</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/toolbar.cpp" line="206"/>
+        <location filename="../src/frontends/qtfrontend/toolbar.cpp" line="211"/>
         <source>&lt;h4&gt;Capture Frame (Space)&lt;/h4&gt; &lt;p&gt;Click on this button to &lt;em&gt;capture&lt;/em&gt; a frame from the camera an put it in the animation&lt;/p&gt; &lt;p&gt; This can also be done by pressing the &lt;b&gt;Space key&lt;/b&gt;&lt;/p&gt;</source>
         <translation>&lt;h4&gt;Сделать снимок (Space)&lt;/h4&gt; &lt;p&gt;Нажмите на эту кнопку чтобы &lt;em&gt;сделать снимок&lt;/em&gt; одного кадрика с камеры и добавить его в анимацию&lt;/p&gt; &lt;p&gt; Это также можно сделать нажатием кнопки &lt;b&gt;Пробел&lt;/b&gt;&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/toolbar.cpp" line="359"/>
+        <location filename="../src/frontends/qtfrontend/toolbar.cpp" line="364"/>
         <source>Running animation</source>
         <translation>Проигрывание анимации</translation>
     </message>

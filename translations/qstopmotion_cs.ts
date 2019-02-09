@@ -2074,6 +2074,10 @@ Potřebujete oprávnění ke čtení, zápisu a spouštění adresáře .qstopmo
         <source>&lt;h4&gt;Previous frame (J, Left)&lt;/h4&gt;</source>
         <translation>&lt;h4&gt;Předchozí snímek (J, šipka vlevo)&lt;/h4&gt;</translation>
     </message>
+    <message>
+        <source>&lt;h4&gt;Degree of overlay&lt;/h4&gt;&lt;p&gt;Change the degree of superposition of the previous exposure to live video from camera&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>TransformWidget</name>

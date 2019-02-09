@@ -60,42 +60,42 @@
         <translation type="obsolete">Tester</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="116"/>
+        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="117"/>
         <source>&amp;Thanks To</source>
         <translation>&amp;Remerciements à</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="126"/>
+        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="127"/>
         <source>&amp;Licence Agreement</source>
         <translation>Accord de &amp;licence</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="164"/>
+        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="165"/>
         <source>Unknown Windows OS</source>
         <translation>Windows OS inconnu</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="193"/>
+        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="194"/>
         <source>Unknown Mac OS</source>
         <translation>Mac OS inconnu</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="208"/>
+        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="209"/>
         <source>Build time: %1 %2</source>
         <translation>Moment de la création: %1 %2</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="212"/>
+        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="213"/>
         <source>&amp;System Info</source>
         <translation>&amp;Information du système</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="214"/>
+        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="215"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="227"/>
+        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="228"/>
         <source>About</source>
         <translation>A propos</translation>
     </message>
@@ -131,17 +131,22 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="120"/>
+        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="91"/>
+        <source>Russian</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="121"/>
         <source>This program is distributed under the terms of the GPL v2.</source>
         <translation>Ce programme est mis en place sous les conditions de GPL v2.</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="132"/>
+        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="133"/>
         <source>Qt runtime version: </source>
         <translation>Version du temps d&apos;éxecution Qt: </translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="135"/>
+        <location filename="../src/frontends/qtfrontend/dialogs/aboutdialog.cpp" line="136"/>
         <source>Operating system name and version: </source>
         <translation>nom et version du système d&apos;exploitation:</translation>
     </message>
@@ -2857,38 +2862,43 @@ Il vous faut des droits d&apos;accès pour lire, écrire et exécuter dans .qsto
 <context>
     <name>ToolBar</name>
     <message>
-        <location filename="../src/frontends/qtfrontend/toolbar.cpp" line="206"/>
+        <location filename="../src/frontends/qtfrontend/toolbar.cpp" line="211"/>
         <source>&lt;h4&gt;Capture Frame (Space)&lt;/h4&gt; &lt;p&gt;Click on this button to &lt;em&gt;capture&lt;/em&gt; a frame from the camera an put it in the animation&lt;/p&gt; &lt;p&gt; This can also be done by pressing the &lt;b&gt;Space key&lt;/b&gt;&lt;/p&gt;</source>
         <translation>&lt;h4&gt;Capturer une Image (Espace)&lt;/h4&gt; &lt;p&gt;Cliquez sur ce bouton pour &lt;em&gt;capturer&lt;/em&gt; une image depuis la caméra et l&apos;insérer dans l&apos;animation&lt;/p&gt; &lt;p&gt; Pour ce faire, vous pouvez aussi utiliser le raccourci clavier : la &lt;b&gt;touche Espace&lt;/b&gt;&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/toolbar.cpp" line="175"/>
+        <location filename="../src/frontends/qtfrontend/toolbar.cpp" line="180"/>
         <source>&lt;h4&gt;Play animation (K, P)&lt;/h4&gt;</source>
         <translation>&lt;h4&gt;Lecture de l&apos;animation (K, P)&lt;/h4&gt;</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/toolbar.cpp" line="359"/>
+        <location filename="../src/frontends/qtfrontend/toolbar.cpp" line="364"/>
         <source>Running animation</source>
         <translation>Affichage de l&apos;animation en cours</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/toolbar.cpp" line="184"/>
+        <location filename="../src/frontends/qtfrontend/toolbar.cpp" line="189"/>
         <source>&lt;h4&gt;First frame of the take (J, Left)&lt;/h4&gt;</source>
         <translation>&lt;h4&gt;Première image de la prise de vue (J, Gauche)&lt;/h4&gt;</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/toolbar.cpp" line="187"/>
-        <location filename="../src/frontends/qtfrontend/toolbar.cpp" line="190"/>
+        <location filename="../src/frontends/qtfrontend/toolbar.cpp" line="175"/>
+        <source>&lt;h4&gt;Degree of overlay&lt;/h4&gt;&lt;p&gt;Change the degree of superposition of the previous exposure to live video from camera&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontends/qtfrontend/toolbar.cpp" line="192"/>
+        <location filename="../src/frontends/qtfrontend/toolbar.cpp" line="195"/>
         <source>&lt;h4&gt;Previous frame (J, Left)&lt;/h4&gt;</source>
         <translation>&lt;h4&gt;Image pécédente (J, Gauche)&lt;/h4&gt;</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/toolbar.cpp" line="193"/>
+        <location filename="../src/frontends/qtfrontend/toolbar.cpp" line="198"/>
         <source>&lt;h4&gt;Next frame (L, Right)&lt;/h4&gt;</source>
         <translation>&lt;h4&gt;Image suivante (L, Droite)&lt;/h4&gt;</translation>
     </message>
     <message>
-        <location filename="../src/frontends/qtfrontend/toolbar.cpp" line="196"/>
+        <location filename="../src/frontends/qtfrontend/toolbar.cpp" line="201"/>
         <source>&lt;h4&gt;Last frame of the take (L, Right)&lt;/h4&gt;</source>
         <translation>&lt;h4&gt;Dernière image de la prise de vue (L, Droite)&lt;/h4&gt;</translation>
     </message>

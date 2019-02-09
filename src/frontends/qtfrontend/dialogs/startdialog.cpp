@@ -26,6 +26,10 @@
 #include <QSizePolicy>
 #include <QVBoxLayout>
 
+namespace {
+    const int FRAME_STYLE_SELECTED = QFrame::Panel | QFrame::Plain;
+    const int FRAME_STYLE_UNSELECTED = QFrame::StyledPanel | QFrame::Plain;
+}
 
 StartDialog::StartDialog(Frontend *f,
                          QString   lpp,
@@ -38,7 +42,8 @@ StartDialog::StartDialog(Frontend *f,
     lastProjectPath.append(lpp);
 
     QGridLayout *inputLayout = new QGridLayout;
-    inputLayout->setSpacing(0);
+    inputLayout->setHorizontalSpacing(0);
+    inputLayout->setVerticalSpacing(3);
 
     QString iconFile(frontend->getGraphicsDirName());
 
@@ -58,12 +63,14 @@ StartDialog::StartDialog(Frontend *f,
                              tr("Start a new Project."));
     // newProjectLabel->setBuddy(newProjectImage);
 
+    newProjectImage->setLineWidth(3);
+    newProjectLabel->setLineWidth(3);
     newProjectImage->setFixedHeight(80);
     newProjectImage->setFixedWidth(80);
     newProjectLabel->setFixedHeight(80);
     newProjectLabel->setFixedWidth(400);
 
-    connect(newProjectLabel, SIGNAL(clicked()), SLOT(newClick()));
+    connect(newProjectLabel, SIGNAL(clicked()), SLOT(highlightSelection()));
 
     inputLayout->addWidget(newProjectImage, 0, 0);
     inputLayout->addWidget(newProjectLabel, 0, 1);
@@ -80,12 +87,14 @@ StartDialog::StartDialog(Frontend *f,
                                   tr("Project path: ") + lastProjectPath );
         // lastProjectLabel->setBuddy(lastProjectImage);
 
+        lastProjectImage->setLineWidth(3);
+        lastProjectLabel->setLineWidth(3);
         lastProjectImage->setFixedHeight(80);
         lastProjectImage->setFixedWidth(80);
         lastProjectLabel->setFixedHeight(80);
         lastProjectLabel->setFixedWidth(400);
 
-        connect(lastProjectLabel, SIGNAL(clicked()), SLOT(lastClick()));
+        connect(lastProjectLabel, SIGNAL(clicked()), SLOT(highlightSelection()));
 
         inputLayout->addWidget(lastProjectImage, 1, 0);
         inputLayout->addWidget(lastProjectLabel, 1, 1);
@@ -102,12 +111,14 @@ StartDialog::StartDialog(Frontend *f,
                               tr("Open and continue a existing project."));
     // openProjectLabel->setBuddy(openProjectImage);
 
+    openProjectImage->setLineWidth(3);
+    openProjectLabel->setLineWidth(3);
     openProjectImage->setFixedHeight(80);
     openProjectImage->setFixedWidth(80);
     openProjectLabel->setFixedHeight(80);
     openProjectLabel->setFixedWidth(400);
 
-    connect(openProjectLabel, SIGNAL(clicked()), SLOT(openClick()));
+    connect(openProjectLabel, SIGNAL(clicked()), SLOT(highlightSelection()));
 
     helpButton = new QPushButton(tr("Help"), this);
     helpButton->setDefault(false);
@@ -138,7 +149,7 @@ StartDialog::StartDialog(Frontend *f,
     mainLayout->addLayout(buttonLayout);
     this->setLayout(mainLayout);
 
-    this->newClick();
+    highlightSelection();
 }
 
 
@@ -152,60 +163,39 @@ void StartDialog::help()
 }
 
 
-void StartDialog::newClick()
+void StartDialog::highlightSelection()
 {
-    qDebug() << "StartDialog::newClick --> Start";
+    qDebug() << "StartDialog::highlightSelection --> Start";
 
-    newProjectImage->setFrameStyle(QFrame::Panel | QFrame::Sunken);
-    newProjectLabel->setFrameStyle(QFrame::Panel | QFrame::Sunken);
+    newProjectImage->setFrameStyle(FRAME_STYLE_UNSELECTED);
+    newProjectLabel->setFrameStyle(FRAME_STYLE_UNSELECTED);
     if (!lastProjectPath.isEmpty()) {
-        lastProjectImage->setFrameStyle(QFrame::StyledPanel);
-        lastProjectLabel->setFrameStyle(QFrame::StyledPanel);
+        lastProjectImage->setFrameStyle(FRAME_STYLE_UNSELECTED);
+        lastProjectLabel->setFrameStyle(FRAME_STYLE_UNSELECTED);
     }
-    openProjectImage->setFrameStyle(QFrame::StyledPanel);
-    openProjectLabel->setFrameStyle(QFrame::StyledPanel);
+    openProjectImage->setFrameStyle(FRAME_STYLE_UNSELECTED);
+    openProjectLabel->setFrameStyle(FRAME_STYLE_UNSELECTED);
 
-    selectedPossibility = 1;
-
-    qDebug() << "StartDialog::newClick --> End";
-}
-
-
-void StartDialog::lastClick()
-{
-    qDebug() << "StartDialog::lastClick --> Start";
-
-    newProjectImage->setFrameStyle(QFrame::StyledPanel);
-    newProjectLabel->setFrameStyle(QFrame::StyledPanel);
-    if (!lastProjectPath.isEmpty()) {
-        lastProjectImage->setFrameStyle(QFrame::Panel | QFrame::Sunken);
-        lastProjectLabel->setFrameStyle(QFrame::Panel | QFrame::Sunken);
+    if (sender() == newProjectLabel) {
+        selectedPossibility = 1;
+        newProjectImage->setFrameStyle(FRAME_STYLE_SELECTED);
+        newProjectLabel->setFrameStyle(FRAME_STYLE_SELECTED);
+    } else if (sender() == lastProjectLabel) {
+        selectedPossibility = 2;
+        lastProjectImage->setFrameStyle(FRAME_STYLE_SELECTED);
+        lastProjectLabel->setFrameStyle(FRAME_STYLE_SELECTED);
+    } else if (sender() == openProjectLabel) {
+        selectedPossibility = 3;
+        openProjectImage->setFrameStyle(FRAME_STYLE_SELECTED);
+        openProjectLabel->setFrameStyle(FRAME_STYLE_SELECTED);
+    } else {
+        selectedPossibility = 1;
+        newProjectImage->setFrameStyle(FRAME_STYLE_SELECTED);
+        newProjectLabel->setFrameStyle(FRAME_STYLE_SELECTED);
     }
-    openProjectImage->setFrameStyle(QFrame::StyledPanel);
-    openProjectLabel->setFrameStyle(QFrame::StyledPanel);
 
-    selectedPossibility = 2;
-
-    qDebug() << "StartDialog::lastClick --> End";
-}
-
-
-void StartDialog::openClick()
-{
-    qDebug() << "StartDialog::openClick --> Start";
-
-    newProjectImage->setFrameStyle(QFrame::StyledPanel);
-    newProjectLabel->setFrameStyle(QFrame::StyledPanel);
-    if (!lastProjectPath.isEmpty()) {
-        lastProjectImage->setFrameStyle(QFrame::StyledPanel);
-        lastProjectLabel->setFrameStyle(QFrame::StyledPanel);
-    }
-    openProjectImage->setFrameStyle(QFrame::Panel | QFrame::Sunken);
-    openProjectLabel->setFrameStyle(QFrame::Panel | QFrame::Sunken);
-
-    selectedPossibility = 3;
-
-    qDebug() << "StartDialog::openClick --> End";
+    qDebug() << "StartDialog::highlightSelection --> End. Selected:"
+             << selectedPossibility;
 }
 
 

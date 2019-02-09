@@ -73,7 +73,7 @@ ProjectTab::ProjectTab(Frontend *f,
     activeTakeIndex     = -1;
     activeExposureIndex = -1;
 
-    gimpProcess         = NULL;
+    photoEditorProcess         = NULL;
 
     this->setObjectName("ProjectTab");
 
@@ -91,10 +91,10 @@ ProjectTab::~ProjectTab()
     qDebug() << "ProjectTab::Destructor --> Start";
 
 
-    if (NULL != gimpProcess) {
-        gimpProcess->close();
-        delete gimpProcess;
-        gimpProcess = NULL;
+    if (NULL != photoEditorProcess) {
+        photoEditorProcess->close();
+        delete photoEditorProcess;
+        photoEditorProcess = NULL;
     }
 
     qDebug() << "ProjectTab::Destructor --> End";
@@ -271,7 +271,9 @@ void ProjectTab::makeGUI()
     editFrameButton = new QPushButton;
     iconFile.clear();
     iconFile.append(frontend->getIconsDirName());
-    iconFile.append(QLatin1String("launchgimp.png"));
+    // TODO load icon from executable file instead of using common icon.
+    // @see QFileIconProvider::icon and https://forum.qt.io/post/308109
+    iconFile.append(QLatin1String("photoeditor.png"));
     editFrameButton->setIcon(QPixmap(iconFile));
     editFrameButton->setIconSize(QSize(30,30));
     // editFrameButton->setFlat(true);
@@ -1505,39 +1507,39 @@ void ProjectTab::editFrameSlot()
 
     frontend->addFileToMonitoring(exposureImagePath);
 
-    if (NULL == gimpProcess) {
-        startGimpProcess(exposureImagePath);
+    if (NULL == photoEditorProcess) {
+        startPhotoEditor(exposureImagePath);
     }
 
     qDebug() << "ProjectTab::editFrameSlot --> End";
 }
 
 
-void ProjectTab::gimpProcessStarted()
+void ProjectTab::photoEditorProcessStarted()
 {
-    qDebug() << "ProjectTab::gimpProcessStarted --> Start (Nothing)";
+    qDebug() << "ProjectTab::photoEditorProcessStarted --> Start (Nothing)";
 
-    // qDebug() << "ProjectTab::gimpProcessStarted --> End";
+    // qDebug() << "ProjectTab::photoEditorProcessStarted --> End";
 }
 
 
-void ProjectTab::gimpProcessError(QProcess::ProcessError error)
+void ProjectTab::photoEditorProcessError(QProcess::ProcessError error)
 {
-    qDebug() << "ProjectTab::gimpProcessError --> Start (Nothing)";
+    qDebug() << "ProjectTab::photoEditorProcessError --> Start (Nothing)";
 
-    // qDebug() << "ProjectTab::gimpProcessError --> End";
+    // qDebug() << "ProjectTab::photoEditorProcessError --> End";
 }
 
 
-void ProjectTab::gimpProcessFinished(int /*exitCode*/, QProcess::ExitStatus /*exitStatus*/)
+void ProjectTab::photoEditorProcessFinished(int /*exitCode*/, QProcess::ExitStatus /*exitStatus*/)
 {
-    qDebug() << "ProjectTab::gimpProcessFinished --> Start";
+    qDebug() << "ProjectTab::photoEditorProcessFinished --> Start";
 
-    stopGimpProcess();
+    stopPhotoEditor();
 
     frontend->removeAllFilesFromMonitoring();
 
-    qDebug() << "ProjectTab::gimpProcessFinished --> End";
+    qDebug() << "ProjectTab::photoEditorProcessFinished --> End";
 }
 void ProjectTab::chooseFrame()
 {
@@ -1694,79 +1696,83 @@ QStringList ProjectTab::selectFiles()
 }
 
 
-void ProjectTab::startGimpProcess(const QString &exposureImagePath)
+void ProjectTab::startPhotoEditor(const QString &exposureImagePath)
 {
-    qDebug() << "ProjectTab::startGimpProcess --> Start";
+    qDebug() << "ProjectTab::startPhotoEditor --> Start";
 
-    Q_ASSERT(NULL == gimpProcess);
+    Q_ASSERT(NULL == photoEditorProcess);
 
-#if defined(Q_OS_WIN32) || defined(Q_OS_WIN64)
-    // Windows version
-    const QString gimpCommand(Util::checkCommand("gimp-?.?"));
-#else
-    // Linux and Apple OS X version
-    const QString gimpCommand = Util::checkCommand("gimp");
-#endif
-
-    if (gimpCommand.isEmpty()) {
+    PreferencesTool *pref = frontend->getPreferences();
+    QString photoEditorPath;
+    if (!pref->getStringPreference("preferences", "photoeditor", photoEditorPath)) {
+        photoEditorPath = Util::findDefaultPhotoEditor();
+    }
+    if (photoEditorPath.isEmpty()) {
         frontend->showWarning(tr("Warning"),
-                              tr("You do not have Gimp installed on your system"));
+                              tr("You do not have any photo editor installed on your system"));
+        qCritical() << "photo editor not specified or not found";
         return;
     }
 
     QStringList argList;
-    // arg0 are the options, and arg1 is the path of the frame.
-    // Start Gimp without splash screen.
-    argList.append(QLatin1String("--no-splash"));
-    argList.append(exposureImagePath);
+    if (photoEditorPath.contains("gimp")) {
+        // arg0 are the options, and arg1 is the path of the frame.
+        // Start Gimp without splash screen.
+        argList.append(QLatin1String("--no-splash"));
+    }
+    const QString imagePath = QDir::toNativeSeparators(exposureImagePath);
+    argList.append(imagePath);
 
     /*
     // Start the process with communication.
-    gimpProcess = new QProcess(this);
+    photoEditorProcess = new QProcess(this);
 
-    connect(gimpProcess, SIGNAL(started()), this, SLOT(gimpProcessStarted()));
-    connect(gimpProcess, SIGNAL(error(QProcess::ProcessError)), this, SLOT(gimpProcessError(QProcess::ProcessError)));
-    connect(gimpProcess, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(gimpProcessFinished(int, QProcess::ExitStatus)));
+    connect(photoEditorProcess, SIGNAL(started()), this, SLOT(photoEditorProcessStarted()));
+    connect(photoEditorProcess, SIGNAL(error(QProcess::ProcessError)), this, SLOT(photoEditorProcessError(QProcess::ProcessError)));
+    connect(photoEditorProcess, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(photoEditorProcessFinished(int, QProcess::ExitStatus)));
 
-    gimpProcess->start(gimpCommand, argList);
-    gimpProcess->waitForStarted();
-    switch(gimpProcess->state()) {
+    photoEditorProcess->start(photoEditorPath, argList);
+    photoEditorProcess->waitForStarted();
+    switch(photoEditorProcess->state()) {
     case QProcess::NotRunning:
-        qDebug() << "ProjectTab::startGimpProcess --> Gimp Process not running");
+        qDebug() << "ProjectTab::startPhotoEditor --> photo editor not running");
         break;
     case QProcess::Starting:
-        qDebug() << "ProjectTab::startGimpProcess --> Gimp Process starting");
+        qDebug() << "ProjectTab::startPhotoEditor --> photo editor starting");
         break;
     case QProcess::Running:
-        qDebug() << "ProjectTab::startGimpProcess --> Gimp process running");
+        qDebug() << "ProjectTab::startPhotoEditor --> photo editor running");
         break;
     }
     */
 
+    qDebug() << "ProjectTab::startPhotoEditor --> Try to open" << imagePath
+             << "in external editor";
     QProcess process;
-    if (!process.startDetached(gimpCommand, argList)) {
+    if (!process.startDetached(photoEditorPath, argList)) {
         frontend->showWarning(tr("Warning"),
-                              tr("Failed to start Gimp!"));
+                              tr("Failed to start Photo editor!"));
         frontend->removeFileFromMonitoring(exposureImagePath);
-        qDebug() << "ProjectTab::startGimpProcess --> End (Error)";
+        qCritical() << "failed to start photo editor" << photoEditorPath << argList;
+        qDebug() << "ProjectTab::startPhotoEditor --> End (Error)";
         return;
     }
 
-    qDebug() << "ProjectTab::startGimpProcess --> End";
+    qDebug() << "ProjectTab::startPhotoEditor --> End";
 }
 
 
-void ProjectTab::stopGimpProcess()
+void ProjectTab::stopPhotoEditor()
 {
-    qDebug() << "ProjectTab::stopGimpProcess --> Start";
+    qDebug() << "ProjectTab::stopPhotoEditor --> Start";
 
     /*
-    Q_ASSERT(NULL != gimpProcess);
+    Q_ASSERT(NULL != photoEditorProcess);
 
-    gimpProcess->close();
-    delete gimpProcess;
-    gimpProcess = NULL;
+    photoEditorProcess->close();
+    delete photoEditorProcess;
+    photoEditorProcess = NULL;
     */
 
-    qDebug() << "ProjectTab::stopGimpProcess --> End";
+    qDebug() << "ProjectTab::stopPhotoEditor --> End";
 }

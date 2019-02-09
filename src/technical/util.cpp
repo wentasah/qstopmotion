@@ -127,3 +127,33 @@ const QString Util::convertPathFromOsSpecific(const QString &path)
     return path;
 #endif
 }
+
+const QString Util::findDefaultPhotoEditor()
+{
+    QString editorPath("");
+
+#if defined(Q_OS_WIN32) || defined(Q_OS_WIN64)
+    // Windows version
+    const QString gimpPath(Util::checkCommand("gimp-?.?"));
+    if (!gimpPath.isEmpty()) {
+        editorPath = gimpPath;
+    } else {
+        const QString mspaintPath(Util::checkCommand("mspaint"));
+        if (!mspaintPath.isEmpty()) {
+            editorPath = mspaintPath;
+        } else {
+            editorPath = QString("");
+        }
+    }
+#else
+    // Linux and Apple OS X version
+    const QString gimpCommand = Util::checkCommand("gimp");
+    if (!gimpPath.isEmpty()) {
+        editorPath = gimpPath;
+    } else {
+        editorPath = QString("");
+    }
+#endif
+
+    return editorPath;
+}

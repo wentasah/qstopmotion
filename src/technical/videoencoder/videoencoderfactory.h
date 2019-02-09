@@ -57,6 +57,9 @@ public:
     const QString createVideoFile(VideoEncoder *encoder);
 
 private:
+    QMap<QString, QStringList> splitMovieOnParts(DomainFacade *domain,
+                                                 const QString outputFile) const;
+
     Frontend *frontend;
 };
 

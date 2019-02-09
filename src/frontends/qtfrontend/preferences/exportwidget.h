@@ -102,6 +102,18 @@ private slots:
      */
     void changeFps(int value);
 
+    /**
+     * Slot for updating the splitting mode value.
+     * @param value the new mode.
+     */
+    void changeSplittingMode(int value);
+
+    /**
+     * Slot for updating the avalability of splitting mode options.
+     * @param enable enable or disable radio buttons.
+     */
+    void enableSplittingOptions(bool enable);
+
     // Output file preferences
     /**
      * Update widgets in order to display that user will be asked about
@@ -154,6 +166,13 @@ private:
     QLabel       *videoFpsLabel;
     QSpinBox     *videoFpsChooser;
     int           activeVideoFps;
+
+    // Movie's splitting preferences
+    QGroupBox    *splittingPrefs;
+    QRadioButton *wholeMovieButton;
+    QRadioButton *splittedOnScenesButton;
+    QRadioButton *splittedOnTakesButton;
+    int           splittingMode;
 
     // Output file preferences
     QGroupBox    *outputPrefs;

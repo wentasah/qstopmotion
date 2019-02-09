@@ -22,12 +22,16 @@
 
 #include "ffmpegencoder.h"
 
+#include <QDebug>
 #include <QDir>
 #include <QString>
 
 #include "domain/animation/projectserializer.h"
 #include "frontends/frontend.h"
 
+namespace {
+const QString MOVIENAMEPREFIX = "movie_";
+}
 
 /**
  * Prepare start command
@@ -89,55 +93,105 @@ FfmpegEncoder::~FfmpegEncoder()
 }
 
 
-const QStringList FfmpegEncoder::getEncoderArguments() const
+const QStringList FfmpegEncoder::getEncoderArguments(const QString inputFilelistPath,
+                                                     const QString outputDirectory) const
 {
-    QStringList      arguments;
-    QString          imagePath = animationProject->getNewImagePath();
-    QString          imageFiles = QString("");
-    QString          outputFile = QString("");
+    QStringList arguments;
 
     // ===============================
     // Input options
     // ===============================
+    arguments << inputOptions();
+
+    // ===============================
+    // Input files
+    // @see https://trac.ffmpeg.org/wiki/Concatenate
+    // ===============================
+    const QString fileListPath = QDir::toNativeSeparators(inputFilelistPath);
+    arguments << QLatin1String("-f");
+    arguments << QLatin1String("concat");
+    arguments << QLatin1String("-safe");
+    arguments << QLatin1String("0");
+    arguments << QLatin1String("-i");
+    arguments << fileListPath;
+
+    // ===============================
+    // Output options
+    // ===============================
+    const int namePos = inputFilelistPath.indexOf(MOVIENAMEPREFIX);
+    if (namePos <= 0) {
+        qCritical() << "couldn't extract movie's name from file name:" << inputFilelistPath;
+        return QStringList();
+    }
+
+    const QString movieName = inputFilelistPath.mid(namePos + MOVIENAMEPREFIX.length());
+    const QFileInfo outputFileInfo(outputDirectory, movieName);
+    arguments << outputOptions(outputFileInfo.absoluteFilePath());
+
+    return arguments;
+}
+
+const QStringList FfmpegEncoder::createInputFilelists(QMap<QString, QStringList> moviesFiles, QString tmpDir) const
+{
+    QDir tempDir(tmpDir);
+    qDebug() << "clear previous filelists from" << tempDir;
+
+    QStringList tmpFiles = tempDir.entryList(QDir::Files);
+    foreach (const QString &tmpFile, tmpFiles) {
+        if (tmpFile.contains(MOVIENAMEPREFIX)) {
+            tempDir.remove(tmpFile);
+        }
+    }
+
+    qDebug() << "generate list of input files for" << moviesFiles.count()
+             << "movies";
+    QStringList filelists;
+    const QStringList outputFiles = moviesFiles.keys();
+    foreach (const QString &movieName, outputFiles) {
+        const QString filelistPath = tmpDir + "/" + MOVIENAMEPREFIX + movieName;
+        QFile file(filelistPath);
+        if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+            qCritical() << "couldn't create filelist" << filelistPath;
+            return QStringList();
+        }
+
+        QTextStream out(&file);
+        const QStringList imagesPaths = moviesFiles.value(movieName);
+        foreach (const QString &imagePath, imagesPaths) {
+            QString line = QString("file '%1'\n").arg(imagePath);
+            out << line;
+        }
+        file.flush();
+        file.close();
+
+        filelists << filelistPath;
+    }
+
+    return filelists;
+}
+
+const QStringList FfmpegEncoder::inputOptions() const
+{
+    QStringList      arguments;
+
+    // Suppress printing banner (copyright, build options and library versions)
+    arguments << QLatin1String("-hide_banner");
+
+    // Verbose output - for debugging only
+    arguments << QLatin1String("-loglevel");
+    arguments << QLatin1String("trace"); // info - default; debug; trace
 
     // Input frame rate (default = 25)
     arguments << QLatin1String("-r");
     arguments << QString("%1").arg(animationProject->getVideoFps());
 
-    // ===============================
-    // Input files
-    // ===============================
+    return arguments;
+}
 
-    // Input file name
-    if (!imagePath.isEmpty()) {
-        arguments << QLatin1String("-i");
-        // imageFiles.append(QLatin1String("\""));
-        imageFiles.append(imagePath);
-        imageFiles.append(QLatin1String("/"));
-        imageFiles.append(QLatin1String("%6d."));
-        switch (animationProject->getImageFormat()) {
-        case DomainFacade::jpegFormat:
-            imageFiles.append(PreferencesTool::jpegSuffix);
-            break;
-        case DomainFacade::tiffFormat:
-            imageFiles.append(PreferencesTool::tiffSuffix);
-            break;
-        case DomainFacade::bmpFormat:
-            imageFiles.append(PreferencesTool::bmpSuffix);
-            break;
-        }
-        // imageFiles.append(QLatin1String("\""));
-        arguments << imageFiles;
-    }
-    else
-    {
-        // Error, empty image path
-        return QStringList();
-    }
 
-    // ===============================
-    // Output options
-    // ===============================
+const QStringList FfmpegEncoder::outputOptions(const QString &movieName) const
+{
+    QStringList      arguments;
 
     // Use target option
     // arguments << QLatin1String("-target"));
@@ -181,15 +235,19 @@ const QStringList FfmpegEncoder::getEncoderArguments() const
 
     // Video format
     arguments << QLatin1String("-f");
+    QString fileExtension("");
     switch(animationProject->getVideoFormat()) {
     case DomainFacade::aviFormat:
+        fileExtension = QLatin1String(".avi");
         arguments << QLatin1String("avi");
         break;
     case DomainFacade::mp4Format:
+        fileExtension = QLatin1String(".mp4");
         arguments << QLatin1String("mp4");
         break;
     default:
         // Default value is AVI output
+        fileExtension = QLatin1String(".avi");
         arguments << QLatin1String("avi");
         break;
     }
@@ -206,11 +264,12 @@ const QStringList FfmpegEncoder::getEncoderArguments() const
     // ===============================
     // Output file
     // ===============================
-
-    // outputFile.append(QLatin1String("\""));
-    outputFile.append(this->getOutputFile());
-    // outputFile.append(QLatin1String("\""));
-    arguments << outputFile;
+    QString fullName = movieName;
+    if (!fullName.endsWith(fileExtension, Qt::CaseInsensitive)) {
+        fullName.append(fileExtension);
+    }
+    arguments << fullName;
 
     return arguments;
 }
+

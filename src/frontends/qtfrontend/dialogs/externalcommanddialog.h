@@ -34,7 +34,6 @@
 
 #include "frontends/frontend.h"
 
-
 class ExternalCommandDialog : public QWidget
 {
     Q_OBJECT
@@ -42,15 +41,19 @@ class ExternalCommandDialog : public QWidget
 public:
     ExternalCommandDialog(Frontend *f, QWidget *parent = 0);
     void run(const QString &command, const QStringList &arguments);
+    void run(const QList<ExternalCommand> &commands);
 
 private slots:
     void readFromStandardOutput();
     void readFromStandardError();
     void submitInputToProgram();
-    void displayExitStatus(int exitCode, QProcess::ExitStatus exitStatus);
+    void checkExitStatus(int exitCode, QProcess::ExitStatus exitStatus);
     void help();
 
 private:
+    bool runNextCommand();
+    void displayFinishStatus(bool successfully);
+
     Frontend     *frontend;
     QVBoxLayout  *vboxLayout;
     QTextBrowser *textBrowser;
@@ -61,6 +64,7 @@ private:
     QPushButton  *helpButton;
     QPushButton  *closeButton;
     QProcess     *process;
+    QList<ExternalCommand> externalCommands;
 };
 
 #endif

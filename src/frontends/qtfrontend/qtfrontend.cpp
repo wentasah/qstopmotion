@@ -759,6 +759,14 @@ int QtFrontend::runExternalCommand(const QString &command, const QStringList &ar
 }
 
 
+int QtFrontend::runExternalCommands(const QList<ExternalCommand> &commands)
+{
+    ExternalCommandDialog *ec = new ExternalCommandDialog(this);
+    ec->show();
+    ec->run(commands);
+    return 0;
+}
+
 bool QtFrontend::startGrabber()
 {
     bool ret;

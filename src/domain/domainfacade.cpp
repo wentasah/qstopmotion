@@ -512,6 +512,18 @@ void DomainFacade::setVideoFps(int newFps)
 }
 
 
+int DomainFacade::getMovieExportSplittingMode()
+{
+    return animationProject->getMovieExportSplittingMode();
+}
+
+
+void DomainFacade::setMovieExportSplittingMode(int newSplittingMode)
+{
+    animationProject->setMovieExportSplittingMode(newSplittingMode);
+}
+
+
 bool DomainFacade::getUseDefaultOutputFile()
 {
     return animationProject->getUseDefaultOutputFile();
@@ -854,6 +866,11 @@ void DomainFacade::setProjectSettingsToDefault()
         intValue = VIDEOFPSDEFAULT;
     }
     setVideoFps(intValue);
+
+    if (pref->getIntegerPreference("preferences", "defaultmovieexportsplittingmode", intValue) == false) {
+        intValue = MOVIESPLITTINGMODEDEFAULT;
+    }
+    setMovieExportSplittingMode(intValue);
 
     if (pref->getBooleanPreference("preferences", "defaultusedefaultoutputfile", boolValue) == false) {
         boolValue = USEDEFAULTOUTPUTFILENAMEDEFAULT;

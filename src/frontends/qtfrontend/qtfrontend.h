@@ -27,7 +27,7 @@
 #include <QObject>
 #include <QApplication>
 #include <QLabel>
-#include <QLoggingCategory>
+#include <QDebug>
 
 #include "frontends/frontend.h"
 #include "frontends/qtfrontend/mainwindowgui.h"
@@ -37,8 +37,6 @@ struct AudioFile {
     unsigned int belongsTo;
     QString filename;
 };
-
-Q_DECLARE_LOGGING_CATEGORY(qstopmotion)
 
 
 /**
@@ -80,7 +78,7 @@ public:
      * Open a project given in the arguments.
      * @return true if a project file is opened.
      */
-    bool handleArguments(int argc, char **argv);
+    bool openProjectFromArguments(const QStringList &applicationArguments);
 
     /**
      * The run function for starting the application.

@@ -39,12 +39,14 @@
 #include <cstring>
 // #include <unistd.h>
 
-Q_LOGGING_CATEGORY(qstopmotion, "qtfrontend.qstopmotion")
+extern bool g_verboseOutput;
 
 QtFrontend::QtFrontend(int &argc, char **argv)
 {
-    qCDebug(qstopmotion) << "QtFrontend::Constructor --> Start";
-    qCDebug(qstopmotion) << "QtFrontend::Constructor Date:" << QDate::currentDate();
+    if (g_verboseOutput) {
+        qDebug() << "QtFrontend::Constructor --> Start";
+        qDebug() << "QtFrontend::Constructor Date:" << QDate::currentDate();
+    }
 
     domainFacade         = NULL;
     viewFacade           = NULL;
@@ -66,26 +68,31 @@ QtFrontend::QtFrontend(int &argc, char **argv)
     QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF-8"));   // f"ur locale
 #endif
 */
-
-    qCDebug(qstopmotion) << "QtFrontend::Constructor --> End";
+    if (g_verboseOutput) {
+        qDebug() << "QtFrontend::Constructor --> End";
+    }
 }
 
 
 QtFrontend::~QtFrontend()
 {
-    qDebug() << "QtFrontend::Destructor --> Start";
+    if (g_verboseOutput) {
+        qDebug() << "QtFrontend::Destructor --> Start";
+    }
 
-    // Save the size and position of the application
-    QSize appSize = mw->size();
-    QPoint appPos = mw->pos();
-    preferencesTool->setIntegerPreference("preferences", "applicationsizeheight", appSize.height());
-    preferencesTool->setIntegerPreference("preferences", "applicationsizewidth", appSize.width());
-    preferencesTool->setIntegerPreference("preferences", "applicationposx", appPos.x());
-    preferencesTool->setIntegerPreference("preferences", "applicationposy", appPos.y());
+    if (mw != NULL) {
+        // Save the size and position of the application
+        QSize appSize = mw->size();
+        QPoint appPos = mw->pos();
+        preferencesTool->setIntegerPreference("preferences", "applicationsizeheight", appSize.height());
+        preferencesTool->setIntegerPreference("preferences", "applicationsizewidth", appSize.width());
+        preferencesTool->setIntegerPreference("preferences", "applicationposx", appPos.x());
+        preferencesTool->setIntegerPreference("preferences", "applicationposy", appPos.y());
 
-    // Cleanup the memory
-    delete mw;
-    mw = NULL;
+        // Cleanup the memory
+        delete mw;
+        mw = NULL;
+    }
 
     if (domainFacade != NULL) {
         delete domainFacade;
@@ -105,7 +112,9 @@ QtFrontend::~QtFrontend()
     delete stApp;
     stApp = NULL;
 
-    qDebug() << "QtFrontend::Destructor --> End";
+    if (g_verboseOutput) {
+        qDebug() << "QtFrontend::Destructor --> End";
+    }
 }
 
 
@@ -361,23 +370,22 @@ void QtFrontend::init()
 }
 
 
-bool QtFrontend::handleArguments(int argc, char **argv)
+bool QtFrontend::openProjectFromArguments(const QStringList &applicationArguments)
 {
-    qDebug() << "QtFrontend::handleArguments --> Start";
+    qDebug() << "QtFrontend::openProjectFromArguments --> Start";
 
-    if (argc < 2) {
-        // No arguments
-        qDebug() << "QtFrontend::handleArguments --> End (false)";
-        return false;
+    foreach (const QString &arg, applicationArguments) {
+        if (!arg.endsWith(PreferencesTool::projectSuffix) && !arg.endsWith(PreferencesTool::archiveSuffix)) {
+            continue;
+        }
+        if (QFileInfo(arg).isReadable()) {
+            mw->openProject(arg);
+            qDebug() << "QtFrontend::openProjectFromArguments --> End (true)";
+            return true;
+        }
     }
 
-    if (QFileInfo(argv[1]).isReadable()) {
-        mw->openProject(argv[1]);
-        qDebug() << "QtFrontend::handleArguments --> End (true)";
-        return true;
-    }
-
-    qDebug() << "QtFrontend::handleArguments --> End (false)";
+    qDebug() << "QtFrontend::openProjectFromArguments --> End (false)";
     return false;
 }
 

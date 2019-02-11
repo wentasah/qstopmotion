@@ -108,12 +108,6 @@ message("Qt5 Version: ${Qt5Widgets_VERSION_STRING}")
 message("QT_INCLUDE_DIRS: ${Qt5Widgets_INCLUDE_DIRS}")
 message("QT_DEFINITIONS: ${QT_DEFINITIONS}")
 
-IF(CMAKE_BUILD_TYPE STREQUAL "Release")
-    message("No Qt debug and warning output!")
-    add_definitions(-DQT_NO_DEBUG_OUTPUT)
-    add_definitions(-DQT_NO_WARNING_OUTPUT)
-ENDIF(CMAKE_BUILD_TYPE STREQUAL "Release")
-
 ###############################################################################
 # File definitions
 ###############################################################################

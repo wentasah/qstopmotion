@@ -115,24 +115,7 @@ Last Change: 2018-01-17
 3. Building qStopMotion
 ================================================================================
 
-3.1 Add the qtruntime to the sources directory
---------------------------------------------------------------------------------
-
-* Create a new directory 'qt5runtime64bit' in the source directory
-* Create a new directory 'release'
-  - Copy Qt5Core.dll, Qt5Gui.dll, Qt5Widgets and Qt5Xml.dll from
-    Qt installation bin directory to the 'release' directory
-  - Copy qwindows.dll from the platforms directory to a new 'platforms' directory
-  - Copy q*.dll (without a 'd' at the end) files of the directory imageformats from
-    Qt installation plugins directory to a new directory 'imageformats'
-* Create a new directory 'debug'
-  - Copy Qt5Cored.dll, Qt5Guid.dll, Qt5Widgetsd.dll and QtXmld.dll from
-    Qt installation bin directory to the 'debug' directory
-  - Copy qwindowsd.dll from the platforms directory to a new 'platforms' directory
-  - Copy q*d.dll (with a 'd' at the end) files of the directory imageformats from
-    Qt installation plugins directory to a new directory 'imageformats'
-
-3.2 Add the qwt runtime to the source directory
+3.1 Add the qwt runtime to the source directory
 --------------------------------------------------------------------------------
 
 * Create a new directory 'qwt64bit' in the source directory
@@ -142,14 +125,14 @@ Last Change: 2018-01-17
   - Copy qwtd.dll and qwtd.pdb from Qwt installation lib directory to
     the 'debug' directory
 
-3.3 Add the ffmpeg encoder to the sources directory
+3.2 Add the ffmpeg encoder to the sources directory
 --------------------------------------------------------------------------------
 
 * Download the latest static version from http://ffmpeg.zeranoe.com/builds/
 * Unpack the 7z file to the qstopmotion directory
 * Rename the ffmpeg directory to 'ffmpeg64bit'
 
-3.4 Create the NMake makefile
+3.3 Create the NMake makefile
 --------------------------------------------------------------------------------
 
 * Create a build directory

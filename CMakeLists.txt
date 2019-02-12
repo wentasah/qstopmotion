@@ -484,11 +484,11 @@ ENDIF(UNIX AND NOT APPLE)
 IF(WIN32)
     SET(
         MEDIAFOUNDATION_LIBRARIES
-        evr.lib          # ???
-        mf.lib           # ???
-        mfplat.lib       # ???
+        evr.lib          # ??? MFCreateVideoMixer, MFCreateVideoOTA, MFCreateVideoPresenter, MFCreateVideoSampleAllocator
+        mf.lib           # MFEnumDeviceSources
+        mfplat.lib       # MFCreateMediaType, MFCreateAttributes, MFStartup, MFShutdown
         mfuuid.lib       # ???
-        mfreadwrite.lib  # Read and write media stream
+        mfreadwrite.lib  # Read and write media stream: MFCreateSourceReaderFromMediaSource
         # strmiids.lib      # Old Direct Show library
     )
 ELSE(WIN32)
@@ -626,6 +626,7 @@ add_definitions(
 )
 
 IF(WIN32)
+    # Copy data to build directory
     file(COPY graphics DESTINATION ".")
     file(COPY manual DESTINATION ".")
     file(COPY translations DESTINATION ".")
@@ -634,28 +635,22 @@ IF(WIN32)
 
     IF(CMAKE_CL_64)
         # Windows 64bit
-
-        IF(CMAKE_BUILD_TYPE STREQUAL "Release")
-            file(COPY qt5runtime64bit/release/ DESTINATION "qtruntime")
-        ELSE(CMAKE_BUILD_TYPE STREQUAL "Release")
-            file(COPY qt5runtime64bit/debug/ DESTINATION "qtruntime")
-        ENDIF(CMAKE_BUILD_TYPE STREQUAL "Release")
-
         file(COPY ffmpeg64bit/ DESTINATION "ffmpeg")
         file(COPY libav64bit/ DESTINATION "libav")
-        file(COPY qwt64bit/ DESTINATION "qwt")
+        IF(CMAKE_BUILD_TYPE STREQUAL "Release")
+            file(COPY qwt64bit/release/ DESTINATION "bin/")
+        ELSE(CMAKE_BUILD_TYPE STREQUAL "Release")
+            file(COPY qwt64bit/debug/ DESTINATION "bin/")
+        ENDIF(CMAKE_BUILD_TYPE STREQUAL "Release")
     ELSE(CMAKE_CL_64)
         # Windows 32bit
-
-        IF(CMAKE_BUILD_TYPE STREQUAL "Release")
-            file(COPY qt5runtime32bit/release/ DESTINATION "qtruntime")
-        ELSE(CMAKE_BUILD_TYPE STREQUAL "Release")
-            file(COPY qt5runtime32bit/debug/ DESTINATION "qtruntime")
-        ENDIF(CMAKE_BUILD_TYPE STREQUAL "Release")
-
         file(COPY ffmpeg32bit/ DESTINATION "ffmpeg")
         file(COPY libav32bit/ DESTINATION "libav")
-        file(COPY qwt32bit/ DESTINATION "qwt")
+        IF(CMAKE_BUILD_TYPE STREQUAL "Release")
+            file(COPY qwt32bit/release/ DESTINATION "bin/")
+        ELSE(CMAKE_BUILD_TYPE STREQUAL "Release")
+            file(COPY qwt32bit/debug/ DESTINATION "bin/")
+        ENDIF(CMAKE_BUILD_TYPE STREQUAL "Release")
     ENDIF(CMAKE_CL_64)
 ENDIF(WIN32)
 
@@ -827,24 +822,27 @@ ENDIF(CPACK_BINARY_RPM)
 
 # installation on Windows systems
 IF(WIN32)
+    # Installing Qt runtime libraries in the same directory as the executables
+    SET(QSTOPMOTION_QTRUNTIME_INSTALL_DIR "${CMAKE_BINARY_DIR}/qtruntime")
+    MESSAGE("QSTOPMOTION_QTRUNTIME_INSTALL_DIR: ${QSTOPMOTION_QTRUNTIME_INSTALL_DIR}")
+    INSTALL(
+        CODE "execute_process(COMMAND windeployqt --no-translations --no-system-d3d-compiler --dir ${QSTOPMOTION_QTRUNTIME_INSTALL_DIR} qstopmotion.exe
+                              WORKING_DIRECTORY ${QSTOPMOTION_BIN_INSTALL_DIR})"
+    )
+    INSTALL(
+        DIRECTORY ${QSTOPMOTION_QTRUNTIME_INSTALL_DIR}/
+        DESTINATION ${QSTOPMOTION_BIN_INSTALL_DIR}/
+    )
+
     IF(CMAKE_CL_64)
         # Windows 64bit
-
-        # installation of Qt runtime
+        # installation of Qwt
         IF(CMAKE_BUILD_TYPE STREQUAL "Release")
-            install(
-                DIRECTORY qt5runtime64bit/release/
-                DESTINATION ${QSTOPMOTION_BIN_INSTALL_DIR}
-            )
             install(
                 DIRECTORY qwt64bit/release/
                 DESTINATION ${QSTOPMOTION_BIN_INSTALL_DIR}
             )
         ELSE(CMAKE_BUILD_TYPE STREQUAL "Release")
-            install(
-                DIRECTORY qt5runtime64bit/debug/
-                DESTINATION ${QSTOPMOTION_BIN_INSTALL_DIR}
-            )
             install(
                 DIRECTORY qwt64bit/debug/
                 DESTINATION ${QSTOPMOTION_BIN_INSTALL_DIR}
@@ -865,22 +863,13 @@ IF(WIN32)
 
     ELSE(CMAKE_CL_64)
         # Windows 32bit
-
-        # installation of Qt runtime
+        # installation of Qwt
         IF(CMAKE_BUILD_TYPE STREQUAL "Release")
-            install(
-                DIRECTORY qt5runtime32bit/release/
-                DESTINATION ${QSTOPMOTION_BIN_INSTALL_DIR}
-            )
             install(
                 DIRECTORY qwt32bit/release/
                 DESTINATION ${QSTOPMOTION_BIN_INSTALL_DIR}
             )
         ELSE(CMAKE_BUILD_TYPE STREQUAL "Release")
-            install(
-                DIRECTORY qt5runtime32bit/debug/
-                DESTINATION ${QSTOPMOTION_BIN_INSTALL_DIR}
-            )
             install(
                 DIRECTORY qwt32bit/debug/
                 DESTINATION ${QSTOPMOTION_BIN_INSTALL_DIR}
@@ -1035,7 +1024,7 @@ IF(UNIX AND NOT APPLE)
     # * Mercurial SMC files
     # * ffmpeg Windows binaries
     # * libav Windows binaries
-    # * Qt Windows runtime
+    # * Qwt runtime library
     SET(
         CPACK_SOURCE_IGNORE_FILES
         "${CPACK_SOURCE_IGNORE_FILES}"
@@ -1047,9 +1036,6 @@ IF(UNIX AND NOT APPLE)
         "${PROJECT_SOURCE_DIR}/ffmpeg64bit/"
         "${PROJECT_SOURCE_DIR}/libav32bit/"
         "${PROJECT_SOURCE_DIR}/libav64bit/"
-        "${PROJECT_SOURCE_DIR}/qt4runtime/"
-        "${PROJECT_SOURCE_DIR}/qt5runtime32bit/"
-        "${PROJECT_SOURCE_DIR}/qt5runtime64bit/"
         "${PROJECT_SOURCE_DIR}/qwt32bit/"
         "${PROJECT_SOURCE_DIR}/qwt64bit/"
     )

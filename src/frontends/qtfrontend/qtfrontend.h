@@ -66,7 +66,7 @@ public:
      * Check the existance an writability of the application directory.
      * @param binDirName name of the binary directory
      */
-    bool checkApplicationDirectory(char *binDirName);
+    bool checkApplicationDirectory(const QString &binDirName);
 
     /**
      * Initialize the frontend.

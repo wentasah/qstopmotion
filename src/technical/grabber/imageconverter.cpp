@@ -17,6 +17,8 @@
  *  Free Software Foundation, Inc.,                                           *
  *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                 *
  ******************************************************************************/
+#include <QByteArray>
+#include <QDebug>
 
 #include "imageconverter.h"
 
@@ -978,7 +980,8 @@ int mjpegToJpeg(unsigned char *inFrame, unsigned char *outFrame, unsigned int bu
 
     if((inFrame[0] != 0xff) && (inFrame[1] != 0xd8))
     {
-        // printf("Not a JPEG nor MJPEG file \nExiting.\n");
+        qWarning() << "mjpegToJpeg(). Not a JPEG nor MJPEG file. bufSize =" << bufSize
+                   << "inFrame(hex):" << QByteArray((char *)inFrame, 2).toHex();
         return -1;
     }
 
@@ -988,7 +991,9 @@ int mjpegToJpeg(unsigned char *inFrame, unsigned char *outFrame, unsigned int bu
     {
         if (inFrame[pos] != 0xff)
         {
-            // printf("This isn't a valid JPEG file.\n");
+            qWarning() << "mjpegToJpeg(). This isn't a valid JPEG file."
+                       << "bufSize =" << bufSize << "pos" << pos
+                       << "inFrame(hex):" << QByteArray((char *)&inFrame[pos], 2).toHex();
             return -1;
         }
 

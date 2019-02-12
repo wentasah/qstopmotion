@@ -165,7 +165,7 @@ int main(int argc, char **argv)
     }
 
     // Init application
-    ret = qtFrontend.checkApplicationDirectory(argv[0]);
+    ret = qtFrontend.checkApplicationDirectory(QApplication::applicationFilePath());
     if (ret) {
         return ret;
     }

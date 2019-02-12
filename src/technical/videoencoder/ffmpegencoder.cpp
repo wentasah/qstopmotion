@@ -181,6 +181,9 @@ const QStringList FfmpegEncoder::inputOptions() const
     arguments << QLatin1String("-loglevel");
     arguments << QLatin1String("trace"); // info - default; debug; trace
 
+    // Overwrite output files without asking.
+    arguments << QLatin1String("-y");
+
     // Input frame rate (default = 25)
     arguments << QLatin1String("-r");
     arguments << QString("%1").arg(animationProject->getVideoFps());

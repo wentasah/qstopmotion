@@ -118,7 +118,7 @@ QtFrontend::~QtFrontend()
 }
 
 
-bool QtFrontend::checkApplicationDirectory(char *binDirName)
+bool QtFrontend::checkApplicationDirectory(const QString &binDirName)
 {
     qDebug() << "QtFrontend::checkApplicationDirectory --> Start";
 
@@ -171,7 +171,7 @@ bool QtFrontend::checkApplicationDirectory(char *binDirName)
     otherDirName.append(PreferencesTool::tempDirectory);
     appTempDirName.append(otherDirName);
 
-    QString absoluteAppName = Util::convertPathFromOsSpecific(QString(binDirName));
+    QString absoluteAppName = Util::convertPathFromOsSpecific(binDirName);
     int pathLength = absoluteAppName.lastIndexOf("/bin/");
 
     if (pathLength == -1)

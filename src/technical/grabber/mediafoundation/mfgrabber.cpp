@@ -746,16 +746,20 @@ void MfGrabber::getRawFrame(QImage &image)
     if (FAILED(hr) ||
         (sample == NULL) ||
         ((dwFlags & MF_SOURCE_READERF_ENDOFSTREAM) != 0)) {
+        qWarning() << "MfGrabber::getRawFrame ReadSample is failed. hr =" << hr
+                   << "sample =" << sample << "dwFlags(hex) =" << QString::number(dwFlags, 16);
         goto done;
     }
 
     hr = sample->ConvertToContiguousBuffer(&buffer);
     if (FAILED(hr)) {
+        qWarning() << "MfGrabber::getRawFrame ConvertToContiguousBuffer is failed. hr =" << hr;
         goto done;
     }
 
     hr = buffer->Lock(&pixels, NULL, &nPixels);
     if (FAILED(hr)) {
+        qWarning() << "MfGrabber::getRawFrame Lock is failed. hr =" << hr;
         goto done;
     }
 
@@ -823,10 +827,10 @@ void MfGrabber::getRawFrame(QImage &image)
             imageLoaded = 1;
         }
         else {
-            qDebug() << "V4L2Grabber::getImage --> Error: Can not convert mjpeg to jpeg";
+            qWarning() << "V4L2Grabber::getImage --> Error: Can not convert mjpeg to jpeg";
         }
 
-        delete jpegBuf1;
+        delete[] jpegBuf1;
     }
 
     // MFVideoFormat_RGB32 ==> TextureFormat::Format_RGBA_8

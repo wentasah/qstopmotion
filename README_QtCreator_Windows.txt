@@ -52,27 +52,7 @@ Last Change: 2018-01-17
 * Add the binary directory to the path variable (e.g. C:\Tools\Qt\Qt5.5.1\bin\).
 * Set the environment variable 'Qt5_DIR' to 'C:\Tools\Qt\Qt5.5.1\5.5\msvc2013_64\'
 
-1.6 Qwt
---------------------------------------------------------------------------------
-
-* Download Qwt >= 6.1.3 from "https://sourceforge.net/projects/qwt/files/"
-* Unpack the file to a temporary directory
-* Configure the the installation directory in the file qwtconfig.pri
-  (QWT_INSTALL_PREFIX = C:/Tools/Qwt-$$QWT_VERSION)
-* Disable not necessary modules in the file qwtconfig.pri
-  (Plot, SVG, OpenGL, Designer)
-* Open a command prompt and change to the temporary qwt directory
-* Create the make file
-  cmake qwt.pro
-* Buiild the library
-  nmake
-* Install the library
-  nmake install
-* Set the environment variables
-  QWT_INSTALL_DIR = C:\Tools\Qwt-6.x.y\include
-  QWT_LIBRARY_DIR = C:\Tools\Qwt-6.x.y\lib
-
-1.7 Qt-Creator for Windows
+1.6 Qt-Creator for Windows
 --------------------------------------------------------------------------------
 
 * Download Qt Creator >= 4.2.x for Windows (not the full SDK) from
@@ -117,24 +97,14 @@ Last Change: 2018-01-17
 3. Building qStopMotion
 ================================================================================
 
-3.1 Add the qwt runtime to the source directory
---------------------------------------------------------------------------------
-
-* Create a new directory 'qwt64bit' in the source directory
-* Create a new directory 'release'
-  - Copy qwt.dll from Qwt installation lib directory to the 'release' directory
-* Create a new directory 'debug'
-  - Copy qwtd.dll and qwtd.pdb from Qwt installation lib directory to
-    the 'debug' directory
-
-3.2 Add the ffmpeg encoder to the sources directory
+3.1 Add the ffmpeg encoder to the sources directory
 --------------------------------------------------------------------------------
 
 * Download the latest static version from http://ffmpeg.zeranoe.com/builds/
 * Unpack the 7z file to the qstopmotion directory
 * Rename the ffmpeg directory to 'ffmpeg64bit'
 
-3.3 Build
+3.2 Build
 --------------------------------------------------------------------------------
 
 * Start Qt Creator.
@@ -150,7 +120,7 @@ Last Change: 2018-01-17
 * In the 'Build' menu select 'Build Project qStopMotion'
 * Locking for error and warning messages.
 
-3.4 Debugging
+3.3 Debugging
 --------------------------------------------------------------------------------
 
 * Start Qt Creator.

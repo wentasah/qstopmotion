@@ -32,7 +32,7 @@
 #include <QWidget>
 #include <QSoundEffect>
 
-#include <qwt/qwt_slider.h>
+#include <qwt_slider.h>
 
 #include "frontends/frontend.h"
 #include "frontends/qtfrontend/toolbar.h"

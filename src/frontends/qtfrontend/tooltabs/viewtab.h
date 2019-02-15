@@ -27,7 +27,7 @@
 #include <QPushButton>
 #include <QWidget>
 
-#include <qwt/qwt_slider.h>
+#include <qwt_slider.h>
 
 #include "frontends/frontend.h"
 

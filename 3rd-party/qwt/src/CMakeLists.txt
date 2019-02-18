@@ -114,15 +114,9 @@ set(qwt_SRCS
     qwt_wheel.cpp
 )
 
-set(qwt_FORMS
-)
-
-qt5_wrap_cpp(qwt_HDRS_MOC ${qwt_HDRS})
-qt5_wrap_ui(qwt_FORM_HDRS ${qwt_FORMS})
-
 set(CMAKE_DEBUG_POSTFIX d)
 
-add_library(qwt SHARED ${qwt_SRCS} ${qwt_HDRS_MOC} ${qwt_FORM_HDRS})
+add_library(qwt SHARED ${qwt_SRCS})
 
 target_link_libraries(
     qwt

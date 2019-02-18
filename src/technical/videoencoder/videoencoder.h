@@ -23,6 +23,7 @@
 #ifndef VIDEOENCODER_H
 #define VIDEOENCODER_H
 
+#include <QMap>
 #include <QString>
 #include <QStringList>
 

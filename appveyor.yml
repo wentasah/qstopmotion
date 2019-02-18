@@ -1,5 +1,9 @@
 version: 2.4.1.{build}
 
+branches:
+  only:
+  - develop
+
 image:
   - Visual Studio 2013
 #  - Visual Studio 2015
@@ -14,6 +18,7 @@ environment:
 #    CONFIGURATION: Release
 #    VCINSTALLDIR: C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\
 #    VC_VARS_ARCH: x86
+##    APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
 #  - QT5: C:\Qt\5.9\msvc2015_64
 #    CMAKE_GENERATOR: Visual Studio 14 2015 Win64
 #    CONFIGURATION: Release
@@ -29,7 +34,6 @@ install:
 - cmd: >-
     set Qt5_DIR=%QT5%\lib\cmake\Qt5
     set Path=%QT5%\bin;%Path%
-    hg clone -r develop http://hg.code.sf.net/p/qstopmotion/code qstopmotion
 
 build_script:
 - cmd: >-

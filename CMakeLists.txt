@@ -40,7 +40,7 @@ SET(
     ${CMAKE_MODULE_PATH}
 )
 
-message("CMAKE_BUILD_TYPE: ${CMAKE_BUILD_TYPE}")
+message("CMAKE_GENERATOR: ${CMAKE_GENERATOR}")
 
 ###############################################################################
 # Platform check
@@ -86,6 +86,8 @@ IF(NOT DEFINED CMAKE_BUILD_TYPE)
         FORCE
     )
 ENDIF(NOT DEFINED CMAKE_BUILD_TYPE)
+
+message("CMAKE_BUILD_TYPE: ${CMAKE_BUILD_TYPE}")
 
 SET(CMAKE_PROJECT_NAME "qstopmotion")
 SET(QSTOPMOTION_HOMEPAGE "http://www.qstopmotion.org")
@@ -411,10 +413,15 @@ IF(WIN32)
 
     ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/3rd-party/qwt ${CMAKE_CURRENT_BINARY_DIR}/qwt)
 
+    SET(CONFIG_DIR "")
+    IF("${CMAKE_GENERATOR}" MATCHES "Visual Studio.*")
+        SET(CONFIG_DIR "${CMAKE_BUILD_TYPE}/")
+    ENDIF("${CMAKE_GENERATOR}" MATCHES "Visual Studio.*")
+
     IF(CMAKE_BUILD_TYPE STREQUAL "Release")
-        SET(QWT_LIB_PATH qwt/src/qwt)
+        SET(QWT_LIB_PATH qwt/src/${CONFIG_DIR}qwt)
     ELSE(CMAKE_BUILD_TYPE STREQUAL "Release")
-        SET(QWT_LIB_PATH qwt/src/qwtd)
+        SET(QWT_LIB_PATH qwt/src/${CONFIG_DIR}qwtd)
     ENDIF(CMAKE_BUILD_TYPE STREQUAL "Release")
 
     SET(
@@ -426,6 +433,7 @@ ENDIF(WIN32)
 message("QWT_INCLUDE_DIRS: ${QWT_INCLUDE_DIRS}")
 message("QWT_LIBRARY: ${QWT_LIBRARY}")
 message("QWT_LIBRARIES: ${QWT_LIBRARIES}")
+message("QWT_LIB_PATH: ${QWT_LIB_PATH}")
 
 ###############################################################################
 # gPhoto2 support
@@ -598,9 +606,9 @@ ELSEIF(WIN32)
     ADD_CUSTOM_COMMAND(
         TARGET qstopmotion
         POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy ${QWT_LIB_PATH}.dll ${EXECUTABLE_OUTPUT_PATH}/
-        COMMAND ${CMAKE_COMMAND} -E echo "copy ${QWT_LIB_PATH}.dll to bin/"
-        COMMENT "copy ${QWT_LIB_PATH}.dll to bin/"
+        COMMAND ${CMAKE_COMMAND} -E copy ${QWT_LIB_PATH}.dll ${EXECUTABLE_OUTPUT_PATH}/${CONFIG_DIR}
+        COMMAND ${CMAKE_COMMAND} -E echo "copy ${QWT_LIB_PATH}.dll to bin/${CONFIG_DIR}"
+        COMMENT "copy ${QWT_LIB_PATH}.dll to bin/${CONFIG_DIR}"
     )
 
     # tell cmake which libraries to link
@@ -877,7 +885,8 @@ IF(WIN32)
     SET(QSTOPMOTION_QTRUNTIME_INSTALL_DIR "${CMAKE_BINARY_DIR}/qtruntime")
     MESSAGE("QSTOPMOTION_QTRUNTIME_INSTALL_DIR: ${QSTOPMOTION_QTRUNTIME_INSTALL_DIR}")
     INSTALL(
-        CODE "execute_process(COMMAND windeployqt --no-translations --no-system-d3d-compiler --dir ${QSTOPMOTION_QTRUNTIME_INSTALL_DIR} qstopmotion.exe
+        CODE "MESSAGE(\"Prepare required Qt libraries.\")"
+        CODE "execute_process(COMMAND windeployqt --no-translations --no-system-d3d-compiler --dir ${QSTOPMOTION_QTRUNTIME_INSTALL_DIR} ${EXECUTABLE_OUTPUT_PATH}/${CONFIG_DIR}qstopmotion.exe
                               WORKING_DIRECTORY ${QSTOPMOTION_BIN_INSTALL_DIR})"
     )
     INSTALL(

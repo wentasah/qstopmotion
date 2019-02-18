@@ -635,15 +635,74 @@ IF(WIN32)
     file(COPY ${ICON_FILES} DESTINATION ".")
     file(COPY ${GENERAL_FILES} DESTINATION ".")
 
+    set(FFMPEG_DIR ${PROJECT_BINARY_DIR}/ffmpeg)
+    set(LIBAV_DIR ${PROJECT_BINARY_DIR}/libav)
     IF(CMAKE_CL_64)
-        # Windows 64bit
-        file(COPY ffmpeg64bit/ DESTINATION "ffmpeg")
-        file(COPY libav64bit/ DESTINATION "libav")
+        set(FFMPEG_ZIP_SHORT_NAME "ffmpeg-4.1-win64-shared")
+        set(FFMPEG_ZIP_URL "https://ffmpeg.zeranoe.com/builds/win64/shared/${FFMPEG_ZIP_SHORT_NAME}.zip")
+        set(FFMPEG_ZIP_MD5 "ff9b7d296cb158f0e15277f72e533b83")
+        set(LIBAV_7Z_SHORT_NAME "libav-x86_64-w64-mingw32-11.7")
+        set(LIBAV_7Z_URL "http://builds.libav.org/windows/release-gpl/${LIBAV_7Z_SHORT_NAME}.7z")
+        set(LIBAV_7Z_MD5 "a09557f7fe2f7d4cc79e248d56cb8589")
     ELSE(CMAKE_CL_64)
-        # Windows 32bit
-        file(COPY ffmpeg32bit/ DESTINATION "ffmpeg")
-        file(COPY libav32bit/ DESTINATION "libav")
+        set(FFMPEG_ZIP_SHORT_NAME "ffmpeg-4.1-win32-shared")
+        set(FFMPEG_ZIP_URL "https://ffmpeg.zeranoe.com/builds/win32/shared/${FFMPEG_ZIP_SHORT_NAME}.zip")
+        set(FFMPEG_ZIP_MD5 "0fb8fb06b741c3077fe4529d02287747")
+        set(LIBAV_7Z_SHORT_NAME "libav-i686-w64-mingw32-11.7")
+        set(LIBAV_7Z_URL "http://builds.libav.org/windows/release-gpl/${LIBAV_7Z_SHORT_NAME}.7z")
+        set(LIBAV_7Z_MD5 "a7ba631551f0502ba46e95d851d15032")
     ENDIF(CMAKE_CL_64)
+
+    # Download and unpack ffmpeg
+    if(NOT EXISTS ${FFMPEG_DIR})
+        set(FFMPEG_ZIP_NAME "${FFMPEG_ZIP_SHORT_NAME}.zip")
+        if(NOT EXISTS ${FFMPEG_ZIP_NAME})
+            message("download ffmpeg from ${FFMPEG_ZIP_URL} to ${FFMPEG_ZIP_NAME}")
+            file(DOWNLOAD ${FFMPEG_ZIP_URL} ${PROJECT_BINARY_DIR}/${FFMPEG_ZIP_NAME}
+                INACTIVITY_TIMEOUT 15
+                EXPECTED_HASH MD5=${FFMPEG_ZIP_MD5}
+            )
+        endif(NOT EXISTS ${FFMPEG_ZIP_NAME})
+
+        execute_process(COMMAND ${CMAKE_COMMAND} -E tar -vxf ${FFMPEG_ZIP_NAME}
+                        WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
+                        RESULT_VARIABLE UNZIP_RESULT
+                        OUTPUT_VARIABLE UNZIP_OUTPUT
+                        ERROR_VARIABLE UNZIP_OUTPUT
+        )
+        MESSAGE(STATUS "ffmpeg unzip result:" ${UNZIP_RESULT})
+        if(${UNZIP_RESULT})
+            MESSAGE(FATAL_ERROR "ffmpeg unzip output:" ${UNZIP_OUTPUT})
+        endif(${UNZIP_RESULT})
+        file(RENAME ${PROJECT_BINARY_DIR}/${FFMPEG_ZIP_SHORT_NAME} ${FFMPEG_DIR})
+    endif(NOT EXISTS ${FFMPEG_DIR})
+
+    # Download and unpack libav
+    if(NOT EXISTS ${LIBAV_DIR})
+        set(LIBAV_7Z_NAME "${LIBAV_7Z_SHORT_NAME}.7z")
+        if(NOT EXISTS ${LIBAV_7Z_NAME})
+            message("download libav from ${LIBAV_7Z_URL} to ${LIBAV_7Z_NAME}")
+            file(DOWNLOAD ${LIBAV_7Z_URL} ${PROJECT_BINARY_DIR}/${LIBAV_7Z_NAME}
+                INACTIVITY_TIMEOUT 15
+                EXPECTED_HASH MD5=${LIBAV_7Z_MD5}
+            )
+        endif(NOT EXISTS ${LIBAV_7Z_NAME})
+
+        execute_process(COMMAND ${CMAKE_COMMAND} -E tar -vxf ${LIBAV_7Z_NAME}
+                        WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
+                        RESULT_VARIABLE UNZIP_RESULT
+                        OUTPUT_VARIABLE UNZIP_OUTPUT
+                        ERROR_VARIABLE UNZIP_OUTPUT
+        )
+        MESSAGE(STATUS "libav unzip result:" ${UNZIP_RESULT})
+        if(${UNZIP_RESULT})
+            MESSAGE(FATAL_ERROR "libav unzip output:" ${UNZIP_OUTPUT})
+        endif(${UNZIP_RESULT})
+        file(RENAME ${PROJECT_BINARY_DIR}/${LIBAV_7Z_SHORT_NAME} ${LIBAV_DIR})
+        file(RENAME ${LIBAV_DIR}/usr/bin ${LIBAV_DIR}/bin)
+        file(RENAME ${LIBAV_DIR}/usr/share ${LIBAV_DIR}/share)
+        file(REMOVE_RECURSE ${LIBAV_DIR}/usr)
+    endif(NOT EXISTS ${LIBAV_DIR})
 ENDIF(WIN32)
 
 IF(UNIX AND NOT APPLE)
@@ -832,35 +891,15 @@ IF(WIN32)
         DESTINATION ${QSTOPMOTION_BIN_INSTALL_DIR}
     )
 
-    IF(CMAKE_CL_64)
-        # Windows 64bit
-        # installation of ffmpeg
-        install(
-            DIRECTORY ffmpeg64bit/
-            DESTINATION "${QSTOPMOTION_GENERALS_INSTALL_DIR}/ffmpeg"
-        )
-
-        # installation of libav
-        install(
-            DIRECTORY libav64bit/
-            DESTINATION "${QSTOPMOTION_GENERALS_INSTALL_DIR}/libav"
-        )
-
-    ELSE(CMAKE_CL_64)
-        # Windows 32bit
-        # installation of ffmpeg
-        install(
-            DIRECTORY ffmpeg32bit/
-            DESTINATION "${QSTOPMOTION_GENERALS_INSTALL_DIR}/ffmpeg"
-        )
-
-        # installation of libav
-        install(
-            DIRECTORY libav32bit/
-            DESTINATION "${QSTOPMOTION_GENERALS_INSTALL_DIR}/libav"
-        )
-
-    ENDIF(CMAKE_CL_64)
+    # installation of ffmpeg and libav
+    install(
+        DIRECTORY ${FFMPEG_DIR}
+        DESTINATION "${QSTOPMOTION_GENERALS_INSTALL_DIR}/"
+    )
+    install(
+        DIRECTORY ${LIBAV_DIR}
+        DESTINATION "${QSTOPMOTION_GENERALS_INSTALL_DIR}/"
+    )
 
 ENDIF(WIN32)
 
@@ -994,8 +1033,6 @@ ENDIF(WIN32)
 IF(UNIX AND NOT APPLE)
     # Exclude:
     # * Mercurial SMC files
-    # * ffmpeg Windows binaries
-    # * libav Windows binaries
     SET(
         CPACK_SOURCE_IGNORE_FILES
         "${CPACK_SOURCE_IGNORE_FILES}"
@@ -1003,10 +1040,6 @@ IF(UNIX AND NOT APPLE)
         "${PROJECT_SOURCE_DIR}/.hgignore"
         "${PROJECT_SOURCE_DIR}/.hgtags"
         "${PROJECT_SOURCE_DIR}/.hgtimestamp"
-        "${PROJECT_SOURCE_DIR}/ffmpeg32bit/"
-        "${PROJECT_SOURCE_DIR}/ffmpeg64bit/"
-        "${PROJECT_SOURCE_DIR}/libav32bit/"
-        "${PROJECT_SOURCE_DIR}/libav64bit/"
     )
 ENDIF(UNIX AND NOT APPLE)
 

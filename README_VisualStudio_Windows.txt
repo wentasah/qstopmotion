@@ -95,14 +95,7 @@ Last Change: 2018-01-17
 3. Building qStopMotion
 ================================================================================
 
-3.1 Add the ffmpeg encoder to the sources directory
---------------------------------------------------------------------------------
-
-* Download the latest static version from http://ffmpeg.zeranoe.com/builds/
-* Unpack the 7z file to the qstopmotion directory
-* Rename the ffmpeg directory to 'ffmpeg64bit'
-
-3.2 Create the Visual Studio Solution
+3.1 Create the Visual Studio Solution
 --------------------------------------------------------------------------------
 
 * Start the CMake GUI using the shortcut to the start script.
@@ -112,7 +105,7 @@ Last Change: 2018-01-17
 * Select the generator "Visual Studio 12 2013 Win64"
 * Press the generate button
 
-3.3 Build the application
+3.2 Build the application
 --------------------------------------------------------------------------------
 
 * Start MS Visual Studio

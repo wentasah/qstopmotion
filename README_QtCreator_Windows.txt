@@ -97,14 +97,7 @@ Last Change: 2018-01-17
 3. Building qStopMotion
 ================================================================================
 
-3.1 Add the ffmpeg encoder to the sources directory
---------------------------------------------------------------------------------
-
-* Download the latest static version from http://ffmpeg.zeranoe.com/builds/
-* Unpack the 7z file to the qstopmotion directory
-* Rename the ffmpeg directory to 'ffmpeg64bit'
-
-3.2 Build
+3.1 Build
 --------------------------------------------------------------------------------
 
 * Start Qt Creator.
@@ -120,7 +113,7 @@ Last Change: 2018-01-17
 * In the 'Build' menu select 'Build Project qStopMotion'
 * Locking for error and warning messages.
 
-3.3 Debugging
+3.2 Debugging
 --------------------------------------------------------------------------------
 
 * Start Qt Creator.

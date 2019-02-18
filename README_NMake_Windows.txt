@@ -95,19 +95,12 @@ Last Change: 2018-01-17
 3. Building qStopMotion
 ================================================================================
 
-3.1 Add the ffmpeg encoder to the sources directory
---------------------------------------------------------------------------------
-
-* Download the latest static version from http://ffmpeg.zeranoe.com/builds/
-* Unpack the 7z file to the qstopmotion directory
-* Rename the ffmpeg directory to 'ffmpeg64bit'
-
-3.2 Create the NMake makefile
+3.1 Create the NMake makefile
 --------------------------------------------------------------------------------
 
 * Create a build directory
 
-3.2.1 Using the CMake GUI
+3.1.1 Using the CMake GUI
 
 * Start the CMake GUI using the shortcut to the start script.
 * Select the directory with the cmakelist.txt file as the source code directory.
@@ -123,13 +116,13 @@ Last Change: 2018-01-17
 * Press the configure button again.
 * Press the generate button.
 
-3.2.2 Using the command line
+3.1.2 Using the command line
 
 * Start the "Visua Studio 2013 - Visual Studio Tools - VS2013 x64 Native Tools Command Prompt"
 * move to the build directory
 * cmake -G "NMake Makefiles" -D CMAKE_BUILD_TYPE:STRING=Release -D CPACK_BINARY_NSIS:BOOL=ON -D CPACK_BINARY_ZIP:BOOL=ON ../qstopmotion
 
-3.3 Build the application
+3.2 Build the application
 --------------------------------------------------------------------------------
 
 * Start the "Visua Studio 2013 - Visual Studio Tools - VS2013 x64 Native Tools Command Prompt"

@@ -29,6 +29,11 @@ environment:
     CONFIGURATION: Release
     VCINSTALLDIR: C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\
     VC_VARS_ARCH: x86
+  - QT5: C:\Qt\5.6\msvc2013_64
+    CMAKE_GENERATOR: Visual Studio 12 2013 Win64
+    CONFIGURATION: Release
+    VCINSTALLDIR: C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\
+    VC_VARS_ARCH: amd64
 
 install:
 - cmd: >-

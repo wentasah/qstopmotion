@@ -373,7 +373,7 @@ public:
      * Get the recording mode.
      * @return The recording mode.
      */
-    int getRecordingMode();
+    enum DomainFacade::recordingMode getRecordingMode();
 
     /**
      * Set the recording mode.

@@ -990,7 +990,7 @@ void QtFrontend::setToolBarState(int newState)
 
 int QtFrontend::getRecordingMode()
 {
-    return mw->getRecordingMode();
+    return static_cast<int>(mw->getRecordingMode());
 }
 
 

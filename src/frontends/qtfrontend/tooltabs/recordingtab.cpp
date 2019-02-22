@@ -301,8 +301,8 @@ void RecordingTab::retranslateStrings()
 
     recordingGroupBox->setTitle(tr("Recording mode"));
     recordingModeCombo->clear();
-    recordingModeCombo->addItem(tr("Single frame capture"));
-    recordingModeCombo->addItem(tr("Time-lapse capture"));
+    recordingModeCombo->addItem(tr("Single frame capture"), DomainFacade::singleFrameMode);
+    recordingModeCombo->addItem(tr("Time-lapse capture"), DomainFacade::timeLapseMode);
 
     captureGroupBox->setTitle(tr("Capture"));
     mixModeCombo->clear();
@@ -480,9 +480,30 @@ bool RecordingTab::setResolution(int index)
 }
 
 
-int RecordingTab::getRecordingMode()
+enum DomainFacade::recordingMode RecordingTab::getRecordingMode()
 {
-    return recordingModeCombo->currentIndex();
+    const QVariant userData = recordingModeCombo->currentData();
+    if (!userData.isValid()) {
+        qWarning() << "recordingModeCombo contains invalid data for index"
+                   << recordingModeCombo->currentIndex()
+                   << "use singleFrameMode";
+        return DomainFacade::singleFrameMode;
+    }
+
+    bool ok = false;
+    const int mode = userData.toInt(&ok);
+    if (!ok || (mode < DomainFacade::singleFrameMode)
+            || (mode > DomainFacade::timeLapseMode)) {
+        qWarning() << "recordingModeCombo contains invalid data for index"
+                   << recordingModeCombo->currentIndex()
+                   << "current data:" << userData
+                   << "use singleFrameMode";
+        return DomainFacade::singleFrameMode;
+    }
+
+    const enum DomainFacade::recordingMode recMode
+            = static_cast<enum DomainFacade::recordingMode>(mode);
+    return recMode;
 }
 
 
@@ -973,7 +994,7 @@ void RecordingTab::cameraButtonClicked()
             clickEffect->setVolume(0.25f);
         }
 
-        if (0 == getRecordingMode()) {
+        if (DomainFacade::singleFrameMode == getRecordingMode()) {
             // Capture mode
 
             toolBar->setActualState(ToolBar::toolBarCameraOn);
@@ -1042,7 +1063,7 @@ void RecordingTab::cameraButtonClicked()
         // captureGroupBox->hide();
         enableCaptureGroupBox(true);
         enableTimelapseGroupBox(true);
-        if (0 == getRecordingMode()) {
+        if (DomainFacade::singleFrameMode == getRecordingMode()) {
             // Capture mode
 
             toolBar->setActualState(ToolBar::toolBarCameraOff);
@@ -1139,9 +1160,14 @@ void RecordingTab::sendBeep()
 
 void RecordingTab::captureFrame()
 {
+    if (!cameraOn) {
+        // skip capturing when camera hasn't been activated yet
+        return;
+    }
+
     qDebug() << "RecordingTab::captureFrame --> Start";
 
-    if (0 == getRecordingMode()) {
+    if (DomainFacade::singleFrameMode == getRecordingMode()) {
         // Capture mode
 
         toolBar->setActualState(ToolBar::toolBarNothing);
@@ -1149,7 +1175,7 @@ void RecordingTab::captureFrame()
 
     storeFrame();
 
-    if (0 == getRecordingMode()) {
+    if (DomainFacade::singleFrameMode == getRecordingMode()) {
         // Capture mode
 
         toolBar->setActualState(ToolBar::toolBarCameraOn);

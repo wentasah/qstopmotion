@@ -1024,7 +1024,7 @@ void MainWindowGUI::setToolBarState(int newState)
 }
 
 
-int MainWindowGUI::getRecordingMode()
+enum DomainFacade::recordingMode MainWindowGUI::getRecordingMode()
 {
     return recordingTab->getRecordingMode();
 }

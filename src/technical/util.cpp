@@ -147,7 +147,7 @@ const QString Util::findDefaultPhotoEditor()
     }
 #else
     // Linux and Apple OS X version
-    const QString gimpCommand = Util::checkCommand("gimp");
+    const QString gimpPath = Util::checkCommand("gimp");
     if (!gimpPath.isEmpty()) {
         editorPath = gimpPath;
     } else {

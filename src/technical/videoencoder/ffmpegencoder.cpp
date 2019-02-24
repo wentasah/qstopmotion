@@ -29,6 +29,8 @@
 #include "domain/animation/projectserializer.h"
 #include "frontends/frontend.h"
 
+extern bool g_verboseOutput;
+
 namespace {
 const QString MOVIENAMEPREFIX = "movie_";
 }
@@ -178,8 +180,10 @@ const QStringList FfmpegEncoder::inputOptions() const
     arguments << QLatin1String("-hide_banner");
 
     // Verbose output - for debugging only
-    arguments << QLatin1String("-loglevel");
-    arguments << QLatin1String("trace"); // info - default; debug; trace
+    if (g_verboseOutput) {
+        arguments << QLatin1String("-loglevel");
+        arguments << QLatin1String("trace"); // info - default; debug; trace
+    }
 
     // Overwrite output files without asking.
     arguments << QLatin1String("-y");

@@ -71,7 +71,6 @@ ExportWidget::ExportWidget(Frontend *f, bool type, QWidget *parent) : QWidget(pa
     askForOutputLabel          = 0;
     askUserEveryTimeButton     = 0;
     useDefaultOutputButton     = 0;
-    activeEncoderApplication   = 0;
     defaultOutputLabel         = 0;
     defaultOutputEdit          = 0;
     activeDefaultOutputFileName.clear();

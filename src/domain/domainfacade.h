@@ -219,7 +219,7 @@ public:
     /**
      * @brief Default video encoder application for new installations
      */
-    const static int  ENCODERAPPLICATIONDEFAULT = noneEncoderApplication;
+    const static int  ENCODERAPPLICATIONDEFAULT = ffmpegApplication;
 
     /**
      * @brief Enum with all possible video output formats

@@ -1439,6 +1439,11 @@ void MainWindowGUI::saveProjectAs()
     fileDialog.setNameFilters(filters);
     fileDialog.setAcceptMode(QFileDialog::AcceptSave);
     fileDialog.setFileMode(QFileDialog::AnyFile);
+    fileDialog.setDefaultSuffix(PreferencesTool::projectSuffix);
+    const QString description = frontend->getProject()->getProjectDescription();
+    if (!description.isEmpty()) {
+        fileDialog.selectFile(description);
+    }
 
     while (1) {
         ret = fileDialog.exec();
@@ -1449,11 +1454,6 @@ void MainWindowGUI::saveProjectAs()
 
         if (filePath.isEmpty()) {
             return;
-        }
-        if (!filePath.endsWith(PreferencesTool::projectSuffix)) {
-            // Append the project suffix
-            filePath.append(".");
-            filePath.append(PreferencesTool::projectSuffix);
         }
         if (filePath.indexOf('|') != -1) {
             // Remove all '|' characters
@@ -1553,6 +1553,12 @@ void MainWindowGUI::exportToVideo()
         fileDialog.setNameFilters(filters);
         fileDialog.setAcceptMode(QFileDialog::AcceptSave);
         fileDialog.setFileMode(QFileDialog::AnyFile);
+        fileDialog.setDefaultSuffix(exportSuffix);
+        const QFileInfo projectPath(frontend->getProject()->getNewProjectFilePath());
+        if (projectPath.exists() && projectPath.isFile()) {
+            const QString projectName = projectPath.baseName();
+            fileDialog.selectFile(projectName);
+        }
         int ret = fileDialog.exec();
         if (ret == QDialog::Accepted) {
             QStringList openFiles = fileDialog.selectedFiles();
@@ -1563,10 +1569,6 @@ void MainWindowGUI::exportToVideo()
             encoder = NULL;
             return;
         } else {
-            if (!outputFile.endsWith(exportSuffix)) {
-                outputFile.append(".");
-                outputFile.append(exportSuffix);
-            }
             encoder->setOutputFile(outputFile);
         }
     } else {

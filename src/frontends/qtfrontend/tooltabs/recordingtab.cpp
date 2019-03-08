@@ -575,9 +575,12 @@ int RecordingTab::getUnitMode()
 
 void RecordingTab::setUnitMode(int mode)
 {
-    Q_ASSERT(mode >= DomainFacade::secondsMode);
-    Q_ASSERT(mode < DomainFacade::lastUnitMode);
-
+    if ((mode < DomainFacade::secondsMode) || (mode >= DomainFacade::lastUnitMode)) {
+        qCritical() << "try to set invalid timelapse unit mode" << mode;
+        qCritical() << "use units in seconds";
+        mode = DomainFacade::secondsMode;
+    }
+    qDebug() << "set timelapse unit mode to" << mode;
     unitModeCombo->setCurrentIndex(mode);
     changeUnitMode(mode);
 }
@@ -585,7 +588,7 @@ void RecordingTab::setUnitMode(int mode)
 
 int RecordingTab::getUnitCount()
 {
-    if (unitModeCombo->currentIndex() == 0) {
+    if (unitModeCombo->currentIndex() == DomainFacade::secondsMode) {
         return (int)(unitCountSlider->value());
     }
     else {
@@ -593,12 +596,41 @@ int RecordingTab::getUnitCount()
     }
 }
 
+quint64 RecordingTab::getTimelapseIntervalMsec() const
+{
+    quint64 factor = 1000;
+
+    switch (unitModeCombo->currentIndex()) {
+    case DomainFacade::secondsMode:
+        factor = 1000;
+        break;
+    case DomainFacade::minutesMode:
+        factor = 60000;
+        break;
+    case DomainFacade::hoursMode:
+        factor = 3600000;
+        break;
+    case DomainFacade::daysMode:
+        factor = 86400000;
+        break;
+    default:
+        qCritical() << "couldn't select timelapse unit mode. combobox index:" << unitModeCombo->currentIndex()
+                    << "use factor 1000";
+        break;
+    }
+
+    const quint64 msec = static_cast<quint64>(unitCountSlider->value()) * factor;
+    return msec;
+}
+
 
 void RecordingTab::setUnitCount(int count)
 {
     qDebug() << "set timelapse unit count to" << count;
-    unitCountSlider->setValue((double)count);
-    unitCountSliderValue->setText(QString("%1").arg(count));
+    unitCountSlider->setValue(static_cast<double>(count));
+    unitCountSliderValue->setText(QString::number(count));
+
+    boundBeepTimeSlider();
 }
 
 
@@ -626,7 +658,7 @@ void RecordingTab::setBeepState(bool checked)
 
 int RecordingTab::getBeepCount()
 {
-    if (unitModeCombo->currentIndex() == 0) {
+    if (unitModeCombo->currentIndex() == DomainFacade::secondsMode) {
         return (int)(beepCountSlider->value());
     }
     else {
@@ -637,8 +669,8 @@ int RecordingTab::getBeepCount()
 
 void RecordingTab::setBeepCount(int count)
 {
-    beepCountSlider->setValue((double)count);
-    beepCountSliderValue->setText(QString("%1").arg(count));
+    qDebug() << "set timelapse beep timer interval to" << count << "second(s)";
+    boundBeepTimeSlider(count);
 }
 
 
@@ -761,7 +793,7 @@ void RecordingTab::changeUnitMode(int index)
     case DomainFacade::secondsMode:
         // Seconds
         unitCountSliderCaption->setText(tr("Seconds between pictures"));
-        unitCountSlider->setScale(0, 60);
+        unitCountSlider->setScale(1, 60);
         unitCountSlider->setTotalSteps(60);
         unitCountSlider->setValue(30);
 
@@ -769,7 +801,7 @@ void RecordingTab::changeUnitMode(int index)
     case DomainFacade::minutesMode:
         // Minutes
         unitCountSliderCaption->setText(tr("Minutes between pictures"));
-        unitCountSlider->setScale(0, 60);
+        unitCountSlider->setScale(1, 60);
         unitCountSlider->setTotalSteps(60);
         unitCountSlider->setValue(5);
 
@@ -777,7 +809,7 @@ void RecordingTab::changeUnitMode(int index)
     case DomainFacade::hoursMode:
         // Hours
         unitCountSliderCaption->setText(tr("Hours between pictures"));
-        unitCountSlider->setScale(0, 25);
+        unitCountSlider->setScale(1, 25);
         unitCountSlider->setTotalSteps(25);
         unitCountSlider->setValue(1);
 
@@ -785,16 +817,19 @@ void RecordingTab::changeUnitMode(int index)
     case DomainFacade::daysMode:
         // Days
         unitCountSliderCaption->setText(tr("Days between pictures"));
-        unitCountSlider->setScale(0, 30);
+        unitCountSlider->setScale(1, 30);
         unitCountSlider->setTotalSteps(30);
         unitCountSlider->setValue(1);
 
         break;
     }
 
+    const int unitCount = static_cast<int>(unitCountSlider->value());
+    unitCountSliderValue->setText(QString::number(unitCount));
     if (frontend->getProject()->isActiveProject()) {
         frontend->getProject()->getAnimationProject()->setUnitMode(index);
     }
+    boundBeepTimeSlider();
 
     qDebug() << "RecordingTab::changeUnitMode --> End";
 }
@@ -804,62 +839,19 @@ void RecordingTab::changeUnitCount()
 {
     qDebug() << "RecordingTab::changeUnitCount --> Start";
 
-    int newUnitCount = (int)unitCountSlider->value();
-    int factor = 0;
-    int unitMode = unitModeCombo->currentIndex();
+    int newUnitCount = static_cast<int>(unitCountSlider->value());
 
     if (0 == newUnitCount) {
         newUnitCount = 1;
     }
 
-    /*
-    switch (unitMode) {
-    case DomainFacade::secondsMode:
-        if (60 < newUnitCount) {
-            newUnitCount = 60;
-        }
-        break;
-    case DomainFacade::minutesMode:
-        if (60 < newUnitCount) {
-            newUnitCount = 60;
-        }
-        break;
-    case DomainFacade::hoursMode:
-        if (24 < newUnitCount) {
-            newUnitCount = 24;
-        }
-        break;
-    case DomainFacade::daysMode:
-        if (30 < newUnitCount) {
-            newUnitCount = 30;
-        }
-        break;
-    }
-    */
     if (frontend->getProject()->isActiveProject()) {
         frontend->getProject()->getAnimationProject()->setUnitCount(newUnitCount);
     }
-    unitCountSliderValue->setText(QString("%1").arg(newUnitCount));
+    unitCountSliderValue->setText(QString::number(newUnitCount));
     qDebug() << "timelapse grab interval changed to" << newUnitCount << "sec";
-    /*
-    if (newUnitCount == 0 || unitMode == DomainFacade::secondsMode) {
-        if (timelapseTimer->isActive()) {
-            timelapseTimer->stop();
-        }
-        return;
-    }
 
-    if (timelapseTimer->isActive() == false) {
-        // Grab the first frame manually
-        cameraHandler->captureFrame();
-        // then grab at the given interval
-        timelapseTimer->start(factor / newUnitCount);
-    }
-    else {
-        timelapseTimer->setInterval(factor / newUnitCount);
-    }
-    */
-
+    boundBeepTimeSlider();
     qDebug() << "RecordingTab::changeUnitCount --> End";
 }
 
@@ -892,14 +884,15 @@ void RecordingTab::changeBeepCount()
 {
     qDebug() << "RecordingTab::changeBeepCount --> Start";
 
-    int newBeepCount = (int)beepCountSlider->value();
+    int newBeepCount = static_cast<int>(beepCountSlider->value());
 
     if (0 == newBeepCount) {
         newBeepCount = 1;
     }
 
+    qDebug() << "change timelapse beep timer interval to" << newBeepCount << "second(s)";
     frontend->getProject()->getAnimationProject()->setBeepCount(newBeepCount);
-    beepCountSliderValue->setText(QString("%1").arg(newBeepCount));
+    beepCountSliderValue->setText(QString::number(newBeepCount));
 
     qDebug() << "RecordingTab::changeBeepCount --> End";
 }
@@ -1007,9 +1000,6 @@ void RecordingTab::cameraButtonClicked()
         else {
             // Time lapse mode
 
-            int msec;
-            int factor;
-
             if (beepCheckBox->isChecked()) {
                 // Create timer for the time between beep and frame capture
                 cameraTimer = new QTimer(this);
@@ -1031,40 +1021,10 @@ void RecordingTab::cameraButtonClicked()
             timelapseTimer->setSingleShot(false);
             QObject::connect(timelapseTimer, SIGNAL(timeout()), this, SLOT(sendBeep()));
 
-            // Calculate the time between the beeps
-            switch (unitModeCombo->currentIndex()) {
-            case DomainFacade::secondsMode:
-                // Seconds
-                factor = 1000;
-
-                break;
-            case DomainFacade::minutesMode:
-                // Minutes
-                factor = 60000;
-
-                break;
-            case DomainFacade::hoursMode:
-                // Hours
-                factor = 3600000;
-
-                break;
-            case DomainFacade::daysMode:
-                // Days
-                factor = 86400000;
-
-                break;
-            default:
-                if (timelapseTimer->isActive()) {
-                    timelapseTimer->stop();
-                }
-                break;
-            }
-
-            msec = unitCountSlider->value() * factor;
-
             // Start the time lapse time
+            quint64 msec = getTimelapseIntervalMsec();
             qDebug() << "start timelapse timer with interval" << msec << "msec";
-            timelapseTimer->start(msec);
+            timelapseTimer->start(static_cast<int>(msec));
         }
     }
     else {
@@ -1436,4 +1396,42 @@ void RecordingTab::enableTimelapseGroupBox(bool newState)
     }
 
     qDebug() << "RecordingTab::enableTimelapseGroupBox --> End";
+}
+
+void RecordingTab::boundBeepTimeSlider(int newBeepIntervalSec)
+{
+    const quint64 timelapseIntervalMs = getTimelapseIntervalMsec();
+    quint64 beepIntervalMs = static_cast<quint64>(beepCountSlider->value()) * 1000;
+    if (newBeepIntervalSec == -1) {
+        beepIntervalMs = static_cast<quint64>(newBeepIntervalSec) * 1000;
+    }
+
+    // Rescale beep count slider according to timelapse grabbing interval
+    qint64 maxBeepInterval = timelapseIntervalMs / 1000 - 1;
+    if (maxBeepInterval <= 0) {
+        qWarning() << "timelapse interval is less than 1 second. set beep interval to 1sec";
+        maxBeepInterval = 1;
+    }
+    if (maxBeepInterval > 100) {
+        maxBeepInterval = 100;
+    }
+    beepCountSlider->setScale(1, maxBeepInterval);
+    beepCountSlider->setTotalSteps(static_cast<uint>(maxBeepInterval));
+
+    // Reduce beep interval if it greater than timelaplse grabbing interval
+    int newBeepCount = -1;
+    if (beepIntervalMs >= timelapseIntervalMs) {
+        qDebug() << "reduce timelapse beep interval to 1000msec because current value greater than grabbing interval:"
+                 << beepIntervalMs << timelapseIntervalMs;
+        newBeepCount = 1;
+    } else if (newBeepIntervalSec == -1) {
+        newBeepCount = newBeepIntervalSec;
+    }
+    if (newBeepCount > 0) {
+        beepCountSlider->setValue(static_cast<double>(newBeepCount));
+        beepCountSliderValue->setText(QString::number(newBeepCount));
+        if (frontend->getProject() && frontend->getProject()->getAnimationProject()) {
+            frontend->getProject()->getAnimationProject()->setBeepCount(newBeepCount);
+        }
+    }
 }

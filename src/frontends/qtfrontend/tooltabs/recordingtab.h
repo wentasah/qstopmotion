@@ -165,6 +165,11 @@ public:
     int getUnitCount();
 
     /**
+     * @return interval beetween camera grabbing in milliseconds.
+     */
+    quint64 getTimelapseIntervalMsec() const;
+
+    /**
      * Set the unit count.
      * @param count The new unit count.
      */
@@ -232,6 +237,13 @@ private:
      * @param newState The new state of the timelapse group box.
      */
     void enableTimelapseGroupBox(bool newState);
+
+    /**
+     * Reduce range of beepCountSlider according to interval beetween timelapse
+     * grab interval.
+     * @param newBeepIntervalSec (optional) If specified, try to set beep slider to this value
+     */
+    void boundBeepTimeSlider(int newBeepIntervalSec = -1);
 
 protected:
     // void resizeEvent(QResizeEvent *event);

@@ -376,6 +376,7 @@ private slots:
      */
     void storeFrame();
 
+    void checkSoundEffectStatus();
 };
 
 #endif

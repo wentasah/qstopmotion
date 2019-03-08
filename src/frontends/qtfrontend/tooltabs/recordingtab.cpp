@@ -596,6 +596,7 @@ int RecordingTab::getUnitCount()
 
 void RecordingTab::setUnitCount(int count)
 {
+    qDebug() << "set timelapse unit count to" << count;
     unitCountSlider->setValue((double)count);
     unitCountSliderValue->setText(QString("%1").arg(count));
 }
@@ -754,6 +755,7 @@ void RecordingTab::changeUnitMode(int index)
     qDebug() << "RecordingTab::changeUnitMode --> Start";
 
     // frontend->getProject()->getAnimationProject()->setUnitMode(index);
+    qDebug() << "change timelapse timer unit mode to" << index;
 
     switch (index) {
     case DomainFacade::secondsMode:
@@ -838,6 +840,7 @@ void RecordingTab::changeUnitCount()
         frontend->getProject()->getAnimationProject()->setUnitCount(newUnitCount);
     }
     unitCountSliderValue->setText(QString("%1").arg(newUnitCount));
+    qDebug() << "timelapse grab interval changed to" << newUnitCount << "sec";
     /*
     if (newUnitCount == 0 || unitMode == DomainFacade::secondsMode) {
         if (timelapseTimer->isActive()) {
@@ -990,6 +993,8 @@ void RecordingTab::cameraButtonClicked()
             clickSoundFile.append(QLatin1String("click.wav"));
 
             clickEffect = new QSoundEffect();
+            connect(clickEffect, SIGNAL(statusChanged()),
+                    this, SLOT(checkSoundEffectStatus()));
             clickEffect->setSource(QUrl::fromLocalFile(clickSoundFile));
             clickEffect->setVolume(0.25f);
         }
@@ -1015,6 +1020,8 @@ void RecordingTab::cameraButtonClicked()
                 beepSoundFile.append(QLatin1String("beep.wav"));
 
                 beepEffect = new QSoundEffect();
+                connect(beepEffect, SIGNAL(statusChanged()),
+                        this, SLOT(checkSoundEffectStatus()));
                 beepEffect->setSource(QUrl::fromLocalFile(beepSoundFile));
                 beepEffect->setVolume(0.25f);
             }
@@ -1056,6 +1063,7 @@ void RecordingTab::cameraButtonClicked()
             msec = unitCountSlider->value() * factor;
 
             // Start the time lapse time
+            qDebug() << "start timelapse timer with interval" << msec << "msec";
             timelapseTimer->start(msec);
         }
     }
@@ -1145,7 +1153,9 @@ void RecordingTab::sendBeep()
         beepEffect->play();
 
         // Start the timer for the frame capture
-        cameraTimer->start(beepCountSlider->value() * 1000);
+        const int ms = beepCountSlider->value() * 1000;
+        qDebug() << "start timelapse beep timer with interval" << ms << "msec";
+        cameraTimer->start(ms);
     }
     else
     {
@@ -1233,6 +1243,22 @@ void RecordingTab::storeFrame()
     }
 
     qDebug() << "RecordingTab::storeFrame --> End";
+}
+
+
+void RecordingTab::checkSoundEffectStatus()
+{
+    const QSoundEffect *effect = qobject_cast<const QSoundEffect *>(sender());
+    if (!effect) {
+        qCritical() << "slot checkSoundEffectStatus() was called from unexpected sender:"
+                    << sender();
+        return;
+    }
+
+    if (effect->status() == QSoundEffect::Error) {
+        qCritical() << "an error was occured for sound effect" << effect->source();
+        qCritical() << "verify the sound file's location";
+    }
 }
 
 

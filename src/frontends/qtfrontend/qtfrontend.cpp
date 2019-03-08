@@ -230,6 +230,12 @@ bool QtFrontend::checkApplicationDirectory(const QString &binDirName)
     otherDirName.append(QLatin1String("/"));
     appGraphicsDirName.append(otherDirName);
 
+    otherDirName.clear();
+    otherDirName.append(appApplicationDirName);
+    otherDirName.append(PreferencesTool::soundsDirectory);
+    otherDirName.append(QLatin1String("/"));
+    appSoundsDirName.append(otherDirName);
+
 #else
     // Linux and Apple OS X version
 

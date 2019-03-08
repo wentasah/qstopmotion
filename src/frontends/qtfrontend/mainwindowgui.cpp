@@ -25,9 +25,11 @@
 #include <QDesktopServices>
 #include <QFileDialog>
 #include <QMenuBar>
+#include <QScreen>
 #include <QStatusBar>
 #include <QUrl>
 #include <QWhatsThis>
+#include <QWindow>
 
 #include "mainwindowgui.h"
 
@@ -1806,16 +1808,27 @@ void MainWindowGUI::showPropertiesDialog()
 
 void MainWindowGUI::showUndoStack()
 {
-    QRect fGeo = this->frameGeometry();
-
     // Open up undo stack window
-    if (undoView == 0) {
+    if (undoView == Q_NULLPTR) {
         undoView = new QUndoView(frontend->getProject()->getUndoStack());
         undoView->setWindowTitle(tr("qStopMotion - Undo stack"));
         undoView->setAttribute(Qt::WA_QuitOnClose, false);
-        undoView->setGeometry(geometry().x() + fGeo.width(), geometry().y(),
-                              250, height());
     }
+
+    // Place UndoStack panel on the right side of the application.
+    const QScreen *screen = QWindow().screen();
+    if (screen == Q_NULLPTR) {
+        qCritical() << "couldn't get screen";
+        return;
+    }
+    const QRect screenRect = screen->geometry();
+    const int panelWidth = 250;
+    int posX = x() + frameGeometry().width();
+    if ((posX + panelWidth) >= screenRect.right()) {
+        posX = screenRect.right() - panelWidth;
+    }
+    undoView->setGeometry(posX, geometry().y(), panelWidth, height());
+
     undoView->show();
     this->activateWindow();
 }
@@ -1823,25 +1836,43 @@ void MainWindowGUI::showUndoStack()
 
 void MainWindowGUI::showCameraControllerDialog()
 {
-    QRect fGeo = this->frameGeometry();
+    if (cameraControllerDialog == Q_NULLPTR) {
+        ImageGrabberDevice *device = grabber->getDevice(getVideoSource());
+        if (device == Q_NULLPTR) {
+            qCritical() << "couldn't get ImageGrabberDevice";
+            return;
+        }
+        if (device->getController() == Q_NULLPTR) {
+            qCritical() << "couldn't get GrabberController from current device";
+            return;
+        }
 
-    Q_ASSERT(grabber->getDevice(getVideoSource())->getController() != NULL);
-
-    if (cameraControllerDialog == 0) {
         cameraControllerDialog = new CameraControllerDialog(frontend,
                                                             grabber->getDevice(getVideoSource()),
                                                             this);
         cameraControllerDialog->initialize();
-        cameraControllerDialog->setGeometry(geometry().x() + fGeo.width(), geometry().y(),
-                                            300, height());
     }
+
+    // Place CameraController dialog on the right side of the application.
+    const QScreen *screen = QWindow().screen();
+    if (screen == Q_NULLPTR) {
+        qCritical() << "couldn't get screen";
+        return;
+    }
+    const QRect screenRect = screen->geometry();
+    const int panelWidth = 300;
+    int posX = x() + frameGeometry().width();
+    if ((posX + panelWidth) >= screenRect.right()) {
+        posX = screenRect.right() - panelWidth;
+    }
+    cameraControllerDialog->setGeometry(posX, geometry().y(), panelWidth, height());
     cameraControllerDialog->show();
+
     cameraControllerDialog->enableControls();
 
     if (frontend->isGrabberInited()) {
         cameraControllerDialog->setUp();
     }
-
 }
 
 

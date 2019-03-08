@@ -641,6 +641,7 @@ IF(WIN32)
     file(COPY manual DESTINATION ".")
     file(COPY translations DESTINATION ".")
     file(COPY ${ICON_FILES} DESTINATION ".")
+    file(COPY sounds DESTINATION ".")
     file(COPY ${GENERAL_FILES} DESTINATION ".")
 
     set(FFMPEG_DIR ${PROJECT_BINARY_DIR}/ffmpeg)

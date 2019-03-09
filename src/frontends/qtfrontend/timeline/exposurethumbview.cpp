@@ -59,7 +59,10 @@ ExposureThumbView::~ExposureThumbView()
 
 void ExposureThumbView::mousePressEvent(QMouseEvent * e)
 {
-    qDebug() << "ExposureThumbView::mousePressEvent --> Empty";
+    Q_UNUSED(e);
+    qDebug() << "ExposureThumbView::mousePressEvent() stringNumber:" << stringNumber
+             << "thumbIndex:" << thumbIndex;
+
 /*
     if (e->button() == Qt::LeftButton) {
         if (!timeLine->isSelecting()) {
@@ -87,22 +90,17 @@ void ExposureThumbView::mousePressEvent(QMouseEvent * e)
 
 void ExposureThumbView::mouseReleaseEvent(QMouseEvent * e)
 {
-    qDebug() << "ExposureThumbView::mouseReleaseEvent --> Start";
+    qDebug() << "ExposureThumbView::mouseReleaseEvent stringNumber:" << stringNumber
+             << "thumbIndex:" << thumbIndex << "--> Start";
 
     if (e->button() == Qt::LeftButton) {
         if (!timeLine->isSelecting()) {
-            int selectionFrame = timeLine->getSelectionFrame();
-            int activeFrame = timeLine->getFrontend()->getProject()->getActiveExposureIndex();
-            if (selectionFrame == activeFrame) {
-                // Click the avtive frame --> nothing to do!
-                return;
-            }
-            int highend = (selectionFrame > activeFrame) ? selectionFrame : activeFrame;
-            int lowend = (selectionFrame < activeFrame) ? selectionFrame : activeFrame;
-            if (thumbIndex <= highend || thumbIndex >= lowend) {
-                timeLine->getFrontend()->getProject()->selectExposureToUndo(timeLine->getFrontend()->getProject()->getActiveSceneIndex(),
-                                                                            timeLine->getFrontend()->getProject()->getActiveTakeIndex(),
-                                                                            thumbIndex);
+            DomainFacade *project = timeLine->getFrontend()->getProject();
+            const int activeSceneIndex = project->getActiveSceneIndex();
+            const int activeTakeIndex = project->getActiveTakeIndex();
+            const int activeExposureIndex = project->getActiveExposureIndex();
+            if (activeExposureIndex != thumbIndex) {
+                project->selectExposureToUndo(activeSceneIndex, activeTakeIndex, thumbIndex);
             }
         }
     }
@@ -229,7 +227,7 @@ void ExposureThumbView::contentsDropped(QDropEvent * /* event */)
 {
     qDebug() << "ExposureThumbView::contentsDropped --> Start";
 
-    timeLine->getFrontend()->showInformation("Not Implemented", "ExposureThumbView::contentsDropped not implemented.");
+    // timeLine->getFrontend()->showInformation("Not Implemented", "ExposureThumbView::contentsDropped not implemented.");
 
     /*
     if ((event->source() != 0) && (timeLine->getMovingScene() == -1)) {

@@ -30,6 +30,7 @@
 #include <QUrl>
 #include <QWhatsThis>
 #include <QWindow>
+#include "qpainter.h"
 
 #include "mainwindowgui.h"
 
@@ -2538,11 +2539,12 @@ void MainWindowGUI::makeToolsMenu(QHBoxLayout *layout)
 
     sideBar = new QTabWidget();
     sideBar->setObjectName("sideBar");
-    sideBar->setTabPosition(QTabWidget::South);
+    sideBar->setTabPosition(QTabWidget::North);
     // sideBar->setMaximumWidth(270);
     // sideBar->setMinimumWidth(220);
     // sideBar->setMinimumSize(170, 300);
     sideBar->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Expanding);
+    sideBar->setStyleSheet("QTabBar::tab { min-width: 100px; }");
     layout->addWidget(sideBar);
 
     Q_ASSERT(frontend != 0);

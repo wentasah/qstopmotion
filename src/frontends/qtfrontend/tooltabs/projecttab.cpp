@@ -117,6 +117,7 @@ void ProjectTab::makeGUI()
     projectTree = new QTreeWidget();
     projectTree->setColumnCount(1);
     projectTree->setHeaderHidden(true);
+    projectTree->setAlternatingRowColors(true);
     connect(projectTree, SIGNAL(itemClicked(QTreeWidgetItem*,int)), this, SLOT(itemClicked(QTreeWidgetItem*,int)));
     // connect(projectTree, SIGNAL(itemDoubleClicked(QTreeWidgetItem*,int)), this, SLOT(itemDoubleClicked(QTreeWidgetItem*,int)));
     // connect(projectTree, SIGNAL(itemSelectionChanged()), this, SLOT(itemSelectionChanged()));

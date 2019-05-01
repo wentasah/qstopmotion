@@ -305,6 +305,17 @@ void QtFrontend::init()
 {
     qDebug() << "QtFrontend::init --> Start";
 
+    QString styleSheetString(getGraphicsDirName());
+    styleSheetString.append("qstopmotion.qss");
+    QFile File(styleSheetString);
+    if(!File.open(QFile::ReadOnly)) {
+        styleSheetString.prepend("Unable to open ");
+        qWarning(styleSheetString.toLatin1());
+    } else {
+        QString StyleSheet = QLatin1String(File.readAll());
+        stApp->setStyleSheet(StyleSheet);
+    }
+
     QString iconFile(getGraphicsDirName());
     iconFile.append(QLatin1String("qstopmotion_splash_screen.png"));
     QSplashScreen *splash = new QSplashScreen;

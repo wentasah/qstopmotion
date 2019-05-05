@@ -650,6 +650,8 @@ void MainWindowGUI::keyPressEvent(QKeyEvent *k)
             }
         }
         break;
+    case Key_F11:
+        isFullScreen() ? showNormal() : showFullScreen();
     default:
         k->ignore();
         break;

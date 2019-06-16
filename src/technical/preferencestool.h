@@ -117,9 +117,14 @@ public:
     static const QString picturesDirectory;
 
     /**
-     * Relative to icons directory
+     * Relative to sounds directory
      */
     static const QString soundsDirectory;
+
+    /**
+     * Relative to styles directory
+     */
+    static const QString stylesDirectory;
 
     /**
      * Relative to home dirctory

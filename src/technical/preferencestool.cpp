@@ -52,6 +52,7 @@ const QString PreferencesTool::graphicsDirectory = QLatin1String("graphics");
 const QString PreferencesTool::iconsDirectory = QLatin1String("icons");
 const QString PreferencesTool::picturesDirectory = QLatin1String("pictures");
 const QString PreferencesTool::soundsDirectory = QLatin1String("sounds");
+const QString PreferencesTool::stylesDirectory = QLatin1String("styles");
 const QString PreferencesTool::historyFileName = QLatin1String(".history");
 
 const QString PreferencesTool::jpegSuffix = QLatin1String("jpg");
@@ -424,7 +425,8 @@ PreferencesElement* PreferencesTool::findPreferencesElement(const QString &name)
 void PreferencesTool::setBasicPreferenceDefaults()
 {
     // General defaults
-    setStringPreference("preferences", "language", "en");
+    setStringPreference("preferences", "language", "en");     // English
+    setIntegerPreference("preferences", "style", 0);          // No style
     setIntegerPreference("preferences", "capturebutton", captureButtonAfter);
     // Project defaults
     setIntegerPreference("preferences", "defaultrecordingmode", DomainFacade::RECORDINGMODEDEFAULT);

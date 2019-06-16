@@ -686,6 +686,30 @@ void MainWindowGUI::changeLanguage(int newIndex)
 }
 
 
+const QVector<QString> MainWindowGUI::getStyles(Frontend* f)
+{
+    QVector<QString>       styles;
+
+    qDebug() << "MainWindowGUI::getStyles --> Start";
+
+    // Fill the list with possible styles
+    QString stylesPath(f->getStylesDirName());
+    QDir stylesDir(stylesPath);
+    QStringList dirNames = stylesDir.entryList(QDir::Dirs|QDir::NoDotAndDotDot, QDir::Name);
+
+    // Qt default style is a special case (base style)
+    styles.append(tr("No style"));
+
+    for (int i = 0; i < dirNames.size(); ++i) {
+        styles.append(dirNames[i]);
+    }
+
+    return styles;
+
+    qDebug() << "MainWindowGUI::getStyles --> End";
+}
+
+
 void MainWindowGUI::changeCaptureButtonFunction(PreferencesTool::captureButtonFunction newFunction)
 {
     recordingTab->changeCaptureButtonFunction(newFunction);
@@ -1991,7 +2015,7 @@ void MainWindowGUI::initTranslations()
     QDir dir(qmPath);
     QStringList fileNames = dir.entryList(QStringList("qstopmotion_*.qm"));
 
-    //English is a special case (base language)
+    // English is a special case (base language)
     translationsLanguages.append("English");
     translationsLocales.append("en");
 

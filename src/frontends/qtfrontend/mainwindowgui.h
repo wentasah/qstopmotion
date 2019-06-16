@@ -130,6 +130,12 @@ public:
     void changeLanguage(int newIndex);
 
     /**
+     * Getting all possible GUI styles
+     * @return A vector with all styles
+     */
+    static const QVector<QString> getStyles(Frontend* f);
+
+    /**
      * A new capture button function is selected in the preferences menu.
      * @param newFunction New selected function.
      */
@@ -808,6 +814,9 @@ private:
     QVector<QString>       translationsLanguages;
     QVector<QString>       translationsLocales;
 
+    // Style handling
+    int                    activeStyle;
+
     // Others
     QString                lastVisitedDir;
     ImageGrabberFacade    *grabber;
@@ -832,6 +841,11 @@ private:
      * Initialize the possible languages
      */
     void initTranslations();
+
+    /**
+     * Initialize the possible styles
+     */
+    void initStyles();
 
     /**
      * Creates key accelerators (keyboard shortcuts)

@@ -49,6 +49,7 @@ class GeneralWidget : public QWidget
 public:
 
     const static int    LANGUAGEDEFAULT       = 0;
+    const static int    STYLEDEFAULT          = 0;
     const static int    BUTTONFUNCTIONDEFAULT = PreferencesTool::captureButtonAfter;
     const static bool   VERTICALGRIDDEFAULT   = false;
     const static int    VERTICALSPINDEFAULT   = 5;
@@ -94,6 +95,12 @@ private slots:
      * @param index the new language.
      */
     void changeLanguage(int index);
+
+    /**
+     * Slot for notified the application when the style changes.
+     * @param index the new style.
+     */
+    void changeStyle(int index);
 
     /**
      * Slot for notified the general tab when bevor button is selected, so that
@@ -143,6 +150,8 @@ private:
 
     QGroupBox    *languageGroupBox;
     QComboBox    *languageCombo;
+    QGroupBox    *styleGroupBox;
+    QComboBox    *styleCombo;
     QGroupBox    *captureGroupBox;
     QRadioButton *bevorButton;
     QRadioButton *afterButton;
@@ -162,6 +171,7 @@ private:
     QPushButton  *photoEditorButton;
 
     int           actualLanguage;
+    int           actualStyle;
     int           actualButtonFunction;
     bool          actualVerticalGrid;
     int           actualVerticalSpin;

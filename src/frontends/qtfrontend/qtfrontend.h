@@ -172,6 +172,12 @@ public:
     const QString getSoundsDirName();
 
     /**
+     * Function for getting the styles directory
+     * @return the styles directory name string
+     */
+    const QString getStylesDirName();
+
+    /**
      * Getting all possible GUI languages
      * @return A vector with all languages
      */
@@ -188,6 +194,12 @@ public:
      * @param newIndex New selected index.
      */
     void changeLanguage(int newIndex);
+
+    /**
+     * Getting all possible GUI styles
+     * @return A vector with all styles
+     */
+    static const QVector<QString> getStyles(Frontend* f);
 
     /**
      * A new capture button function is selected in the preferences menu.
@@ -714,6 +726,7 @@ private:
     QString          appIconsDirName;
     QString          appPicturesDirName;
     QString          appSoundsDirName;
+    QString          appStylesDirName;
 
     void initializePreferences();
     void setDefaultPreferences();

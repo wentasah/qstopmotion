@@ -236,6 +236,12 @@ bool QtFrontend::checkApplicationDirectory(const QString &binDirName)
     otherDirName.append(QLatin1String("/"));
     appSoundsDirName.append(otherDirName);
 
+    otherDirName.clear();
+    otherDirName.append(appApplicationDirName);
+    otherDirName.append(PreferencesTool::stylesDirectory);
+    otherDirName.append(QLatin1String("/"));
+    appStylesDirName.append(otherDirName);
+
 #else
     // Linux and Apple OS X version
 
@@ -275,6 +281,15 @@ bool QtFrontend::checkApplicationDirectory(const QString &binDirName)
     otherDirName.append(QLatin1String("/"));
     appSoundsDirName.append(otherDirName);
 
+    otherDirName.clear();
+    otherDirName.append(appApplicationDirName);
+    otherDirName.append(QLatin1String("share/"));
+    otherDirName.append(PreferencesTool::applicationName);
+    otherDirName.append(QLatin1String("/"));
+    otherDirName.append(PreferencesTool::stylesDirectory);
+    otherDirName.append(QLatin1String("/"));
+    appStylesDirName.append(otherDirName);
+
 #endif
 
     qDebug() << "QtFrontend::checkApplicationDirectory --> Application Manual Directory:" << appManualDirName;
@@ -305,15 +320,28 @@ void QtFrontend::init()
 {
     qDebug() << "QtFrontend::init --> Start";
 
-    QString styleSheetString(getGraphicsDirName());
-    styleSheetString.append("qstopmotion.qss");
-    QFile File(styleSheetString);
-    if(!File.open(QFile::ReadOnly)) {
-        styleSheetString.prepend("Unable to open ");
-        qWarning(styleSheetString.toLatin1());
-    } else {
-        QString StyleSheet = QLatin1String(File.readAll());
-        stApp->setStyleSheet(StyleSheet);
+    // Need to call this here to get the locale for the language
+    // which is used by the translator created in mainWindowGUI.
+    // Also to read the style.
+    preferencesTool = new PreferencesTool(this);
+    initializePreferences();
+
+    QVector<QString> styles = QtFrontend::getStyles(this);
+    int actualStyle;
+    preferencesTool->getIntegerPreference("preferences", "style", actualStyle);
+    if (0 < actualStyle) {
+        QString styleSheetFile(getStylesDirName());
+        styleSheetFile.append(styles[actualStyle].toLatin1());
+        styleSheetFile.append(QLatin1String("/"));
+        styleSheetFile.append(QLatin1String("stylesheet.qss"));
+        QFile styleSheet(styleSheetFile);
+        if(!styleSheet.open(QFile::ReadOnly)) {
+            styleSheetFile.prepend("Unable to open ");
+            qWarning(styleSheetFile.toLatin1());
+        } else {
+            QString StyleSheet = QLatin1String(styleSheet.readAll());
+            stApp->setStyleSheet(StyleSheet);
+        }
     }
 
     QString iconFile(getGraphicsDirName());
@@ -323,11 +351,6 @@ void QtFrontend::init()
     splash->show();
     Qt::Alignment bottomRight = Qt::AlignBottom | Qt::AlignRight;
     splash->showMessage(PreferencesTool::applicationShowName + " - " + PreferencesTool::applicationVersion, bottomRight, Qt::black);
-
-    // Need to call this here to get the locale for the language
-    // which is used by the translator created in mainWindowGUI
-    preferencesTool = new PreferencesTool(this);
-    initializePreferences();
 
     // returns a pointer to the domain facade (allocated with new)
     domainFacade = new DomainFacade(this);
@@ -499,6 +522,12 @@ const QString QtFrontend::getSoundsDirName()
 }
 
 
+const QString QtFrontend::getStylesDirName()
+{
+    return this->appStylesDirName;
+}
+
+
 const QVector<QString> QtFrontend::getLanguages()
 {
     return mw->getLanguages();
@@ -514,6 +543,12 @@ const QVector<QString> QtFrontend::getLocales()
 void QtFrontend::changeLanguage(int newIndex)
 {
     mw->changeLanguage(newIndex);
+}
+
+
+const QVector<QString> QtFrontend::getStyles(Frontend* f)
+{
+    return MainWindowGUI::getStyles(f);
 }
 
 

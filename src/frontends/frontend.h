@@ -171,6 +171,12 @@ public:
     virtual const QString getSoundsDirName() = 0;
 
     /**
+     * Abstract function for getting the sounds directory
+     * @return the sounds directory name string
+     */
+    virtual const QString getStylesDirName() = 0;
+
+    /**
      * Abstract function for getting all possible GUI languages
      * @return A vector with all languages
      */

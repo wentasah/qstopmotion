@@ -12,6 +12,8 @@ syntax: glob
 *~
 Thumbs.db
 
+# Exclude 3rd party components on windows platform
+3rd-party-new
 ffmpeg/*
 ffmpeg32bit/*
 ffmpeg64bit/*

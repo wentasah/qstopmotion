@@ -396,6 +396,45 @@ SET(
 # used libraries: libgphoto2
 ###############################################################################
 
+message("========== Fetch Content Start ==========")
+include(FetchContent)
+
+SET(
+    FETCHCONTENT_BASE_DIR
+    ${CMAKE_SOURCE_DIR}/3rd-party-new
+)
+
+# Only one download, no updates
+SET(
+    FETCHCONTENT_UPDATES_DISCONNECTED
+    ON
+)
+
+FetchContent_Declare(
+  qwt
+  SVN_REPOSITORY svn://svn.code.sf.net/p/qwt/code/branches/qwt-6.1
+  # SVN_REVISION   -r12345
+)
+# Check if population has already been performed
+FetchContent_GetProperties(qwt)
+string(TOLOWER "qwt" lcName)
+if(NOT ${lcName}_POPULATED)
+  # Fetch the content using previously declared details
+  message("FetchContent - Populate")
+  FetchContent_Populate(qwt)
+
+  # Set custom variables, policies, etc.
+  # ...
+
+  # Bring the populated content into the build
+  message("qwt source dir: ${qwt_SOURCE_DIR}")
+  message("qwt binary dir: ${qwt_BINARY_DIR}")
+  message("qwt populated state: ${qwt_POPULATED}")
+  # add_subdirectory(${${lcName}_SOURCE_DIR} ${${lcName}_BINARY_DIR})
+endif()
+
+message("========== Fetch Content End ==========")
+
 IF(UNIX AND NOT APPLE)
     # Linux
 

@@ -396,44 +396,41 @@ SET(
 # used libraries: libgphoto2
 ###############################################################################
 
-message("========== Fetch Content Start ==========")
-include(FetchContent)
+message("========== External Project qwt Start ==========")
+include(ExternalProject)
+
+message("qmake executable: ${QT_QMAKE_EXECUTABLE}")
+find_program(
+    MAKE_EXECUTABLE
+    NAMES
+    gmake nmake make
+)
+message("make executable: ${MAKE_EXECUTABLE}")
+
+ExternalProject_Add(
+    qwt
+    PREFIX ${CMAKE_SOURCE_DIR}/3rd-party-new/qwt
+    SVN_REPOSITORY svn://svn.code.sf.net/p/qwt/code/branches/qwt-6.1
+    # SVN_REVISION   -r12345
+    CONFIGURE_COMMAND ${QT_QMAKE_EXECUTABLE} -o ${CMAKE_SOURCE_DIR}/3rd-party-new/qwt/src/qwt/Makefile ${CMAKE_SOURCE_DIR}/3rd-party-new/qwt/src/qwt/qwt.pro
+    BUILD_COMMAND ${MAKE_EXECUTABLE} --makefile=${CMAKE_SOURCE_DIR}/3rd-party-new/qwt/src/qwt/Makefile
+    INSTALL_COMMAND ""
+    TEST_COMMAND ""
+)
+
+ExternalProject_Get_Property(
+    qwt
+    SOURCE_DIR
+)
 
 SET(
-    FETCHCONTENT_BASE_DIR
-    ${CMAKE_SOURCE_DIR}/3rd-party-new
+    QWT_SOURCE_DIR
+    "$(SOURCE_DIR)"
 )
 
-# Only one download, no updates
-SET(
-    FETCHCONTENT_UPDATES_DISCONNECTED
-    ON
-)
-
-FetchContent_Declare(
-  qwt
-  SVN_REPOSITORY svn://svn.code.sf.net/p/qwt/code/branches/qwt-6.1
-  # SVN_REVISION   -r12345
-)
-# Check if population has already been performed
-FetchContent_GetProperties(qwt)
-string(TOLOWER "qwt" lcName)
-if(NOT ${lcName}_POPULATED)
-  # Fetch the content using previously declared details
-  message("FetchContent - Populate")
-  FetchContent_Populate(qwt)
-
-  # Set custom variables, policies, etc.
-  # ...
-
-  # Bring the populated content into the build
-  message("qwt source dir: ${qwt_SOURCE_DIR}")
-  message("qwt binary dir: ${qwt_BINARY_DIR}")
-  message("qwt populated state: ${qwt_POPULATED}")
-  # add_subdirectory(${${lcName}_SOURCE_DIR} ${${lcName}_BINARY_DIR})
-endif()
-
-message("========== Fetch Content End ==========")
+message("qwt source dir: ${QWT_SOURCE_DIR}")
+message("qwt source dir: ${SOURCE_DIR}")
+message("========== External Project qwt End ==========")
 
 IF(UNIX AND NOT APPLE)
     # Linux
@@ -683,23 +680,75 @@ IF(WIN32)
     file(COPY sounds DESTINATION ".")
     file(COPY styles DESTINATION ".")
     file(COPY ${GENERAL_FILES} DESTINATION ".")
+ENDIF(WIN32)
 
+IF(UNIX AND NOT APPLE)
+    file(COPY graphics DESTINATION "share/qstopmotion/")
+    file(COPY manual/ DESTINATION "share/doc/qstopmotion/")
+    file(COPY translations DESTINATION "share/qstopmotion/")
+    file(COPY icons DESTINATION "share/qstopmotion/")
+    file(COPY sounds DESTINATION "share/qstopmotion/")
+    file(COPY styles DESTINATION "share/qstopmotion/")
+    file(COPY ${ICON_FILES} DESTINATION "share/qstopmotion/")
+    file(COPY ${GENERAL_FILES} DESTINATION "share/qstopmotion/")
+    file(COPY ${UNIX_FILES} DESTINATION "share/qstopmotion/")
+    file(COPY ${DEB_FILES} DESTINATION "share/qstopmotion/deb/")
+    file(COPY ${RPM_FILES} DESTINATION "share/qstopmotion/rpm/")
+ENDIF(UNIX AND NOT APPLE)
+
+###############################################################################
+# FFMPEG Handling
+###############################################################################
+
+message("========== Fetch FFMPEG Content Start ==========")
+include(FetchContent)
+
+SET(
+    FETCHCONTENT_BASE_DIR
+    ${CMAKE_SOURCE_DIR}/3rd-party-new
+)
+
+# Only one download, no updates
+SET(
+    FETCHCONTENT_UPDATES_DISCONNECTED
+    ON
+)
+
+FetchContent_Declare(
+    ffmpeg
+    URL https://ffmpeg.zeranoe.com/builds/win64/static/ffmpeg-latest-win64-static.zip
+)
+# Check if population has already been performed
+FetchContent_GetProperties(ffmpeg)
+string(TOLOWER "ffmpeg" lcName)
+if(NOT ${lcName}_POPULATED)
+  # Fetch the content using previously declared details
+  message("FetchContent - Populate")
+  FetchContent_Populate(ffmpeg)
+
+  # Set custom variables, policies, etc.
+  # ...
+
+  # Bring the populated content into the build
+  message("ffmpeg source dir: ${ffmpeg_SOURCE_DIR}")
+  message("ffmpeg binary dir: ${ffmpeg_BINARY_DIR}")
+  message("ffmpeg populated state: ${ffmpeg_POPULATED}")
+  # add_subdirectory(${${lcName}_SOURCE_DIR} ${${lcName}_BINARY_DIR})
+endif()
+
+message("========== Fetch FFMPEG Content End ==========")
+
+IF(WIN32)
     set(FFMPEG_DIR ${PROJECT_BINARY_DIR}/ffmpeg)
-    set(LIBAV_DIR ${PROJECT_BINARY_DIR}/libav)
+
     IF(CMAKE_CL_64)
         set(FFMPEG_ZIP_SHORT_NAME "ffmpeg-4.1-win64-shared")
         set(FFMPEG_ZIP_URL "https://ffmpeg.zeranoe.com/builds/win64/shared/${FFMPEG_ZIP_SHORT_NAME}.zip")
         set(FFMPEG_ZIP_MD5 "ff9b7d296cb158f0e15277f72e533b83")
-        set(LIBAV_7Z_SHORT_NAME "libav-x86_64-w64-mingw32-11.7")
-        set(LIBAV_7Z_URL "http://builds.libav.org/windows/release-gpl/${LIBAV_7Z_SHORT_NAME}.7z")
-        set(LIBAV_7Z_MD5 "a09557f7fe2f7d4cc79e248d56cb8589")
     ELSE(CMAKE_CL_64)
         set(FFMPEG_ZIP_SHORT_NAME "ffmpeg-4.1-win32-shared")
         set(FFMPEG_ZIP_URL "https://ffmpeg.zeranoe.com/builds/win32/shared/${FFMPEG_ZIP_SHORT_NAME}.zip")
         set(FFMPEG_ZIP_MD5 "0fb8fb06b741c3077fe4529d02287747")
-        set(LIBAV_7Z_SHORT_NAME "libav-i686-w64-mingw32-11.7")
-        set(LIBAV_7Z_URL "http://builds.libav.org/windows/release-gpl/${LIBAV_7Z_SHORT_NAME}.7z")
-        set(LIBAV_7Z_MD5 "a7ba631551f0502ba46e95d851d15032")
     ENDIF(CMAKE_CL_64)
 
     # Download and unpack ffmpeg
@@ -725,6 +774,24 @@ IF(WIN32)
         endif(${UNZIP_RESULT})
         file(RENAME ${PROJECT_BINARY_DIR}/${FFMPEG_ZIP_SHORT_NAME} ${FFMPEG_DIR})
     endif(NOT EXISTS ${FFMPEG_DIR})
+ENDIF(WIN32)
+
+###############################################################################
+# Libav Handling
+###############################################################################
+
+IF(WIN32)
+    set(LIBAV_DIR ${PROJECT_BINARY_DIR}/libav)
+
+    IF(CMAKE_CL_64)
+        set(LIBAV_7Z_SHORT_NAME "libav-x86_64-w64-mingw32-11.7")
+        set(LIBAV_7Z_URL "http://builds.libav.org/windows/release-gpl/${LIBAV_7Z_SHORT_NAME}.7z")
+        set(LIBAV_7Z_MD5 "a09557f7fe2f7d4cc79e248d56cb8589")
+    ELSE(CMAKE_CL_64)
+        set(LIBAV_7Z_SHORT_NAME "libav-i686-w64-mingw32-11.7")
+        set(LIBAV_7Z_URL "http://builds.libav.org/windows/release-gpl/${LIBAV_7Z_SHORT_NAME}.7z")
+        set(LIBAV_7Z_MD5 "a7ba631551f0502ba46e95d851d15032")
+    ENDIF(CMAKE_CL_64)
 
     # Download and unpack libav
     if(NOT EXISTS ${LIBAV_DIR})
@@ -753,20 +820,6 @@ IF(WIN32)
         file(REMOVE_RECURSE ${LIBAV_DIR}/usr)
     endif(NOT EXISTS ${LIBAV_DIR})
 ENDIF(WIN32)
-
-IF(UNIX AND NOT APPLE)
-    file(COPY graphics DESTINATION "share/qstopmotion/")
-    file(COPY manual/ DESTINATION "share/doc/qstopmotion/")
-    file(COPY translations DESTINATION "share/qstopmotion/")
-    file(COPY icons DESTINATION "share/qstopmotion/")
-    file(COPY sounds DESTINATION "share/qstopmotion/")
-    file(COPY styles DESTINATION "share/qstopmotion/")
-    file(COPY ${ICON_FILES} DESTINATION "share/qstopmotion/")
-    file(COPY ${GENERAL_FILES} DESTINATION "share/qstopmotion/")
-    file(COPY ${UNIX_FILES} DESTINATION "share/qstopmotion/")
-    file(COPY ${DEB_FILES} DESTINATION "share/qstopmotion/deb/")
-    file(COPY ${RPM_FILES} DESTINATION "share/qstopmotion/rpm/")
-ENDIF(UNIX AND NOT APPLE)
 
 ###############################################################################
 # Installation

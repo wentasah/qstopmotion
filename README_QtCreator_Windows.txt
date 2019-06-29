@@ -1,20 +1,19 @@
 Building qStopMotion using Qt-Creator IDE on Windows with the Windows SDK as host
-Last Change: 2018-01-17
+Last Change: 2019-06-19
 
 1. Preparation of the development environment
 ================================================================================
 
-1.1 Install the Visual Studio 2013
+1.1 Install the Tools for Visual Studio 2019
 --------------------------------------------------------------------------------
 
-* Download the "Visual Studio 2013 Community Edition"
-* This package including the Visual Studio 2010 command line tools.
+* Download the "Tools for Visual Studio 2019" for free without registration.
+* This package including ONLY the Visual Studio 2019 command line tools.
+* This package including the Windows 10 SDK
 * Install in the default installation directory
-  (C:\Program Files\Microsoft Visual Studio 12.0).
-  - Switch off all optional features
-  - Start the IDE and search for updates
-* Add the binary directory to the path variable
-  (C:\Program Files\Microsoft Visual Studio 12.0\VC\bin\).
+  (C:\Program Files\Microsoft Visual Studio).
+* Add the binary directory to the path variable ???
+  (C:\Program Files\Microsoft Visual Studio\2019\BuildTools\VC\...).
 
 1.2 Install the Windows SDK
 --------------------------------------------------------------------------------
@@ -27,23 +26,31 @@ Last Change: 2018-01-17
 1.3 CMake
 --------------------------------------------------------------------------------
 
-* Download CMake >= 3.4.x from "http://www.cmake.org/cmake/resources/software.html"
+* Download CMake >= 3.11.2 from "https://cmake.org/download/"
 * Install in the default installation directory.
-* Add CMake to the system PATH for all users.
+* Select "Add CMake to the system PATH for all users" in the installation dialog.
 * Create a start script for CMake (C:\Tools\cmakestart.bat)
     rem Set the Visual Studion 10 environment variables
     call "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\vcvarsall.bat"
     rem Start CMake
-    "C:\Program Files (x86)\CMake\bin\cmake-gui.exe"
+    "C:\Program Files\CMake\bin\cmake-gui.exe"
 * Create a shortcut to the start script.
 
-1.4 Mercurial SCM (Developers only)
+1.4 Mercurial SCM
 --------------------------------------------------------------------------------
 
 * Download Mercurial or TortoiseHG with Mercurial from "http://mercurial.selenic.com/downloads"
 * Install in the default installation directory.
 
-1.5 Qt5 for Windows and Visual Studio
+1.5 Subversion
+--------------------------------------------------------------------------------
+
+* Download TortoiseSVN from "https://tortoisesvn.net/downloads.html"
+* Install in the default installation directory.
+* Add the installation of the "command line client tools" in the installer dialog
+
+
+1.6 Qt5 for Windows and Visual Studio
 --------------------------------------------------------------------------------
 
 * Download Qt runtime >= 5.5.x for Windows 64-bit (VS 2013) from www.qt.io/download
@@ -52,7 +59,7 @@ Last Change: 2018-01-17
 * Add the binary directory to the path variable (e.g. C:\Tools\Qt\Qt5.5.1\bin\).
 * Set the environment variable 'Qt5_DIR' to 'C:\Tools\Qt\Qt5.5.1\5.5\msvc2013_64\'
 
-1.6 Qt-Creator for Windows
+1.7 Qt-Creator for Windows
 --------------------------------------------------------------------------------
 
 * Download Qt Creator >= 4.2.x for Windows (not the full SDK) from

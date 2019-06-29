@@ -1,7 +1,7 @@
 ###############################################################################
 # CMake file for the qStopMotion project                                      #
 # (c) Ralf Lange, longsoft.de                                                 #
-# Last update: 2019-06-16                                                     #
+# Last update: 2019-06-29                                                     #
 #                                                                             #
 # Usage:                                                                      #
 #   * Qt-Creator (Windows, Linux)                                             #
@@ -348,7 +348,7 @@ SET(
     translations/qstopmotion_es.ts       # Spanish
 #    translations/qstopmotion_fi.ts       # Finnish
     translations/qstopmotion_it.ts       # Italian
-#    translations/qstopmotion_kl.ts       # 
+#    translations/qstopmotion_kl.ts       #
 #    translations/qstopmotion_nb.ts       # Norwegian
     translations/qstopmotion_pt.ts       # Portuguese
     translations/qstopmotion_ru.ts       # Russian
@@ -396,41 +396,6 @@ SET(
 # used libraries: libgphoto2
 ###############################################################################
 
-message("========== External Project qwt Start ==========")
-include(ExternalProject)
-
-message("qmake executable: ${QT_QMAKE_EXECUTABLE}")
-find_program(
-    MAKE_EXECUTABLE
-    NAMES
-    gmake nmake make
-)
-message("make executable: ${MAKE_EXECUTABLE}")
-
-ExternalProject_Add(
-    qwt
-    PREFIX ${CMAKE_SOURCE_DIR}/3rd-party-new/qwt
-    SVN_REPOSITORY svn://svn.code.sf.net/p/qwt/code/branches/qwt-6.1
-    # SVN_REVISION   -r12345
-    CONFIGURE_COMMAND ${QT_QMAKE_EXECUTABLE} -o ${CMAKE_SOURCE_DIR}/3rd-party-new/qwt/src/qwt/Makefile ${CMAKE_SOURCE_DIR}/3rd-party-new/qwt/src/qwt/qwt.pro
-    BUILD_COMMAND ${MAKE_EXECUTABLE} --makefile=${CMAKE_SOURCE_DIR}/3rd-party-new/qwt/src/qwt/Makefile
-    INSTALL_COMMAND ""
-    TEST_COMMAND ""
-)
-
-ExternalProject_Get_Property(
-    qwt
-    SOURCE_DIR
-)
-
-SET(
-    QWT_SOURCE_DIR
-    "$(SOURCE_DIR)"
-)
-
-message("qwt source dir: ${QWT_SOURCE_DIR}")
-message("qwt source dir: ${SOURCE_DIR}")
-message("========== External Project qwt End ==========")
 
 IF(UNIX AND NOT APPLE)
     # Linux
@@ -447,23 +412,101 @@ ENDIF(UNIX AND NOT APPLE)
 IF(WIN32)
     # Windows
 
-    ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/3rd-party/qwt ${CMAKE_CURRENT_BINARY_DIR}/qwt)
-
     SET(CONFIG_DIR "")
     IF("${CMAKE_GENERATOR}" MATCHES "Visual Studio.*")
-        SET(CONFIG_DIR "${CMAKE_BUILD_TYPE}/")
+        message("========== Visual Studio qwt Start ==========")
+        ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/3rd-party/qwt ${CMAKE_CURRENT_BINARY_DIR}/qwt)
+
+        IF(CMAKE_BUILD_TYPE STREQUAL "Release")
+            SET(QWT_LIB_PATH qwt/src/${CMAKE_BUILD_TYPE}/qwt)
+        ELSE(CMAKE_BUILD_TYPE STREQUAL "Release")
+            SET(QWT_LIB_PATH qwt/src/${CMAKE_BUILD_TYPE}/qwtd)
+        ENDIF(CMAKE_BUILD_TYPE STREQUAL "Release")
+
+        SET(
+            QWT_INCLUDE_DIRS
+            ${CMAKE_SOURCE_DIR}/3rd-party/qwt/src
+        )
+
+        SET(
+            QWT_TARGET
+            qwt
+        )
+        message("========== Visual Studio qwt End ==========")
+    ELSE("${CMAKE_GENERATOR}" MATCHES "Visual Studio.*")
+        message("========== External Project qwt Start ==========")
+        include(ExternalProject)
+
+        SET(
+            QWT_TARGET
+            qwt2
+        )
+
+        FIND_PROGRAM(
+            QT_QMAKE_EXECUTABLE
+            NAMES
+            qmake
+        )
+        message("qmake executable: ${QT_QMAKE_EXECUTABLE}")
+
+        IF(CMAKE_SIZEOF_VOID_P GREATER 4)
+            # 64bit system
+            SET(
+                VC_ARG
+                amd64
+            )
+        ELSE(CMAKE_SIZEOF_VOID_P GREATER 4)
+            # 32bit system
+            SET(
+                VC_ARG
+                x84
+            )
+        ENDIF(CMAKE_SIZEOF_VOID_P GREATER 4)
+        message("vccvarall argument: ${VC_ARG}")
+
+        FILE(
+            TO_NATIVE_PATH
+            "${CMAKE_SOURCE_DIR}/3rd-party-new/qwt/src/${QWT_TARGET}"
+            NMAKE_PATH
+        )
+        message("nmake path: ${NMAKE_PATH}")
+
+        FILE(
+            WRITE
+            ${CMAKE_SOURCE_DIR}/3rd-party-new/qwt/src/${QWT_TARGET}/build.bat
+            "@call \"$ENV{VCINSTALLDIR}\\vcvarsall.bat\" ${VC_ARG}\n@cd ${NMAKE_PATH}\n@nmake"
+        )
+
+        ExternalProject_Add(
+            ${QWT_TARGET}
+            PREFIX ${CMAKE_SOURCE_DIR}/3rd-party-new/qwt
+            SVN_REPOSITORY svn://svn.code.sf.net/p/qwt/code/branches/qwt-6.1
+            # SVN_REVISION   -r12345
+            CONFIGURE_COMMAND ${QT_QMAKE_EXECUTABLE} -o ${CMAKE_SOURCE_DIR}/3rd-party-new/qwt/src/${QWT_TARGET}/Makefile ${CMAKE_SOURCE_DIR}/3rd-party-new/qwt/src/${QWT_TARGET}/qwt.pro
+            BUILD_COMMAND ${CMAKE_SOURCE_DIR}/3rd-party-new/qwt/src/${QWT_TARGET}/build.bat
+            INSTALL_COMMAND ""
+            TEST_COMMAND ""
+        )
+
+        ExternalProject_Get_Property(
+            ${QWT_TARGET}
+            SOURCE_DIR
+        )
+        message("qwt source dir: ${SOURCE_DIR}")
+
+        SET(
+            QWT_INCLUDE_DIRS
+            ${SOURCE_DIR}/src
+        )
+
+        IF(CMAKE_BUILD_TYPE STREQUAL "Release")
+            SET(QWT_LIB_PATH ${SOURCE_DIR}/lib/qwt)
+        ELSE(CMAKE_BUILD_TYPE STREQUAL "Release")
+            SET(QWT_LIB_PATH ${SOURCE_DIR}/lib/qwtd)
+        ENDIF(CMAKE_BUILD_TYPE STREQUAL "Release")
+
+        message("========== External Project qwt End ==========")
     ENDIF("${CMAKE_GENERATOR}" MATCHES "Visual Studio.*")
-
-    IF(CMAKE_BUILD_TYPE STREQUAL "Release")
-        SET(QWT_LIB_PATH qwt/src/${CONFIG_DIR}qwt)
-    ELSE(CMAKE_BUILD_TYPE STREQUAL "Release")
-        SET(QWT_LIB_PATH qwt/src/${CONFIG_DIR}qwtd)
-    ENDIF(CMAKE_BUILD_TYPE STREQUAL "Release")
-
-    SET(
-        QWT_INCLUDE_DIRS
-        ${CMAKE_SOURCE_DIR}/3rd-party/qwt/src
-    )
 ENDIF(WIN32)
 
 message("QWT_INCLUDE_DIRS: ${QWT_INCLUDE_DIRS}")
@@ -636,21 +679,23 @@ ELSEIF(WIN32)
         ${MOC_SOURCES}
     )
 
-    add_dependencies(qstopmotion qwt)
+    add_dependencies(
+        qstopmotion
+        ${QWT_TARGET}
+    )
 
     # Copy compiled Qwt library to bin/ folder - it needs for run application
     ADD_CUSTOM_COMMAND(
         TARGET qstopmotion
         POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy ${QWT_LIB_PATH}.dll ${EXECUTABLE_OUTPUT_PATH}/${CONFIG_DIR}
-        COMMAND ${CMAKE_COMMAND} -E echo "copy ${QWT_LIB_PATH}.dll to bin/${CONFIG_DIR}"
         COMMENT "copy ${QWT_LIB_PATH}.dll to bin/${CONFIG_DIR}"
     )
 
     # tell cmake which libraries to link
     target_link_libraries(
         qstopmotion
-        ${QWT_LIB_PATH}
+        ${QWT_LIB_PATH}.lib
         ${MEDIAFOUNDATION_LIBRARIES}
         Qt5::WinMain
         Qt5::Widgets

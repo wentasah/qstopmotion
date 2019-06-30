@@ -441,6 +441,31 @@ IF(WIN32)
             QWT_TARGET
             qwt2
         )
+        SET(
+            QWT_PREFIX
+            ${CMAKE_SOURCE_DIR}/3rd-party-new/qwt
+        )
+        SET(
+            QWT_BUILD_SCRIPT
+            ${QWT_PREFIX}/build.bat
+        )
+
+        ExternalProject_Add(
+            ${QWT_TARGET}
+            PREFIX ${QWT_PREFIX}
+            SVN_REPOSITORY svn://svn.code.sf.net/p/qwt/code/branches/qwt-6.1
+            # SVN_REVISION   -r12345
+            CONFIGURE_COMMAND ""
+            BUILD_COMMAND ${QWT_BUILD_SCRIPT}
+            INSTALL_COMMAND ""
+            TEST_COMMAND ""
+        )
+
+        ExternalProject_Get_Property(
+            ${QWT_TARGET}
+            SOURCE_DIR
+        )
+        message("qwt source dir: ${SOURCE_DIR}")
 
         FIND_PROGRAM(
             QT_QMAKE_EXECUTABLE
@@ -466,33 +491,23 @@ IF(WIN32)
 
         FILE(
             TO_NATIVE_PATH
-            "${CMAKE_SOURCE_DIR}/3rd-party-new/qwt/src/${QWT_TARGET}"
-            NMAKE_PATH
+            "${QT_QMAKE_EXECUTABLE}"
+            QMAKE_PATH
         )
-        message("nmake path: ${NMAKE_PATH}")
+        message("qmake path: ${QMAKE_PATH}")
+
+        FILE(
+            TO_NATIVE_PATH
+            "${SOURCE_DIR}"
+            QWT_SOURCE_DIR
+        )
+        message("qwt source dir: ${QWT_SOURCE_DIR}")
 
         FILE(
             WRITE
-            ${CMAKE_SOURCE_DIR}/3rd-party-new/qwt/src/${QWT_TARGET}/build.bat
-            "@call \"$ENV{VCINSTALLDIR}\\vcvarsall.bat\" ${VC_ARG}\n@cd ${NMAKE_PATH}\n@nmake"
+            ${QWT_BUILD_SCRIPT}
+            "@call \"$ENV{VCINSTALLDIR}\\vcvarsall.bat\" ${VC_ARG}\n@cd ${QWT_SOURCE_DIR}\n@${QMAKE_PATH}\n@nmake"
         )
-
-        ExternalProject_Add(
-            ${QWT_TARGET}
-            PREFIX ${CMAKE_SOURCE_DIR}/3rd-party-new/qwt
-            SVN_REPOSITORY svn://svn.code.sf.net/p/qwt/code/branches/qwt-6.1
-            # SVN_REVISION   -r12345
-            CONFIGURE_COMMAND ${QT_QMAKE_EXECUTABLE} -o ${CMAKE_SOURCE_DIR}/3rd-party-new/qwt/src/${QWT_TARGET}/Makefile ${CMAKE_SOURCE_DIR}/3rd-party-new/qwt/src/${QWT_TARGET}/qwt.pro
-            BUILD_COMMAND ${CMAKE_SOURCE_DIR}/3rd-party-new/qwt/src/${QWT_TARGET}/build.bat
-            INSTALL_COMMAND ""
-            TEST_COMMAND ""
-        )
-
-        ExternalProject_Get_Property(
-            ${QWT_TARGET}
-            SOURCE_DIR
-        )
-        message("qwt source dir: ${SOURCE_DIR}")
 
         SET(
             QWT_INCLUDE_DIRS
@@ -500,9 +515,17 @@ IF(WIN32)
         )
 
         IF(CMAKE_BUILD_TYPE STREQUAL "Release")
-            SET(QWT_LIB_PATH ${SOURCE_DIR}/lib/qwt)
+            # Release build
+            SET(
+                QWT_LIB_PATH
+                ${SOURCE_DIR}/lib/qwt
+            )
         ELSE(CMAKE_BUILD_TYPE STREQUAL "Release")
-            SET(QWT_LIB_PATH ${SOURCE_DIR}/lib/qwtd)
+            # Debug build
+            SET(
+                QWT_LIB_PATH
+                ${SOURCE_DIR}/lib/qwtd
+            )
         ENDIF(CMAKE_BUILD_TYPE STREQUAL "Release")
 
         message("========== External Project qwt End ==========")

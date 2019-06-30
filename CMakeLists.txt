@@ -1,7 +1,7 @@
 ###############################################################################
 # CMake file for the qStopMotion project                                      #
 # (c) Ralf Lange, longsoft.de                                                 #
-# Last update: 2019-06-29                                                     #
+# Last update: 2019-06-30                                                     #
 #                                                                             #
 # Usage:                                                                      #
 #   * Qt-Creator (Windows, Linux)                                             #
@@ -765,83 +765,76 @@ IF(UNIX AND NOT APPLE)
 ENDIF(UNIX AND NOT APPLE)
 
 ###############################################################################
-# FFMPEG Handling
+# Fetch Content
 ###############################################################################
 
-message("========== Fetch FFMPEG Content Start ==========")
-include(FetchContent)
+IF(WIN32)
+    include(FetchContent)
 
-SET(
-    FETCHCONTENT_BASE_DIR
-    ${CMAKE_SOURCE_DIR}/3rd-party-new
-)
+    SET(
+        FETCHCONTENT_BASE_DIR
+        ${CMAKE_SOURCE_DIR}/3rd-party-new
+    )
 
-# Only one download, no updates
-SET(
-    FETCHCONTENT_UPDATES_DISCONNECTED
-    ON
-)
+    # Only one download, no updates
+    SET(
+        FETCHCONTENT_UPDATES_DISCONNECTED
+        ON
+    )
+ENDIF(WIN32)
 
-FetchContent_Declare(
-    ffmpeg
-    URL https://ffmpeg.zeranoe.com/builds/win64/static/ffmpeg-latest-win64-static.zip
-)
-# Check if population has already been performed
-FetchContent_GetProperties(ffmpeg)
-string(TOLOWER "ffmpeg" lcName)
-if(NOT ${lcName}_POPULATED)
-  # Fetch the content using previously declared details
-  message("FetchContent - Populate")
-  FetchContent_Populate(ffmpeg)
-
-  # Set custom variables, policies, etc.
-  # ...
-
-  # Bring the populated content into the build
-  message("ffmpeg source dir: ${ffmpeg_SOURCE_DIR}")
-  message("ffmpeg binary dir: ${ffmpeg_BINARY_DIR}")
-  message("ffmpeg populated state: ${ffmpeg_POPULATED}")
-  # add_subdirectory(${${lcName}_SOURCE_DIR} ${${lcName}_BINARY_DIR})
-endif()
-
-message("========== Fetch FFMPEG Content End ==========")
+###############################################################################
+# ffmpeg Handling
+###############################################################################
 
 IF(WIN32)
-    set(FFMPEG_DIR ${PROJECT_BINARY_DIR}/ffmpeg)
+    message("========== Fetch FFMPEG Content Start ==========")
 
     IF(CMAKE_CL_64)
-        set(FFMPEG_ZIP_SHORT_NAME "ffmpeg-4.1-win64-shared")
-        set(FFMPEG_ZIP_URL "https://ffmpeg.zeranoe.com/builds/win64/shared/${FFMPEG_ZIP_SHORT_NAME}.zip")
-        set(FFMPEG_ZIP_MD5 "ff9b7d296cb158f0e15277f72e533b83")
+        SET(
+            FFMPEG_URL
+            "https://ffmpeg.zeranoe.com/builds/win64/static/ffmpeg-latest-win64-static.zip"
+        )
+        SET(
+            FFMPEG_TARGET
+            ffmpeg64
+        )
     ELSE(CMAKE_CL_64)
-        set(FFMPEG_ZIP_SHORT_NAME "ffmpeg-4.1-win32-shared")
-        set(FFMPEG_ZIP_URL "https://ffmpeg.zeranoe.com/builds/win32/shared/${FFMPEG_ZIP_SHORT_NAME}.zip")
-        set(FFMPEG_ZIP_MD5 "0fb8fb06b741c3077fe4529d02287747")
+        SET(
+            FFMPEG_URL
+            "https://ffmpeg.zeranoe.com/builds/win32/static/ffmpeg-latest-win32-static.zip"
+        )
+        SET(
+            FFMPEG_TARGET
+            ffmpeg32
+        )
     ENDIF(CMAKE_CL_64)
 
-    # Download and unpack ffmpeg
-    if(NOT EXISTS ${FFMPEG_DIR})
-        set(FFMPEG_ZIP_NAME "${FFMPEG_ZIP_SHORT_NAME}.zip")
-        if(NOT EXISTS ${FFMPEG_ZIP_NAME})
-            message("download ffmpeg from ${FFMPEG_ZIP_URL} to ${FFMPEG_ZIP_NAME}")
-            file(DOWNLOAD ${FFMPEG_ZIP_URL} ${PROJECT_BINARY_DIR}/${FFMPEG_ZIP_NAME}
-                INACTIVITY_TIMEOUT 15
-                EXPECTED_HASH MD5=${FFMPEG_ZIP_MD5}
-            )
-        endif(NOT EXISTS ${FFMPEG_ZIP_NAME})
+    FetchContent_Declare(
+        ${FFMPEG_TARGET}
+        URL ${FFMPEG_URL}
+    )
 
-        execute_process(COMMAND ${CMAKE_COMMAND} -E tar -vxf ${FFMPEG_ZIP_NAME}
-                        WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
-                        RESULT_VARIABLE UNZIP_RESULT
-                        OUTPUT_VARIABLE UNZIP_OUTPUT
-                        ERROR_VARIABLE UNZIP_OUTPUT
+    # Check if population has already been performed
+    FetchContent_GetProperties(
+        ${FFMPEG_TARGET}
+    )
+    string(TOLOWER ${FFMPEG_TARGET} ffmpegName)
+    IF(NOT ${ffmpegName}_POPULATED)
+        # Fetch the content using previously declared details
+        message("FetchContent - Populate")
+        FetchContent_Populate(
+            ${FFMPEG_TARGET}
         )
-        MESSAGE(STATUS "ffmpeg unzip result:" ${UNZIP_RESULT})
-        if(${UNZIP_RESULT})
-            MESSAGE(FATAL_ERROR "ffmpeg unzip output:" ${UNZIP_OUTPUT})
-        endif(${UNZIP_RESULT})
-        file(RENAME ${PROJECT_BINARY_DIR}/${FFMPEG_ZIP_SHORT_NAME} ${FFMPEG_DIR})
-    endif(NOT EXISTS ${FFMPEG_DIR})
+
+        # Bring the populated content into the build
+        message("ffmpeg source dir: ${${ffmpegName}_SOURCE_DIR}")
+        message("ffmpeg binary dir: ${${ffmpegName}_BINARY_DIR}")
+        message("ffmpeg populated state: ${${ffmpegName}_POPULATED}")
+        # add_subdirectory(${${ffmpegName}_SOURCE_DIR} ${${ffmpegName}_BINARY_DIR})
+    ENDIF()
+
+    message("========== Fetch FFMPEG Content End ==========")
 ENDIF(WIN32)
 
 ###############################################################################
@@ -849,44 +842,53 @@ ENDIF(WIN32)
 ###############################################################################
 
 IF(WIN32)
-    set(LIBAV_DIR ${PROJECT_BINARY_DIR}/libav)
+    message("========== Fetch LIBAV Content Start ==========")
 
     IF(CMAKE_CL_64)
-        set(LIBAV_7Z_SHORT_NAME "libav-x86_64-w64-mingw32-11.7")
-        set(LIBAV_7Z_URL "http://builds.libav.org/windows/release-gpl/${LIBAV_7Z_SHORT_NAME}.7z")
-        set(LIBAV_7Z_MD5 "a09557f7fe2f7d4cc79e248d56cb8589")
+        SET(
+            LIBAV_URL
+            "http://builds.libav.org/windows/release-gpl/libav-11.3-win64.7z"
+        )
+        SET(
+            LIBAV_TARGET
+            libav64
+        )
     ELSE(CMAKE_CL_64)
-        set(LIBAV_7Z_SHORT_NAME "libav-i686-w64-mingw32-11.7")
-        set(LIBAV_7Z_URL "http://builds.libav.org/windows/release-gpl/${LIBAV_7Z_SHORT_NAME}.7z")
-        set(LIBAV_7Z_MD5 "a7ba631551f0502ba46e95d851d15032")
+        SET(
+            LIBAV_URL
+            "http://builds.libav.org/windows/release-gpl/libav-11.3-win32.7z"
+        )
+        SET(
+            LIBAV_TARGET
+            libav32
+        )
     ENDIF(CMAKE_CL_64)
 
-    # Download and unpack libav
-    if(NOT EXISTS ${LIBAV_DIR})
-        set(LIBAV_7Z_NAME "${LIBAV_7Z_SHORT_NAME}.7z")
-        if(NOT EXISTS ${LIBAV_7Z_NAME})
-            message("download libav from ${LIBAV_7Z_URL} to ${LIBAV_7Z_NAME}")
-            file(DOWNLOAD ${LIBAV_7Z_URL} ${PROJECT_BINARY_DIR}/${LIBAV_7Z_NAME}
-                INACTIVITY_TIMEOUT 15
-                EXPECTED_HASH MD5=${LIBAV_7Z_MD5}
-            )
-        endif(NOT EXISTS ${LIBAV_7Z_NAME})
+    FetchContent_Declare(
+        ${LIBAV_TARGET}
+        URL ${LIBAV_URL}
+    )
 
-        execute_process(COMMAND ${CMAKE_COMMAND} -E tar -vxf ${LIBAV_7Z_NAME}
-                        WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
-                        RESULT_VARIABLE UNZIP_RESULT
-                        OUTPUT_VARIABLE UNZIP_OUTPUT
-                        ERROR_VARIABLE UNZIP_OUTPUT
+    # Check if population has already been performed
+    FetchContent_GetProperties(
+        ${LIBAV_TARGET}
+    )
+    string(TOLOWER ${LIBAV_TARGET} libavName)
+    IF(NOT ${libavName}_POPULATED)
+        # Fetch the content using previously declared details
+        message("FetchContent - Populate")
+        FetchContent_Populate(
+            ${LIBAV_TARGET}
         )
-        MESSAGE(STATUS "libav unzip result:" ${UNZIP_RESULT})
-        if(${UNZIP_RESULT})
-            MESSAGE(FATAL_ERROR "libav unzip output:" ${UNZIP_OUTPUT})
-        endif(${UNZIP_RESULT})
-        file(RENAME ${PROJECT_BINARY_DIR}/${LIBAV_7Z_SHORT_NAME} ${LIBAV_DIR})
-        file(RENAME ${LIBAV_DIR}/usr/bin ${LIBAV_DIR}/bin)
-        file(RENAME ${LIBAV_DIR}/usr/share ${LIBAV_DIR}/share)
-        file(REMOVE_RECURSE ${LIBAV_DIR}/usr)
-    endif(NOT EXISTS ${LIBAV_DIR})
+
+        # Bring the populated content into the build
+        message("libav source dir: ${${libavName}_SOURCE_DIR}")
+        message("libav binary dir: ${${libavName}_BINARY_DIR}")
+        message("libav populated state: ${${libavName}_POPULATED}")
+        # add_subdirectory(${${libavName}_SOURCE_DIR} ${${libavName}_BINARY_DIR})
+    ENDIF()
+
+    message("========== Fetch LIBAV Content End ==========")
 ENDIF(WIN32)
 
 ###############################################################################
@@ -1067,18 +1069,18 @@ IF(WIN32)
 
     # installation of Qwt
     install(
-        FILES ${PROJECT_BINARY_DIR}/${QWT_LIB_PATH}.dll
-        DESTINATION ${QSTOPMOTION_BIN_INSTALL_DIR}
+        FILES ${QWT_LIB_PATH}.dll
+        DESTINATION "${QSTOPMOTION_BIN_INSTALL_DIR}"
     )
 
     # installation of ffmpeg and libav
     install(
-        DIRECTORY ${FFMPEG_DIR}
-        DESTINATION "${QSTOPMOTION_GENERALS_INSTALL_DIR}/"
+        DIRECTORY ${${ffmpegName}_SOURCE_DIR}/
+        DESTINATION "${QSTOPMOTION_GENERALS_INSTALL_DIR}/ffmpeg"
     )
     install(
-        DIRECTORY ${LIBAV_DIR}
-        DESTINATION "${QSTOPMOTION_GENERALS_INSTALL_DIR}/"
+        DIRECTORY ${${libavName}_SOURCE_DIR}/usr/
+        DESTINATION "${QSTOPMOTION_GENERALS_INSTALL_DIR}/libav"
     )
 
 ENDIF(WIN32)

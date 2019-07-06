@@ -13,19 +13,7 @@ syntax: glob
 Thumbs.db
 
 # Exclude 3rd party components on windows platform
-3rd-party-new
-ffmpeg/*
-ffmpeg32bit/*
-ffmpeg64bit/*
-libav/*
-libav32bit/*
-libav64bit/*
-qtruntime/*
-qt4runtime/*
-qt5runtime32bit/*
-qt5runtime64bit/*
-qwt32bit/*
-qwt64bit/*
+3rd-party
 
 # switch to regexp syntax.
 syntax: regexp

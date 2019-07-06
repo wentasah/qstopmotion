@@ -1,7 +1,7 @@
 ###############################################################################
 # CMake file for the qStopMotion project                                      #
 # (c) Ralf Lange, longsoft.de                                                 #
-# Last update: 2019-06-30                                                     #
+# Last update: 2019-07-06                                                     #
 #                                                                             #
 # Usage:                                                                      #
 #   * Qt-Creator (Windows, Linux)                                             #
@@ -413,123 +413,107 @@ IF(WIN32)
     # Windows
 
     SET(CONFIG_DIR "")
-    IF("${CMAKE_GENERATOR}" MATCHES "Visual Studio.*")
-        message("========== Visual Studio qwt Start ==========")
-        ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/3rd-party/qwt ${CMAKE_CURRENT_BINARY_DIR}/qwt)
+    SET(
+        3RD_PARTY_DIR
+        ${CMAKE_SOURCE_DIR}/3rd-party
+    )
 
-        IF(CMAKE_BUILD_TYPE STREQUAL "Release")
-            SET(QWT_LIB_PATH qwt/src/${CMAKE_BUILD_TYPE}/qwt)
-        ELSE(CMAKE_BUILD_TYPE STREQUAL "Release")
-            SET(QWT_LIB_PATH qwt/src/${CMAKE_BUILD_TYPE}/qwtd)
-        ENDIF(CMAKE_BUILD_TYPE STREQUAL "Release")
+    message("========== External Project qwt Start ==========")
+    include(ExternalProject)
 
+    SET(
+        QWT_TARGET
+        qwt2
+    )
+    SET(
+        QWT_PREFIX
+        ${3RD_PARTY_DIR}/qwt
+    )
+    SET(
+        QWT_BUILD_SCRIPT
+        ${QWT_PREFIX}/build.bat
+    )
+
+    ExternalProject_Add(
+        ${QWT_TARGET}
+        PREFIX ${QWT_PREFIX}
+        SVN_REPOSITORY svn://svn.code.sf.net/p/qwt/code/branches/qwt-6.1
+        # SVN_REVISION   -r12345
+        CONFIGURE_COMMAND ""
+        BUILD_COMMAND ${QWT_BUILD_SCRIPT}
+        INSTALL_COMMAND ""
+        TEST_COMMAND ""
+    )
+
+    ExternalProject_Get_Property(
+        ${QWT_TARGET}
+        SOURCE_DIR
+    )
+    message("qwt source dir: ${SOURCE_DIR}")
+
+    FIND_PROGRAM(
+        QT_QMAKE_EXECUTABLE
+        NAMES
+        qmake
+    )
+    message("qmake executable: ${QT_QMAKE_EXECUTABLE}")
+
+    IF(CMAKE_SIZEOF_VOID_P GREATER 4)
+        # 64bit system
         SET(
-            QWT_INCLUDE_DIRS
-            ${CMAKE_SOURCE_DIR}/3rd-party/qwt/src
+            VC_ARG
+            amd64
         )
-
+    ELSE(CMAKE_SIZEOF_VOID_P GREATER 4)
+        # 32bit system
         SET(
-            QWT_TARGET
-            qwt
+            VC_ARG
+            x84
         )
-        message("========== Visual Studio qwt End ==========")
-    ELSE("${CMAKE_GENERATOR}" MATCHES "Visual Studio.*")
-        message("========== External Project qwt Start ==========")
-        include(ExternalProject)
+    ENDIF(CMAKE_SIZEOF_VOID_P GREATER 4)
+    message("vccvarall argument: ${VC_ARG}")
 
+    FILE(
+        TO_NATIVE_PATH
+        "${QT_QMAKE_EXECUTABLE}"
+        QMAKE_PATH
+    )
+    message("qmake path: ${QMAKE_PATH}")
+
+    FILE(
+        TO_NATIVE_PATH
+        "${SOURCE_DIR}"
+        QWT_SOURCE_DIR
+    )
+    message("qwt source dir: ${QWT_SOURCE_DIR}")
+
+    FILE(
+        WRITE
+        ${QWT_BUILD_SCRIPT}
+        "@call \"$ENV{VCINSTALLDIR}\\vcvarsall.bat\" ${VC_ARG}\n@cd ${QWT_SOURCE_DIR}\n@${QMAKE_PATH}\n@nmake"
+    )
+
+    SET(
+        QWT_INCLUDE_DIRS
+        ${SOURCE_DIR}/src
+    )
+
+    IF(CMAKE_BUILD_TYPE STREQUAL "Release")
+        # Release build
         SET(
-            QWT_TARGET
-            qwt2
+            QWT_LIB_PATH
+            ${SOURCE_DIR}/lib/qwt
         )
+    ELSE(CMAKE_BUILD_TYPE STREQUAL "Release")
+        # Debug build
         SET(
-            QWT_PREFIX
-            ${CMAKE_SOURCE_DIR}/3rd-party-new/qwt
+            QWT_LIB_PATH
+            ${SOURCE_DIR}/lib/qwtd
         )
-        SET(
-            QWT_BUILD_SCRIPT
-            ${QWT_PREFIX}/build.bat
-        )
+    ENDIF(CMAKE_BUILD_TYPE STREQUAL "Release")
 
-        ExternalProject_Add(
-            ${QWT_TARGET}
-            PREFIX ${QWT_PREFIX}
-            SVN_REPOSITORY svn://svn.code.sf.net/p/qwt/code/branches/qwt-6.1
-            # SVN_REVISION   -r12345
-            CONFIGURE_COMMAND ""
-            BUILD_COMMAND ${QWT_BUILD_SCRIPT}
-            INSTALL_COMMAND ""
-            TEST_COMMAND ""
-        )
+    message("========== External Project qwt End ==========")
 
-        ExternalProject_Get_Property(
-            ${QWT_TARGET}
-            SOURCE_DIR
-        )
-        message("qwt source dir: ${SOURCE_DIR}")
-
-        FIND_PROGRAM(
-            QT_QMAKE_EXECUTABLE
-            NAMES
-            qmake
-        )
-        message("qmake executable: ${QT_QMAKE_EXECUTABLE}")
-
-        IF(CMAKE_SIZEOF_VOID_P GREATER 4)
-            # 64bit system
-            SET(
-                VC_ARG
-                amd64
-            )
-        ELSE(CMAKE_SIZEOF_VOID_P GREATER 4)
-            # 32bit system
-            SET(
-                VC_ARG
-                x84
-            )
-        ENDIF(CMAKE_SIZEOF_VOID_P GREATER 4)
-        message("vccvarall argument: ${VC_ARG}")
-
-        FILE(
-            TO_NATIVE_PATH
-            "${QT_QMAKE_EXECUTABLE}"
-            QMAKE_PATH
-        )
-        message("qmake path: ${QMAKE_PATH}")
-
-        FILE(
-            TO_NATIVE_PATH
-            "${SOURCE_DIR}"
-            QWT_SOURCE_DIR
-        )
-        message("qwt source dir: ${QWT_SOURCE_DIR}")
-
-        FILE(
-            WRITE
-            ${QWT_BUILD_SCRIPT}
-            "@call \"$ENV{VCINSTALLDIR}\\vcvarsall.bat\" ${VC_ARG}\n@cd ${QWT_SOURCE_DIR}\n@${QMAKE_PATH}\n@nmake"
-        )
-
-        SET(
-            QWT_INCLUDE_DIRS
-            ${SOURCE_DIR}/src
-        )
-
-        IF(CMAKE_BUILD_TYPE STREQUAL "Release")
-            # Release build
-            SET(
-                QWT_LIB_PATH
-                ${SOURCE_DIR}/lib/qwt
-            )
-        ELSE(CMAKE_BUILD_TYPE STREQUAL "Release")
-            # Debug build
-            SET(
-                QWT_LIB_PATH
-                ${SOURCE_DIR}/lib/qwtd
-            )
-        ENDIF(CMAKE_BUILD_TYPE STREQUAL "Release")
-
-        message("========== External Project qwt End ==========")
-    ENDIF("${CMAKE_GENERATOR}" MATCHES "Visual Studio.*")
 ENDIF(WIN32)
 
 message("QWT_INCLUDE_DIRS: ${QWT_INCLUDE_DIRS}")
@@ -773,7 +757,7 @@ IF(WIN32)
 
     SET(
         FETCHCONTENT_BASE_DIR
-        ${CMAKE_SOURCE_DIR}/3rd-party-new
+        ${3RD_PARTY_DIR}
     )
 
     # Only one download, no updates

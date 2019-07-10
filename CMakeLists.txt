@@ -1,7 +1,7 @@
 ###############################################################################
 # CMake file for the qStopMotion project                                      #
 # (c) Ralf Lange, longsoft.de                                                 #
-# Last update: 2019-07-06                                                     #
+# Last update: 2019-07-10                                                     #
 #                                                                             #
 # Usage:                                                                      #
 #   * Qt-Creator (Windows, Linux)                                             #
@@ -10,8 +10,8 @@
 #      + press the CMake button                                               #
 #   * makefile: (Windows)                                                     #
 #      + open Visual Studio Command Prompt                                    #
-#        (for 64bit use: 'VS2013 x64 Native Tools Command Prompt'             #
-#        (for 32bit use: 'VS2013 x32 Native Tools Command Prompt'             #
+#        (for 64bit use: 'VS2017 x64 Native Tools Command Prompt'             #
+#        (for 32bit use: 'VS2017 x32 Native Tools Command Prompt'             #
 #      + cmake -G "NMake Makefiles" .                                         #
 #      + nmake                                                                #
 #      + nmake install (with administration rights)                           #
@@ -21,8 +21,8 @@
 #      + make                                                                 #
 #      + sudo make install                                                    #
 #   * MS Visual Studio (Windows)                                              #
-#      + for 32bit: cmake -G "Visual Studio 12 2013"                          #
-#      + for 64bit: cmake -G "Visual Studio 12 2013 x64"                      #
+#      + for 32bit: cmake -G "Visual Studio 12 2017"                          #
+#      + for 64bit: cmake -G "Visual Studio 12 2017 x64"                      #
 #      + open the solution file                                               #
 #                                                                             #
 ###############################################################################
@@ -393,7 +393,7 @@ SET(
 #
 # (UNIX and Windows)
 #
-# used libraries: libgphoto2
+# used libraries: libqwt
 ###############################################################################
 
 
@@ -490,7 +490,7 @@ IF(WIN32)
     FILE(
         WRITE
         ${QWT_BUILD_SCRIPT}
-        "@call \"$ENV{VCINSTALLDIR}\\vcvarsall.bat\" ${VC_ARG}\n@cd ${QWT_SOURCE_DIR}\n@${QMAKE_PATH}\n@nmake"
+        "@call \"$ENV{VCINSTALLDIR}\\Auxiliary\\Build\\vcvarsall.bat\" ${VC_ARG}\n@cd ${QWT_SOURCE_DIR}\n@${QMAKE_PATH}\n@nmake"
     )
 
     SET(

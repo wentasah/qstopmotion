@@ -4,26 +4,19 @@ Last Change: 2019-06-19
 1. Preparation of the development environment
 ================================================================================
 
-1.1 Install the Tools for Visual Studio 2019
+1.1 Install the Build Tools for Visual Studio 2017
 --------------------------------------------------------------------------------
 
-* Download the "Tools for Visual Studio 2019" for free without registration.
-* This package including ONLY the Visual Studio 2019 command line tools.
+* Only Visual Studio 2015 and 2017 are supported by the actual Qt 5.13.
+* Download the "Build Tools for Visual Studio 2017" for free without registration.
+* This package including ONLY the Visual Studio 2017 command line tools.
 * This package including the Windows 10 SDK
 * Install in the default installation directory
   (C:\Program Files\Microsoft Visual Studio).
 * Add the binary directory to the path variable ???
-  (C:\Program Files\Microsoft Visual Studio\2019\BuildTools\VC\...).
+  (C:\Program Files\Microsoft Visual Studio\2017\BuildTools\VC\...).
 
-1.2 Install the Windows SDK
---------------------------------------------------------------------------------
-
-* Download the "Windows Software Development Kit for Windows 8.1"
-* This package including the debugging tools for windows.
-* Install in the default installation directory
-  (C:\Program Files\Windows Kits\v8.1).
-
-1.3 CMake
+1.2 CMake
 --------------------------------------------------------------------------------
 
 * Download CMake >= 3.11.2 from "https://cmake.org/download/"
@@ -49,22 +42,16 @@ Last Change: 2019-06-19
 * Install in the default installation directory.
 * Add the installation of the "command line client tools" in the installer dialog
 
-
 1.6 Qt5 for Windows and Visual Studio
 --------------------------------------------------------------------------------
 
-* Download Qt runtime >= 5.5.x for Windows 64-bit (VS 2013) from www.qt.io/download
+* Download Qt open source installer >= 5.12 from www.qt.io/download
+* Install Qt for Windows 64-bit (VS 2017)
 * Install in the Directory C:\Tools\Qt\...
 * Qt need write permissions to this directory during compilation and linking.
-* Add the binary directory to the path variable (e.g. C:\Tools\Qt\Qt5.5.1\bin\).
-* Set the environment variable 'Qt5_DIR' to 'C:\Tools\Qt\Qt5.5.1\5.5\msvc2013_64\'
-
-1.7 Qt-Creator for Windows
---------------------------------------------------------------------------------
-
-* Download Qt Creator >= 4.2.x for Windows (not the full SDK) from
-  www.qt.io/download
-* Install in the Directory C:\Tools\Qt\...
+* Add the binary directory to the path variable (e.g. C:\Tools\Qt\5.13.0\msvc2017_64\bin\).
+* Set the environment variable 'Qt5_DIR' to 'C:\Tools\Qt\5.13.0\msvc2017_64\'
+* Qt-Creator is included.
 * The installation of the MinGW runtime development tools is not necessary.
 
 2. Access to the sources of qStopMotion

@@ -391,6 +391,18 @@ public:
     void setVideoFps(int newFPS);
 
     /**
+     * Get the splitting mode during movie export.
+     * @return The splitting mode.
+     */
+    int getMovieExportSplittingMode() const;
+
+    /**
+     * Set the splitting mode during movie export.
+     * @param newSplittingMode The splitting mode.
+     */
+    void setMovieExportSplittingMode(int newSplittingMode);
+
+    /**
      * Get the use default output file flag of the project.
      * @return Use default output file flag.
      */
@@ -1007,6 +1019,11 @@ private:
      * Active video frames per second of the project.
      */
     int videoFps;
+
+    /**
+     * Active splitting mode during movie export of the project.
+     */
+    int splittingMode;
 
     /**
      * Active use default output file flag of the project.

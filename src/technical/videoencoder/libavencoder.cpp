@@ -87,8 +87,12 @@ LibavEncoder::~LibavEncoder()
 }
 
 
-const QStringList LibavEncoder::getEncoderArguments() const
+const QStringList LibavEncoder::getEncoderArguments(const QString inputFilelistPath,
+                                                    const QString outputDirectory) const
 {
+    Q_UNUSED(inputFilelistPath);
+    Q_UNUSED(outputDirectory);
+
     QStringList      arguments;
     QString          imagePath = animationProject->getNewImagePath();
     QString          imageFiles = QString("");

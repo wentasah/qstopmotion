@@ -57,9 +57,12 @@ public:
 
     /**
      * Gets the arguments for the encoder.
+     * @param inputFilelistPath path to file, which contain list of input files
+     * @param outputDirectory path to folder, where output files must be stored
      * @return the encoder argument list
      */
-    const QStringList getEncoderArguments() const;
+    const QStringList getEncoderArguments(const QString inputFilelistPath,
+                                          const QString outputDirectory) const;
 
 private:
     AnimationProject *animationProject;

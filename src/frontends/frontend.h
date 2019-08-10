@@ -33,6 +33,8 @@
 #include <QtCore/QVector>
 #include <QtGui/QImage>
 
+typedef QPair<QString, QStringList> ExternalCommand;
+
 class PreferencesTool;
 class DomainFacade;
 class ViewFacade;
@@ -167,6 +169,12 @@ public:
      * @return the sounds directory name string
      */
     virtual const QString getSoundsDirName() = 0;
+
+    /**
+     * Abstract function for getting the sounds directory
+     * @return the sounds directory name string
+     */
+    virtual const QString getStylesDirName() = 0;
 
     /**
      * Abstract function for getting all possible GUI languages
@@ -384,6 +392,13 @@ public:
      * @return return value of the command
      */
     virtual int runExternalCommand(const QString &command, const QStringList &arguments) = 0;
+
+    /**
+     * Abstract function to run several external commands
+     * @param commands commands with arguments to run
+     * @return return value of the command
+     */
+    virtual int runExternalCommands(const QList<ExternalCommand> &commands) = 0;
 
     /**
      * Abstract function to turns on the webcamera/video import mode.

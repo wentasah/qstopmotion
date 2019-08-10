@@ -234,7 +234,7 @@ void GrabberWidget::apply()
 
     if (true == changes) {
         // There are changes in the grabber preferences
-        frontend->showInformation(tr("Information"), tr("Pease restart qStopMotion to activate the changings!"));
+        frontend->showInformation(tr("Information"), tr("Pease restart qStopMotion to activate the new grabber stettings!"));
     }
     qDebug() << "GrabberWidget::apply --> End";
 }

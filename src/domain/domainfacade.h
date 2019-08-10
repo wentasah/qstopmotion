@@ -219,7 +219,7 @@ public:
     /**
      * @brief Default video encoder application for new installations
      */
-    const static int  ENCODERAPPLICATIONDEFAULT = noneEncoderApplication;
+    const static int  ENCODERAPPLICATIONDEFAULT = ffmpegApplication;
 
     /**
      * @brief Enum with all possible video output formats
@@ -257,6 +257,20 @@ public:
      * @brief Default video frames per second for new instalations
      */
     const static int  VIDEOFPSDEFAULT = 12;
+
+    /**
+     * @brief Enum with all possible video output formats
+     */
+    enum movieSplittingMode {
+        exportAsWholeMovie,        // All scenes and takes are united in one movie
+        exportAsSplittedOnScenes, // Movie is splitted up on several files - separate for each per scene
+        exportAsSplittedOnTakes   // Movie is splitted up on multiple files - separate for each per take
+    };
+
+    /**
+     * @brief Default splitting mode for new installations
+     */
+    const static int  MOVIESPLITTINGMODEDEFAULT = exportAsWholeMovie;
 
     /**
      * @brief Default usage of the default output file name for new installations
@@ -653,6 +667,18 @@ public:
      * @param newFPS The new video frames per second.
      */
     void setVideoFps(int newFPS);
+
+    /**
+     * Get the splitting mode during movie export.
+     * @return The splitting mode.
+     */
+    int getMovieExportSplittingMode();
+
+    /**
+     * Set the splitting mode during movie export.
+     * @param newSplittingMode The splitting mode.
+     */
+    void setMovieExportSplittingMode(int newSplittingMode);
 
     /**
      * Get the use default output file flag of the project.

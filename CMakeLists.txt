@@ -1,7 +1,7 @@
 ###############################################################################
 # CMake file for the qStopMotion project                                      #
 # (c) Ralf Lange, longsoft.de                                                 #
-# Last update: 2018-12-08                                                     #
+# Last update: 2019-07-10                                                     #
 #                                                                             #
 # Usage:                                                                      #
 #   * Qt-Creator (Windows, Linux)                                             #
@@ -10,8 +10,8 @@
 #      + press the CMake button                                               #
 #   * makefile: (Windows)                                                     #
 #      + open Visual Studio Command Prompt                                    #
-#        (for 64bit use: 'VS2013 x64 Native Tools Command Prompt'             #
-#        (for 32bit use: 'VS2013 x32 Native Tools Command Prompt'             #
+#        (for 64bit use: 'VS2017 x64 Native Tools Command Prompt'             #
+#        (for 32bit use: 'VS2017 x32 Native Tools Command Prompt'             #
 #      + cmake -G "NMake Makefiles" .                                         #
 #      + nmake                                                                #
 #      + nmake install (with administration rights)                           #
@@ -21,8 +21,8 @@
 #      + make                                                                 #
 #      + sudo make install                                                    #
 #   * MS Visual Studio (Windows)                                              #
-#      + for 32bit: cmake -G "Visual Studio 12 2013"                          #
-#      + for 64bit: cmake -G "Visual Studio 12 2013 x64"                      #
+#      + for 32bit: cmake -G "Visual Studio 12 2017"                          #
+#      + for 64bit: cmake -G "Visual Studio 12 2017 x64"                      #
 #      + open the solution file                                               #
 #                                                                             #
 ###############################################################################
@@ -31,6 +31,8 @@ project(qStopMotion)
 
 cmake_minimum_required(VERSION 3.0.2)
 
+# option(CMAKE_VERBOSE_MAKEFILE ON)
+
 # set path to additional CMake modules
 SET(
     CMAKE_MODULE_PATH
@@ -38,7 +40,7 @@ SET(
     ${CMAKE_MODULE_PATH}
 )
 
-message("CMAKE_BUILD_TYPE: ${CMAKE_BUILD_TYPE}")
+message("CMAKE_GENERATOR: ${CMAKE_GENERATOR}")
 
 ###############################################################################
 # Platform check
@@ -85,6 +87,8 @@ IF(NOT DEFINED CMAKE_BUILD_TYPE)
     )
 ENDIF(NOT DEFINED CMAKE_BUILD_TYPE)
 
+message("CMAKE_BUILD_TYPE: ${CMAKE_BUILD_TYPE}")
+
 SET(CMAKE_PROJECT_NAME "qstopmotion")
 SET(QSTOPMOTION_HOMEPAGE "http://www.qstopmotion.org")
 SET(QSTOPMOTION_VERSION_MAJOR "2")
@@ -107,12 +111,6 @@ find_package(Qt5 REQUIRED COMPONENTS Core Widgets Xml)
 message("Qt5 Version: ${Qt5Widgets_VERSION_STRING}")
 message("QT_INCLUDE_DIRS: ${Qt5Widgets_INCLUDE_DIRS}")
 message("QT_DEFINITIONS: ${QT_DEFINITIONS}")
-
-IF(CMAKE_BUILD_TYPE STREQUAL "Release")
-    message("No Qt debug and warning output!")
-    add_definitions(-DQT_NO_DEBUG_OUTPUT)
-    add_definitions(-DQT_NO_WARNING_OUTPUT)
-ENDIF(CMAKE_BUILD_TYPE STREQUAL "Release")
 
 ###############################################################################
 # File definitions
@@ -350,7 +348,7 @@ SET(
     translations/qstopmotion_es.ts       # Spanish
 #    translations/qstopmotion_fi.ts       # Finnish
     translations/qstopmotion_it.ts       # Italian
-#    translations/qstopmotion_kl.ts       # 
+#    translations/qstopmotion_kl.ts       #
 #    translations/qstopmotion_nb.ts       # Norwegian
     translations/qstopmotion_pt.ts       # Portuguese
     translations/qstopmotion_ru.ts       # Russian
@@ -395,8 +393,9 @@ SET(
 #
 # (UNIX and Windows)
 #
-# used libraries: libgphoto2
+# used libraries: libqwt
 ###############################################################################
+
 
 IF(UNIX AND NOT APPLE)
     # Linux
@@ -413,36 +412,114 @@ ENDIF(UNIX AND NOT APPLE)
 IF(WIN32)
     # Windows
 
+    SET(CONFIG_DIR "")
     SET(
-        QWT_INCLUDE_DIRS
-        # C:/Tools/Qwt/include
-        $ENV{QWT_INCLUDE_DIR}
+        3RD_PARTY_DIR
+        ${CMAKE_SOURCE_DIR}/3rd-party
+    )
+
+    message("========== External Project qwt Start ==========")
+    include(ExternalProject)
+
+    SET(
+        QWT_TARGET
+        qwt2
+    )
+    SET(
+        QWT_PREFIX
+        ${3RD_PARTY_DIR}/qwt
+    )
+    SET(
+        QWT_BUILD_SCRIPT
+        ${QWT_PREFIX}/build.bat
+    )
+
+    ExternalProject_Add(
+        ${QWT_TARGET}
+        PREFIX ${QWT_PREFIX}
+        SVN_REPOSITORY svn://svn.code.sf.net/p/qwt/code/branches/qwt-6.1
+        # SVN_REVISION   -r12345
+        CONFIGURE_COMMAND ""
+        BUILD_COMMAND ${QWT_BUILD_SCRIPT}
+        INSTALL_COMMAND ""
+        TEST_COMMAND ""
+    )
+
+    ExternalProject_Get_Property(
+        ${QWT_TARGET}
+        SOURCE_DIR
+    )
+    message("qwt source dir: ${SOURCE_DIR}")
+
+    FIND_PROGRAM(
+        QT_QMAKE_EXECUTABLE
+        NAMES
+        qmake
+    )
+    message("qmake executable: ${QT_QMAKE_EXECUTABLE}")
+
+    IF(CMAKE_SIZEOF_VOID_P GREATER 4)
+        # 64bit system
+        SET(
+            VC_ARG
+            amd64
+        )
+    ELSE(CMAKE_SIZEOF_VOID_P GREATER 4)
+        # 32bit system
+        SET(
+            VC_ARG
+            x84
+        )
+    ENDIF(CMAKE_SIZEOF_VOID_P GREATER 4)
+    message("vccvarall argument: ${VC_ARG}")
+
+    FILE(
+        TO_NATIVE_PATH
+        "${QT_QMAKE_EXECUTABLE}"
+        QMAKE_PATH
+    )
+    message("qmake path: ${QMAKE_PATH}")
+
+    FILE(
+        TO_NATIVE_PATH
+        "${SOURCE_DIR}"
+        QWT_SOURCE_DIR
+    )
+    message("qwt source dir: ${QWT_SOURCE_DIR}")
+
+    FILE(
+        WRITE
+        ${QWT_BUILD_SCRIPT}
+        "@call \"$ENV{VCINSTALLDIR}\\Auxiliary\\Build\\vcvarsall.bat\" ${VC_ARG}\n@cd ${QWT_SOURCE_DIR}\n@${QMAKE_PATH}\n@nmake"
     )
 
     SET(
-        QWT_LIBRARY
-        # C:/Tools/Qwt/lib
-        $ENV{QWT_LIBRARY_DIR}
+        QWT_INCLUDE_DIRS
+        ${SOURCE_DIR}/src
     )
 
     IF(CMAKE_BUILD_TYPE STREQUAL "Release")
+        # Release build
         SET(
-            QWT_LIBRARIES
-            qwt.lib
+            QWT_LIB_PATH
+            ${SOURCE_DIR}/lib/qwt
+        )
+    ELSE(CMAKE_BUILD_TYPE STREQUAL "Release")
+        # Debug build
+        SET(
+            QWT_LIB_PATH
+            ${SOURCE_DIR}/lib/qwtd
         )
     ENDIF(CMAKE_BUILD_TYPE STREQUAL "Release")
 
-    IF(CMAKE_BUILD_TYPE STREQUAL "Debug")
-        SET(
-            QWT_LIBRARIES
-            qwtd.lib
-        )
-    ENDIF(CMAKE_BUILD_TYPE STREQUAL "Debug")
+    message("========== External Project qwt End ==========")
+
 ENDIF(WIN32)
 
 message("QWT_INCLUDE_DIRS: ${QWT_INCLUDE_DIRS}")
 message("QWT_LIBRARY: ${QWT_LIBRARY}")
 message("QWT_LIBRARIES: ${QWT_LIBRARIES}")
+message("QWT_LIB_PATH: ${QWT_LIB_PATH}")
 
 ###############################################################################
 # gPhoto2 support
@@ -490,11 +567,11 @@ ENDIF(UNIX AND NOT APPLE)
 IF(WIN32)
     SET(
         MEDIAFOUNDATION_LIBRARIES
-        evr.lib          # ???
-        mf.lib           # ???
-        mfplat.lib       # ???
+        evr.lib          # ??? MFCreateVideoMixer, MFCreateVideoOTA, MFCreateVideoPresenter, MFCreateVideoSampleAllocator
+        mf.lib           # MFEnumDeviceSources
+        mfplat.lib       # MFCreateMediaType, MFCreateAttributes, MFStartup, MFShutdown
         mfuuid.lib       # ???
-        mfreadwrite.lib  # Read and write media stream
+        mfreadwrite.lib  # Read and write media stream: MFCreateSourceReaderFromMediaSource
         # strmiids.lib      # Old Direct Show library
     )
 ELSE(WIN32)
@@ -514,9 +591,11 @@ include_directories(
 )
 
 # tell cmake where to search for libraries:
-link_directories(
-    ${QWT_LIBRARY}
-)
+IF(NOT WIN32)
+    link_directories(
+        ${QWT_LIBRARY}
+    )
+ENDIF(NOT WIN32)
 
 ###############################################################################
 # Additional definitions
@@ -607,10 +686,23 @@ ELSEIF(WIN32)
         ${MOC_SOURCES}
     )
 
+    add_dependencies(
+        qstopmotion
+        ${QWT_TARGET}
+    )
+
+    # Copy compiled Qwt library to bin/ folder - it needs for run application
+    ADD_CUSTOM_COMMAND(
+        TARGET qstopmotion
+        POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy ${QWT_LIB_PATH}.dll ${EXECUTABLE_OUTPUT_PATH}/${CONFIG_DIR}
+        COMMENT "copy ${QWT_LIB_PATH}.dll to bin/${CONFIG_DIR}"
+    )
+
     # tell cmake which libraries to link
     target_link_libraries(
         qstopmotion
-        ${QWT_LIBRARIES}
+        ${QWT_LIB_PATH}.lib
         ${MEDIAFOUNDATION_LIBRARIES}
         Qt5::WinMain
         Qt5::Widgets
@@ -632,37 +724,14 @@ add_definitions(
 )
 
 IF(WIN32)
+    # Copy data to build directory
     file(COPY graphics DESTINATION ".")
     file(COPY manual DESTINATION ".")
     file(COPY translations DESTINATION ".")
     file(COPY ${ICON_FILES} DESTINATION ".")
+    file(COPY sounds DESTINATION ".")
+    file(COPY styles DESTINATION ".")
     file(COPY ${GENERAL_FILES} DESTINATION ".")
-
-    IF(CMAKE_CL_64)
-        # Windows 64bit
-
-        IF(CMAKE_BUILD_TYPE STREQUAL "Release")
-            file(COPY qt5runtime64bit/release/ DESTINATION "qtruntime")
-        ELSE(CMAKE_BUILD_TYPE STREQUAL "Release")
-            file(COPY qt5runtime64bit/debug/ DESTINATION "qtruntime")
-        ENDIF(CMAKE_BUILD_TYPE STREQUAL "Release")
-
-        file(COPY ffmpeg64bit/ DESTINATION "ffmpeg")
-        file(COPY libav64bit/ DESTINATION "libav")
-        file(COPY qwt64bit/ DESTINATION "qwt")
-    ELSE(CMAKE_CL_64)
-        # Windows 32bit
-
-        IF(CMAKE_BUILD_TYPE STREQUAL "Release")
-            file(COPY qt5runtime32bit/release/ DESTINATION "qtruntime")
-        ELSE(CMAKE_BUILD_TYPE STREQUAL "Release")
-            file(COPY qt5runtime32bit/debug/ DESTINATION "qtruntime")
-        ENDIF(CMAKE_BUILD_TYPE STREQUAL "Release")
-
-        file(COPY ffmpeg32bit/ DESTINATION "ffmpeg")
-        file(COPY libav32bit/ DESTINATION "libav")
-        file(COPY qwt32bit/ DESTINATION "qwt")
-    ENDIF(CMAKE_CL_64)
 ENDIF(WIN32)
 
 IF(UNIX AND NOT APPLE)
@@ -671,12 +740,140 @@ IF(UNIX AND NOT APPLE)
     file(COPY translations DESTINATION "share/qstopmotion/")
     file(COPY icons DESTINATION "share/qstopmotion/")
     file(COPY sounds DESTINATION "share/qstopmotion/")
+    file(COPY styles DESTINATION "share/qstopmotion/")
     file(COPY ${ICON_FILES} DESTINATION "share/qstopmotion/")
     file(COPY ${GENERAL_FILES} DESTINATION "share/qstopmotion/")
     file(COPY ${UNIX_FILES} DESTINATION "share/qstopmotion/")
     file(COPY ${DEB_FILES} DESTINATION "share/qstopmotion/deb/")
     file(COPY ${RPM_FILES} DESTINATION "share/qstopmotion/rpm/")
 ENDIF(UNIX AND NOT APPLE)
+
+###############################################################################
+# Fetch Content
+###############################################################################
+
+IF(WIN32)
+    include(FetchContent)
+
+    SET(
+        FETCHCONTENT_BASE_DIR
+        ${3RD_PARTY_DIR}
+    )
+
+    # Only one download, no updates
+    SET(
+        FETCHCONTENT_UPDATES_DISCONNECTED
+        ON
+    )
+ENDIF(WIN32)
+
+###############################################################################
+# ffmpeg Handling
+###############################################################################
+
+IF(WIN32)
+    message("========== Fetch FFMPEG Content Start ==========")
+
+    IF(CMAKE_CL_64)
+        SET(
+            FFMPEG_URL
+            "https://ffmpeg.zeranoe.com/builds/win64/static/ffmpeg-latest-win64-static.zip"
+        )
+        SET(
+            FFMPEG_TARGET
+            ffmpeg64
+        )
+    ELSE(CMAKE_CL_64)
+        SET(
+            FFMPEG_URL
+            "https://ffmpeg.zeranoe.com/builds/win32/static/ffmpeg-latest-win32-static.zip"
+        )
+        SET(
+            FFMPEG_TARGET
+            ffmpeg32
+        )
+    ENDIF(CMAKE_CL_64)
+
+    FetchContent_Declare(
+        ${FFMPEG_TARGET}
+        URL ${FFMPEG_URL}
+    )
+
+    # Check if population has already been performed
+    FetchContent_GetProperties(
+        ${FFMPEG_TARGET}
+    )
+    string(TOLOWER ${FFMPEG_TARGET} ffmpegName)
+    IF(NOT ${ffmpegName}_POPULATED)
+        # Fetch the content using previously declared details
+        message("FetchContent - Populate")
+        FetchContent_Populate(
+            ${FFMPEG_TARGET}
+        )
+
+        # Bring the populated content into the build
+        message("ffmpeg source dir: ${${ffmpegName}_SOURCE_DIR}")
+        message("ffmpeg binary dir: ${${ffmpegName}_BINARY_DIR}")
+        message("ffmpeg populated state: ${${ffmpegName}_POPULATED}")
+        # add_subdirectory(${${ffmpegName}_SOURCE_DIR} ${${ffmpegName}_BINARY_DIR})
+    ENDIF()
+
+    message("========== Fetch FFMPEG Content End ==========")
+ENDIF(WIN32)
+
+###############################################################################
+# Libav Handling
+###############################################################################
+
+IF(WIN32)
+    message("========== Fetch LIBAV Content Start ==========")
+
+    IF(CMAKE_CL_64)
+        SET(
+            LIBAV_URL
+            "http://builds.libav.org/windows/release-gpl/libav-11.3-win64.7z"
+        )
+        SET(
+            LIBAV_TARGET
+            libav64
+        )
+    ELSE(CMAKE_CL_64)
+        SET(
+            LIBAV_URL
+            "http://builds.libav.org/windows/release-gpl/libav-11.3-win32.7z"
+        )
+        SET(
+            LIBAV_TARGET
+            libav32
+        )
+    ENDIF(CMAKE_CL_64)
+
+    FetchContent_Declare(
+        ${LIBAV_TARGET}
+        URL ${LIBAV_URL}
+    )
+
+    # Check if population has already been performed
+    FetchContent_GetProperties(
+        ${LIBAV_TARGET}
+    )
+    string(TOLOWER ${LIBAV_TARGET} libavName)
+    IF(NOT ${libavName}_POPULATED)
+        # Fetch the content using previously declared details
+        message("FetchContent - Populate")
+        FetchContent_Populate(
+            ${LIBAV_TARGET}
+        )
+
+        # Bring the populated content into the build
+        message("libav source dir: ${${libavName}_SOURCE_DIR}")
+        message("libav binary dir: ${${libavName}_BINARY_DIR}")
+        message("libav populated state: ${${libavName}_POPULATED}")
+        # add_subdirectory(${${libavName}_SOURCE_DIR} ${${libavName}_BINARY_DIR})
+    ENDIF()
+
+    message("========== Fetch LIBAV Content End ==========")
+ENDIF(WIN32)
 
 ###############################################################################
 # Installation
@@ -691,6 +888,7 @@ IF(WIN32)
     SET(QSTOPMOTION_GRAPHICS_ICONS_INSTALL_DIR "graphics/icons")
     SET(QSTOPMOTION_GRAPHICS_PICTURES_INSTALL_DIR "graphics/pictures")
     SET(QSTOPMOTION_SOUNDS_INSTALL_DIR "sounds")
+    SET(QSTOPMOTION_STYLES_INSTALL_DIR "styles")
     SET(QSTOPMOTION_MANUAL_INSTALL_DIR "manual")
     SET(QSTOPMOTION_TRANSLATIONS_INSTALL_DIR "translations")
     SET(QSTOPMOTION_PIXMAP_INSTALL_DIR "pixmaps")
@@ -708,6 +906,7 @@ IF(UNIX AND NOT APPLE)
     SET(QSTOPMOTION_GRAPHICS_ICONS_INSTALL_DIR "share/qstopmotion/graphics/icons")
     SET(QSTOPMOTION_GRAPHICS_PICTURES_INSTALL_DIR "share/qstopmotion/graphics/pictures")
     SET(QSTOPMOTION_SOUNDS_INSTALL_DIR "share/qstopmotion/sounds")
+    SET(QSTOPMOTION_STYLES_INSTALL_DIR "share/qstopmotion/styles")
     SET(QSTOPMOTION_TRANSLATIONS_INSTALL_DIR "share/qstopmotion/translations")
     SET(QSTOPMOTION_MANUAL_INSTALL_DIR "share/doc/qstopmotion")
     SET(QSTOPMOTION_DESKTOP_INSTALL_DIR "share/applications")
@@ -733,6 +932,12 @@ install(
 install(
     DIRECTORY sounds/
     DESTINATION ${QSTOPMOTION_SOUNDS_INSTALL_DIR}
+)
+
+# installation of the content of the styles directory
+install(
+    DIRECTORY styles/
+    DESTINATION ${QSTOPMOTION_STYLES_INSTALL_DIR}
 )
 
 # installation of the content of the manual directory
@@ -833,79 +1038,34 @@ ENDIF(CPACK_BINARY_RPM)
 
 # installation on Windows systems
 IF(WIN32)
-    IF(CMAKE_CL_64)
-        # Windows 64bit
+    # Installing Qt runtime libraries in the same directory as the executables
+    SET(QSTOPMOTION_QTRUNTIME_INSTALL_DIR "${CMAKE_BINARY_DIR}/qtruntime")
+    MESSAGE("QSTOPMOTION_QTRUNTIME_INSTALL_DIR: ${QSTOPMOTION_QTRUNTIME_INSTALL_DIR}")
+    INSTALL(
+        CODE "MESSAGE(\"Prepare required Qt libraries.\")"
+        CODE "execute_process(COMMAND windeployqt --no-translations --no-system-d3d-compiler --dir ${QSTOPMOTION_QTRUNTIME_INSTALL_DIR} ${EXECUTABLE_OUTPUT_PATH}/${CONFIG_DIR}qstopmotion.exe
+                              WORKING_DIRECTORY ${QSTOPMOTION_BIN_INSTALL_DIR})"
+    )
+    INSTALL(
+        DIRECTORY ${QSTOPMOTION_QTRUNTIME_INSTALL_DIR}/
+        DESTINATION ${QSTOPMOTION_BIN_INSTALL_DIR}/
+    )
 
-        # installation of Qt runtime
-        IF(CMAKE_BUILD_TYPE STREQUAL "Release")
-            install(
-                DIRECTORY qt5runtime64bit/release/
-                DESTINATION ${QSTOPMOTION_BIN_INSTALL_DIR}
-            )
-            install(
-                DIRECTORY qwt64bit/release/
-                DESTINATION ${QSTOPMOTION_BIN_INSTALL_DIR}
-            )
-        ELSE(CMAKE_BUILD_TYPE STREQUAL "Release")
-            install(
-                DIRECTORY qt5runtime64bit/debug/
-                DESTINATION ${QSTOPMOTION_BIN_INSTALL_DIR}
-            )
-            install(
-                DIRECTORY qwt64bit/debug/
-                DESTINATION ${QSTOPMOTION_BIN_INSTALL_DIR}
-            )
-        ENDIF(CMAKE_BUILD_TYPE STREQUAL "Release")
+    # installation of Qwt
+    install(
+        FILES ${QWT_LIB_PATH}.dll
+        DESTINATION "${QSTOPMOTION_BIN_INSTALL_DIR}"
+    )
 
-        # installation of ffmpeg
-        install(
-            DIRECTORY ffmpeg64bit/
-            DESTINATION "${QSTOPMOTION_GENERALS_INSTALL_DIR}/ffmpeg"
-        )
-
-        # installation of libav
-        install(
-            DIRECTORY libav64bit/
-            DESTINATION "${QSTOPMOTION_GENERALS_INSTALL_DIR}/libav"
-        )
-
-    ELSE(CMAKE_CL_64)
-        # Windows 32bit
-
-        # installation of Qt runtime
-        IF(CMAKE_BUILD_TYPE STREQUAL "Release")
-            install(
-                DIRECTORY qt5runtime32bit/release/
-                DESTINATION ${QSTOPMOTION_BIN_INSTALL_DIR}
-            )
-            install(
-                DIRECTORY qwt32bit/release/
-                DESTINATION ${QSTOPMOTION_BIN_INSTALL_DIR}
-            )
-        ELSE(CMAKE_BUILD_TYPE STREQUAL "Release")
-            install(
-                DIRECTORY qt5runtime32bit/debug/
-                DESTINATION ${QSTOPMOTION_BIN_INSTALL_DIR}
-            )
-            install(
-                DIRECTORY qwt32bit/debug/
-                DESTINATION ${QSTOPMOTION_BIN_INSTALL_DIR}
-            )
-        ENDIF(CMAKE_BUILD_TYPE STREQUAL "Release")
-
-        # installation of ffmpeg
-        install(
-            DIRECTORY ffmpeg32bit/
-            DESTINATION "${QSTOPMOTION_GENERALS_INSTALL_DIR}/ffmpeg"
-        )
-
-        # installation of libav
-        install(
-            DIRECTORY libav32bit/
-            DESTINATION "${QSTOPMOTION_GENERALS_INSTALL_DIR}/libav"
-        )
-
-    ENDIF(CMAKE_CL_64)
+    # installation of ffmpeg and libav
+    install(
+        DIRECTORY ${${ffmpegName}_SOURCE_DIR}/
+        DESTINATION "${QSTOPMOTION_GENERALS_INSTALL_DIR}/ffmpeg"
+    )
+    install(
+        DIRECTORY ${${libavName}_SOURCE_DIR}/usr/
+        DESTINATION "${QSTOPMOTION_GENERALS_INSTALL_DIR}/libav"
+    )
 
 ENDIF(WIN32)
 
@@ -1039,9 +1199,6 @@ ENDIF(WIN32)
 IF(UNIX AND NOT APPLE)
     # Exclude:
     # * Mercurial SMC files
-    # * ffmpeg Windows binaries
-    # * libav Windows binaries
-    # * Qt Windows runtime
     SET(
         CPACK_SOURCE_IGNORE_FILES
         "${CPACK_SOURCE_IGNORE_FILES}"
@@ -1049,15 +1206,6 @@ IF(UNIX AND NOT APPLE)
         "${PROJECT_SOURCE_DIR}/.hgignore"
         "${PROJECT_SOURCE_DIR}/.hgtags"
         "${PROJECT_SOURCE_DIR}/.hgtimestamp"
-        "${PROJECT_SOURCE_DIR}/ffmpeg32bit/"
-        "${PROJECT_SOURCE_DIR}/ffmpeg64bit/"
-        "${PROJECT_SOURCE_DIR}/libav32bit/"
-        "${PROJECT_SOURCE_DIR}/libav64bit/"
-        "${PROJECT_SOURCE_DIR}/qt4runtime/"
-        "${PROJECT_SOURCE_DIR}/qt5runtime32bit/"
-        "${PROJECT_SOURCE_DIR}/qt5runtime64bit/"
-        "${PROJECT_SOURCE_DIR}/qwt32bit/"
-        "${PROJECT_SOURCE_DIR}/qwt64bit/"
     )
 ENDIF(UNIX AND NOT APPLE)
 

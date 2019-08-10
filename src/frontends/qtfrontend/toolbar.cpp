@@ -172,7 +172,12 @@ void ToolBar::makeGUI()
 
 void ToolBar::retranslateStrings()
 {
-    QString infoText = tr("<h4>Play animation (K, P)</h4>");
+    QString infoText = tr("<h4>Degree of overlay</h4>"
+                          "<p>Change the degree of superposition of the "
+                          "previous exposure to live video from camera</p>");
+    overlaySlider->setToolTip(infoText);
+
+    infoText = tr("<h4>Play animation (K, P)</h4>");
     playButton->setToolTip(infoText);
     /*
     infoText = tr("<h4>Previous scene (I)</h4>");

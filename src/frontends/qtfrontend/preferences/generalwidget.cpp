@@ -22,14 +22,17 @@
 
 #include <QDebug>
 #include <QColorDialog>
+#include <QFileDialog>
 #include <QGridLayout>
 #include <QHeaderView>
 #include <QInputDialog>
 #include <QLabel>
 
 #include "domain/domainfacade.h"
+#include "frontends/qtfrontend/mainwindowgui.h"
 #include "frontends/qtfrontend/elements/flexiblelineedit.h"
 #include "technical/preferencestool.h"
+#include "technical/util.h"
 
 
 const QColor GeneralWidget::GRIDCOLORDEFAULT = Qt::black;
@@ -44,6 +47,10 @@ GeneralWidget::GeneralWidget(Frontend *f, QWidget *parent)
     languageGroupBox = 0;
     languageCombo    = 0;
     actualLanguage   = LANGUAGEDEFAULT;
+
+    styleGroupBox = 0;
+    styleCombo    = 0;
+    actualStyle   = STYLEDEFAULT;
 
     captureGroupBox  = 0;
     bevorButton      = 0;
@@ -68,6 +75,12 @@ GeneralWidget::GeneralWidget(Frontend *f, QWidget *parent)
     signalGroupBox        = 0;
     signalCheck           = 0;
     actualSignal          = SIGNALDEFAULT;
+
+    photoEditorBox        = 0;
+    photoEditorLabel      = 0;
+    photoEditorEdit       = 0;
+    photoEditorButton     = 0;
+    actualPhotoEditorPath = Util::findDefaultPhotoEditor();
 
     this->setObjectName("GeneralWidget");
 
@@ -103,6 +116,27 @@ void GeneralWidget::makeGUI()
     languageLayout->addWidget(languageCombo);
     languageLayout->addStretch(10);
     languageGroupBox->setLayout(languageLayout);
+
+    styleGroupBox = new QGroupBox(tr("Style"));
+    // styleGroupBox->setFlat(true);
+
+    styleCombo = new QComboBox();
+    styleCombo->setFocusPolicy(Qt::NoFocus);
+    connect(styleCombo, SIGNAL(activated(int)), this, SLOT(changeStyle(int)));
+
+    // Add all possible styles
+    QVector<QString> styles = MainWindowGUI::getStyles(frontend);
+    for (int index = 0 ; index < styles.count() ; index++) {
+        styleCombo->addItem(styles[index]);
+    }
+
+    QVBoxLayout *styleLayout = new QVBoxLayout;
+    // styleLayout->setMargin(0);
+    // styleLayout->setSpacing(2);
+    // styleLayout->addStretch(1);
+    styleLayout->addWidget(styleCombo);
+    styleLayout->addStretch(10);
+    styleGroupBox->setLayout(styleLayout);
 
     captureGroupBox = new QGroupBox;
     captureGroupBox->setTitle(tr("Capture Button Functionality"));
@@ -181,11 +215,34 @@ void GeneralWidget::makeGUI()
     signalLayout->addWidget(signalCheck, 0, 0);
     signalGroupBox->setLayout(signalLayout);
 
+    // Photo editor's preferences
+    photoEditorBox = new QGroupBox;
+    photoEditorBox->setTitle(tr("Image editor"));
+
+    photoEditorLabel = new QLabel(tr("Select application for edit exposures:"));
+    photoEditorEdit = new FlexibleLineEdit;
+    photoEditorButton = new QPushButton(tr("Choose"));
+    photoEditorButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    connect(photoEditorButton, SIGNAL(clicked()),
+            this, SLOT(choosePhotoEditor()));
+
+    QVBoxLayout *photoEditorLayout = new QVBoxLayout;
+    photoEditorLayout->addWidget(photoEditorLabel);
+    QHBoxLayout *hbLayout = new QHBoxLayout;
+    hbLayout->addWidget(photoEditorEdit);
+    hbLayout->addWidget(photoEditorButton);
+    photoEditorLayout->addLayout(hbLayout);
+
+    photoEditorBox->setLayout(photoEditorLayout);
+
+    // Main layout
     QVBoxLayout *mainLayout = new QVBoxLayout;
     mainLayout->addWidget(languageGroupBox);
+    mainLayout->addWidget(styleGroupBox);
     mainLayout->addWidget(captureGroupBox);
     mainLayout->addWidget(gridGroupBox);
     mainLayout->addWidget(signalGroupBox);
+    mainLayout->addWidget(photoEditorBox);
     mainLayout->addStretch(1);
 
     setLayout(mainLayout);
@@ -201,6 +258,7 @@ void GeneralWidget::initialize()
     PreferencesTool *pref = frontend->getPreferences();
     QString          actualLocale;
     QString          colorName;
+    QString          photoEditorPath;
     QVector<QString> locales = frontend->getLocales();
 
     pref->getStringPreference("preferences", "language", actualLocale);
@@ -211,6 +269,9 @@ void GeneralWidget::initialize()
     }
     languageCombo->setCurrentIndex(actualLanguage);
 
+    pref->getIntegerPreference("preferences", "style", actualStyle);
+    styleCombo->setCurrentIndex(actualStyle);
+
     pref->getIntegerPreference("preferences", "capturebutton", actualButtonFunction);
     pref->getBooleanPreference("preferences", "verticalgrid", actualVerticalGrid);
     pref->getIntegerPreference("preferences", "verticalspin", actualVerticalSpin);
@@ -220,6 +281,9 @@ void GeneralWidget::initialize()
         actualGridColor.setNamedColor(colorName);
     }
     pref->getBooleanPreference("preferences", "signal", actualSignal);
+    if (pref->getStringPreference("preferences", "photoeditor", photoEditorPath) == true) {
+        actualPhotoEditorPath = photoEditorPath;
+    }
 
     reset();
 
@@ -246,9 +310,20 @@ void GeneralWidget::apply()
     int newLanguage = languageCombo->currentIndex();
     if (actualLanguage != newLanguage)
     {
+        // Language changed
         QVector<QString> locales = frontend->getLocales();
         pref->setStringPreference("preferences", "language", locales[newLanguage]);
         actualLanguage = newLanguage;
+    }
+
+    int newStyle = styleCombo->currentIndex();
+    if (actualStyle != newStyle)
+    {
+        // Style changed
+        pref->setIntegerPreference("preferences", "style", newStyle);
+        actualLanguage = newLanguage;
+
+        frontend->showInformation(tr("Information"), tr("Pease restart qStopMotion to activate the new style!"));
     }
 
     PreferencesTool::captureButtonFunction newButtonFunction;
@@ -318,6 +393,13 @@ void GeneralWidget::apply()
         actualSignal = newSignal;
     }
 
+    const QString newPhotoEditorPath = photoEditorEdit->text();
+    if (newPhotoEditorPath != actualPhotoEditorPath) {
+        // Photo editor changed
+        pref->setStringPreference("preferences", "photoeditor", newPhotoEditorPath);
+        actualPhotoEditorPath = newPhotoEditorPath;
+    }
+
     qDebug() << "GeneralWidget::apply --> End";
 }
 
@@ -327,6 +409,7 @@ void GeneralWidget::reset()
     qDebug() << "GeneralWidget::reset --> Start";
 
     changeLanguage(actualLanguage);
+    styleCombo->setCurrentIndex(actualStyle);
     frontend->changeCaptureButtonFunction(actualButtonFunction);
     switch (actualButtonFunction) {
     case PreferencesTool::captureButtonBevor:
@@ -344,6 +427,7 @@ void GeneralWidget::reset()
     horizontalGridCheck->setChecked(actualHorizontalGrid);
     horizontalGridSpin->setValue(actualHorizontalSpin);
     signalCheck->setChecked(actualSignal);
+    photoEditorEdit->setText(actualPhotoEditorPath);
 
     qDebug() << "GeneralWidget::reset --> End";
 }
@@ -352,6 +436,12 @@ void GeneralWidget::reset()
 void GeneralWidget::changeLanguage(int index)
 {
     frontend->changeLanguage(index);
+}
+
+
+void GeneralWidget::changeStyle(int index)
+{
+    // frontend->changeStyle(index);
 }
 
 
@@ -405,4 +495,18 @@ void GeneralWidget::clickedGridColorButton()
 {
     newGridColor = QColorDialog::getColor(actualGridColor);
     gridColorButton->setText(newGridColor.name());
+}
+
+void GeneralWidget::choosePhotoEditor()
+{
+    QString currentApp = photoEditorEdit->text();
+    if (!QFileInfo::exists(currentApp)) {
+        currentApp = QDir::home().absolutePath();
+    }
+
+    QString appPath = QFileDialog::getOpenFileName(this, tr("Choose image editor"),
+                                                   currentApp);
+    if (!appPath.isEmpty()) {
+        photoEditorEdit->setText(appPath);
+    }
 }

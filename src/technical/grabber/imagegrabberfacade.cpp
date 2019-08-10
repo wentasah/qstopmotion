@@ -240,6 +240,11 @@ const QVector<ImageGrabberDevice*> ImageGrabberFacade::getDevices()
 
 ImageGrabberDevice* ImageGrabberFacade::getDevice(int deviceIndex)
 {
+    if ((deviceIndex < 0) || (deviceIndex >= getDeviceCount())) {
+        qCritical() << "try to get ImageGrabberDevice with incorrect index:"
+                    << deviceIndex << "max devices:" << getDeviceCount();
+        return Q_NULLPTR;
+    }
     return devices[deviceIndex];
 }
 

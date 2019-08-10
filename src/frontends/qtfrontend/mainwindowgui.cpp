@@ -25,9 +25,12 @@
 #include <QDesktopServices>
 #include <QFileDialog>
 #include <QMenuBar>
+#include <QScreen>
 #include <QStatusBar>
 #include <QUrl>
 #include <QWhatsThis>
+#include <QWindow>
+#include "qpainter.h"
 
 #include "mainwindowgui.h"
 
@@ -647,6 +650,9 @@ void MainWindowGUI::keyPressEvent(QKeyEvent *k)
             }
         }
         break;
+    case Key_F11:
+        isFullScreen() ? showNormal() : showFullScreen();
+        break;
     default:
         k->ignore();
         break;
@@ -677,6 +683,30 @@ void MainWindowGUI::changeLanguage(int newIndex)
     activeLocale = translationsLocales[newIndex];
     createTranslator(activeLocale);
     retranslateStrings();
+}
+
+
+const QVector<QString> MainWindowGUI::getStyles(Frontend* f)
+{
+    QVector<QString>       styles;
+
+    qDebug() << "MainWindowGUI::getStyles --> Start";
+
+    // Fill the list with possible styles
+    QString stylesPath(f->getStylesDirName());
+    QDir stylesDir(stylesPath);
+    QStringList dirNames = stylesDir.entryList(QDir::Dirs|QDir::NoDotAndDotDot, QDir::Name);
+
+    // Qt default style is a special case (base style)
+    styles.append(tr("No style"));
+
+    for (int i = 0; i < dirNames.size(); ++i) {
+        styles.append(dirNames[i]);
+    }
+
+    return styles;
+
+    qDebug() << "MainWindowGUI::getStyles --> End";
 }
 
 
@@ -1024,7 +1054,7 @@ void MainWindowGUI::setToolBarState(int newState)
 }
 
 
-int MainWindowGUI::getRecordingMode()
+enum DomainFacade::recordingMode MainWindowGUI::getRecordingMode()
 {
     return recordingTab->getRecordingMode();
 }
@@ -1439,6 +1469,11 @@ void MainWindowGUI::saveProjectAs()
     fileDialog.setNameFilters(filters);
     fileDialog.setAcceptMode(QFileDialog::AcceptSave);
     fileDialog.setFileMode(QFileDialog::AnyFile);
+    fileDialog.setDefaultSuffix(PreferencesTool::projectSuffix);
+    const QString description = frontend->getProject()->getProjectDescription();
+    if (!description.isEmpty()) {
+        fileDialog.selectFile(description);
+    }
 
     while (1) {
         ret = fileDialog.exec();
@@ -1449,11 +1484,6 @@ void MainWindowGUI::saveProjectAs()
 
         if (filePath.isEmpty()) {
             return;
-        }
-        if (!filePath.endsWith(PreferencesTool::projectSuffix)) {
-            // Append the project suffix
-            filePath.append(".");
-            filePath.append(PreferencesTool::projectSuffix);
         }
         if (filePath.indexOf('|') != -1) {
             // Remove all '|' characters
@@ -1553,6 +1583,12 @@ void MainWindowGUI::exportToVideo()
         fileDialog.setNameFilters(filters);
         fileDialog.setAcceptMode(QFileDialog::AcceptSave);
         fileDialog.setFileMode(QFileDialog::AnyFile);
+        fileDialog.setDefaultSuffix(exportSuffix);
+        const QFileInfo projectPath(frontend->getProject()->getNewProjectFilePath());
+        if (projectPath.exists() && projectPath.isFile()) {
+            const QString projectName = projectPath.baseName();
+            fileDialog.selectFile(projectName);
+        }
         int ret = fileDialog.exec();
         if (ret == QDialog::Accepted) {
             QStringList openFiles = fileDialog.selectedFiles();
@@ -1563,10 +1599,6 @@ void MainWindowGUI::exportToVideo()
             encoder = NULL;
             return;
         } else {
-            if (!outputFile.endsWith(exportSuffix)) {
-                outputFile.append(".");
-                outputFile.append(exportSuffix);
-            }
             encoder->setOutputFile(outputFile);
         }
     } else {
@@ -1804,16 +1836,27 @@ void MainWindowGUI::showPropertiesDialog()
 
 void MainWindowGUI::showUndoStack()
 {
-    QRect fGeo = this->frameGeometry();
-
     // Open up undo stack window
-    if (undoView == 0) {
+    if (undoView == Q_NULLPTR) {
         undoView = new QUndoView(frontend->getProject()->getUndoStack());
         undoView->setWindowTitle(tr("qStopMotion - Undo stack"));
         undoView->setAttribute(Qt::WA_QuitOnClose, false);
-        undoView->setGeometry(geometry().x() + fGeo.width(), geometry().y(),
-                              250, height());
     }
+
+    // Place UndoStack panel on the right side of the application.
+    const QScreen *screen = QWindow().screen();
+    if (screen == Q_NULLPTR) {
+        qCritical() << "couldn't get screen";
+        return;
+    }
+    const QRect screenRect = screen->geometry();
+    const int panelWidth = 250;
+    int posX = x() + frameGeometry().width();
+    if ((posX + panelWidth) >= screenRect.right()) {
+        posX = screenRect.right() - panelWidth;
+    }
+    undoView->setGeometry(posX, geometry().y(), panelWidth, height());
+
     undoView->show();
     this->activateWindow();
 }
@@ -1821,25 +1864,43 @@ void MainWindowGUI::showUndoStack()
 
 void MainWindowGUI::showCameraControllerDialog()
 {
-    QRect fGeo = this->frameGeometry();
+    if (cameraControllerDialog == Q_NULLPTR) {
+        ImageGrabberDevice *device = grabber->getDevice(getVideoSource());
+        if (device == Q_NULLPTR) {
+            qCritical() << "couldn't get ImageGrabberDevice";
+            return;
+        }
+        if (device->getController() == Q_NULLPTR) {
+            qCritical() << "couldn't get GrabberController from current device";
+            return;
+        }
 
-    Q_ASSERT(grabber->getDevice(getVideoSource())->getController() != NULL);
-
-    if (cameraControllerDialog == 0) {
         cameraControllerDialog = new CameraControllerDialog(frontend,
                                                             grabber->getDevice(getVideoSource()),
                                                             this);
         cameraControllerDialog->initialize();
-        cameraControllerDialog->setGeometry(geometry().x() + fGeo.width(), geometry().y(),
-                                            300, height());
     }
+
+    // Place CameraController dialog on the right side of the application.
+    const QScreen *screen = QWindow().screen();
+    if (screen == Q_NULLPTR) {
+        qCritical() << "couldn't get screen";
+        return;
+    }
+    const QRect screenRect = screen->geometry();
+    const int panelWidth = 300;
+    int posX = x() + frameGeometry().width();
+    if ((posX + panelWidth) >= screenRect.right()) {
+        posX = screenRect.right() - panelWidth;
+    }
+    cameraControllerDialog->setGeometry(posX, geometry().y(), panelWidth, height());
     cameraControllerDialog->show();
+
     cameraControllerDialog->enableControls();
 
     if (frontend->isGrabberInited()) {
         cameraControllerDialog->setUp();
     }
-
 }
 
 
@@ -1954,7 +2015,7 @@ void MainWindowGUI::initTranslations()
     QDir dir(qmPath);
     QStringList fileNames = dir.entryList(QStringList("qstopmotion_*.qm"));
 
-    //English is a special case (base language)
+    // English is a special case (base language)
     translationsLanguages.append("English");
     translationsLocales.append("en");
 
@@ -2505,11 +2566,12 @@ void MainWindowGUI::makeToolsMenu(QHBoxLayout *layout)
 
     sideBar = new QTabWidget();
     sideBar->setObjectName("sideBar");
-    sideBar->setTabPosition(QTabWidget::South);
+    sideBar->setTabPosition(QTabWidget::North);
     // sideBar->setMaximumWidth(270);
     // sideBar->setMinimumWidth(220);
     // sideBar->setMinimumSize(170, 300);
     sideBar->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Expanding);
+    sideBar->setStyleSheet("QTabBar::tab { min-width: 100px; }");
     layout->addWidget(sideBar);
 
     Q_ASSERT(frontend != 0);

@@ -30,7 +30,7 @@
 #include <QPushButton>
 #include <QVBoxLayout>
 
-#include <qwt/qwt_slider.h>
+#include <qwt_slider.h>
 
 #include "frontends/frontend.h"
 #include "technical/grabber/grabbercontroller.h"

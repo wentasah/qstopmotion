@@ -102,18 +102,30 @@ private slots:
      */
     void changeFps(int value);
 
-    // Output file preferences
     /**
-     * Slot for notified the export tab when yes button is selected, so that
-     * encoder preferences can be updated.
+     * Slot for updating the splitting mode value.
+     * @param value the new mode.
      */
-    void setYesButtonOn();
+    void changeSplittingMode(int value);
 
     /**
-     * Slot for notified the export tab when no button is selected, so that
-     * encoder preferences can be updated.
+     * Slot for updating the avalability of splitting mode options.
+     * @param enable enable or disable radio buttons.
      */
-    void setNoButtonOn();
+    void enableSplittingOptions(bool enable);
+
+    // Output file preferences
+    /**
+     * Update widgets in order to display that user will be asked about
+     * output destination everytime.
+     */
+    void setAskingUserAboutOutputDestination();
+
+    /**
+     * Update widgets in order to display that default output destination
+     * will be used everytime without user prompting.
+     */
+    void setUsingDefaultOutputDestination();
 
     /**
      * Slot for notified the export tab when an new default output file name
@@ -155,10 +167,17 @@ private:
     QSpinBox     *videoFpsChooser;
     int           activeVideoFps;
 
+    // Movie's splitting preferences
+    QGroupBox    *splittingPrefs;
+    QRadioButton *wholeMovieButton;
+    QRadioButton *splittedOnScenesButton;
+    QRadioButton *splittedOnTakesButton;
+    int           splittingMode;
+
     // Output file preferences
     QGroupBox    *outputPrefs;
-    QRadioButton *yesButton;
-    QRadioButton *noButton;
+    QRadioButton *askUserEveryTimeButton;
+    QRadioButton *useDefaultOutputButton;
     bool          activeUseDefaultOutputFile;
     QLabel       *askForOutputLabel;
     QLabel       *defaultOutputLabel;

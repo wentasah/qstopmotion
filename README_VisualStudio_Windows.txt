@@ -52,27 +52,7 @@ Last Change: 2018-01-17
 * Add the binary directory to the path variable (e.g. C:\Tools\Qt\Qt5.5.1\bin\).
 * Set the environment variable 'Qt5_DIR' to 'C:\Tools\Qt\Qt5.5.1\5.5\msvc2013_64\'
 
-1.6 Qwt
---------------------------------------------------------------------------------
-
-* Download Qwt >= 6.1.3 from "https://sourceforge.net/projects/qwt/files/"
-* Unpack the file to a temporary directory
-* Configure the the installation directory in the file qwtconfig.pri
-  (QWT_INSTALL_PREFIX = C:/Tools/Qwt-$$QWT_VERSION)
-* Disable not necessary modules in the file qwtconfig.pri
-  (Plot, SVG, OpenGL, Designer)
-* Open a command prompt and change to the temporary qwt directory
-* Create the make file
-  cmake qwt.pro
-* Buiild the library
-  nmake
-* Install the library
-  nmake install
-* Set the environment variables
-  QWT_INSTALL_DIR = C:\Tools\Qwt-6.x.y\include
-  QWT_LIBRARY_DIR = C:\Tools\Qwt-6.x.y\lib
-
-1.7 NSIS 2.46
+1.6 NSIS 2.46
 --------------------------------------------------------------------------------
 
 * Download NSIS from "http://nsis.sourceforge.net/Main_Page"
@@ -115,41 +95,7 @@ Last Change: 2018-01-17
 3. Building qStopMotion
 ================================================================================
 
-3.1 Add the qtruntime to the sources directory
---------------------------------------------------------------------------------
-
-* Create a new directory 'qt5runtime64bit' in the source directory
-* Create a new directory 'release'
-  - Copy Qt5Core.dll, Qt5Gui.dll, Qt5Widgets and Qt5Xml.dll from
-    Qt installation bin directory to the 'release' directory
-  - Copy qwindows.dll from the platforms directory to a new 'platforms' directory
-  - Copy q*.dll (without a 'd' at the end) files of the directory imageformats from
-    Qt installation plugins directory to a new directory 'imageformats'
-* Create a new directory 'debug'
-  - Copy Qt5Cored.dll, Qt5Guid.dll, Qt5Widgetsd.dll and QtXmld.dll from
-    Qt installation bin directory to the 'debug' directory
-  - Copy qwindowsd.dll from the platforms directory to a new 'platforms' directory
-  - Copy q*d.dll (with a 'd' at the end) files of the directory imageformats from
-    Qt installation plugins directory to a new directory 'imageformats'
-
-3.2 Add the qwt runtime to the source directory
---------------------------------------------------------------------------------
-
-* Create a new directory 'qwt64bit' in the source directory
-* Create a new directory 'release'
-  - Copy qwt.dll from Qwt installation lib directory to the 'release' directory
-* Create a new directory 'debug'
-  - Copy qwtd.dll and qwtd.pdb from Qwt installation lib directory to
-    the 'debug' directory
-
-3.3 Add the ffmpeg encoder to the sources directory
---------------------------------------------------------------------------------
-
-* Download the latest static version from http://ffmpeg.zeranoe.com/builds/
-* Unpack the 7z file to the qstopmotion directory
-* Rename the ffmpeg directory to 'ffmpeg64bit'
-
-3.3 Create the Visual Studio Solution
+3.1 Create the Visual Studio Solution
 --------------------------------------------------------------------------------
 
 * Start the CMake GUI using the shortcut to the start script.
@@ -159,7 +105,7 @@ Last Change: 2018-01-17
 * Select the generator "Visual Studio 12 2013 Win64"
 * Press the generate button
 
-3.4 Build the application
+3.2 Build the application
 --------------------------------------------------------------------------------
 
 * Start MS Visual Studio

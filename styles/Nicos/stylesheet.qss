@@ -1,0 +1,132 @@
+MainWindowGUI {	
+	background: rgb(40, 40, 40);
+	color:rgb(33, 180, 207);
+}
+
+FrameViewImage {
+	background: rgb(0, 0, 0);
+}
+
+QTabWidget {
+	background-color: rgb(40, 40, 40);
+	color:rgb(33, 180, 207)
+}
+
+QTabBar::tab {
+    	background: rgb(40, 40, 40);
+	color: rgb(33, 180, 207)
+}
+
+QTabBar::tab:!selected {
+	margin-top: 2px; 
+}
+
+QTabBar::tab:selected {
+	background-color: rgb(65, 65, 65)
+
+}
+
+QDialog {
+	background-color: rgb(40, 40, 40); 
+	color:rgb(33, 180, 207);
+}
+
+/*
+ClickableLabel:pressed {
+	background: red; 
+}
+*/
+
+QMenuBar { 
+	background-color: rgb(40, 40, 40); 
+	color:rgb(33, 180, 207);
+}
+
+QMenu { 
+	background-color: rgb(40, 40, 40); 
+	color:rgb(33, 180, 207);
+}
+
+QMenu::item:selected { 
+	background-color: rgb(65, 65, 65)
+}
+
+QMenuBar::item:selected { 
+	background-color: rgb(65, 65, 65)
+}
+
+QLabel { 
+	color: rgb(33, 180, 207)
+}
+
+QwtSlider { 
+	color: rgb(33, 180, 207)
+}
+
+QGroupBox {
+	background: rgb(40, 40, 40); 
+	color: rgb(33, 180, 207)
+}
+
+QTreeWidget {
+	alternate-background-color: rgb(65, 65, 65);
+    	background: rgb(40, 40, 40);
+	color: rgb(33, 180, 207)
+}
+
+QPushButton {
+	background-color: rgb(40, 40, 40);
+	color: rgb(33, 180, 207)
+}
+
+
+QScrollBar:horizontal {
+	border: 2px solid grey;
+	background: rgb(65, 65, 65);
+    	height: 15px;
+    	margin: 0px 20px 0 20px;
+}
+
+
+QComboBox {
+	background-color: rgb(40, 40, 40);
+	color: rgb(33, 180, 207)
+}
+
+QComboBox::item:selected { 
+	background-color: rgb(65, 65, 65)
+}
+
+QComboBox::item:!selected { 
+	background-color: rgb(40, 40, 40)
+}
+
+QwtSlider { 
+	background-color: rgb(40, 40, 40);
+}
+
+QRadioButton {
+	background-color: rgb(40, 40, 40);
+	color: rgb(33, 180, 207);
+}
+
+QCheckBox {
+	background-color: rgb(40, 40, 40);
+	color: rgb(33, 180, 207);
+}
+
+QSpinBox {
+	background-color: rgb(60, 60, 60);
+	color: rgb(33, 180, 207);
+}
+
+QTextEdit {
+	background-color: rgb(60, 60, 60);
+	color: rgb(33, 180, 207);
+}
+
+
+
+
+
+

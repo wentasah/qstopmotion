@@ -27,7 +27,7 @@
 #include <QObject>
 #include <QApplication>
 #include <QLabel>
-#include <QLoggingCategory>
+#include <QDebug>
 
 #include "frontends/frontend.h"
 #include "frontends/qtfrontend/mainwindowgui.h"
@@ -37,8 +37,6 @@ struct AudioFile {
     unsigned int belongsTo;
     QString filename;
 };
-
-Q_DECLARE_LOGGING_CATEGORY(qstopmotion)
 
 
 /**
@@ -68,7 +66,7 @@ public:
      * Check the existance an writability of the application directory.
      * @param binDirName name of the binary directory
      */
-    bool checkApplicationDirectory(char *binDirName);
+    bool checkApplicationDirectory(const QString &binDirName);
 
     /**
      * Initialize the frontend.
@@ -80,7 +78,7 @@ public:
      * Open a project given in the arguments.
      * @return true if a project file is opened.
      */
-    bool handleArguments(int argc, char **argv);
+    bool openProjectFromArguments(const QStringList &applicationArguments);
 
     /**
      * The run function for starting the application.
@@ -174,6 +172,12 @@ public:
     const QString getSoundsDirName();
 
     /**
+     * Function for getting the styles directory
+     * @return the styles directory name string
+     */
+    const QString getStylesDirName();
+
+    /**
      * Getting all possible GUI languages
      * @return A vector with all languages
      */
@@ -190,6 +194,12 @@ public:
      * @param newIndex New selected index.
      */
     void changeLanguage(int newIndex);
+
+    /**
+     * Getting all possible GUI styles
+     * @return A vector with all styles
+     */
+    static const QVector<QString> getStyles(Frontend* f);
 
     /**
      * A new capture button function is selected in the preferences menu.
@@ -389,6 +399,13 @@ public:
      * @return return value of the command
      */
     int runExternalCommand(const QString &command, const QStringList &arguments);
+
+    /**
+     * Function to run several external commands
+     * @param commands commands with arguments to run
+     * @return return value of the command
+     */
+    int runExternalCommands(const QList<ExternalCommand> &commands);
 
     /**
      * Turns on the webcamera/video import mode.
@@ -709,6 +726,7 @@ private:
     QString          appIconsDirName;
     QString          appPicturesDirName;
     QString          appSoundsDirName;
+    QString          appStylesDirName;
 
     void initializePreferences();
     void setDefaultPreferences();

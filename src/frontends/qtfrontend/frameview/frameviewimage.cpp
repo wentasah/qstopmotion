@@ -358,6 +358,11 @@ void FrameViewImage::paintEvent(QPaintEvent *)
 
     widgetPainter.setRenderHint(QPainter::Antialiasing, true);
 
+    QStyleOption opt;
+    opt.init(this);
+    QPainter p(this);
+    style()->drawPrimitive(QStyle::PE_Widget, &opt, &p, this);
+
     if (displayMode == liveImageMode) {
         // Playing live video
 

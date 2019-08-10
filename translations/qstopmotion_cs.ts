@@ -107,6 +107,10 @@
         <source>Greek</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Russian</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>AnimationProject</name>
@@ -575,6 +579,22 @@ rozhodnete pro přehrání, přehrána bez zvuku.</translation>
         <source>libav</source>
         <translation>libav</translation>
     </message>
+    <message>
+        <source>Splitting up the movie on several files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>All scenes and takes will be united in one movie</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Movie will be splitted up by scenes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Movie will be splitted up by takes</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Exposure</name>
@@ -738,6 +758,22 @@ rozhodnete pro přehrání, přehrána bez zvuku.</translation>
     <message>
         <source>Take Picture Signal</source>
         <translation>Signál k udělání záběru</translation>
+    </message>
+    <message>
+        <source>Image editor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Select application for edit exposures:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Choose</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Choose image editor</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1569,7 +1605,7 @@ Kodér nainstalujte nebo vyberte jiný!</translation>
     </message>
     <message>
         <source>You do not have Gimp installed on your system</source>
-        <translation>GIMP není nainstalován v systému</translation>
+        <translation type="vanished">GIMP není nainstalován v systému</translation>
     </message>
     <message>
         <source>Insert Frames</source>
@@ -1597,7 +1633,7 @@ Kodér nainstalujte nebo vyberte jiný!</translation>
     </message>
     <message>
         <source>Failed to start Gimp!</source>
-        <translation>Nepodařilo se spustit GIMP!</translation>
+        <translation type="vanished">Nepodařilo se spustit GIMP!</translation>
     </message>
     <message>
         <source>There is no active frame to open</source>
@@ -1658,6 +1694,14 @@ Kodér nainstalujte nebo vyberte jiný!</translation>
     <message>
         <source>Project Tree</source>
         <translation>Projektový strom</translation>
+    </message>
+    <message>
+        <source>You do not have any photo editor installed on your system</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Failed to start Photo editor!</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2045,6 +2089,10 @@ Potřebujete oprávnění ke čtení, zápisu a spouštění adresáře .qstopmo
     <message>
         <source>&lt;h4&gt;Previous frame (J, Left)&lt;/h4&gt;</source>
         <translation>&lt;h4&gt;Předchozí snímek (J, šipka vlevo)&lt;/h4&gt;</translation>
+    </message>
+    <message>
+        <source>&lt;h4&gt;Degree of overlay&lt;/h4&gt;&lt;p&gt;Change the degree of superposition of the previous exposure to live video from camera&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

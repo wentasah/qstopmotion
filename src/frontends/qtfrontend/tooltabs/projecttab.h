@@ -373,15 +373,15 @@ private:
     void makeGUI();
 
     /**
-     * Start the gimp process.
+     * Start the photo editor process.
      * @param exposureImagePath The path to the first image to edit.
      */
-    void startGimpProcess(const QString &exposureImagePath);
+    void startPhotoEditor(const QString &exposureImagePath);
 
     /**
-     * Stop the gimp process.
+     * Stop the photo editor process.
      */
-    void stopGimpProcess();
+    void stopPhotoEditor();
 
 private slots:
     /**
@@ -418,17 +418,17 @@ private slots:
     /**
      *
      */
-    void gimpProcessStarted();
+    void photoEditorProcessStarted();
 
     /**
      *
      */
-    void gimpProcessError(QProcess::ProcessError error);
+    void photoEditorProcessError(QProcess::ProcessError error);
 
     /**
      *
      */
-    void gimpProcessFinished(int exitCode, QProcess::ExitStatus exitStatus);
+    void photoEditorProcessFinished(int exitCode, QProcess::ExitStatus exitStatus);
 
 private:
     Frontend            *frontend;
@@ -465,7 +465,7 @@ private:
     QGroupBox   *editGroupBox;
     QPushButton *editFrameButton;
 
-    QProcess    *gimpProcess;
+    QProcess    *photoEditorProcess;
 };
 
 #endif

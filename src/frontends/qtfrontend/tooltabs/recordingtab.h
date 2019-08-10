@@ -32,7 +32,7 @@
 #include <QWidget>
 #include <QSoundEffect>
 
-#include <qwt/qwt_slider.h>
+#include <qwt_slider.h>
 
 #include "frontends/frontend.h"
 #include "frontends/qtfrontend/toolbar.h"
@@ -114,7 +114,7 @@ public:
      * Get the recording mode.
      * @return The recording mode.
      */
-    int getRecordingMode();
+    enum DomainFacade::recordingMode getRecordingMode();
 
     /**
      * Set the recording mode.
@@ -163,6 +163,11 @@ public:
      * @return The unit count.
      */
     int getUnitCount();
+
+    /**
+     * @return interval beetween camera grabbing in milliseconds.
+     */
+    quint64 getTimelapseIntervalMsec() const;
 
     /**
      * Set the unit count.
@@ -232,6 +237,13 @@ private:
      * @param newState The new state of the timelapse group box.
      */
     void enableTimelapseGroupBox(bool newState);
+
+    /**
+     * Reduce range of beepCountSlider according to interval beetween timelapse
+     * grab interval.
+     * @param newBeepIntervalSec (optional) If specified, try to set beep slider to this value
+     */
+    void boundBeepTimeSlider(int newBeepIntervalSec = -1);
 
 protected:
     // void resizeEvent(QResizeEvent *event);
@@ -376,6 +388,7 @@ private slots:
      */
     void storeFrame();
 
+    void checkSoundEffectStatus();
 };
 
 #endif

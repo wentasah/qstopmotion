@@ -39,12 +39,14 @@
 #include <cstring>
 // #include <unistd.h>
 
-Q_LOGGING_CATEGORY(qstopmotion, "qtfrontend.qstopmotion")
+extern bool g_verboseOutput;
 
 QtFrontend::QtFrontend(int &argc, char **argv)
 {
-    qCDebug(qstopmotion) << "QtFrontend::Constructor --> Start";
-    qCDebug(qstopmotion) << "QtFrontend::Constructor Date:" << QDate::currentDate();
+    if (g_verboseOutput) {
+        qDebug() << "QtFrontend::Constructor --> Start";
+        qDebug() << "QtFrontend::Constructor Date:" << QDate::currentDate();
+    }
 
     domainFacade         = NULL;
     viewFacade           = NULL;
@@ -66,26 +68,31 @@ QtFrontend::QtFrontend(int &argc, char **argv)
     QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF-8"));   // f"ur locale
 #endif
 */
-
-    qCDebug(qstopmotion) << "QtFrontend::Constructor --> End";
+    if (g_verboseOutput) {
+        qDebug() << "QtFrontend::Constructor --> End";
+    }
 }
 
 
 QtFrontend::~QtFrontend()
 {
-    qDebug() << "QtFrontend::Destructor --> Start";
+    if (g_verboseOutput) {
+        qDebug() << "QtFrontend::Destructor --> Start";
+    }
 
-    // Save the size and position of the application
-    QSize appSize = mw->size();
-    QPoint appPos = mw->pos();
-    preferencesTool->setIntegerPreference("preferences", "applicationsizeheight", appSize.height());
-    preferencesTool->setIntegerPreference("preferences", "applicationsizewidth", appSize.width());
-    preferencesTool->setIntegerPreference("preferences", "applicationposx", appPos.x());
-    preferencesTool->setIntegerPreference("preferences", "applicationposy", appPos.y());
+    if (mw != NULL) {
+        // Save the size and position of the application
+        QSize appSize = mw->size();
+        QPoint appPos = mw->pos();
+        preferencesTool->setIntegerPreference("preferences", "applicationsizeheight", appSize.height());
+        preferencesTool->setIntegerPreference("preferences", "applicationsizewidth", appSize.width());
+        preferencesTool->setIntegerPreference("preferences", "applicationposx", appPos.x());
+        preferencesTool->setIntegerPreference("preferences", "applicationposy", appPos.y());
 
-    // Cleanup the memory
-    delete mw;
-    mw = NULL;
+        // Cleanup the memory
+        delete mw;
+        mw = NULL;
+    }
 
     if (domainFacade != NULL) {
         delete domainFacade;
@@ -105,11 +112,13 @@ QtFrontend::~QtFrontend()
     delete stApp;
     stApp = NULL;
 
-    qDebug() << "QtFrontend::Destructor --> End";
+    if (g_verboseOutput) {
+        qDebug() << "QtFrontend::Destructor --> End";
+    }
 }
 
 
-bool QtFrontend::checkApplicationDirectory(char *binDirName)
+bool QtFrontend::checkApplicationDirectory(const QString &binDirName)
 {
     qDebug() << "QtFrontend::checkApplicationDirectory --> Start";
 
@@ -162,7 +171,7 @@ bool QtFrontend::checkApplicationDirectory(char *binDirName)
     otherDirName.append(PreferencesTool::tempDirectory);
     appTempDirName.append(otherDirName);
 
-    QString absoluteAppName = Util::convertPathFromOsSpecific(QString(binDirName));
+    QString absoluteAppName = Util::convertPathFromOsSpecific(binDirName);
     int pathLength = absoluteAppName.lastIndexOf("/bin/");
 
     if (pathLength == -1)
@@ -221,6 +230,18 @@ bool QtFrontend::checkApplicationDirectory(char *binDirName)
     otherDirName.append(QLatin1String("/"));
     appGraphicsDirName.append(otherDirName);
 
+    otherDirName.clear();
+    otherDirName.append(appApplicationDirName);
+    otherDirName.append(PreferencesTool::soundsDirectory);
+    otherDirName.append(QLatin1String("/"));
+    appSoundsDirName.append(otherDirName);
+
+    otherDirName.clear();
+    otherDirName.append(appApplicationDirName);
+    otherDirName.append(PreferencesTool::stylesDirectory);
+    otherDirName.append(QLatin1String("/"));
+    appStylesDirName.append(otherDirName);
+
 #else
     // Linux and Apple OS X version
 
@@ -260,6 +281,15 @@ bool QtFrontend::checkApplicationDirectory(char *binDirName)
     otherDirName.append(QLatin1String("/"));
     appSoundsDirName.append(otherDirName);
 
+    otherDirName.clear();
+    otherDirName.append(appApplicationDirName);
+    otherDirName.append(QLatin1String("share/"));
+    otherDirName.append(PreferencesTool::applicationName);
+    otherDirName.append(QLatin1String("/"));
+    otherDirName.append(PreferencesTool::stylesDirectory);
+    otherDirName.append(QLatin1String("/"));
+    appStylesDirName.append(otherDirName);
+
 #endif
 
     qDebug() << "QtFrontend::checkApplicationDirectory --> Application Manual Directory:" << appManualDirName;
@@ -290,6 +320,30 @@ void QtFrontend::init()
 {
     qDebug() << "QtFrontend::init --> Start";
 
+    // Need to call this here to get the locale for the language
+    // which is used by the translator created in mainWindowGUI.
+    // Also to read the style.
+    preferencesTool = new PreferencesTool(this);
+    initializePreferences();
+
+    QVector<QString> styles = QtFrontend::getStyles(this);
+    int actualStyle;
+    preferencesTool->getIntegerPreference("preferences", "style", actualStyle);
+    if (0 < actualStyle) {
+        QString styleSheetFile(getStylesDirName());
+        styleSheetFile.append(styles[actualStyle].toLatin1());
+        styleSheetFile.append(QLatin1String("/"));
+        styleSheetFile.append(QLatin1String("stylesheet.qss"));
+        QFile styleSheet(styleSheetFile);
+        if(!styleSheet.open(QFile::ReadOnly)) {
+            styleSheetFile.prepend("Unable to open ");
+            qWarning(styleSheetFile.toLatin1());
+        } else {
+            QString StyleSheet = QLatin1String(styleSheet.readAll());
+            stApp->setStyleSheet(StyleSheet);
+        }
+    }
+
     QString iconFile(getGraphicsDirName());
     iconFile.append(QLatin1String("qstopmotion_splash_screen.png"));
     QSplashScreen *splash = new QSplashScreen;
@@ -297,11 +351,6 @@ void QtFrontend::init()
     splash->show();
     Qt::Alignment bottomRight = Qt::AlignBottom | Qt::AlignRight;
     splash->showMessage(PreferencesTool::applicationShowName + " - " + PreferencesTool::applicationVersion, bottomRight, Qt::black);
-
-    // Need to call this here to get the locale for the language
-    // which is used by the translator created in mainWindowGUI
-    preferencesTool = new PreferencesTool(this);
-    initializePreferences();
 
     // returns a pointer to the domain facade (allocated with new)
     domainFacade = new DomainFacade(this);
@@ -361,23 +410,22 @@ void QtFrontend::init()
 }
 
 
-bool QtFrontend::handleArguments(int argc, char **argv)
+bool QtFrontend::openProjectFromArguments(const QStringList &applicationArguments)
 {
-    qDebug() << "QtFrontend::handleArguments --> Start";
+    qDebug() << "QtFrontend::openProjectFromArguments --> Start";
 
-    if (argc < 2) {
-        // No arguments
-        qDebug() << "QtFrontend::handleArguments --> End (false)";
-        return false;
+    foreach (const QString &arg, applicationArguments) {
+        if (!arg.endsWith(PreferencesTool::projectSuffix) && !arg.endsWith(PreferencesTool::archiveSuffix)) {
+            continue;
+        }
+        if (QFileInfo(arg).isReadable()) {
+            mw->openProject(arg);
+            qDebug() << "QtFrontend::openProjectFromArguments --> End (true)";
+            return true;
+        }
     }
 
-    if (QFileInfo(argv[1]).isReadable()) {
-        mw->openProject(argv[1]);
-        qDebug() << "QtFrontend::handleArguments --> End (true)";
-        return true;
-    }
-
-    qDebug() << "QtFrontend::handleArguments --> End (false)";
+    qDebug() << "QtFrontend::openProjectFromArguments --> End (false)";
     return false;
 }
 
@@ -474,6 +522,12 @@ const QString QtFrontend::getSoundsDirName()
 }
 
 
+const QString QtFrontend::getStylesDirName()
+{
+    return this->appStylesDirName;
+}
+
+
 const QVector<QString> QtFrontend::getLanguages()
 {
     return mw->getLanguages();
@@ -489,6 +543,12 @@ const QVector<QString> QtFrontend::getLocales()
 void QtFrontend::changeLanguage(int newIndex)
 {
     mw->changeLanguage(newIndex);
+}
+
+
+const QVector<QString> QtFrontend::getStyles(Frontend* f)
+{
+    return MainWindowGUI::getStyles(f);
 }
 
 
@@ -759,6 +819,14 @@ int QtFrontend::runExternalCommand(const QString &command, const QStringList &ar
 }
 
 
+int QtFrontend::runExternalCommands(const QList<ExternalCommand> &commands)
+{
+    ExternalCommandDialog *ec = new ExternalCommandDialog(this);
+    ec->show();
+    ec->run(commands);
+    return 0;
+}
+
 bool QtFrontend::startGrabber()
 {
     bool ret;
@@ -974,7 +1042,7 @@ void QtFrontend::setToolBarState(int newState)
 
 int QtFrontend::getRecordingMode()
 {
-    return mw->getRecordingMode();
+    return static_cast<int>(mw->getRecordingMode());
 }
 
 

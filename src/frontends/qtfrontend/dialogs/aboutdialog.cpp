@@ -66,6 +66,8 @@ AboutDialog::AboutDialog(Frontend *f,
     autorsText->setHtml(
                 "<p><b>" + tr("Main developers") + " - qStopMotion</b><br>"
                 "Ralf Lange &lt;ralf.lange@longsoft.de&gt;<br>"
+                "Dmitry Valento&lt;decobramegra@gmail.com&gt;<br>"
+                "Nikos &lt;kosnickx@gmail.com&gt;<br>"
                 "<p><b>" + tr("Main developers") + " - stopmotion for Linux</b><br>"
                 "Bjørn Erik Nilsen &lt;bjoern.nilsen@bjoernen.com&gt;<br>"
                 "Fredrik Berg Kjølstad &lt;fredrikbk@hotmail.com&gt;<br>"
@@ -88,7 +90,7 @@ AboutDialog::AboutDialog(Frontend *f,
                 "Ralf Lange &lt;ralf.lange@longsoft.de&gt; (" + tr("German") + ")<br>"
                 "Pavel Fric &lt;pavelfric@seznam.cz&gt; (" + tr("Czech") + ")<br>"
                 "Nikos &lt;kosnickx@gmail.com&gt; (" + tr("Greek") + ")<br>"
-                "Dmitry &lt;decobramegra@gmail.com&gt; (" + tr("Russian") + ")<br>"
+                "Dmitry Valento&lt;decobramegra@gmail.com&gt; (" + tr("Russian") + ")<br>"
                 /*
                 "Gorazd Bizjak and Matej Lavreni &lt;info@zapstudio.net&gt; (" + tr("Slovenian") + ")<br>"
                 "José Jorge &lt;jjorge@free.fr&gt; (" + tr("Portuguese") + ")<br>"

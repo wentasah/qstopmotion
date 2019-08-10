@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2005-2018 by                                                *
+ *  Copyright (C) 2005-2019 by                                                *
  *    Bjoern Erik Nilsen (bjoern.nilsen@bjoernen.com),                        *
  *    Fredrik Berg Kjoelstad (fredrikbk@hotmail.com),                         *
  *    Ralf Lange (ralf.lange@longsoft.de)                                     *
@@ -34,8 +34,8 @@
 
 const QString PreferencesTool::applicationShowName = QLatin1String("qStopMotion");
 const QString PreferencesTool::applicationName = QLatin1String("qstopmotion");
-const QString PreferencesTool::applicationVersion = QLatin1String("2.4.1");
-const QString PreferencesTool::applicationYear = QLatin1String("2018");
+const QString PreferencesTool::applicationVersion = QLatin1String("2.5.0");
+const QString PreferencesTool::applicationYear = QLatin1String("2019");
 const QString PreferencesTool::preferencesVersion = QLatin1String("0.9");
 const QString PreferencesTool::preferencesSuffix = QLatin1String("qsmp");
 const QString PreferencesTool::preferencesName = QLatin1String("preferences");

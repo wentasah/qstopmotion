@@ -1,7 +1,7 @@
 ###############################################################################
 # CMake file for the qStopMotion project                                      #
 # (c) Ralf Lange, longsoft.de                                                 #
-# Last update: 2019-08-10                                                     #
+# Last update: 2019-10-20                                                     #
 #                                                                             #
 # Usage:                                                                      #
 #   * Qt-Creator (Windows, Linux)                                             #
@@ -1315,7 +1315,7 @@ IF(WIN32)
 ENDIF(WIN32)
 
 ###############################################################################
-# DEB package - Linux only (Debian, OpenSuse, Ubuntu, ...)
+# DEB package - Linux only (Debian, Ubuntu, Mint, ...)
 ###############################################################################
 
 IF ("${LSB_DISTRIB}" MATCHES "Ubuntu|Debian|LinuxMint")
@@ -1340,12 +1340,12 @@ IF ("${LSB_DISTRIB}" MATCHES "Ubuntu|Debian|LinuxMint")
     # Set the dependencies based on the distro version
     # thus only one package is build you must list here *any* depending libraries,
     # even if they are only used in one module
-    IF ("${LSB_DISTRIB}" MATCHES "Ubuntu16.04")
+    IF ("${LSB_DISTRIB}" MATCHES "Ubuntu18.04")
         SET(
             CPACK_DEBIAN_PACKAGE_DEPENDS
             "libc6 (>=2.11), ffmpeg (>=7:2.8.6), libqt5core5 (>=5.3.2) | libqt5core5a (>=5.3.2), libqt5gui5 (>=5.3.2), libqt5widgets5 (>=5.3.2), libqt5xml5 (>=5.3.2), libqwt-qt5-6 (>=6.1.0), libv4l-0 (>=1.0.0), libgphoto2-6 (>=2.5.3), qt5-image-formats-plugins (>=5.3.2)"
         )
-    ENDIF ("${LSB_DISTRIB}" MATCHES "Ubuntu16.04")
+    ENDIF ("${LSB_DISTRIB}" MATCHES "Ubuntu18.04")
     IF ("${LSB_DISTRIB}" MATCHES "LinuxMint18.2")
         SET(
             CPACK_DEBIAN_PACKAGE_DEPENDS
@@ -1370,12 +1370,15 @@ IF ("${LSB_DISTRIB}" MATCHES "Ubuntu|Debian|LinuxMint")
             "libc6 (>=2.11), ffmpeg (>=7:3.2), libqt5core5 (>=5.3.2) | libqt5core5a (>=5.3.2), libqt5gui5 (>=5.3.2), libqt5widgets5 (>=5.3.2), libqt5xml5 (>=5.3.2), libv4l-0 (>=1.0.0), libgphoto2-6 (>=2.5.3), qt5-image-formats-plugins (>=5.3.2)"
         )
     ENDIF ("${LSB_DISTRIB}" MATCHES "Debian9.*")
+
+    # Test unsupported Debian/Ubuntu/Mint version
     IF (NOT CPACK_DEBIAN_PACKAGE_DEPENDS)
         MESSAGE ("WARNING: ${LSB_DISTRIB} not supported yet.\nPlease set deps in CMakeLists.txt before packaging.")
     ENDIF (NOT CPACK_DEBIAN_PACKAGE_DEPENDS)
     IF ("${CPACK_DEBIAN_PACKAGE_DEPENDS}" STREQUAL "")
         MESSAGE ("WARNING: ${LSB_DISTRIB} not supported yet.\nPlease set deps in CMakeLists.txt before packaging.")
     ENDIF ("${CPACK_DEBIAN_PACKAGE_DEPENDS}" STREQUAL "")
+
     MESSAGE("CPACK_DEBIAN_PACKAGE_DEPENDS: ${CPACK_DEBIAN_PACKAGE_DEPENDS}")
 
     # Mandatory
@@ -1427,7 +1430,7 @@ IF ("${LSB_DISTRIB}" MATCHES "Ubuntu|Debian|LinuxMint")
 ENDIF ("${LSB_DISTRIB}" MATCHES "Ubuntu|Debian|LinuxMint")
 
 ###############################################################################
-# RPM package - Linux only (Fedora, Red Hat, CentOS, Mandriva, ...)
+# RPM package - Linux only (Fedora, Red Hat, CentOS, Mandriva, OpenSuse, ...)
 ###############################################################################
 
 IF ("${LSB_DISTRIB}" MATCHES "Fedora|CentOS")

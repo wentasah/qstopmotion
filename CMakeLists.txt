@@ -1,7 +1,7 @@
 ###############################################################################
 # CMake file for the qStopMotion project                                      #
 # (c) Ralf Lange, longsoft.de                                                 #
-# Last update: 2019-10-20                                                     #
+# Last update: 2019-10-31                                                     #
 #                                                                             #
 # Usage:                                                                      #
 #   * Qt-Creator (Windows, Linux)                                             #
@@ -468,7 +468,7 @@ IF(WIN32)
         # 32bit system
         SET(
             VC_ARG
-            x84
+            x86
         )
     ENDIF(CMAKE_SIZEOF_VOID_P GREATER 4)
     message("vccvarall argument: ${VC_ARG}")
@@ -1343,7 +1343,7 @@ IF ("${LSB_DISTRIB}" MATCHES "Ubuntu|Debian|LinuxMint")
     IF ("${LSB_DISTRIB}" MATCHES "Ubuntu18.04")
         SET(
             CPACK_DEBIAN_PACKAGE_DEPENDS
-            "libc6 (>=2.11), ffmpeg (>=7:2.8.6), libqt5core5 (>=5.3.2) | libqt5core5a (>=5.3.2), libqt5gui5 (>=5.3.2), libqt5widgets5 (>=5.3.2), libqt5xml5 (>=5.3.2), libqwt-qt5-6 (>=6.1.0), libv4l-0 (>=1.0.0), libgphoto2-6 (>=2.5.3), qt5-image-formats-plugins (>=5.3.2)"
+            "libc6 (>=2.11), ffmpeg (>=7:3.2), libqt5core5 (>=5.7.0) | libqt5core5a (>=5.7.0), libqt5gui5 (>=5.7.0), libqt5multimedia5 (>=5.7.0), libqt5network5 (>=5.7.0), libqt5svg5 (>=5.7.0), libqt5widgets5 (>=5.7.0), libqt5xml5 (>=5.7.0), libqwt-qt5-6 (>=6.1.2), libv4l-0 (>=1.0.0), libgphoto2-6 (>=2.5.3), qt5-image-formats-plugins (>=5.7.0)"
         )
     ENDIF ("${LSB_DISTRIB}" MATCHES "Ubuntu18.04")
     IF ("${LSB_DISTRIB}" MATCHES "LinuxMint18.2")
@@ -1367,7 +1367,7 @@ IF ("${LSB_DISTRIB}" MATCHES "Ubuntu|Debian|LinuxMint")
     IF ("${LSB_DISTRIB}" MATCHES "Debian9.*")
         SET(
             CPACK_DEBIAN_PACKAGE_DEPENDS
-            "libc6 (>=2.11), ffmpeg (>=7:3.2), libqt5core5 (>=5.3.2) | libqt5core5a (>=5.3.2), libqt5gui5 (>=5.3.2), libqt5widgets5 (>=5.3.2), libqt5xml5 (>=5.3.2), libv4l-0 (>=1.0.0), libgphoto2-6 (>=2.5.3), qt5-image-formats-plugins (>=5.3.2)"
+            "libc6 (>=2.11), ffmpeg (>=7:3.2), libqt5core5 (>=5.7.0) | libqt5core5a (>=5.7.0), libqt5gui5 (>=5.7.0), libqt5multimedia5 (>=5.7.0), libqt5network5 (>=5.7.0), libqt5svg5 (>=5.7.0), libqt5widgets5 (>=5.7.0), libqt5xml5 (>=5.7.0), libqwt-qt5-6 (>=6.1.2), libv4l-0 (>=1.0.0), libgphoto2-6 (>=2.5.3), qt5-image-formats-plugins (>=5.7.0)"
         )
     ENDIF ("${LSB_DISTRIB}" MATCHES "Debian9.*")
 

@@ -1,7 +1,7 @@
 ###############################################################################
 # CMake file for the qStopMotion project                                      #
 # (c) Ralf Lange, longsoft.de                                                 #
-# Last update: 2019-11-11                                                     #
+# Last update: 2019-11-12                                                     #
 #                                                                             #
 # Usage:                                                                      #
 #   * Qt-Creator (Windows, Linux)                                             #
@@ -1340,6 +1340,12 @@ IF ("${LSB_DISTRIB}" MATCHES "Ubuntu|Debian|LinuxMint")
     # Set the dependencies based on the distro version
     # thus only one package is build you must list here *any* depending libraries,
     # even if they are only used in one module
+    IF ("${LSB_DISTRIB}" MATCHES "Ubuntu16.04")
+        SET(
+            CPACK_DEBIAN_PACKAGE_DEPENDS
+            "libc6 (>=2.11), ffmpeg (>=7:3.2), libqt5core5 (>=5.5.0) | libqt5core5a (>=5.5.0), libqt5gui5 (>=5.5.0), libqt5multimedia5 (>=5.5.0), libqt5network5 (>=5.5.0), libqt5svg5 (>=5.5.0), libqt5widgets5 (>=5.5.0), libqt5xml5 (>=5.5.0), libqwt-qt5-6 (>=6.1.2), libv4l-0 (>=1.0.0), libgphoto2-6 (>=2.5.3), qt5-image-formats-plugins (>=5.5.0)"
+        )
+    ENDIF ("${LSB_DISTRIB}" MATCHES "Ubuntu16.04")
     IF ("${LSB_DISTRIB}" MATCHES "Ubuntu18.04")
         SET(
             CPACK_DEBIAN_PACKAGE_DEPENDS

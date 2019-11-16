@@ -1,7 +1,7 @@
 ###############################################################################
 # CMake file for the qStopMotion project                                      #
 # (c) Ralf Lange, longsoft.de                                                 #
-# Last update: 2019-11-12                                                     #
+# Last update: 2019-11-15                                                     #
 #                                                                             #
 # Usage:                                                                      #
 #   * Qt-Creator (Windows, Linux)                                             #
@@ -1483,7 +1483,7 @@ IF ("${LSB_DISTRIB}" MATCHES "Fedora|CentOS")
     # Qwt: qwt-qt5 - Qwt for Qt5
     SET(
         CPACK_RPM_PACKAGE_REQUIRES
-        "glibc >= 2.12, libgphoto2 >= 2.4.7, libv4l >= 0.6.3, qt5-qtbase >= 5.2.0, qt5-qtbase-gui >= 5.2.0, qt5-qtimageformats >= 5.2.0, qwt-qt5 >= 6.1.0"
+        "ffmpeg >= 3.4.0, glibc >= 2.12, libgphoto2 >= 2.4.7, libv4l >= 0.6.3, qt5-qtbase >= 5.9.0, qt5-qtbase-gui >= 5.9.0, qt5-qtimageformats >= 5.9.0, qt5-qtsvg >= 5.9.0, qwt-qt5 >= 6.1.0"
     )
     MESSAGE("CPACK_RPM_PACKAGE_REQUIRES: ${CPACK_RPM_PACKAGE_REQUIRES}")
     # CPACK_RPM_PACKAGE_SUGGESTS

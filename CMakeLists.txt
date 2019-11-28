@@ -1,7 +1,7 @@
 ###############################################################################
 # CMake file for the qStopMotion project                                      #
 # (c) Ralf Lange, longsoft.de                                                 #
-# Last update: 2019-11-15                                                     #
+# Last update: 2019-11-28                                                     #
 #                                                                             #
 # Usage:                                                                      #
 #   * Qt-Creator (Windows, Linux)                                             #
@@ -1043,7 +1043,7 @@ IF(WIN32)
     MESSAGE("QSTOPMOTION_QTRUNTIME_INSTALL_DIR: ${QSTOPMOTION_QTRUNTIME_INSTALL_DIR}")
     INSTALL(
         CODE "MESSAGE(\"Prepare required Qt libraries.\")"
-        CODE "execute_process(COMMAND windeployqt --no-translations --no-system-d3d-compiler --dir ${QSTOPMOTION_QTRUNTIME_INSTALL_DIR} ${EXECUTABLE_OUTPUT_PATH}/${CONFIG_DIR}qstopmotion.exe
+        CODE "execute_process(COMMAND windeployqt -opengl --dir ${QSTOPMOTION_QTRUNTIME_INSTALL_DIR} ${EXECUTABLE_OUTPUT_PATH}/${CONFIG_DIR}qstopmotion.exe
                               WORKING_DIRECTORY ${QSTOPMOTION_BIN_INSTALL_DIR})"
     )
     INSTALL(
@@ -1193,6 +1193,8 @@ IF(WIN32)
         "${PROJECT_SOURCE_DIR}/.hgignore"
         "${PROJECT_SOURCE_DIR}/.hgtags"
         "${PROJECT_SOURCE_DIR}/.hgtimestamp"
+        "${PROJECT_SOURCE_DIR}/3rd-party/"
+        "${PROJECT_SOURCE_DIR}/cmake-old/"
     )
 ENDIF(WIN32)
 

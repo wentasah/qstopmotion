@@ -186,26 +186,24 @@ SOURCES += src/main.cpp \
            src/technical/videoencoder/videoencoderfactory.cpp
 
 TRANSLATIONS += translations/qstopmotion_fr.ts \
-#                translations/qt_fr.ts \
 #                translations/qstopmotion_br.ts \
                 translations/qstopmotion_cs.ts \
-#                translations/qt_cs.ts \
                 translations/qstopmotion_da.ts \
-#                translations/qt_da.ts \
                 translations/qstopmotion_de.ts \
-#                translations/qt_de.ts \
                 translations/qstopmotion_el.ts \
                 translations/qstopmotion_es.ts \
 #                translations/qstopmotion_fi.ts \
                 translations/qstopmotion_it.ts \
+                translations/qt_it.ts \
 #                translations/qstopmotion_kl.ts \
 #                translations/qstopmotion_no_nb.ts \
 #                translations/qstopmotion_no_nn.ts \
 #                translations/qstopmotion_no_se.ts \
                 translations/qstopmotion_pt.ts \
+                translations/qt_pt.ts \
                 translations/qstopmotion_ru.ts \
-                translations/qstopmotion_se.ts \
-#                translations/qt_se.ts \
+                translations/qstopmotion_sv.ts \
+                translations/qt_sv.ts \
 #                translations/qstopmotion_sl.ts \
 #                translations/qstopmotion_tr.ts
 

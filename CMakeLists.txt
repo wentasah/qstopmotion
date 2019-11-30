@@ -340,19 +340,19 @@ ENDIF(UNIX AND NOT APPLE)
 SET(
     TRANSLATIONS
 #    translations/qstopmotion_br.ts       # Brazilian
-    translations/qstopmotion_cz.ts       # Czech
+    translations/qstopmotion_cs.ts       # Czech
     translations/qstopmotion_da.ts       # Danish
     translations/qstopmotion_de.ts       # German
     translations/qstopmotion_el.ts       # Greek
-    translations/qstopmotion_fr.ts       # French
     translations/qstopmotion_es.ts       # Spanish
+    translations/qstopmotion_fr.ts       # French
 #    translations/qstopmotion_fi.ts       # Finnish
     translations/qstopmotion_it.ts       # Italian
 #    translations/qstopmotion_kl.ts       #
 #    translations/qstopmotion_nb.ts       # Norwegian
     translations/qstopmotion_pt.ts       # Portuguese
     translations/qstopmotion_ru.ts       # Russian
-    translations/qstopmotion_se.ts       # Swedish
+    translations/qstopmotion_sv.ts       # Swedish
 #    translations/qstopmotion_sl.ts       # Slovene
 #    translations/qstopmotion_tr.ts       # Turkish
 )
@@ -1043,7 +1043,7 @@ IF(WIN32)
     MESSAGE("QSTOPMOTION_QTRUNTIME_INSTALL_DIR: ${QSTOPMOTION_QTRUNTIME_INSTALL_DIR}")
     INSTALL(
         CODE "MESSAGE(\"Prepare required Qt libraries.\")"
-        CODE "execute_process(COMMAND windeployqt --no-translations -opengl --dir ${QSTOPMOTION_QTRUNTIME_INSTALL_DIR} ${EXECUTABLE_OUTPUT_PATH}/${CONFIG_DIR}qstopmotion.exe
+        CODE "execute_process(COMMAND windeployqt -opengl --dir ${QSTOPMOTION_QTRUNTIME_INSTALL_DIR} ${EXECUTABLE_OUTPUT_PATH}/${CONFIG_DIR}qstopmotion.exe
                               WORKING_DIRECTORY ${QSTOPMOTION_BIN_INSTALL_DIR})"
     )
     INSTALL(

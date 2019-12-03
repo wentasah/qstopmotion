@@ -136,12 +136,21 @@ int main(int argc, char **argv)
 
     //  Configure and redirect log output to text file
     QString g_logFilePath("");
-    g_logFilePath = QString("%1/log_qstopmotion.txt").arg(QDir::currentPath());
+    g_logFilePath = QString("%1/log_qstopmotion.txt").arg(QDir::homePath());
 #ifdef Q_OS_WIN
-    logFileStream = _wfopen(g_logFilePath.toStdWString().c_str(), L"w");
+    errno_t err;
+    err = _wfopen_s(&logFileStream, g_logFilePath.toStdWString().c_str(), L"w");
+    if (err != 0) {
+        printf( "The logfile was not opened\n" );
+        return EXIT_FAILURE;
+    }
 #else
     // for Linux - log file will be put in a User's home directory
     logFileStream = fopen(g_logFilePath.toUtf8().data(), "w");
+    if (logFileStream == NULL) {
+        printf( "The logfile was not opened\n" );
+        return EXIT_FAILURE;
+    }
 #endif
     logConsoleStream = stderr;
     qInstallMessageHandler(logging);

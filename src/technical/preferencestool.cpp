@@ -171,6 +171,9 @@ bool PreferencesTool::setPreferencesFile(const QString &filePath, const QString 
         qWarning() << "PreferencesTool::setPreferencesFile --> Error while parsing preferences file";
         goto FileCorrupt;
     }
+
+    qDebug() << "PreferencesTool::setPreferencesFile --> End";
+
     return true;
 
 FileCorrupt:
@@ -200,7 +203,7 @@ FileCorrupt:
 
     flushPreferences();
 
-    qDebug() << "PreferencesTool::setPreferencesFile --> End";
+    qDebug() << "PreferencesTool::setPreferencesFile --> File Corrupt End";
 
     return false;
 }

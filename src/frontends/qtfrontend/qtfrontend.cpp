@@ -295,6 +295,8 @@ bool QtFrontend::checkApplicationDirectory(const QString &binDirName)
     qDebug() << "QtFrontend::checkApplicationDirectory --> Application Manual Directory:" << appManualDirName;
     qDebug() << "QtFrontend::checkApplicationDirectory --> Application Translations Directory:" << appTranslationsDirName;
     qDebug() << "QtFrontend::checkApplicationDirectory --> Application Graphics Directory:" << appGraphicsDirName;
+    qDebug() << "QtFrontend::checkApplicationDirectory --> Application Sounds Directory:" << appSoundsDirName;
+    qDebug() << "QtFrontend::checkApplicationDirectory --> Application Styles Directory:" << appStylesDirName;
 
 
     otherDirName.clear();

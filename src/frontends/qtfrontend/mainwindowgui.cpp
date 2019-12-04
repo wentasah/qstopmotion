@@ -701,12 +701,13 @@ const QVector<QString> MainWindowGUI::getStyles(Frontend* f)
     styles.append(tr("No style"));
 
     for (int i = 0; i < dirNames.size(); ++i) {
+        qDebug() << "MainWindowGUI::getStyles --> Style: " << dirNames[i];
         styles.append(dirNames[i]);
     }
 
-    return styles;
-
     qDebug() << "MainWindowGUI::getStyles --> End";
+
+    return styles;
 }
 
 

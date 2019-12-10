@@ -330,7 +330,9 @@ void QtFrontend::init()
 
     QVector<QString> styles = QtFrontend::getStyles(this);
     int actualStyle;
-    preferencesTool->getIntegerPreference("preferences", "style", actualStyle);
+    if (preferencesTool->getIntegerPreference("preferences", "style", actualStyle) == false) {
+        actualStyle = 0;
+    }
     if (0 < actualStyle) {
         QString styleSheetFile(getStylesDirName());
         styleSheetFile.append(styles[actualStyle].toLatin1());

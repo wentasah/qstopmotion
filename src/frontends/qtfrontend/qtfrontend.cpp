@@ -341,7 +341,7 @@ void QtFrontend::init()
         QFile styleSheet(styleSheetFile);
         if(!styleSheet.open(QFile::ReadOnly)) {
             styleSheetFile.prepend("Unable to open ");
-            qWarning(styleSheetFile.toLatin1());
+            qWarning() << styleSheetFile.toLatin1();
         } else {
             QString StyleSheet = QLatin1String(styleSheet.readAll());
             stApp->setStyleSheet(StyleSheet);

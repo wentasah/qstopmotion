@@ -38,7 +38,7 @@
 
 
 V4L2Grabber::V4L2Grabber(Frontend *f)
-    : ImageGrabber(f)
+    : ImageGrabber(f), firstImage(true)
 {
     qDebug() << "V4L2Grabber::Constructor --> Start";
 
@@ -330,13 +330,31 @@ const QImage V4L2Grabber::getImage()
 
     // qDebug() << "V4L2Grabber::getImage --> Start";
     
-    // Dequeue a buffer.
+    // Dequeue all buffers, keep the last (most recent) one, requeue the rest
+    v4l2_buffer tmp_buf;
     memset(&buf, 0, sizeof(struct v4l2_buffer));
-    buf.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
-    buf.memory = V4L2_MEMORY_MMAP;
+    while (true) {
+            memset(&tmp_buf, 0, sizeof(struct v4l2_buffer));
+            tmp_buf.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+            tmp_buf.memory = V4L2_MEMORY_MMAP;
 
-    ret = xioctl(fd, VIDIOC_DQBUF, &buf);
-    if (ret < 0) {
+            ret = xioctl(fd, VIDIOC_DQBUF, &tmp_buf);
+            if (ret < 0) // no more buffered frames
+                    break;
+
+            if (buf.bytesused) {
+                    // Requeue the previous buffer.
+                    ret = xioctl(fd, VIDIOC_QBUF, &buf);
+                    if (ret < 0) {
+                            qDebug() << "V4L2Grabber::getImage --> Error: Unable to requeue buffer (" << errno << ")";
+                            return image;
+                    }
+            }
+
+            buf = tmp_buf; // keep this frame for next round
+    }
+
+    if (errno != EAGAIN || buf.bytesused == 0) {
         qDebug() << "V4L2Grabber::getImage --> Error: Unable to dequeue buffer (" << errno << ")";
         return image;
     }

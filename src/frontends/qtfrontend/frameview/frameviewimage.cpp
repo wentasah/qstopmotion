@@ -253,7 +253,7 @@ void FrameViewImage::nextAnimationFrame(int exposureIndex)
 
 void FrameViewImage::redraw()
 {
-    // qDebug() << "FrameViewImage::redraw --> Start";
+    //  qDebug() << "FrameViewImage::redraw --> Start";
 
     const QImage liveImage = frontend->getLiveImage();
     if (liveImage.isNull()) {
@@ -265,7 +265,7 @@ void FrameViewImage::redraw()
 
     update();
 
-    // qDebug() << "FrameViewImage::redraw --> End";
+    //  qDebug() << "FrameViewImage::redraw --> End";
 }
 
 

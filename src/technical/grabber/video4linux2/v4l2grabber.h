@@ -27,7 +27,7 @@
 // Include files of v4l2
 #include <linux/videodev2.h>
 
-#define N_BUFFERS 2
+#define N_BUFFERS 25
 
 
 /**

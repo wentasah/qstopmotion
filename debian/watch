@@ -1,0 +1,5 @@
+# Compulsory line, this is a version 4 file
+version=4
+
+# SourceForge hosted projects
+https://sf.net/qstopmotion/ qstopmotion-(.*)-Source\.tar\.gz debian uupdate

@@ -1,0 +1,27 @@
+Source: qstopmotion
+Section: video
+Priority: optional
+Maintainer: Debian Multimedia Maintainers <debian-multimedia@lists.debian.org>
+Uploaders: Adrian Knoth <adi@drcomp.erfurt.thur.de>
+Build-Depends: debhelper (>= 11),
+ libgphoto2-dev,
+ libqwt-qt5-dev,
+ libxml2-dev,
+ libv4l-dev,
+ qtbase5-dev,
+ qtmultimedia5-dev,
+ cmake
+Standards-Version: 4.2.0
+Homepage: http://www.qstopmotion.org
+Vcs-Git: https://salsa.debian.org/multimedia-team/qstopmotion.git
+Vcs-Browser: https://salsa.debian.org/multimedia-team/qstopmotion
+
+Package: qstopmotion
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Recommends: ffmpeg,
+ v4l-utils
+Description: Application for creating stop-motion animation movies
+ The users will be able to create stop-motions from pictures imported
+ from a camera or from the harddrive and export the animation to
+ different video formats such as mpeg or avi.

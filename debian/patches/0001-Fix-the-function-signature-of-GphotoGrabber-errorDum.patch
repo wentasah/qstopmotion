@@ -1,0 +1,54 @@
+From: Adrian Bunk <bunk@debian.org>
+Date: Tue, 21 Aug 2018 19:03:55 +0200
+Subject: Fix the function signature of GphotoGrabber::errorDumper()
+
+---
+ src/technical/grabber/gphoto2/gpgrabber.cpp | 13 ++-----------
+ src/technical/grabber/gphoto2/gpgrabber.h   |  1 -
+ 2 files changed, 2 insertions(+), 12 deletions(-)
+
+diff --git a/src/technical/grabber/gphoto2/gpgrabber.cpp b/src/technical/grabber/gphoto2/gpgrabber.cpp
+index 7ccf920..ea5c2cf 100644
+--- a/src/technical/grabber/gphoto2/gpgrabber.cpp
++++ b/src/technical/grabber/gphoto2/gpgrabber.cpp
+@@ -61,7 +61,7 @@ GphotoGrabber::GphotoGrabber(Frontend *f)
+     filePath.append(rootDir);
+ 
+     gphotoContext = gp_context_new();
+-    gphotoErrorId = gp_log_add_func(GP_LOG_ERROR, (GPLogFunc)errorDumper, NULL);
++    gphotoErrorId = gp_log_add_func(GP_LOG_ERROR, errorDumper, NULL);
+ 
+     openCamera();
+ 
+@@ -807,18 +807,9 @@ int GphotoGrabber::lookupWidget(CameraWidget  *widget,
+ void GphotoGrabber::errorDumper(GPLogLevel  level,
+                                 const char *domain,
+                                 const char *format,
+-                                va_list     args,
+                                 void       *data)
+ {
+-    char temp[1024];
+-
+-    if (args != NULL) {
+-        vsprintf(temp, format, args);
+-        qDebug() << "GphotoGrabber::errorDumper --> Domain: " << domain << "Error: " << temp;
+-    }
+-    else {
+-        qDebug() << "GphotoGrabber::errorDumper --> Domain: " << domain << "Error: " << format;
+-    }
++    qDebug() << "GphotoGrabber::errorDumper --> Domain: " << domain << "Error: " << format;
+ }
+ 
+ 
+diff --git a/src/technical/grabber/gphoto2/gpgrabber.h b/src/technical/grabber/gphoto2/gpgrabber.h
+index ba2507a..13f2074 100644
+--- a/src/technical/grabber/gphoto2/gpgrabber.h
++++ b/src/technical/grabber/gphoto2/gpgrabber.h
+@@ -100,7 +100,6 @@ private:
+     static void errorDumper(GPLogLevel  level,
+                             const char *domain,
+                             const char *format,
+-                            va_list     args,
+                             void       *data);
+ 
+     bool canonEnableCapture(Camera       *gphotoCamera,

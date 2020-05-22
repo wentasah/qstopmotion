@@ -1,0 +1,40 @@
+qstopmotion (2.4.1-1) unstable; urgency=medium
+
+  [ Ondřej Nový ]
+  * d/watch: Use https protocol
+
+  [ Adrian Knoth ]
+  * New upstream version 2.4.1
+
+ -- Adrian Knoth <adi@drcomp.erfurt.thur.de>  Tue, 25 Dec 2018 11:47:23 +0100
+
+qstopmotion (2.4.0-1) unstable; urgency=medium
+
+  * Team upload
+
+  [ Ondřej Nový ]
+  * d/control: Set Vcs-* to salsa.debian.org.
+
+  [ Felipe Sateler ]
+  * Change maintainer address to debian-multimedia@lists.debian.org.
+
+  [ Sebastian Ramacher ]
+  * New upstream release.
+  * debian/: Bump debhelper compat to 11.
+  * debian/control:
+    - Add new B-D required by new upstream release.
+    - Bump Standards-Version to 4.2.0.
+  * debian/rules: Enable -Wl,--as-needed.
+  * debian/copyright: Bump copyright years.
+
+  [ Adrian Bunk ]
+  * Fix the function signature of GphotoGrabber::errorDumper(). (Closes:
+    #846499)
+
+ -- Sebastian Ramacher <sramacher@debian.org>  Tue, 21 Aug 2018 19:07:16 +0200
+
+qstopmotion (2.3.2-1) unstable; urgency=low
+
+  * Initial release (Closes: #827840)
+
+ -- Adrian Knoth <adi@drcomp.erfurt.thur.de>  Mon, 14 Nov 2016 20:58:37 +0100

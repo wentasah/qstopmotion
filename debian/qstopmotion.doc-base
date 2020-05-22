@@ -1,0 +1,9 @@
+Document: qstopmotion
+Title: qstopmotion manual
+Author: Ralf Lange
+Abstract: This is the qstopmotion user manual.
+Section: Video
+
+Format: HTML
+Index: /usr/share/doc/qstopmotion/index.html
+Files: /usr/share/doc/qstopmotion/*.html
